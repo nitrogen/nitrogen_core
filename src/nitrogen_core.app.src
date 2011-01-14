@@ -1,0 +1,6 @@
+{application, nitrogen_core, [
+    {description,  "Nitrogen Web Framework for Erlang"},
+    {vsn,          "2.0.5"},
+    {applications, [kernel, stdlib, sasl]},
+    {registered, []}
+]}.

@@ -1,0 +1,13 @@
+*.dump
+.DS_Store
+coverage
+.hgignore
+*.beam
+rel/nitrogen
+TAGS
+builds
+Quickstart/static/nitrogen
+Quickstart/static/doc
+.eunit/
+*.beam
+*.app

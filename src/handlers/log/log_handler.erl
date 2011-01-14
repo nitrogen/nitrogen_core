@@ -3,6 +3,9 @@
 % See MIT-LICENSE for licensing information.
 
 -module (log_handler).
+
+-compile({no_auto_import,[error/1]}).
+
 -export ([
     behaviour_info/1,
     info/1, info/2,
@@ -44,6 +47,6 @@ behaviour_info(callbacks) -> [
     {finish, 2},
     {info, 3},       
     {warning, 3},	
-    {error, 4}
+    {error, 3}
 ];
 behaviour_info(_) -> undefined.
