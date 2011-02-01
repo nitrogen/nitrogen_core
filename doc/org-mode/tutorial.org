@@ -44,7 +44,7 @@
 
 *** If you *do* have Erlang installed:
 
-Pull the [[http://github.com/rklophaus/nitrogen][Nitrogen Source Code]], then =make rel_inets; cd rel/nitrogen=.
+Pull the [[http://github.com/nitrogen/nitrogen][Nitrogen Source Code]], then =make rel_inets; cd rel/nitrogen=.
 
 * Start the Website in Console Mode
 ** Install & Run Nitrogen

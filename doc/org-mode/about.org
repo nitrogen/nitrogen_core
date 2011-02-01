@@ -10,7 +10,7 @@
 
   + NitrogenProject.com - http://nitrogenproject.com
 
-  + Source Code - http://github.com/rklophaus/nitrogen
+  + Source Code - http://github.com/nitrogen/nitrogen
 
   + Donations - http://pledgie.com/campaigns/2057
 
@@ -25,19 +25,19 @@
   + *Erlang R13B03* or later - http://erlang.org
 
   + *SimpleBridge* - Common interface to Erlang HTTP servers.
-    - Git Repo: git://github.com/rklophaus/SimpleBridge.git
-    - Tag: v1.1.0
+    - Git Repo: https://github.com/nitrogen/simple_bridge
 
   + *mochiweb* - HTTP Server (Optional)
-    - SVN Repo: http://mochiweb.googlecode.com/svn/trunk/
-    - Tag: 1.5.0
+    - SVN Repo: https://github.com/nitrogen/mochiweb
 
   + *webmachine* - HTTP Server (Optional)
     - SVN Repo: https://github.com/basho/webmachine
-    - Revision: webmachine-1.7.3
 
   + *yaws* - HTTP Server - http://yaws.hyber.org/ (Optional)
-    - Source: http://yaws.hyber.org/download/yaws-1.89.tar.gz
+    - Source: https://yaws.hyber.org/download/
+
+  + *Sync* - Automatically recompile changed Erlang modules.
+    - Source: https://github.com/rklophaus/Sync
 
   + *JQuery 1.4.2* - http://jquery.com
 
@@ -74,5 +74,5 @@
 
   This documentation is created using org-mode. To contribute updates
   or corrections, contact Rusty Klophaus (@rklophaus) or fork and
-  update the code in http://github.com/rklophaus/nitrogen under the
+  update the code in http://github.com/nitrogen/nitrogen under the
   =./docs/org-mode= directory
