@@ -7,7 +7,7 @@ lang="en" xml:lang="en">
 <title>Getting Started with Nitrogen</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2010-12-20 17:14:31 EST"/>
+<meta name="generated" content="2011-02-01 08:02:39 EST"/>
 <meta name="author" content="Rusty Klophaus (@rklophaus)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -89,14 +89,7 @@ lang="en" xml:lang="en">
 <li><a href="#sec-2">2 Is there a Nitrogen Tutorial? </a></li>
 <li><a href="#sec-3">3 How do I create a new Nitrogen application? </a></li>
 <li><a href="#sec-4">4 How do I start/stop/manage Nitrogen? </a></li>
-<li><a href="#sec-5">5 How do I change configuration settings? </a>
-<ul>
-<li><a href="#sec-5_1">5.1 Inets Configuration </a></li>
-<li><a href="#sec-5_2">5.2 Mochiweb Configuration </a></li>
-<li><a href="#sec-5_3">5.3 Webmachine Configuration </a></li>
-<li><a href="#sec-5_4">5.4 Yaws Configuration </a></li>
-</ul>
-</li>
+<li><a href="#sec-5">5 How do I change configuration settings? </a></li>
 <li><a href="#sec-6">6 Where is the code for my website? </a></li>
 <li><a href="#sec-7">7 How do I compile my code? </a></li>
 <li><a href="#sec-8">8 How do I create new pages, custom elements, or custom actions? </a></li>
@@ -195,41 +188,7 @@ make package_inets
 <p>
 You can also run Nitrogen on Mochiweb or Yaws. Run one of the
 scripts provided in the <code>./deps/</code> directory to download the
-Mochiweb or Yaws code.
-</p>
-<pre class="example">
-# For Mochiweb...
-./deps/get_mochiweb.sh
-
-# For Webmachine...
-./deps/get_webmachine.sh
-</pre>
-
-
-<pre class="example">
-# For Yaws...
-./deps/get_yaws.sh
-</pre>
-
-
-<p>
-Then, create the release or the binary package (example below is
-for Mochiweb):
-</p>
-<pre class="example">
-# Build a release in ./rel/nitrogen
-make rel_mochiweb
-
-# Build a binary package in ./builds
-make package_mochiweb
-</pre>
-
-
-<p>
-Nitrogen 2.0 uses Dave "Dizzy" Smith's <a href="http://dizzyd.com/blog/post/194">Rebar</a> (<a href="http://bitbucket.org/basho/rebar/">source code</a>) to build
-OTP-compliant releases and packages. Check it out, it is awesome.
-</p>
-</div>
+</p></div>
 
 </div>
 
@@ -238,35 +197,10 @@ OTP-compliant releases and packages. Check it out, it is awesome.
 <div class="outline-text-2" id="text-4">
 
 
-<p>
-Once you have a build of Nitrogen that will run on your
-application, the next step is to start the application. Nitrogen
-includes a handy script inside your release, under
-<code>./bin/nitrogen</code>, that will let you bring your Nitrogen application
-up or down:
-</p>
 <pre class="example">
-# Start the app in the background...
-./bin/nitrogen start
-
-# Connect to the app in the background. Control-D to disconnect.
-./bin/nitrogen attach
-
-# Stop the app...
-./bin/nitrogen stop
-
-# Start the app in "console" mode...
-./bin/nitrogen console
-
-# Ping the app to see if it is running...
-./bin/nitrogen ping
+./deps/get_mochiweb.sh
 </pre>
 
-
-<p>
-Once you have started your application, open
-<a href="http://localhost:8000">http://localhost:8000</a>. You should see a basic welcome page.x
-</p>
 </div>
 
 </div>
@@ -275,115 +209,10 @@ Once you have started your application, open
 <h2 id="sec-5"><a name="3" id="3"></a><span class="section-number-2">5</span> How do I change configuration settings? </h2>
 <div class="outline-text-2" id="text-5">
 
+<pre class="example">
+./deps/get_webmachine.sh
+</pre>
 
-<p>
-All configuration files for your application can be found under the
-<code>./etc</code> directory.
-</p>
-<p>
-Here, you will see:
-</p>
-<ul>
-<li>
-<b>vm.args</b> - This controls the arguments passed in to the
-VM. Here, you can set the node name, cookie, memory flags, etc.
-
-</li>
-<li>
-<b>app.config</b> - This contains application settings for Nitrogen and
-sasl (error logging).
-
-</li>
-</ul>
-
-<p><b>Important:</b> Before deploying your app to production, you should
-change the Erlang cookie (found in <code>./etc/vm.args</code>) and define a Nitrogen
-signkey (found in <code>./etc/app.config</code>).
-</p>
-
-</div>
-
-<div id="outline-container-5_1" class="outline-3">
-<h3 id="sec-5_1"><span class="section-number-3">5.1</span> Inets Configuration </h3>
-<div class="outline-text-3" id="text-5_1">
-
-
-<p>
-Nitrogen applications running on Inets will also contain:
-</p>
-<ul>
-<li>
-<b>inets.config</b> - You should not need to touch this file.
-
-</li>
-<li>
-<b>inets_httpd.erlenv</b> - Configure ip/port of your application, and other
-Inets-specific information.
-
-</li>
-</ul>
-</div>
-
-</div>
-
-<div id="outline-container-5_2" class="outline-3">
-<h3 id="sec-5_2"><span class="section-number-3">5.2</span> Mochiweb Configuration </h3>
-<div class="outline-text-3" id="text-5_2">
-
-
-<p>
-Nitrogen applications running on Mochiweb will also contain:
-</p>
-<ul>
-<li>
-<b>mochiweb.config</b> - Configure ip/port of your application, and
-other Mochiweb-specific information.
-
-</li>
-</ul>
-</div>
-
-</div>
-
-<div id="outline-container-5_3" class="outline-3">
-<h3 id="sec-5_3"><span class="section-number-3">5.3</span> Webmachine Configuration </h3>
-<div class="outline-text-3" id="text-5_3">
-
-
-<p>
-Nitrogen applications running on Webmachine will also contain:
-</p>
-<ul>
-<li>
-<b>webmachine.config</b> - Configure ip/port of your application, and
-other Webmachine-specific information.
-
-</li>
-</ul>
-</div>
-
-</div>
-
-<div id="outline-container-5_4" class="outline-3">
-<h3 id="sec-5_4"><span class="section-number-3">5.4</span> Yaws Configuration </h3>
-<div class="outline-text-3" id="text-5_4">
-
-
-<p>
-Nitrogen applications running on Yaws will also contain:
-</p>
-<ul>
-<li>
-<b>yaws.config</b> - You should not need to touch this file.
-
-</li>
-<li>
-<b>yaws.conf</b> - Configure ip/port of your application, and other
-Yaws-specific information.
-
-</li>
-</ul>
-</div>
 </div>
 
 </div>
@@ -392,46 +221,10 @@ Yaws-specific information.
 <h2 id="sec-6"><a name="4" id="4"></a><span class="section-number-2">6</span> Where is the code for my website? </h2>
 <div class="outline-text-2" id="text-6">
 
+<pre class="example">
+./deps/get_yaws.sh
+</pre>
 
-<p>
-The Nitrogen project is structured so that all site specific code
-is contained inside the <code>site</code> directory. It is recommended that
-you place your entire <code>site</code> directory under source control. This
-will allow you to move your application to other architectures and
-configurations easily.
-</p>
-<p>
-The <code>site</code> directory contains the following sub-directories:
-</p>
-<dl>
-<dt><code>./site/src</code></dt><dd>
-Page modules, custom elements, and custom actions for
-your site.
-
-</dd>
-<dt><code>./site/static</code></dt><dd>
-Static files, including Javascript and
-CSS. These will be served through the web. Place any files you
-like here, but try not to touch the <code>nitrogen</code> directory, as you
-will need to overwrite this when you upgrade to a new version of
-Nitrogen.
-
-</dd>
-<dt><code>./site/templates</code></dt><dd>
-Html files used by the <code>#template{}</code> action.
-
-</dd>
-<dt><code>./site/.prototypes</code></dt><dd>
-Code used by <code>./bin/dev</code> to generate a page,
-element, or action. Feel free to edit these to something more to
-your liking.
-
-</dd>
-<dt><code>./site/ebin</code></dt><dd>
-Compiled <code>.beam</code> files.
-
-</dd>
-</dl>
 </div>
 
 </div>
@@ -561,7 +354,7 @@ You will also need to update your code if there are any API level changes.
 <div id="postamble">
 <p class="author"> Author: Rusty Klophaus (@rklophaus)
 </p>
-<p class="date"> Date: 2010-12-20 17:14:31 EST</p>
+<p class="date"> Date: 2011-02-01 08:02:39 EST</p>
 <p class="creator">HTML generated by org-mode 7.01h in emacs 24</p>
 </div>
 </div>

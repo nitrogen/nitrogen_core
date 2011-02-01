@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 lang="en" xml:lang="en">
 <head>
 <title>Introduction to Nitrogen</title>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2010-11-22 11:02:35 EST"/>
+<meta name="generated" content="2011-02-01 08:02:39 EST"/>
 <meta name="author" content="Rusty Klophaus"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -2303,7 +2303,7 @@ First, let's use the postback to print out a debug message.
     ].
 
 <span style="color: #28439B;">event</span>(myevent) -&gt;
-    ?<span style="color: #28439B;">PRINT</span>({event, <span style="color: #000000;">now</span>()}).
+    ?<span style="color: #A639AE;">PRINT</span>({event, <span style="color: #000000;">now</span>()}).
 </pre>
 
 
@@ -2393,7 +2393,7 @@ The previous code, simplified:
     ].
 
 <span style="color: #28439B;">event</span>(myevent) -&gt;
-    ?<span style="color: #28439B;">PRINT</span>({event, <span style="color: #000000;">now</span>()}).
+    ?<span style="color: #A639AE;">PRINT</span>({event, <span style="color: #000000;">now</span>()}).
 </pre>
 
 
@@ -2439,9 +2439,9 @@ The previous code, simplified:
     ].
 
 <span style="color: #28439B;">event</span>(my_click_event) -&gt;
-    ?<span style="color: #28439B;">PRINT</span>({click, <span style="color: #000000;">now</span>()});
+    ?<span style="color: #A639AE;">PRINT</span>({click, <span style="color: #000000;">now</span>()});
 <span style="color: #28439B;">event</span>(<span style="color: #000000;">OtherEvent</span>) -&gt;
-    ?<span style="color: #28439B;">PRINT</span>({other, <span style="color: #000000;">MyEvent</span>, <span style="color: #000000;">now</span>()}).
+    ?<span style="color: #A639AE;">PRINT</span>({other, <span style="color: #000000;">MyEvent</span>, <span style="color: #000000;">now</span>()}).
 </pre>
 
 
@@ -2486,7 +2486,7 @@ Generally, a postback is a good chance to read form elements. The
 
 <span style="color: #28439B;">event</span>(myevent) -&gt;
     <span style="color: #000000;">Text</span> = <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">q</span>(mytextbox),
-    ?<span style="color: #28439B;">PRINT</span>({event, <span style="color: #000000;">Text</span>}).
+    ?<span style="color: #A639AE;">PRINT</span>({event, <span style="color: #000000;">Text</span>}).
 </pre>
 
 
@@ -3730,7 +3730,7 @@ and chat to yourself.
     ].
 
 <span style="color: #28439B;">event</span>(submit) -&gt;
-    ?<span style="color: #28439B;">PRINT</span>(<span style="color: #28439B;">wf</span>:<span style="color: #28439B;">q</span>(msg)),
+    ?<span style="color: #A639AE;">PRINT</span>(<span style="color: #28439B;">wf</span>:<span style="color: #28439B;">q</span>(msg)),
     <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">send_global</span>(repeater_pool, {msg, <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">q</span>(msg)}).
 
 <span style="color: #28439B;">repeater</span>() -&gt;
@@ -3891,7 +3891,7 @@ on the main page.
     <span style="color: #000000;">ButtonID</span> = <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">temp_id</span>(),
     <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">wire</span>(<span style="color: #000000;">ButtonID</span>, #<span style="color: #28439B;">event</span> { 
         type=click,
-        delegate=?<span style="color: #28439B;">MODULE</span>, 
+        delegate=?<span style="color: #A639AE;">MODULE</span>, 
         postback={click, <span style="color: #000000;">TextboxID</span>}
     }),
     [
@@ -3901,7 +3901,7 @@ on the main page.
 
 <span style="color: #28439B;">event</span>({click, <span style="color: #000000;">TextboxID</span>}) -&gt;
     <span style="color: #000000;">Text</span> = <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">q</span>(<span style="color: #000000;">TextboxID</span>),
-    ?<span style="color: #28439B;">PRINT</span>({clicked, <span style="color: #000000;">TextboxID</span>, <span style="color: #000000;">Text</span>}),
+    ?<span style="color: #A639AE;">PRINT</span>({clicked, <span style="color: #000000;">TextboxID</span>, <span style="color: #000000;">Text</span>}),
     <span style="color: #000000;">PageModule</span> = <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">page_module</span>(),
     <span style="color: #000000;">PageModule</span>:<span style="color: #28439B;">my_element_event</span>(<span style="color: #000000;">Text</span>).
 </pre>
@@ -3943,7 +3943,7 @@ element into <code>include/records.hrl</code> first!
     #<span style="color: #28439B;">my_element</span> {}.
 
 <span style="color: #28439B;">my_element_event</span>(<span style="color: #000000;">Text</span>) -&gt;
-    ?<span style="color: #28439B;">PRINT</span>(<span style="color: #000000;">Text</span>).
+    ?<span style="color: #A639AE;">PRINT</span>(<span style="color: #000000;">Text</span>).
 </pre>
 
 
@@ -4018,7 +4018,7 @@ string, but converted to all uppercase.
 
 
 
-<pre class="src src-erlang"><span style="color: #FB5D17;">-record</span>(<span style="color: #28439B;">my_action</span>, {?<span style="color: #28439B;">ACTION_BASE</span>(action_my_action), text}).
+<pre class="src src-erlang"><span style="color: #FB5D17;">-record</span>(<span style="color: #28439B;">my_action</span>, {?<span style="color: #A639AE;">ACTION_BASE</span>(action_my_action), text}).
 
 <span style="color: #28439B;">render_action</span>(<span style="color: #000000;">Record</span> = #<span style="color: #28439B;">my_action</span>{}) -&gt;
     #<span style="color: #28439B;">alert</span> { text=<span style="color: #28439B;">string</span>:<span style="color: #28439B;">to_upper</span>(<span style="color: #000000;">Record</span>#<span style="color: #28439B;">my_action</span>.text) }.
@@ -4199,10 +4199,10 @@ to access modules beginning with the word "my".
 <pre class="src src-erlang"><span style="color: #FB5D17;">-module</span>(my_security_handler).
 <span style="color: #FB5D17;">-behaviour</span>(security_handler).
 <span style="color: #FB5D17;">-export</span>([<span style="color: #28439B;">init/2</span>, <span style="color: #28439B;">finish/2</span>]).
-<span style="color: #FB5D17;">-include_lib</span>(<span style="color: #09A240;">"nitrogen_core/include/wf.hrl"</span>).
+<span style="color: #FB5D17;">-include_lib</span>(<span style="color: #09A240;">"nitrogen/include/wf.hrl"</span>).
 
 <span style="color: #28439B;">init</span>(<span style="color: #000000;">_Config</span>, <span style="color: #000000;">State</span>) -&gt;
-    ?<span style="color: #28439B;">PRINT</span>(<span style="color: #28439B;">wf</span>:<span style="color: #28439B;">page_module</span>()),
+    ?<span style="color: #A639AE;">PRINT</span>(<span style="color: #28439B;">wf</span>:<span style="color: #28439B;">page_module</span>()),
     <span style="color: #FB5D17;">case</span> <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">to_list</span>(<span style="color: #28439B;">wf</span>:<span style="color: #28439B;">page_module</span>()) <span style="color: #FB5D17;">of</span>
         <span style="color: #09A240;">"my"</span> ++ <span style="color: #000000;">_</span> -&gt;
             {ok, <span style="color: #000000;">State</span>};
@@ -4342,7 +4342,7 @@ Follow me on Twitter: <a href="http://twitter/rklophaus">@rklophaus</a>
 <div id="postamble">
 <p class="author"> Author: Rusty Klophaus
 </p>
-<p class="date"> Date: 2010-11-22 11:02:35 EST</p>
+<p class="date"> Date: 2011-02-01 08:02:39 EST</p>
 <p class="creator">HTML generated by org-mode 7.01h in emacs 24</p>
 </div>
 </div>
