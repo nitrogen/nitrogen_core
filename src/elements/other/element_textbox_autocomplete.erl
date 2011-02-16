@@ -14,8 +14,8 @@ render_element(Record) ->
     AutoCompleteDelay = Record#textbox_autocomplete.delay,
 
     % Write out the script to make this element autocompletable...
-    AutoCompleteEnterPostbackInfo = wf_event:serialize_event_context({autocomplete_enter_event, Delegate, Tag}, Anchor, undefined, ?MODULE),
-    AutoCompleteSelectPostbackInfo = wf_event:serialize_event_context({autocomplete_select_event, Delegate, Tag }, Anchor, undefined, ?MODULE ),
+    AutoCompleteEnterPostbackInfo = wf_event:serialize_event_context({autocomplete_enter_event, Delegate, Tag}, Anchor, undefined, false, ?MODULE),
+    AutoCompleteSelectPostbackInfo = wf_event:serialize_event_context({autocomplete_select_event, Delegate, Tag }, Anchor, undefined, false, ?MODULE ),
 
     AutoCompleteOptions = {struct, [
         {dataType, <<"json">>},

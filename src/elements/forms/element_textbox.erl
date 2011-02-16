@@ -17,9 +17,11 @@ render_element(Record) ->
     Anchor = Record#textbox.anchor,
     Delegate = Record#textbox.delegate,
     Postback = Record#textbox.postback,
+    HandleInvalid = Record#textbox.handle_invalid,
+    OnInvalid = Record#textbox.on_invalid,
 
     wire_next(Anchor, Record#textbox.next),
-    wire_postback(Anchor, ID, Delegate, Postback),
+    wire_postback(Anchor, ID, HandleInvalid, OnInvalid, Delegate, Postback),
 
     Value = wf:html_encode(Record#textbox.text, Record#textbox.html_encode),
     Placeholder  = wf:html_encode(Record#textbox.placeholder, true),
@@ -41,12 +43,14 @@ wire_next(Anchor, Next) ->
     Next1 = wf_render_actions:normalize_path(Next),
     wf:wire(Anchor, #event { type=enterkey, actions=wf:f("Nitrogen.$go_next('~s');", [Next1]) }).
 
-wire_postback(_, _, _, undefined) ->
+wire_postback(_, _, _, _, _, undefined) ->
     do_nothing;
-wire_postback(Anchor, ID, Delegate, Postback) ->
+wire_postback(Anchor, ID, HandleInvalid, OnInvalid, Delegate, Postback) ->
     wf:wire(Anchor, #event {
         type=enterkey,
         postback=Postback,
         validation_group=ID,
+        handle_invalid=HandleInvalid,
+        on_invalid=OnInvalid,
         delegate=Delegate
     }).

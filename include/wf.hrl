@@ -40,11 +40,13 @@
 % Event Information. A serialized version of this record
 % is sent by the browser when an event is called.
 -record(event_context, {
-  module,     % The module that should handle the event
-  tag,        % An Erlang term that is passed along with the event
-  type,       % The type of event postback, comet, continuation, upload
-  anchor,     % The element id to which trigger and target are relative.
-  validation_group % The validation group that should be run when this event is fired.
+    module,     % The module that should handle the event
+    tag,        % An Erlang term that is passed along with the event
+    type,       % The type of event postback, comet, continuation, upload
+    anchor,     % The element id to which trigger and target are relative.
+    validation_group, % The validation group that should be run when this event is fired.
+    handle_invalid % When an invalidation evaluates to false, instead of silently not
+                   % issuing a postback event, call Delegate:event_invalid with the same tag.
 }).
 
 % Handlers Context-
@@ -208,6 +210,8 @@
         url="javascript:"       :: script() | url(),
         click                   :: actions(),
         postback                :: term(),
+        handle_invalid=false    :: boolean(),
+        on_invalid              :: undefined | script(),
         delegate                :: module()
     }).
 -record(email_link, {?ELEMENT_BASE(element_email_link),
@@ -235,6 +239,8 @@
         html_encode=true        :: html_encode(),
         click                   :: actions(),
         postback                :: term(),
+        handle_invalid=false    :: boolean(),
+        on_invalid              :: undefined | script(),
         delegate                :: module(),
         data_fields=[]          :: data_fields()
     }).
@@ -249,6 +255,8 @@
         html_encode=true        :: html_encode(),
         next                    :: id(),
         postback                :: term(),
+        handle_invalid=false    :: boolean(),
+        on_invalid              :: undefined | script(),
         delegate                :: module(),
         html_name               :: html_name(),
         type=text               :: string() | atom(),
@@ -277,6 +285,8 @@
         value=0                 :: integer(),
         next                    :: id(),
         postback                :: term(),
+        handle_invalid=false    :: boolean(),
+        on_invalid              :: undefined | script(),
         delegate                :: module()
     }).
 -record(datepicker_textbox, {?ELEMENT_BASE(element_datepicker_textbox),
@@ -308,6 +318,8 @@
         options=[]              :: options(),
         html_encode=true        :: html_encode(),
         postback                :: term(),
+        handle_invalid=false    :: boolean(),
+        on_invalid              :: undefined | script(),
         delegate                :: module(),
         value                   :: text(),
         multiple=false          :: boolean(),
@@ -322,6 +334,8 @@
         checked=false           :: boolean(),
         value="on"              :: text(),
         postback                :: term(),
+        handle_invalid=false    :: boolean(),
+        on_invalid              :: undefined | script(),
         delegate                :: module(),
         html_name               :: html_name()
     }).
@@ -335,6 +349,8 @@
         name                    :: html_name(),
         checked=false           :: boolean(),
         postback                :: term(),
+        handle_invalid=false    :: boolean(),
+        on_invalid              :: undefined | script(),
         delegate                :: module(),
         html_name               :: html_name()
     }).
@@ -345,6 +361,8 @@
         html_encode=true        :: html_encode(),
         next                    :: id(),
         postback                :: term(),
+        handle_invalid=false    :: boolean(),
+        on_invalid              :: undefined | script(),
         delegate                :: module(),
         html_name               :: html_name()
     }).
@@ -540,6 +558,8 @@
         html_encode=true        :: html_encode(),
         next                    :: id(),
         postback                :: term(),
+        handle_invalid=false    :: boolean(),
+        on_invalid              :: undefined | script(),
         delegate                :: module()
     }).
 -record(recaptcha, {?ELEMENT_BASE(element_recaptcha),
@@ -583,6 +603,8 @@
         off_value="off"         :: text(),
         selected="on"           :: atom() | text(),
         postback                :: term(),
+        handle_invalid=false    :: boolean(),
+        on_invalid              :: undefined | script(),
         delegate                :: module(),
         width                   :: integer() | undefined,
         theme=""                :: mobile_theme()
@@ -748,6 +770,8 @@
         shift_key=false         :: boolean(),
         delay=0                 :: integer(),
         postback                :: term(),
+        handle_invalid=false    :: boolean(),
+        on_invalid              :: undefined | script(),
         validation_group        :: string() | binary() | atom(),
         delegate                :: module(),
         extra_param             :: string() | binary() | undefined

@@ -248,6 +248,14 @@ event_validation_group(ValidationGroup) ->
     Event = event_context(),
     event_context(Event#event_context { validation_group = ValidationGroup }).
 
+event_handle_invalid() ->
+    Event = event_context(),
+    Event#event_context.handle_invalid.
+
+event_handle_invalid(HandleInvalid) ->
+    Event = event_context(),
+    event_context(Event#event_context { handle_invalid = HandleInvalid }).
+
 %%% HANDLERS %%%
 
 handlers() ->

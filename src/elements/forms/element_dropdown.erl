@@ -38,6 +38,8 @@ wire_postback(Dropdown) ->
     wf:wire(Dropdown#dropdown.anchor, #event { 
         type=change, 
         postback=Dropdown#dropdown.postback,
+        handle_invalid=Dropdown#dropdown.handle_invalid,
+        on_invalid=Dropdown#dropdown.on_invalid,
         validation_group=Dropdown#dropdown.id,
         delegate=Dropdown#dropdown.delegate 
     }).

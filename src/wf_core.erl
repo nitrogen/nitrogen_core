@@ -184,6 +184,7 @@ run_postback_request() ->
     % Some values...
     Module = wf_context:event_module(),
     Tag = wf_context:event_tag(),
+    HandleInvalid = wf_context:event_handle_invalid(),
 
     % Validate...
     {ok, IsValid} = wf_validation:validate(),
@@ -191,7 +192,11 @@ run_postback_request() ->
     % Call the event...
     case IsValid of
         true -> Module:event(Tag);
-        false -> ok
+        false ->
+            if
+                HandleInvalid -> Module:event_invalid(Tag);
+                true          -> ok
+            end
     end.
 
 run_crashed_postback_request(Type, Error, Stacktrace) ->

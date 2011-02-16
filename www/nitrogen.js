@@ -60,10 +60,11 @@ NitrogenClass.prototype.$destroy = function() {
 
 /*** EVENT QUEUE ***/
 
-NitrogenClass.prototype.$queue_event = function(validationGroup, eventContext, extraParam, ajaxSettings) {
+NitrogenClass.prototype.$queue_event = function(validationGroup, onInvalid, eventContext, extraParam, ajaxSettings) {
     // Put an event on the event_queue.
     this.$event_queue.push({
         validationGroup : validationGroup,
+        onInvalid       : onInvalid,
         eventContext    : eventContext,
         extraParam      : extraParam,
         ajaxSettings    : ajaxSettings
@@ -90,7 +91,7 @@ NitrogenClass.prototype.$event_loop = function() {
     // If no events are running and an event is queued, then fire it.
     if (!this.$event_is_running && this.$event_queue.length > 0) {
         var o = this.$event_queue.shift();
-        this.$do_event(o.validationGroup, o.eventContext, o.extraParam, o.ajaxSettings);
+        this.$do_event(o.validationGroup, o.onInvalid, o.eventContext, o.extraParam, o.ajaxSettings);
     }
 
     if (this.$system_event_queue.length == 0 || this.$event_queue.length == 0) {
@@ -199,7 +200,7 @@ NitrogenClass.prototype.$make_id = function(element) {
 
 /*** AJAX METHODS ***/
 
-NitrogenClass.prototype.$do_event = function(validationGroup, eventContext, extraParam, ajaxSettings) {
+NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventContext, extraParam, ajaxSettings) {
     var n = this;
     
     var s = jQuery.extend({
@@ -216,6 +217,12 @@ NitrogenClass.prototype.$do_event = function(validationGroup, eventContext, extr
     var validationParams = this.$validate_and_serialize(validationGroup);   
     if (validationParams == null) {
         this.$event_is_running = false;
+
+        // Since validation failed, call onInvalid callback
+        if (onInvalid) {
+            onInvalid();
+        }
+
         return;
     }
 
@@ -683,10 +690,10 @@ NitrogenClass.prototype.$autocomplete = function(path, autocompleteOptions, ente
     jQuery.extend(autocompleteOptions, {
         select: function(ev, ui) {
           var item = (ui.item) && '{"id":"'+ui.item.id+'","value":"'+ui.item.value+'"}' || '';
-          n.$queue_event(null, selectPostbackInfo, "select_item="+n.$urlencode(item));
+          n.$queue_event(null, null, selectPostbackInfo, "select_item="+n.$urlencode(item));
         },
         source: function(req, res) {
-          n.$queue_event(null, enterPostbackInfo, "search_term="+req.term, {
+          n.$queue_event(null, null, enterPostbackInfo, "search_term="+req.term, {
               dataType: 'json',
               success: function(data) {
                  res(data);
@@ -710,7 +717,7 @@ NitrogenClass.prototype.$droppable = function(path, dropOptions, dropPostbackInf
     var n = this;
     dropOptions.drop = function(ev, ui) {
         var dragItem = ui.draggable[0].$drag_tag;
-        n.$queue_event(null, dropPostbackInfo, "drag_item=" + dragItem);
+        n.$queue_event(null, null, dropPostbackInfo, "drag_item=" + dragItem);
     };
     objs(path).each(function(index, el) {
           jQuery(el).droppable(dropOptions);
@@ -730,13 +737,13 @@ NitrogenClass.prototype.$sortitem = function(el, sortTag) {
 NitrogenClass.prototype.$sortblock = function(el, sortOptions, sortPostbackInfo) {
     var n = this;
     sortOptions.update = function() {
-    var sortItems = "";
-    for (var i=0; i<this.childNodes.length; i++) {
-        var childNode = this.childNodes[i];
-        if (sortItems != "") sortItems += ",";
-        if (childNode.$sort_tag) sortItems += childNode.$sort_tag;
-    }
-    n.$queue_event(null, sortPostbackInfo, "sort_items=" + sortItems);
+        var sortItems = "";
+        for (var i=0; i<this.childNodes.length; i++) {
+            var childNode = this.childNodes[i];
+            if (sortItems != "") sortItems += ",";
+            if (childNode.$sort_tag) sortItems += childNode.$sort_tag;
+        }
+        n.$queue_event(null, null, sortPostbackInfo, "sort_items=" + sortItems);
     };
     objs(el).sortable(sortOptions);
 }

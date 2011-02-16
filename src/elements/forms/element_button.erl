@@ -17,7 +17,13 @@ render_element(Record) ->
     Anchor = Record#button.anchor,
     case Record#button.postback of
         undefined -> ignore;
-        Postback -> wf:wire(Anchor, #event { type=click, validation_group=ID, postback=Postback, delegate=Record#button.delegate })
+        Postback -> wf:wire(Anchor, #event {
+                    type=click,
+                    validation_group=ID,
+                    postback=Postback,
+                    handle_invalid=Record#button.handle_invalid,
+                    on_invalid=Record#button.on_invalid,
+                    delegate=Record#button.delegate })
     end,
 
 	case Record#button.click of
