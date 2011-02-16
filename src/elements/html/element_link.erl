@@ -13,7 +13,13 @@ render_element(Record) ->
     Anchor = Record#link.anchor,
     case Record#link.postback of
         undefined -> ignore;
-        Postback -> wf:wire(Anchor, #event { type=click, postback=Postback, validation_group=ID, delegate=Record#link.delegate })
+        Postback -> wf:wire(Anchor, #event {
+                    type=click,
+                    postback=Postback,
+                    validation_group=ID,
+                    handle_invalid=Record#link.handle_invalid,
+                    on_invalid=Record#link.on_invalid,
+                    delegate=Record#link.delegate })
     end,
 
     Body = [

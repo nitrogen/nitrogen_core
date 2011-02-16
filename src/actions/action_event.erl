@@ -7,16 +7,17 @@
 -compile(export_all).
 
 render_action(#event { 
-    postback=Postback, actions=Actions, 
-    anchor=Anchor, trigger=Trigger, target=Target, validation_group=ValidationGroup,
+    postback=Postback, actions=Actions,
+    anchor=Anchor, trigger=Trigger, target=Target,
+    validation_group=ValidationGroup, handle_invalid=HandleInvalid, on_invalid=OnInvalid,
     type=Type, keycode=KeyCode, delay=Delay, delegate=Delegate, 
     extra_param=ExtraParam
 }) -> 
 
     ValidationGroup1 = wf:coalesce([ValidationGroup, Trigger]),
     AnchorScript = wf_render_actions:generate_anchor_script(Anchor, Target), 
-    PostbackScript = wf_event:generate_postback_script(Postback, Anchor, ValidationGroup1, Delegate, ExtraParam),
-    SystemPostbackScript = wf_event:generate_system_postback_script(Postback, Anchor, ValidationGroup1, Delegate),
+    PostbackScript = wf_event:generate_postback_script(Postback, Anchor, ValidationGroup1, HandleInvalid, OnInvalid, Delegate, ExtraParam),
+    SystemPostbackScript = wf_event:generate_system_postback_script(Postback, Anchor, ValidationGroup1, HandleInvalid, Delegate),
     WireAction = #wire { trigger=Trigger, target=Target, actions=Actions },
 
     Script = case Type of

@@ -13,7 +13,13 @@ render_element(Record) ->
     Anchor = Record#dropdown.anchor,
     case Record#dropdown.postback of
         undefined -> ignore;
-        Postback -> wf:wire(Anchor, #event { type=change, postback=Postback, validation_group=ID, delegate=Record#dropdown.delegate })
+        Postback -> wf:wire(Anchor, #event {
+                    type=change,
+                    postback=Postback,
+                    validation_group=ID,
+                    handle_invalid=Record#dropdown.handle_invalid,
+                    on_invalid=Record#dropdown.on_invalid,
+                    delegate=Record#dropdown.delegate })
     end,
 
     case Record#dropdown.value of 

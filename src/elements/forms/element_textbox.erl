@@ -20,7 +20,13 @@ render_element(Record) ->
 
     case Record#textbox.postback of
         undefined -> ignore;
-        Postback -> wf:wire(Anchor, #event { type=enterkey, postback=Postback, validation_group=ID, delegate=Record#textbox.delegate })
+        Postback -> wf:wire(Anchor, #event {
+                    type=enterkey,
+                    postback=Postback,
+                    validation_group=ID,
+                    handle_invalid=Record#textbox.handle_invalid,
+                    on_invalid=Record#textbox.on_invalid,
+                    delegate=Record#textbox.delegate })
     end,
 
     Value = wf:html_encode(Record#textbox.text, Record#textbox.html_encode),

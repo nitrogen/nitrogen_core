@@ -17,7 +17,13 @@ render_element(Record) ->
     end,
     case Record#checkbox.postback of
         undefined -> ignore;
-        Postback -> wf:wire(Anchor, #event { type=change, postback=Postback, validation_group=ID, delegate=Record#checkbox.delegate })
+        Postback -> wf:wire(Anchor, #event {
+                    type=change,
+                    postback=Postback,
+                    validation_group=ID,
+                    handle_invalid=Record#checkbox.handle_invalid,
+                    on_invalid=Record#checkbox.on_invalid,
+                    delegate=Record#checkbox.delegate })
     end,
 
     Text = wf:html_encode(Record#checkbox.text, Record#checkbox.html_encode),

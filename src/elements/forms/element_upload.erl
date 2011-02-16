@@ -44,7 +44,7 @@ render_element(Record) ->
     IFrameID = wf:temp_id(),
     ButtonID = wf:temp_id(),
     SubmitJS = wf:f("Nitrogen.$upload(jQuery('#~s').get(0));", [FormID]),
-    PostbackInfo = wf_event:serialize_event_context(FinishedTag, Record#upload.id, undefined, ?MODULE),
+    PostbackInfo = wf_event:serialize_event_context(FinishedTag, Record#upload.id, undefined, false, ?MODULE),
 
     % Create a postback that is called when the user first starts the upload...
     wf:wire(Anchor, #event { show_if=(not ShowButton), type=change, delegate=?MODULE, postback=StartedTag }),
@@ -126,7 +126,8 @@ event({upload_finished, Record}) ->
     % Make the tag...
     Anchor = wf_context:anchor(),
     ValidationGroup = wf_context:event_validation_group(),
-    Postback = wf_event:generate_postback_script(NewTag, Anchor, ValidationGroup, ?MODULE, undefined),
+    HandleInvalid = wf_context:event_handle_invalid(),
+    Postback = wf_event:generate_postback_script(NewTag, Anchor, ValidationGroup, HandleInvalid, undefined, ?MODULE, undefined),
 
     % Set the response...
     wf_context:data([

@@ -14,11 +14,13 @@
 % Event Information. A serialized version of this record
 % is sent by the browser when an event is called.
 -record(event_context, {
-  module,     % The module that should handle the event
-  tag,        % An Erlang term that is passed along with the event
-  type,       % The type of event postback, comet, continuation, upload
+	module,     % The module that should handle the event
+	tag,        % An Erlang term that is passed along with the event
+	type,       % The type of event postback, comet, continuation, upload
 	anchor,     % The element id to which trigger and target are relative.
-	validation_group % The validation group that should be run when this event is fired.
+	validation_group, % The validation group that should be run when this event is fired.
+	handle_invalid % When an invalidation evaluates to false, instead of silently not
+	               % issuing a postback event, call Delegate:event_invalid with the same tag.
 }).
 
 % Handlers Context-
@@ -80,21 +82,21 @@
 -record(p, {?ELEMENT_BASE(element_p), body=""}).
 -record(label, {?ELEMENT_BASE(element_label), text="", html_encode=true}).
 -record(value, {?ELEMENT_BASE(element_value), text="", html_encode=true}).
--record(link, {?ELEMENT_BASE(element_link), title = "", text="", body="", html_encode=true, url="javascript:", postback, delegate}).
+-record(link, {?ELEMENT_BASE(element_link), title = "", text="", body="", html_encode=true, url="javascript:", postback, handle_invalid=false, on_invalid, delegate}).
 -record(error, {?ELEMENT_BASE(element_error), text="", html_encode=true}).
 -record(span, {?ELEMENT_BASE(element_span), text="", html_encode=true}).
--record(button, {?ELEMENT_BASE(element_button), text="Button", html_encode=true, postback, delegate}).
+-record(button, {?ELEMENT_BASE(element_button), text="Button", html_encode=true, postback, handle_invalid=false, on_invalid, delegate}).
 -record(literal, {?ELEMENT_BASE(element_literal), text="", html_encode=true}).
--record(textbox, {?ELEMENT_BASE(element_textbox), text="", html_encode=true, next, postback, delegate}).
+-record(textbox, {?ELEMENT_BASE(element_textbox), text="", html_encode=true, next, postback, handle_invalid=false, on_invalid, delegate}).
 -record(hidden, {?ELEMENT_BASE(element_hidden), text="", html_encode=true}).
 -record(textarea, {?ELEMENT_BASE(element_textarea), text="", html_encode=true}).
 -record(datepicker_textbox, {?ELEMENT_BASE(element_datepicker_textbox), text="", next, html_encode=true, validators=[], options = [{dateFormat, "yy-mm-dd"}] }).
--record(dropdown, {?ELEMENT_BASE(element_dropdown), options=[], html_encode=true, postback, delegate, value}).
+-record(dropdown, {?ELEMENT_BASE(element_dropdown), options=[], html_encode=true, postback, handle_invalid=false, on_invalid, delegate, value}).
 -record(option, { text="", value="", selected=false }).
--record(checkbox, {?ELEMENT_BASE(element_checkbox), text="", html_encode=true, checked=false, value="on", postback, delegate}).
+-record(checkbox, {?ELEMENT_BASE(element_checkbox), text="", html_encode=true, checked=false, value="on", postback, handle_invalid=false, on_invalid, delegate}).
 -record(radiogroup, {?ELEMENT_BASE(element_radiogroup), body=[]}).
--record(radio, {?ELEMENT_BASE(element_radio), text="", html_encode=true, value, name, checked=false, postback, delegate}).
--record(password, {?ELEMENT_BASE(element_password), text="", html_encode=true, next, postback, delegate}).
+-record(radio, {?ELEMENT_BASE(element_radio), text="", html_encode=true, value, name, checked=false, postback, handle_invalid=false, on_invalid, delegate}).
+-record(password, {?ELEMENT_BASE(element_password), text="", html_encode=true, next, postback, handle_invalid=false, on_invalid, delegate}).
 -record(panel, {?ELEMENT_BASE(element_panel), body=""}).
 -record(spinner, {?ELEMENT_BASE(element_spinner), image="/nitrogen/spinner.gif"}).
 -record(image, {?ELEMENT_BASE(element_image), image="", alt}).
@@ -118,7 +120,7 @@
 -record(wizard, {?ELEMENT_BASE(element_wizard), tag, titles, steps }).
 -record(upload, {?ELEMENT_BASE(element_upload), delegate, tag, show_button=true, button_text="Upload" }).
 -record(sparkline, {?ELEMENT_BASE(element_sparkline), type, values, options }).
--record(textbox_autocomplete, {?ELEMENT_BASE(element_textbox_autocomplete), tag, text="", minLength=2, delay=300, html_encode=true, next, postback, delegate=undefined }).
+-record(textbox_autocomplete, {?ELEMENT_BASE(element_textbox_autocomplete), tag, text="", minLength=2, delay=300, html_encode=true, next, postback, handle_invalid=false, on_invalid, delegate=undefined }).
 
 %% HTML5 semantic elements
 -record(section, {?ELEMENT_BASE(element_section), body=""}).
@@ -166,7 +168,7 @@
 -record(function, {?ACTION_BASE(action_function), function }).
 -record(set, {?ACTION_BASE(action_set), value}).
 -record(redirect, {?ACTION_BASE(action_redirect), url}).
--record(event, {?ACTION_BASE(action_event), type=default, keycode=undefined, delay=0, postback, validation_group, delegate, extra_param}).
+-record(event, {?ACTION_BASE(action_event), type=default, keycode=undefined, delay=0, postback, validation_group, handle_invalid=false, on_invalid, delegate, extra_param}).
 -record(validate, {?ACTION_BASE(action_validate), on=submit, success_text=" ", group, validators, attach_to }).
 -record(validation_error, {?ACTION_BASE(action_validation_error), text="" }).
 -record(alert, {?ACTION_BASE(action_alert), text=""}).

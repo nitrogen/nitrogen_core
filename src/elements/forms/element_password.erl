@@ -17,7 +17,13 @@ render_element(Record) ->
     end,
     case Record#password.postback of
         undefined -> ignore;
-        Postback -> wf:wire(Anchor, #event { type=enterkey, postback=Postback, validation_group=ID, delegate=Record#password.delegate })
+        Postback -> wf:wire(Anchor, #event {
+                    type=enterkey,
+                    postback=Postback,
+                    validation_group=ID,
+                    handle_invalid=Record#password.handle_invalid,
+                    on_invalid=Record#password.on_invalid,
+                    delegate=Record#password.delegate })
     end,
 
     Value = wf:html_encode(Record#password.text, Record#password.html_encode),
