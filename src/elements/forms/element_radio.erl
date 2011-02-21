@@ -36,6 +36,6 @@ render_element(Record) ->
 
         %% Label for Radio...
         wf_tags:emit_tag(label, Content, [
-            {for, Anchor}
+            {for, ID}
         ])
     ].
