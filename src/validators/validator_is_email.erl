@@ -13,7 +13,7 @@ render_action(Record)  ->
     validator_custom:render_action(#custom { 
         trigger=TriggerPath, 
         target=TargetPath, 
-        function=fun validate/2, text = Text, tag=Record 
+        function=fun validate/2, text = Text, tag=Record, attach_to=Record#is_email.attach_to
     }),
     wf:f("v.add(Validate.Email, { failureMessage: \"~s\" });", [Text]).
 

@@ -167,8 +167,8 @@
 -record(set, {?ACTION_BASE(action_set), value}).
 -record(redirect, {?ACTION_BASE(action_redirect), url}).
 -record(event, {?ACTION_BASE(action_event), type=default, keycode=undefined, delay=0, postback, validation_group, delegate, extra_param}).
--record(validate, {?ACTION_BASE(action_validate), on=submit, success_text=" ", group, validators, attach_to }).
--record(validation_error, {?ACTION_BASE(action_validation_error), text="" }).
+-record(validate, {?ACTION_BASE(action_validate), on=submit, success_text=" ", group, validators, attach_to}).
+-record(validation_error, {?ACTION_BASE(action_validation_error), text="", attach_to}).
 -record(alert, {?ACTION_BASE(action_alert), text=""}).
 -record(confirm, {?ACTION_BASE(action_confirm), text="", postback, delegate}).
 -record(script, {?ACTION_BASE(action_script), script}).
@@ -186,7 +186,7 @@
 -record(buttonize, {?ACTION_BASE(action_buttonize)}).
 
 %%% Validators %%%
--define(VALIDATOR_BASE(Module), ?ACTION_BASE(Module), text="Failed.").
+-define(VALIDATOR_BASE(Module), ?ACTION_BASE(Module), text="Failed.", attach_to=undefined).
 -record(validatorbase, {?VALIDATOR_BASE(undefined)}).
 -record(is_required, {?VALIDATOR_BASE(validator_is_required)}).
 -record(is_email, {?VALIDATOR_BASE(validator_is_email)}).
@@ -194,7 +194,7 @@
 -record(min_length, {?VALIDATOR_BASE(validator_min_length), length}).
 -record(max_length, {?VALIDATOR_BASE(validator_max_length), length}).
 -record(confirm_password, {?VALIDATOR_BASE(validator_confirm_password), password}).
--record(custom, {?VALIDATOR_BASE(validator_custom), function, tag }).
+-record(custom, {?VALIDATOR_BASE(validator_custom), function, tag}).
 -record(js_custom, {?VALIDATOR_BASE(validator_js_custom), function, args="{}" }).
 
 

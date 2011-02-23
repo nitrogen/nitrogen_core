@@ -12,7 +12,7 @@ render_action(Record)  ->
     Text = wf:js_escape(Record#confirm_password.text),
     PasswordElement = Record#confirm_password.password,
 
-    validator_custom:render_action(#custom { trigger=TriggerPath, target=TargetPath, function=fun validate/2, text = Text, tag=Record }),
+    validator_custom:render_action(#custom { trigger=TriggerPath, target=TargetPath, function=fun validate/2, text = Text, tag=Record, attach_to=Record#confirm_password.attach_to }),
 
     JSFunction = wf:f("function(value, args) { return (value == obj('~s').value); }", [PasswordElement]),
     validator_js_custom:render_action(#js_custom { trigger=TriggerPath, target=TargetPath, function=JSFunction, text=Text }).

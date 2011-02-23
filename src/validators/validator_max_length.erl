@@ -12,7 +12,7 @@ render_action(Record)  ->
     TargetPath = Record#max_length.target,
     Text = wf:js_escape(Record#max_length.text),
     Length = Record#max_length.length,
-    CustomValidatorAction = #custom { trigger=TriggerPath, target=TargetPath, function=fun validate/2, text=Text, tag=Record },
+    CustomValidatorAction = #custom { trigger=TriggerPath, target=TargetPath, function=fun validate/2, text=Text, tag=Record, attach_to=Record#max_length.attach_to },
     validator_custom:render_action(CustomValidatorAction),
     wf:f("v.add(Validate.Length, { maximum: ~p, tooLongMessage: \"~s\" });", [Length, Text]).
 
