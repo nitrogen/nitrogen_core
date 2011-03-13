@@ -33,6 +33,12 @@ insert_top(Target, Elements) ->
 insert_bottom(Target, Elements) -> 
     update(insert_bottom, Target, Elements).
 
+insert_before(Target, Elements) ->
+    update(insert_before, Target, Elements).
+
+insert_after(Target, Elements) ->
+    update(insert_after, Target, Elements).
+
 remove(Target) ->
     update(remove, Target, []).
 

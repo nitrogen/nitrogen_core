@@ -28,6 +28,12 @@ insert_top(Target, Elements) ->
 insert_bottom(Target, Elements) -> 
     ok = action_update:insert_bottom(Target, Elements).
 
+insert_before(Target, Elements) ->
+    ok = action_update:insert_before(Target, Elements).
+
+insert_after(Target, Elements) ->
+    ok = action_update:insert_after(Target, Elements).
+
 remove(Target) ->
     ok = action_update:remove(Target).
 
@@ -174,6 +180,15 @@ cookie(Cookie, Value, Path, MinutesToLive) ->
 
 socket() ->
     wf_context:socket().
+
+peer_ip() ->
+    wf_context:peer_ip().
+
+peer_ip(Proxies) ->
+    wf_context:peer_ip(Proxies).
+
+peer_ip(Proxies,ForwardedHeader) ->
+    wf_context:peer_ip(Proxies,ForwardedHeader).
 
 %%% EXPOSE QUERY_HANDLER %%%
 q(Key) -> 

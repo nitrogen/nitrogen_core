@@ -28,6 +28,26 @@ socket() ->
     Req = wf_context:request_bridge(), 
     Req:socket().
 
+peer_ip() ->
+    Req = request_bridge(),
+    Req:peer_ip().
+
+peer_ip(Proxies) ->
+    peer_ip(Proxies,x_forwarded_for).
+
+peer_ip(Proxies,ForwardedHeader) ->
+    ConnIP = peer_ip(),
+    case header(ForwardedHeader) of
+        undefined -> ConnIP;
+        ForwardedIP ->
+            case lists:member(ConnIP,Proxies) of
+                true -> ForwardedIP;
+                false -> ConnIP
+            end
+    end.
+
+
+
 status_code() ->
     Req = request_bridge(),
     Req:status_code().

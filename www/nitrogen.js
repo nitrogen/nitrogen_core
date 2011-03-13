@@ -304,6 +304,14 @@ NitrogenClass.prototype.$insert_bottom = function(anchor, path, html) {
     objs(path, anchor).append(html);
 }
 
+NitrogenClass.prototype.$insert_before = function(anchor, path, html) {
+    objs(path, anchor).before(html);
+}
+
+NitrogenClass.prototype.$insert_after = function(anchor, path, html) {
+    objs(path, anchor).after(html);
+}
+
 NitrogenClass.prototype.$remove = function(anchor, path) {
     objs(path, anchor).remove();
 }
