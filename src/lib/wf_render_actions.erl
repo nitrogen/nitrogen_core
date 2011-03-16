@@ -115,7 +115,7 @@ call_action_render(Module, Action, Anchor, Trigger, Target) ->
 normalize_path(undefined) -> 
     undefined;
 normalize_path(page) ->
-    ".page";
+    "page";
 normalize_path(Path) when is_atom(Path) ->
     String = atom_to_list(Path),
     Tokens = string:tokens(String, "."),

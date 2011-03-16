@@ -40,7 +40,7 @@ update_context_for_first_request() ->
     Module = wf_context:page_module(),
     wf_context:event_module(Module),
     wf_context:type(first_request),
-    wf_context:anchor(".page"),
+    wf_context:anchor("page"),
     ok.
 
 update_context_for_postback_request(Event) ->

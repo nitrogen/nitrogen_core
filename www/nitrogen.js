@@ -15,9 +15,17 @@ function NitrogenClass(o) {
 
 /*** PRIVATE METHODS ***/
 
+NitrogenClass.prototype.$path_alias = function(path) {
+    if (path === 'page') {
+        return document;
+    } else {
+        return path;
+    }
+}
+
 NitrogenClass.prototype.$anchor = function(anchor, target) {
-    this.$anchor_path = anchor;
-    this.$target_path = target;
+    this.$anchor_path = this.$path_alias(anchor);
+    this.$target_path = this.$path_alias(target);
 }
 
 NitrogenClass.prototype.$set_param = function(key, value) {
