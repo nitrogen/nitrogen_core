@@ -210,6 +210,8 @@ function objs(path, anchor) {
     // If no anchor is specified, then use the last anchor set...
     if (!anchor) {
         anchor = Nitrogen.$anchor_path;
+    } else {
+        anchor = Nitrogen.$path_alias(anchor);
     }
 
     // Multiple parts, so split and combine results...
