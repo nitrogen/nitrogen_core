@@ -75,11 +75,11 @@ to_string_list([H|T], Acc) ->
 
 %%% HTML ENCODE %%%
 
+html_encode(L,_) when is_integer(L) -> integer_to_list(L);
+html_encode(L,_) when is_float(L) -> float_to_list(L);
 html_encode(L, false) -> wf:to_list(lists:flatten([L]));
 html_encode(L, true) -> html_encode(wf:to_list(lists:flatten([L])));
 html_encode(L, whites) -> html_encode_whites(wf:to_list(lists:flatten([L])));
-html_encode(L, number) when is_integer(L) -> integer_to_list(L);
-html_encode(L, number) when is_float(L) -> float_to_list(L);
 html_encode(L,Fun) when is_function(Fun) -> Fun(wf:to_list(lists:flatten([L]))).
 
 html_encode([]) -> [];
