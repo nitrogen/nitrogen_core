@@ -21,6 +21,7 @@ render_element(Record) ->
     ConnectWithGroups = groups_to_connect_with(Record#sortblock.connect_with_groups),
     GroupClasses = groups_to_classes(Record#sortblock.group),
     Placeholder = Record#sortblock.placeholder,
+
     % Emit the javascript...
     Script = #script { 
         script=wf:f("Nitrogen.$sortblock('~s', {handle: ~s, connectWith: [~s], placeholder: '~s'}, '~s');", [Anchor, Handle, ConnectWithGroups, Placeholder, PostbackInfo])
