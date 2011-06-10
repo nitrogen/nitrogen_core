@@ -38,8 +38,14 @@ create_option(X, HtmlEncode) ->
     end,
 
     Content = wf:html_encode(X#option.text, HtmlEncode),
-    Value = wf:html_encode(X#option.value, HtmlEncode),
-    wf_tags:emit_tag(option, Content, [
-        {value, Value},
-        {SelectedOrNot, true}
-    ]).
+
+    Props = [{SelectedOrNot, true}],
+
+    %% if value property is 'undefined', then we don't want to emit it at all
+    %% This keeps it consistent with the behavior of HTML forms
+    Props1 = case X#option.value of
+        undefined -> Props;
+        V -> [ {value,wf:html_encode(V,HtmlEncode)} | Props]
+    end,
+
+    wf_tags:emit_tag(option, Content, Props1).

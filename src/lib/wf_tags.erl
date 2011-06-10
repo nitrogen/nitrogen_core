@@ -61,7 +61,10 @@ display_property({Prop}) when is_atom(Prop) ->
 display_property({Prop, V}) when is_atom(Prop) ->
     display_property({atom_to_list(Prop), V});
 
-display_property({_, []}) -> "";    
+%% Most HTML tags don't care about a property with an empty string as its value
+%% Except for the "value" tag on <option> and other form tags
+%% In this case, we emit the 'value' propery even if it's an empty value
+display_property({Prop, []}) when Prop =/= "value" -> "";    
 
 display_property({Prop, Value}) when is_integer(Value); is_atom(Value) ->
     [" ", Prop, "=\"", wf:to_list(Value), "\""];
