@@ -172,13 +172,19 @@ run_postback_request() ->
     % Some values...
     Module = wf_context:event_module(),
     Tag = wf_context:event_tag(),
-
+	
     % Validate...
     {ok, IsValid} = wf_validation:validate(),
 
     % Call the event...
     case IsValid of
-        true -> Module:event(Tag);
+        true -> 
+			case Tag of
+				{module, TagModule, Tag1} ->
+					erlang:apply(TagModule, event, [Tag1]);
+				_ ->
+					Module:event(Tag)
+			end;
         false -> ok
     end.
 
