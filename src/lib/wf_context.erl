@@ -101,6 +101,9 @@ cookie(Cookie, Value, Path, MinutesToLive) ->
     response_bridge(Res:cookie(Cookie, Value, Path, MinutesToLive)),
     ok.
 
+delete_cookie(Cookie) ->
+	cookie(Cookie,"","/",0).
+
 
 %%% TRANSIENT CONTEXT %%%
 

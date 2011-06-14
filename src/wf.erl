@@ -181,6 +181,9 @@ cookie(Cookie, Value) ->
 cookie(Cookie, Value, Path, MinutesToLive) ->
     ok = wf_context:cookie(Cookie, Value, Path, MinutesToLive).
 
+delete_cookie(Cookie) ->
+	ok = wf_context:delete_cookie(Cookie).
+
 socket() ->
     wf_context:socket().
 

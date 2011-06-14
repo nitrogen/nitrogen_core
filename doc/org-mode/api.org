@@ -389,7 +389,12 @@
 
    Tell Nitrogen to set a cookie on the browser under the specified Path that is valid
    for a certain number of minutes.
-   
+
+** wf:delete_cookie(Key) -> ok
+
+   Tell Nitrogen to set the cookie to expire immediately, effectively deleting it from 
+   the browser.  Is a shortcut for =wf:cookie(Key,"","/",0)=.
+ 
 * HTTP Headers
 # <<11>>
    
