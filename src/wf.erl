@@ -172,6 +172,9 @@ cookies() ->
 cookie(Cookie) ->
     wf_context:cookie(Cookie).
 
+cookie_default(Cookie,DefaultValue) ->
+	wf_context:cookie_default(Cookie,DefaultValue).
+
 cookie(Cookie, Value) ->
     ok = wf_context:cookie(Cookie, Value).
 

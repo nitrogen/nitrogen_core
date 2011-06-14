@@ -83,6 +83,12 @@ cookie(Cookie) ->
     Req = request_bridge(),
     Req:cookie(Cookie).
 
+cookie_default(Cookie,DefaultValue) ->
+	case cookie(Cookie) of
+		undefined -> DefaultValue;
+		Value -> Value
+	end.
+
 cookie(Cookie, Value) ->
     Res = response_bridge(),
     response_bridge(Res:cookie(Cookie, Value)),
@@ -92,6 +98,7 @@ cookie(Cookie, Value, Path, MinutesToLive) ->
     Res = response_bridge(),
     response_bridge(Res:cookie(Cookie, Value, Path, MinutesToLive)),
     ok.
+
 
 %%% TRANSIENT CONTEXT %%%
 
