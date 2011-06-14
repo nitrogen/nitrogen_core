@@ -79,6 +79,8 @@ cookies() ->
     Req = request_bridge(),
     Req:cookies().
 
+cookie(Cookie) when is_atom(Cookie) ->
+	cookie(atom_to_list(Cookie));
 cookie(Cookie) ->
     Req = request_bridge(),
     Req:cookie(Cookie).
