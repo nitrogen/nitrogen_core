@@ -372,11 +372,11 @@
 
    Return a proplist of all cookies.
 
-** wf:get\_cookie(Key) -> String
+** wf:cookie(Key) -> String
 
    Get the value of a cookie.
 
-** wf:get\_cookie\_default(Key, Default) -> String.
+** wf:cookie\_default(Key, Default) -> String.
 
    Get the value of a cookie, if it doesn't exist, return the default.
 
