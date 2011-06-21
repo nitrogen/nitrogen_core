@@ -27,6 +27,7 @@ render_element(Record) ->
     wf_tags:emit_tag(input, [
         {type, text}, 
         {class, [textbox, Record#textbox.class]},
+	{maxlength, Record#textbox.maxlength},
         {style, Record#textbox.style},
         {value, Value}
     ]).

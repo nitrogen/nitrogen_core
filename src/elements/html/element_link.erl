@@ -21,9 +21,16 @@ render_element(Record) ->
         Record#link.body
     ],
 
+    Target = case Record#link.new of
+        false -> "_self";
+        true -> "_blank";
+        _ -> "_self"
+    end,
+
     wf_tags:emit_tag(a, Body, [
         {href, Record#link.url},
         {class, [link, Record#link.class]},
+        {target, Target},
         {style, Record#link.style},
         {title, wf:html_encode(Record#link.title, Record#link.html_encode)}
     ]).

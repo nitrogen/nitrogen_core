@@ -41,10 +41,16 @@
    Remove TargetID from the DOM.
    
 ** wf:insert\_top(TargetID, Elements) -> ok
-   Insert Nitrogen Elements at the top of TargetID, shifting the existing contents downward.
+   Insert Nitrogen Elements at the top of TargetID (within the contents of TargetID), shifting the existing contents downward.
    
 ** wf:insert\_bottom(TargetID, Elements) -> ok
-   Insert Nitrogen Elements at the bottom of the TargetID, below the existing contents.
+   Insert Nitrogen Elements at the bottom of the TargetID (within the contents of TargetID), below the existing contents.
+
+** wf:insert\_before(TargetID, Elements) -> ok
+   Insert Nitrogen Elements before TargetID in the DOM, shifting the existing contents downward.
+   
+** wf:insert\_after(TargetID, Elements) -> ok
+   Insert Nitrogen Elements after TargetID in the DOM, below the existing contents.
 
 ** wf:flash(Elements) -> ok
    Insert the Nitrogen Elements as a new flash message.
@@ -316,11 +322,29 @@
    than one AtomKey matches, then this will throw an error, use
    =wf:qs(AtomKey)= instead.
 
+** wf:mq(ListOfAtomKeys) -> [ListOfStrings]
+
+   Get the list of query string and POST values for the provided keys, and 
+   return the list of values for the keys. Syntactical sugar equivilant of:
+#+BEGIN_SRC erlang
+   [wf:q(AtomKey) || AtomKey <- ListOfAtomKeys]
+#+END_SRC
+
+
 ** wf:qs(AtomKey) -> [String]
 
    Get a list of query string and POST values for the provided
    key. (This acts like =wf:q(AtomKey)= in Nitrogen 1.0.)
   
+** wf:mqs(ListOfAtomKeys) -> [ListOfStrings]
+
+   Get a list of query string and POST values for the provided list of keys.  Syntactical sugar equivilant of:
+
+#+BEGIN_SRC erlang
+   [wf:qs(AtomKey) || AtomKey <- ListOfAtomKeys]
+#+END_SRC
+  
+
 ** wf:status\_code(IntegerCode) -> ok
    Set the HTTP response code. Default is 200.
    
@@ -348,11 +372,11 @@
 
    Return a proplist of all cookies.
 
-** wf:get\_cookie(Key) -> String
+** wf:cookie(Key) -> String
 
    Get the value of a cookie.
 
-** wf:get\_cookie\_default(Key, Default) -> String.
+** wf:cookie\_default(Key, Default) -> String.
 
    Get the value of a cookie, if it doesn't exist, return the default.
 
@@ -365,7 +389,12 @@
 
    Tell Nitrogen to set a cookie on the browser under the specified Path that is valid
    for a certain number of minutes.
-   
+
+** wf:delete_cookie(Key) -> ok
+
+   Tell Nitrogen to set the cookie to expire immediately, effectively deleting it from 
+   the browser.  Is a shortcut for =wf:cookie(Key,"","/",0)=.
+ 
 * HTTP Headers
 # <<11>>
    

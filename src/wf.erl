@@ -28,6 +28,12 @@ insert_top(Target, Elements) ->
 insert_bottom(Target, Elements) -> 
     ok = action_update:insert_bottom(Target, Elements).
 
+insert_before(Target, Elements) ->
+    ok = action_update:insert_before(Target, Elements).
+
+insert_after(Target, Elements) ->
+    ok = action_update:insert_after(Target, Elements).
+
 remove(Target) ->
     ok = action_update:remove(Target).
 
@@ -166,14 +172,29 @@ cookies() ->
 cookie(Cookie) ->
     wf_context:cookie(Cookie).
 
+cookie_default(Cookie,DefaultValue) ->
+	wf_context:cookie_default(Cookie,DefaultValue).
+
 cookie(Cookie, Value) ->
     ok = wf_context:cookie(Cookie, Value).
 
 cookie(Cookie, Value, Path, MinutesToLive) ->
     ok = wf_context:cookie(Cookie, Value, Path, MinutesToLive).
 
+delete_cookie(Cookie) ->
+	ok = wf_context:delete_cookie(Cookie).
+
 socket() ->
     wf_context:socket().
+
+peer_ip() ->
+    wf_context:peer_ip().
+
+peer_ip(Proxies) ->
+    wf_context:peer_ip(Proxies).
+
+peer_ip(Proxies,ForwardedHeader) ->
+    wf_context:peer_ip(Proxies,ForwardedHeader).
 
 %%% EXPOSE QUERY_HANDLER %%%
 q(Key) -> 

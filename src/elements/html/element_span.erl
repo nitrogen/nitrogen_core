@@ -9,8 +9,12 @@
 reflect() -> record_info(fields, span).
 
 render_element(Record) -> 
-    Text = wf:html_encode(Record#span.text, Record#span.html_encode),
-    wf_tags:emit_tag(span, Text, [
+    Body = [
+        wf:html_encode(Record#span.text, Record#span.html_encode),
+        Record#span.body
+    ],
+
+    wf_tags:emit_tag(span, Body, [
         {class, Record#span.class}, 
         {style, Record#span.style}
     ]).

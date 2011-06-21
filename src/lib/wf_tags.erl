@@ -6,6 +6,17 @@
 -module (wf_tags).
 -author('tom.mcnulty@cetiforge.com').
 -include_lib ("wf.hrl").
+-define(NO_SHORT_TAGS(TagName),(
+    TagName =/= 'div' andalso 
+    TagName =/= 'span' andalso 
+    TagName =/= 'label' andalso 
+    TagName =/= 'textarea' andalso 
+    TagName =/= 'table' andalso 
+    TagName =/= 'tr' andalso 
+    TagName =/= 'th' andalso 
+    TagName =/= 'td' andalso 
+    TagName =/= 'iframe')).
+
 -export ([emit_tag/2, emit_tag/3]).
 
 %%%  Empty tags %%%
@@ -22,19 +33,10 @@ emit_tag(TagName, Props) ->
 %%% Tags with child content %%%
 
 % empty text and body
-emit_tag(TagName, [[], []], Props) ->
+emit_tag(TagName, [[], []], Props) when ?NO_SHORT_TAGS(TagName) ->
     emit_tag(TagName, Props);
 
-emit_tag(TagName, [], Props) when 
-    TagName =/= 'div', 
-    TagName =/= 'span',
-    TagName =/= 'label',
-    TagName =/= 'textarea',
-    TagName =/= 'table',
-    TagName =/= 'tr',
-    TagName =/= 'th',
-    TagName =/= 'td',
-    TagName =/= 'iframe' ->
+emit_tag(TagName, [], Props) when ?NO_SHORT_TAGS(TagName) ->
     emit_tag(TagName, Props);
 
 emit_tag(TagName, Content, Props) ->
@@ -61,7 +63,10 @@ display_property({Prop}) when is_atom(Prop) ->
 display_property({Prop, V}) when is_atom(Prop) ->
     display_property({atom_to_list(Prop), V});
 
-display_property({_, []}) -> "";    
+%% Most HTML tags don't care about a property with an empty string as its value
+%% Except for the "value" tag on <option> and other form tags
+%% In this case, we emit the 'value' propery even if it's an empty value
+display_property({Prop, []}) when Prop =/= "value" -> "";    
 
 display_property({Prop, Value}) when is_integer(Value); is_atom(Value) ->
     [" ", Prop, "=\"", wf:to_list(Value), "\""];
