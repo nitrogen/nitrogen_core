@@ -36,6 +36,8 @@
 
    + url - (/string/) :: If set, clicking on the link will navigate to this URL.
 
+   + new - (/boolean/) :: Set to true to make link open in a new window.
+
    + postback - (/Erlang term/) :: If set, clicking on the link will cause a Nitrogen postback with the supplied term.
 
 ** See Also
