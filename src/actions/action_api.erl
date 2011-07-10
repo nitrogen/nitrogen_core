@@ -14,7 +14,7 @@ render_action(Record) ->
         wf:f("obj('~s').~s = function() {", [Anchor, Name]),
         "var s = Nitrogen.$encode_arguments_object(arguments);",
         #event { postback=Tag, delegate=?MODULE, extra_param="s" },
-        "}"
+        "};"
     ].
 
 event({api_event, Record}) ->
