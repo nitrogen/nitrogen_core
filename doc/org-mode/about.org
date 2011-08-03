@@ -49,7 +49,7 @@
 
   Sincere thanks to all the people who have helped make Nitrogen great, including:
    
-  + Rusty Klophaus (@rklophaus)
+  + Rusty Klophaus (@rustyio)
   + Chris Williams (@voodootikigod)
   + Joel Reymont (@wagerlabs)
   + Tom McNulty
@@ -67,12 +67,16 @@
   + Robert Schonberger
   + Yurii Rashkovskii (@yrashk)
   + Ville Koivula
+  + Jesse Gumm
+  + Andreas Hasselberg 
+  + Jonas Adahl
+  + Susan Potter
    
-  Roughly sorted by date of contribution. Send your twitter handles to @rklophaus
+  Roughly sorted by date of contribution. Send your twitter handles to @rustyio or @jessegumm
 
 * Documentation
 
   This documentation is created using org-mode. To contribute updates
-  or corrections, contact Rusty Klophaus (@rklophaus) or fork and
+  or corrections, contact Rusty Klophaus (@rustyio) or fork and
   update the code in http://github.com/nitrogen/nitrogen under the
   =./docs/org-mode= directory
