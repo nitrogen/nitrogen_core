@@ -17,9 +17,14 @@ render_element(Record) ->
     LabelID = wf:temp_id(),
     MouseOverID = wf:temp_id(),
     TextBoxID = wf:temp_id(),
+    
     Tag = Record#inplace_textarea.tag,
     OriginalText = Record#inplace_textarea.text,
     Delegate = Record#inplace_textarea.delegate,
+    HTMLEncode = Record#inplace_textarea.html_encode,
+   
+    % Record the encoding of the inplace textarea so we don't need to re-encode
+    wf:state({inplace_textarea_encode,LabelID},HTMLEncode),
 
     % Set up the events...
     Controls = {ViewPanelID, LabelID, EditPanelID, TextBoxID},
@@ -33,7 +38,7 @@ render_element(Record) ->
         style=Record#inplace_textarea.style,
         body = [
             #panel { id=ViewPanelID, class="view", body=[
-                #span { id=LabelID, class="label", text=Text, html_encode=Record#inplace_textarea.html_encode, actions=[
+                #span { id=LabelID, class="label", text=Text, html_encode=HTMLEncode, actions=[
                     #buttonize { target=ViewPanelID }
                 ]},
                 #span { id=MouseOverID, class="instructions", text="Click to edit", actions=#hide{} }
@@ -70,7 +75,12 @@ event({ok, Delegate, {ViewPanelID, LabelID, EditPanelID, TextBoxID}, Tag}) ->
     Value = wf:q(TextBoxID),
     Module = wf:coalesce([Delegate, wf:page_module()]),
     Value1 = Module:inplace_textarea_event(Tag, Value),
-    wf:update(LabelID, Value1),
+    Encoding = wf:state({inplace_textarea_encode,LabelID}),
+
+    Value2 = wf_convert:html_encode(Value1,Encoding),
+
+    wf:update(LabelID, Value2),
+
     wf:set(TextBoxID, Value1),
     wf:wire(EditPanelID, #hide {}),
     wf:wire(ViewPanelID, #show {}),
