@@ -8,8 +8,8 @@
 
 % TODO - Revisit parsing in the to_module_callback. This
 % will currently fail if we encounter a string like:
-% "String with ) will fail" 
-% or 
+% "String with ) will fail"
+% or
 % "String with ]]] will fail"
 
 
@@ -17,7 +17,7 @@ reflect() -> record_info(fields, template).
 
 render_element(Record) ->
     % Parse the template file...
-    
+
     File = wf:to_list(Record#template.file),
     Template = get_cached_template(File),
 
@@ -29,38 +29,38 @@ get_cached_template(File) ->
     FileAtom = list_to_atom("template_file_" ++ File),
 
     LastModAtom = list_to_atom("template_lastmod_" ++ File),
-    LastMod = mochiglobal:get(LastModAtom),
+    LastMod = nitro_mochiglobal:get(LastModAtom),
 
     CacheTimeAtom = list_to_atom("template_cachetime_" ++ File),
-    CacheTime = mochiglobal:get(CacheTimeAtom),
-    
+    CacheTime = nitro_mochiglobal:get(CacheTimeAtom),
+
     %% Check for recache if one second has passed since last cache time...
     ReCache = case (CacheTime == undefined) orelse (timer:now_diff(now(), CacheTime) > (1000 * 1000)) of
-        true -> 
+        true ->
             %% Recache if the file has been modified. Otherwise, reset
             %% the CacheTime timer...
             case LastMod /= filelib:last_modified(File) of
-                true -> 
+                true ->
                     true;
                 false ->
-                    mochiglobal:put(CacheTimeAtom, now()),
+                    nitro_mochiglobal:put(CacheTimeAtom, now()),
                     false
             end;
         false ->
             false
     end,
-    
+
     case ReCache of
         true ->
             %% Recache the template...
             Template = parse_template(File),
-            mochiglobal:put(FileAtom, Template),
-            mochiglobal:put(LastModAtom, filelib:last_modified(File)),
-            mochiglobal:put(CacheTimeAtom, now()),
+            nitro_mochiglobal:put(FileAtom, Template),
+            nitro_mochiglobal:put(LastModAtom, filelib:last_modified(File)),
+            nitro_mochiglobal:put(CacheTimeAtom, now()),
             Template;
         false ->
             %% Load template from cache...
-            mochiglobal:get(FileAtom)
+            nitro_mochiglobal:get(FileAtom)
     end.
 
 parse_template(File) ->
@@ -69,16 +69,16 @@ parse_template(File) ->
     File1 = File,
     case file:read_file(File1) of
         {ok, B} -> parse_template1(B);
-        _ -> 
+        _ ->
             ?LOG("Error reading file: ~s~n", [File1]),
             throw({template_not_found, File1})
     end.
 
 parse_template1(B) ->
-    F = fun(Tag) -> 
-        try 
+    F = fun(Tag) ->
+        try
             Tag1 = wf:to_list(Tag),
-            to_module_callback(Tag1) 
+            to_module_callback(Tag1)
         catch _ : _ ->
             ?LOG("Invalid template tag: ~s~n", [Tag])
         end
@@ -92,7 +92,7 @@ parse_template1(B) ->
 %% for strings of the form [[[module]]] or [[[module:function(args)]]]
 parse(B, Callback) -> parse(B, Callback, []).
 parse(<<>>, _Callback, Acc) -> [lists:reverse(Acc)];
-parse(<<"[[[", Rest/binary>>, Callback, Acc) -> 
+parse(<<"[[[", Rest/binary>>, Callback, Acc) ->
     { Token, Rest1 } = get_token(Rest, <<>>),
     [lists:reverse(Acc), Callback(Token)|parse(Rest1, Callback, [])];
 parse(<<C, Rest/binary>>, Callback, Acc) -> parse(Rest, Callback, [C|Acc]).
@@ -146,7 +146,7 @@ replace_callbacks(CallbackTuples, Record) ->
 
 convert_callback_tuple_to_function(Module, Function, ArgString, Bindings) ->
     % De-reference to page module...
-    Module1 = case Module of 
+    Module1 = case Module of
         page -> wf_context:page_module();
         _ -> Module
     end,
@@ -155,7 +155,7 @@ convert_callback_tuple_to_function(Module, Function, ArgString, Bindings) ->
         % Convert args to term...
         Args = to_term("[" ++ ArgString ++ "].", Bindings),
 
-        % If the function in exported, then call it. 
+        % If the function in exported, then call it.
         % Otherwise return undefined...
         {module, Module1} = code:ensure_loaded(Module1),
         case erlang:function_exported(Module1, Function, length(Args)) of
