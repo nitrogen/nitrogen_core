@@ -5,7 +5,7 @@
 %%      with binaries as strings, arrays as lists (without an {array, _})
 %%      wrapper and it only knows how to decode UTF-8 (and ASCII).
 
--module(mochijson2).
+-module(nitro_mochijson2).
 -author('bob@mochimedia.com').
 -export([encoder/1, encode/1]).
 -export([decoder/1, decode/1]).
@@ -99,9 +99,9 @@ json_encode(I, _State) when is_integer(I) andalso I >= -2147483648 andalso I =< 
     %% Anything outside of 32-bit integers should be encoded as a float
     integer_to_list(I);
 json_encode(I, _State) when is_integer(I) ->
-    mochinum:digits(float(I));
+    nitro_mochinum:digits(float(I));
 json_encode(F, _State) when is_float(F) ->
-    mochinum:digits(F);
+    nitro_mochinum:digits(F);
 json_encode(S, State) when is_binary(S); is_atom(S) ->
     json_encode_string(S, State);
 json_encode(Array, State) when is_list(Array) ->
@@ -628,7 +628,7 @@ encoder_utf8_test() ->
         encode(<<1,"\321\202\320\265\321\201\321\202">>),
 
     %% raw utf8 output (optional)
-    Enc = mochijson2:encoder([{utf8, true}]),
+    Enc = nitro_mochijson2:encoder([{utf8, true}]),
     [34,"\\u0001",[209,130],[208,181],[209,129],[209,130],34] =
         Enc(<<1,"\321\202\320\265\321\201\321\202">>).
 
