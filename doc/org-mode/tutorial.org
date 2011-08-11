@@ -538,8 +538,8 @@ Pull the [[http://github.com/nitrogen/nitrogen][Nitrogen Source Code]], then =ma
         % 'mouseover', 'click', and 'mouseout' are standard Javascript
         % events.
         wf:wire(mybutton, [
-            #event { type=mouseover, postback=my_mouseover_event }
-            #event { type=click, postback=my_click_event }
+            #event { type=mouseover, postback=my_mouseover_event },
+            #event { type=click, postback=my_click_event },
             #event { type=mouseout, postback=my_mouseout_event }
         ]),
         [

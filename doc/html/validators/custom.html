@@ -7,7 +7,7 @@ lang="en" xml:lang="en">
 <title>Custom Server-Side Validator Element</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2011-02-01 08:02:37 EST"/>
+<meta name="generated" content="2011-08-11 07:24:16 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rklophaus)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -21,6 +21,9 @@ lang="en" xml:lang="en">
   .target { }
   .timestamp { color: #bebebe; }
   .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
   p.verse { margin-left: 3% }
   pre {
 	border: 1pt solid #AEBDCC;
@@ -31,7 +34,13 @@ lang="en" xml:lang="en">
         overflow:auto;
   }
   table { border-collapse: collapse; }
-  td, th { vertical-align: top; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
   dt { font-weight: bold; }
   div.figure { padding: 0.5em; }
   div.figure p { text-align: center; }
@@ -68,6 +77,7 @@ lang="en" xml:lang="en">
  }
 /*]]>*///-->
 </script>
+
 </head>
 <body>
 <div id="content">
@@ -106,18 +116,18 @@ Attach a custom validator, written in Erlang, to an element. The validator will 
 
 
 
-<pre class="src src-erlang"><span style="color: #929292;">% </span><span style="color: #929292;">Function to validate that a value is either upper or lower case,
-</span><span style="color: #929292;">% </span><span style="color: #929292;">depending on the value of Tag...
-</span><span style="color: #000000;">F</span> = <span style="color: #FB5D17;">fun</span>(<span style="color: #000000;">Tag</span>, <span style="color: #000000;">Value</span>) -&gt;
-  <span style="color: #FB5D17;">case</span> <span style="color: #000000;">Tag</span> <span style="color: #FB5D17;">of</span>
-    upper -&gt;<span style="color: #28439B;"> </span><span style="color: #28439B;">string</span>:<span style="color: #28439B;">to_upper</span>(<span style="color: #000000;">Value</span>) == <span style="color: #000000;">Value</span>;
-    lower -&gt;<span style="color: #28439B;"> </span><span style="color: #28439B;">string</span>:<span style="color: #28439B;">to_upper</span>(<span style="color: #000000;">Value</span>) == <span style="color: #000000;">Value</span>
-  <span style="color: #FB5D17;">end</span>
-<span style="color: #FB5D17;">end</span>,
+<pre class="src src-erlang"><span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">Function to validate that a value is either upper or lower case,
+</span><span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">depending on the value of Tag...
+</span><span style="font-weight: bold; font-style: italic;">F</span> = <span style="font-weight: bold;">fun</span>(<span style="font-weight: bold; font-style: italic;">Tag</span>, <span style="font-weight: bold; font-style: italic;">Value</span>) -&gt;
+  <span style="font-weight: bold;">case</span> <span style="font-weight: bold; font-style: italic;">Tag</span> <span style="font-weight: bold;">of</span>
+    upper -&gt;<span style="font-weight: bold;"> </span><span style="font-weight: bold; text-decoration: underline;">string</span>:<span style="font-weight: bold; text-decoration: underline;">to_upper</span>(<span style="font-weight: bold; font-style: italic;">Value</span>) == <span style="font-weight: bold; font-style: italic;">Value</span>;
+    lower -&gt;<span style="font-weight: bold;"> </span><span style="font-weight: bold; text-decoration: underline;">string</span>:<span style="font-weight: bold; text-decoration: underline;">to_upper</span>(<span style="font-weight: bold; font-style: italic;">Value</span>) == <span style="font-weight: bold; font-style: italic;">Value</span>
+  <span style="font-weight: bold;">end</span>
+<span style="font-weight: bold;">end</span>,
 
-<span style="color: #929292;">% </span><span style="color: #929292;">Wire the validator in upper case mode...
-</span><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">wire</span>(<span style="color: #000000;">ButtonID</span>, <span style="color: #000000;">TextBoxID</span>, #<span style="color: #28439B;">validate</span> { validators=[
-  #<span style="color: #28439B;">custom</span> { text=<span style="color: #09A240;">"Must be uppercase"</span>, function=<span style="color: #000000;">F</span>, tag=upper }
+<span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">Wire the validator in upper case mode...
+</span><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">wire</span>(<span style="font-weight: bold; font-style: italic;">ButtonID</span>, <span style="font-weight: bold; font-style: italic;">TextBoxID</span>, #<span style="font-weight: bold; text-decoration: underline;">validate</span> { validators=[
+  #<span style="font-weight: bold; text-decoration: underline;">custom</span> { text=<span style="font-style: italic;">"Must be uppercase"</span>, function=<span style="font-weight: bold; font-style: italic;">F</span>, tag=upper }
 ]})
 </pre>
 
@@ -145,14 +155,15 @@ An Erlang function that returns true if the value is valid, false if invalid. &l
 Tag value is passed into the custom validation function.
 </dd>
 </dl>
+
 </div>
 </div>
 </div>
 <div id="postamble">
 <p class="author"> Author: Rusty Klophaus (@rklophaus)
 </p>
-<p class="date"> Date: 2011-02-01 08:02:37 EST</p>
-<p class="creator">HTML generated by org-mode 7.01h in emacs 24</p>
+<p class="date"> Date: 2011-08-11 07:24:16 CDT</p>
+<p class="creator">HTML generated by org-mode 7.4 in emacs 23</p>
 </div>
 </div>
 </body>

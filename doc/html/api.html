@@ -7,7 +7,7 @@ lang="en" xml:lang="en">
 <title>Nitrogen 2.x Documentation</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2011-02-01 08:02:43 EST"/>
+<meta name="generated" content="2011-08-11 07:26:23 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rklophaus)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -21,6 +21,9 @@ lang="en" xml:lang="en">
   .target { }
   .timestamp { color: #bebebe; }
   .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
   p.verse { margin-left: 3% }
   pre {
 	border: 1pt solid #AEBDCC;
@@ -31,7 +34,13 @@ lang="en" xml:lang="en">
         overflow:auto;
   }
   table { border-collapse: collapse; }
-  td, th { vertical-align: top; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
   dt { font-weight: bold; }
   div.figure { padding: 0.5em; }
   div.figure p { text-align: center; }
@@ -69,6 +78,7 @@ lang="en" xml:lang="en">
  }
 /*]]>*///-->
 </script>
+
 </head>
 <body>
 <div id="content">
@@ -152,9 +162,10 @@ lang="en" xml:lang="en">
 </li>
 <li>
 <a href="#sec-15">Configuration</a>
-
 </li>
 </ul>
+
+
 </div>
 
 </div>
@@ -205,7 +216,7 @@ selector path. See <a href="./paths.html">Element Paths</a> for more information
 <h3 id="sec-2_4"><span class="section-number-3">2.4</span> wf:insert_top(TargetID, Elements) -&gt; ok </h3>
 <div class="outline-text-3" id="text-2_4">
 
-<p>Insert Nitrogen Elements at the top of TargetID, shifting the existing contents downward.
+<p>Insert Nitrogen Elements at the top of TargetID (within the contents of TargetID), shifting the existing contents downward.
 </p>
 </div>
 
@@ -215,15 +226,35 @@ selector path. See <a href="./paths.html">Element Paths</a> for more information
 <h3 id="sec-2_5"><span class="section-number-3">2.5</span> wf:insert_bottom(TargetID, Elements) -&gt; ok </h3>
 <div class="outline-text-3" id="text-2_5">
 
-<p>Insert Nitrogen Elements at the bottom of the TargetID, below the existing contents.
+<p>Insert Nitrogen Elements at the bottom of the TargetID (within the contents of TargetID), below the existing contents.
 </p>
 </div>
 
 </div>
 
 <div id="outline-container-2_6" class="outline-3">
-<h3 id="sec-2_6"><span class="section-number-3">2.6</span> wf:flash(Elements) -&gt; ok </h3>
+<h3 id="sec-2_6"><span class="section-number-3">2.6</span> wf:insert_before(TargetID, Elements) -&gt; ok </h3>
 <div class="outline-text-3" id="text-2_6">
+
+<p>Insert Nitrogen Elements before TargetID in the DOM, shifting the existing contents downward.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2_7" class="outline-3">
+<h3 id="sec-2_7"><span class="section-number-3">2.7</span> wf:insert_after(TargetID, Elements) -&gt; ok </h3>
+<div class="outline-text-3" id="text-2_7">
+
+<p>Insert Nitrogen Elements after TargetID in the DOM, below the existing contents.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2_8" class="outline-3">
+<h3 id="sec-2_8"><span class="section-number-3">2.8</span> wf:flash(Elements) -&gt; ok </h3>
+<div class="outline-text-3" id="text-2_8">
 
 <p>Insert the Nitrogen Elements as a new flash message.
 </p>
@@ -451,7 +482,7 @@ For example, show a Javascript alert:
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">wire</span>(#<span style="color: #28439B;">alert</span> { text=\"<span style="color: #000000;">Hello</span>, <span style="color: #000000;">World</span>!\" })
+<pre class="src src-erlang"><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">wire</span>(#<span style="font-weight: bold; text-decoration: underline;">alert</span> { text=\"<span style="font-weight: bold; font-style: italic;">Hello</span>, <span style="font-weight: bold; font-style: italic;">World</span>!\" })
 </pre>
 
 
@@ -472,7 +503,7 @@ For example, hide a Panel:
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">wire</span>(<span style="color: #000000;">PanelID</span>, #<span style="color: #28439B;">hide</span> {})
+<pre class="src src-erlang"><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">wire</span>(<span style="font-weight: bold; font-style: italic;">PanelID</span>, #<span style="font-weight: bold; text-decoration: underline;">hide</span> {})
 </pre>
 
 
@@ -497,7 +528,7 @@ For example, when a button is clicked, hide a panel:
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">wire</span>(<span style="color: #000000;">ButtonID</span>, <span style="color: #000000;">PanelID</span>, #<span style="color: #28439B;">event</span> { type=click, actions=#<span style="color: #28439B;">hide</span> {} })
+<pre class="src src-erlang"><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">wire</span>(<span style="font-weight: bold; font-style: italic;">ButtonID</span>, <span style="font-weight: bold; font-style: italic;">PanelID</span>, #<span style="font-weight: bold; text-decoration: underline;">event</span> { type=click, actions=#<span style="font-weight: bold; text-decoration: underline;">hide</span> {} })
 </pre>
 
 
@@ -952,8 +983,29 @@ than one AtomKey matches, then this will throw an error, use
 </div>
 
 <div id="outline-container-10_2" class="outline-3">
-<h3 id="sec-10_2"><span class="section-number-3">10.2</span> wf:qs(AtomKey) -&gt; [String] </h3>
+<h3 id="sec-10_2"><span class="section-number-3">10.2</span> wf:mq(ListOfAtomKeys) -&gt; [ListOfStrings] </h3>
 <div class="outline-text-3" id="text-10_2">
+
+
+<p>
+Get the list of query string and POST values for the provided keys, and 
+return the list of values for the keys. Syntactical sugar equivilant of:
+</p>
+
+
+<pre class="src src-erlang">[<span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">q</span>(<span style="font-weight: bold; font-style: italic;">AtomKey</span>) <span style="font-weight: bold;">||</span> <span style="font-weight: bold; font-style: italic;">AtomKey</span> <span style="font-weight: bold;">&lt;-</span> <span style="font-weight: bold; font-style: italic;">ListOfAtomKeys</span>]
+</pre>
+
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-10_3" class="outline-3">
+<h3 id="sec-10_3"><span class="section-number-3">10.3</span> wf:qs(AtomKey) -&gt; [String] </h3>
+<div class="outline-text-3" id="text-10_3">
 
 
 <p>
@@ -964,9 +1016,30 @@ key. (This acts like <code>wf:q(AtomKey)</code> in Nitrogen 1.0.)
 
 </div>
 
-<div id="outline-container-10_3" class="outline-3">
-<h3 id="sec-10_3"><span class="section-number-3">10.3</span> wf:status_code(IntegerCode) -&gt; ok </h3>
-<div class="outline-text-3" id="text-10_3">
+<div id="outline-container-10_4" class="outline-3">
+<h3 id="sec-10_4"><span class="section-number-3">10.4</span> wf:mqs(ListOfAtomKeys) -&gt; [ListOfStrings] </h3>
+<div class="outline-text-3" id="text-10_4">
+
+
+<p>
+Get a list of query string and POST values for the provided list of keys.  Syntactical sugar equivilant of:
+</p>
+
+
+
+<pre class="src src-erlang">[<span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">qs</span>(<span style="font-weight: bold; font-style: italic;">AtomKey</span>) <span style="font-weight: bold;">||</span> <span style="font-weight: bold; font-style: italic;">AtomKey</span> <span style="font-weight: bold;">&lt;-</span> <span style="font-weight: bold; font-style: italic;">ListOfAtomKeys</span>]
+</pre>
+
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-10_5" class="outline-3">
+<h3 id="sec-10_5"><span class="section-number-3">10.5</span> wf:status_code(IntegerCode) -&gt; ok </h3>
+<div class="outline-text-3" id="text-10_5">
 
 <p>Set the HTTP response code. Default is 200.
 </p>
@@ -974,9 +1047,9 @@ key. (This acts like <code>wf:q(AtomKey)</code> in Nitrogen 1.0.)
 
 </div>
 
-<div id="outline-container-10_4" class="outline-3">
-<h3 id="sec-10_4"><span class="section-number-3">10.4</span> wf:content_type(ContentType) -&gt; ok </h3>
-<div class="outline-text-3" id="text-10_4">
+<div id="outline-container-10_6" class="outline-3">
+<h3 id="sec-10_6"><span class="section-number-3">10.6</span> wf:content_type(ContentType) -&gt; ok </h3>
+<div class="outline-text-3" id="text-10_6">
 
 
 <p>
@@ -988,9 +1061,9 @@ HTML.
 
 </div>
 
-<div id="outline-container-10_5" class="outline-3">
-<h3 id="sec-10_5"><span class="section-number-3">10.5</span> wf:path_info() -&gt; String </h3>
-<div class="outline-text-3" id="text-10_5">
+<div id="outline-container-10_7" class="outline-3">
+<h3 id="sec-10_7"><span class="section-number-3">10.7</span> wf:path_info() -&gt; String </h3>
+<div class="outline-text-3" id="text-10_7">
 
 
 <p>
@@ -1002,9 +1075,9 @@ wf:get_path_info() would return "some/extra/stuff".
 
 </div>
 
-<div id="outline-container-10_6" class="outline-3">
-<h3 id="sec-10_6"><span class="section-number-3">10.6</span> wf:page_module() -&gt; Atom </h3>
-<div class="outline-text-3" id="text-10_6">
+<div id="outline-container-10_8" class="outline-3">
+<h3 id="sec-10_8"><span class="section-number-3">10.8</span> wf:page_module() -&gt; Atom </h3>
+<div class="outline-text-3" id="text-10_8">
 
 
 <p>
@@ -1037,7 +1110,7 @@ Return a proplist of all cookies.
 </div>
 
 <div id="outline-container-11_2" class="outline-3">
-<h3 id="sec-11_2"><span class="section-number-3">11.2</span> wf:get_cookie(Key) -&gt; String </h3>
+<h3 id="sec-11_2"><span class="section-number-3">11.2</span> wf:cookie(Key) -&gt; String </h3>
 <div class="outline-text-3" id="text-11_2">
 
 
@@ -1049,7 +1122,7 @@ Get the value of a cookie.
 </div>
 
 <div id="outline-container-11_3" class="outline-3">
-<h3 id="sec-11_3"><span class="section-number-3">11.3</span> wf:get_cookie_default(Key, Default) -&gt; String. </h3>
+<h3 id="sec-11_3"><span class="section-number-3">11.3</span> wf:cookie_default(Key, Default) -&gt; String. </h3>
 <div class="outline-text-3" id="text-11_3">
 
 
@@ -1081,6 +1154,19 @@ session timeout setting for the MinutesToLive value.
 <p>
 Tell Nitrogen to set a cookie on the browser under the specified Path that is valid
 for a certain number of minutes.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-11_6" class="outline-3">
+<h3 id="sec-11_6"><span class="section-number-3">11.6</span> wf:delete<sub>cookie</sub>(Key) -&gt; ok </h3>
+<div class="outline-text-3" id="text-11_6">
+
+
+<p>
+Tell Nitrogen to set the cookie to expire immediately, effectively deleting it from 
+the browser.  Is a shortcut for <code>wf:cookie(Key,"","/",0)</code>.
 </p>
 </div>
 </div>
@@ -1306,8 +1392,8 @@ not set, then return DefaultValue.
 <div id="postamble">
 <p class="author"> Author: Rusty Klophaus (@rklophaus)
 </p>
-<p class="date"> Date: 2011-02-01 08:02:43 EST</p>
-<p class="creator">HTML generated by org-mode 7.01h in emacs 24</p>
+<p class="date"> Date: 2011-08-11 07:26:23 CDT</p>
+<p class="creator">HTML generated by org-mode 7.4 in emacs 23</p>
 </div>
 </div>
 </body>

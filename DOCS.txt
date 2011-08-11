@@ -1,0 +1,19 @@
+COMPILING THE DOCUMENTATION
+
+
+Compiling the documentation uses Org-mode for Emacs.
+
+Editing the HTML is not recommended, as the org-mode compiler just overwrites all HTML anyway.
+
+Instead, edit the org-mode files found in doc/org-mode.
+
+Make sure you have emacs installed, with the htmlize[1] (version 1.34 or later), erlang-mode, and org-mode installed.
+
+On Ubuntu, these packages can all be installed with:
+
+sudo apt-get install emacs erlang-mode org-mode emacs-goodies-el
+
+
+Once this is done, you can compile the docs from the command line with:
+
+$ make docs

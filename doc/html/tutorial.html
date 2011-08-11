@@ -7,8 +7,8 @@ lang="en" xml:lang="en">
 <title>Introduction to Nitrogen</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2011-02-01 08:20:29 EST"/>
-<meta name="author" content="Rusty Klophaus"/>
+<meta name="generated" content="2011-08-11 07:29:08 CDT"/>
+<meta name="author" content="Jesse Gumm"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
 <style type="text/css">
@@ -21,6 +21,9 @@ lang="en" xml:lang="en">
   .target { }
   .timestamp { color: #bebebe; }
   .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
   p.verse { margin-left: 3% }
   pre {
 	border: 1pt solid #AEBDCC;
@@ -31,7 +34,13 @@ lang="en" xml:lang="en">
         overflow:auto;
   }
   table { border-collapse: collapse; }
-  td, th { vertical-align: top; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
   dt { font-weight: bold; }
   div.figure { padding: 0.5em; }
   div.figure p { text-align: center; }
@@ -68,6 +77,7 @@ lang="en" xml:lang="en">
  }
 /*]]>*///-->
 </script>
+
 </head>
 <body>
 <div id="content">
@@ -767,9 +777,10 @@ Part 10: Extending Nitrogen
 </li>
 <li>
 Conclusion
-
 </li>
 </ul>
+
+
 </div>
 </div>
 
@@ -796,9 +807,10 @@ Run the Website
 </li>
 <li>
 A Tour Through the Files
-
 </li>
 </ul>
+
+
 </div>
 </div>
 
@@ -962,9 +974,10 @@ Tells Erlang how to start the system.
 </dd>
 <dt>lib/</dt><dd>
 Dependent libraries.
-
 </dd>
 </dl>
+
+
 </div>
 </div>
 </div>
@@ -1010,9 +1023,10 @@ Static files for your website.
 </dd>
 <dt>templates/</dt><dd>
 Template files for your website.
-
 </dd>
 </dl>
+
+
 </div>
 </div>
 </div>
@@ -1056,9 +1070,10 @@ By convention, custom alements are placed here.
 </dd>
 <dt>actions/</dt><dd>
 By convention, custom actions are placed here.
-
 </dd>
 </dl>
+
+
 </div>
 </div>
 </div>
@@ -1099,9 +1114,10 @@ sync:go()
 </li>
 <li>
 Reload the page
-
 </li>
 </ul>
+
+
 </div>
 </div>
 </div>
@@ -1139,9 +1155,10 @@ bin/dev compile
 </li>
 <li>
 Reload the page
-
 </li>
 </ul>
+
+
 </div>
 </div>
 </div>
@@ -1174,9 +1191,10 @@ reload. What happens?
 <li>
 Add <code>?PRINT(node())</code> to <code>index.erl</code>. Then compile and reload. What
 happens?
-
 </li>
 </ul>
+
+
 </div>
 </div>
 </div>
@@ -1204,8 +1222,8 @@ happens?
 
 
 
-<pre class="src src-lisp">(add-to-list 'load-path <span style="color: #09A240;">"PATH/TO/NITROGEN/support/nitrogen-mode"</span>)
-(<span style="color: #FB5D17;">require</span> '<span style="color: #A639AE;">nitrogen-mode</span>)
+<pre class="src src-lisp">(add-to-list 'load-path <span style="font-style: italic;">"PATH/TO/NITROGEN/support/nitrogen-mode"</span>)
+(<span style="font-weight: bold;">require</span> '<span style="font-weight: bold; text-decoration: underline;">nitrogen-mode</span>)
 </pre>
 
 
@@ -1215,10 +1233,10 @@ Without <code>nitrogen-mode</code>:
 </p>
 
 
-<pre class="src src-erlang">#<span style="color: #28439B;">panel</span> { id=my_panel, body=[
-                            #<span style="color: #28439B;">panel</span> { id=my_panel2, body=[
-                                                         #<span style="color: #28439B;">label</span> { text=<span style="color: #09A240;">"Name"</span> },
-                                                         #<span style="color: #28439B;">textbox</span> { id=my_textbox }
+<pre class="src src-erlang">#<span style="font-weight: bold; text-decoration: underline;">panel</span> { id=my_panel, body=[
+                            #<span style="font-weight: bold; text-decoration: underline;">panel</span> { id=my_panel2, body=[
+                                                         #<span style="font-weight: bold; text-decoration: underline;">label</span> { text=<span style="font-style: italic;">"Name"</span> },
+                                                         #<span style="font-weight: bold; text-decoration: underline;">textbox</span> { id=my_textbox }
                                                         ]}
                            ]}
 </pre>
@@ -1231,10 +1249,10 @@ With <code>nitrogen-mode</code>:
 
 
 <pre class="src src-erlang">M-x nitrogen-mode
-#<span style="color: #28439B;">panel</span> { id=my_panel, body=[
-    #<span style="color: #28439B;">panel</span> { id=my_panel2, body=[
-        #<span style="color: #28439B;">label</span> { text=<span style="color: #09A240;">"Name"</span> },
-        #<span style="color: #28439B;">textbox</span> { id=my_textbox }
+#<span style="font-weight: bold; text-decoration: underline;">panel</span> { id=my_panel, body=[
+    #<span style="font-weight: bold; text-decoration: underline;">panel</span> { id=my_panel2, body=[
+        #<span style="font-weight: bold; text-decoration: underline;">label</span> { text=<span style="font-style: italic;">"Name"</span> },
+        #<span style="font-weight: bold; text-decoration: underline;">textbox</span> { id=my_textbox }
     ]}
 ]}
 </pre>
@@ -1276,9 +1294,10 @@ Anatomy of a Template
 </li>
 <li>
 Experimenting With Templates
-
 </li>
 </ul>
+
+
 </div>
 </div>
 
@@ -1324,11 +1343,12 @@ Display a list of items. (<code>items_view.erl</code>)
 </li>
 <li>
 Allow the user to edit an item. (<code>items_edit.erl</code>)
+</li>
+</ul>
+</li>
+</ul>
 
-</li>
-</ul>
-</li>
-</ul>
+
 </div>
 </div>
 </div>
@@ -1388,9 +1408,10 @@ Modules that aren't found go to <code>web_404.erl</code> if it exists.
 <li>
 Static files that aren't found are handled by the underlying
 platform (not yet generalized.)
-
 </li>
 </ol>
+
+
 </div>
 </div>
 </div>
@@ -1430,7 +1451,7 @@ Replace the default body with:
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span><span style="color: #09A240;">"Hello World!"</span>.
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span><span style="font-style: italic;">"Hello World!"</span>.
 </pre>
 
 
@@ -1442,9 +1463,10 @@ Remove the <code>event/1</code> function.
 </li>
 <li>
 Compile the page and load <code>http://localhost:8080/my/page</code>
-
 </li>
 </ul>
+
+
 </div>
 </div>
 </div>
@@ -1538,9 +1560,10 @@ Contains a script callout for Javascript:
 The callouts look like Erlang, but they are not. They can only be
 of the form <code>module:function(Args)</code>. The 'page' module refers to
 the current page.
-
 </li>
 </ul>
+
+
 </div>
 </div>
 </div>
@@ -1581,9 +1604,10 @@ What happens when you change <code>page</code> to be a specific module?
 </li>
 <li>
 Replace the module call with some arbitrary Erlang code. What happens?
-
 </li>
 </ul>
+
+
 </div>
 </div>
 </div>
@@ -1616,9 +1640,10 @@ Documentation
 </li>
 <li>
 Anatomy of a Nitrogen Element
-
 </li>
 </ul>
+
+
 </div>
 </div>
 
@@ -1650,7 +1675,7 @@ Change this:
 </p>
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span><span style="color: #09A240;">"Hello World!"</span>.
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span><span style="font-style: italic;">"Hello World!"</span>.
 </pre>
 
 
@@ -1660,7 +1685,7 @@ To this:
 </p>
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span>#<span style="color: #28439B;">label</span> { text=<span style="color: #09A240;">"Hello World!"</span> }.
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span>#<span style="font-weight: bold; text-decoration: underline;">label</span> { text=<span style="font-style: italic;">"Hello World!"</span> }.
 </pre>
 
 
@@ -1694,7 +1719,7 @@ To this:
 
 
 
-<pre class="src src-html">&lt;<span style="color: #28439B;">label</span> <span style="color: #000000;">class</span>=<span style="color: #09A240;">"wfid_tempNNNNN label"</span>&gt;Hello World!&lt;/<span style="color: #28439B;">label</span>&gt;
+<pre class="src src-html">&lt;<span style="font-weight: bold;">label</span> <span style="font-weight: bold; font-style: italic;">class</span>=<span style="font-style: italic;">"wfid_tempNNNNN label"</span>&gt;Hello World!&lt;/<span style="font-weight: bold;">label</span>&gt;
 </pre>
 
 
@@ -1754,11 +1779,12 @@ Avoid repeating common functionality.
 </li>
 <li>
 Hide complexity in a module.
-
 </li>
 </ul>
 </li>
 </ol>
+
+
 </div>
 </div>
 </div>
@@ -1789,11 +1815,11 @@ Try this on my_page.erl:
 </p>
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span>[
-    #<span style="color: #28439B;">h1</span> { text=<span style="color: #09A240;">"My Simple Application"</span> },
-    #<span style="color: #28439B;">label</span> { text=<span style="color: #09A240;">"What is your name?"</span> },
-    #<span style="color: #28439B;">textbox</span> { },
-    #<span style="color: #28439B;">button</span> { text=<span style="color: #09A240;">"Submit"</span> }
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span>[
+    #<span style="font-weight: bold; text-decoration: underline;">h1</span> { text=<span style="font-style: italic;">"My Simple Application"</span> },
+    #<span style="font-weight: bold; text-decoration: underline;">label</span> { text=<span style="font-style: italic;">"What is your name?"</span> },
+    #<span style="font-weight: bold; text-decoration: underline;">textbox</span> { },
+    #<span style="font-weight: bold; text-decoration: underline;">button</span> { text=<span style="font-style: italic;">"Submit"</span> }
 ].
 </pre>
 
@@ -1833,12 +1859,12 @@ Try a nested element:
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span>
-    #<span style="color: #28439B;">panel</span> { style=<span style="color: #09A240;">"margin: 50px;"</span>, body=[
-        #<span style="color: #28439B;">h1</span> { text=<span style="color: #09A240;">"My Page"</span> },
-        #<span style="color: #28439B;">label</span> { text=<span style="color: #09A240;">"Enter Your Name:"</span> },
-        #<span style="color: #28439B;">textbox</span> { },
-        #<span style="color: #28439B;">button</span> { text=<span style="color: #09A240;">"Submit"</span> }
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span>
+    #<span style="font-weight: bold; text-decoration: underline;">panel</span> { style=<span style="font-style: italic;">"margin: 50px;"</span>, body=[
+        #<span style="font-weight: bold; text-decoration: underline;">h1</span> { text=<span style="font-style: italic;">"My Page"</span> },
+        #<span style="font-weight: bold; text-decoration: underline;">label</span> { text=<span style="font-style: italic;">"Enter Your Name:"</span> },
+        #<span style="font-weight: bold; text-decoration: underline;">textbox</span> { },
+        #<span style="font-weight: bold; text-decoration: underline;">button</span> { text=<span style="font-style: italic;">"Submit"</span> }
     ]}.
 </pre>
 
@@ -1873,9 +1899,10 @@ Conditional Actions with <code>#event{}</code>
 </li>
 <li>
 Postbacks
-
 </li>
 </ul>
+
+
 </div>
 </div>
 
@@ -1909,9 +1936,9 @@ and run. What do you expect will happen?
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;
     [
-        #<span style="color: #28439B;">button</span> { text=<span style="color: #09A240;">"Submit"</span>, actions=<span style="color: #09A240;">"alert('hello');"</span> }
+        #<span style="font-weight: bold; text-decoration: underline;">button</span> { text=<span style="font-style: italic;">"Submit"</span>, actions=<span style="font-style: italic;">"alert('hello');"</span> }
     ].
 </pre>
 
@@ -1946,11 +1973,11 @@ and run. What do you expect will happen?
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;
     [
-        #<span style="color: #28439B;">button</span> { 
-            text=<span style="color: #09A240;">"Submit"</span>, 
-            actions=#<span style="color: #28439B;">alert</span> { text=<span style="color: #09A240;">"Hello"</span> } 
+        #<span style="font-weight: bold; text-decoration: underline;">button</span> { 
+            text=<span style="font-style: italic;">"Submit"</span>, 
+            actions=#<span style="font-weight: bold; text-decoration: underline;">alert</span> { text=<span style="font-style: italic;">"Hello"</span> } 
         }
     ].
 </pre>
@@ -1990,10 +2017,10 @@ function.
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span>
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">wire</span>(mybutton, #<span style="color: #28439B;">effect</span> { effect=pulsate }),
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span>
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">wire</span>(mybutton, #<span style="font-weight: bold; text-decoration: underline;">effect</span> { effect=pulsate }),
     [
-        #<span style="color: #28439B;">button</span> { id=mybutton, text=<span style="color: #09A240;">"Submit"</span> }
+        #<span style="font-weight: bold; text-decoration: underline;">button</span> { id=mybutton, text=<span style="font-style: italic;">"Submit"</span> }
     ].
 </pre>
 
@@ -2032,13 +2059,13 @@ causes the effect to <b>only</b> get fired if the user clicks on
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span>
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">wire</span>(mybutton, #<span style="color: #28439B;">event</span> { 
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span>
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">wire</span>(mybutton, #<span style="font-weight: bold; text-decoration: underline;">event</span> { 
         type=click, 
-        actions=#<span style="color: #28439B;">effect</span> { effect=pulsate }
+        actions=#<span style="font-weight: bold; text-decoration: underline;">effect</span> { effect=pulsate }
     }),
     [
-        #<span style="color: #28439B;">button</span> { id=mybutton, text=<span style="color: #09A240;">"Submit"</span> }
+        #<span style="font-weight: bold; text-decoration: underline;">button</span> { id=mybutton, text=<span style="font-style: italic;">"Submit"</span> }
     ].
 </pre>
 
@@ -2083,14 +2110,14 @@ Try this:
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span>
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">wire</span>(#<span style="color: #28439B;">event</span> { 
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span>
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">wire</span>(#<span style="font-weight: bold; text-decoration: underline;">event</span> { 
         type=click, trigger=mybutton, target=mylabel,
-        actions=#<span style="color: #28439B;">effect</span> { effect=pulsate }
+        actions=#<span style="font-weight: bold; text-decoration: underline;">effect</span> { effect=pulsate }
     }),
     [
-        #<span style="color: #28439B;">label</span> { id=mylabel, text=<span style="color: #09A240;">"Make Me Blink!"</span> },
-        #<span style="color: #28439B;">button</span> { id=mybutton, text=<span style="color: #09A240;">"Submit"</span> }
+        #<span style="font-weight: bold; text-decoration: underline;">label</span> { id=mylabel, text=<span style="font-style: italic;">"Make Me Blink!"</span> },
+        #<span style="font-weight: bold; text-decoration: underline;">button</span> { id=mybutton, text=<span style="font-style: italic;">"Submit"</span> }
     ].
 </pre>
 
@@ -2127,16 +2154,16 @@ You can also specify the <b>Trigger</b> and <b>Target</b> directly in <code>wf:w
 
 
 
-<pre class="src src-erlang"><span style="color: #929292;">% </span><span style="color: #929292;">Specify a trigger and target.
-</span><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">wire</span>(<span style="color: #000000;">Trigger</span>, <span style="color: #000000;">Target</span>, <span style="color: #000000;">Actions</span>)
+<pre class="src src-erlang"><span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">Specify a trigger and target.
+</span><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">wire</span>(<span style="font-weight: bold; font-style: italic;">Trigger</span>, <span style="font-weight: bold; font-style: italic;">Target</span>, <span style="font-weight: bold; font-style: italic;">Actions</span>)
 
-<span style="color: #929292;">% </span><span style="color: #929292;">Use the same element for both trigger and target.
-</span><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">wire</span>(<span style="color: #000000;">TriggerAndTarget</span>, <span style="color: #000000;">Actions</span>)
+<span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">Use the same element for both trigger and target.
+</span><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">wire</span>(<span style="font-weight: bold; font-style: italic;">TriggerAndTarget</span>, <span style="font-weight: bold; font-style: italic;">Actions</span>)
 
-<span style="color: #929292;">% </span><span style="color: #929292;">Assume the trigger and/or target is provided in the actions. 
-</span><span style="color: #929292;">% </span><span style="color: #929292;">If not, then wire the action directly to the page. 
-</span><span style="color: #929292;">% </span><span style="color: #929292;">(Useful for catching keystrokes.)
-</span><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">wire</span>(<span style="color: #000000;">Actions</span>)
+<span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">Assume the trigger and/or target is provided in the actions. 
+</span><span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">If not, then wire the action directly to the page. 
+</span><span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">(Useful for catching keystrokes.)
+</span><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">wire</span>(<span style="font-weight: bold; font-style: italic;">Actions</span>)
 </pre>
 
 
@@ -2184,9 +2211,10 @@ can be specified in a few different ways.
 </li>
 <li>
 Everything we have seen so far happens on the client.
-
 </li>
 </ol>
+
+
 </div>
 </div>
 </div>
@@ -2224,6 +2252,7 @@ Postback Shortcuts
 Modifying Elements
 </li>
 </ul>
+
 </div>
 </div>
 
@@ -2256,7 +2285,7 @@ Nitrogen server. It is initiated when an event fires with the
 
 
 
-<pre class="src src-erlang">#<span style="color: #28439B;">event</span> { type=click, postback=my_click_event }
+<pre class="src src-erlang">#<span style="font-weight: bold; text-decoration: underline;">event</span> { type=click, postback=my_click_event }
 </pre>
 
 
@@ -2296,14 +2325,14 @@ First, let's use the postback to print out a debug message.
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span>
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">wire</span>(mybutton, #<span style="color: #28439B;">event</span> { type=click, postback=myevent }),
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span>
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">wire</span>(mybutton, #<span style="font-weight: bold; text-decoration: underline;">event</span> { type=click, postback=myevent }),
     [
-        #<span style="color: #28439B;">button</span> { id=mybutton, text=<span style="color: #09A240;">"Submit"</span> }
+        #<span style="font-weight: bold; text-decoration: underline;">button</span> { id=mybutton, text=<span style="font-style: italic;">"Submit"</span> }
     ].
 
-<span style="color: #28439B;">event</span>(myevent) -&gt;
-    ?<span style="color: #A639AE;">PRINT</span>({event, <span style="color: #000000;">now</span>()}).
+<span style="font-weight: bold;">event</span>(myevent) -&gt;
+    ?<span style="font-weight: bold; text-decoration: underline;">PRINT</span>({event, <span style="font-weight: bold;">now</span>()}).
 </pre>
 
 
@@ -2339,15 +2368,15 @@ shortcut to handle their most common events.
 </p>
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption></caption>
-<colgroup><col align="left" /><col align="left" />
+<colgroup><col class="left" /><col class="left" />
 </colgroup>
 <tbody>
-<tr><td>Element</td><td>Shortcut Event</td></tr>
-<tr><td><code>#button{}</code></td><td>click</td></tr>
-<tr><td><code>#textbox{}</code></td><td>enter key</td></tr>
-<tr><td><code>#checkbox{}</code></td><td>click</td></tr>
-<tr><td><code>#dropdown{}</code></td><td>change</td></tr>
-<tr><td><code>#password{}</code></td><td>enter key</td></tr>
+<tr><td class="left">Element</td><td class="left">Shortcut Event</td></tr>
+<tr><td class="left"><code>#button{}</code></td><td class="left">click</td></tr>
+<tr><td class="left"><code>#textbox{}</code></td><td class="left">enter key</td></tr>
+<tr><td class="left"><code>#checkbox{}</code></td><td class="left">click</td></tr>
+<tr><td class="left"><code>#dropdown{}</code></td><td class="left">change</td></tr>
+<tr><td class="left"><code>#password{}</code></td><td class="left">enter key</td></tr>
 </tbody>
 </table>
 
@@ -2387,13 +2416,13 @@ The previous code, simplified:
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span>
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span>
     [
-        #<span style="color: #28439B;">button</span> { id=mybutton, text=<span style="color: #09A240;">"Submit"</span>, postback=myevent }
+        #<span style="font-weight: bold; text-decoration: underline;">button</span> { id=mybutton, text=<span style="font-style: italic;">"Submit"</span>, postback=myevent }
     ].
 
-<span style="color: #28439B;">event</span>(myevent) -&gt;
-    ?<span style="color: #A639AE;">PRINT</span>({event, <span style="color: #000000;">now</span>()}).
+<span style="font-weight: bold;">event</span>(myevent) -&gt;
+    ?<span style="font-weight: bold; text-decoration: underline;">PRINT</span>({event, <span style="font-weight: bold;">now</span>()}).
 </pre>
 
 
@@ -2426,22 +2455,22 @@ The previous code, simplified:
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span>
-    <span style="color: #929292;">% </span><span style="color: #929292;">'mouseover', 'click', and 'mouseout' are standard Javascript
-</span>    <span style="color: #929292;">% </span><span style="color: #929292;">events.
-</span>    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">wire</span>(mybutton, [
-        #<span style="color: #28439B;">event</span> { type=mouseover, postback=my_mouseover_event }
-        #<span style="color: #28439B;">event</span> { type=click, postback=my_click_event }
-        #<span style="color: #28439B;">event</span> { type=mouseout, postback=my_mouseout_event }
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span>
+    <span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">'mouseover', 'click', and 'mouseout' are standard Javascript
+</span>    <span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">events.
+</span>    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">wire</span>(mybutton, [
+        #<span style="font-weight: bold; text-decoration: underline;">event</span> { type=mouseover, postback=my_mouseover_event },
+        #<span style="font-weight: bold; text-decoration: underline;">event</span> { type=click, postback=my_click_event },
+        #<span style="font-weight: bold; text-decoration: underline;">event</span> { type=mouseout, postback=my_mouseout_event }
     ]),
     [
-        #<span style="color: #28439B;">button</span> { id=mybutton, text=<span style="color: #09A240;">"Submit"</span> }
+        #<span style="font-weight: bold; text-decoration: underline;">button</span> { id=mybutton, text=<span style="font-style: italic;">"Submit"</span> }
     ].
 
-<span style="color: #28439B;">event</span>(my_click_event) -&gt;
-    ?<span style="color: #A639AE;">PRINT</span>({click, <span style="color: #000000;">now</span>()});
-<span style="color: #28439B;">event</span>(<span style="color: #000000;">OtherEvent</span>) -&gt;
-    ?<span style="color: #A639AE;">PRINT</span>({other, <span style="color: #000000;">MyEvent</span>, <span style="color: #000000;">now</span>()}).
+<span style="font-weight: bold;">event</span>(my_click_event) -&gt;
+    ?<span style="font-weight: bold; text-decoration: underline;">PRINT</span>({click, <span style="font-weight: bold;">now</span>()});
+<span style="font-weight: bold;">event</span>(<span style="font-weight: bold; font-style: italic;">OtherEvent</span>) -&gt;
+    ?<span style="font-weight: bold; text-decoration: underline;">PRINT</span>({other, <span style="font-weight: bold; font-style: italic;">OtherEvent</span>, <span style="font-weight: bold;">now</span>()}).
 </pre>
 
 
@@ -2478,15 +2507,15 @@ Generally, a postback is a good chance to read form elements. The
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span>
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span>
     [
-        #<span style="color: #28439B;">textbox</span> { id=mytextbox, text=<span style="color: #09A240;">"Edit this text."</span> },
-        #<span style="color: #28439B;">button</span> { id=mybutton, text=<span style="color: #09A240;">"Submit"</span>, postback=myevent }
+        #<span style="font-weight: bold; text-decoration: underline;">textbox</span> { id=mytextbox, text=<span style="font-style: italic;">"Edit this text."</span> },
+        #<span style="font-weight: bold; text-decoration: underline;">button</span> { id=mybutton, text=<span style="font-style: italic;">"Submit"</span>, postback=myevent }
     ].
 
-<span style="color: #28439B;">event</span>(myevent) -&gt;
-    <span style="color: #000000;">Text</span> = <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">q</span>(mytextbox),
-    ?<span style="color: #A639AE;">PRINT</span>({event, <span style="color: #000000;">Text</span>}).
+<span style="font-weight: bold;">event</span>(myevent) -&gt;
+    <span style="font-weight: bold; font-style: italic;">Text</span> = <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">q</span>(mytextbox),
+    ?<span style="font-weight: bold; text-decoration: underline;">PRINT</span>({event, <span style="font-weight: bold; font-style: italic;">Text</span>}).
 </pre>
 
 
@@ -2524,17 +2553,17 @@ update parts of a page without updating the entire page.
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span>
-    #<span style="color: #28439B;">panel</span> { style=<span style="color: #09A240;">"margin: 50px;"</span>, body=[
-        #<span style="color: #28439B;">button</span> { id=mybutton, text=<span style="color: #09A240;">"Submit"</span>, postback=click },
-        #<span style="color: #28439B;">panel</span> { id=placeholder }
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span>
+    #<span style="font-weight: bold; text-decoration: underline;">panel</span> { style=<span style="font-style: italic;">"margin: 50px;"</span>, body=[
+        #<span style="font-weight: bold; text-decoration: underline;">button</span> { id=mybutton, text=<span style="font-style: italic;">"Submit"</span>, postback=click },
+        #<span style="font-weight: bold; text-decoration: underline;">panel</span> { id=placeholder }
     ]}.
 
-<span style="color: #28439B;">event</span>(click) -&gt;
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">update</span>(placeholder, [
-        #<span style="color: #28439B;">h1</span> { text=<span style="color: #09A240;">"Congratulations!"</span> },
-        #<span style="color: #28439B;">p</span> { body=<span style="color: #09A240;">"You have updated the page!"</span> },
-        #<span style="color: #28439B;">p</span> { body=<span style="color: #28439B;">io_lib</span>:<span style="color: #28439B;">format</span>(<span style="color: #09A240;">"~p"</span>, [<span style="color: #000000;">now</span>()]) }
+<span style="font-weight: bold;">event</span>(click) -&gt;
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">update</span>(placeholder, [
+        #<span style="font-weight: bold; text-decoration: underline;">h1</span> { text=<span style="font-style: italic;">"Congratulations!"</span> },
+        #<span style="font-weight: bold; text-decoration: underline;">p</span> { body=<span style="font-style: italic;">"You have updated the page!"</span> },
+        #<span style="font-weight: bold; text-decoration: underline;">p</span> { body=<span style="font-weight: bold; text-decoration: underline;">io_lib</span>:<span style="font-weight: bold; text-decoration: underline;">format</span>(<span style="font-style: italic;">"~p"</span>, [<span style="font-weight: bold;">now</span>()]) }
     ]).
 </pre>
 
@@ -2586,11 +2615,12 @@ Remove an element(s).
 </dd>
 <dt><code>wf:set/2</code></dt><dd>
 Set a textbox or checkbox value.
-
 </dd>
 </dl>
 
-<p>It also exposes many other generally useful utility functions:
+
+<p>
+It also exposes many other generally useful utility functions:
 <a href="http://nitrogenproject.com/doc/api.html">http://nitrogenproject.com/doc/api.html</a>
 </p>
 </div>
@@ -2621,6 +2651,7 @@ Page State Example
 Session State Example
 </li>
 </ul>
+
 </div>
 </div>
 
@@ -2679,11 +2710,12 @@ Associated with the user's session by an HTTP cookie.
 </li>
 <li>
 Useful place to store authentication
+</li>
+</ul>
+</li>
+</ul>
 
-</li>
-</ul>
-</li>
-</ul>
+
 </div>
 </div>
 </div>
@@ -2715,12 +2747,12 @@ Using Page State:
 
 
 
-<pre class="src src-erlang"><span style="color: #929292;">% </span><span style="color: #929292;">Set a state variable
-</span><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">state</span>(<span style="color: #000000;">Key</span>, <span style="color: #000000;">Value</span>)
+<pre class="src src-erlang"><span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">Set a state variable
+</span><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">state</span>(<span style="font-weight: bold; font-style: italic;">Key</span>, <span style="font-weight: bold; font-style: italic;">Value</span>)
 
-<span style="color: #929292;">% </span><span style="color: #929292;">Get a state variable
-</span><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">state</span>(<span style="color: #000000;">Key</span>)
-<span style="color: #28439B;">wf</span>:<span style="color: #28439B;">state_default</span>(<span style="color: #000000;">Key</span>, <span style="color: #000000;">DefaultValue</span>)
+<span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">Get a state variable
+</span><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">state</span>(<span style="font-weight: bold; font-style: italic;">Key</span>)
+<span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">state_default</span>(<span style="font-weight: bold; font-style: italic;">Key</span>, <span style="font-weight: bold; font-style: italic;">DefaultValue</span>)
 </pre>
 
 
@@ -2761,18 +2793,18 @@ should reset when the user reloads the page.
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;
-    #<span style="color: #28439B;">panel</span> { style=<span style="color: #09A240;">"margin: 50px;"</span>, body=[
-        #<span style="color: #28439B;">button</span> { id=mybutton, text=<span style="color: #09A240;">"Submit"</span>, postback=click },
-        #<span style="color: #28439B;">panel</span> { id=placeholder, body=<span style="color: #09A240;">"1"</span> }
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;
+    #<span style="font-weight: bold; text-decoration: underline;">panel</span> { style=<span style="font-style: italic;">"margin: 50px;"</span>, body=[
+        #<span style="font-weight: bold; text-decoration: underline;">button</span> { id=mybutton, text=<span style="font-style: italic;">"Submit"</span>, postback=click },
+        #<span style="font-weight: bold; text-decoration: underline;">panel</span> { id=placeholder, body=<span style="font-style: italic;">"1"</span> }
     ]}.
 
-<span style="color: #28439B;">event</span>(click) -&gt;
-    <span style="color: #000000;">Counter</span> = <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">state_default</span>(counter, 1),
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">update</span>(placeholder, [
-        #<span style="color: #28439B;">panel</span> { body=<span style="color: #28439B;">io_lib</span>:<span style="color: #28439B;">format</span>(<span style="color: #09A240;">"~p"</span>, [<span style="color: #000000;">Counter</span> + 1]) }
+<span style="font-weight: bold;">event</span>(click) -&gt;
+    <span style="font-weight: bold; font-style: italic;">Counter</span> = <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">state_default</span>(counter, 1),
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">update</span>(placeholder, [
+        #<span style="font-weight: bold; text-decoration: underline;">panel</span> { body=<span style="font-weight: bold; text-decoration: underline;">io_lib</span>:<span style="font-weight: bold; text-decoration: underline;">format</span>(<span style="font-style: italic;">"~p"</span>, [<span style="font-weight: bold; font-style: italic;">Counter</span> + 1]) }
     ]),
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">state</span>(counter, <span style="color: #000000;">Counter</span> + 1).
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">state</span>(counter, <span style="font-weight: bold; font-style: italic;">Counter</span> + 1).
 </pre>
 
 
@@ -2808,12 +2840,12 @@ Using Session State:
 
 
 
-<pre class="src src-erlang"><span style="color: #929292;">% </span><span style="color: #929292;">Set a session state variable
-</span><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">session</span>(<span style="color: #000000;">Key</span>, <span style="color: #000000;">Value</span>)
+<pre class="src src-erlang"><span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">Set a session state variable
+</span><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">session</span>(<span style="font-weight: bold; font-style: italic;">Key</span>, <span style="font-weight: bold; font-style: italic;">Value</span>)
 
-<span style="color: #929292;">% </span><span style="color: #929292;">Get a session state variable
-</span><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">session</span>(<span style="color: #000000;">Key</span>)
-<span style="color: #28439B;">wf</span>:<span style="color: #28439B;">session_default</span>(<span style="color: #000000;">Key</span>, <span style="color: #000000;">DefaultValue</span>)
+<span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">Get a session state variable
+</span><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">session</span>(<span style="font-weight: bold; font-style: italic;">Key</span>)
+<span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">session_default</span>(<span style="font-weight: bold; font-style: italic;">Key</span>, <span style="font-weight: bold; font-style: italic;">DefaultValue</span>)
 </pre>
 
 
@@ -2825,7 +2857,7 @@ Using Session State:
 <b>Exercise:</b> Modify my_page.erl to display <b>TWO</b> counters. When the
 user presses the 'Submit' button, one counter should get
 incremented, the other counter should get doubled. The server
-should remember the counter even if the closes and then re-opens
+should remember the counters even if the user closes and then re-opens
 the browser.
 </p>
 </div>
@@ -2855,23 +2887,23 @@ the browser.
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;
-    #<span style="color: #28439B;">panel</span> { style=<span style="color: #09A240;">"margin: 50px;"</span>, body=[
-        #<span style="color: #28439B;">button</span> { id=mybutton, text=<span style="color: #09A240;">"Submit"</span>, postback=click },
-        #<span style="color: #28439B;">panel</span> { id=placeholder1, body=<span style="color: #09A240;">"1"</span> },
-        #<span style="color: #28439B;">panel</span> { id=placeholder2, body=<span style="color: #09A240;">"1"</span> }
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;
+    #<span style="font-weight: bold; text-decoration: underline;">panel</span> { style=<span style="font-style: italic;">"margin: 50px;"</span>, body=[
+        #<span style="font-weight: bold; text-decoration: underline;">button</span> { id=mybutton, text=<span style="font-style: italic;">"Submit"</span>, postback=click },
+        #<span style="font-weight: bold; text-decoration: underline;">panel</span> { id=placeholder1, body=<span style="font-style: italic;">"1"</span> },
+        #<span style="font-weight: bold; text-decoration: underline;">panel</span> { id=placeholder2, body=<span style="font-style: italic;">"1"</span> }
     ]}.
 
-<span style="color: #28439B;">event</span>(click) -&gt;
-    <span style="color: #929292;">%% </span><span style="color: #929292;">Increment the counter...
-</span>    <span style="color: #000000;">Counter1</span> = <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">session_default</span>(counter1, 1),
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">update</span>(placeholder1, <span style="color: #28439B;">io_lib</span>:<span style="color: #28439B;">format</span>(<span style="color: #09A240;">"~p"</span>, [<span style="color: #000000;">Counter1</span> + 1])),
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">session</span>(counter1, <span style="color: #000000;">Counter1</span> + 1),
+<span style="font-weight: bold;">event</span>(click) -&gt;
+    <span style="font-weight: bold; font-style: italic;">%% </span><span style="font-weight: bold; font-style: italic;">Increment the counter...
+</span>    <span style="font-weight: bold; font-style: italic;">Counter1</span> = <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">session_default</span>(counter1, 1),
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">update</span>(placeholder1, <span style="font-weight: bold; text-decoration: underline;">io_lib</span>:<span style="font-weight: bold; text-decoration: underline;">format</span>(<span style="font-style: italic;">"~p"</span>, [<span style="font-weight: bold; font-style: italic;">Counter1</span> + 1])),
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">session</span>(counter1, <span style="font-weight: bold; font-style: italic;">Counter1</span> + 1),
 
-    <span style="color: #929292;">%% </span><span style="color: #929292;">Double the other counter...
-</span>    <span style="color: #000000;">Counter2</span> = <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">session_default</span>(counter2, 1),
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">update</span>(placeholder2, <span style="color: #28439B;">io_lib</span>:<span style="color: #28439B;">format</span>(<span style="color: #09A240;">"~p"</span>, [<span style="color: #000000;">Counter2</span> * 2])),
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">session</span>(counter2, <span style="color: #000000;">Counter2</span> * 2).
+    <span style="font-weight: bold; font-style: italic;">%% </span><span style="font-weight: bold; font-style: italic;">Double the other counter...
+</span>    <span style="font-weight: bold; font-style: italic;">Counter2</span> = <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">session_default</span>(counter2, 1),
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">update</span>(placeholder2, <span style="font-weight: bold; text-decoration: underline;">io_lib</span>:<span style="font-weight: bold; text-decoration: underline;">format</span>(<span style="font-style: italic;">"~p"</span>, [<span style="font-weight: bold; font-style: italic;">Counter2</span> * 2])),
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">session</span>(counter2, <span style="font-weight: bold; font-style: italic;">Counter2</span> * 2).
 </pre>
 
 
@@ -2907,6 +2939,7 @@ Page Redirection Functions
 Creating a Secure Page
 </li>
 </ul>
+
 </div>
 </div>
 
@@ -2946,9 +2979,10 @@ roles, but not the <code>administrator</code> role.
 </li>
 <li>
 Authentication/authorization info is stored in the session. 
-
 </li>
 </ul>
+
+
 </div>
 </div>
 </div>
@@ -2980,11 +3014,11 @@ Functions to set the user/role:
 
 
 
-<pre class="src src-erlang"><span style="color: #929292;">% </span><span style="color: #929292;">Get/set the current user for this session.
-</span><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">user</span>(), <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">user</span>(<span style="color: #000000;">User</span>)
+<pre class="src src-erlang"><span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">Get/set the current user for this session.
+</span><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">user</span>(), <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">user</span>(<span style="font-weight: bold; font-style: italic;">User</span>)
 
-<span style="color: #929292;">% </span><span style="color: #929292;">Get/set whether the current session has the specified role.
-</span><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">role</span>(<span style="color: #000000;">Role</span>), <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">role</span>(<span style="color: #000000;">Role</span>, <span style="color: #000000;">IsInRole</span>)
+<span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">Get/set whether the current session has the specified role.
+</span><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">role</span>(<span style="font-weight: bold; font-style: italic;">Role</span>), <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">role</span>(<span style="font-weight: bold; font-style: italic;">Role</span>, <span style="font-weight: bold; font-style: italic;">IsInRole</span>)
 </pre>
 
 
@@ -3020,15 +3054,15 @@ Functions kick the user to a login page:
 
 
 
-<pre class="src src-erlang"><span style="color: #929292;">% </span><span style="color: #929292;">Redirect the user to a different page.
-</span><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">redirect</span>(<span style="color: #000000;">Url</span>)
+<pre class="src src-erlang"><span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">Redirect the user to a different page.
+</span><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">redirect</span>(<span style="font-weight: bold; font-style: italic;">Url</span>)
 
-<span style="color: #929292;">% </span><span style="color: #929292;">Redirect the user to the login page.
-</span><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">redirect_to_login</span>(<span style="color: #000000;">LoginUrl</span>)
+<span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">Redirect the user to the login page.
+</span><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">redirect_to_login</span>(<span style="font-weight: bold; font-style: italic;">LoginUrl</span>)
 
-<span style="color: #929292;">% </span><span style="color: #929292;">Redirect the user back to the original page they 
-</span><span style="color: #929292;">% </span><span style="color: #929292;">tried to access.  
-</span><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">redirect_from_login</span>(<span style="color: #000000;">DefaultUrl</span>)
+<span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">Redirect the user back to the original page they 
+</span><span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">tried to access.  
+</span><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">redirect_from_login</span>(<span style="font-weight: bold; font-style: italic;">DefaultUrl</span>)
 </pre>
 
 
@@ -3065,13 +3099,13 @@ doesn't have the role, go to a login page.
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">main</span>() -&gt;<span style="color: #28439B;"> </span>
-    <span style="color: #FB5D17;">case</span> <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">role</span>(managers) <span style="color: #FB5D17;">of</span>
+<pre class="src src-erlang"><span style="font-weight: bold;">main</span>() -&gt;<span style="font-weight: bold;"> </span>
+    <span style="font-weight: bold;">case</span> <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">role</span>(managers) <span style="font-weight: bold;">of</span>
         true -&gt;
-            #<span style="color: #28439B;">template</span> { file=<span style="color: #09A240;">"./site/templates/bare.html"</span> };
+            #<span style="font-weight: bold; text-decoration: underline;">template</span> { file=<span style="font-style: italic;">"./site/templates/bare.html"</span> };
         false -&gt;
-            <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">redirect_to_login</span>(<span style="color: #09A240;">"/login"</span>)
-    <span style="color: #FB5D17;">end</span>.
+            <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">redirect_to_login</span>(<span style="font-style: italic;">"/login"</span>)
+    <span style="font-weight: bold;">end</span>.
 </pre>
 
 
@@ -3109,12 +3143,12 @@ back.
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;
-    #<span style="color: #28439B;">button</span> { text=<span style="color: #09A240;">"Login"</span>, postback=login }.
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;
+    #<span style="font-weight: bold; text-decoration: underline;">button</span> { text=<span style="font-style: italic;">"Login"</span>, postback=login }.
 
-<span style="color: #28439B;">event</span>(login) -&gt;
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">role</span>(managers, true),
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">redirect_from_login</span>(<span style="color: #09A240;">"/"</span>).
+<span style="font-weight: bold;">event</span>(login) -&gt;
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">role</span>(managers, true),
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">redirect_from_login</span>(<span style="font-style: italic;">"/"</span>).
 </pre>
 
 
@@ -3150,26 +3184,26 @@ Update <code>login.erl</code> to prompt for a username and password.
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span>
-    #<span style="color: #28439B;">panel</span> { style=<span style="color: #09A240;">"margin: 50px;"</span>, body=[
-        #<span style="color: #28439B;">flash</span> {},
-        #<span style="color: #28439B;">label</span> { text=<span style="color: #09A240;">"Username"</span> },
-        #<span style="color: #28439B;">textbox</span> { id=username, next=password },
-        #<span style="color: #28439B;">br</span> {},
-        #<span style="color: #28439B;">label</span> { text=<span style="color: #09A240;">"Password"</span> },
-        #<span style="color: #28439B;">password</span> { id=password, next=submit },
-        #<span style="color: #28439B;">br</span> {},
-        #<span style="color: #28439B;">button</span> { text=<span style="color: #09A240;">"Login"</span>, id=submit, postback=login }
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span>
+    #<span style="font-weight: bold; text-decoration: underline;">panel</span> { style=<span style="font-style: italic;">"margin: 50px;"</span>, body=[
+        #<span style="font-weight: bold; text-decoration: underline;">flash</span> {},
+        #<span style="font-weight: bold; text-decoration: underline;">label</span> { text=<span style="font-style: italic;">"Username"</span> },
+        #<span style="font-weight: bold; text-decoration: underline;">textbox</span> { id=username, next=password },
+        #<span style="font-weight: bold; text-decoration: underline;">br</span> {},
+        #<span style="font-weight: bold; text-decoration: underline;">label</span> { text=<span style="font-style: italic;">"Password"</span> },
+        #<span style="font-weight: bold; text-decoration: underline;">password</span> { id=password, next=submit },
+        #<span style="font-weight: bold; text-decoration: underline;">br</span> {},
+        #<span style="font-weight: bold; text-decoration: underline;">button</span> { text=<span style="font-style: italic;">"Login"</span>, id=submit, postback=login }
     ]}.
 
-<span style="color: #28439B;">event</span>(login) -&gt;
-    <span style="color: #FB5D17;">case</span> <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">q</span>(password) == <span style="color: #09A240;">"password"</span> <span style="color: #FB5D17;">of</span>
+<span style="font-weight: bold;">event</span>(login) -&gt;
+    <span style="font-weight: bold;">case</span> <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">q</span>(password) == <span style="font-style: italic;">"password"</span> <span style="font-weight: bold;">of</span>
         true -&gt;
-            <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">role</span>(managers, true),
-            <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">redirect_from_login</span>(<span style="color: #09A240;">"/"</span>);
+            <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">role</span>(managers, true),
+            <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">redirect_from_login</span>(<span style="font-style: italic;">"/"</span>);
         false -&gt;
-            <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">flash</span>(<span style="color: #09A240;">"Invalid password."</span>)
-    <span style="color: #FB5D17;">end</span>.
+            <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">flash</span>(<span style="font-style: italic;">"Invalid password."</span>)
+    <span style="font-weight: bold;">end</span>.
 </pre>
 
 
@@ -3205,8 +3239,8 @@ Create a way for the user to logout.
 
 
 
-<pre class="src src-erlang"><span style="color: #929292;">% </span><span style="color: #929292;">Clears all user, roles, session state, and page state.
-</span><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">logout</span>()
+<pre class="src src-erlang"><span style="font-weight: bold; font-style: italic;">% </span><span style="font-weight: bold; font-style: italic;">Clears all user, roles, session state, and page state.
+</span><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">logout</span>()
 </pre>
 
 
@@ -3237,9 +3271,10 @@ Overview of Nitrogen Validation
 </li>
 <li>
 Adding Some Validators
-
 </li>
 </ul>
+
+
 </div>
 </div>
 
@@ -3309,14 +3344,14 @@ a password.
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span>
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">wire</span>(submit, username, #<span style="color: #28439B;">validate</span> { validators=[
-        #<span style="color: #28439B;">is_required</span> { text=<span style="color: #09A240;">"Required."</span> }
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span>
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">wire</span>(submit, username, #<span style="font-weight: bold; text-decoration: underline;">validate</span> { validators=[
+        #<span style="font-weight: bold; text-decoration: underline;">is_required</span> { text=<span style="font-style: italic;">"Required."</span> }
     ]}),
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">wire</span>(submit, password, #<span style="color: #28439B;">validate</span> { validators=[
-        #<span style="color: #28439B;">is_required</span> { text=<span style="color: #09A240;">"Required."</span> }
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">wire</span>(submit, password, #<span style="font-weight: bold; text-decoration: underline;">validate</span> { validators=[
+        #<span style="font-weight: bold; text-decoration: underline;">is_required</span> { text=<span style="font-style: italic;">"Required."</span> }
     ]}),
-    #<span style="color: #28439B;">panel</span> { style=<span style="color: #09A240;">"margin: 50px;"</span>, body=[
+    #<span style="font-weight: bold; text-decoration: underline;">panel</span> { style=<span style="font-style: italic;">"margin: 50px;"</span>, body=[
         ...
 </pre>
 
@@ -3356,18 +3391,18 @@ the server. (To make a custom client-side validator, use
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span>
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">wire</span>(submit, username, #<span style="color: #28439B;">validate</span> { validators=[
-        #<span style="color: #28439B;">is_required</span> { text=<span style="color: #09A240;">"Required."</span> }
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span>
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">wire</span>(submit, username, #<span style="font-weight: bold; text-decoration: underline;">validate</span> { validators=[
+        #<span style="font-weight: bold; text-decoration: underline;">is_required</span> { text=<span style="font-style: italic;">"Required."</span> }
     ]}),
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">wire</span>(submit, password, #<span style="color: #28439B;">validate</span> { validators=[
-        #<span style="color: #28439B;">is_required</span> { text=<span style="color: #09A240;">"Required."</span> },
-        #<span style="color: #28439B;">custom</span> { 
-            text=<span style="color: #09A240;">"Invalid password."</span>, 
-            function=<span style="color: #FB5D17;">fun</span>(<span style="color: #000000;">_</span>, <span style="color: #000000;">Value</span>) -&gt;<span style="color: #28439B;"> </span><span style="color: #000000;">Value</span> == <span style="color: #09A240;">"password"</span> <span style="color: #FB5D17;">end</span>
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">wire</span>(submit, password, #<span style="font-weight: bold; text-decoration: underline;">validate</span> { validators=[
+        #<span style="font-weight: bold; text-decoration: underline;">is_required</span> { text=<span style="font-style: italic;">"Required."</span> },
+        #<span style="font-weight: bold; text-decoration: underline;">custom</span> { 
+            text=<span style="font-style: italic;">"Invalid password."</span>, 
+            function=<span style="font-weight: bold;">fun</span>(<span style="font-weight: bold; font-style: italic;">_</span>, <span style="font-weight: bold; font-style: italic;">Value</span>) -&gt;<span style="font-weight: bold;"> </span><span style="font-weight: bold; font-style: italic;">Value</span> == <span style="font-style: italic;">"password"</span> <span style="font-weight: bold;">end</span>
         }
     ]}),
-    #<span style="color: #28439B;">panel</span> { style=<span style="color: #09A240;">"margin: 50px;"</span>, body=[
+    #<span style="font-weight: bold; text-decoration: underline;">panel</span> { style=<span style="font-style: italic;">"margin: 50px;"</span>, body=[
         ...
 </pre>
 
@@ -3406,9 +3441,9 @@ correct. Change the <code>login</code> event to:
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">event</span>(login) -&gt;
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">role</span>(managers, true),
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">redirect_from_login</span>(<span style="color: #09A240;">"/"</span>).
+<pre class="src src-erlang"><span style="font-weight: bold;">event</span>(login) -&gt;
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">role</span>(managers, true),
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">redirect_from_login</span>(<span style="font-style: italic;">"/"</span>).
 </pre>
 
 
@@ -3448,9 +3483,10 @@ Comet Pool Scope
 </li>
 <li>
 The Simplest Chatroom Ever Constructed
-
 </li>
 </ul>
+
+
 </div>
 </div>
 
@@ -3537,9 +3573,10 @@ Output is queued until the function ends or calls <code>wf:flush/0</code>.
 The function acts like it is linked to the current user's
 page. It is killed when the user leaves the page (or receives
 <code>{'EXIT', _, Message}</code> if <code>trap_exit</code> is <code>true</code>.)
-
 </li>
 </ul>
+
+
 </div>
 </div>
 </div>
@@ -3571,15 +3608,15 @@ Update <code>my_page.erl</code> to count once per second.
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span>
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">comet</span>(<span style="color: #FB5D17;">fun</span>() -&gt;<span style="color: #28439B;"> </span><span style="color: #28439B;">counter</span>(1) <span style="color: #FB5D17;">end</span>),
-    #<span style="color: #28439B;">panel</span> { id=placeholder }.
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span>
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">comet</span>(<span style="font-weight: bold;">fun</span>() -&gt;<span style="font-weight: bold;"> </span><span style="font-weight: bold; text-decoration: underline;">counter</span>(1) <span style="font-weight: bold;">end</span>),
+    #<span style="font-weight: bold; text-decoration: underline;">panel</span> { id=placeholder }.
 
-<span style="color: #28439B;">counter</span>(<span style="color: #000000;">Count</span>) -&gt;
-    <span style="color: #28439B;">timer</span>:<span style="color: #28439B;">sleep</span>(1000),
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">update</span>(placeholder, <span style="color: #000000;">integer_to_list</span>(<span style="color: #000000;">Count</span>)),
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">flush</span>(),
-    <span style="color: #28439B;">counter</span>(<span style="color: #000000;">Count</span> + 1).
+<span style="font-weight: bold;">counter</span>(<span style="font-weight: bold; font-style: italic;">Count</span>) -&gt;
+    <span style="font-weight: bold; text-decoration: underline;">timer</span>:<span style="font-weight: bold; text-decoration: underline;">sleep</span>(1000),
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">update</span>(placeholder, <span style="font-weight: bold;">integer_to_list</span>(<span style="font-weight: bold; font-style: italic;">Count</span>)),
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">flush</span>(),
+    <span style="font-weight: bold; text-decoration: underline;">counter</span>(<span style="font-weight: bold; font-style: italic;">Count</span> + 1).
 </pre>
 
 
@@ -3616,7 +3653,7 @@ You can tell a Comet function to start in a pool by providing a
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">comet</span>(<span style="color: #000000;">Fun</span>, <span style="color: #000000;">PoolName</span>)
+<pre class="src src-erlang"><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">comet</span>(<span style="font-weight: bold; font-style: italic;">Fun</span>, <span style="font-weight: bold; font-style: italic;">PoolName</span>)
 </pre>
 
 
@@ -3628,7 +3665,7 @@ received by other functions started in that comet pool.
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">send</span>(<span style="color: #000000;">PoolName</span>, <span style="color: #000000;">Message</span>)
+<pre class="src src-erlang"><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">send</span>(<span style="font-weight: bold; font-style: italic;">PoolName</span>, <span style="font-weight: bold; font-style: italic;">Message</span>)
 </pre>
 
 
@@ -3673,17 +3710,18 @@ goes away.
 <b>Global</b> comet pools exist to help you create multi-user
 applications. They pool is accessible by <b>all</b> pages and <b>all</b>
 users.
-
-
 </li>
 </ul>
 
 
-<pre class="src src-erlang"><span style="color: #929292;">%% </span><span style="color: #929292;">Create a global comet pool.
-</span><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">comet_global</span>(<span style="color: #000000;">Function</span>, <span style="color: #000000;">PoolName</span>)
 
-<span style="color: #929292;">%% </span><span style="color: #929292;">Send a global comet message.
-</span><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">send_global</span>(<span style="color: #000000;">PoolName</span>, <span style="color: #000000;">Message</span>)
+
+
+<pre class="src src-erlang"><span style="font-weight: bold; font-style: italic;">%% </span><span style="font-weight: bold; font-style: italic;">Create a global comet pool.
+</span><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">comet_global</span>(<span style="font-weight: bold; font-style: italic;">Function</span>, <span style="font-weight: bold; font-style: italic;">PoolName</span>)
+
+<span style="font-weight: bold; font-style: italic;">%% </span><span style="font-weight: bold; font-style: italic;">Send a global comet message.
+</span><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">send_global</span>(<span style="font-weight: bold; font-style: italic;">PoolName</span>, <span style="font-weight: bold; font-style: italic;">Message</span>)
 </pre>
 
 
@@ -3721,24 +3759,24 @@ and chat to yourself.
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span>
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">comet_global</span>(<span style="color: #FB5D17;">fun</span>() -&gt;<span style="color: #28439B;"> </span><span style="color: #28439B;">repeater</span>() <span style="color: #FB5D17;">end</span>, repeater_pool),
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span>
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">comet_global</span>(<span style="font-weight: bold;">fun</span>() -&gt;<span style="font-weight: bold;"> </span><span style="font-weight: bold; text-decoration: underline;">repeater</span>() <span style="font-weight: bold;">end</span>, repeater_pool),
     [
-        #<span style="color: #28439B;">textbox</span> { id=msg, text=<span style="color: #09A240;">"Your message..."</span>, next=submit },
-        #<span style="color: #28439B;">button</span> { id=submit, text=<span style="color: #09A240;">"Submit"</span>, postback=submit },
-        #<span style="color: #28439B;">panel</span> { id=placeholder }
+        #<span style="font-weight: bold; text-decoration: underline;">textbox</span> { id=msg, text=<span style="font-style: italic;">"Your message..."</span>, next=submit },
+        #<span style="font-weight: bold; text-decoration: underline;">button</span> { id=submit, text=<span style="font-style: italic;">"Submit"</span>, postback=submit },
+        #<span style="font-weight: bold; text-decoration: underline;">panel</span> { id=placeholder }
     ].
 
-<span style="color: #28439B;">event</span>(submit) -&gt;
-    ?<span style="color: #A639AE;">PRINT</span>(<span style="color: #28439B;">wf</span>:<span style="color: #28439B;">q</span>(msg)),
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">send_global</span>(repeater_pool, {msg, <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">q</span>(msg)}).
+<span style="font-weight: bold;">event</span>(submit) -&gt;
+    ?<span style="font-weight: bold; text-decoration: underline;">PRINT</span>(<span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">q</span>(msg)),
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">send_global</span>(repeater_pool, {msg, <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">q</span>(msg)}).
 
-<span style="color: #28439B;">repeater</span>() -&gt;
-    <span style="color: #FB5D17;">receive</span> 
-        {msg, <span style="color: #000000;">Msg</span>} -&gt;<span style="color: #28439B;"> </span><span style="color: #28439B;">wf</span>:<span style="color: #28439B;">insert_top</span>(placeholder, [<span style="color: #000000;">Msg</span>, <span style="color: #09A240;">"&lt;br&gt;"</span>])
-    <span style="color: #FB5D17;">end</span>,
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">flush</span>(),
-    <span style="color: #28439B;">repeater</span>().
+<span style="font-weight: bold;">repeater</span>() -&gt;
+    <span style="font-weight: bold;">receive</span> 
+        {msg, <span style="font-weight: bold; font-style: italic;">Msg</span>} -&gt;<span style="font-weight: bold;"> </span><span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">insert_top</span>(placeholder, [<span style="font-weight: bold; font-style: italic;">Msg</span>, <span style="font-style: italic;">"&lt;br&gt;"</span>])
+    <span style="font-weight: bold;">end</span>,
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">flush</span>(),
+    <span style="font-weight: bold; text-decoration: underline;">repeater</span>().
 </pre>
 
 
@@ -3771,6 +3809,7 @@ Custom Actions
 Handlers
 </li>
 </ul>
+
 </div>
 </div>
 
@@ -3850,9 +3889,10 @@ worked, this would not be necessary.)
 <li>
 A <code>render_element(Record)</code> function that emits HTML or
 other elements.
-
 </li>
 </ol>
+
+
 </div>
 </div>
 </div>
@@ -3886,24 +3926,24 @@ on the main page.
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">render_element</span>(#<span style="color: #28439B;">my_element</span>{}) -&gt;
-    <span style="color: #000000;">TextboxID</span> = <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">temp_id</span>(),
-    <span style="color: #000000;">ButtonID</span> = <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">temp_id</span>(),
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">wire</span>(<span style="color: #000000;">ButtonID</span>, #<span style="color: #28439B;">event</span> { 
+<pre class="src src-erlang"><span style="font-weight: bold;">render_element</span>(#<span style="font-weight: bold; text-decoration: underline;">my_element</span>{}) -&gt;
+    <span style="font-weight: bold; font-style: italic;">TextboxID</span> = <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">temp_id</span>(),
+    <span style="font-weight: bold; font-style: italic;">ButtonID</span> = <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">temp_id</span>(),
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">wire</span>(<span style="font-weight: bold; font-style: italic;">ButtonID</span>, #<span style="font-weight: bold; text-decoration: underline;">event</span> { 
         type=click,
-        delegate=?<span style="color: #A639AE;">MODULE</span>, 
-        postback={click, <span style="color: #000000;">TextboxID</span>}
+        delegate=?<span style="font-weight: bold; text-decoration: underline;">MODULE</span>, 
+        postback={click, <span style="font-weight: bold; font-style: italic;">TextboxID</span>}
     }),
     [
-        #<span style="color: #28439B;">textbox</span> { id=<span style="color: #000000;">TextboxID</span>, text=<span style="color: #09A240;">"Your text..."</span>, next=<span style="color: #000000;">ButtonID</span> },
-        #<span style="color: #28439B;">button</span> { id=<span style="color: #000000;">ButtonID</span>, text=<span style="color: #09A240;">"Submit"</span> }
+        #<span style="font-weight: bold; text-decoration: underline;">textbox</span> { id=<span style="font-weight: bold; font-style: italic;">TextboxID</span>, text=<span style="font-style: italic;">"Your text..."</span>, next=<span style="font-weight: bold; font-style: italic;">ButtonID</span> },
+        #<span style="font-weight: bold; text-decoration: underline;">button</span> { id=<span style="font-weight: bold; font-style: italic;">ButtonID</span>, text=<span style="font-style: italic;">"Submit"</span> }
     ].
 
-<span style="color: #28439B;">event</span>({click, <span style="color: #000000;">TextboxID</span>}) -&gt;
-    <span style="color: #000000;">Text</span> = <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">q</span>(<span style="color: #000000;">TextboxID</span>),
-    ?<span style="color: #A639AE;">PRINT</span>({clicked, <span style="color: #000000;">TextboxID</span>, <span style="color: #000000;">Text</span>}),
-    <span style="color: #000000;">PageModule</span> = <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">page_module</span>(),
-    <span style="color: #000000;">PageModule</span>:<span style="color: #28439B;">my_element_event</span>(<span style="color: #000000;">Text</span>).
+<span style="font-weight: bold;">event</span>({click, <span style="font-weight: bold; font-style: italic;">TextboxID</span>}) -&gt;
+    <span style="font-weight: bold; font-style: italic;">Text</span> = <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">q</span>(<span style="font-weight: bold; font-style: italic;">TextboxID</span>),
+    ?<span style="font-weight: bold; text-decoration: underline;">PRINT</span>({clicked, <span style="font-weight: bold; font-style: italic;">TextboxID</span>, <span style="font-weight: bold; font-style: italic;">Text</span>}),
+    <span style="font-weight: bold; font-style: italic;">PageModule</span> = <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">page_module</span>(),
+    <span style="font-weight: bold; font-style: italic;">PageModule</span>:<span style="font-weight: bold; text-decoration: underline;">my_element_event</span>(<span style="font-weight: bold; font-style: italic;">Text</span>).
 </pre>
 
 
@@ -3939,11 +3979,11 @@ element into <code>include/records.hrl</code> first!
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span>
-    #<span style="color: #28439B;">my_element</span> {}.
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span>
+    #<span style="font-weight: bold; text-decoration: underline;">my_element</span> {}.
 
-<span style="color: #28439B;">my_element_event</span>(<span style="color: #000000;">Text</span>) -&gt;
-    ?<span style="color: #A639AE;">PRINT</span>(<span style="color: #000000;">Text</span>).
+<span style="font-weight: bold;">my_element_event</span>(<span style="font-weight: bold; font-style: italic;">Text</span>) -&gt;
+    ?<span style="font-weight: bold; text-decoration: underline;">PRINT</span>(<span style="font-weight: bold; font-style: italic;">Text</span>).
 </pre>
 
 
@@ -4018,10 +4058,10 @@ string, but converted to all uppercase.
 
 
 
-<pre class="src src-erlang"><span style="color: #FB5D17;">-record</span>(<span style="color: #28439B;">my_action</span>, {?<span style="color: #A639AE;">ACTION_BASE</span>(action_my_action), text}).
+<pre class="src src-erlang"><span style="font-weight: bold;">-record</span>(<span style="font-weight: bold; text-decoration: underline;">my_action</span>, {?<span style="font-weight: bold; text-decoration: underline;">ACTION_BASE</span>(action_my_action), text}).
 
-<span style="color: #28439B;">render_action</span>(<span style="color: #000000;">Record</span> = #<span style="color: #28439B;">my_action</span>{}) -&gt;
-    #<span style="color: #28439B;">alert</span> { text=<span style="color: #28439B;">string</span>:<span style="color: #28439B;">to_upper</span>(<span style="color: #000000;">Record</span>#<span style="color: #28439B;">my_action</span>.text) }.
+<span style="font-weight: bold;">render_action</span>(<span style="font-weight: bold; font-style: italic;">Record</span> = #<span style="font-weight: bold; text-decoration: underline;">my_action</span>{}) -&gt;
+    #<span style="font-weight: bold; text-decoration: underline;">alert</span> { text=<span style="font-weight: bold; text-decoration: underline;">string</span>:<span style="font-weight: bold; text-decoration: underline;">to_upper</span>(<span style="font-weight: bold; font-style: italic;">Record</span>#<span style="font-weight: bold; text-decoration: underline;">my_action</span>.text) }.
 </pre>
 
 
@@ -4057,9 +4097,9 @@ into <code>include/records.hrl</code> first!
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">body</span>() -&gt;<span style="color: #28439B;"> </span>
-    <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">wire</span>(#<span style="color: #28439B;">my_action</span> { text=<span style="color: #09A240;">"this is a message"</span> }),
-    #<span style="color: #28439B;">label</span> { text=<span style="color: #09A240;">"You should see an alert."</span> }.
+<pre class="src src-erlang"><span style="font-weight: bold;">body</span>() -&gt;<span style="font-weight: bold;"> </span>
+    <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">wire</span>(#<span style="font-weight: bold; text-decoration: underline;">my_action</span> { text=<span style="font-style: italic;">"this is a message"</span> }),
+    #<span style="font-weight: bold; text-decoration: underline;">label</span> { text=<span style="font-style: italic;">"You should see an alert."</span> }.
 </pre>
 
 
@@ -4128,9 +4168,10 @@ Routing
 </li>
 <li>
 Security
-
 </li>
 </ul>
+
+
 </div>
 </div>
 </div>
@@ -4196,25 +4237,25 @@ to access modules beginning with the word "my".
 
 
 
-<pre class="src src-erlang"><span style="color: #FB5D17;">-module</span>(my_security_handler).
-<span style="color: #FB5D17;">-behaviour</span>(security_handler).
-<span style="color: #FB5D17;">-export</span>([<span style="color: #28439B;">init/2</span>, <span style="color: #28439B;">finish/2</span>]).
-<span style="color: #FB5D17;">-include_lib</span>(<span style="color: #09A240;">"nitrogen/include/wf.hrl"</span>).
+<pre class="src src-erlang"><span style="font-weight: bold;">-module</span>(my_security_handler).
+<span style="font-weight: bold;">-behaviour</span>(security_handler).
+<span style="font-weight: bold;">-export</span>([<span style="font-weight: bold; text-decoration: underline;">init/2</span>, <span style="font-weight: bold; text-decoration: underline;">finish/2</span>]).
+<span style="font-weight: bold;">-include_lib</span>(<span style="font-style: italic;">"nitrogen/include/wf.hrl"</span>).
 
-<span style="color: #28439B;">init</span>(<span style="color: #000000;">_Config</span>, <span style="color: #000000;">State</span>) -&gt;
-    ?<span style="color: #A639AE;">PRINT</span>(<span style="color: #28439B;">wf</span>:<span style="color: #28439B;">page_module</span>()),
-    <span style="color: #FB5D17;">case</span> <span style="color: #28439B;">wf</span>:<span style="color: #28439B;">to_list</span>(<span style="color: #28439B;">wf</span>:<span style="color: #28439B;">page_module</span>()) <span style="color: #FB5D17;">of</span>
-        <span style="color: #09A240;">"my"</span> ++ <span style="color: #000000;">_</span> -&gt;
-            {ok, <span style="color: #000000;">State</span>};
-        <span style="color: #09A240;">"static_file"</span> -&gt;
-            {ok, <span style="color: #000000;">State</span>};
-        <span style="color: #000000;">_</span> -&gt;
-            <span style="color: #28439B;">wf_context</span>:<span style="color: #28439B;">page_module</span>(access_denied),
-            {ok, <span style="color: #000000;">State</span>}
-    <span style="color: #FB5D17;">end</span>.
+<span style="font-weight: bold;">init</span>(<span style="font-weight: bold; font-style: italic;">_Config</span>, <span style="font-weight: bold; font-style: italic;">State</span>) -&gt;
+    ?<span style="font-weight: bold; text-decoration: underline;">PRINT</span>(<span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">page_module</span>()),
+    <span style="font-weight: bold;">case</span> <span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">to_list</span>(<span style="font-weight: bold; text-decoration: underline;">wf</span>:<span style="font-weight: bold; text-decoration: underline;">page_module</span>()) <span style="font-weight: bold;">of</span>
+        <span style="font-style: italic;">"my"</span> ++ <span style="font-weight: bold; font-style: italic;">_</span> -&gt;
+            {ok, <span style="font-weight: bold; font-style: italic;">State</span>};
+        <span style="font-style: italic;">"static_file"</span> -&gt;
+            {ok, <span style="font-weight: bold; font-style: italic;">State</span>};
+        <span style="font-weight: bold; font-style: italic;">_</span> -&gt;
+            <span style="font-weight: bold; text-decoration: underline;">wf_context</span>:<span style="font-weight: bold; text-decoration: underline;">page_module</span>(access_denied),
+            {ok, <span style="font-weight: bold; font-style: italic;">State</span>}
+    <span style="font-weight: bold;">end</span>.
 
-<span style="color: #28439B;">finish</span>(<span style="color: #000000;">_Config</span>, <span style="color: #000000;">State</span>) -&gt;
-    {ok, <span style="color: #000000;">State</span>}.
+<span style="font-weight: bold;">finish</span>(<span style="font-weight: bold; font-style: italic;">_Config</span>, <span style="font-weight: bold; font-style: italic;">State</span>) -&gt;
+    {ok, <span style="font-weight: bold; font-style: italic;">State</span>}.
 </pre>
 
 
@@ -4250,12 +4291,12 @@ Now, install the handler in <code>nitrogen_inets.erl</code>:
 
 
 
-<pre class="src src-erlang"><span style="color: #28439B;">do</span>(<span style="color: #000000;">Info</span>) -&gt;
-    <span style="color: #000000;">RequestBridge</span> = <span style="color: #28439B;">simple_bridge</span>:<span style="color: #28439B;">make_request</span>(inets_request_bridge, <span style="color: #000000;">Info</span>),
-    <span style="color: #000000;">ResponseBridge</span> = <span style="color: #28439B;">simple_bridge</span>:<span style="color: #28439B;">make_response</span>(inets_response_bridge, <span style="color: #000000;">Info</span>),
-    <span style="color: #28439B;">nitrogen</span>:<span style="color: #28439B;">init_request</span>(<span style="color: #000000;">RequestBridge</span>, <span style="color: #000000;">ResponseBridge</span>),
-    <span style="color: #28439B;">nitrogen</span>:<span style="color: #28439B;">handler</span>(my_security_handler, []),
-    <span style="color: #28439B;">nitrogen</span>:<span style="color: #28439B;">run</span>().
+<pre class="src src-erlang"><span style="font-weight: bold;">do</span>(<span style="font-weight: bold; font-style: italic;">Info</span>) -&gt;
+    <span style="font-weight: bold; font-style: italic;">RequestBridge</span> = <span style="font-weight: bold; text-decoration: underline;">simple_bridge</span>:<span style="font-weight: bold; text-decoration: underline;">make_request</span>(inets_request_bridge, <span style="font-weight: bold; font-style: italic;">Info</span>),
+    <span style="font-weight: bold; font-style: italic;">ResponseBridge</span> = <span style="font-weight: bold; text-decoration: underline;">simple_bridge</span>:<span style="font-weight: bold; text-decoration: underline;">make_response</span>(inets_response_bridge, <span style="font-weight: bold; font-style: italic;">Info</span>),
+    <span style="font-weight: bold; text-decoration: underline;">nitrogen</span>:<span style="font-weight: bold; text-decoration: underline;">init_request</span>(<span style="font-weight: bold; font-style: italic;">RequestBridge</span>, <span style="font-weight: bold; font-style: italic;">ResponseBridge</span>),
+    <span style="font-weight: bold; text-decoration: underline;">nitrogen</span>:<span style="font-weight: bold; text-decoration: underline;">handler</span>(my_security_handler, []),
+    <span style="font-weight: bold; text-decoration: underline;">nitrogen</span>:<span style="font-weight: bold; text-decoration: underline;">run</span>().
 </pre>
 
 
@@ -4308,9 +4349,10 @@ Custom Valiators
 </li>
 <li>
 Handlers
-
 </li>
 </ul>
+
+
 </div>
 </div>
 
@@ -4336,14 +4378,15 @@ Mailing List, Bugs, etc: <a href="http://nitrogenproject.com/community">http://n
 Follow me on Twitter: <a href="http://twitter/rklophaus">@rklophaus</a>
 </li>
 </ul>
+
 </div>
 </div>
 </div>
 <div id="postamble">
-<p class="author"> Author: Rusty Klophaus
+<p class="author"> Author: Jesse Gumm
 </p>
-<p class="date"> Date: 2011-02-01 08:20:29 EST</p>
-<p class="creator">HTML generated by org-mode 7.01h in emacs 24</p>
+<p class="date"> Date: 2011-08-11 07:29:08 CDT</p>
+<p class="creator">HTML generated by org-mode 7.4 in emacs 23</p>
 </div>
 </div>
 </body>
