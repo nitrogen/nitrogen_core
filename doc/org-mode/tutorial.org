@@ -549,7 +549,7 @@ Pull the [[http://github.com/nitrogen/nitrogen][Nitrogen Source Code]], then =ma
     event(my_click_event) ->
         ?PRINT({click, now()});
     event(OtherEvent) ->
-        ?PRINT({other, MyEvent, now()}).
+        ?PRINT({other, OtherEvent, now()}).
     #+END_SRC
         
 * More Event Examples
@@ -693,7 +693,7 @@ Pull the [[http://github.com/nitrogen/nitrogen][Nitrogen Source Code]], then =ma
     *Exercise:* Modify my\_page.erl to display *TWO* counters. When the
     user presses the 'Submit' button, one counter should get
     incremented, the other counter should get doubled. The server
-    should remember the counter even if the closes and then re-opens
+    should remember the counters even if the user closes and then re-opens
     the browser.
 
 * Session State
