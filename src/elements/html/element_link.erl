@@ -22,9 +22,9 @@ render_element(Record) ->
     ],
 
     Target = case Record#link.new of
-        false -> "_self";
+        false -> "";
         true -> "_blank";
-        _ -> "_self"
+        _ -> ""
     end,
 
     wf_tags:emit_tag(a, Body, [
