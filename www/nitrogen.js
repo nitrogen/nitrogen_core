@@ -197,6 +197,10 @@ NitrogenClass.prototype.$upload = function(form) {
     form.reset();
 }
 
+/*** GMAIL-STYLE UPLOAD ***/
+
+
+
 /*** PATH LOOKUPS ***/
 
 function obj(path, anchor) {
