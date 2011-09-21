@@ -48,8 +48,8 @@ render_element(Record) ->
             ]},
             #panel { id=EditPanelID, class="edit", body=[
                 #textbox { id=TextBoxID, text=Text, next=OKButtonID },
-                #button { id=OKButtonID, text="OK", actions=OKEvent#event { type=click } },
-                #button { id=CancelButtonID, text="Cancel", actions=CancelEvent#event { type=click } }
+                #button { id=OKButtonID, text="OK" },
+                #button { id=CancelButtonID, text="Cancel" }
             ]}
         ]
     },
@@ -61,6 +61,9 @@ render_element(Record) ->
             Script = #script { script="obj('me').focus(); obj('me').select();" },
             wf:wire(TextBoxID, Script)
     end,
+
+    wf:wire(CancelButtonID, CancelEvent#event { type=click }),
+    wf:wire(OKButtonID, OKEvent#event { type=click }),
 
     wf:wire(OKButtonID, TextBoxID, #validate { attach_to=CancelButtonID, validators=Record#inplace_textbox.validators }),
 
