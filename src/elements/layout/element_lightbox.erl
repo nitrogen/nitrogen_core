@@ -14,14 +14,13 @@ render_element(Record) ->
         id=Record#lightbox.id,
         anchor=Record#lightbox.anchor,
         class=[lightbox, Record#lightbox.class],
-        style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; " ++ wf:to_list(Record#lightbox.style),
+        style=wf:to_list(Record#lightbox.style),
         body=[
             #panel { 			
-                class=lightbox_background, 
-                style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; z-index: 98; background-color: #000000;"
+                class=lightbox_background
             },
             #table { 
-                style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; z-index: 99; overflow:auto;", 
+                class=lightbox_table,
                 rows=#tablerow {
                     cells=#tablecell { align=center, valign=middle, style="vertical-align: middle;", body=[
                         "<center><table><tr><td>",
