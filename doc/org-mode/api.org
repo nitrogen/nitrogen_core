@@ -329,6 +329,7 @@
 #+BEGIN_SRC erlang
    [wf:q(AtomKey) || AtomKey <- ListOfAtomKeys]
 #+END_SRC
+   Think of 'mq' as an acronym of "Multi Query".
 
 
 ** wf:qs(AtomKey) -> [String]
