@@ -95,7 +95,7 @@
 -record(radiogroup, {?ELEMENT_BASE(element_radiogroup), body=[]}).
 -record(radio, {?ELEMENT_BASE(element_radio), text="", html_encode=true, value, name, checked=false, postback, delegate}).
 -record(password, {?ELEMENT_BASE(element_password), text="", html_encode=true, next, postback, delegate}).
--record(panel, {?ELEMENT_BASE(element_panel), body="", text="", html_encode=true}).
+-record(panel, {?ELEMENT_BASE(element_panel), body="", text="", html_encode=true, data_role=""}).
 -record(spinner, {?ELEMENT_BASE(element_spinner), image="/nitrogen/spinner.gif"}).
 -record(image, {?ELEMENT_BASE(element_image), image="", alt}).
 -record(lightbox, {?ELEMENT_BASE(element_lightbox), body="" }).
