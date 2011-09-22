@@ -78,7 +78,7 @@
 -record(br, {?ELEMENT_BASE(element_br) }).
 -record(hr, {?ELEMENT_BASE(element_hr) }).
 -record(p, {?ELEMENT_BASE(element_p), body="", text="", html_encode=true}).
--record(label, {?ELEMENT_BASE(element_label), body="", text="", html_encode=true}).
+-record(label, {?ELEMENT_BASE(element_label), body="", text="", html_encode=true, for=""}).
 -record(value, {?ELEMENT_BASE(element_value), text="", html_encode=true}).
 -record(link, {?ELEMENT_BASE(element_link), title = "", text="", body="", new=false, html_encode=true, url="javascript:", postback, delegate}).
 -record(error, {?ELEMENT_BASE(element_error), text="", html_encode=true}).
