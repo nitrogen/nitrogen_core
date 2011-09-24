@@ -219,11 +219,12 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(droparea,dropl
     }
 
     var handle_drop = function(evt) {
+	evt.stopPropagation();
+	evt.preventDefault()
         alert("Dropped");
 
         var type = evt.type;
         var files = evt.target.files;
-        var frag = document.createDocumentFragment();
 
         
         //jQuery(droparea)
@@ -236,15 +237,24 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(droparea,dropl
 
         jQuery(droplist)
             .html(filetext)
-        //    .fadeIn();
     }
-    
-    jQuery("body")
-        .bind('dragenter',handle_drag)
-        .bind('dragend',handle_drag);
 
-    jQuery(droparea)
-        .bind('drop',handle_drop);
+    var handle_target_drag = function(evt) {
+	    evt.stopPropagation();
+	    evt.preventDefault();
+    }
+
+    jQuery(function(){
+	    jQuery(droparea)
+		.bind("dragenter",handle_target_drag)
+	    	.bind("dragover",handle_target_drag)
+		.bind("drop",handle_drop);
+	    
+	    jQuery("body")
+		.bind('dragenter',handle_drag)
+		.bind('dragend',handle_drag);
+   });
+
 }
 
 
