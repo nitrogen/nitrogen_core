@@ -199,6 +199,54 @@ NitrogenClass.prototype.$upload = function(form) {
 
 /*** GMAIL-STYLE UPLOAD ***/
 
+NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(droparea,droplist) {
+
+    console.log(droparea);
+    console.log(droplist);
+
+    var handle_drag = function(evt) {
+        var type = evt.type;
+        var dragnode = evt.target.nodeName.toLowerCase();
+
+        if(type=="dragenter") {
+            jQuery(droparea)
+                .css("border","1px solid black");
+                
+        }else if(type=="dragend") {
+            jQuery(droparea)
+                .css("border","1px solid black");
+        }
+    }
+
+    var handle_drop = function(evt) {
+        alert("Dropped");
+
+        var type = evt.type;
+        var files = evt.target.files;
+        var frag = document.createDocumentFragment();
+
+        
+        //jQuery(droparea)
+        //    .fadeOut();
+
+        var filetext = "";
+        for(var i=0;i < files.length;i++) {
+            filetext += "<li>" + files[i].fileName + "</li>";
+        }
+
+        jQuery(droplist)
+            .html(filetext)
+        //    .fadeIn();
+    }
+    
+    jQuery("body")
+        .bind('dragenter',handle_drag)
+        .bind('dragend',handle_drag);
+
+    jQuery(droparea)
+        .bind('drop',handle_drop);
+}
+
 
 
 /*** PATH LOOKUPS ***/

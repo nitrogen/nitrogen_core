@@ -36,6 +36,9 @@ reflect() -> record_info(fields, upload).
 
 render_element(Record) ->
     Anchor = Record#upload.anchor,
+    Multiple = Record#upload.multiple,
+    Droppable = Record#upload.droppable,
+    
     ShowButton = Record#upload.show_button,
     ButtonText = Record#upload.button_text,
     StartedTag = {upload_started, Record},
@@ -43,7 +46,13 @@ render_element(Record) ->
     FormID = wf:temp_id(),
     IFrameID = wf:temp_id(),
     ButtonID = wf:temp_id(),
-    SubmitJS = wf:f("Nitrogen.$upload(jQuery('#~s').get(0));", [FormID]),
+    DropID = wf:temp_id(),
+    DropListingID = wf:temp_id(),
+    FileInputID = wf:temp_id(),
+
+    SubmitJS = wf:f("Nitrogen.$upload(jQuery('#~s').get(0));", [FormID]),    
+    DragJS = wf:f("Nitrogen.$attach_upload_handle_dragdrop(obj('~s'),obj('~s'));", [DropID,DropListingID]),
+
     PostbackInfo = wf_event:serialize_event_context(FinishedTag, Record#upload.id, undefined, ?MODULE),
 
     % Create a postback that is called when the user first starts the upload...
@@ -54,11 +63,22 @@ render_element(Record) ->
     wf:wire(Anchor, #event { show_if=(not ShowButton), type=change, actions=SubmitJS }),
     wf:wire(ButtonID, #event { show_if=ShowButton, type=click, actions=SubmitJS }),
 
+    %wf:wire(#event{type=dragenter, actions=DragJS}),
+    %wf:wire(#event{type=dragend,actions=DragJS}),
+    %wf:wire(#event{type=change,actions=DropJS}),
+
+    case Droppable of
+	true -> wf:wire(DragJS);
+	false -> ok
+    end,
+
     % Render the controls and hidden iframe...
     FormContent = [
+	
         wf_tags:emit_tag(input, [
             {name, file},
-            {class, [no_postback|Anchor]},
+            {multuple,Multiple},
+            {class, [no_postback,FileInputID|Anchor]},
             {type, file}
         ]),	
 
@@ -85,7 +105,7 @@ render_element(Record) ->
         #button { id=ButtonID, show_if=ShowButton, text=ButtonText }
     ],
 
-    [
+    Form = [
         wf_tags:emit_tag(form, FormContent, [
             {id, FormID},
             {name, upload}, 
@@ -100,7 +120,26 @@ render_element(Record) ->
             {name, IFrameID},
             {style, "display: none; width: 300px; height: 100px;"}
         ])
+    ],
+
+    [	
+	    #panel{
+		id=formpanelid,
+		body=Form
+	    },
+            #panel{
+		show_if=Droppable,
+                id=DropID,
+                class=upload_drop,
+                body="DRop Files Here"
+            },
+            #list{
+		show_if=Droppable,
+                id=DropListingID,
+                class=upload_droplist
+            }
     ].
+
 
 % This event is fired when the user first clicks the upload button.
 event({upload_started, Record}) ->

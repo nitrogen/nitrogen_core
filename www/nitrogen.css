@@ -102,3 +102,9 @@ div.inplace_textbox .LV_invalid {
 
 /*** Gmail-style Uploading ***/
 
+.upload_drop {
+	padding:20px;
+	width:100%;
+	background:#ffc;
+}
+
