@@ -199,67 +199,51 @@ NitrogenClass.prototype.$upload = function(form) {
 
 /*** GMAIL-STYLE UPLOAD ***/
 
-NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(droparea,droplist) {
+NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input) {
+    var thisNitro = this;
 
-    console.log(droparea);
-    console.log(droplist);
+    jQuery.getScript("/nitrogen/jquery.iframe-transport.js",function(){
+        jQuery.getScript("/nitrogen/jquery.fileupload.js",function(){
+            var dropzone = jQuery(form).children(".upload_drop");
 
-    var handle_drag = function(evt) {
-        var type = evt.type;
-        var dragnode = evt.target.nodeName.toLowerCase();
-
-        if(type=="dragenter") {
-            jQuery(droparea)
-                .css("border","1px solid black");
-                
-        }else if(type=="dragend") {
-            jQuery(droparea)
-                .css("border","1px solid black");
-        }
-    }
-
-    var handle_drop = function(evt) {
-	evt.stopPropagation();
-	evt.preventDefault();
-
-	console.log(evt);
-
-        var type = evt.type;
-	console.log(type);
-
-        var files = evt.target.files;
-
-        
-        //jQuery(droparea)
-        //    .fadeOut();
-
-        var filetext = "";
-	console.log(files);
-
-        for(var i=0;i < files.length;i++) {
-            filetext += "<li>" + files[i].fileName + "</li>";
-        }
-
-        jQuery(droplist)
-            .html(filetext)
-    }
-
-    var handle_target_drag = function(evt) {
-	    evt.stopPropagation();
-	    evt.preventDefault();
-    }
-
-    jQuery(function(){
-	    jQuery(droparea)
-		.bind("dragenter",handle_target_drag)
-	    	.bind("dragover",handle_target_drag)
-		.bind("drop",handle_drop);
-	    
-	    jQuery("body")
-		.bind('dragenter',handle_drag)
-		.bind('dragend',handle_drag);
-   });
-
+            jQuery(input).fileupload({
+                dropZone:dropzone,
+                singleFileUploads:true,
+                sequentialUploads:true,
+                url:thisNitro.$url,
+                paramName:"file",
+                formData: function() {
+                    form.elements["pageContext"].value = thisNitro.$params["pageContext"];
+                    var d = jQuery(form).serializeArray();
+                    console.log(d);
+                    return d;
+                },
+                start: function() {
+                    console.log("start");
+                    form.pageContext.value = thisNitro.$params["pageContext"];
+                },
+                progress: function(e,data) {
+                    var prog = parseInt(data.loaded / data.total * 100,10);
+                    jQuery(form).children(".upload_progress").text=prog + "%";
+                },
+                add: function(e,data) {
+                    jQuery.each(data.files,function(i,f) {
+                        jQuery(form).children(".upload_droplist")
+                            .prepend("<li>" + f.name + "</li>");
+                    }),
+                    data.submit();
+                },
+                done: function(e,data) {
+                    console.log(data.result);
+                    Postback = data.result;
+                    jQuery.globalEval(Postback);
+                    /*$.each(data.result, function(i,f) {
+                        console.log(f);
+                    });*/
+                }
+            })
+        })
+    })
 }
 
 

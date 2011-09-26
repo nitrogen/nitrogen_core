@@ -51,7 +51,7 @@ render_element(Record) ->
     FileInputID = wf:temp_id(),
 
     SubmitJS = wf:f("Nitrogen.$upload(jQuery('#~s').get(0));", [FormID]),    
-    DragJS = wf:f("Nitrogen.$attach_upload_handle_dragdrop(obj('~s'),obj('~s'));", [DropID,DropListingID]),
+    DragJS = wf:f("Nitrogen.$attach_upload_handle_dragdrop(jQuery('#~s').get(0),jQuery('#~s').get(0));", [FormID,FileInputID]),
 
     PostbackInfo = wf_event:serialize_event_context(FinishedTag, Record#upload.id, undefined, ?MODULE),
 
@@ -69,17 +69,33 @@ render_element(Record) ->
     %wf:wire(#event{type=change,actions=DropJS}),
 
     case Droppable of
-	true -> wf:wire(DragJS);
-	false -> ok
+		true -> wf:wire(DragJS);
+		false -> ok
     end,
 
     % Render the controls and hidden iframe...
     FormContent = [
-	
+		#panel{
+			show_if=Droppable,
+			id=DropID,
+			class=upload_drop,
+			body="Drop Files Here"
+		},
+		#panel{
+			show_if=Droppable,
+			class=upload_progress,
+			body=""
+		},
+		#list{
+			show_if=Droppable,
+			id=DropListingID,
+			class=upload_droplist
+		},
         wf_tags:emit_tag(input, [
             {name, file},
             {multuple,Multiple},
             {class, [no_postback,FileInputID|Anchor]},
+			{id, FileInputID},
             {type, file}
         ]),	
 
@@ -106,7 +122,7 @@ render_element(Record) ->
         #button { id=ButtonID, show_if=ShowButton, text=ButtonText }
     ],
 
-    Form = [
+    [
         wf_tags:emit_tag(form, FormContent, [
             {id, FormID},
             {name, upload}, 
@@ -121,24 +137,6 @@ render_element(Record) ->
             {name, IFrameID},
             {style, "display: none; width: 300px; height: 100px;"}
         ])
-    ],
-
-    [	
-	    #panel{
-		id=formpanelid,
-		body=Form
-	    },
-            #panel{
-		show_if=Droppable,
-                id=DropID,
-                class=upload_drop,
-                body="DRop Files Here"
-            },
-            #list{
-		show_if=Droppable,
-                id=DropListingID,
-                class=upload_droplist
-            }
     ].
 
 
@@ -170,10 +168,10 @@ event({upload_finished, Record}) ->
 
     % Set the response...
     wf_context:data([
-        "<html><body><script>",
-        "var Nitrogen = window.parent.Nitrogen;",
-        Postback,
-        "</script></body></html>"
+        %"<html><body><script>",
+        %"var Nitrogen = window.parent.Nitrogen;",
+        Postback
+        %"</script></body></html>"
     ]);
 
 % This event is fired by the upload_finished event, it calls
