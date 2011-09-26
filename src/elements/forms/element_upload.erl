@@ -63,6 +63,7 @@ render_element(Record) ->
     wf:wire(Anchor, #event { show_if=(not ShowButton), type=change, actions=SubmitJS }),
     wf:wire(ButtonID, #event { show_if=ShowButton, type=click, actions=SubmitJS }),
 
+
     %wf:wire(#event{type=dragenter, actions=DragJS}),
     %wf:wire(#event{type=dragend,actions=DragJS}),
     %wf:wire(#event{type=change,actions=DropJS}),

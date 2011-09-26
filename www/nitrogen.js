@@ -220,10 +220,13 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(droparea,dropl
 
     var handle_drop = function(evt) {
 	evt.stopPropagation();
-	evt.preventDefault()
-        alert("Dropped");
+	evt.preventDefault();
+
+	console.log(evt);
 
         var type = evt.type;
+	console.log(type);
+
         var files = evt.target.files;
 
         
@@ -231,6 +234,8 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(droparea,dropl
         //    .fadeOut();
 
         var filetext = "";
+	console.log(files);
+
         for(var i=0;i < files.length;i++) {
             filetext += "<li>" + files[i].fileName + "</li>";
         }
