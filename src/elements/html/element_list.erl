@@ -16,5 +16,7 @@ render_element(Record) ->
 
     wf_tags:emit_tag(Tag, Record#list.body, [
         {class, [list, Record#list.class]},
+	{"data-role", Record#list.data_role},
+	{"data-inset", Record#list.data_inset},
         {style, Record#list.style}
     ]).

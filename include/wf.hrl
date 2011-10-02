@@ -73,8 +73,8 @@
 -record(h4, {?ELEMENT_BASE(element_h4), text="", html_encode=true}).
 -record(h5, {?ELEMENT_BASE(element_h5), text="", html_encode=true}).
 -record(h6, {?ELEMENT_BASE(element_h6), text="", html_encode=true}).
--record(list, {?ELEMENT_BASE(element_list), numbered=false, body=[]}).
--record(listitem, {?ELEMENT_BASE(element_listitem), body=[], text="", html_encode=true}).
+-record(list, {?ELEMENT_BASE(element_list), numbered=false, body=[], data_role="", data_inset=""}).
+-record(listitem, {?ELEMENT_BASE(element_listitem), body=[], text="", html_encode=true, data_role="", role="", data_theme="" }).
 -record(br, {?ELEMENT_BASE(element_br) }).
 -record(hr, {?ELEMENT_BASE(element_hr) }).
 -record(p, {?ELEMENT_BASE(element_p), body="", text="", html_encode=true}).
