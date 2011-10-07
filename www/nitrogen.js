@@ -237,9 +237,6 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input) {
                     console.log(data.result);
                     Postback = data.result;
                     jQuery.globalEval(Postback);
-                    /*$.each(data.result, function(i,f) {
-                        console.log(f);
-                    });*/
                 }
             })
         })
