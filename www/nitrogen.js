@@ -215,11 +215,9 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input) {
                 formData: function() {
                     form.elements["pageContext"].value = thisNitro.$params["pageContext"];
                     var d = jQuery(form).serializeArray();
-                    console.log(d);
                     return d;
                 },
                 start: function() {
-                    console.log("start");
                     form.pageContext.value = thisNitro.$params["pageContext"];
                 },
                 progress: function(e,data) {
@@ -234,7 +232,6 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input) {
                     data.submit();
                 },
                 done: function(e,data) {
-                    console.log(data.result);
                     Postback = data.result;
                     jQuery.globalEval(Postback);
                 }
