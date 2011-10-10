@@ -69,28 +69,28 @@ render_element(Record) ->
     %wf:wire(#event{type=change,actions=DropJS}),
 
     case Droppable of
-		true -> wf:wire(DragJS);
-		false -> ok
+	true -> wf:wire(DragJS);
+	false -> ok
     end,
 
     % Render the controls and hidden iframe...
     FormContent = [
-		#panel{
-			show_if=Droppable,
-			id=DropID,
-			class=upload_drop,
-			body="Drop Files Here"
-		},
-		#panel{
-			show_if=Droppable,
-			class=upload_progress,
-			body=""
-		},
-		#list{
-			show_if=Droppable,
-			id=DropListingID,
-			class=upload_droplist
-		},
+	#panel{
+		show_if=Droppable,
+		id=DropID,
+		class=upload_drop,
+		body="Drop Files Here"
+	},
+	#panel{
+		show_if=Droppable,
+		class=upload_progress,
+		body=""
+	},
+	#list{
+		show_if=Droppable,
+		id=DropListingID,
+		class=upload_droplist
+	},
         wf_tags:emit_tag(input, [
             {name, file},
             {multuple,Multiple},
