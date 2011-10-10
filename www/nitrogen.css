@@ -109,9 +109,9 @@ div.inplace_textbox .LV_invalid {
 	vertical-align:center;
 	width:300px;
 	background:#ffc;
-	border:1px dotted #000;
+	border:2px dashed #000;
 	font-size:18pt;
-	border-radius:5px;
-	-moz-border-radius:5px;
+	border-radius:15px;
+	-moz-border-radius:15px;
 }
 
