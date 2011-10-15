@@ -69,33 +69,39 @@ render_element(Record) ->
     %wf:wire(#event{type=change,actions=DropJS}),
 
     case Droppable of
-	true -> wf:wire(DragJS);
-	false -> ok
+        true -> wf:wire(DragJS);
+        false -> ok
     end,
 
     % Render the controls and hidden iframe...
     FormContent = [
-	#panel{
-		show_if=Droppable,
-		id=DropID,
-		class=upload_drop,
-		body="Drop Files Here"
-	},
-	#panel{
-		show_if=Droppable,
-		class=upload_progress,
-		body=""
-	},
-	#list{
-		show_if=Droppable,
-		id=DropListingID,
-		class=upload_droplist
-	},
+        #panel{
+            show_if=Droppable,
+            id=DropID,
+            class=[upload_drop,'dropzone-container'],
+            body=[
+                #panel{
+                    class=[dropzone,'ui-corner-all'],
+                    text="Drop Files Here"
+                }
+            ]
+        },
+        #panel{
+            show_if=Droppable,
+            class=upload_progress,
+            body=""
+        },
+        #list{
+            show_if=Droppable,
+            id=DropListingID,
+            class=upload_droplist
+        },
+
         wf_tags:emit_tag(input, [
             {name, file},
             {multuple,Multiple},
             {class, [no_postback,FileInputID|Anchor]},
-			{id, FileInputID},
+{id, FileInputID},
             {type, file}
         ]),	
 
@@ -154,11 +160,11 @@ event({upload_finished, Record}) ->
     Req = wf_context:request_bridge(),
 
     % % Create the postback...
-    NewTag = case Req:post_files() of
+    {Filename,NewTag} = case Req:post_files() of
         [] -> 
-            {upload_event, Record, undefined, undefined, undefined};
+            {undefined,{upload_event, Record, undefined, undefined, undefined}};
         [#uploaded_file { original_name=OriginalName, temp_file=TempFile }|_] ->
-            {upload_event, Record, OriginalName, TempFile, node()}
+            {OriginalName,{upload_event, Record, OriginalName, TempFile, node()}}
     end,
 
     % Make the tag...
@@ -170,6 +176,7 @@ event({upload_finished, Record}) ->
     wf_context:data([
         %"<html><body><script>",
         %"var Nitrogen = window.parent.Nitrogen;",
+        "Nitrogen.$upload_finished(\"",wf:js_escape(Filename),"\");",
         Postback
         %"</script></body></html>"
     ]);
