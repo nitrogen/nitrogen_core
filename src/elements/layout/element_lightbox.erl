@@ -9,7 +9,6 @@
 reflect() -> record_info(fields, lightbox).
 
 render_element(Record) -> 
-    ?PRINT(Record#lightbox.id),
     Panel = #panel {
         id=Record#lightbox.id,
         anchor=Record#lightbox.anchor,
