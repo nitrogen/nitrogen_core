@@ -38,7 +38,7 @@ render_element(Record) ->
         style=Record#inplace_textarea.style,
         body = [
             #panel { id=ViewPanelID, class="view", body=[
-                #span { id=LabelID, class="label", text=Text, html_encode=HTMLEncode, actions=[
+                #span { id=LabelID, class="inplace_textarea", text=Text, html_encode=HTMLEncode, actions=[
                     #buttonize { target=ViewPanelID }
                 ]},
                 #span { id=MouseOverID, class="instructions", text="Click to edit", actions=#hide{} }
