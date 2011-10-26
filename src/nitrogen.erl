@@ -77,10 +77,8 @@ start_link(mochiweb, Mod) ->
 
 % Inets handler
 do(Info) -> 
-    RequestBridge = simple_bridge:make_request(inets_request_bridge, 
-Info), 
-    ResponseBridge = 
-simple_bridge:make_response(inets_response_bridge, Info), 
+    RequestBridge = simple_bridge:make_request(inets_request_bridge, Info), 
+    ResponseBridge = simple_bridge:make_response(inets_response_bridge, Info), 
     nitrogen:init_request(RequestBridge, ResponseBridge),
     Mod = handling_module(),
     Mod:handlers(),
@@ -88,10 +86,9 @@ simple_bridge:make_response(inets_response_bridge, Info),
 
 % Yaws handler 
 out(Info) -> 
-    RequestBridge = simple_bridge:make_request(yaws_request_bridge, 
-Info), 
-    ResponseBridge = simple_bridge:make_response(yaws_response_bridge, 
-Info), 
+	throw(Info),
+    RequestBridge = simple_bridge:make_request(yaws_request_bridge, Info), 
+    ResponseBridge = simple_bridge:make_response(yaws_response_bridge, Info), 
     nitrogen:init_request(RequestBridge, ResponseBridge), 
     Mod = handling_module(),
     Mod:handlers(),
