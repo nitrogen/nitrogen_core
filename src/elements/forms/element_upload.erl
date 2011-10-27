@@ -36,6 +36,9 @@ reflect() -> record_info(fields, upload).
 
 render_element(Record) ->
     Anchor = Record#upload.anchor,
+    Multiple = Record#upload.multiple,
+    Droppable = Record#upload.droppable,
+    
     ShowButton = Record#upload.show_button,
     ButtonText = Record#upload.button_text,
     StartedTag = {upload_started, Record},
@@ -43,7 +46,13 @@ render_element(Record) ->
     FormID = wf:temp_id(),
     IFrameID = wf:temp_id(),
     ButtonID = wf:temp_id(),
-    SubmitJS = wf:f("Nitrogen.$upload(jQuery('#~s').get(0));", [FormID]),
+    DropID = wf:temp_id(),
+    DropListingID = wf:temp_id(),
+    FileInputID = wf:temp_id(),
+
+    SubmitJS = wf:f("Nitrogen.$upload(jQuery('#~s').get(0));", [FormID]),    
+    DragJS = wf:f("Nitrogen.$attach_upload_handle_dragdrop(jQuery('#~s').get(0),jQuery('#~s').get(0));", [FormID,FileInputID]),
+
     PostbackInfo = wf_event:serialize_event_context(FinishedTag, Record#upload.id, undefined, ?MODULE),
 
     % Create a postback that is called when the user first starts the upload...
@@ -54,11 +63,45 @@ render_element(Record) ->
     wf:wire(Anchor, #event { show_if=(not ShowButton), type=change, actions=SubmitJS }),
     wf:wire(ButtonID, #event { show_if=ShowButton, type=click, actions=SubmitJS }),
 
+
+    %wf:wire(#event{type=dragenter, actions=DragJS}),
+    %wf:wire(#event{type=dragend,actions=DragJS}),
+    %wf:wire(#event{type=change,actions=DropJS}),
+
+    case Droppable of
+        true -> wf:wire(DragJS);
+        false -> ok
+    end,
+
     % Render the controls and hidden iframe...
     FormContent = [
+        #panel{
+            show_if=Droppable,
+            id=DropID,
+            class=[upload_drop,'dropzone-container'],
+            body=[
+                #panel{
+                    class=[dropzone,'ui-corner-all'],
+                    text="Drop Files Here"
+                }
+            ]
+        },
+        #panel{
+            show_if=Droppable,
+            class=upload_progress,
+            body=""
+        },
+        #list{
+            show_if=Droppable,
+            id=DropListingID,
+            class=upload_droplist
+        },
+
         wf_tags:emit_tag(input, [
             {name, file},
-            {class, [no_postback|Anchor]},
+            {multuple,Multiple},
+            {class, [no_postback,FileInputID|Anchor]},
+{id, FileInputID},
             {type, file}
         ]),	
 
@@ -102,6 +145,7 @@ render_element(Record) ->
         ])
     ].
 
+
 % This event is fired when the user first clicks the upload button.
 event({upload_started, Record}) ->
     Module = wf:coalesce([Record#upload.delegate, wf:page_module()]),
@@ -116,11 +160,11 @@ event({upload_finished, Record}) ->
     Req = wf_context:request_bridge(),
 
     % % Create the postback...
-    NewTag = case Req:post_files() of
+    {Filename,NewTag} = case Req:post_files() of
         [] -> 
-            {upload_event, Record, undefined, undefined, undefined};
+            {undefined,{upload_event, Record, undefined, undefined, undefined}};
         [#uploaded_file { original_name=OriginalName, temp_file=TempFile }|_] ->
-            {upload_event, Record, OriginalName, TempFile, node()}
+            {OriginalName,{upload_event, Record, OriginalName, TempFile, node()}}
     end,
 
     % Make the tag...
@@ -130,10 +174,11 @@ event({upload_finished, Record}) ->
 
     % Set the response...
     wf_context:data([
-        "<html><body><script>",
-        "var Nitrogen = window.parent.Nitrogen;",
-        Postback,
-        "</script></body></html>"
+        %"<html><body><script>",
+        %"var Nitrogen = window.parent.Nitrogen;",
+        "Nitrogen.$upload_finished(\"",wf:js_escape(Filename),"\");",
+        Postback
+        %"</script></body></html>"
     ]);
 
 % This event is fired by the upload_finished event, it calls

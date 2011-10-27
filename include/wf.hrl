@@ -81,6 +81,7 @@
 -record(label, {?ELEMENT_BASE(element_label), body="", text="", html_encode=true}).
 -record(value, {?ELEMENT_BASE(element_value), text="", html_encode=true}).
 -record(link, {?ELEMENT_BASE(element_link), title = "", text="", body="", new=false, html_encode=true, url="javascript:", postback, delegate}).
+-record(email_link, {?ELEMENT_BASE(element_email_link), title="",text="",body="",html_encode=true,email=""}).
 -record(error, {?ELEMENT_BASE(element_error), text="", html_encode=true}).
 -record(span, {?ELEMENT_BASE(element_span), body="", text="", html_encode=true}).
 -record(button, {?ELEMENT_BASE(element_button), text="Button", html_encode=true, postback, delegate}).
@@ -116,7 +117,7 @@
 -record(inplace_textarea, {?ELEMENT_BASE(element_inplace_textarea), tag, text="", html_encode=true, start_mode=view, validators=[], delegate=undefined}).
 -record(inplace_textbox, {?ELEMENT_BASE(element_inplace_textbox), tag, text="", html_encode=true, start_mode=view, validators=[], delegate=undefined}).
 -record(wizard, {?ELEMENT_BASE(element_wizard), tag, titles, steps }).
--record(upload, {?ELEMENT_BASE(element_upload), delegate, tag, show_button=true, button_text="Upload" }).
+-record(upload, {?ELEMENT_BASE(element_upload), delegate, tag, show_button=true, button_text="Upload", droppable=false,multiple=false }).
 -record(sparkline, {?ELEMENT_BASE(element_sparkline), type, values, options }).
 -record(textbox_autocomplete, {?ELEMENT_BASE(element_textbox_autocomplete), tag, text="", minLength=2, delay=300, html_encode=true, next, postback, delegate=undefined }).
 

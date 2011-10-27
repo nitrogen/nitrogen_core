@@ -15,6 +15,10 @@
     TagName =/= 'tr' andalso 
     TagName =/= 'th' andalso 
     TagName =/= 'td' andalso 
+    TagName =/= 'p' andalso
+    TagName =/= 'a' andalso
+    TagName =/= 'ul' andalso
+    TagName =/= 'ol' andalso
     TagName =/= 'iframe')).
 
 -export ([emit_tag/2, emit_tag/3]).

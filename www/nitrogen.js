@@ -197,6 +197,64 @@ NitrogenClass.prototype.$upload = function(form) {
     form.reset();
 }
 
+/*** GMAIL-STYLE UPLOAD ***/
+
+NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input) {
+    var thisNitro = this;
+
+    jQuery.getScript("/nitrogen/jquery.iframe-transport.js",function(){
+        jQuery.getScript("/nitrogen/jquery.fileupload.js",function(){
+            var dropzone = jQuery(form).children(".upload_drop");
+
+            jQuery(input).fileupload({
+                dropZone:dropzone,
+                singleFileUploads:true,
+                sequentialUploads:true,
+                url:thisNitro.$url,
+                paramName:"file",
+                formData: function() {
+                    form.elements["pageContext"].value = thisNitro.$params["pageContext"];
+                    var d = jQuery(form).serializeArray();
+                    return d;
+                },
+                start: function() {
+                    form.pageContext.value = thisNitro.$params["pageContext"];
+                    jQuery(form).children(".upload_progress").innerHTML = "Uploading...";
+                },
+                progressall: function(e,data) {
+                    console.log(data);
+                    var prog = parseInt(data.loaded / data.total * 100,10);
+                    jQuery(form).children(".upload_progress").text=prog + "%";
+                },
+                send: function(e,data) {
+                    console.log(e);
+                },
+                stop: function(e,data) {
+                    alert("uploads finished");
+                },
+                add: function(e,data) {
+                    jQuery.each(data.files,function(i,f) {
+                        jQuery(form).children(".upload_droplist")
+                            .prepend(jQuery("<li></li>").attr("filename",f.name).text(f.name));
+                    }),
+                    data.submit();
+                },
+                done: function(e,data) {
+                    Postback = data.result;
+                    jQuery.globalEval(Postback);
+                }
+            })
+        })
+    })
+}
+
+NitrogenClass.prototype.$upload_finished = function(Name) {
+    jQuery(".upload_droplist").children("li[filename=\"" + Name + "\"]")
+        .fadeOut();
+        //.css("text-decoration","line-through");
+}
+
+
 /*** PATH LOOKUPS ***/
 
 function obj(path, anchor) {
