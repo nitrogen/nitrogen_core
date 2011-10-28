@@ -116,6 +116,11 @@ hex_decode(S) ->
 js_escape(String) -> 
     _String = wf_convert:js_escape(String).
 
+short_if(Cond,IfTrue) ->
+	_String = wf_convert:short_if(Cond,IfTrue).
+
+short_if(Cond,IfTrue,IfFalse) ->
+	_String = wf_convert:short_if(Cond,IfTrue,IfFalse).
 
 %%% EXPOSE WF_BIND %%%
 % TODO
