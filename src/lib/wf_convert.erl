@@ -177,8 +177,21 @@ short_if(_,_IfTrue,IfFalse) when is_function(IfFalse) ->
 short_if(_,_IfTrue,IfFalse) ->
 	IfFalse.
 
+
 short_if(Cond,IfTrue) ->
 	short_if(Cond,IfTrue,"").
+
+
+%%% JOIN %%%
+%% Erlang doesn't provide a short way to join lists of "things" with other things.
+%% string:join is not applicable here and only works on strings
+
+join([],_) ->
+	[];
+join([Item],_Delim) ->
+	[Item];
+join([Item|Items],Delim) ->
+	[Item,Delim | join(Items,Delim)].
 
 %%% CODE BELOW IS FROM MOCHIWEB %%%
 

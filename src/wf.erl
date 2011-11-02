@@ -122,6 +122,9 @@ short_if(Cond,IfTrue) ->
 short_if(Cond,IfTrue,IfFalse) ->
 	_String = wf_convert:short_if(Cond,IfTrue,IfFalse).
 
+join(List,Delimiter) ->
+	_Result = wf_convert:join(List,Delimiter).
+
 %%% EXPOSE WF_BIND %%%
 % TODO
 set(Element, Value) -> 
