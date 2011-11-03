@@ -5,6 +5,7 @@
 function NitrogenClass(o) {
     this.$url = document.location.href;
     this.$div = document;
+    this.$anchor_root_path = document;
     this.$params = new Object();
     this.$event_queue = new Array();
     this.$event_is_running = false;
@@ -18,6 +19,11 @@ function NitrogenClass(o) {
 NitrogenClass.prototype.$anchor = function(anchor, target) {
     this.$anchor_path = anchor;
     this.$target_path = target;
+}
+
+
+NitrogenClass.prototype.$anchor_root = function(anchor_root) {
+    this.$anchor_root_path = anchor_root;
 }
 
 NitrogenClass.prototype.$set_param = function(key, value) {
@@ -248,14 +254,15 @@ function objs(path, anchor) {
         return jQuery(path);
     }    
 
+    var anchor_obj = jQuery(Nitrogen.$anchor_root_path).find(anchor);
     // Find all results under the anchor...
-    var results = jQuery(anchor).find(path);
+    var results = anchor_obj.find(path);
     if (results.length > 0) {
 	return results;
     }
     
     // If no results under the anchor, then try on each parent, moving upwards...
-    var results = jQuery(anchor).parents();
+    var results = anchor_obj.parentsUntil( Nitrogen.$anchor_root_path );
     for (var i=0; i<results.length; i++) {
 	var results2 = jQuery(results.get(i)).find(path);
 	if (results2.length > 0) {
