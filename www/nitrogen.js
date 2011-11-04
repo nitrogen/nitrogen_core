@@ -50,6 +50,9 @@ NitrogenClass.prototype.$queue_system_event = function(eventContext) {
 }
 
 NitrogenClass.prototype.$event_loop = function() {
+    // Create a local copy of this for setTimeout callbacks.
+    var this2 = this;
+
     // If no events are running and an event is queued, then fire it.
     if (!this.$system_event_is_running && this.$system_event_queue.length > 0) {
         var o = this.$system_event_queue.shift();
@@ -64,18 +67,18 @@ NitrogenClass.prototype.$event_loop = function() {
 
     // No more events, sleep for 50 ms...
     if (this.$system_event_queue.length == 0 || this.$event_queue.length == 0) {
-        setTimeout("Nitrogen.$event_loop();", 50);
+        setTimeout( function() { this2.$event_loop() }, 50);
         return;
     }
 
     // Events queued, but one is running, sleep for 10 ms...
     if (this.$event_is_running || this.$system_event_is_running) {
-        setTimeout("Nitrogen.$event_loop();", 10);
+        setTimeout( function() { this2.$event_loop() }, 10);
         return;
     }
 
     // Events queued, loop and grab it...
-    setTimeout("Nitrogen.$event_loop();", 1);
+    setTimeout( function() { this2.$event_loop() }, 1);
 }
 
 /*** VALIDATE AND SERIALIZE ***/
