@@ -11,6 +11,8 @@ function NitrogenClass(o) {
     this.$event_is_running = false;
     this.$system_event_queue = new Array();
     this.$system_event_is_running = false;
+    this.$system_event_obj = null;
+    this.$going_away = false;
     return this;
 }
 
@@ -29,6 +31,20 @@ NitrogenClass.prototype.$anchor_root = function(anchor_root) {
 NitrogenClass.prototype.$set_param = function(key, value) {
     this.$params[key] = value;
 }
+
+NitrogenClass.prototype.$destroy = function() {
+    this.$going_away = true;
+
+    // Clear the system event queue and abort any pending system events.
+    this.$system_event_queue = new Array();
+    if( this.$system_event_obj !== null ) {
+	this.$system_event_obj.abort();
+    }
+    this.$system_event_is_running = false;
+
+    // Let the event loop keep running until the event queue is empty. 
+}
+
 
 /*** EVENT QUEUE ***/
 
@@ -65,10 +81,17 @@ NitrogenClass.prototype.$event_loop = function() {
         this.$do_event(o.validationGroup, o.eventContext, o.extraParam, o.ajaxSettings);
     }
 
-    // No more events, sleep for 50 ms...
     if (this.$system_event_queue.length == 0 || this.$event_queue.length == 0) {
-        setTimeout( function() { this2.$event_loop() }, 50);
-        return;
+	if( this.$going_away ) {
+	    // $destroy has been called for this Nitrogen object
+	    // and the event queue is empty - let the event loop stop.
+	    return;
+	}
+	else {
+	    // No more events, sleep for 50 ms...
+	    setTimeout( function() { this2.$event_loop() }, 50);
+	    return;
+	}
     }
 
     // Events queued, but one is running, sleep for 10 ms...
@@ -169,7 +192,7 @@ NitrogenClass.prototype.$do_system_event = function(eventContext) {
     // Assemble other parameters...
     var params = jQuery.extend( {}, n.$params, { eventContext: eventContext, is_system_event: 1 });
 
-    $.ajax({ 
+    n.$system_event_obj = $.ajax({
 	       url: this.$url,
 	       type:'post',
 	       data: jQuery.param(params),
@@ -177,6 +200,7 @@ NitrogenClass.prototype.$do_system_event = function(eventContext) {
          cache: false,
 	       success: function(data, textStatus) {
             n.$system_event_is_running = false;
+            n.$system_event_obj = null;
             // A system event shouldn't clobber the pageContext.
             // Easiest to cacount for it here.
             var pc = n.$params["pageContext"];
@@ -185,6 +209,7 @@ NitrogenClass.prototype.$do_system_event = function(eventContext) {
 	       },
 	       error: function(xmlHttpRequest, textStatus, errorThrown) {
             n.$system_event_is_running = false;
+            n.$system_event_obj = null;
 	       }
 	   });                     
 }
