@@ -14,7 +14,10 @@
     html_encode/1, html_encode/2,
     hex_encode/1, hex_decode/1,
     url_encode/1, url_decode/1,
-    js_escape/1
+    js_escape/1,
+	join/2,
+	short_if/2,short_if/3
+
 ]).
 
 -include_lib ("wf.hrl").
