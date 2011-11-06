@@ -25,6 +25,14 @@
 
    + postback - (/Erlang term/) :: Clicking on the button will initiate a Nitrogen postback with the supplied term.
 
+   + click - (/Action/ or /List of Actions/) :: Wires the selected actons to the \"click\" events.  Due to the commonality of binding actions to the click event, this is merely a shortcut for
+
+#+BEGIN_SRC ERLANG
+   #button { text="Do Something", actions=[
+      #event{type=click,actions=ListOfActions}
+   ]}
+#+END_SRC
+
 ** See Also
 
    + [[./base.html][Base]]
