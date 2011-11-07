@@ -1,7 +1,7 @@
 // Destroy the Nitrogen object that is created in nitrogen.js
 Nitrogen.$destroy();
 
-$( '#pagediv' ).live( 'pagebeforeshow', function(event){
+$( '#pagediv' ).live( 'pageshow', function(event){
 	Nitrogen = new NitrogenClass();
 	Nitrogen.$event_loop();
 	eval( $(this).jqmData("code") );
