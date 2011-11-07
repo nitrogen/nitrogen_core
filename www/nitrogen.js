@@ -33,6 +33,7 @@ NitrogenClass.prototype.$set_param = function(key, value) {
 }
 
 NitrogenClass.prototype.$destroy = function() {
+    document.comet_started = false;
     this.$going_away = true;
 
     // Clear the system event queue and abort any pending system events.
