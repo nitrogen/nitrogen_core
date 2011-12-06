@@ -61,23 +61,35 @@ div.inplace_textbox .LV_invalid {
 }
 
 .wizard .wizard_title {
-        font-family: 'Arial', Georgia; font-size: 1.2em; font-weight: bold;
+        font-size: 1.2em;
+	font-weight: bold;
 }
 
 .wizard .wizard_body {
-        margin-top: 20px;
-        margin-bottom: 20px;
+	padding-top:1em;
+	padding-bottom:1em;
 }
 
-.wizard .wizard_buttons {
-        padding-right: 40px;
-        text-align:right;
+.wizard_progress {
+	margin-left:10px;
+	font-size:1em;
+}
+
+.wizard_buttons table, .wizard_buttons {
+	width:100%;
+}
+
+.wizard_buttons_next {
+	text-align:right;
+}
+
+.wizard_buttons_back {
+	text-align:left;
 }
 
 .wizard .wizard_buttons input {
         margin-right: 20px;
 }
-
 
 /*** VALIDATION ***/
 
