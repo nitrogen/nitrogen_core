@@ -57,6 +57,28 @@ div.inplace_textbox .LV_invalid {
     font-size: 90%;
 }
 
+.wizard {
+}
+
+.wizard .wizard_title {
+        font-family: 'Arial', Georgia; font-size: 1.2em; font-weight: bold;
+}
+
+.wizard .wizard_body {
+        margin-top: 20px;
+        margin-bottom: 20px;
+}
+
+.wizard .wizard_buttons {
+        padding-right: 40px;
+        text-align:right;
+}
+
+.wizard .wizard_buttons input {
+        margin-right: 20px;
+}
+
+
 /*** VALIDATION ***/
 
 .LV_validation_message {
