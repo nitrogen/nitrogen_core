@@ -1212,7 +1212,7 @@ Pull the [[http://github.com/nitrogen/nitrogen][Nitrogen Source Code]], then =ma
     -module(my_security_handler).
     -behaviour(security_handler).
     -export([init/2, finish/2]).
-    -include_lib("nitrogen/include/wf.hrl").
+    -include_lib("nitrogen_core/include/wf.hrl").
      
     init(_Config, State) ->
         ?PRINT(wf:page_module()),
