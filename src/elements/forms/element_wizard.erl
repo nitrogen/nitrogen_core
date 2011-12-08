@@ -31,34 +31,65 @@ render_element(Record = #wizard{}) ->
 		end,
 		StepBody = lists:nth(N, Record#wizard.steps),
 		IsFirst = (N == 1),
-		IsLast = (N == length(StepIDs)),
+		IsLast = (N == StepCount),
+
+		ButtonRow = fun(TopOrBot) ->
+			#panel{class=[wizard_buttons,combine(TopOrBot,wizard_buttons)],body=[
+				#singlerow{cells=[
+					#tablecell{class=wizard_buttons_back,body=[
+						#button{
+							id=combine(TopOrBot,back),
+							show_if=(not IsFirst),
+							text=Record#wizard.back,
+							postback={back, N, StepIDs},
+							delegate=?MODULE
+						}
+					]},
+					#tablecell{class=wizard_buttons_next,body=[
+						#button{
+							id=combine(TopOrBot,next), 
+							show_if=(not IsLast), 
+							text=Record#wizard.next, 
+							postback={next, N, StepIDs}, 
+							delegate=?MODULE 
+						},
+						#button{
+							id=combine(TopOrBot,finish), 
+							show_if=IsLast, 
+							text=Record#wizard.finish, 
+							postback={finish, Tag}, 
+							delegate=?MODULE 
+						} 
+					]}
+				]}
+			]}
+		end,
 		
 		#panel { id=StepID, style="display: none;", body=[
-			#singlerow { class="wizard_title", cells=[
-				#tablecell { text=StepTitle },
-				#tablecell { class="wizard_buttons_top", body=[
-					#button { id=backTop, show_if=(not IsFirst), text="Back", postback={back, N, StepIDs}, delegate=?MODULE },
-					#button { id=nextTop, show_if=(not IsLast), text="Next", postback={next, N, StepIDs}, delegate=?MODULE },
-					#button { id=finishTop, show_if=IsLast, text="Finish", postback={finish, Tag}, delegate=?MODULE }				
+			#panel{class=wizard_title,body=[
+				#span{class=wizard_title_text,text=StepTitle},
+				#span{class=wizard_progress,show_if=Record#wizard.show_progress,text=[
+					"(",
+					Record#wizard.progress_step,
+					wf:to_list(N),
+					Record#wizard.progress_of,
+					wf:to_list(StepCount),
+					")"
 				]}
 			]},
-			#panel { class="wizard_body", body=StepBody },
-			#panel { class="wizard_buttons_bottom", body=[
-				#button { id=back, show_if=(not IsFirst), text="Back", postback={back, N, StepIDs}, delegate=?MODULE },
-				#button { id=next, show_if=(not IsLast), text="Next", postback={next, N, StepIDs}, delegate=?MODULE },
-				#button { id=finish, show_if=IsLast, text="Finish", postback={finish, Tag}, delegate=?MODULE } 
-			]}
+			ButtonRow(top),
+			#panel { class=wizard_body, body=StepBody },
+			ButtonRow(bottom)
 		]}
 	end,
 
 	% Combine the steps.
 	Terms = #panel {
-		class="wizard " ++ wf:to_list(Record#wizard.class),
+		class=[wizard,Record#wizard.class],
 		body=[F(X) || X <- StepSeq] 
 	},
 	
 	% Show the first step.
-	sigma:log({open,hd(StepIDs)}),
 	wf:wire(hd(StepIDs), #show{}),	
 	
 	% Render.
@@ -82,4 +113,4 @@ event({finish, Tag}) ->
 event(_) -> ok.
 
 combine(A, B) ->
-	wf:to_list(A) ++ "_" ++ wf:to_list(B).
+	wf:to_atom(wf:to_list(A) ++ "_" ++ wf:to_list(B)).
