@@ -50,8 +50,14 @@ render_element(Record) ->
     DropListingID = wf:temp_id(),
     FileInputID = wf:temp_id(),
 
-    SubmitJS = wf:f("Nitrogen.$upload(jQuery('#~s').get(0));", [FormID]),    
-    DragJS = wf:f("Nitrogen.$attach_upload_handle_dragdrop(jQuery('#~s').get(0),jQuery('#~s').get(0));", [FormID,FileInputID]),
+	Param = [
+		{droppable,Droppable},
+		{autoupload,not(ShowButton)}
+	],
+
+	JSONParam = nitro_mochijson2:encode({struct,Param}),
+	SubmitJS = wf:f("Nitrogen.$send_pending_files(jQuery('#~s').get(0),jQuery('#~s').get(0));",[FormID,FileInputID]),
+    UploadJS = wf:f("Nitrogen.$attach_upload_handle_dragdrop(jQuery('#~s').get(0),jQuery('#~s').get(0),~s);", [FormID,FileInputID,JSONParam]),
 
     PostbackInfo = wf_event:serialize_event_context(FinishedTag, Record#upload.id, undefined, ?MODULE),
 
@@ -60,18 +66,10 @@ render_element(Record) ->
     wf:wire(ButtonID, #event { show_if=ShowButton, type=click, delegate=?MODULE, postback=StartedTag }),
 
     % If the button is invisible, then start uploading when the user selects a file.
-    wf:wire(Anchor, #event { show_if=(not ShowButton), type=change, actions=SubmitJS }),
+    %wf:wire(Anchor, #event { show_if=(not ShowButton), type=change, actions=SubmitJS }),
     wf:wire(ButtonID, #event { show_if=ShowButton, type=click, actions=SubmitJS }),
 
-
-    %wf:wire(#event{type=dragenter, actions=DragJS}),
-    %wf:wire(#event{type=dragend,actions=DragJS}),
-    %wf:wire(#event{type=change,actions=DropJS}),
-
-    case Droppable of
-        true -> wf:wire(DragJS);
-        false -> ok
-    end,
+    wf:wire(UploadJS),
 
     % Render the controls and hidden iframe...
     FormContent = [
@@ -101,7 +99,7 @@ render_element(Record) ->
             {name, file},
             {multuple,Multiple},
             {class, [no_postback,FileInputID|Anchor]},
-{id, FileInputID},
+			{id, FileInputID},
             {type, file}
         ]),	
 
@@ -136,12 +134,6 @@ render_element(Record) ->
             {enctype, "multipart/form-data"},
             {class, no_postback},
             {target, IFrameID}
-        ]),
-
-        wf_tags:emit_tag(iframe, [], [
-            {id, IFrameID},
-            {name, IFrameID},
-            {style, "display: none; width: 300px; height: 100px;"}
         ])
     ].
 
@@ -174,11 +166,8 @@ event({upload_finished, Record}) ->
 
     % Set the response...
     wf_context:data([
-        %"<html><body><script>",
-        %"var Nitrogen = window.parent.Nitrogen;",
         "Nitrogen.$upload_finished(\"",wf:js_escape(Filename),"\");",
         Postback
-        %"</script></body></html>"
     ]);
 
 % This event is fired by the upload_finished event, it calls

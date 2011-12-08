@@ -189,25 +189,41 @@ NitrogenClass.prototype.$do_system_event = function(eventContext) {
 }
 
 /*** FILE UPLOAD ***/
-NitrogenClass.prototype.$upload = function(form) {
+/*NitrogenClass.prototype.$upload = function(form,input) {
     // Assemble other parameters...
     form.action = this.$url;
     form.pageContext.value = this.$params["pageContext"];
     form.submit();
     form.reset();
-}
+}*/
 
 /*** GMAIL-STYLE UPLOAD ***/
 
-NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input) {
+NitrogenClass.prototype.$send_pending_files = function(form,input) {
+    var file=null;
+    if(typeof(form.$nitrogen_pending_files)=="object")
+    {
+	while(file=form.$nitrogen_pending_files.shift())
+	{
+	    console.log(file);
+	    file.submit();
+	}
+    }
+}
+
+NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input,settings) {
     var thisNitro = this;
+    if(typeof(settings)=="undefined")
+        settings={};
+    if(typeof(form.$nitrogen_pending_files)=="undefined")
+	    form.$nitrogen_pending_files = [];
 
     jQuery.getScript("/nitrogen/jquery.iframe-transport.js",function(){
         jQuery.getScript("/nitrogen/jquery.fileupload.js",function(){
             var dropzone = jQuery(form).children(".upload_drop");
-
+	    
             jQuery(input).fileupload({
-                dropZone:dropzone,
+	     	dropZone:(settings.droppable ? dropzone : null),
                 singleFileUploads:true,
                 sequentialUploads:true,
                 url:thisNitro.$url,
@@ -218,26 +234,31 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input) {
                     return d;
                 },
                 start: function() {
+	            console.log("start");
                     form.pageContext.value = thisNitro.$params["pageContext"];
                     jQuery(form).children(".upload_progress").innerHTML = "Uploading...";
                 },
                 progressall: function(e,data) {
-                    console.log(data);
+                    console.log("progressall"),
+		    console.log(data);
                     var prog = parseInt(data.loaded / data.total * 100,10);
-                    jQuery(form).children(".upload_progress").text=prog + "%";
+                    jQuery(form).children(".upload_progress").text(prog + "% (" + data.loaded + "/" + data.total + " bytes");
                 },
                 send: function(e,data) {
                     console.log(e);
                 },
                 stop: function(e,data) {
-                    alert("uploads finished");
+
                 },
                 add: function(e,data) {
                     jQuery.each(data.files,function(i,f) {
                         jQuery(form).children(".upload_droplist")
                             .prepend(jQuery("<li></li>").attr("filename",f.name).text(f.name));
                     }),
-                    data.submit();
+		    if(settings.autoupload)
+			 data.submit();
+		    else
+	                 form.$nitrogen_pending_files.push(data);
                 },
                 done: function(e,data) {
                     Postback = data.result;
@@ -249,9 +270,10 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input) {
 }
 
 NitrogenClass.prototype.$upload_finished = function(Name) {
+    console.log(["finshed",Name]);
     jQuery(".upload_droplist").children("li[filename=\"" + Name + "\"]")
+        .css("text-decoration","line-through")
         .fadeOut();
-        //.css("text-decoration","line-through");
 }
 
 

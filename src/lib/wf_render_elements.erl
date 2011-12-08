@@ -39,6 +39,9 @@ render_elements(script, HtmlAcc) ->
     HtmlAcc1 = [script|HtmlAcc],
     {ok, HtmlAcc1};
 
+render_elements(Atom, HtmlAcc) when is_atom(Atom) ->
+	render_elements(wf:to_binary(Atom), HtmlAcc);
+
 render_elements(Unknown, _HtmlAcc) ->
     throw({unanticipated_case_in_render_elements, Unknown}).
 

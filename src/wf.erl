@@ -217,6 +217,24 @@ mq(KeyList) when is_list(KeyList) ->
 mqs(KeyList) when is_list(KeyList) ->
     [qs(X) || X<-KeyList].
 
+%% Returns a proplist formed from the list of Keys
+q_pl(KeyList) when is_list(KeyList) ->
+	[{K,q(K)} || K <- KeyList].
+
+qs_pl(KeyList) when is_list(KeyList) ->
+	[{K,qs(K)} || K <- KeyList].
+
+%qs_pls(KeyList) when is_list(KeyList) ->
+%	Temp = mqs(KeyList),
+%	Vals = length(hd(Temp)),
+%	PL = 
+		
+%hd_all(Lists) ->
+%	Hds = [hd(L) || L <- Lists],
+%	Tls = [tl(L) || L <- Lists],
+%	{Hds,Tls}.
+		
+
 
 
 

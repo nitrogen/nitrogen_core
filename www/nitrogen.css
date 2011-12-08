@@ -57,6 +57,40 @@ div.inplace_textbox .LV_invalid {
     font-size: 90%;
 }
 
+.wizard {
+}
+
+.wizard .wizard_title {
+        font-size: 1.2em;
+	font-weight: bold;
+}
+
+.wizard .wizard_body {
+	padding-top:1em;
+	padding-bottom:1em;
+}
+
+.wizard_progress {
+	margin-left:10px;
+	font-size:1em;
+}
+
+.wizard_buttons table, .wizard_buttons {
+	width:100%;
+}
+
+.wizard_buttons_next {
+	text-align:right;
+}
+
+.wizard_buttons_back {
+	text-align:left;
+}
+
+.wizard .wizard_buttons input {
+        margin-right: 20px;
+}
+
 /*** VALIDATION ***/
 
 .LV_validation_message {
@@ -116,21 +150,19 @@ div.inplace_textbox .LV_invalid {
 }
 
 .dropzone-container div {
-    width: 0px;
-    height: 0px;
-    line-height: 0px;
-    font-size: 0em;
+    width:100%;
+    height:100%;
     text-align: center;
 }
 
 .dropzone-container div.ui-state-active {
+    /*
     width: 100%;
     height: 100%;
-    line-height: 200px;
-    font-size: 3em;
-    background: lightgreen;
+    background: #f00;
+    */
 }
 
 .dropzone-container div.ui-state-highlight {
-    background: limegreen;
+    /*background: limegreen;*/
 }

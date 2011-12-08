@@ -351,6 +351,22 @@
 #+END_SRC
    Think of 'mq' as an acronym of "Multi Query".
 
+** wf:q_pl(ListOfAtomKeys) -> [{Key,Values},...]
+
+   Takes a list of keys returns a proplist of keys and respective values from query string and POST values.
+
+#+BEGIN_SRC erlang
+  wf:qs_pl([favorite_robot,favorite_dinosaur,favorite_hobbit])
+#+END_SRC
+
+  Returns something like:
+#+BEGIN_SRC erlang
+  [
+      {favorite_robot,"Optimus Prime"},
+      {favorite_dinosaur,"Velociraptor"},
+      {favorite_hobbit,"Samwise"}
+  ].
+#+END_SRC
 
 ** wf:qs(AtomKey) -> [String]
 
@@ -363,6 +379,23 @@
 
 #+BEGIN_SRC erlang
    [wf:qs(AtomKey) || AtomKey <- ListOfAtomKeys]
+#+END_SRC
+
+** wf:qs_pl(ListOfAtomKeys) -> [{Key,ListOfValues},...]
+
+   Takes a list of keys and returns a proplist of keys and respective list of values from the query string and POST values.
+
+#+BEGIN_SRC erlang
+  wf:qs_pl([fruit,veggie,meat])
+#+END_SRC
+
+  Returns something like:
+#+BEGIN_SRC erlang
+  [
+     {fruit,["Apple","Peach"]},
+     {veggie,["Broccoli"]},
+     {meat,["Pork","Beef","Venison"]}
+  ].
 #+END_SRC
   
 

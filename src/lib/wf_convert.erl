@@ -14,7 +14,10 @@
     html_encode/1, html_encode/2,
     hex_encode/1, hex_decode/1,
     url_encode/1, url_decode/1,
-    js_escape/1
+    js_escape/1,
+	join/2,
+	short_if/2,short_if/3
+
 ]).
 
 -include_lib ("wf.hrl").
@@ -32,7 +35,11 @@ to_list(A) -> inner_to_list(A).
 inner_to_list(A) when is_atom(A) -> atom_to_list(A);
 inner_to_list(B) when is_binary(B) -> binary_to_list(B);
 inner_to_list(I) when is_integer(I) -> integer_to_list(I);
-inner_to_list(F) when is_float(F) -> nitro_mochinum:digits(F);
+inner_to_list(F) when is_float(F) -> 
+	case F == round(F) of
+		true -> inner_to_list(round(F));
+		false -> nitro_mochinum:digits(F)
+	end;
 inner_to_list(L) when is_list(L) -> L.
 
 to_atom(A) when is_atom(A) -> A;
@@ -80,6 +87,7 @@ to_string_list([H|T], Acc) ->
 
 html_encode(L,Fun) when is_function(Fun) -> Fun(L);
 
+html_encode(L,EncType) when is_atom(L) -> html_encode(wf:to_list(L),EncType);
 html_encode(L,EncType) when is_integer(L) -> html_encode(integer_to_list(L),EncType);
 html_encode(L,EncType) when is_float(L) -> html_encode(nitro_mochinum:digits(L),EncType);
 
