@@ -85,7 +85,7 @@ render_element(Record) ->
             ]
         },
         #panel{
-            show_if=Droppable,
+            %show_if=Droppable,
             class=upload_progress,
             body=""
         },

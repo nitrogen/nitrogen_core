@@ -205,7 +205,6 @@ NitrogenClass.prototype.$send_pending_files = function(form,input) {
     {
 	while(file=form.$nitrogen_pending_files.shift())
 	{
-	    console.log(file);
 	    file.submit();
 	}
     }
@@ -234,18 +233,14 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input,set
                     return d;
                 },
                 start: function() {
-	            console.log("start");
                     form.pageContext.value = thisNitro.$params["pageContext"];
                     jQuery(form).children(".upload_progress").innerHTML = "Uploading...";
                 },
                 progressall: function(e,data) {
-                    console.log("progressall"),
-		    console.log(data);
                     var prog = parseInt(data.loaded / data.total * 100,10);
                     jQuery(form).children(".upload_progress").text(prog + "% (" + data.loaded + "/" + data.total + " bytes");
                 },
                 send: function(e,data) {
-                    console.log(e);
                 },
                 stop: function(e,data) {
 
@@ -254,7 +249,7 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input,set
                     jQuery.each(data.files,function(i,f) {
                         jQuery(form).children(".upload_droplist")
                             .prepend(jQuery("<li></li>").attr("filename",f.name).text(f.name));
-                    }),
+                    });
 		    if(settings.autoupload)
 			 data.submit();
 		    else
