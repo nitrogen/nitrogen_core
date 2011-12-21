@@ -38,7 +38,7 @@ render_element(Record = #wizard{}) ->
 				#singlerow{cells=[
 					#tablecell{class=wizard_buttons_back,body=[
 						#button{
-							id=combine(TopOrBot,back),
+							id=combine(TopOrBot,back,N),
 							show_if=(not IsFirst),
 							text=Record#wizard.back,
 							postback={back, N, StepIDs},
@@ -47,14 +47,14 @@ render_element(Record = #wizard{}) ->
 					]},
 					#tablecell{class=wizard_buttons_next,body=[
 						#button{
-							id=combine(TopOrBot,next), 
+							id=combine(TopOrBot,next,N), 
 							show_if=(not IsLast), 
 							text=Record#wizard.next, 
 							postback={next, N, StepIDs}, 
 							delegate=?MODULE 
 						},
 						#button{
-							id=combine(TopOrBot,finish), 
+							id=combine(TopOrBot,finish,N), 
 							show_if=IsLast, 
 							text=Record#wizard.finish, 
 							postback={finish, Tag}, 
@@ -114,3 +114,6 @@ event(_) -> ok.
 
 combine(A, B) ->
 	wf:to_atom(wf:to_list(A) ++ "_" ++ wf:to_list(B)).
+
+combine(A, B, Step) ->
+	wf:to_atom(wf:to_list(A) ++ "_" ++ wf:to_list(B) ++ "_" ++ wf:to_list(Step)).
