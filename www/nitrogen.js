@@ -333,8 +333,8 @@ NitrogenClass.prototype.$return_false = function(value, args) {
     return false; 
 }
 
-NitrogenClass.prototype.$is_key_code = function(event, keyCode) {
-    return (event && event.keyCode == keyCode);
+NitrogenClass.prototype.$is_key_code = function(event, keyCode, shiftKey) {
+    return (event && event.keyCode == keyCode && event.shiftKey == shiftKey);
 }
 
 NitrogenClass.prototype.$go_next = function(controlID) {
