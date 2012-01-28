@@ -30,6 +30,9 @@
 
   TargetID can refer to the name of an element, or it can be a JQuery
   selector path. See [[./paths.org][Element Paths]] for more information.
+
+** wf:set(TargetID,Value) -> ok
+   Update a form element (textbox, dropdown, checkbox, etc) to set text value of TargetID. Can also be used to set the =src= attribute of an image tag.
    
 ** wf:update(TargetID, Elements) -> ok
    Update the contents of TargetID with a new set of Nitrogen Elements.
