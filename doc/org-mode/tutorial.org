@@ -70,7 +70,7 @@ Pull the [[http://github.com/nitrogen/nitrogen][Nitrogen Source Code]], then =ma
     + site/ :: Contains the website files, templates, and Erlang modules.
     + log/ :: The logs.
     + doc/ :: Contains Nitrogen documentation.
-    + erts-5.7.5/ :: Embedded Erlang.
+    + erts-X.Y.Z/ :: Embedded Erlang.
     + releases/ :: Tells Erlang how to start the system.
     + lib/ :: Dependent libraries.
 
@@ -1132,7 +1132,7 @@ Pull the [[http://github.com/nitrogen/nitrogen][Nitrogen Source Code]], then =ma
 
 
     /For more examples, see the built-in elements under
-    nitrogen/src/elements./
+    nitrogen_core/src/elements./
 
 * Custom Actions - Part 1
 ** Extending Nitrogen
@@ -1170,7 +1170,7 @@ Pull the [[http://github.com/nitrogen/nitrogen][Nitrogen Source Code]], then =ma
     #+END_SRC
 
     /For more examples, see the built-in actions under
-    nitrogen/src/actions./
+    nitrogen_core/src/actions./
 
 * Handlers - Part 1
 ** Extending Nitrogen
