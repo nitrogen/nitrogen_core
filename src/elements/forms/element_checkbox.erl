@@ -10,7 +10,10 @@ reflect() -> record_info(fields, checkbox).
 
 render_element(Record) -> 
     ID = Record#checkbox.id,
-    Anchor = Record#checkbox.anchor,
+    Anchor = case Record#checkbox.anchor of
+		"." ++ AnchorNoDot -> AnchorNoDot;
+		A -> A
+	end,
     CheckedOrNot = case Record#checkbox.checked of
         true -> checked;
         _ -> not_checked

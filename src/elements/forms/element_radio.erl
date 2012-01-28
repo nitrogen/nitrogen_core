@@ -10,7 +10,10 @@ reflect() -> record_info(fields, radio).
 
 render_element(Record) -> 
     ID = Record#radio.id,
-    Anchor = Record#radio.anchor,
+    Anchor = case Record#radio.anchor of
+		"." ++ AnchorNoDot -> AnchorNoDot;
+		A -> A
+	end,
     CheckedOrNot = case Record#radio.checked of
         true -> checked;
         _ -> not_checked
