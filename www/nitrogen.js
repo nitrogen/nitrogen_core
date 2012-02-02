@@ -358,6 +358,7 @@ NitrogenClass.prototype.$set_value = function(anchor, element, value) {
     element.each(function(index, el) {
                      if (el.value != undefined) el.value = value;
                      else if (el.checked != undefined) el.checked = value;
+                     else if (el.src != undefined) el.src = value;
                      else $(el).html(value);
                  });
 }
