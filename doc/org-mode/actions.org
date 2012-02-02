@@ -14,6 +14,7 @@
   + [[./actions/event.org][Event]]
   + [[./actions/script.org][Script]]
   + [[./actions/validate.org][Validate]]
+  + [[./actions/api.org][Ajax API]]
 
 * Effects
   + [[./actions/show.org][Show]]

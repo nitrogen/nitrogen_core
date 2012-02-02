@@ -1,6 +1,6 @@
 #+STYLE: <LINK href="stylesheet.css" rel="stylesheet" type="text/css">
 #+TITLE: Nitrogen 2.x Documentation
-#+AUTHOR: Rusty Klophaus (@rklophaus)
+#+AUTHOR: Rusty Klophaus (@rustyio)
 #+EMAIL: 
 
 #+TEXT: [[file:./index.org][Getting Started]] | [[file:./api.org][API]] | [[file:./elements.org][Elements]] | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | [[file:./handlers.org][Handlers]] | About
@@ -37,7 +37,7 @@
     - Source: https://yaws.hyber.org/download/
 
   + *Sync* - Automatically recompile changed Erlang modules.
-    - Source: https://github.com/rklophaus/Sync
+    - Source: https://github.com/rustyio/Sync
 
   + *JQuery 1.4.2* - http://jquery.com
 
@@ -67,7 +67,7 @@
   + Robert Schonberger
   + Yurii Rashkovskii (@yrashk)
   + Ville Koivula
-  + Jesse Gumm
+  + Jesse Gumm (@jessegumm)
   + Andreas Hasselberg 
   + Jonas Adahl
   + Susan Potter
