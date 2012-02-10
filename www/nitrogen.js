@@ -333,8 +333,8 @@ NitrogenClass.prototype.$return_false = function(value, args) {
     return false; 
 }
 
-NitrogenClass.prototype.$is_key_code = function(event, keyCode) {
-    return (event && event.keyCode == keyCode);
+NitrogenClass.prototype.$is_key_code = function(event, keyCode, shiftKey) {
+    return (event && event.keyCode == keyCode && event.shiftKey == shiftKey);
 }
 
 NitrogenClass.prototype.$go_next = function(controlID) {
@@ -358,6 +358,7 @@ NitrogenClass.prototype.$set_value = function(anchor, element, value) {
     element.each(function(index, el) {
                      if (el.value != undefined) el.value = value;
                      else if (el.checked != undefined) el.checked = value;
+                     else if (el.src != undefined) el.src = value;
                      else $(el).html(value);
                  });
 }
