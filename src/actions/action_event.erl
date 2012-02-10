@@ -9,7 +9,7 @@
 render_action(#event { 
     postback=Postback, actions=Actions, 
     anchor=Anchor, trigger=Trigger, target=Target, validation_group=ValidationGroup,
-    type=Type, keycode=KeyCode, delay=Delay, delegate=Delegate, 
+    type=Type, keycode=KeyCode, shift_key=ShiftKey, delay=Delay, delegate=Delegate,
     extra_param=ExtraParam
 }) -> 
 
@@ -43,7 +43,7 @@ render_action(#event {
         _ when (Type==keypress orelse Type==keydown orelse Type==keyup) andalso (KeyCode /= undefined) ->
             [
                 wf:f("Nitrogen.$observe_event('~s', '~s', '~s', function anonymous(event) {", [Anchor, Trigger, Type]),
-                wf:f("if (Nitrogen.$is_key_code(event, ~p)) { ", [KeyCode]), 
+                wf:f("if (Nitrogen.$is_key_code(event, ~p, ~p)) { ", [KeyCode, ShiftKey]),
                 AnchorScript, PostbackScript, WireAction, 
                 "return false; }});"
             ];
@@ -52,7 +52,7 @@ render_action(#event {
         enterkey ->
             [
                 wf:f("Nitrogen.$observe_event('~s', '~s', '~s', function anonymous(event) {", [Anchor, Trigger, keydown]),
-                wf:f("if (Nitrogen.$is_key_code(event, ~p)) { ", [13]),
+                wf:f("if (Nitrogen.$is_key_code(event, ~p, ~p)) { ", [13, ShiftKey]),
                 AnchorScript, PostbackScript, WireAction,
                 "return false; }});"
             ];
