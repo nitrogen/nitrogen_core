@@ -438,6 +438,15 @@ NitrogenClass.prototype.$set_value = function(anchor, element, value) {
                  });
 }
 
+NitrogenClass.prototype.$get_value = function(anchor, element) {
+    if (!element.id) element = objs(element);
+    el = element.get(0);
+    if (el.value != undefined) return el.value;
+    else if (el.checked != undefined) return el.checked;
+    else if (el.src != undefined) return el.src;
+    else return $(el).html();
+}
+
 NitrogenClass.prototype.$normalize_param = function(key, value) {
     // Create the key=value line to add.
     // Sometimes, the user will pass a bunch of params in the key field.

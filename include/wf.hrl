@@ -114,8 +114,11 @@
 -record(draggable, {?ELEMENT_BASE(element_draggable), tag, body=[], group, handle, clone=true, revert=true, scroll=true, container = false, zindex = false}).
 -record(droppable, {?ELEMENT_BASE(element_droppable), tag, body=[], accept_groups=all, active_class=active, hover_class=hover, delegate=undefined}).
 -record(gravatar, {?ELEMENT_BASE(element_gravatar), email="", size="80", rating="g", default=""}).
+
 -record(inplace_textarea, {?ELEMENT_BASE(element_inplace_textarea), tag, text="", html_encode=true, start_mode=view, validators=[], delegate=undefined}).
 -record(inplace_textbox, {?ELEMENT_BASE(element_inplace_textbox), tag, text="", html_encode=true, start_mode=view, validators=[], delegate=undefined}).
+-record(inplace, {?ELEMENT_BASE(element_inplace), tag, text="", delegate=undefined, view, edit, start_mode=view}).
+
 -record(upload, {?ELEMENT_BASE(element_upload), delegate, tag, show_button=true, button_text="Upload", droppable=false,multiple=false }).
 -record(wizard, {?ELEMENT_BASE(element_wizard), tag, titles, steps, next="Next", back="Back", finish="Finish",show_progress=true,progress_step="Step ",progress_of=" of "}).
 -record(sparkline, {?ELEMENT_BASE(element_sparkline), type, values, options }).
