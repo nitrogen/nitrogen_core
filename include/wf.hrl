@@ -167,7 +167,7 @@
 -record(function, {?ACTION_BASE(action_function), function }).
 -record(set, {?ACTION_BASE(action_set), value}).
 -record(redirect, {?ACTION_BASE(action_redirect), url}).
--record(event, {?ACTION_BASE(action_event), type=default, keycode=undefined, delay=0, postback, validation_group, delegate, extra_param}).
+-record(event, {?ACTION_BASE(action_event), type=default, keycode=undefined, shift_key=false, delay=0, postback, validation_group, delegate, extra_param}).
 -record(validate, {?ACTION_BASE(action_validate), on=submit, success_text=" ", group, validators, attach_to }).
 -record(validation_error, {?ACTION_BASE(action_validation_error), text="" }).
 -record(alert, {?ACTION_BASE(action_alert), text=""}).
