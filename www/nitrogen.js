@@ -5,11 +5,14 @@
 function NitrogenClass(o) {
     this.$url = document.location.href;
     this.$div = document;
+    this.$anchor_root_path = document;
     this.$params = new Object();
     this.$event_queue = new Array();
     this.$event_is_running = false;
     this.$system_event_queue = new Array();
     this.$system_event_is_running = false;
+    this.$system_event_obj = null;
+    this.$going_away = false;
     return this;
 }
 
@@ -28,9 +31,29 @@ NitrogenClass.prototype.$anchor = function(anchor, target) {
     this.$target_path = this.$path_alias(target);
 }
 
+
+NitrogenClass.prototype.$anchor_root = function(anchor_root) {
+    this.$anchor_root_path = anchor_root;
+}
+
 NitrogenClass.prototype.$set_param = function(key, value) {
     this.$params[key] = value;
 }
+
+NitrogenClass.prototype.$destroy = function() {
+    document.comet_started = false;
+    this.$going_away = true;
+
+    // Clear the system event queue and abort any pending system events.
+    this.$system_event_queue = new Array();
+    if( this.$system_event_obj !== null ) {
+	this.$system_event_obj.abort();
+    }
+    this.$system_event_is_running = false;
+
+    // Let the event loop keep running until the event queue is empty. 
+}
+
 
 /*** EVENT QUEUE ***/
 
@@ -52,6 +75,9 @@ NitrogenClass.prototype.$queue_system_event = function(eventContext) {
 }
 
 NitrogenClass.prototype.$event_loop = function() {
+    // Create a local copy of this for setTimeout callbacks.
+    var this2 = this;
+
     // If no events are running and an event is queued, then fire it.
     if (!this.$system_event_is_running && this.$system_event_queue.length > 0) {
         var o = this.$system_event_queue.shift();
@@ -64,20 +90,27 @@ NitrogenClass.prototype.$event_loop = function() {
         this.$do_event(o.validationGroup, o.eventContext, o.extraParam, o.ajaxSettings);
     }
 
-    // No more events, sleep for 50 ms...
     if (this.$system_event_queue.length == 0 || this.$event_queue.length == 0) {
-        setTimeout("Nitrogen.$event_loop();", 50);
-        return;
+	if( this.$going_away ) {
+	    // $destroy has been called for this Nitrogen object
+	    // and the event queue is empty - let the event loop stop.
+	    return;
+	}
+	else {
+	    // No more events, sleep for 50 ms...
+	    setTimeout( function() { this2.$event_loop() }, 50);
+	    return;
+	}
     }
 
     // Events queued, but one is running, sleep for 10 ms...
     if (this.$event_is_running || this.$system_event_is_running) {
-        setTimeout("Nitrogen.$event_loop();", 10);
+        setTimeout( function() { this2.$event_loop() }, 10);
         return;
     }
 
     // Events queued, loop and grab it...
-    setTimeout("Nitrogen.$event_loop();", 1);
+    setTimeout( function() { this2.$event_loop() }, 1);
 }
 
 /*** VALIDATE AND SERIALIZE ***/
@@ -168,7 +201,7 @@ NitrogenClass.prototype.$do_system_event = function(eventContext) {
     // Assemble other parameters...
     var params = jQuery.extend( {}, n.$params, { eventContext: eventContext, is_system_event: 1 });
 
-    $.ajax({ 
+    n.$system_event_obj = $.ajax({
 	       url: this.$url,
 	       type:'post',
 	       data: jQuery.param(params),
@@ -176,6 +209,7 @@ NitrogenClass.prototype.$do_system_event = function(eventContext) {
          cache: false,
 	       success: function(data, textStatus) {
             n.$system_event_is_running = false;
+            n.$system_event_obj = null;
             // A system event shouldn't clobber the pageContext.
             // Easiest to cacount for it here.
             var pc = n.$params["pageContext"];
@@ -184,6 +218,7 @@ NitrogenClass.prototype.$do_system_event = function(eventContext) {
 	       },
 	       error: function(xmlHttpRequest, textStatus, errorThrown) {
             n.$system_event_is_running = false;
+            n.$system_event_obj = null;
 	       }
 	   });                     
 }
@@ -333,14 +368,15 @@ function objs(path, anchor) {
         return jQuery(path);
     }    
 
+    var anchor_obj = jQuery(Nitrogen.$anchor_root_path).find(anchor);
     // Find all results under the anchor...
-    var results = jQuery(anchor).find(path);
+    var results = anchor_obj.find(path);
     if (results.length > 0) {
 	return results;
     }
     
     // If no results under the anchor, then try on each parent, moving upwards...
-    var results = jQuery(anchor).parents();
+    var results = anchor_obj.parentsUntil( Nitrogen.$anchor_root_path );
     for (var i=0; i<results.length; i++) {
 	var results2 = jQuery(results.get(i)).find(path);
 	if (results2.length > 0) {

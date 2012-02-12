@@ -28,7 +28,9 @@ render_element(Record) ->
 
     wf_tags:emit_tag(select, Options, [
         {class, [dropdown, Record#dropdown.class]},
-        {style, Record#dropdown.style}
+        {style, Record#dropdown.style},
+        {'data-role', Record#dropdown.data_role},
+	{id, Record#dropdown.html_id}
     ]).
 
 create_option(X, HtmlEncode) ->

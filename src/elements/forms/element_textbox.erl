@@ -29,5 +29,6 @@ render_element(Record) ->
         {class, [textbox, Record#textbox.class]},
 	{maxlength, Record#textbox.maxlength},
         {style, Record#textbox.style},
+	{id, Record#textbox.html_id},
         {value, Value}
     ]).
