@@ -400,7 +400,12 @@
      {meat,["Pork","Beef","Venison"]}
   ].
 #+END_SRC
-  
+
+** wf:request\_body() -> String
+   Return the complete text of the request body to the server. Note, this value 
+   will use the context of the current request. For example, the result of calling 
+   this during the page's initial request will be different than calling it within
+   a postback event.
 
 ** wf:status\_code(IntegerCode) -> ok
    Set the HTTP response code. Default is 200.

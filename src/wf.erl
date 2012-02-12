@@ -117,13 +117,13 @@ js_escape(String) ->
     _String = wf_convert:js_escape(String).
 
 short_if(Cond,IfTrue) ->
-	_String = wf_convert:short_if(Cond,IfTrue).
+    _String = wf_convert:short_if(Cond,IfTrue).
 
 short_if(Cond,IfTrue,IfFalse) ->
-	_String = wf_convert:short_if(Cond,IfTrue,IfFalse).
+    _String = wf_convert:short_if(Cond,IfTrue,IfFalse).
 
 join(List,Delimiter) ->
-	_Result = wf_convert:join(List,Delimiter).
+    _Result = wf_convert:join(List,Delimiter).
 
 %%% EXPOSE WF_BIND %%%
 % TODO
@@ -181,7 +181,7 @@ cookie(Cookie) ->
     wf_context:cookie(Cookie).
 
 cookie_default(Cookie,DefaultValue) ->
-	wf_context:cookie_default(Cookie,DefaultValue).
+    wf_context:cookie_default(Cookie,DefaultValue).
 
 cookie(Cookie, Value) ->
     ok = wf_context:cookie(Cookie, Value).
@@ -190,7 +190,7 @@ cookie(Cookie, Value, Path, MinutesToLive) ->
     ok = wf_context:cookie(Cookie, Value, Path, MinutesToLive).
 
 delete_cookie(Cookie) ->
-	ok = wf_context:delete_cookie(Cookie).
+    ok = wf_context:delete_cookie(Cookie).
 
 socket() ->
     wf_context:socket().
@@ -203,6 +203,9 @@ peer_ip(Proxies) ->
 
 peer_ip(Proxies,ForwardedHeader) ->
     wf_context:peer_ip(Proxies,ForwardedHeader).
+
+request_body() ->
+    wf_context:request_body().
 
 %%% EXPOSE QUERY_HANDLER %%%
 q(Key) -> 
@@ -219,21 +222,21 @@ mqs(KeyList) when is_list(KeyList) ->
 
 %% Returns a proplist formed from the list of Keys
 q_pl(KeyList) when is_list(KeyList) ->
-	[{K,q(K)} || K <- KeyList].
+    [{K,q(K)} || K <- KeyList].
 
 qs_pl(KeyList) when is_list(KeyList) ->
-	[{K,qs(K)} || K <- KeyList].
+    [{K,qs(K)} || K <- KeyList].
 
 %qs_pls(KeyList) when is_list(KeyList) ->
-%	Temp = mqs(KeyList),
-%	Vals = length(hd(Temp)),
-%	PL = 
-		
+%   Temp = mqs(KeyList),
+%   Vals = length(hd(Temp)),
+%   PL = 
+        
 %hd_all(Lists) ->
-%	Hds = [hd(L) || L <- Lists],
-%	Tls = [tl(L) || L <- Lists],
-%	{Hds,Tls}.
-		
+%   Hds = [hd(L) || L <- Lists],
+%   Tls = [tl(L) || L <- Lists],
+%   {Hds,Tls}.
+        
 
 
 
@@ -276,7 +279,7 @@ clear_session() ->
 
 %%% EXPOSE IDENTITY_HANDLER %%%
 user() -> 
-    _User = identity_handler:get_user().	
+    _User = identity_handler:get_user().    
 
 user(User) -> 
     ok = identity_handler:set_user(User).
