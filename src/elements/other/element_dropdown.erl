@@ -23,7 +23,7 @@ render_element(Record) ->
 
     Options=case Record#dropdown.options of
         undefined -> "";
-        L -> [create_option(X, Record#dropdown.html_encode) || X <- L]
+        L -> [create_option(Opt, Record#dropdown.html_encode) || Opt <- L,Opt#option.show_if==true]
     end,
 
     wf_tags:emit_tag(select, Options, [
