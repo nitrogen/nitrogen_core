@@ -41,18 +41,20 @@ render_element(#inplace{text=Text, tag=Tag, delegate=Delegate, edit=Edit,
 
 	% Create the view...
 
-	ViewAction = #buttonize { target=ViewPanelID },
+	ViewAction = [
+		#buttonize { target=ViewPanelID }
+	],
 
 	View1 = replace_field(id, ViewID, ViewModule:reflect(), View),
-	View2 = replace_field(actions, ViewAction, ViewModule:reflect(), View1),
+	View2 = append_field_actions(ViewAction, undefined, ViewModule:reflect(), View1),
 	View3 = replace_field_text(Text, View2, ViewModule:reflect()),
 
 	% Create the edit...
 
 	EditAction = [
-			#event { type=enterkey, shift_key=false, actions=#script { script=["objs('", OKButtonID, "').click();"] } },
-			#event { type=keyup, keycode=27, actions=#script { script=["objs('", CancelButtonID, "').click();"] } }
-		],
+		#event { type=enterkey, shift_key=false, actions=#script { script=["objs('", OKButtonID, "').click();"] } },
+		#event { type=keyup, keycode=27, actions=#script { script=["objs('", CancelButtonID, "').click();"] } }
+	],
 
 	Edit1 = replace_field(id, EditID, EditModule:reflect(), Edit),
 	Edit2 = append_field_actions(EditAction, OKButtonID, EditModule:reflect(), Edit1),
