@@ -1,0 +1,37 @@
+
+#+TITLE: Fieldset Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Jesse Gumm (@jessegumm)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | Elements | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
+
+* Fieldset Element - #fieldset {}
+
+  The fieldset element produces an HTML fieldset element containing the expected legend 
+  element. This is used for grouping related elements together in a coherent way.
+
+** Usage
+
+#+BEGIN_SRC erlang
+   #fieldset { legend_text="This Section", body=[ #span{text="The body of the fieldset"} ] }
+#+END_SRC
+
+** Attributes
+
+   + legend_text - (/string/) :: The legend (or title) of the fieldset element
+
+   + legend_html_encode - (/boolean/) :: Set to true to safely html-encode the displayed text
+
+   + legend_body - (/Elements/) :: The body of the legend in Nitrogen terms and raw HTML.
+
+   + text - (/string/) :: The body of the fieldset in a text format.
+
+   + body - (/Elements/) :: The body of the fieldset in Nitrogen terms and raw HTML.
+
+   + html\_encode - (/boolean/) :: Set to true to safely html-encode the displayed text body.
+
+** See Also
+
+   + [[./base.html][base element]]
+
