@@ -183,6 +183,8 @@
 -record(hide, {?ACTION_BASE(action_hide), effect=none, options=[], speed=500}).
 -record(appear, {?ACTION_BASE(action_appear), speed=500}).
 -record(fade, {?ACTION_BASE(action_fade), speed=500}).
+-record(slide_down, {?ACTION_BASE(action_slide_down), speed=500}).
+-record(slide_up, {?ACTION_BASE(action_slide_up), speed=500}).
 -record(effect, {?ACTION_BASE(action_effect), effect=none, options=[], speed=500}).
 -record(toggle, {?ACTION_BASE(action_toggle), effect=none, options=[], speed=500}).
 -record(add_class, {?ACTION_BASE(action_add_class), class=none, speed=0}).

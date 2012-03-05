@@ -21,6 +21,8 @@
   + [[./actions/hide.org][Hide]]
   + [[./actions/appear.org][Appear]]
   + [[./actions/fade.org][Fade]]
+  + [[./actions/slide_down.org][Slide Down]]
+  + [[./actions/slide_up.org][Slide Up]]
   + [[./actions/animate.org][Animate]]
   + [[./actions/toggle.org][Toggle]]
   + [[./actions/effect.org][Effect]]
