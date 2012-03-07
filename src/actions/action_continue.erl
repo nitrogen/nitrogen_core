@@ -49,8 +49,11 @@ run_continue_function(Record) ->
     Ref = make_ref(),
     Self = self(),
 
+	Context = wf_context:context(),			
     % Spawn the user's function...
     Pid = spawn(fun() -> 
+		wf_context:context(Context),
+		wf_context:clear_actions(),
         try 
             Self ! {result, Fun(), Ref}
         catch 
