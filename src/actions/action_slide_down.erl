@@ -10,5 +10,5 @@ render_action(Record) ->
     #jquery_effect {
         type=slidedown,
         speed = Record#slide_down.speed,
-        actions = Record#slide_up.actions
+        actions = Record#slide_down.actions
     }.
