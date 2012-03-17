@@ -2,6 +2,9 @@
 
 (defun publish-nitrogen-docs ()
   (interactive)
+  (require 'htmlize)
+  (require 'erlang)
+  (setq org-export-htmlize-output-type 'css)
   (setq org-publish-project-alist
         '(
           ("nitrogen-docs-org"

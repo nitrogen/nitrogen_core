@@ -91,3 +91,11 @@ h4 {
 .src {
     padding: 12px 10px;
 }
+
+.org-type {
+	color: #28439B;
+}
+
+.org-string {
+	color: #09A240;
+}
