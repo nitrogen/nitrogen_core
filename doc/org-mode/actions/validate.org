@@ -13,8 +13,8 @@
 ** Usage
 
 #+BEGIN_SRC erlang
-   wf:wire(myButton, myTextbox, #validate { validators=[<br>
-     #is_required { text="Required." }<br>
+   wf:wire(myButton, myTextbox, #validate { validators=[
+     #is_required { text="Required." }
    ]})
 #+END_SRC
 
