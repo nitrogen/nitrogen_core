@@ -19,6 +19,7 @@ render_element(Record) ->
     OptionsS = options_to_js([{type, Record#sparkline.type}|Record#sparkline.options]),
     wf:wire(wf:f("objs('~s').sparkline(~s, ~s);", [Anchor, ValuesS, OptionsS])),
     Span = #span {
+        html_id = Record#sparkline.html_id,
 	id = Record#sparkline.id,
 	anchor = Record#sparkline.anchor,
 	class = [sparkline, Record#sparkline.class],

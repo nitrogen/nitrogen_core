@@ -35,6 +35,7 @@ render_element(Record) ->
     % Render as a textbox.
     Value = wf:html_encode(Record#textbox_autocomplete.text, Record#textbox_autocomplete.html_encode),
     wf_tags:emit_tag(input, [
+        {id, Record#textbox_autocomplete.html_id},
         {type, text},
         {class, [textbox_autocomplete, Record#textbox_autocomplete.class]},
         {style, Record#textbox_autocomplete.style},

@@ -20,6 +20,7 @@ render_element(Record) ->
     end,
 
     Panel = #panel {
+        html_id=Record#file.html_id,
         body=FileContents
     },
 

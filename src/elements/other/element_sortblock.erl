@@ -28,6 +28,7 @@ render_element(Record) ->
     wf:wire(Script),
 
     element_panel:render_element(#panel {
+        html_id=Record#sortblock.html_id,
         id=Record#sortblock.id,
         anchor=Record#sortblock.anchor,
         class=[sortblock, GroupClasses|Record#sortblock.class],
