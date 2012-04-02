@@ -209,6 +209,8 @@ mq(KeyList) when is_list(KeyList) ->
 mqs(KeyList) when is_list(KeyList) ->
     [qs(X) || X<-KeyList].
 
+params() ->
+	query_handler:get_params().
 
 
 
