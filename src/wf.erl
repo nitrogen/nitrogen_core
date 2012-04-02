@@ -240,8 +240,8 @@ qs_pl(KeyList) when is_list(KeyList) ->
 %   Tls = [tl(L) || L <- Lists],
 %   {Hds,Tls}.
         
-
-
+params() ->
+	query_handler:get_params().
 
 
 %%% EXPOSE LOG_HANDLER %%%

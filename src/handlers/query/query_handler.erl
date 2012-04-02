@@ -6,7 +6,8 @@
 -export ([
     behaviour_info/1,
     get_value/1,
-    get_values/1
+    get_values/1,
+    get_params/0
 ]).
 
 
@@ -21,6 +22,8 @@ get_value(Path) ->
 get_values(Path) ->
     wf_handler:call_readonly(query_handler, get_values, [Path]).
 
+get_params() ->
+    wf_handler:call_readonly(query_handler, get_params, []).
 
 behaviour_info(callbacks) -> [
     {init, 2},      
