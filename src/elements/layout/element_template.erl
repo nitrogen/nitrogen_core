@@ -77,7 +77,7 @@ parse_template(File) ->
 parse_template1(B) ->
     F = fun(Tag) ->
         try
-            Tag1 = wf:to_list(Tag),
+            Tag1 = string:strip(wf:to_list(Tag)),
             to_module_callback(Tag1)
         catch _ : _ ->
             ?LOG("Invalid template tag: ~s~n", [Tag])
@@ -104,11 +104,11 @@ to_module_callback("script") -> script;
 to_module_callback(Tag) ->
     % Get the module...
     {ModuleString, Rest1} = peel(Tag, $:),
-    Module = wf:to_atom(ModuleString),
+    Module = wf:to_atom(string:strip(ModuleString)),
 
     % Get the function...
     {FunctionString, Rest2} = peel(Rest1, $(),
-    Function = wf:to_atom(FunctionString),
+    Function = wf:to_atom(string:strip(FunctionString)),
 
     {ArgString, Rest3} = peel(Rest2, $)),
 
