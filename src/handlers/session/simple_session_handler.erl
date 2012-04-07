@@ -16,7 +16,8 @@
     finish/2,
     get_value/4, 
     set_value/4, 
-    clear_all/2
+    clear_all/2,
+    session_id/2
 ]).
 -record (state, {unique, node}).
 
@@ -58,6 +59,10 @@ clear_all(Config, State) ->
     Pid!{clear_all, self(), Ref},
     receive {ok, Ref} -> ok end,	
     {ok, State}.
+
+session_id(Config, State) ->
+    {ok, SessionId} = wf:hex_encode (State#state.unique),
+    {ok, SessionId, State}.
 
 %%% PRIVATE FUNCTIONS
 
