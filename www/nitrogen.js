@@ -273,7 +273,8 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input,set
                 },
                 progressall: function(e,data) {
                     var prog = parseInt(data.loaded / data.total * 100,10);
-                    jQuery(form).children(".upload_progress").text(prog + "% (" + data.loaded + "/" + data.total + " bytes");
+		    // TODO: Convert this to a progress bar
+                    jQuery(form).children(".upload_progress").text(prog + "% (" + data.loaded + "/" + data.total + " bytes)");
                 },
                 send: function(e,data) {
                 },
