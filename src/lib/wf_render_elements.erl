@@ -6,7 +6,8 @@
 -include_lib ("wf.hrl").
 -export ([
     render_elements/1,
-    temp_id/0
+    temp_id/0,
+	normalize_id/1
 ]).
 
 % render_elements(Elements) - {ok, Html}

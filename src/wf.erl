@@ -146,6 +146,9 @@ to_js_id(Path) ->
 temp_id() -> 
     _String = wf_render_elements:temp_id().
 
+normalize_id(Path) ->
+	_String = wf_render_elements:normalize_id(Path).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% EXPOSE REQUEST INFORMATION %%%
