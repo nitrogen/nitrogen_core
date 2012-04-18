@@ -18,13 +18,15 @@ render_element(#inplace{text=Text, tag=Tag, delegate=Delegate, edit=Edit,
 
 	% Use id of edit if set, otherwise generate one
 
-	EditModule = wf:to_atom(lists:concat(["element_", element(1, Edit)])),
-	EditID = wf:coalesce([get_field(id, EditModule:reflect(), Edit), wf:temp_id()]),
+	BaseEdit = wf_utils:get_elementbase(Edit),
+	EditModule = BaseEdit#elementbase.module,
+	EditID = wf:coalesce([BaseEdit#elementbase.id, wf:temp_id()]),
 
 	% Use id of view if set, otherwise generate one
 
-	ViewModule = wf:to_atom(lists:concat(["element_", element(1, View)])),
-	ViewID = wf:coalesce([get_field(id, ViewModule:reflect(), View), wf:temp_id()]),
+	BaseView = wf_utils:get_elementbase(View),
+	ViewModule = BaseView#elementbase.module,
+	ViewID = wf:coalesce([BaseView#elementbase.id, wf:temp_id()]),
 
 	% Set up the events...
 
@@ -39,18 +41,20 @@ render_element(#inplace{text=Text, tag=Tag, delegate=Delegate, edit=Edit,
 
 	% Create the view...
 
-	ViewAction = #buttonize { target=ViewPanelID },
+	ViewAction = [
+		#buttonize { target=ViewPanelID }
+	],
 
 	View1 = replace_field(id, ViewID, ViewModule:reflect(), View),
-	View2 = replace_field(actions, ViewAction, ViewModule:reflect(), View1),
+	View2 = append_field_actions(ViewAction, undefined, ViewModule:reflect(), View1),
 	View3 = replace_field_text(Text, View2, ViewModule:reflect()),
 
 	% Create the edit...
 
 	EditAction = [
-			#event { type=enterkey, shift_key=false, actions=#script { script=["objs('", OKButtonID, "').click();"] } },
-			#event { type=keyup, keycode=27, actions=#script { script=["objs('", CancelButtonID, "').click();"] } }
-		],
+		#event { type=enterkey, shift_key=false, actions=#script { script=["objs('", OKButtonID, "').click();"] } },
+		#event { type=keyup, keycode=27, actions=#script { script=["objs('", CancelButtonID, "').click();"] } }
+	],
 
 	Edit1 = replace_field(id, EditID, EditModule:reflect(), Edit),
 	Edit2 = append_field_actions(EditAction, OKButtonID, EditModule:reflect(), Edit1),
@@ -118,22 +122,23 @@ replace_field_text(Value, Element, Fields) ->
 		_ -> replace_field(text, Value, Fields, Element)
 	end.
 
-%% Append new actions (Value) to the original actions.
-%% Modify original actions so validate actions have
-%% the required trigger (Trigger).
-append_field_actions(Value, Trigger, Fields, Rec) ->
+modify_field_action(Action, Trigger) ->
+	case element(1, Action) of
+		validate -> Action#validate{ trigger = Trigger };
+		_ -> Action
+	end.
+
+%% Set required trigger to original validate actions and append
+%% new actions specified by Actions.
+append_field_actions(Actions, Trigger, Fields, Rec) ->
 	N = indexof(actions, Fields),
-	ModifiedOldValues = case element(N, Rec) of
+	ModifiedOldActions = case element(N, Rec) of
 		undefined -> [];
-		OldValues ->
-			F = fun
-				(Action) when element(1, Action) == validate ->
-					Action#validate{ trigger = Trigger };
-				(Action) -> Action
-			end,
-			[F(X) || X <- OldValues]
+		OldActions when is_list(OldActions) ->
+			[modify_field_action(X, Trigger) || X <- OldActions];
+		OldActions -> modify_field_action(OldActions, Trigger)
 	end,
-	setelement(N, Rec, Value ++ ModifiedOldValues).
+	setelement(N, Rec, Actions ++ ModifiedOldActions).
 
 indexof(Key, Fields) -> indexof(Key, Fields, 2).
 indexof(_Key, [], _N) -> undefined;

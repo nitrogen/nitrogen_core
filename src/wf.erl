@@ -278,6 +278,9 @@ session_default(Key, DefaultValue) ->
 clear_session() -> 
     ok = session_handler:clear_all().
 
+session_id() ->
+    session_handler:session_id().
+
 
 
 %%% EXPOSE IDENTITY_HANDLER %%%
