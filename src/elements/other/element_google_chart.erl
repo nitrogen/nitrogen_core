@@ -118,6 +118,7 @@ render_element(Record) ->
 
     % Render the image tag...
     Image = #image {
+        html_id=Record#google_chart.html_id,
         id=Record#google_chart.id,
         anchor=Record#google_chart.anchor,
         class=[google_chart, Record#google_chart.class],

@@ -15,6 +15,7 @@ render_element(Record) ->
     ],
 
     wf_tags:emit_tag(td, Body, [
+        {id, Record#tablecell.html_id},
         {class, [tablecell, Record#tablecell.class]},
         {style, Record#tablecell.style},
         {align, Record#tablecell.align},

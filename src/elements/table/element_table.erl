@@ -24,6 +24,7 @@ render_element(Record) ->
     Content = [Header, Footer, Body ],
 
     wf_tags:emit_tag( table, Content, [
+        {id, Record#table.html_id},
         {border, 0},
         {cellpadding, 0},
         {cellspacing, 0},

@@ -17,6 +17,7 @@ render_element(Record) ->
     wf:wire(Script),
 
     Panel = #panel {
+        html_id=Record#sortitem.html_id,
         id=Record#sortitem.id,
         anchor=Record#sortitem.anchor,
         class=[sortitem, Record#sortitem.class],

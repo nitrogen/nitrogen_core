@@ -9,6 +9,7 @@ reflect() -> record_info(fields, section).
 
 render_element(Record) ->
     wf_tags:emit_tag(section, Record#section.body, [
+        {id, Record#section.html_id},
         {class, ["section", Record#section.class]},
         {style, Record#section.style}
     ]).
