@@ -60,7 +60,7 @@ clear_all(Config, State) ->
     receive {ok, Ref} -> ok end,	
     {ok, State}.
 
-session_id(Config, State) ->
+session_id(_Config, State) ->
     {ok, SessionId} = wf:hex_encode (State#state.unique),
     {ok, SessionId, State}.
 
