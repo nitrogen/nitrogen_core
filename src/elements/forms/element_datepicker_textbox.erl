@@ -13,6 +13,7 @@ render_element(Record) ->
     Options = action_jquery_effect:options_to_js(Record#datepicker_textbox.options),
 
     Textbox = #textbox {
+        html_id     = Record#datepicker_textbox.html_id,
         class       = [datepicker_textbox, Record#datepicker_textbox.class],
         style       = Record#datepicker_textbox.style,
         text        = Record#datepicker_textbox.text,

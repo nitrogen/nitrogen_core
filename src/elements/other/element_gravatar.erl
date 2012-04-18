@@ -6,6 +6,7 @@ reflect() -> record_info(fields, gravatar).
 
 render_element(Record) -> 
     Image = #image {
+        html_id=Record#gravatar.html_id,
         id=Record#gravatar.id,
         anchor=Record#gravatar.anchor,
         image = gravatar_icon(Record)

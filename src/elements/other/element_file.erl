@@ -9,8 +9,7 @@
 reflect() -> record_info(fields, file).
 
 render_element(Record) -> 
-    FileName = Record#file.file,
-    FilePath = io_lib:format(FileName),
+    FilePath = Record#file.file,
     FileContents = case file:read_file(FilePath) of
         {ok, B} -> 
             B;
@@ -20,6 +19,7 @@ render_element(Record) ->
     end,
 
     Panel = #panel {
+        html_id=Record#file.html_id,
         body=FileContents
     },
 

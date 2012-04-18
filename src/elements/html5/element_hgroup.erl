@@ -30,6 +30,7 @@ render_element(Record) ->
     if
         Y ->
             wf_tags:emit_tag(hgroup, Record#hgroup.body, [
+                {id, Record#hgroup.html_id},
                 {class, ["hgroup", Record#hgroup.class]},
                 {style, Record#hgroup.style}
             ]);

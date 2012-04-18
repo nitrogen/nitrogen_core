@@ -11,6 +11,7 @@ reflect() -> record_info(fields, spinner).
 render_element(Record) -> 
     wf:wire(spinner, #hide{}),
     Terms = #panel {
+        html_id=Record#spinner.html_id,
         id=Record#spinner.id,
         anchor=Record#spinner.anchor,
         class=[spinner, Record#spinner.class],

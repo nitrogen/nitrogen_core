@@ -11,6 +11,7 @@ render_element(Record0)  ->
     Body = rewrite_body(lists:flatten([Record#grid.body])),
 
     element_panel:render_element(#panel {
+        html_id=Record#grid.html_id,
         class=to_classes(Record),
         body=case Record#grid.type of
             container ->
