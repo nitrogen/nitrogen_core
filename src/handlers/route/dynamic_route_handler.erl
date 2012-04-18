@@ -93,12 +93,12 @@ route(Path) ->
 %%     end.
 
 module_name(Tokens) ->
-	ModulePrefix = wf:config_default(module_prefix, ""),
+    ModulePrefix = wf:config_default(module_prefix, ""),
 	AllTokens = case ModulePrefix of
-		"" -> Tokens;
-		_ -> [ ModulePrefix | Tokens ]
-		end,
-	ModuleName = string:join(AllTokens, "_").
+	    "" -> Tokens;
+	    _ -> [ ModulePrefix | Tokens ]
+	end,
+	_ModuleName = string:join(AllTokens, "_").
 
 try_load_module(Tokens) -> try_load_module(Tokens, []).
 try_load_module([], _ExtraTokens) -> undefined;

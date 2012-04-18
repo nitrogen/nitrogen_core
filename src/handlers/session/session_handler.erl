@@ -26,7 +26,7 @@ behaviour_info(callbacks) -> [
     {get_value, 4},       
     {set_value, 4},
     {clear_all, 2},
-    {session_id, 0}
+    {session_id, 2}
 ];
 behaviour_info(_) -> undefined.
 
