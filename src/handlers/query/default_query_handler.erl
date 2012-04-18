@@ -14,7 +14,8 @@
     init/2, 
     finish/2,
     get_value/3,
-    get_values/3
+    get_values/3,
+    get_params/2
 ]).
 
 init(_Config, _State) -> 
@@ -47,6 +48,15 @@ get_values(Path, _Config, State) ->
     Params = State,
     Path1 = normalize_path(Path),
     refine_params(Path1, Params).    
+
+get_params(_Config, State) ->
+    Params = State,
+    F = fun({KeyPartsReversed, Value}) ->
+        KeyParts = lists:reverse(KeyPartsReversed),
+        Key = string:join(KeyParts, "."),
+        { Key, Value }
+    end,
+    lists:map(F, Params).
 
 %% Next, narrow down the parameters by keeping only the parameters
 %% that contain the next element found in path, while shrinking the 
