@@ -1,4 +1,4 @@
-% Nitrogen Web Framework for Erlang
+% vim: sw=4 ts=4 et
 % Copyright (c) 2008-2010 Rusty Klophaus
 % See MIT-LICENSE for licensing information.
 
@@ -36,7 +36,7 @@ reflect() -> record_info(fields, upload).
 
 render_element(Record) ->
     Anchor = Record#upload.anchor,
-    Multiple = Record#upload.multiple,
+	Multiple = Record#upload.multiple,
     Droppable = Record#upload.droppable,
     
     ShowButton = Record#upload.show_button,
@@ -97,7 +97,7 @@ render_element(Record) ->
 
         wf_tags:emit_tag(input, [
             {name, file},
-            {multuple,Multiple},
+            {multiple,Multiple},
             {class, [no_postback,FileInputID|Anchor]},
 			{id, FileInputID},
             {type, file}

@@ -301,7 +301,6 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input,set
 }
 
 NitrogenClass.prototype.$upload_finished = function(Name) {
-    console.log(["finshed",Name]);
     jQuery(".upload_droplist").children("li[filename=\"" + Name + "\"]")
         .css("text-decoration","line-through")
         .fadeOut();
