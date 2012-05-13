@@ -21,5 +21,6 @@ render_element(Record) ->
         {type, button},
         {class, [button, Record#button.class]},
         {style, Record#button.style},
+        {name, Record#radio.name},
         {value, Value}
     ]).

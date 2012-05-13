@@ -45,7 +45,7 @@ render_element(#inplace{text=Text, tag=Tag, delegate=Delegate, edit=Edit,
 		#buttonize { target=ViewPanelID }
 	],
 
-	View1 = replace_field(id, ViewID, ViewModule:reflect(), View),
+	View1 = wf_utils:replace_field(id, ViewID, ViewModule:reflect(), View),
 	View2 = append_field_actions(ViewAction, undefined, ViewModule:reflect(), View1),
 	View3 = replace_field_text(Text, View2, ViewModule:reflect()),
 
@@ -56,9 +56,9 @@ render_element(#inplace{text=Text, tag=Tag, delegate=Delegate, edit=Edit,
 		#event { type=keyup, keycode=27, actions=#script { script=["objs('", CancelButtonID, "').click();"] } }
 	],
 
-	Edit1 = replace_field(id, EditID, EditModule:reflect(), Edit),
+	Edit1 = wf_utils:replace_field(id, EditID, EditModule:reflect(), Edit),
 	Edit2 = append_field_actions(EditAction, OKButtonID, EditModule:reflect(), Edit1),
-	Edit3 = replace_field_text(Text, Edit2, EditModule:reflect()),
+	Edit3 = wf_utils:replace_field_text(Text, Edit2, EditModule:reflect()),
 
 	% No value in view mode cause the view panel unclickable thus
 	% we set edit mode in that case.
@@ -117,9 +117,9 @@ event({cancel, {ViewPanelID, _ViewID, EditPanelID, EditID}, _Tag}) ->
 
 replace_field_text(Value, Element, Fields) ->
 	case element(1, Element) of
-		dropdown -> replace_field(value, Value, Fields, Element);
-		image -> replace_field(image, Value, Fields, Element);
-		_ -> replace_field(text, Value, Fields, Element)
+		dropdown -> wf_utils:replace_field(value, Value, Fields, Element);
+		image -> wf_utils:replace_field(image, Value, Fields, Element);
+		_ -> wf_utils:replace_field(text, Value, Fields, Element)
 	end.
 
 modify_field_action(Action, Trigger) ->
@@ -131,7 +131,7 @@ modify_field_action(Action, Trigger) ->
 %% Set required trigger to original validate actions and append
 %% new actions specified by Actions.
 append_field_actions(Actions, Trigger, Fields, Rec) ->
-	N = indexof(actions, Fields),
+	N = wf_utils:indexof(actions, Fields),
 	ModifiedOldActions = case element(N, Rec) of
 		undefined -> [];
 		OldActions when is_list(OldActions) ->
@@ -140,17 +140,3 @@ append_field_actions(Actions, Trigger, Fields, Rec) ->
 	end,
 	setelement(N, Rec, Actions ++ ModifiedOldActions).
 
-indexof(Key, Fields) -> indexof(Key, Fields, 2).
-indexof(_Key, [], _N) -> undefined;
-indexof(Key, [Key|_T], N) -> N;
-indexof(Key, [_|T], N) -> indexof(Key, T, N + 1).
-
-replace_field(Key, Value, Fields, Rec) ->
-	N = indexof(Key, Fields),
-	setelement(N, Rec, Value).
-
-get_field(Key, Fields, Rec) ->
-	case indexof(Key, Fields) of
-		undefined -> undefined;
-		N -> element(N, Rec)
-	end.
