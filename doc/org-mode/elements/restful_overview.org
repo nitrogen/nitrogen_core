@@ -1,0 +1,77 @@
+#+STYLE: <LINK href="../stylesheet.css" rel="stylesheet" type="text/css" />
+#+TITLE: Nirogen 2.x Documentation
+#+AUTHOR: Steffen Panning
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | Elements | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
+#+HTML: <div class=headline>Nitrogen Restful Elements</div>
+
+* Overview
+
+  Restful elements introduce the possibility to create forms that don't
+  depend on AJAX/Javascript. This is sometimes useful, for example if you
+  want to provide a fallback option when a client does not support
+  javascript or sits behind a firewall that filters active content.
+  
+* How it works
+
+  Restful requests work a little different compared to the rest of
+  nitrogen. They don't use the event mechanism. Instead you have to
+  render the reply either on a different page or check if
+  wf:q(restful\_method) is set to "post" or "get" depending on the
+  method of the form.  Form elements that don't rely on javascript are
+  useable in restful\_form elements. The elements that are supported are
+  described below.
+
+* Replaced and new elements
+
+** New Elements
+
+   + [[./restful_form.org][restful\_form]]
+
+** Replaced elements
+   Some elements are replaced with restful\_ counterparts:
+
+# <<1>>
+
+   + [[./restful_submit.org][restful\_submit]] and [[./restful_reset.org][restful\_reset]] instead of [[./button.org][button]] 
+   + [[./restful_upload][restful\_upload]] instead of upload
+
+* Supported elements
+
+  + [[./textbox.org][Textbox]]
+  + [[./textarea.org][Textarea]]
+  + [[./checkbox.org][Checkbox]]
+  + [[./dropdown.org][Dropdown]]
+  + [[./password.org][Password Box]]
+  + [[./hidden.org][Hidden Value]]
+  + Radio Button
+
+* No support for validators
+  Validators are not supported for restful\_submit actions.
+
+* Example
+#+BEGIN_SRC erlang
+  case wf:q(restful_method) of
+    "post" -> [
+        % this is code is executed after the submit button was pressed
+
+        #table{rows=[
+            #tablerow{cells=[
+                #tablecell{text="text_input"},
+                #tablecell{text=wf:q(text_input)}]}];
+    _else -> [
+        % this code is executed when restful_method is "get" 
+        % or undefined
+
+        #restful_form{id=restful_form, method=post, body=[
+           #table{rows=[
+                #tablerow{cells=[
+                    #tablecell{text="text_input"},
+                    #tablecell{body=[#textbox{id=text_input}]}]}
+            ]},
+            #restful_reset{},
+            #restful_submit{}]}
+    ]
+  end
+#+END_SRC

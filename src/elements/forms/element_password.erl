@@ -25,5 +25,6 @@ render_element(Record) ->
         {type, password},
         {class, [password, Record#password.class]},
         {style, Record#password.style},
+        {name, Record#password.html_name},
         {value, Value}
     ]).

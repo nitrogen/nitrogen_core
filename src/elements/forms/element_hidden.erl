@@ -13,5 +13,6 @@ render_element(Record) ->
     wf_tags:emit_tag(input, [
         {class, Record#hidden.class},
         {type, hidden},
+        {name, Record#hidden.html_name},
         {value, Value}
     ]).

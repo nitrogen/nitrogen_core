@@ -26,9 +26,9 @@ render_element(Record) ->
     [
         %% Checkbox...
         wf_tags:emit_tag(input, [
-            {name, Record#radio.name},
             {id, Anchor},
             {value, Record#radio.value},
+            {name, Record#radio.html_name},
             {type, radio},
             {class, [radio, Record#radio.class]},
             {style, Record#radio.style},
