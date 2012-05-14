@@ -15,8 +15,7 @@
     get_elementbase/1, get_actionbase/1, get_validatorbase/1, replace_with_base/2,
     indexof/2,
     replace_field/4,
-    get_field/3,
-    normalize_id/1
+    get_field/3
 ]).
 
 -define(COPY_TO_BASERECORD(Name, Size, Record),
@@ -155,9 +154,3 @@ get_field(Key, Fields, Rec) ->
 		undefined -> undefined;
 		N -> element(N, Rec)
 	end.
-normalize_id(ID) -> 
-    case wf:to_string_list(ID) of
-        [".wfid_" ++ _] = [NormalizedID] -> NormalizedID;
-        ["page"] -> "page";
-        [NewID]  -> ".wfid_" ++ NewID
-    end.
