@@ -54,7 +54,7 @@ wire(_, _, undefined) ->
 wire(_, _, []) -> 
     ok;
 
-wire(Trigger, Target, Actions) when ?IS_STRING(Actions) ->
+wire(Trigger, Target, Actions) when is_binary(Actions) orelse ?IS_STRING(Actions) ->
     wire(Trigger, Target, #script { script=Actions });
 
 wire(Trigger, Target, Actions) ->
