@@ -155,7 +155,7 @@ url_decode(S) -> unquote(S).
 %%% ESCAPE JAVASCRIPT %%%
 
 js_escape(undefined) -> [];
-js_escape(Value) when is_list(Value) -> binary_to_list(js_escape(list_to_binary(lists:flatten(Value))));
+js_escape(Value) when is_list(Value) -> binary_to_list(js_escape(iolist_to_binary(Value)));
 js_escape(Value) -> js_escape(Value, <<>>).
 js_escape(<<"\\", Rest/binary>>, Acc) -> js_escape(Rest, <<Acc/binary, "\\\\">>);
 js_escape(<<"\r", Rest/binary>>, Acc) -> js_escape(Rest, <<Acc/binary, "\\r">>);
