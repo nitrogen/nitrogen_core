@@ -20,6 +20,7 @@
     TagName =/= 'ul' andalso
     TagName =/= 'ol' andalso
 	TagName =/= 'select' andalso
+	TagName =/= 'script' andalso
     TagName =/= 'iframe')).
 
 -export ([emit_tag/2, emit_tag/3]).
