@@ -74,7 +74,7 @@ display_property({Prop, V}) when is_atom(Prop) ->
 %% In this case, we emit the 'value' propery even if it's an empty value
 display_property({Prop, []}) when Prop =/= "value" -> "";    
 
-display_property({Prop, Value}) when is_integer(Value); is_atom(Value) ->
+display_property({Prop, Value}) when is_integer(Value); is_atom(Value); is_float(Value) ->
     [" ", Prop, "=\"", wf:to_list(Value), "\""];
 
 display_property({Prop, Value}) when is_binary(Value); ?IS_STRING(Value) ->
