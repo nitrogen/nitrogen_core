@@ -28,7 +28,8 @@ render_element(Record) ->
 
     wf_tags:emit_tag(select, Options, [
         {class, [dropdown, Record#dropdown.class]},
-        {style, Record#dropdown.style}
+        {style, Record#dropdown.style},
+        {name, Record#dropdown.html_name}
     ]).
 
 create_option(X, HtmlEncode) ->

@@ -6,7 +6,8 @@
 -include_lib ("wf.hrl").
 -export([reflect/0, render_element/1]).
 
--define(IS_FORM(Tag), ( Tag == element_hidden          orelse
+-define(IS_FORM(Tag), ( Tag == element_dropdown        orelse
+                        Tag == element_hidden          orelse
                         Tag == element_password        orelse
                         Tag == element_radio           orelse
                         Tag == element_restful_reject  orelse
@@ -18,21 +19,22 @@
 
 reflect() -> record_info(fields, restful_form).
 
-render_element(Record) -> 
+render_element(Record) ->
     Body= [
            #hidden{id=restful_method, text=Record#restful_form.method}|
            Record#restful_form.body
           ],
     WithName = inject_name(Record#restful_form{body=Body}),
-    wf_tags:emit_tag(form, WithName#restful_form.body, [ 
-        wf_tags:html_name(WithName#restful_form.id, 
+    wf_tags:emit_tag(form, WithName#restful_form.body, [
+        wf_tags:html_name(WithName#restful_form.id,
                           WithName#restful_form.html_name),
         {action, WithName#restful_form.action},
-        {method, WithName#restful_form.method}
+        {method, WithName#restful_form.method},
+        {enctype, WithName#restful_form.enctype}
     ]).
 
 %%internal
-inject_name(Element) 
+inject_name(Element)
   when is_tuple(Element) ->
     Base = wf_utils:get_elementbase(Element),
     Module = Base#elementbase.module,
@@ -48,8 +50,8 @@ inject_name(Element)
     case [E || E <- Containers, element(2, E) =/= undefined ] of
         []    -> New;
         Found -> lists:foldl(
-                   fun({Field, C}, Acc) ->  
-                           NewC = [inject_name(N) || N <- C], 
+                   fun({Field, C}, Acc) ->
+                           NewC = [inject_name(N) || N <- C],
                            wf_utils:replace_field(Field, NewC, Fields, Acc)
                    end, New, Found)
     end;
@@ -61,6 +63,8 @@ set_html_name(Tag, Fields, Rec)
     {ID, Name} = {wf_utils:get_field(id, Fields, Rec),
                   wf_utils:get_field(html_name, Fields, Rec)},
     {_, NewName} = wf_tags:html_name(ID, Name),
-    wf_utils:replace_field(html_name, wf_render_elements:normalize_id(NewName), Fields, Rec);
+    wf_utils:replace_field(html_name,
+                           wf_render_elements:normalize_id(NewName),
+                           Fields, Rec);
 set_html_name(_Tag, _Fields, Rec) ->
     Rec.

@@ -24,12 +24,11 @@ render_element(Record) ->
     [
         % Checkbox...
         wf_tags:emit_tag(input, [
-            {name, Anchor},
-            {id, Anchor},
+            {name, Record#checkbox.html_name},
+            {id,   Anchor},
             {type, checkbox},
             {class, [checkbox, Record#checkbox.class]},
             {style, Record#checkbox.style},
-            {name, Record#checkbox.html_name},
             {value, Record#checkbox.value},
             {CheckedOrNot, true}
         ]),

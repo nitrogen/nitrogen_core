@@ -13,7 +13,7 @@ render_element(Record) ->
     wf_tags:emit_tag(textarea, Text, [
         {class, [textarea, Record#textarea.class]},
         {style, Record#textarea.style},
-        {name, Record#radio.name}
+        {name, Record#textarea.html_name}
     ]).
 
 html_encode(L, false) -> wf:to_list(lists:flatten([L]));
