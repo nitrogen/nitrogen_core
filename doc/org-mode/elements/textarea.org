@@ -22,6 +22,8 @@
 
    + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
 
+   + html\_name - (/string/) :: The name attribute of the textarea.
+
 ** See Also
 
    + [[./base.html][base element]]

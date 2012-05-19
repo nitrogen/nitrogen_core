@@ -1,38 +1,31 @@
-
-#+TITLE: Checkbox Element Element
+#+TITLE: restful_submit Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
-#+AUTHOR: Rusty Klophaus (@rklophaus)
+#+AUTHOR: Steffen Panning
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
 #+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | Elements | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
 
-* Checkbox Element - #checkbox {}
-
-  The checkbox element produces an HTML checkbox.
+* Restful Submit Element #restful\_submit{}
+  The restful\_submit element produces an input field of type submit
+  When clicked, the restful\_submit field submit the surrounding form.
 
 ** Usage
 
 #+BEGIN_SRC erlang
-   #checkbox { id=checkbox1, text="Check Me", checked=true }
+   #restful\_submit { text="Go!" }
 #+END_SRC
 
 ** Attributes
 
-   + text - (/string/) :: The checkbox's title.
+   + text - (/string/) :: The button's title.
 
    + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
 
-   + postback - (/Erlang term/) :: If set, clicking on the checkbox will initiate a Nitrogen postback with the supplied term.
-
-   + checked - (/boolean/) :: True if the checkbox should be checked.
-
-   + html\_name - (/string/) :: The name attribute of the checkbox.
+   + html\_name - (/string/) :: the name attribute of the restful\_submit element 
 
 ** See Also
 
-   + [[./base.html][base]]
-
-   + [[./button.html][Button]]
+   + [[./base.html][Base]]
 
    + [[./link.html][Link]]
 
@@ -42,7 +35,14 @@
 
    + [[./textarea.html][Textarea]]
 
+   + [[./checkbox.html][Checkbox]]
+
    + [[./dropdown.html][Dropdown]]
 
    + [[./option.html][Dropdown Option]]
+   
+   + [[./restful_form.org][Restful\_Form]]
 
+   + [[./restful_reset.org][Restful\_Reset]]
+
+   + [[./restful_upload.org][Restful\_Upload]]

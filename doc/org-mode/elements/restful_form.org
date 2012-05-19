@@ -1,0 +1,58 @@
+#+TITLE: restful_form Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Steffen Panning
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | Elements | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
+
+* RestfulForm Element - #restful\_form {}
+
+  The restful\_form element produces a form element.
+  The form element is necessary if your website has to work without
+  javascript. It is _not_ necessary for a pure  ajax/javascript driven
+  website. 
+ 
+** Usage
+
+#+BEGIN_SRC erlang
+   #restful_form { method=post|get, action=[]|url, enctype=EncType,
+                   body=[FormElement|FormElements]}
+#+END_SRC
+
+** Attributes
+
+   + method - (/string/) :: Set the request-method 
+
+   + action - (/string/) :: Set the target-url of the form submit. If
+                            left blank, the same page module is used as
+                            target.
+
+   + enctype - (/string/) :: Sets the encoding for the form transmission.
+
+   + body    - (/string/) :: Contains the elements of the form
+
+
+** See Also
+
+   + [[./base.html][Base]]
+
+   + [[./link.html][Link]]
+
+   + [[./textbox.html][Textbox]]
+
+   + [[./password.html][Password]]
+
+   + [[./textarea.html][Textarea]]
+
+   + [[./checkbox.html][Checkbox]]
+
+   + [[./dropdown.html][Dropdown]]
+
+   + [[./option.html][Dropdown Option]]
+   
+   + [[./restful_submit.org][Restful\_Submit]]
+
+   + [[./restful_reset.org][Restful\_Reset]]
+
+   + [[./restful_upload.org][Restful\_Upload]]
+
