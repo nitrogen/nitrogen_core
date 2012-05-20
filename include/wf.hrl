@@ -96,9 +96,9 @@
 -record(radio, {?ELEMENT_BASE(element_radio), html_name, text="", html_encode=true, value, name, checked=false, postback, delegate}).
 -record(password, {?ELEMENT_BASE(element_password), html_name, text="", html_encode=true, next, postback, delegate}).
 -record(restful_form, {?ELEMENT_BASE(element_restful_form), method="POST", action, html_name, enctype, body=[]}).
--record(restful_submit, {?ELEMENT_BASE(element_restful_submit), text="Submit", html_encode=true, html_name, postback, delegate}).
--record(restful_reset, {?ELEMENT_BASE(element_restful_reset), text="Cancel", html_encode=true, html_name, postback, delegate}).
--record(restful_upload, {?ELEMENT_BASE(element_restful_upload), text="Submit", html_encode=true, html_name, maxlength, postback, delegate, next}).
+-record(restful_submit, {?ELEMENT_BASE(element_restful_submit), text="Submit", html_encode=true, html_name}).
+-record(restful_reset, {?ELEMENT_BASE(element_restful_reset), text="Cancel", html_encode=true, html_name}).
+-record(restful_upload, {?ELEMENT_BASE(element_restful_upload), text="Submit", html_encode=true, html_name, maxlength, next}).
 -record(panel, {?ELEMENT_BASE(element_panel), body="", text="", html_encode=true}).
 -record(spinner, {?ELEMENT_BASE(element_spinner), image="/nitrogen/spinner.gif"}).
 -record(image, {?ELEMENT_BASE(element_image), image="", alt}).
