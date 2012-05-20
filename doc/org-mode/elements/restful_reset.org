@@ -12,7 +12,7 @@
 ** Usage
 
 #+BEGIN_SRC erlang
-   #restful\_reset { text="Cancel!" }
+   #restful_reset { text="Cancel!" }
 #+END_SRC
 
 ** Attributes
@@ -41,8 +41,8 @@
 
    + [[./option.html][Dropdown Option]]
    
-   + [[./restful_form.org][Restful\_Form]]
+   + [[./restful_form.org][Restful Form]]
 
-   + [[./restful_submit.org][Restful\_Submit]]
+   + [[./restful_submit.org][Restful Submit]]
 
-   + [[./restful_upload.org][Restful\_Upload]]
+   + [[./restful_upload.org][Restful Upload]]

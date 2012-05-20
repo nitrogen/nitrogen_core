@@ -6,13 +6,13 @@
 #+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | Elements | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
 
 * Restful Submit Element #restful\_submit{}
-  The restful\_submit element produces an input field of type submit
+  The restful\_submit element produces an input field of type submit.
   When clicked, the restful\_submit field submit the surrounding form.
 
 ** Usage
 
 #+BEGIN_SRC erlang
-   #restful\_submit { text="Go!" }
+   #restful_submit { text="Go!" }
 #+END_SRC
 
 ** Attributes
@@ -41,8 +41,8 @@
 
    + [[./option.html][Dropdown Option]]
    
-   + [[./restful_form.org][Restful\_Form]]
+   + [[./restful_form.org][Restful Form]]
 
-   + [[./restful_reset.org][Restful\_Reset]]
+   + [[./restful_reset.org][Restful Reset]]
 
-   + [[./restful_upload.org][Restful\_Upload]]
+   + [[./restful_upload.org][Restful Upload]]

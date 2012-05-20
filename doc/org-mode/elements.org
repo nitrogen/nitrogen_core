@@ -40,10 +40,10 @@
   + [[./elements/spinner.org][AJAX Spinner]]
 * RestfulElements
   + [[./elements/restful_overview.org][Overview]]
-  + [[./elements/restful_form.org][Restful\_Form]]
-  + [[./elements/restful_submit.org][Restful\_Submit]]
-  + [[./restful_reset.org][Restful\_Reset]]
-  + [[./elements/restful_upload.org][Restful\_Upload]]
+  + [[./elements/restful_form.org][Restful Form]]
+  + [[./elements/restful_submit.org][Restful Submit]]
+  + [[./elements/restful_reset.org][Restful Reset]]
+  + [[./elements/restful_upload.org][Restful Upload]]
 * Other
   + [[./elements/bind.org][Bind]]
   + [[./elements/file.org][File]]

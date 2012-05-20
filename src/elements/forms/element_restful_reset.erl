@@ -9,8 +9,6 @@
 reflect() -> record_info(fields, restful_reset).
 
 render_element(Record) ->
-    ID = Record#restful_reset.id,
-    Anchor = Record#restful_reset.anchor,
     Value = ["  ", wf:html_encode(Record#restful_reset.text, Record#restful_reset.html_encode), "  "], 
     wf_tags:emit_tag(input, [
         {type,  reset},

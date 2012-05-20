@@ -50,9 +50,9 @@
 
    + [[./option.html][Dropdown Option]]
    
-   + [[./restful_submit.org][Restful\_Submit]]
+   + [[./restful_submit.org][Restful Submit]]
 
-   + [[./restful_reset.org][Restful\_Reset]]
+   + [[./restful_reset.org][Restful Reset]]
 
-   + [[./restful_upload.org][Restful\_Upload]]
+   + [[./restful_upload.org][Restful Upload]]
 
