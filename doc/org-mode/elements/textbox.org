@@ -30,6 +30,8 @@
       If set, pressing the enter key in the textbox will automatically
       initiate a Nitrogen postback with the supplied term.
 
+   + html\_name - (/string/) :: The name attribute of the textbox.
+
 ** See Also
 
    + [[./base.html][base element]]

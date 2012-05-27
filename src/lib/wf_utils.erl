@@ -12,7 +12,10 @@
     coalesce/1,
     is_process_alive/1,
     debug/0, break/0,
-    get_elementbase/1, get_actionbase/1, get_validatorbase/1, replace_with_base/2
+    get_elementbase/1, get_actionbase/1, get_validatorbase/1, replace_with_base/2,
+    indexof/2,
+    replace_field/4,
+    get_field/3
 ]).
 
 -define(COPY_TO_BASERECORD(Name, Size, Record),
@@ -136,3 +139,18 @@ debug() ->
     i:ib(?MODULE, break, 0).
 
 break() -> ok.
+
+indexof(Key, Fields) -> indexof(Key, Fields, 2).
+indexof(_Key, [], _N) -> undefined;
+indexof(Key, [Key|_T], N) -> N;
+indexof(Key, [_|T], N) -> indexof(Key, T, N + 1).
+
+replace_field(Key, Value, Fields, Rec) ->
+	N = indexof(Key, Fields),
+	setelement(N, Rec, Value).
+
+get_field(Key, Fields, Rec) ->
+	case indexof(Key, Fields) of
+		undefined -> undefined;
+		N -> element(N, Rec)
+	end.

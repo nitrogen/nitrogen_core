@@ -17,8 +17,8 @@
   module,     % The module that should handle the event
   tag,        % An Erlang term that is passed along with the event
   type,       % The type of event postback, comet, continuation, upload
-	anchor,     % The element id to which trigger and target are relative.
-	validation_group % The validation group that should be run when this event is fired.
+  anchor,     % The element id to which trigger and target are relative.
+  validation_group % The validation group that should be run when this event is fired.
 }).
 
 % Handlers Context-
@@ -85,16 +85,20 @@
 -record(span, {?ELEMENT_BASE(element_span), body="", text="", html_encode=true}).
 -record(button, {?ELEMENT_BASE(element_button), text="Button", html_encode=true, postback, delegate}).
 -record(literal, {?ELEMENT_BASE(element_literal), text="", html_encode=true}).
--record(textbox, {?ELEMENT_BASE(element_textbox), text="", maxlength="", html_encode=true, next, postback, delegate}).
--record(hidden, {?ELEMENT_BASE(element_hidden), text="", html_encode=true}).
--record(textarea, {?ELEMENT_BASE(element_textarea), text="", html_encode=true}).
+-record(textbox, {?ELEMENT_BASE(element_textbox), html_name, text="", maxlength="", html_encode=true, next, postback, delegate}).
+-record(hidden, {?ELEMENT_BASE(element_hidden), html_name, text="", html_encode=true}).
+-record(textarea, {?ELEMENT_BASE(element_textarea), html_name, text="", html_encode=true}).
 -record(datepicker_textbox, {?ELEMENT_BASE(element_datepicker_textbox), text="", next, html_encode=true, validators=[], options = [{dateFormat, "yy-mm-dd"}] }).
--record(dropdown, {?ELEMENT_BASE(element_dropdown), options=[], html_encode=true, postback, delegate, value}).
+-record(dropdown, {?ELEMENT_BASE(element_dropdown), html_name, options=[], html_encode=true, postback, delegate, value}).
 -record(option, { text="", value=undefined, selected=false }).
--record(checkbox, {?ELEMENT_BASE(element_checkbox), text="", html_encode=true, checked=false, value="on", postback, delegate}).
+-record(checkbox, {?ELEMENT_BASE(element_checkbox), html_name, text="", html_encode=true, checked=false, value="on", postback, delegate}).
 -record(radiogroup, {?ELEMENT_BASE(element_radiogroup), body=[]}).
--record(radio, {?ELEMENT_BASE(element_radio), text="", html_encode=true, value, name, checked=false, postback, delegate}).
--record(password, {?ELEMENT_BASE(element_password), text="", html_encode=true, next, postback, delegate}).
+-record(radio, {?ELEMENT_BASE(element_radio), html_name, text="", html_encode=true, value, name, checked=false, postback, delegate}).
+-record(password, {?ELEMENT_BASE(element_password), html_name, text="", html_encode=true, next, postback, delegate}).
+-record(restful_form, {?ELEMENT_BASE(element_restful_form), method="POST", action, html_name, enctype, body=[]}).
+-record(restful_submit, {?ELEMENT_BASE(element_restful_submit), text="Submit", html_encode=true, html_name}).
+-record(restful_reset, {?ELEMENT_BASE(element_restful_reset), text="Cancel", html_encode=true, html_name}).
+-record(restful_upload, {?ELEMENT_BASE(element_restful_upload), html_encode=true, html_name}).
 -record(panel, {?ELEMENT_BASE(element_panel), body="", text="", html_encode=true}).
 -record(spinner, {?ELEMENT_BASE(element_spinner), image="/nitrogen/spinner.gif"}).
 -record(image, {?ELEMENT_BASE(element_image), image="", alt}).
