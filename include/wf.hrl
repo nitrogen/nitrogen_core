@@ -124,7 +124,7 @@
 -record(upload, {?ELEMENT_BASE(element_upload), delegate, tag, show_button=true, button_text="Upload" }).
 -record(sparkline, {?ELEMENT_BASE(element_sparkline), type, values, options }).
 -record(textbox_autocomplete, {?ELEMENT_BASE(element_textbox_autocomplete), tag, text="", minLength=2, delay=300, html_encode=true, next, postback, delegate=undefined }).
-
+-record(recaptcha, {?ELEMENT_BASE(element_recaptcha), captcha_opts=[], btn_label="Check!", delegate, fail_body="Please try again!"}).
 %% HTML5 semantic elements
 -record(section, {?ELEMENT_BASE(element_section), body=""}).
 -record(nav, {?ELEMENT_BASE(element_nav), body=""}).
