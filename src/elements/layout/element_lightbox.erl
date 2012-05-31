@@ -10,6 +10,7 @@ reflect() -> record_info(fields, lightbox).
 
 render_element(Record) -> 
     Panel = #panel {
+        html_id=Record#lightbox.html_id,
         id=Record#lightbox.id,
         anchor=Record#lightbox.anchor,
         class=[lightbox, Record#lightbox.class],

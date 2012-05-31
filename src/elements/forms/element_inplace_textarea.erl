@@ -36,6 +36,7 @@ render_element(Record) ->
     % Create the view...
     Text = Record#inplace_textarea.text,
     Terms = #panel { 
+        html_id=Record#inplace_textarea.html_id,
         class=[inplace_textbox, Record#inplace_textarea.class],
         style=Record#inplace_textarea.style,
         body = [

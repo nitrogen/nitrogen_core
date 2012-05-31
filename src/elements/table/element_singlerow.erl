@@ -10,6 +10,7 @@ reflect() -> record_info(fields, singlerow).
 
 render_element(Record) -> 
     Table = #table {
+        html_id=Record#singlerow.html_id,
         id=Record#singlerow.id,
         anchor=Record#singlerow.anchor,
         class=[singlerow, Record#singlerow.class],

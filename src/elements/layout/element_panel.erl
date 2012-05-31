@@ -15,6 +15,7 @@ render_element(Record) ->
         Record#panel.body
     ],
     wf_tags:emit_tag('div', Body, [
+        {id, Record#panel.html_id},
         {class, ["panel", Record#panel.class]},
         {style, Record#panel.style},
         {'data-role', Record#panel.data_role}
