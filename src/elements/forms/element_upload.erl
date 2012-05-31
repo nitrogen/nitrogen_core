@@ -97,7 +97,7 @@ render_element(Record) ->
 
         wf_tags:emit_tag(input, [
             {name, file},
-            {multuple,Multiple},
+            {multiple,Multiple},
             {class, [no_postback,FileInputID|Anchor]},
 			{id, FileInputID},
             {type, file}
