@@ -23,7 +23,18 @@
 	TagName =/= 'script' andalso
     TagName =/= 'iframe')).
 
--export ([emit_tag/2, emit_tag/3]).
+-export ([emit_tag/2, emit_tag/3, html_name/2]).
+
+html_name(Id, Name)
+  when Id =:= [] orelse
+       Id =:= undefined ->
+    html_name(wf_render_elements:temp_id(), Name);
+html_name(Id, Name) ->
+    case Name of
+        undefined -> {name, Id};
+        ""        -> {name, Id};
+        Name      -> {name, Name}
+    end.
 
 %%%  Empty tags %%%
 

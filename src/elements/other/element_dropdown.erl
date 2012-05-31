@@ -31,7 +31,7 @@ render_element(Record) ->
         {class, [dropdown, Record#dropdown.class]},
         {style, Record#dropdown.style},
         {'data-role', Record#dropdown.data_role},
-	{id, Record#dropdown.html_id}
+        {name, Record#dropdown.html_name}
     ]).
 
 create_option(X, HtmlEncode) ->

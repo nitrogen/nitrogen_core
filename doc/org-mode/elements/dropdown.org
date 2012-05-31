@@ -32,6 +32,8 @@ The dropdown element produces an HTML dropdown.
 
    + value - (/string/) :: If set, the option matching this value will be selected by default.
 
+   + html\_name - (/string/) :: The name attribute of the dropdownbox
+
 ** See Also
 
    + [[./base.html][base element]]

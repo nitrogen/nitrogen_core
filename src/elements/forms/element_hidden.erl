@@ -14,5 +14,6 @@ render_element(Record) ->
         {id, Record#hidden.html_id},
         {class, Record#hidden.class},
         {type, hidden},
+        {name, Record#hidden.html_name},
         {value, Value}
     ]).
