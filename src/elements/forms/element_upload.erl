@@ -38,7 +38,7 @@ render_element(Record) ->
     Anchor = Record#upload.anchor,
     Multiple = Record#upload.multiple,
     Droppable = Record#upload.droppable,
-    
+    DroppableText = Record#upload.droppable_text,
     FileInputText = Record#upload.file_text,
     ShowButton = Record#upload.show_button,
     ButtonText = Record#upload.button_text,
@@ -87,7 +87,7 @@ render_element(Record) ->
             body=[
                 #panel{
                     class=[dropzone,'ui-corner-all'],
-                    text="Drop Files Here"
+                    text=DroppableText
                 }
             ]
         },
