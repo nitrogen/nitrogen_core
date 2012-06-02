@@ -80,6 +80,8 @@
 -record(p, {?ELEMENT_BASE(element_p), body="", text="", html_encode=true}).
 -record(label, {?ELEMENT_BASE(element_label), body="", text="", html_encode=true, for=""}).
 -record(pre, {?ELEMENT_BASE(element_pre), text="", html_encode=true}).
+-record(strong, {?ELEMENT_BASE(element_strong), body="", text="", html_encode=true}).
+-record(em, {?ELEMENT_BASE(element_em), body="", text="", html_encode=true}).
 -record(value, {?ELEMENT_BASE(element_value), text="", html_encode=true}).
 -record(link, {?ELEMENT_BASE(element_link), title = "", text="", body="", new=false, html_encode=true, url="javascript:", postback, delegate}).
 -record(email_link, {?ELEMENT_BASE(element_email_link), title="",text="",body="",html_encode=true,email=""}).
