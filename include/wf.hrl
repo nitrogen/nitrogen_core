@@ -8,7 +8,7 @@
 	series_id,   % A unique ID assigned to the first request which stays constant on repeated requests.
 	module,      % The requested page module
 	path_info,   % Any extra info passed with the request
-	async_mode= comet % {poll, Interval} or comet 
+	async_mode= comet % {poll, Interval} or comet
 }).
 
 % Event Information. A serialized version of this record
@@ -39,7 +39,7 @@
 	response_bridge,     % Holds the simple_bridge response object
 	anchor=undefined,    % Holds the unique ID of the current anchor element.
 	data=[],             % Holds whatever the page_module:main/1 method returns: HTML, Elements, Binary, etc..
-	queued_actions=[],   % List of actions queued in main/1, event/2, or when rendering elements.	
+	queued_actions=[],   % List of actions queued in main/1, event/2, or when rendering elements.
 
 	% These are all serialized, sent to the browser
 	% and de-serialized on each request.
@@ -79,6 +79,7 @@
 -record(hr, {?ELEMENT_BASE(element_hr) }).
 -record(p, {?ELEMENT_BASE(element_p), body="", text="", html_encode=true}).
 -record(label, {?ELEMENT_BASE(element_label), body="", text="", html_encode=true, for=""}).
+-record(pre, {?ELEMENT_BASE(element_pre), text="", html_encode=true}).
 -record(value, {?ELEMENT_BASE(element_value), text="", html_encode=true}).
 -record(link, {?ELEMENT_BASE(element_link), title = "", text="", body="", new=false, html_encode=true, url="javascript:", postback, delegate}).
 -record(email_link, {?ELEMENT_BASE(element_email_link), title="",text="",body="",html_encode=true,email=""}).
@@ -110,7 +111,7 @@
 -record(tablerow, {?ELEMENT_BASE(element_tablerow), cells}).
 -record(tableheader, {?ELEMENT_BASE(element_tableheader), text="", html_encode=true, body="", align="left", valign="middle", colspan=1, rowspan=1}).
 -record(tablecell, {?ELEMENT_BASE(element_tablecell), text="", html_encode=true, body="", align="left", valign="middle", colspan=1, rowspan=1}).
--record(singlerow, {?ELEMENT_BASE(element_singlerow), cells}). 
+-record(singlerow, {?ELEMENT_BASE(element_singlerow), cells}).
 -record(file, {?ELEMENT_BASE(element_file), file}).
 -record(flash, {?ELEMENT_BASE(element_flash)}).
 -record(placeholder, {?ELEMENT_BASE(element_placeholder), body=[]}).
