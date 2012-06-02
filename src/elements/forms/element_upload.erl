@@ -38,7 +38,8 @@ render_element(Record) ->
     Anchor = Record#upload.anchor,
 	Multiple = Record#upload.multiple,
     Droppable = Record#upload.droppable,
-    
+    DroppableText = Record#upload.droppable_text,
+    FileInputText = Record#upload.file_text,
     ShowButton = Record#upload.show_button,
     ButtonText = Record#upload.button_text,
     StartedTag = {upload_started, Record},
@@ -49,6 +50,7 @@ render_element(Record) ->
     DropID = wf:temp_id(),
     DropListingID = wf:temp_id(),
     FileInputID = wf:temp_id(),
+    FakeFileInputID = wf:temp_id(),
 
 	Param = [
 		{droppable,Droppable},
@@ -71,6 +73,11 @@ render_element(Record) ->
 
     wf:wire(UploadJS),
 
+    % Set the dimensions of the file input element the same as
+    % faked file input button has.
+    wf:wire(wf:f("jQuery('#~s').width(jQuery('#~s').width()); jQuery('#~s').height(jQuery('#~s').height());",
+        [FileInputID, FakeFileInputID, FileInputID, FakeFileInputID])),
+
     % Render the controls and hidden iframe...
     FormContent = [
         #panel{
@@ -80,7 +87,7 @@ render_element(Record) ->
             body=[
                 #panel{
                     class=[dropzone,'ui-corner-all'],
-                    text="Drop Files Here"
+                    text=DroppableText
                 }
             ]
         },
@@ -95,13 +102,34 @@ render_element(Record) ->
             class=upload_droplist
         },
 
-        wf_tags:emit_tag(input, [
-            {name, file},
-            {multiple,Multiple},
-            {class, [no_postback,FileInputID|Anchor]},
-			{id, FileInputID},
-            {type, file}
-        ]),	
+%%  ORIGINAL!
+%%        wf_tags:emit_tag(input, [
+%%            {name, file},
+%%            {multiple,Multiple},
+%%            {class, [no_postback,FileInputID|Anchor]},
+%%            {id, FileInputID},
+%%            {type, file}
+%%        ]),	
+        #panel{
+            style="position: relative;",
+            body=[
+                wf_tags:emit_tag(input, [
+                    {type, button},
+                    {style, "margin: 2px; border: 2px outset rgb(221, 221, 221); padding: 1px 6px; position: absolute; top: 0px; left: 0px; z-index: 1;"},
+                    {value, FileInputText},
+                    {id, FakeFileInputID}
+                ]),
+
+                wf_tags:emit_tag(input, [
+                    {name, file},
+                    {multiple, Multiple},
+                    {class, [no_postback, FileInputID|Anchor]},
+                    {id, FileInputID},
+                    {type, file},
+                    {style, "margin: 2px; border: 2px outset rgb(221, 221, 221); padding: 1px 6px; opacity: 0; filter:alpha(opacity: 0); position: relative; z-index: 2;"}
+                ])
+            ]
+        },
 
         wf_tags:emit_tag(input, [
             {name, eventContext},
