@@ -1,0 +1,92 @@
+#+TITLE: Recaptcha Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Steffen Panning
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | Elements | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
+
+* Recaptcha Element - #recaptcha{}
+
+** Overview
+
+   The recaptcha element produces a recaptcha element.
+   For more information about recaptchas you may refer to
+   https://developers.google.com/recaptcha/
+
+   The element is rendered and evaluated by an external library.
+
+   The captcha is processed as follows:
+   * The user solves the captcha.
+   * If the solution is wrong the captcha gets refreshed until the user
+      gives up or the solution is correct.
+   * If the solution is correct the Page:event callback is called.
+   * The return value of the Page:event callback is evaluated as
+      follows:
+      + If the value is 'ok' nothing is done.
+      + If the return value is 'error', the captcha gets refreshed.
+      + If the return value is {'error', Msg}, the captcha gets
+        refreshed and the Msg is shown as the error message.
+
+** Preparations
+
+   Before you can use the the recaptcha element, you have to register at
+   https://www.google.com/recaptcha/admin/create.
+
+   After that you have to enter your credentials and link information
+   into /rel/nitrogen/etc/app.config as follows:
+
+#+BEGIN_SRC erlang
+[
+ {nitrogen, [
+             {recaptcha, 
+              [{public_key, "recaptcha_public_key"},
+               {private_key, "recaptcha_private_key"},
+               {challenge_url, "http://www.google.com/recaptcha/api/challenge"},
+               {verify_url, "http://www.google.com/recaptcha/api/verify"}]}
+               ...
+ ]},
+ ...
+].
+#+END_SRC
+
+** Usage
+
+#+BEGIN_SRC erlang
+   #recaptcha { }
+#+END_SRC
+
+** Attributes
+
+All attributes are optional
+
+   + btn\_id - (/atom/) :: The button's id
+   + btn\_label - (/string/) :: The button's label
+   + captcha\_opts - (/proplist/) :: The captcha's options. For more
+        information visit
+        https://developers.google.com/recaptcha/docs/customization
+
+        custom\_theme\_widget is not supported
+   + delegate (/Module/) :: The module where the event callback gets called
+   + fail\_body (/List/)  :: The fail message. It can be a simple string
+        or an array of element_* items
+
+** Example
+Code in a page module may looks like this:
+#+BEGIN_SRC erlang
+inner_body() -> 
+    [
+        #recaptcha{id=re_captcha, captcha_opts=[{theme,white}]},
+    ].
+
+event({recaptcha, ok}) ->
+    case check_user_input() of
+        ok     -> wf:remove(re_captcha),
+                  ok;
+        error  -> {error, "FAIL!"}
+    end.
+
+user_input() ->
+%% your check routine
+.
+#+END_SRC
+
