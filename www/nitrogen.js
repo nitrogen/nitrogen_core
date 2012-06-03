@@ -465,6 +465,14 @@ NitrogenClass.prototype.$sortblock = function(el, sortOptions, sortPostbackInfo)
     objs(el).sortable(sortOptions);
 }
 
+/*** transfer content of an alien elment into a nitrogen form
+ * used in src/elements/other/element_recaptcha.erl
+ * ***/
+NitrogenClass.prototype.$from_alien = function(nativeID) {
+    var input = $("input#" + nativeID).val();
+    objs(nativeID).val(input);
+};
+
 var Nitrogen = new NitrogenClass();
 var page = document;
 Nitrogen.$event_loop();

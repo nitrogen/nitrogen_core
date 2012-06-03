@@ -8,8 +8,7 @@
 #+HTML: <div class=headline>Nitrogen Elements</div>
 
 * Base Element
-  + [[./elements/base.org][Base Element]] - All elements contain these attributes.
-
+  + [[./elements/base.org][Base Element]] - All elements contain these attributes. 
 * Layout
   + [[./elements/template.org][Template]]
   + [[./elements/panel.org][Panel]]
@@ -29,7 +28,7 @@
   + [[./elements/literal.org][Literal]]
   + [[./elements/hr.org][Horizontal Rule]]
 
-* Forms
+* Form
   + [[./elements/button.org][Button]]
   + [[./elements/textbox.org][Textbox]]
   + [[./elements/textarea.org][Textarea]]
@@ -39,7 +38,12 @@
   + [[./elements/hidden.org][Hidden Value]]
   + [[./elements/inplace_textbox.org][In-Place Textbox]]
   + [[./elements/spinner.org][AJAX Spinner]]
-
+* RestfulElements
+  + [[./elements/restful_overview.org][Overview]]
+  + [[./elements/restful_form.org][Restful Form]]
+  + [[./elements/restful_submit.org][Restful Submit]]
+  + [[./elements/restful_reset.org][Restful Reset]]
+  + [[./elements/restful_upload.org][Restful Upload]]
 * Other
   + [[./elements/bind.org][Bind]]
   + [[./elements/file.org][File]]
@@ -49,6 +53,6 @@
   + [[./elements/sortblock.org][Sort Block]]
   + [[./elements/sortitem.org][Sort Item]]
   + [[./elements/gravatar.org][Gravatar]]
-
+  + [[./elements/recaptcha.org][Recaptcha]]
 * See Also
   + [[./paths.org][Nitrogen Element Paths]]
