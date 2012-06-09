@@ -1,3 +1,4 @@
+# vim: ts=3 sw=3 et ft=org
 #+TITLE: restful_form Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Steffen Panning
@@ -15,13 +16,17 @@
 ** Usage
 
 #+BEGIN_SRC erlang
-   #restful_form { method=post|get, action=[]|url, enctype=EncType,
-                   body=[FormElement|FormElements]}
+   #restful_form { 
+      method=post|get,
+      action="/formdest",
+      enctype="multipart/form-data",
+      body=FormElements
+   }
 #+END_SRC
 
 ** Attributes
 
-   + method - (/string/) :: Set the request-method 
+   + method - (/string/) :: Set the request-method (typically 'post' or 'get')
 
    + action - (/string/) :: Set the target-url of the form submit. If
                             left blank, the same page module is used as

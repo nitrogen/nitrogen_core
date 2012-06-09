@@ -1,3 +1,4 @@
+# vim: ts=3 sw=3 et ft=org
 #+STYLE: <LINK href="../stylesheet.css" rel="stylesheet" type="text/css" />
 #+TITLE: Nirogen 2.x Documentation
 #+AUTHOR: Steffen Panning
@@ -16,12 +17,16 @@
 * How it works
 
   Restful requests work a little different compared to the rest of
-  nitrogen. They don't use the event mechanism. Instead you have to
+  Nitrogen. They don't use the event mechanism. Instead you have to
   render the reply either on a different page or check if
   wf:q(restful\_method) is set to "post" or "get" depending on the
   method of the form.  Form elements that don't rely on javascript are
   useable in restful\_form elements. The elements that are supported are
   described below.
+
+  Each control within a #restful\_form{} element will submit its Nitrogen
+  id as the name of the field, unless overridden by specifying an html\_name
+  on the restful elements.
 
 * Replaced and new elements
 
@@ -45,10 +50,10 @@
   + [[./dropdown.org][Dropdown]]
   + [[./password.org][Password Box]]
   + [[./hidden.org][Hidden Value]]
-  + Radio Button
+  + [[./radio.org][Radio Button]]
 
 * No support for validators
-  Validators are not supported for restful\_submit actions.
+  Validators are not currently supported for restful\_submit actions, so be sure extra sure to check your inputs.
 
 * Example
 #+BEGIN_SRC erlang
@@ -59,7 +64,9 @@
         #table{rows=[
             #tablerow{cells=[
                 #tablecell{text="text_input"},
-                #tablecell{text=wf:q(text_input)}]}];
+                #tablecell{text=wf:q(text_input)}
+            ]}
+         ]};
     _else -> [
         % this code is executed when restful_method is "get" 
         % or undefined
@@ -68,10 +75,12 @@
            #table{rows=[
                 #tablerow{cells=[
                     #tablecell{text="text_input"},
-                    #tablecell{body=[#textbox{id=text_input}]}]}
+                    #tablecell{body=[#textbox{id=text_input}]}
+               ]}
             ]},
             #restful_reset{},
-            #restful_submit{}]}
+            #restful_submit{}
+         ]}
     ]
   end
 #+END_SRC
