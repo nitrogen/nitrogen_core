@@ -1,11 +1,11 @@
-#+TITLE: Restful Upload Element
+#+TITLE: RESTful Upload Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Steffen Panning
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
 #+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | Elements | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
 
-* Restful Upload Element - #restful\_upload {}
+* RESTful Upload Element - #restful\_upload {}
   The button element produces an HTML input element that has type
   attribute 'file'. The input element represents a file-choose dialog.
   When the restful\_submit element is clicked, the chosen file will be
@@ -51,9 +51,9 @@
 
    + [[./option.html][Dropdown Option]]
 
-   + [[./restful_form.org][Restful Form]]
+   + [[./restful_form.org][RESTful Form]]
 
-   + [[./restful_reset.org][Restful Reset]]
+   + [[./restful_reset.org][RESTful Reset]]
 
-   + [[./restful_upload.org][Restful Upload]]
+   + [[./restful_upload.org][RESTful Upload]]
     

@@ -5,7 +5,7 @@
 #+EMAIL: 
 #+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | Elements | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
 
-* Restful Submit Element #restful\_submit{}
+* RESTful Submit Element #restful\_submit{}
   The restful\_submit element produces an input field of type submit.
   When clicked, the restful\_submit field submit the surrounding form.
 
@@ -41,8 +41,8 @@
 
    + [[./option.html][Dropdown Option]]
    
-   + [[./restful_form.org][Restful Form]]
+   + [[./restful_form.org][RESTful Form]]
 
-   + [[./restful_reset.org][Restful Reset]]
+   + [[./restful_reset.org][RESTful Reset]]
 
-   + [[./restful_upload.org][Restful Upload]]
+   + [[./restful_upload.org][RESTful Upload]]

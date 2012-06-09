@@ -51,11 +51,11 @@
   + [[./elements/mobile_grid_block][Mobile Grid Block]]
 
 * RESTful Elements
-  + [[./elements/restful_overview.org][Overview]]
-  + [[./elements/restful_form.org][Restful Form]]
-  + [[./elements/restful_submit.org][Restful Submit]]
-  + [[./elements/restful_reset.org][Restful Reset]]
-  + [[./elements/restful_upload.org][Restful Upload]]
+  + [[./elements/restful_overview.org][RESTful Overview]]
+  + [[./elements/restful_form.org][RESTful Form]]
+  + [[./elements/restful_submit.org][RESTful Submit]]
+  + [[./elements/restful_reset.org][RESTful Reset]]
+  + [[./elements/restful_upload.org][RESTful Upload]]
 
 * Other
   + [[./elements/bind.org][Bind]]

@@ -6,11 +6,11 @@
 #+EMAIL: 
 #+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | Elements | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
 
-* RestfulForm Element - #restful\_form {}
+* RESTfulForm Element - #restful\_form {}
 
-  The restful\_form element produces a form element.
+  The #restful\_form{} element produces a form element.
   The form element is necessary if your website has to work without
-  javascript. It is _not_ necessary for a pure  ajax/javascript driven
+  javascript. It is _not_ necessary for a pure ajax/javascript driven
   website. 
  
 ** Usage
@@ -55,9 +55,9 @@
 
    + [[./option.html][Dropdown Option]]
    
-   + [[./restful_submit.org][Restful Submit]]
+   + [[./restful_submit.org][RESTful Submit]]
 
-   + [[./restful_reset.org][Restful Reset]]
+   + [[./restful_reset.org][RESTful Reset]]
 
-   + [[./restful_upload.org][Restful Upload]]
+   + [[./restful_upload.org][RESTful Upload]]
 
