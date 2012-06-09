@@ -1,0 +1,40 @@
+# vim: ft=org sw=3 ts=3 et
+#+TITLE: Mobile List Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Jesse Gumm (@jessegumm)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | Elements | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
+
+* Mobile List Element - #mobile_list {}
+
+This element produces a wrapper for [[http://jquerymobile.com/test/docs/lists/docs-lists.html][jQuery Mobile Listviews]].
+
+** Usage
+
+#+BEGIN_SRC erlang
+   #mobile_list { 
+      theme=d,
+      body=[
+         #mobile_listitem { ... },
+         #mobile_listitem { ... },
+         #mobile_listitem { ... }
+      ]
+   }
+#+END_SRC
+
+** Attributes
+ 
+   + inset - (/boolean/) :: Whether or not to render the list inset or outset.
+
+   + body - (/string/) :: The body of the list element, generally containing only #mobile_list{} elements.
+
+** See Also
+
+   + [[./jquery_mobile.html][jQuery mobile elements]]
+
+   + [[./base.html][base element]]
+
+   + [[./mobile_listitem.html][label element]]
+
+   + [[./list.html][list element]]

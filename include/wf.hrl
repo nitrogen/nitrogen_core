@@ -73,8 +73,8 @@
 -record(h4, {?ELEMENT_BASE(element_h4), text="", html_encode=true}).
 -record(h5, {?ELEMENT_BASE(element_h5), text="", html_encode=true}).
 -record(h6, {?ELEMENT_BASE(element_h6), text="", html_encode=true}).
--record(list, {?ELEMENT_BASE(element_list), numbered=false, body=[], data_role="", data_inset=""}).
--record(listitem, {?ELEMENT_BASE(element_listitem), body=[], text="", html_encode=true, data_role="", role="", data_theme="" }).
+-record(list, {?ELEMENT_BASE(element_list), numbered=false, body=[], data_fields=[]}).
+-record(listitem, {?ELEMENT_BASE(element_listitem), body=[], text="", html_encode=true, role="", data_fields=[] }).
 -record(br, {?ELEMENT_BASE(element_br) }).
 -record(hr, {?ELEMENT_BASE(element_hr) }).
 -record(p, {?ELEMENT_BASE(element_p), body="", text="", html_encode=true}).
@@ -94,7 +94,7 @@
 -record(textarea, {?ELEMENT_BASE(element_textarea), text="", html_encode=true, html_name}).
 -record(range, {?ELEMENT_BASE(element_range), min=0, max=100, step=1, value=0, next, postback, delegate}).
 -record(datepicker_textbox, {?ELEMENT_BASE(element_datepicker_textbox), text="", next, html_encode=true, validators=[], options = [{dateFormat, "yy-mm-dd"}] }).
--record(dropdown, {?ELEMENT_BASE(element_dropdown), options=[], html_encode=true, postback, delegate, value, data_role="", html_name}).
+-record(dropdown, {?ELEMENT_BASE(element_dropdown), options=[], html_encode=true, postback, delegate, value, data_fields=[], html_name}).
 -record(option, { text="", value=undefined, selected=false, show_if=true }).
 -record(checkbox, {?ELEMENT_BASE(element_checkbox), text="", html_encode=true, checked=false, value="on", postback, delegate, html_name}).
 -record(radiogroup, {?ELEMENT_BASE(element_radiogroup), body=[]}).
@@ -104,7 +104,7 @@
 -record(restful_submit, {?ELEMENT_BASE(element_restful_submit), text="Submit", html_encode=true, html_name}).
 -record(restful_reset, {?ELEMENT_BASE(element_restful_reset), text="Cancel", html_encode=true, html_name}).
 -record(restful_upload, {?ELEMENT_BASE(element_restful_upload), html_encode=true, html_name}).
--record(panel, {?ELEMENT_BASE(element_panel), body="", text="", html_encode=true, data_role=""}).
+-record(panel, {?ELEMENT_BASE(element_panel), body="", text="", html_encode=true, data_fields=[]}).
 -record(fieldset, {?ELEMENT_BASE(element_fieldset), body="", text="", html_encode=true, legend_body="", legend_text="", legend_html_encode=true}).
 -record(spinner, {?ELEMENT_BASE(element_spinner), image="/nitrogen/spinner.gif"}).
 -record(image, {?ELEMENT_BASE(element_image), image="", alt}).
@@ -132,7 +132,19 @@
 -record(wizard, {?ELEMENT_BASE(element_wizard), tag, titles, steps, next="Next", back="Back", finish="Finish",show_progress=true,progress_step="Step ",progress_of=" of "}).
 -record(sparkline, {?ELEMENT_BASE(element_sparkline), type, values, options }).
 -record(textbox_autocomplete, {?ELEMENT_BASE(element_textbox_autocomplete), tag, text="", minLength=2, delay=300, html_encode=true, next, postback, delegate=undefined }).
--record(recaptcha, {?ELEMENT_BASE(element_recaptcha), captcha_opts=[], btn_label="Check!", delegate, fail_body="Please try again!"}).
+-record(recaptcha, {?ELEMENT_BASE(element_recaptcha), captcha_opts=[], button_id, button_label="Check!", delegate, fail_body="Please try again!"}).
+
+%% Mobile Shortcut elements
+-record(mobile_list, {?ELEMENT_BASE(element_mobile_list), body=[], data_fields=[], theme, inset=true}).
+-record(mobile_list_divider, {?ELEMENT_BASE(element_mobile_list_divider), data_fields=[], theme, text="", role=heading}).
+-record(mobile_listitem, {?ELEMENT_BASE(element_mobile_listitem), data_fields=[], text="", body="", theme=""}).
+-record(mobile_slider, {?ELEMENT_BASE(element_mobile_slider), data_fields=[], on_text="On", on_value="on", off_text="Off", off_value="off", selected="on, postback"}).
+-record(mobile_collapsible, {?ELEMENT_BASE(element_mobile_collapsible), data_fields=[], header_theme, content_theme, header_text="", content_body=[], content_text="", header_size=3, mini=false, collapsed=true}).
+-record(mobile_collapsible_set, {?ELEMENT_BASE(element_mobile_collapsible_set), data_fields=[], header_theme, content_theme, mini=false}).
+-record(mobile_grid, {?ELEMENT_BASE(element_mobile_grid), data_fields=[], columns=2, blocks=[]}).
+-record(mobile_grid_block, {?ELEMENT_BASE(element_grid_block), data_fields=[], text="", body=[]}).
+
+		
 %% HTML5 semantic elements
 -record(section, {?ELEMENT_BASE(element_section), body=""}).
 -record(nav, {?ELEMENT_BASE(element_nav), body=""}).

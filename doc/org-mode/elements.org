@@ -1,9 +1,9 @@
+# vim: ts=2 sw=2 et ft=org
 #+STYLE: <LINK href="stylesheet.css" rel="stylesheet" type="text/css" />
 #+TITLE: Nitrogen 2.x Documentation
 #+AUTHOR: Rusty Klophaus (@rklophaus)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-
 #+TEXT: [[file:./index.org][Getting Started]] | [[file:./api.org][API]] | Elements | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | [[file:./handlers.org][Handlers]] | [[file:./about.org][About]]
 #+HTML: <div class=headline>Nitrogen Elements</div>
 
@@ -19,6 +19,7 @@
   + [[./elements/lightbox.org][Lightbox]]
   + [[./elements/label.org][Label]]
   + [[./elements/value.org][Value]]
+  + [[./elements/list.org][Lists]] | [[./elements/listitem.org][List Items]]
 
 * HTML
   + [[./elements/h1.org][Heading 1]] | [[./elements/h2.org][Heading 2]] | [[./elements/h3.org][Heading 3]] | [[./elements/h4.org][Heading 4]]
@@ -39,12 +40,23 @@
   + [[./elements/hidden.org][Hidden Value]]
   + [[./elements/inplace_textbox.org][In-Place Textbox]]
   + [[./elements/spinner.org][AJAX Spinner]]
-* RestfulElements
+
+* Mobile Elements
+  + [[./elements/jquery_mobile.org][jQuery Mobile Elements]]
+  + [[./elements/mobile_list.org][Mobile List]] | [[./elements/mobile_list_item.org][Mobile List Item]] | [[./elements/mobile_list_divider][Mobile List Divider]]
+  + [[./elements/mobile_slider][Mobile Slider]]
+  + [[./elements/mobile_collapsible][Mobile Collapsible]]
+  + [[./elements/mobile_collapsible_set][Mobile Collapsible Set]]
+  + [[./elements/mobile_grid][Mobile Grid]]
+  + [[./elements/mobile_grid_block][Mobile Grid Block]]
+
+* RESTful Elements
   + [[./elements/restful_overview.org][Overview]]
   + [[./elements/restful_form.org][Restful Form]]
   + [[./elements/restful_submit.org][Restful Submit]]
   + [[./elements/restful_reset.org][Restful Reset]]
   + [[./elements/restful_upload.org][Restful Upload]]
+
 * Other
   + [[./elements/bind.org][Bind]]
   + [[./elements/file.org][File]]
@@ -55,5 +67,8 @@
   + [[./elements/sortitem.org][Sort Item]]
   + [[./elements/gravatar.org][Gravatar]]
   + [[./elements/recaptcha.org][Recaptcha]]
+
 * See Also
   + [[./paths.org][Nitrogen Element Paths]]
+  + [[./jquery_mobile_integration.org][jQuery Mobile Integration]]
+

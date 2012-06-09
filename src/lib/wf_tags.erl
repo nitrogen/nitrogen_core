@@ -77,12 +77,19 @@ write_props(Props) ->
 display_property({Prop}) when is_atom(Prop) ->
     [" ", atom_to_list(Prop)];
 
+%% Data fields are special in HTML5.
+%% In this case, the DataTags value is expected to be a
+%% proplist of [{field,Value}]. Emitted will be data-field="value".
+%% "data-" gets prefixed on the fieldnames.
+display_property({data_fields,DataTags}) ->
+	[" ",data_tags(DataTags)];
+
 display_property({Prop, V}) when is_atom(Prop) ->
     display_property({atom_to_list(Prop), V});
 
 %% Most HTML tags don't care about a property with an empty string as its value
-%% Except for the "value" tag on <option> and other form tags
-%% In this case, we emit the 'value' propery even if it's an empty value
+%% Except for the "value" tag on <option> and other form tags.
+%% In this case, we emit the 'value' propery even if it's an empty value.
 display_property({Prop, []}) when Prop =/= "value" -> "";    
 
 display_property({Prop, Value}) when is_integer(Value); is_atom(Value); is_float(Value) ->
@@ -100,3 +107,10 @@ display_property({Prop, Values}) ->
     end,
     [" ", Prop, "=\"", StrValues2, "\""].
 
+%% 
+data_tags(Data) ->
+	[display_property({data_tag(FieldName),Value}) || {FieldName,Value} <- Data].
+
+data_tag(FieldName) ->
+	DataField = wf:to_binary(FieldName),
+	<<"data-",DataField/binary>>.

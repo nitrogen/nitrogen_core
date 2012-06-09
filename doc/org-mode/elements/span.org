@@ -22,6 +22,8 @@
 
    + html\_encode - (/boolean/) :: Set to true to safely html-encode the displayed text.
 
+   + body - (/Nitrogen element or list of elements./) :: Set the element or elements that will be rendered within this panel.
+
 ** See Also
 
    + [[./base.html][base element]]

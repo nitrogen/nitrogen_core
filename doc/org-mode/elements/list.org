@@ -1,33 +1,36 @@
-
-#+TITLE: Value Element
+# vim: sw=3 ts=3 et
+#+TITLE: List Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
-#+AUTHOR: Rusty Klophaus (@rklophaus)
+#+AUTHOR: Jesse Gumm (@jessegumm)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
 #+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | Elements | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
 
-* Value Element - #value {}
+* List Element - #list {}
 
-The value element produces an HTML span with a CSS type of 'value'.
+The list element produces an HTML list element (<ol> and <ul>).
 
 ** Usage
 
 #+BEGIN_SRC erlang
-   #value { text="Some text." }
+   #list{
+	
 #+END_SRC
 
 ** Attributes
-
-   + text - (/string/) :: The text to display.
+  
+   + numbered - (/boolean/) :: Set to true to make this a numbered list, otherwise it will be typical bullet list.
+ 
+   + body - (/list of Nitrogen #listitem{} elements/) :: A list of listitems elements
 
    + html\_encode - (/boolean/) :: Set to true to safely html-encode the displayed value.
+
+   + role - (/atom or string/) :: Set the [[http://www.w3.org/TR/xhtml-role/][XHTML Role attribute]].
 
 ** See Also
 
    + [[./base.html][base element]]
 
-   + [[./label.html][label element]]
+   + [[./listitem.html][listitem element]] 
 
-   + [[./span.html][span element]]
-
- 
+   + [[./mobile_list.html][mobile_list element]]
