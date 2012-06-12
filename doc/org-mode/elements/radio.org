@@ -1,0 +1,50 @@
+# vim: ts=3 sw=3 et ft=org
+#+TITLE: Radio Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Rusty Klophaus (@rklophaus)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | Elements | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
+
+* Radio Element - #checkbox {}
+
+  The radio element produces an HTML radio button.
+
+** Usage
+
+#+BEGIN_SRC erlang
+   [
+      #radio { id=checkbox1, text="Check Me", checked=true },
+      #radio { id=
+#+END_SRC
+
+** Attributes
+
+   + text - (/string/) :: The checkbox's title.
+
+   + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
+
+   + postback - (/Erlang term/) :: If set, clicking on the checkbox will initiate a Nitrogen postback with the supplied term.
+
+   + checked - (/boolean/) :: True if the checkbox should be checked.
+
+   + html\_name - (/string/) :: The name attribute of the checkbox.
+
+** See Also
+
+   + [[./base.html][base]]
+
+   + [[./button.html][Button]]
+
+   + [[./link.html][Link]]
+
+   + [[./textbox.html][Textbox]]
+
+   + [[./password.html][Password]]
+
+   + [[./textarea.html][Textarea]]
+
+   + [[./dropdown.html][Dropdown]]
+
+   + [[./option.html][Dropdown Option]]
+

@@ -1,4 +1,4 @@
-# vim: sw=3 ts=3 et
+# vim: sw=3 ts=3 et ft=org
 #+TITLE: List Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Jesse Gumm (@jessegumm)
@@ -14,6 +14,13 @@ The list element produces an HTML list element (<ol> and <ul>).
 
 #+BEGIN_SRC erlang
    #list{
+      numbered=true,
+      body=[
+         #listitem{ ... },
+         #listitem{ ... },
+         #listitem{ ... } 
+      ]
+   }.
 	
 #+END_SRC
 
@@ -22,8 +29,6 @@ The list element produces an HTML list element (<ol> and <ul>).
    + numbered - (/boolean/) :: Set to true to make this a numbered list, otherwise it will be typical bullet list.
  
    + body - (/list of Nitrogen #listitem{} elements/) :: A list of listitems elements
-
-   + html\_encode - (/boolean/) :: Set to true to safely html-encode the displayed value.
 
    + role - (/atom or string/) :: Set the [[http://www.w3.org/TR/xhtml-role/][XHTML Role attribute]].
 
