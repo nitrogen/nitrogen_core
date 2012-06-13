@@ -21,7 +21,7 @@ render_element(Record) ->
         role=Record#mobile_list_divider.role,
         data_fields=[
             {role,"list-divider"},
-            {theme,Record#mobile_list_divider.theme},
+            {theme,Record#mobile_list_divider.theme}
             | Record#mobile_list_divider.data_fields
         ]
     }.
