@@ -1,3 +1,4 @@
+% vim: ts=4 sw=4 et
 % Nitrogen Web Framework for Erlang
 % Copyright (c) 2008-2010 Rusty Klophaus
 % See MIT-LICENSE for licensing information.
@@ -9,30 +10,39 @@
 reflect() -> record_info(fields, dropdown).
 
 render_element(Record) -> 
-    ID = Record#dropdown.id,
-    Anchor = Record#dropdown.anchor,
-    case Record#dropdown.postback of
-        undefined -> ignore;
-        Postback -> wf:wire(Anchor, #event { type=change, postback=Postback, validation_group=ID, delegate=Record#dropdown.delegate })
-    end,
 
-    case Record#dropdown.value of 
-        undefined -> ok;
-        Value -> wf:set(Anchor, Value)
-    end,
+    wire_postback(Record),
+    set_dropdown_value(Record#dropdown.anchor,Record#dropdown.value),
 
-    Options=case Record#dropdown.options of
-        undefined -> "";
-        L -> [create_option(Opt, Record#dropdown.html_encode) || Opt <- L,Opt#option.show_if==true]
-    end,
+    Options = format_options(Record#dropdown.options,Record#dropdown.html_encode),
 
     wf_tags:emit_tag(select, Options, [
         {id, Record#dropdown.html_id},
         {class, [dropdown, Record#dropdown.class]},
         {style, Record#dropdown.style},
-        {'data-role', Record#dropdown.data_role},
-        {name, Record#dropdown.html_name}
+        {name, Record#dropdown.html_name},
+        {data, Record#dropdown.data_fields}
     ]).
+
+set_dropdown_value(_,undefined) -> 
+    ok;
+set_dropdown_value(Anchor,Value) -> 
+    wf:set(Anchor,Value).
+
+wire_postback(Dropdown) when Dropdown#dropdown.postback==undefined ->
+    ignore;
+wire_postback(Dropdown) ->
+    wf:wire(Dropdown#dropdown.anchor, #event { 
+        type=change, 
+        postback=Dropdown#dropdown.postback,
+        validation_group=Dropdown#dropdown.id,
+        delegate=Dropdown#dropdown.delegate 
+    }).
+
+format_options(undefined,_) -> 
+    "";
+format_options(Opts,HtmlEncode) ->
+    [create_option(Opt, HtmlEncode) || Opt <- Opts,Opt#option.show_if==true].
 
 create_option(X, HtmlEncode) ->
     SelectedOrNot = case X#option.selected of
