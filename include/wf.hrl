@@ -136,7 +136,7 @@
 
 %% Mobile Shortcut elements
 -record(mobile_list, {?ELEMENT_BASE(element_mobile_list), body=[], data_fields=[], theme, inset=true}).
--record(mobile_list_divider, {?ELEMENT_BASE(element_mobile_list_divider), data_fields=[], theme, text="", role=heading}).
+-record(mobile_list_divider, {?ELEMENT_BASE(element_mobile_list_divider), data_fields=[], theme, text="", body="", role=heading}).
 -record(mobile_listitem, {?ELEMENT_BASE(element_mobile_listitem), data_fields=[], text="", body="", theme=""}).
 -record(mobile_slider, {?ELEMENT_BASE(element_mobile_slider), data_fields=[], on_text="On", on_value="on", off_text="Off", off_value="off", selected="on, postback"}).
 -record(mobile_collapsible, {?ELEMENT_BASE(element_mobile_collapsible), data_fields=[], header_theme, content_theme, header_text="", content_body=[], content_text="", header_size=3, mini=false, collapsed=true}).
