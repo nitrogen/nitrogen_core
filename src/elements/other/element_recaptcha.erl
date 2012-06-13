@@ -1,4 +1,5 @@
 %% -*- mode: nitrogen -*-
+%% vim: ts=4 sw=4 et
 -module (element_recaptcha).
 -include_lib("nitrogen_core/include/wf.hrl").
 -export([reflect/0, render_element/1, event/1]).
@@ -10,12 +11,12 @@ reflect() -> record_info(fields, recaptcha).
 
 render_element(#recaptcha{id=ID, class=Cl, delegate=Delegate,
                fail_body=FB, captcha_opts=COPts, 
-               btn_label=BtnLabel, btn_id=BtnId})->
+               button_label=ButtonLabel, button_id=ButtonId})->
     % Since the recaptcha is rendered outside of the nitrogen framework
     % it doesn't play along when it comes to data exchange.
     % This hack transfers the alien content into #hidden elements before
     % postback. The content is then accessible via wf:q()
-    wf:wire(BtnId, #event{type=click, actions=[
+    wf:wire(ButtonId, #event{type=click, actions=[
         % transfer happens here
         #script{script="Nitrogen.$from_alien('recaptcha_challenge_field')"},
         #script{script="Nitrogen.$from_alien('recaptcha_response_field')" }]}),
@@ -32,8 +33,8 @@ render_element(#recaptcha{id=ID, class=Cl, delegate=Delegate,
                 #panel{id=fail_msg,
                        style="visibility:hidden;float:left",
                        body=FB},
-                #button{id=BtnId, style="float:right",
-                        text=BtnLabel,
+                #button{id=ButtonId, style="float:right",
+                        text=ButtonLabel,
                         postback=Postback, delegate=?MODULE}]},
             #p{style="clear:both"}]}.
 
@@ -134,7 +135,7 @@ replace_error_message(Msg) ->
 		      style="visibility:visible;float:left",
 		      body=Msg}).
 
-parse_response(CaptchaID, Body) ->
+parse_response(_CaptchaID, Body) ->
     case string:tokens(Body, "\n") of
         ["true", "success"] -> ok;
         ["false", Error]    -> {error, Error};
