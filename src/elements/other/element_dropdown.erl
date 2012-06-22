@@ -16,13 +16,18 @@ render_element(Record) ->
 
     Options = format_options(Record#dropdown.options,Record#dropdown.html_encode),
 
+    Multiple = case Record#dropdown.multiple of
+        false -> [];
+        true -> [{multiple}]
+    end,
+
     wf_tags:emit_tag(select, Options, [
         {id, Record#dropdown.html_id},
         {class, [dropdown, Record#dropdown.class]},
         {style, Record#dropdown.style},
         {name, Record#dropdown.html_name},
         {data, Record#dropdown.data_fields}
-    ]).
+    ] ++ Multiple).
 
 set_dropdown_value(_,undefined) -> 
     ok;
