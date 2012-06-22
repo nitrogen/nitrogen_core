@@ -38,6 +38,7 @@
   + [[./elements/dropdown.org][Dropdown]] | [[./elements/option.org][Dropdown Option]]
   + [[./elements/password.org][Password Box]]
   + [[./elements/hidden.org][Hidden Value]]
+  + [[./elements/inplace.org][General In-Place Element]]
   + [[./elements/inplace_textbox.org][In-Place Textbox]]
   + [[./elements/spinner.org][AJAX Spinner]]
 

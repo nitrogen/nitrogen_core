@@ -28,6 +28,7 @@
   + [[./actions/effect.org][Effect]]
   + [[./actions/add_class.org][Add Class]]
   + [[./actions/remove_class.org][Remove Class]]
+  + [[./actions/disable.org][Disable]]
 
 * Feedback
   + [[./actions/alert.org][Alert]]
