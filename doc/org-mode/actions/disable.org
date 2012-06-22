@@ -1,0 +1,24 @@
+
+#+TITLE: Disable Action Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Milan Svoboda
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][Elements]] | Actions | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
+
+* Disable Action - #disable{}
+
+  Disable the target element.
+
+** Usage
+
+#+BEGIN_SRC erlang
+   wf:wire(myButton, #disable {})
+#+END_SRC
+
+** Attributes
+
+** See Also
+
+   + [[./base.html][base element]]
+
