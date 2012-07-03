@@ -40,6 +40,7 @@
   + [[./elements/hidden.org][Hidden Value]]
   + [[./elements/inplace.org][General In-Place Element]]
   + [[./elements/inplace_textbox.org][In-Place Textbox]]
+  + [[./elements/inplace_textarea.org][In-Place Textarea]]
   + [[./elements/spinner.org][AJAX Spinner]]
 
 * Mobile Elements

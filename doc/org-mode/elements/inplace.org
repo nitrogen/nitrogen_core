@@ -58,3 +58,6 @@
 
    + [[./base.html][base element]]
 
+   + [[./inplace_textarea.html][inplace_textarea element]]
+
+   + [[./inplace_textbox.html][inplace_textbox element]]
