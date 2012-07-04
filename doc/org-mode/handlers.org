@@ -1,14 +1,14 @@
 # vim: ts=2 sw=2 et ft=org
 #+STYLE: <LINK href="stylesheet.css" rel="stylesheet" type="text/css" />
 #+TITLE: Nitrogen 2.x Documentation
-#+AUTHOR: Jesse Gumm (@jessegumm)
+#+AUTHOR: Rusty Klophaus(@rustyio), Jesse Gumm (@jessegumm)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
 
 #+TEXT: [[file:./index.org][Getting Started]] | [[file:./api.org][API]] | [[file:./elements.org][Elements]] | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | Handlers | [[file:./about.org][About]]
 #+HTML: <div class=headline>Nitrogen Handlers</div>
 
-* Overview
+* Handler Overview
 
 Core Nitrogen behavior has been broken out into well-defined, pluggable 
 behavior modules called /handlers/. Handlers allow you to easily substitute
@@ -37,25 +37,31 @@ loading, but that's because the =nitrogen:handler/2= function determines,
 based on the =behavior()= defined within the handler module, which handler it
 is we're actually loading.
 
+* The Handlers
 
-* Config Handler
-
-* Log Handler
-
-* Process Registry Handler
-
-* Cache Handler
-
-* Query Handler
-
-* Session Handler
-
-* State Handler
-
-* Identity Handler
-
-* Role Handler
-
-* Route Handler
-
-* Security Handler
+  + [[./handlers/config.org][Config Handler]] - Controls how and from where the
+      configuration settings are loaded.
+  + [[./handlers/process_registry.org][Process Registry Handler]] - Controls
+      how processes are tracked. The default backend for the process registry
+      is [[https://github.com/nitrogen/nprocreg][nprocreg]].
+  + [[./handlers/cache.org][Cache Handler]] - Controls the server-side caching
+      interface used with =wf:cache/[1-3]=.
+  + [[./handlers/query.org][Query Handler]] - Controls the how =wf:q= (and it's
+      siblings, =wf:qs=, =wf:mq=, etc), functions retrieve their values from the
+      POST, GET, or other methods.
+  + [[./handlers/session.org][Session Handler]] - Controls how session
+      information and variables are set, stored, and/or distributed.
+  + [[./handlers/state.org][State Handler]] - Controls how the =wf:state=
+      functions store and retrieve their values. The default uses a simple
+      proplist.
+  + [[./handlers/identity.org][Identity Handler]] - Controls how the identity
+      of the client is stored and retrieved. This is related to the =wf:user=
+      functions.
+  + [[./handlers/role.org][Role Handler]] - Controls how the roles of the
+      client are stored and retrieved. This is related to the =wf:role=
+      functions.
+  + [[./handlers/route.org][Route Handler]] - Controls how Nitrogen routes
+      requests to modules or static files.
+  + [[./handlers/security][Security Handler]] - Controls whether or not a user
+      has access to a resource, and if not, should determine what to do with
+      the request.
