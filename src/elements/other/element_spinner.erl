@@ -18,5 +18,5 @@ render_element(Record) ->
         body=#image { image=Record#spinner.image }
     },
 
-    wf:render(Terms).
+    element_panel:render_element(Terms).
 
