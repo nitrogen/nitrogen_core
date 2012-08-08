@@ -12,13 +12,16 @@ reflect() -> record_info(fields, dropdown).
 render_element(Record) -> 
 
     wire_postback(Record),
-    set_dropdown_value(Record#dropdown.anchor,Record#dropdown.value),
-
-    Options = format_options(Record#dropdown.options,Record#dropdown.html_encode),
+    Options = format_options(Record),
 
     Multiple = case Record#dropdown.multiple of
-        false -> [];
-        true -> [{multiple}]
+        true -> [{multiple}];
+        false -> []
+    end,
+
+    Disabled = case Record#dropdown.disabled of
+        true -> [{disabled}];
+        false -> []
     end,
 
     wf_tags:emit_tag(select, Options, [
@@ -27,12 +30,7 @@ render_element(Record) ->
         {style, Record#dropdown.style},
         {name, Record#dropdown.html_name},
         {data, Record#dropdown.data_fields}
-    ] ++ Multiple).
-
-set_dropdown_value(_,undefined) -> 
-    ok;
-set_dropdown_value(Anchor,Value) -> 
-    wf:set(Anchor,Value).
+    ] ++ Multiple ++ Disabled).
 
 wire_postback(Dropdown) when Dropdown#dropdown.postback==undefined ->
     ignore;
@@ -44,15 +42,18 @@ wire_postback(Dropdown) ->
         delegate=Dropdown#dropdown.delegate 
     }).
 
-format_options(undefined,_) -> 
+format_options(Dropdown) when Dropdown#dropdown.options==undefined ->
     "";
-format_options(Opts,HtmlEncode) ->
-    [create_option(Opt, HtmlEncode) || Opt <- Opts,Opt#option.show_if==true].
+format_options(#dropdown{options=Opts, value=Value, html_encode=HtmlEncode}) ->
+    [create_option(Opt, HtmlEncode, Value) || Opt <- Opts, Opt#option.show_if==true].
 
-create_option(X, HtmlEncode) ->
-    SelectedOrNot = case X#option.selected of
-        true -> selected;
-        _ -> not_selected
+create_option(X, HtmlEncode, Value) ->
+    SelectedOrNot = if
+        (Value =/= undefined andalso X#option.value == Value)
+                orelse X#option.selected == true ->
+            selected;
+        true ->
+            not_selected
     end,
 
     Content = wf:html_encode(X#option.text, HtmlEncode),
