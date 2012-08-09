@@ -58,7 +58,7 @@ render_element(#inplace{text=Text, tag=Tag, delegate=Delegate, edit=Edit,
 
 	Edit1 = wf_utils:replace_field(id, EditID, EditModule:reflect(), Edit),
 	Edit2 = append_field_actions(EditAction, OKButtonID, EditModule:reflect(), Edit1),
-	Edit3 = wf_utils:replace_field_text(Text, Edit2, EditModule:reflect()),
+	Edit3 = replace_field_text(Text, Edit2, EditModule:reflect()),
 
 	% No value in view mode cause the view panel unclickable thus
 	% we set edit mode in that case.
