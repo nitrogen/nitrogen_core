@@ -78,6 +78,15 @@ h4 {
     padding: 0px;
 }
 
+h5 {
+    font-family: "Helvetica", "Arial", san-serif;
+    color: #000; 
+    font-weight: bold; 
+    font-size: 1em; /* 12px */
+    line-height: 1.2em; /* 14px */
+    margin: 0.5em 0em;
+    padding: 0px;
+}
 
 .section-number-1, .section-number-2, .section-number-3, .section-number-4 {
     display: none;

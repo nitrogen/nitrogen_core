@@ -1,0 +1,51 @@
+# vim: ts=2 sw=2 et ft=org
+#+STYLE: <LINK href="../stylesheet.css" rel="stylesheet" type="text/css" />
+#+TITLE: Template Handler
+#+AUTHOR: Jesse Gumm (@jessegumm)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+
+#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][Elements]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | Handlers | [[file:../about.org][About]].
+
+* Template Handler
+
+  Overview of what this handler does
+
+** Behavior Functions
+ 
+**** =init(Config, State)=
+
+  Initialize the handler
+
+  + /Return Value/ - ={ok, NewState}= 
+
+**** =finish(Config, State)=
+
+  Clean up the handler
+
+  + /Return Value/ - ={ok, NewState}=
+  
+**** =function(Arg1, Arg2)=
+  
+  Overview of this function
+
+  + =Arg1= - Description of Arg1
+
+  + =Arg2= - Description of Arg2
+
+  + /Return Value/ - Description of the return value
+
+** Example
+
+Here is the complete text of the default template handler
+
+#+BEGIN_SRC erlang
+
+#+END_SRC
+
+
+** See Also
+
+  + [[../handlers.html][Handler Overview]]
+
+  + [[../api.html#sec-X][API: Template]]

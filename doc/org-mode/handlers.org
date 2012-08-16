@@ -45,7 +45,7 @@ is we're actually loading.
       how processes are tracked. The default backend for the process registry
       is [[https://github.com/nitrogen/nprocreg][nprocreg]].
   + [[./handlers/cache.org][Cache Handler]] - Controls the server-side caching
-      interface used with =wf:cache/[1-3]=.
+      interface used with =wf:cache/[1-3]=. (not currently implemenented)
   + [[./handlers/query.org][Query Handler]] - Controls the how =wf:q= (and it's
       siblings, =wf:qs=, =wf:mq=, etc), functions retrieve their values from the
       POST, GET, or other methods.
