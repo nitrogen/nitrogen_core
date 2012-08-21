@@ -101,10 +101,35 @@ h5 {
     padding: 12px 10px;
 }
 
-.org-type {
+.org-type, .org-function-name {
 	color: #28439B;
+	font-weight:bold;
+}
+
+.org-function-name {
+	font-weight:bold;
 }
 
 .org-string {
+	color: #f00;
+}
+
+.org-preprocessor {
+	color: #f0f;
+}
+
+.org-builtin {
+	color: #909;
+}
+
+.org-keyword {
+	color: #a62;
+}
+
+.org-variable-name {
+	color: #00f;
+}
+
+.org-comment, .org-comment-delimiter {
 	color: #09A240;
 }

@@ -29,7 +29,8 @@ behaviour_info(callbacks) -> [
     {init, 2},      
     {finish, 2},
     {get_value, 3},
-    {get_values, 3}
+    {get_values, 3},
+	{get_params, 2}
 ];
 
 behaviour_info(_) -> undefined.

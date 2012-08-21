@@ -57,7 +57,7 @@ In all of the handler behavior functions are found two particular variables:
       second argument is =Config=, which is then passed into each handler
       function.
 
-  + =State= - The current state of the handler. Each handler maintains it's own
+  + =State= - The current state of the handler. Each handler maintains its own
       state.
 
 * The Handlers
@@ -67,7 +67,7 @@ In all of the handler behavior functions are found two particular variables:
   + [[./handlers/process_registry.org][Process Registry Handler]] - Controls
       how processes are tracked. The default backend for the process registry
       is [[https://github.com/nitrogen/nprocreg][nprocreg]].
-  + [[./handlers/query.org][Query Handler]] - Controls the how =wf:q= (and it's
+  + [[./handlers/query.org][Query Handler]] - Controls the how =wf:q= (and its
       siblings, =wf:qs=, =wf:mq=, etc), functions retrieve their values from the
       POST, GET, or other methods.
   + [[./handlers/session.org][Session Handler]] - Controls how session
