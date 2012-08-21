@@ -331,7 +331,8 @@
    Check if the current user has a specified role.
    
 ** wf:role(Role, IsInRole) -> ok
-   Set whether the current user is in a specified role.
+   Set whether the current user is in a specified role. =IsInRole= should be a
+   boolean (=true= or =false=)
    
 ** wf:clear\_roles() -> ok
    Remove the user from all roles.
