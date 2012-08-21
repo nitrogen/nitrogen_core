@@ -1,0 +1,46 @@
+# vim: ft=org sw=3 ts=3 et
+#+TITLE: Mobile Grid Block Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Jesse Gumm (@jessegumm)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | Elements | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
+
+* Mobile Grid Block Element - #mobile_grid_block {}
+
+This element produces a block element for a container [[./mobile_grid.html][Mobile Grid]] Element.
+
+** Usage
+
+#+BEGIN_SRC erlang
+   #mobile_grid { 
+      columns=2
+      body=[
+         #mobile_grid_block{ text="Row 1, Cell 1" },
+         #mobile_grid_block{ text="Row 1, Cell 2" },
+         #mobile_grid_block{ text="Row 2, Cell 1" },
+         #mobile_grid_block{ new_row = true, text="Row 3, Cell 1"},
+         #mobile_grid_block{ text="Row 3, Cell 2"}
+      ]
+   }
+#+END_SRC
+
+** Attributes
+  
+   + new\_row - (/boolean/) :: Set to true to short-circuit the automatic row/column layout and for the grid to start at the next row down.
+ 
+   + body - (/Nitrogen element or list of elements/) :: Set the element(s) that will be rendered within this block.
+
+   + text - (/string/) :: Set to the text of the block, instead of specifying Nitrogen elements.
+
+   + html\_encode - (/boolean|whites|encoding fun/) :: Set to true to have the text safely html_encoded (default: 'true'). Set to 'whites' to also encode whitespace. Set to a function with arity 1 to have the contents encoded using that function.
+   
+** See Also
+
+   + [[./jquery_mobile.html][jQuery mobile elements]]
+
+   + [[./base.html][base element]]
+
+   + [[./mobile_grid.html][mobile grid element]]
+
+   + [[./table.html][table element]]

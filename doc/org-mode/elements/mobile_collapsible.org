@@ -1,0 +1,53 @@
+# vim: ft=org sw=3 ts=3 et
+#+TITLE: Mobile Collapsible Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Jesse Gumm (@jessegumm)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | Elements | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
+
+* Mobile Collapsible Element - #mobile_collapsible {}
+
+This element produces a [[http://jquerymobile.com/test/docs/content/content-collapsible.html][jQuery Mobile Collapsible Content]] Element
+
+** Usage
+
+#+BEGIN_SRC erlang
+   #mobile_collapsible { 
+      collapsed=true,
+      header_text="See my favorite movies",
+      content_body=[
+         #list{body=[
+            #listitem{text="Big Trouble in Little China"},
+            #listitem{text="Dumb and Dumber"},
+            #listitem{text="Gladiator"}
+         ]}
+      ]
+   }
+#+END_SRC
+
+** Attributes
+   
+   + header_text - (/string/) :: The header text of the collapsible.  This is the text that will be clicked on to expand or collapse the content
+
+   + content_text - (/string/) :: The text content of the element.
+
+   + content_body - (/Nitrogen element or list of elements/) :: Set the element(s) that will be rendered within this panel.
+
+   + header_theme - (/atom/) :: Set the jQuery Mobile swatch letter for the header.
+
+   + content_theme - (/atom/) :: Set the jQuery Mobile swatch letter for the content.
+   
+   + collapsed - (/boolean/) :: Set to true to have the element start collapsed, false to start open. (default 'true')
+
+   + mini - (/boolean/) :: Set to true to render the collapsible in a smaller, more compact form.
+
+** See Also
+
+   + [[./jquery_mobile.html][jQuery mobile elements]]
+
+   + [[./base.html][base element]]
+
+   + [[./mobile_collapsible_set.html][mobile collapsible set element]]
+
+   + [[./panel.html][panel element]]

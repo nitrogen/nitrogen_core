@@ -43,12 +43,11 @@
 
 * Mobile Elements
   + [[./elements/jquery_mobile.org][jQuery Mobile Elements]]
-  + [[./elements/mobile_list.org][Mobile List]] | [[./elements/mobile_list_item.org][Mobile List Item]] | [[./elements/mobile_list_divider][Mobile List Divider]]
-  + [[./elements/mobile_slider][Mobile Slider]]
-  + [[./elements/mobile_collapsible][Mobile Collapsible]]
-  + [[./elements/mobile_collapsible_set][Mobile Collapsible Set]]
-  + [[./elements/mobile_grid][Mobile Grid]]
-  + [[./elements/mobile_grid_block][Mobile Grid Block]]
+  + [[./elements/mobile_list.org][Mobile List]] | [[./elements/mobile_list_item.org][Mobile List Item]] | [[./elements/mobile_list_divider.org][Mobile List Divider]]
+  + [[./elements/mobile_slider.org][Mobile Slider]]
+  + [[./elements/mobile_collapsible.org][Mobile Collapsible]]
+  + [[./elements/mobile_collapsible_set.org][Mobile Collapsible Set]]
+  + [[./elements/mobile_grid.org][Mobile Grid]] | [[./elements/mobile_grid_block.org][Mobile Grid Block]]
 
 * RESTful Elements
   + [[./elements/restful_overview.org][RESTful Overview]]
