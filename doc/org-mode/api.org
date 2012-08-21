@@ -133,12 +133,12 @@
    If =Bool= is =true= return =IfTrue=, otherwise, return =IfFalse=.  =IfTrue= and =IfFalse= can be functions arity 1, which will be evaluated instead of returned, and their return value is what gets returned.
 
 #+BEGIN_SRC erlang
-   wf:short_if(Name /= \"\", Name, \"Name Not Specified\").
+   wf:short_if(Name /= "", Name, "Name Not Specified").
 #+END_SRC
 
 ** wf:short\_if(Bool,IfTrue) -> Term
 
-   If =Bool= is =true=, return =IfTrue=, otherwise return an empty list. Shorthand for =wf:short_if(Bool,IfTrue,\"\")=
+   If =Bool= is =true=, return =IfTrue=, otherwise return an empty list. Shorthand for =wf:short_if(Bool,IfTrue,"")=
 
 ** wf:join([Terms],Delimiter) -> [Terms]
 
@@ -355,12 +355,12 @@
 #+END_SRC
    Think of 'mq' as an acronym of "Multi Query".
 
-** wf:q_pl(ListOfAtomKeys) -> [{Key,Values},...]
+** wf:q\_pl(ListOfAtomKeys) -> [{Key,Values},...]
 
    Takes a list of keys returns a proplist of keys and respective values from query string and POST values.
 
 #+BEGIN_SRC erlang
-  wf:qs_pl([favorite_robot,favorite_dinosaur,favorite_hobbit])
+  wf:qs_pl([favorite_robot,favorite\_dinosaur,favorite_hobbit])
 #+END_SRC
 
   Returns something like:
@@ -385,7 +385,7 @@
    [wf:qs(AtomKey) || AtomKey <- ListOfAtomKeys]
 #+END_SRC
 
-** wf:qs_pl(ListOfAtomKeys) -> [{Key,ListOfValues},...]
+** wf:qs\_pl(ListOfAtomKeys) -> [{Key,ListOfValues},...]
 
    Takes a list of keys and returns a proplist of keys and respective list of values from the query string and POST values.
 
