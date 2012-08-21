@@ -159,7 +159,7 @@
    For example, show a Javascript alert:
 
 #+BEGIN_SRC erlang
-   wf:wire(#alert { text=\"Hello, World!\" })
+   wf:wire(#alert { text="Hello, World!" })
 #+END_SRC
    
 ** wf:wire(TargetID, Actions) -> ok
