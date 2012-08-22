@@ -133,12 +133,12 @@
    If =Bool= is =true= return =IfTrue=, otherwise, return =IfFalse=.  =IfTrue= and =IfFalse= can be functions arity 1, which will be evaluated instead of returned, and their return value is what gets returned.
 
 #+BEGIN_SRC erlang
-   wf:short_if(Name /= \"\", Name, \"Name Not Specified\").
+   wf:short_if(Name /= "", Name, "Name Not Specified").
 #+END_SRC
 
 ** wf:short\_if(Bool,IfTrue) -> Term
 
-   If =Bool= is =true=, return =IfTrue=, otherwise return an empty list. Shorthand for =wf:short_if(Bool,IfTrue,\"\")=
+   If =Bool= is =true=, return =IfTrue=, otherwise return an empty list. Shorthand for =wf:short_if(Bool,IfTrue,"")=
 
 ** wf:join([Terms],Delimiter) -> [Terms]
 
@@ -159,7 +159,7 @@
    For example, show a Javascript alert:
 
 #+BEGIN_SRC erlang
-   wf:wire(#alert { text=\"Hello, World!\" })
+   wf:wire(#alert { text="Hello, World!" })
 #+END_SRC
    
 ** wf:wire(TargetID, Actions) -> ok
@@ -331,7 +331,8 @@
    Check if the current user has a specified role.
    
 ** wf:role(Role, IsInRole) -> ok
-   Set whether the current user is in a specified role.
+   Set whether the current user is in a specified role. =IsInRole= should be a
+   boolean (=true= or =false=)
    
 ** wf:clear\_roles() -> ok
    Remove the user from all roles.
@@ -345,19 +346,26 @@
    than one AtomKey matches, then this will throw an error, use
    =wf:qs(AtomKey)= instead.
 
+   *Mnemonic:* Think =q= as "Query".
+
 ** wf:mq(ListOfAtomKeys) -> [ListOfStrings]
 
    Get the list of query string and POST values for the provided keys, and 
    return the list of values for the keys. Syntactical sugar equivilant of:
+
 #+BEGIN_SRC erlang
    [wf:q(AtomKey) || AtomKey <- ListOfAtomKeys]
 #+END_SRC
-   Think of 'mq' as an acronym of "Multi Query".
 
-** wf:q_pl(ListOfAtomKeys) -> [{Key,Values},...]
+   *Mnemonic*: Think =mq= as "Multi Query".
+
+** wf:q\_pl(ListOfAtomKeys) -> [{Key,Values},...]
 
    Takes a list of keys returns a proplist of keys and respective values from query string and POST values.
 
+   *Mnemonic*: Think =q_pl= as "Query Proplist"
+
+Example:
 #+BEGIN_SRC erlang
   wf:qs_pl([favorite_robot,favorite_dinosaur,favorite_hobbit])
 #+END_SRC
@@ -369,13 +377,17 @@
       {favorite_dinosaur,"Velociraptor"},
       {favorite_hobbit,"Samwise"}
   ].
+
 #+END_SRC
+
 
 ** wf:qs(AtomKey) -> [String]
 
    Get a list of query string and POST values for the provided
    key. (This acts like =wf:q(AtomKey)= in Nitrogen 1.0.)
   
+   *Mnemonic:* Think =qs= as "Query Plural"
+
 ** wf:mqs(ListOfAtomKeys) -> [ListOfStrings]
 
    Get a list of query string and POST values for the provided list of keys.  Syntactical sugar equivilant of:
@@ -384,10 +396,15 @@
    [wf:qs(AtomKey) || AtomKey <- ListOfAtomKeys]
 #+END_SRC
 
-** wf:qs_pl(ListOfAtomKeys) -> [{Key,ListOfValues},...]
+   *Mnemonic*: Think =mqs= as "Multi Query Plural"
+
+** wf:qs\_pl(ListOfAtomKeys) -> [{Key,ListOfValues},...]
 
    Takes a list of keys and returns a proplist of keys and respective list of values from the query string and POST values.
 
+   *Mnemonic*: Think =qs_pl= as "Query Plurals into a Proplist"
+
+Example:
 #+BEGIN_SRC erlang
   wf:qs_pl([fruit,veggie,meat])
 #+END_SRC
@@ -400,6 +417,7 @@
      {meat,["Pork","Beef","Venison"]}
   ].
 #+END_SRC
+
 
 ** wf:request\_body() -> String
    Return the complete text of the request body to the server. Note, this value 

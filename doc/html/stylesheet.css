@@ -78,6 +78,15 @@ h4 {
     padding: 0px;
 }
 
+h5 {
+    font-family: "Helvetica", "Arial", san-serif;
+    color: #000; 
+    font-weight: bold; 
+    font-size: 1em; /* 12px */
+    line-height: 1.2em; /* 14px */
+    margin: 0.5em 0em;
+    padding: 0px;
+}
 
 .section-number-1, .section-number-2, .section-number-3, .section-number-4 {
     display: none;
@@ -92,10 +101,35 @@ h4 {
     padding: 12px 10px;
 }
 
-.org-type {
+.org-type, .org-function-name {
 	color: #28439B;
+	font-weight:bold;
+}
+
+.org-function-name {
+	font-weight:bold;
 }
 
 .org-string {
+	color: #f00;
+}
+
+.org-preprocessor {
+	color: #f0f;
+}
+
+.org-builtin {
+	color: #909;
+}
+
+.org-keyword {
+	color: #a62;
+}
+
+.org-variable-name {
+	color: #00f;
+}
+
+.org-comment, .org-comment-delimiter {
 	color: #09A240;
 }
