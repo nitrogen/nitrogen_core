@@ -8,16 +8,16 @@
 
 reflect() -> record_info(fields, spinner).
 
-render_element(Record) -> 
-    wf:wire(spinner, #hide{}),
-    Terms = #panel {
+render_element(Record) ->
+    wf:wire(Record#spinner.html_id,
+            #script{script=["objs('me').hide()",
+                            ".ajaxStart(function(){$(this).show();})",
+                            ".ajaxStop(function(){$(this).hide();});" ]} ),
+    #panel {
         html_id=Record#spinner.html_id,
         id=Record#spinner.id,
         anchor=Record#spinner.anchor,
         class=[spinner, Record#spinner.class],
         style=Record#spinner.style,
         body=#image { image=Record#spinner.image }
-    },
-
-    wf:render(Terms).
-
+    }.
