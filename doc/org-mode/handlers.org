@@ -62,14 +62,28 @@ In all of the handler behavior functions are found two particular variables:
 
 * The Handlers
 
+  *Note*: The =init/2= function is called on each handler in a specific order
+  as defined in =wf_context:init_context/2=.
+
+  In the order they are loaded, here are all the handlers, and their
+  documentation:
+
+*** Core handlers:
   + [[./handlers/config.org][Config Handler]] - Controls how and from where the
       configuration settings are loaded.
+  + [[./handlers/log.org][Log Handler]] - Controls the logging system for your
+      Nitrogen app.
   + [[./handlers/process_registry.org][Process Registry Handler]] - Controls
       how processes are tracked. The default backend for the process registry
       is [[https://github.com/nitrogen/nprocreg][nprocreg]].
+#  + [[./handlers/cache.org][Cache Handler]] - Controls the server-side caching
+#      interface used with =wf:cache/[1-3]=. (not currently implemenented)
   + [[./handlers/query.org][Query Handler]] - Controls the how =wf:q= (and its
       siblings, =wf:qs=, =wf:mq=, etc), functions retrieve their values from the
       POST, GET, or other methods.
+#  + [[./handlers/mail][Mail Handler]] - Controls how nitrogen will send email
+
+*** Stateful Handlers
   + [[./handlers/session.org][Session Handler]] - Controls how session
       information and variables are set, stored, and/or distributed.
   + [[./handlers/state.org][State Handler]] - Controls how the =wf:state=
@@ -81,11 +95,10 @@ In all of the handler behavior functions are found two particular variables:
   + [[./handlers/role.org][Role Handler]] - Controls how the roles of the
       client are stored and retrieved. This is related to the =wf:role=
       functions.
+
+*** Handlers that possibly redirect
   + [[./handlers/route.org][Route Handler]] - Controls how Nitrogen routes
       requests to modules or static files.
-  + [[./handlers/security][Security Handler]] - Controls whether or not a user
+  + [[./handlers/security.org][Security Handler]] - Controls whether or not a user
       has access to a resource, and if not, should determine what to do with
       the request.
-#  + [[./handlers/mail][Mail Handler]] - Controls how nitrogen will send email
-#  + [[./handlers/cache.org][Cache Handler]] - Controls the server-side caching
-#      interface used with =wf:cache/[1-3]=. (not currently implemenented)
