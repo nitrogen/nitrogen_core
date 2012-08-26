@@ -191,16 +191,16 @@
 * Asynchronous Page Updates (Comet, Continuations)
 # <<4>>
 
-** wf:comet(Function) -> Pid
+** wf:comet(Function) -> {ok, Pid}
 
    Spawn a comet function, and tell the browser to open a COMET request to receive the results in real time.
    See [[http://nitrogenproject.com/web/samples/comet1][example 1]], [[http://nitrogenproject.com/web/samples/comet2][example 2]], and [[http://nitrogenproject.com/web/samples/comet3][example 3]] for usage.
 
-** wf:comet(Function, LocalPool) -> Pid
+** wf:comet(Function, LocalPool) -> {ok, Pid}
 
    Spawn a function connected to the specified local pool.
 
-** wf:comet\_global(Function, GlobalPool) -> Pid
+** wf:comet\_global(Function, GlobalPool) -> {ok, Pid}
 
    Spawn a function connected to the specified global pool.
 

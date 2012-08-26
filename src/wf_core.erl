@@ -191,7 +191,7 @@ build_static_file_response(Path) ->
 
 build_first_response(Html, Script) ->
     % Update the output with any script...
-    Html1 = replace(script, Script, Html),
+    Html1 = replace_script(Script, Html),
 
     % Update the response bridge and return.
     Response = wf_context:response_bridge(),
@@ -205,7 +205,10 @@ build_postback_response(Script) ->
     Response1 = Response:data(lists:flatten(Script)),
     Response1:build_response().
 
-replace(_, _, S) when ?IS_STRING(S) -> S;
-replace(Old, New, [Old|T]) -> [New|T];
-replace(Old, New, [H|T]) -> [replace(Old, New, H)|replace(Old, New, T)];
-replace(_, _, Other) -> Other.
+replace_script(_,Html) when ?IS_STRING(Html) -> Html;
+replace_script(Script, [script|T]) -> [Script|T];
+%% For the mobile_script, it's necessary that it's inside the data-role attr,
+%% and therefore must be escaped before it can be sent to the browser
+replace_script(Script, [mobile_script|T]) -> [wf:html_encode(lists:flatten(Script))|T];
+replace_script(Script, [H|T]) -> [replace_script(Script, H)|replace_script(Script, T)];
+replace_script(_, Other) -> Other.

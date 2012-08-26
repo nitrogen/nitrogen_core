@@ -103,7 +103,7 @@ html_encode([H|T]) ->
 		$" -> "&quot;" ++ html_encode(T);
 		$' -> "&#39;" ++ html_encode(T);
 		$& -> "&amp;" ++ html_encode(T);
-		BigNum when BigNum > 255 ->
+		BigNum when is_integer(BigNum) andalso BigNum > 255 ->
 			%% Any integers above 255 are converted to their HTML encode equivilant,
 			%% Example: 7534 gets turned into &#7534;
 			[$&,$# | wf:to_list(BigNum)] ++ ";" ++ html_encode(T);

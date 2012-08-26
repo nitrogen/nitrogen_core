@@ -11,7 +11,8 @@
 reflect() -> record_info(fields, mobile_toggle).
 
 render_element(Record) -> 
-    #dropdown{
+
+    DropDown = #dropdown{
         id=Record#mobile_toggle.id,
         class=Record#mobile_toggle.class,
         html_id=Record#mobile_toggle.html_id,
@@ -25,13 +26,27 @@ render_element(Record) ->
         ],
         options=[
             #option{
-                text=Record#mobile_toggle.on_text,
-                value=Record#mobile_toggle.on_value
-            },
-            #option{
                 text=Record#mobile_toggle.off_text,
                 value=Record#mobile_toggle.off_value
+            },
+            #option{
+                text=Record#mobile_toggle.on_text,
+                value=Record#mobile_toggle.on_value
             }
         ]
-    }.
+    },
 
+    Wrapperclass = wf:temp_id(),
+    case Record#mobile_toggle.width of
+        undefined -> DropDown;
+        W -> 
+            [
+                "<style> .",Wrapperclass," .ui-slider-switch { width: ",format_width(W),"; }</style>",
+                #span{class=Wrapperclass, body=DropDown}
+            ]
+    end.
+
+format_width(W) when is_integer(W) ->
+    wf:to_list(W) ++ "px";
+format_width(W) when is_list(W) ->
+    W.

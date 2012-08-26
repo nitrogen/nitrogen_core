@@ -36,6 +36,10 @@ render_elements(Element, HtmlAcc) when is_tuple(Element) ->
     HtmlAcc1 = [Html|HtmlAcc],
     {ok, HtmlAcc1};
 
+render_elements(mobile_script, HtmlAcc) ->
+	HtmlAcc1 = [mobile_script|HtmlAcc],
+	{ok, HtmlAcc1};
+
 render_elements(script, HtmlAcc) ->
     HtmlAcc1 = [script|HtmlAcc],
     {ok, HtmlAcc1};

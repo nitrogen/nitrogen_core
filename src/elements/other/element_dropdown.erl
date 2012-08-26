@@ -21,7 +21,7 @@ render_element(Record) ->
         {class, [dropdown, Record#dropdown.class]},
         {style, Record#dropdown.style},
         {name, Record#dropdown.html_name},
-        {data, Record#dropdown.data_fields}
+        {data_fields, Record#dropdown.data_fields}
     ]).
 
 set_dropdown_value(_,undefined) -> 

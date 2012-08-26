@@ -16,12 +16,15 @@ render_element(Record) ->
     #panel{
         html_id=Record#mobile_grid.html_id,
         class=[GridClass | Record#mobile_grid.class],
+        data_fields=Record#mobile_grid.data_fields,
         body=format_blocks(Record#mobile_grid.blocks,Columns)
     }.
         
 format_blocks(Blocks,Columns) ->
     format_blocks(lists:flatten(Blocks),1,Columns).
 
+format_blocks([],_,_) ->
+    [];
 %% If we are at the beginning of a specified row, or we should wrap around
 %% (the Current Column is higher than the max columns), then let's reset the
 %% Current column to 1, which will start us at the first column again
@@ -31,7 +34,7 @@ format_blocks([Block | Blocks],CurColumn,MaxColumns)
     format_blocks([Block | Blocks],1,MaxColumns);
 
 %% This will iterate through each block, and assign the proper grid block class
-%% to it, based on it's location
+%% to it, based on its location
 format_blocks([Block | Blocks],CurColumn,MaxColumns) ->
     NewBlock = format_block(Block,CurColumn),
     [NewBlock | format_blocks(Blocks,CurColumn+1,MaxColumns)].

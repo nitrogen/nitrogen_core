@@ -1,3 +1,4 @@
+% vim: ts=4 sw=4 et
 % Nitrogen Web Framework for Erlang
 % Copyright (c) 2008-2010 Rusty Klophaus
 % See MIT-LICENSE for licensing information.
@@ -27,11 +28,21 @@ render_element(Record) ->
         _ -> ""
     end,
 
+    %% Basically, the default for mobile_target is to say nothing and let
+    %% jquery mobile use its default setting. Anything other than a boolean
+    %% will just treat it as blank
+    DataFields = case Record#link.mobile_target of
+        true -> [];
+        false -> [{ajax,false}];
+        _ -> []
+    end,
+
     wf_tags:emit_tag(a, Body, [
         {id, Record#link.html_id},
         {href, wf:to_list(Record#link.url)},
         {class, [link, Record#link.class]},
         {target, Target},
         {style, Record#link.style},
-        {title, wf:html_encode(Record#link.title, Record#link.html_encode)}
+        {title, wf:html_encode(Record#link.title, Record#link.html_encode)},
+        {data_fields, DataFields}
     ]).

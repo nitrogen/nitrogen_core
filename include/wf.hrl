@@ -83,7 +83,7 @@
 -record(strong, {?ELEMENT_BASE(element_strong), body="", text="", html_encode=true}).
 -record(em, {?ELEMENT_BASE(element_em), body="", text="", html_encode=true}).
 -record(value, {?ELEMENT_BASE(element_value), text="", html_encode=true}).
--record(link, {?ELEMENT_BASE(element_link), title = "", text="", body="", new=false, html_encode=true, url="javascript:", postback, delegate}).
+-record(link, {?ELEMENT_BASE(element_link), title = "", text="", body="", new=false, html_encode=true, mobile_target=false, url="javascript:", postback, delegate}).
 -record(email_link, {?ELEMENT_BASE(element_email_link), title="",text="",body="",html_encode=true,email=""}).
 -record(error, {?ELEMENT_BASE(element_error), text="", html_encode=true}).
 -record(span, {?ELEMENT_BASE(element_span), body="", text="", html_encode=true}).
@@ -138,11 +138,12 @@
 -record(mobile_list, {?ELEMENT_BASE(element_mobile_list), body=[], data_fields=[], theme, inset=true}).
 -record(mobile_list_divider, {?ELEMENT_BASE(element_mobile_list_divider), data_fields=[], theme, text="", body="", role=heading}).
 -record(mobile_listitem, {?ELEMENT_BASE(element_mobile_listitem), data_fields=[], text="", body=[], theme=""}).
--record(mobile_toggle, {?ELEMENT_BASE(element_mobile_toggle), data_fields=[], on_text="On", on_value="on", off_text="Off", off_value="off", selected="on", postback, delegate, theme=""}).
+-record(mobile_toggle, {?ELEMENT_BASE(element_mobile_toggle), data_fields=[], on_text="On", on_value="on", off_text="Off", off_value="off", selected="on", postback, delegate, width=undefined, theme=""}).
 -record(mobile_collapsible, {?ELEMENT_BASE(element_mobile_collapsible), data_fields=[], header_theme, content_theme, header_text="", content_body=[], content_text="", header_size=3, mini=false, collapsed=true}).
 -record(mobile_collapsible_set, {?ELEMENT_BASE(element_mobile_collapsible_set), data_fields=[], header_theme, content_theme, mini=false, body=[]}).
 -record(mobile_grid, {?ELEMENT_BASE(element_mobile_grid), data_fields=[], columns=2, blocks=[]}).
--record(mobile_grid_block, {?ELEMENT_BASE(element_grid_block), data_fields=[], text="", body=[], new_row=default}).
+-record(mobile_grid_block, {?ELEMENT_BASE(element_mobile_grid_block), data_fields=[], text="", body=[], new_row=default}).
+
 
 		
 %% HTML5 semantic elements

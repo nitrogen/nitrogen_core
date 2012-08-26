@@ -19,6 +19,7 @@ render_element(Record) ->
         style=Record#mobile_list.style,
         body=Record#mobile_list.body,
         data_fields=[
+            {role,listview},
             {inset,Record#mobile_list.inset}
             | Record#mobile_list.data_fields
         ]

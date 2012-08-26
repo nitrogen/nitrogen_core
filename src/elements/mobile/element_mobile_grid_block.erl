@@ -12,8 +12,9 @@ reflect() -> record_info(fields, mobile_grid_block).
 
 render_element(Record) -> 
     #panel{
-        class=Record#mobile_grid.class,
+        class=Record#mobile_grid_block.class,
         html_id=Record#mobile_grid_block.html_id,
         text=Record#mobile_grid_block.text,
-        body=Record#mobile_grid_block.body
+        body=Record#mobile_grid_block.body,
+        data_fields=Record#mobile_grid_block.data_fields
     }.

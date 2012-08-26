@@ -100,6 +100,7 @@ parse(<<C, Rest/binary>>, Callback, Acc) -> parse(Rest, Callback, [C|Acc]).
 get_token(<<"]]]", Rest/binary>>, Acc) -> { Acc, Rest };
 get_token(<<H, Rest/binary>>, Acc) -> get_token(Rest, <<Acc/binary, H>>).
 
+to_module_callback("mobile_script") -> mobile_script;
 to_module_callback("script") -> script;
 to_module_callback(Tag) ->
     % Get the module...
@@ -134,7 +135,7 @@ to_term(X, Bindings) ->
 %%% EVALUATE %%%
 
 eval([], _) -> [];
-eval([script|T], Record) -> [script|eval(T, Record)];
+eval([H|T], Record) when H==script orelse H==mobile_script -> [H|eval(T, Record)];
 eval([H|T], Record) when ?IS_STRING(H) -> [H|eval(T, Record)];
 eval([H|T], Record) -> [replace_callbacks(H, Record)|eval(T, Record)].
 
@@ -150,7 +151,7 @@ convert_callback_tuple_to_function(Module, Function, ArgString, Bindings) ->
         page -> wf_context:page_module();
         _ -> Module
     end,
-
+	
     _F = fun() ->
         % Convert args to term...
         Args = to_term("[" ++ ArgString ++ "].", Bindings),
