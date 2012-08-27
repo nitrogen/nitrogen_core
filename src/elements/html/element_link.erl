@@ -22,20 +22,14 @@ render_element(Record) ->
         Record#link.body
     ],
 
-    Target = case Record#link.new of
-        false -> "";
-        true -> "_blank";
-        _ -> ""
-    end,
+    Target = target(Record#link.new),
 
     %% Basically, the default for mobile_target is to say nothing and let
     %% jquery mobile use its default setting. Anything other than a boolean
     %% will just treat it as blank
-    DataFields = case Record#link.mobile_target of
-        true -> [];
-        false -> [{ajax,false}];
-        _ -> []
-    end,
+
+    DataFields1 = add_field(Record#link.mobile_target==false,{ajax,false},[]),
+    DataFields2 = add_field(Record#link.mobile_dialog==true,{rel,dialog},DataFields1),
 
     wf_tags:emit_tag(a, Body, [
         {id, Record#link.html_id},
@@ -44,5 +38,15 @@ render_element(Record) ->
         {target, Target},
         {style, Record#link.style},
         {title, wf:html_encode(Record#link.title, Record#link.html_encode)},
-        {data_fields, DataFields}
+        {data_fields, DataFields2}
     ]).
+
+target(New) ->
+    case New of
+        false -> "";
+        true -> "_blank";
+        _ -> ""
+    end.
+
+add_field(true,ToAdd,DataFields) -> [ToAdd | DataFields];
+add_field(_,_,DataFields) -> DataFields.
