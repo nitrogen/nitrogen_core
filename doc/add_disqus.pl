@@ -8,16 +8,16 @@ my @files = `find html/* | grep \\.html\$`;
 
 for my $file (@files) {
 	chomp($file);
-	print "Injecting Disqus code into $file...";
+	print "Injecting Disqus Code: $file\n";
 	my $to_inject = $raw_inject;
 	$to_inject =~ s/<page-identifier>/$file/g;
 	my $contents = &read_file($file);
 	if($contents =~ /<div id="disqus_thread">/) {
-		print "already done\n";
+		print "...SKIPPING (done already)\n";
 	}else{
 		$contents =~ s!</div>[\s\n]*</body>!</div>$to_inject</body>!g;
 		&write_file($file,$contents);
-		print "done\n";
+		print "...DONE\n";
 	}
 }
 

@@ -88,6 +88,12 @@ h4 {
 .outline-text-1, .outline-text-2, .outline-text-3, .outline-text-4 {
 }
 
+/*#disqus_thread {
+	border-top: dashed 2px #DB0;
+	margin-top: 20px;
+	padding-top:20px;
+}*/
+
 .src {
     padding: 12px 10px;
 }
