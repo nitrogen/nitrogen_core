@@ -1,3 +1,4 @@
+% vim: ts=4 sw=4 et
 % Nitrogen Web Framework for Erlang
 % Copyright (c) 2008-2010 Rusty Klophaus
 % See MIT-LICENSE for licensing information.
@@ -31,7 +32,15 @@ render_element(Record) ->
         wf_tags:emit_tag(input, [
             {id, Anchor},
             {value, Record#radio.value},
-            {name, Record#radio.html_name},
+
+            %% the emitted name gives priority to html_name, but if it's
+            %% undefined, then we fall back to the name attribute.
+            %% Note, this might seem a bit hacky to have html_name and name
+            %% that do essentially the same thing, but they have their own
+            %% semantic meanings.  'html_name' is generally reserved for
+            %% RESTful forms, while 'name' will be the more commonly used
+            %% attribute.
+            {name, wf:coalesce([Record#radio.html_name,Record#radio.name])},
             {type, radio},
             {class, [radio, Record#radio.class]},
             {style, Record#radio.style},
