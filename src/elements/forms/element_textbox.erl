@@ -25,6 +25,7 @@ render_element(Record) ->
     end,
 
     Value = wf:html_encode(Record#textbox.text, Record#textbox.html_encode),
+    Placeholder  = wf:html_encode(Record#textbox.placeholder, true),
     wf_tags:emit_tag(input, [
         {id, Record#textbox.html_id},
         {type, text}, 
@@ -32,5 +33,6 @@ render_element(Record) ->
         {maxlength, Record#textbox.maxlength},
         {style, Record#textbox.style},
         {name, Record#textbox.html_name},
+        {placeholder, Placeholder},
         {value, Value}
     ]).
