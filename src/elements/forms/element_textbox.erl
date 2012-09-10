@@ -29,7 +29,6 @@ render_element(Record) ->
         {type, text}, 
         {class, [textbox, Record#textbox.class]},
         {style, Record#textbox.style},
-        {maxlength, Record#textbox.maxlength},
         {placeholder, Placeholder},
         {value, Value}
     ]).
