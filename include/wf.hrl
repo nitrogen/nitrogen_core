@@ -85,9 +85,9 @@
 -record(span, {?ELEMENT_BASE(element_span), body="", text="", html_encode=true}).
 -record(button, {?ELEMENT_BASE(element_button), text="Button", html_encode=true, postback, delegate}).
 -record(literal, {?ELEMENT_BASE(element_literal), text="", html_encode=true}).
--record(textbox, {?ELEMENT_BASE(element_textbox), text="", maxlength="", html_encode=true, next, postback, delegate}).
+-record(textbox, {?ELEMENT_BASE(element_textbox), text="", placeholder="", html_encode=true, next, postback, delegate}).
 -record(hidden, {?ELEMENT_BASE(element_hidden), text="", html_encode=true}).
--record(textarea, {?ELEMENT_BASE(element_textarea), text="", html_encode=true}).
+-record(textarea, {?ELEMENT_BASE(element_textarea), text="", placeholder="", html_encode=true}).
 -record(datepicker_textbox, {?ELEMENT_BASE(element_datepicker_textbox), text="", next, html_encode=true, validators=[], options = [{dateFormat, "yy-mm-dd"}] }).
 -record(dropdown, {?ELEMENT_BASE(element_dropdown), options=[], html_encode=true, postback, delegate, value}).
 -record(option, { text="", value=undefined, selected=false }).

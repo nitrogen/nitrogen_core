@@ -10,8 +10,10 @@ reflect() -> record_info(fields, textarea).
 
 render_element(Record) -> 
     Text = html_encode(Record#textarea.text, Record#textarea.html_encode),
+    Placeholder  = wf:html_encode(Record#textarea.placeholder, true),
     wf_tags:emit_tag(textarea, Text, [
 	{class, [textarea, Record#textarea.class]},
+        {placeholder, Placeholder},
 	{style, Record#textarea.style}
     ]).
 
