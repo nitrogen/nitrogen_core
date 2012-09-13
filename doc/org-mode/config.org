@@ -174,6 +174,61 @@ installation.
 
 ** Cowboy: etc/cowboy.config
 
+[[http://github.com/extend/cowboy][Cowboy]] is the web server made by
+[[http://twitter.com/lhoguin][Loïc Hoguin]]. The configuration for Cowboy
+provided with Nitrogen isn't the /official/ configuration file, but it works
+for our purposes.  The options we provide are read by Nitrogen and passed to
+the Cowboy server upon initialization.
+
+The default Cowboy configuration is as follows:
+
+#+BEGIN_SRC erlang
+[
+    {cowboy,[
+        {bind_address,"0.0.0.0"},
+        {bind_port,8000},
+        {server_name,nitrogen},
+        {document_root,"./site/static"},
+        {static_paths, ["js/","images/","css/","nitrogen/"]}
+    ]}
+].
+#+END_SRC
+
+*** =bind_address= :: (/String/)
+
+The string of the IP address to bind.  If set to "0.0.0.0" or left blank, it'll
+bind to all available addresses. (Default: ="0.0.0.0"=)
+
+*** =bind_port= :: (/Number/)
+
+The port number to bind. (Default: =8000=)
+
+*** =server_name= :: (/Erlang term/)
+
+What to name the Cowboy server. (Default: =nitrogen=)
+
+*** =document_root= :: (/String/)
+
+The root of the location of static resources (ie, stylesheets, javascript
+files, images, etc). This will be passed to simple\_bridge for the serving of
+static files. (Default: ="./site/static"=)
+
+*Note:* this is relative to the root of the Nitrogen installation.
+
+*** =static_paths= :: (/List of Strings/)
+
+This setting will be used to determine if a requested resource should be
+handled by Nitrogen and simple\_bridge, or if it should just be immediately
+served directly by the Cowboy server. 
+(Default: =["js/","images/","css/","nitrogen/"]=)
+
+ *Note 1:* This is relative to the =document_root= above. So requests for =js/=
+will be served from =./site/static/js/= (using the default above).
+
+ *Note 2:* it is *strongly* recommended to catch static files with the
+=static_paths= setting. simple\_bridge does not serve large static files in an
+optimal way (it loads the files into memory completely before sending).
+
 ** Inets: etc/inets.config
 
 ** Mochiweb: etc/mochiweb.config
