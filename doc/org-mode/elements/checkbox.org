@@ -18,13 +18,15 @@
 
 ** Attributes
 
-   + text - (/string/) :: The checkbox's title.
+   + text - (/string/) :: The checkbox's label.
 
    + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
 
    + postback - (/Erlang term/) :: If set, clicking on the checkbox will initiate a Nitrogen postback with the supplied term.
 
    + checked - (/boolean/) :: True if the checkbox should be checked.
+
+   + value - (/string/) :: The value that will be posted if checked. The default HTML behavior is the string "on"
 
    + html\_name - (/string/) :: The name attribute of the checkbox.
 
