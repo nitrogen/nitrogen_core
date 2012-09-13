@@ -8,6 +8,7 @@ documentation I want to see added, in no particular order.
 * Guide for adding custom Mobile Elements
 * Guide for adding custom Validators
 * Improvements to the guides for adding custom handlers
+* Recommendations for contributing to Nitrogen
 
 ## Desired Guides
 
@@ -22,7 +23,7 @@ commonly presented on Stackoverflow or the mailing lists.
 * Email integration
 * Reverse Proxy configuration
 * Working with HTML5 Canvas
-* Builing an app that does something from the ground up
+* Builing a sample app that does something from the ground up
 
 ## Other things that are worth doing with documentation
 
@@ -49,4 +50,4 @@ did so with a blog post or something, go ahead and make a pull request linking
 to it.
 
 Any questions, make a Github issue, or contact Jesse Gumm at
-[@jessegumm](http://twitter.com/jessegumm) or by [email](gumm@sigma-star.com).
+[@jessegumm](http://twitter.com/jessegumm) or by [email](mailto:gumm@sigma-star.com).
