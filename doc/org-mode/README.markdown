@@ -9,6 +9,8 @@ documentation I want to see added, in no particular order.
 * Guide for adding custom Validators
 * Improvements to the guides for adding custom handlers
 * Recommendations for contributing to Nitrogen
+* Building a simple HTTP API in Nitrogen
+* Using the RESTful elements
 
 ## Desired Guides
 
