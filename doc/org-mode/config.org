@@ -229,7 +229,63 @@ will be served from =./site/static/js/= (using the default above).
 =static_paths= setting. simple\_bridge does not serve large static files in an
 optimal way (it loads the files into memory completely before sending).
 
-** Inets: etc/inets.config
+** Inets: etc/inets.config and etc/inets_httd.erlenv
+
+[[http://www.erlang.org/doc/man/inets.html][Inets]] is the web client and
+server included with the standard Erlang Install, and we use the Inets Web
+server as the "simple" solution for Nitrogen. Inets isn't as feature-rich as
+the other popular Erlang webservers, and because of this, we only recommend
+using Inets for development purposes, since it doesn't require any additional
+installation.
+
+Further, the Inets configuration is broken into two different files, one for
+the =inets= application itself, and one for the httpd server included in Inets.
+
+*** etc/inets.config
+
+This is the file for configuring the =inets= application itself. By default, we
+simply use this file to tell the application to start the httpd and load the
+specified configuration file.
+
+The default inets.config provided with Nitrogen is as follows:
+
+#+BEGIN_SRC erlang
+[{inets, [
+    {services, [
+        {httpd, [
+            {proplist_file, "./etc/inets_httpd.erlenv"}
+        ]}
+    ]}
+]}].
+#+END_SRC
+
+Note that basically all it does it tell =inets= to load the inets_httpd.erlenv
+proplist file, using the =proplist_file= option.
+
+*** etc/inets_httpd.erlenv
+
+This file does the heavy lifting of configuring our inets configuration.
+
+#+BEGIN_SRC erlang
+[
+    {port, 8000},
+    {bind_address, {0,0,0,0}},
+    {server_name, "nitrogen"},
+    {server_root, "."},
+    {document_root, "./site/static"},
+    {error_log, "./log/inets.log"},
+    {modules, [nitrogen_inets]},
+
+    {mime_types, [
+        {"css", "text/css"},
+        {"js", "text/javascript"},
+        {"html", "text/html"}
+    ]}
+].
+#+END_SRC
+
+
+
 
 ** Mochiweb: etc/mochiweb.config
 
