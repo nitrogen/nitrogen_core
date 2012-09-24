@@ -13,6 +13,8 @@ render_element(Record) ->
     },
     element_image:render_element(Image).
 
+gravatar_icon(G = #gravatar{size=Size}) when is_integer(Size) ->
+	gravatar_icon(G#gravatar{size=wf:to_list(Size)});
 gravatar_icon(#gravatar{email=Email, size=Size, rating=Rating, default=Default}) ->
     GravatarId = digest2str(erlang:md5(wf:clean_lower(Email))),
     wf:f("http://www.gravatar.com/avatar/~s?size=~s&r=~s&d=~s" ,
