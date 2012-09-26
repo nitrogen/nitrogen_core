@@ -284,7 +284,27 @@ This file does the heavy lifting of configuring our inets configuration.
 ].
 #+END_SRC
 
++ =port= :: (/Integer/) - Tells inets what port to listen on.
 
++ =bind_address= :: (/IP Address as a 4-tuple/) - Tells inets what IP addresses
+to listen on (ie ={12,34,56,67}= would be ="12.34.56.78"=).
+
++ =server_name= :: (/String or Atom/) - What you want to name this instance of
+Nitrogen.
+
++ =document_root= :: (/String/) - The path containing the static content. This
+is relative to the root of the Nitrogen installation.
+
++ =error_log= :: (/String/) - The name of the file to store the inets logs.
+
++ =modules= :: (/List of module names/) - For each request, Erlang will attempt
+to call =ModuleName:do/1= for each specified module. Typically, we just put in
+the atom =nitrogen_inets= as that's the default Nitrogen entry point for inets.
+
++ =mime_types= :: (/[{Extension,Mimetype},...]/) - This is simply a list of the
+Mime Types you wish to support along with the extensions that trigger those
+mime types. By default, it supports css, javascript, and html files. More types
+will have to be added by the user.
 
 
 ** Mochiweb: etc/mochiweb.config
