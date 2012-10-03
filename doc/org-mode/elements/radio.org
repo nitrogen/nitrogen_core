@@ -6,7 +6,7 @@
 #+EMAIL: 
 #+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | Elements | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
 
-* Radio Element - #checkbox {}
+* Radio Element - #radio {}
 
   The radio element produces an HTML radio button.
 
@@ -14,25 +14,33 @@
 
 #+BEGIN_SRC erlang
    [
-      #radio { id=checkbox1, text="Check Me", checked=true },
-      #radio { id=
+      #radio { name=fruit, text="Apple", checked=true },
+      #radio { name=fruit, text="Orange" },
+      #radio { name=fruit, text="Banana", value="banana" }
+   ].
 #+END_SRC
 
 ** Attributes
 
-   + text - (/string/) :: The checkbox's title.
+   + text - (/string/) :: The radio button's label.
 
-   + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
+   + html\_encode - (/boolean/) :: Set to true to safely html-encode the text label.
+
+   + value - (/string/) :: The value to be submitted for this radio button in postbacks if it is selected.
 
    + postback - (/Erlang term/) :: If set, clicking on the checkbox will initiate a Nitrogen postback with the supplied term.
 
-   + checked - (/boolean/) :: True if the checkbox should be checked.
+   + checked - (/boolean/) :: True if the radio button should be checked.
 
-   + html\_name - (/string/) :: The name attribute of the checkbox.
+   + name - (/string/) :: The name attribute of the checkbox. If this is not contained within a =#radiogroup{}= element, then =name= must be specified, as =name= determines the "group" of the radio buttons (that is, when one member of a radio group is selected, the others are unselected).
+
+   + html\_name - (/string/) :: The name attribute of the checkbox. ( This does essentially the same thing as the =name= attribute, but is semantically different for use with the RESTful elements, as all RESTful elements shre the =html_name= attributes. If you're not sure, just use =name=)
 
 ** See Also
 
    + [[./base.html][base]]
+
+   + [[./radiogroup.html][radiogroup]]
 
    + [[./button.html][Button]]
 
@@ -47,4 +55,6 @@
    + [[./dropdown.html][Dropdown]]
 
    + [[./option.html][Dropdown Option]]
+
+   + [[../restful_overfiew.html][RESTful element overview]]
 

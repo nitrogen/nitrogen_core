@@ -22,6 +22,11 @@ render_element(Record) ->
         body=Body
     }).
 
+
+%% TODO: This whole thing needs to be replaced with a smarter recursive search.
+%% As it is, it won't dive into the bodies of subelements. A recursive map (ie: wf:map_body) would be
+%% ideal
+
 apply_name(Name, Terms) ->
     [do_apply(Name, X) || X <- Terms].
 
@@ -30,5 +35,8 @@ do_apply(Name, X) when is_record(X, radio) ->
 do_apply(Name, X) when is_record(X, bind) ->
     Body2 = apply_name(Name, X#bind.body),
     X#bind{body = Body2};
+do_apply(Name, List) when is_list(List) ->
+	%% Encounter a list, let's try the members of this list.
+	apply_name(Name,List);
 do_apply(_Name, X) ->
     X.

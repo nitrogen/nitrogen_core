@@ -1,0 +1,50 @@
+# vim: ts=3 sw=3 et ft=org
+#+TITLE: Radio Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Rusty Klophaus (@rklophaus)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | Elements | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
+
+* Radio Group Element - #radio_group {}
+
+  The radio group element automatically groups it's radio button members into the same radio button group by applying the same HTML =name= to each radio contained within.
+
+Note: Currently, this will not do a "deep dive" for the radio buttons, but assumes a flattened list containing the radio buttons.
+
+** Usage
+
+#+BEGIN_SRC erlang
+   #radiogroup { id=fruit, body= [
+      #radio { text="Apple", value="apple", checked=true },
+      #radio { text="Orange", value="orange" },
+      #radio { text="Banana", value="banana" }
+   ]}.
+#+END_SRC
+
+** Attributes
+
+   + body - (/string/) :: The contents of the radio group.  Recommended to be a list of radio buttons, but it will not search the contents of child elements containing their own =body= attributes. So be aware. It's recommended to just be a list of =#radio{}= elements, separated by =#br{}= or =#p{}= elements.
+
+** See Also
+
+   + [[./base.html][base]]
+
+   + [[./radio.html][radio]]
+
+   + [[./button.html][Button]]
+
+   + [[./link.html][Link]]
+
+   + [[./textbox.html][Textbox]]
+
+   + [[./password.html][Password]]
+
+   + [[./textarea.html][Textarea]]
+
+   + [[./dropdown.html][Dropdown]]
+
+   + [[./option.html][Dropdown Option]]
+
+   + [[../restful_overfiew.html][RESTful element overview]]
+
