@@ -309,6 +309,39 @@ will have to be added by the user.
 
 ** Mochiweb: etc/mochiweb.config
 
+[[http://github.com/mochi/mochiweb][Mochiweb]] is a webserver written by Bob
+Ippolito. It's a very lightweight webserver and very easy to configure.
+
+The default configuration file for Mochiweb provided by Nitrogen is as follows:
+
+#+BEGIN_SRC erlang
+
+[{mochiweb, [
+    {bind_address, "0.0.0.0"},
+    {port, 8000},
+    {server_name, nitrogen},
+    {document_root, "./site/static"},
+
+    %% Max Request size of 25MB. While this is a mochiweb env_var,
+    %% it's actually only used in simple_bridge
+    {max_request_size, 26214400}
+]}].
+#+END_SRC
+
+As above, this shares a handful of standard 
+
++ =port= :: (/Integer/) - Tells inets what port to listen on.
+
++ =bind_address= :: (/IP Address as a string/) - Tells Mochiweb what IP address to listen on. For example ="12.34.56.78"=. (Default ="0.0.0.0"=, which just means listen on all IP addresses).
+
++ =server_name= :: (/String or Atom/) - What you want to name this instance of
+Nitrogen.
+
++ =document_root= :: (/String/) - The path containing the static content. This
+is relative to the root of the Nitrogen installation.
+
++ =max_request_size= :: (/Integer/) - Tells Mochiweb (in particular, it tells SimpleBridge) what the maximum request size to be honored. This is in bytes. The current default is 25 MB maximum request size.
+
 ** Webmachine: etc/webmachine.config
 
 ** Yaws: etc/yaws.config
