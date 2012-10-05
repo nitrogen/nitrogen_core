@@ -31,7 +31,6 @@ render_element(Record) ->
         {name, Record#dropdown.html_name},
         {data_fields, Record#dropdown.data_fields}
     ] ++ Multiple ++ Disabled).
-    ]).
 
 wire_postback(Dropdown) when Dropdown#dropdown.postback==undefined ->
     ignore;
