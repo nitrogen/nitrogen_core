@@ -19,5 +19,5 @@ render_element(Record) ->
         {id, Record#list.html_id},
         {class, [list, Record#list.class]},
         {style, Record#list.style},
-        {data, Record#list.data_fields}
+        {data_fields, Record#list.data_fields}
     ]).

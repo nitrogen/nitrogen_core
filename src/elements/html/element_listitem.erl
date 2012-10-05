@@ -20,5 +20,5 @@ render_element(Record) ->
         {class, [listitem, Record#listitem.class]},
         {role, Record#listitem.role},
         {style, Record#listitem.style},
-        {data, Record#listitem.data_fields}
+        {data_fields, Record#listitem.data_fields}
     ]).

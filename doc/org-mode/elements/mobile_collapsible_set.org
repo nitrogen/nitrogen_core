@@ -1,0 +1,40 @@
+# vim: ft=org sw=3 ts=3 et
+#+TITLE: Mobile Collapsible Set Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Jesse Gumm (@jessegumm)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | Elements | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
+
+* Mobile Collapsible Element - #mobile_collapsible {}
+
+This element produces a [[http://jquerymobile.com/test/docs/content/content-collapsible.html][jQuery Mobile Collapsible Content]] Element
+
+** Usage
+
+#+BEGIN_SRC erlang
+   #mobile_collapsible_set { 
+      collapsed=true,
+      body=[
+         #collapsible{ ... },
+         #collapsible{ ... },
+         #collapsible{ ... }
+      ]
+   }
+#+END_SRC
+
+** Attributes
+   
+   + header_theme - (/atom/) :: Set the jQuery Mobile swatch letter for the contained #collapsible{} elements' header.
+
+   + content_theme - (/atom/) :: Set the jQuery Mobile swatch letter for the contained #collapsible{} elements' content.
+   
+   + mini - (/boolean/) :: Set to true to render the contained #collapsible{} elements in a smaller, more compact form.
+
+** See Also
+
+   + [[./jquery_mobile.html][jQuery mobile elements]]
+
+   + [[./base.html][base element]]
+
+   + [[./mobile_collapsible.html][mobile collapsible element]]

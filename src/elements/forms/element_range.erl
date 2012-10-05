@@ -1,3 +1,4 @@
+%$ vim: ts=4 sw=4 et
 % Nitrogen Web Framework for Erlang
 % Copyright (c) 2008-2010 Rusty Klophaus
 % See MIT-LICENSE for licensing information.
@@ -26,10 +27,11 @@ render_element(Record) ->
     wf_tags:emit_tag(input, [
         {type, range}, 
         {class, [range, Record#range.class]},
-	{min, Record#range.min},
-	{max, Record#range.max},
-	{step, Record#range.step},
+        {min, Record#range.min},
+        {max, Record#range.max},
+        {step, Record#range.step},
         {style, Record#range.style},
-	{id, Record#range.html_id},
-        {value, Record#range.value}
+        {id, Record#range.html_id},
+        {value, Record#range.value},
+        {data, Record#range.data_fields}
     ]).
