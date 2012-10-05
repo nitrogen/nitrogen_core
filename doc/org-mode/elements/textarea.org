@@ -1,4 +1,4 @@
-
+# vim: ts=3 sw=3 et ft=org
 #+TITLE: Textarea Element Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Rusty Klophaus (@rklophaus)
@@ -22,6 +22,17 @@
 
    + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
 
+   + placeholder - (/string/) :: Sets the placeholder text (text that will be
+      in the textarea until the user focuses in the textarea). This uses the
+      HTML5 placeholder attribute, which is only supported in newer browsers.
+      To add support for older-browsers, you will need to link a placeholder
+      script in your template. You can do this by adding the following to your
+      template inside the =<head>= section after loading jQuery. 
+
+#+BEGIN_SRC html
+   <script src='/nitrogen/jquery.placeholder.js' type='text/javascript'></script>
+#+END_SRC
+
    + html\_name - (/string/) :: The name attribute of the textarea.
 
 ** See Also
@@ -40,4 +51,4 @@
 
    + [[./option.html][option element]]
 
- 
+   + [[https://github.com/mathiasbynens/jquery-placeholder][jQuery Placeholder Readme]]

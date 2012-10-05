@@ -1,4 +1,4 @@
-
+# vim: ts=3 sw=3 et ft=org
 #+TITLE: Textbox Element Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Rusty Klophaus (@rklophaus)
@@ -21,6 +21,17 @@
    + text - (/string/) :: Set the textbox's contents.
 
    + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
+
+   + placeholder - (/string/) :: Sets the placeholder text (text that will be
+      in the textbox until the user focuses in the textbox). This uses the
+      HTML5 placeholder attribute, which is only supported in newer browsers.
+      To add support for older-browsers, you will need to link a placeholder
+      script in your template. You can do this by adding the following to your
+      template inside the =<head>= section after loading jQuery. 
+
+#+BEGIN_SRC html
+   <script src='/nitrogen/jquery.placeholder.js' type='text/javascript'></script>
+#+END_SRC
 
    + next - (/atom/) :: 
       If set with a valid control ID, pressing the enter key in the 
@@ -47,5 +58,7 @@
    + [[./dropdown.html][dropdown element]]
 
    + [[./option.html][option element]]
+
+   + [[https://github.com/mathiasbynens/jquery-placeholder][jQuery Placeholder Readme]]
 
  
