@@ -1,3 +1,4 @@
+#vim :ts=2 sw=2 et ft=org
 #+STARTUP: showall
 #+STYLE: <link rel="stylesheet" href="tutorial.css" />
 #+TITLE: Introduction to Nitrogen
@@ -50,7 +51,8 @@ Pull the [[http://github.com/nitrogen/nitrogen][Nitrogen Source Code]], then =ma
 ** Install & Run Nitrogen
 *** Start Up
     : bin/nitrogen console
-    : open http://localhost:8000
+
+Open http://localhost:8000 in your Browser
 
 * Stop the Website
 ** Install & Run Nitrogen
@@ -69,7 +71,6 @@ Pull the [[http://github.com/nitrogen/nitrogen][Nitrogen Source Code]], then =ma
     + etc/ :: Configuration settings.
     + site/ :: Contains the website files, templates, and Erlang modules.
     + log/ :: The logs.
-    + doc/ :: Contains Nitrogen documentation.
     + erts-X.Y.Z/ :: Embedded Erlang.
     + releases/ :: Tells Erlang how to start the system.
     + lib/ :: Dependent libraries.
@@ -103,19 +104,31 @@ Pull the [[http://github.com/nitrogen/nitrogen][Nitrogen Source Code]], then =ma
 * Exercise: Modify a Nitrogen Page
 ** Install & Run Nitrogen
 *** Exercise: Modify Your First Page
-    + Open =site/src/index.erl=
-    + Change "Welcome to Nitrogen" to "Welcome to My Website"
     + From the Erlang Shell, run:
       : sync:go()
+    + Open =site/src/index.erl=
+    + Change "Welcome to Nitrogen" to "Welcome to My Website"
     + Reload the page
 
 * Exercise: Compile in Different Ways
 ** Install & Run Nitrogen
 *** Exercise: Compile in a Different Way
-    + Change to "Welcome to my ERL-TASTIC WEBSITE!" (or, you know, whatever)
     + From a different terminal, run:
       : bin/dev compile
+    + Change to "Welcome to my ERL-TASTIC WEBSITE!" (or, you know, whatever)
     + Reload the page
+
+* Dynamic Compiling
+** Install & Run Nitrogen
+*** Understanding =sync=
+
+    + Running =sync:go()= from the Erlang shell or =bin/dev compile= start the
+      =sync= application
+    + Sync applications constantly checks for changes to Erlang files and
+      attempts to recompile
+    + To stop sync's checking, run =sync:stop()=
+    + *Note*: Sync will only recompile files changed *since* sync was launched.
+      Sync is not aware of changes made before running =sync:go()=
 
 * Exercise: Debugging
 ** Install & Run Nitrogen
@@ -1266,4 +1279,6 @@ Pull the [[http://github.com/nitrogen/nitrogen][Nitrogen Source Code]], then =ma
 ** Thanks
 
    + Mailing List, Bugs, etc: [[http://nitrogenproject.com/community]]
-   + Follow me on Twitter: [[http://twitter/rklophaus][@rklophaus]]
+   + Follow Nitrogen on Twitter: [[http://twitter.com/nitrogenproject][@nitrogenproject]]
+   + Follow Rusty on Twitter: [[http://twitter.com/rustyio][@rustyio]]
+   + Fully Jesse on Twitter: [[http://twitter.com/jessegumm][@jessegumm]]
