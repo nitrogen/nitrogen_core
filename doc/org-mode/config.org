@@ -189,6 +189,29 @@ bind to all available addresses. (Default: ="0.0.0.0"=)
 
 The port number to bind. (Default: =8000=)
 
+*About Ports and Linux*: While port 80 is the standard HTTP port,port 80 is a
+privileged port in a Linux/Unix environment. This means that in order for
+Erlang to bind to port 80, it will need to be run with *root* privileges. This
+is generally unadvised. Instead, we recommend using a lightweight reverse
+proxy (such as nginx) in front of Nitrogen. Doing so will allow you to run
+Nitrogen with standard user privileges (for better system security), while
+presenting your Nitrogen website on the expected port 80.
+
+On some variants of Linux, it is possible to bind Nitrogen to port 80 without
+running as root. This is accomplished with the use of the
+[[http://linux.die.net/man/8/setcap][=setcap=]] application (which may need to
+be installed from your distro's package system).
+
+An example of =setcap= being run on your Erlang app:
+
+#+BEGIN_SRC bash
+  sudo setcap cap_net_bind_service+ep ./erts-5.9.2/bin/beam
+  sudo setcap cap_net_bind_service+ep ./erts-5.7.5/bin/beam.smp
+#+END_SRC
+
+This will give the =beam= and =beam.smp= programs privileges to bind to
+privileged ports (ports under 1024).
+
 + =server_name= :: (/Erlang term/)
 
 What to name the server. (Default: =nitrogen=)
@@ -215,7 +238,7 @@ The default Cowboy configuration is as follows:
 [
     {cowboy,[
         {bind_address,"0.0.0.0"},
-        {bind_port,8000},
+        {port,8000},
         {server_name,nitrogen},
         {document_root,"./site/static"},
         {static_paths, ["js/","images/","css/","nitrogen/"]}
