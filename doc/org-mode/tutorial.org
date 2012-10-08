@@ -1,4 +1,4 @@
-#vim :ts=2 sw=2 et ft=org
+# vim: ts=2 sw=2 et ft=org
 #+STARTUP: showall
 #+STYLE: <link rel="stylesheet" href="tutorial.css" />
 #+TITLE: Introduction to Nitrogen
@@ -211,8 +211,8 @@ Open http://localhost:8000 in your Browser
 ** Nitrogen Pages
 *** Exercise: Create a New Page
     + Generate the Page
-      : bin/dev page my\_page
-      : $EDIT site/src/my\_page.erl
+      : bin/dev page my_page
+      : $EDIT site/src/my_page.erl
 
     + Replace the default body with:
       #+BEGIN_SRC erlang
@@ -359,7 +359,9 @@ Open http://localhost:8000 in your Browser
     #+BEGIN_SRC erlang
     body() ->
         [
-            #button { text="Submit", actions="alert('hello');" }
+            #button { text="Submit", actions=[
+            	#event{type=click,actions="alert('hello');" }
+            ]}
         ].
     #+END_SRC
         
@@ -371,10 +373,9 @@ Open http://localhost:8000 in your Browser
     #+BEGIN_SRC erlang
     body() ->
         [
-            #button { 
-                text="Submit", 
-                actions=#alert { text="Hello" } 
-            }
+            #button { text="Submit", actions=[
+              #event{type=click, actions=#alert { text="Hello" } 
+            ]}
         ].
     #+END_SRC
 
@@ -596,7 +597,7 @@ Open http://localhost:8000 in your Browser
     body() -> 
         #panel { style="margin: 50px;", body=[
             #button { id=mybutton, text="Submit", postback=click },
-            #panel { id=placeholder }
+            #panel { id=placeholder, body="This text will be replaced" }
         ]}.
 
     event(click) ->
