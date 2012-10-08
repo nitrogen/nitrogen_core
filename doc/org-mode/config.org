@@ -462,3 +462,99 @@ quite long and dense with information, this configuration setting tells Yaws to
 send all requests to the Erlang module =nitrogen_yaws=, except for any requests
 that start with \/images, \/nitrogen, \/css, or \/js, which will instead be
 handled by Yaws directly.
+
+
+* Additional Configuration
+
+** nginx - A lightweight reverse proxy
+
+[[http://wiki.nginx.org/Main][Nginx]] is high performance, lightweight web
+server and reverse proxy that is commonly used for load balancing, rewrite
+rules, SSL certificates, and more.
+
+Here's a sample configuration (this assumes a standard Ubuntu configuration):
+
+*** /etc/nginx/nginx.conf
+
+#+BEGIN_SRC nginx
+user www-data;
+worker_processes  1;
+
+error_log  /var/log/nginx/error.log;
+pid        /var/run/nginx.pid;
+
+events {
+            worker_connections  4096;
+}
+
+http {
+        include       /etc/nginx/mime.types;
+        default_type  application/octet-stream;
+
+        access_log      /var/log/nginx/access.log;
+
+        sendfile        on;
+
+        keepalive_timeout  10;
+        tcp_nodelay        on;
+
+        gzip  on;
+
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Server $host;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+
+        include /etc/nginx/conf.d/*.conf;
+        include /etc/nginx/sites-enabled/*;
+}
+#+END_SRC
+
+*** Non-SSL Sample: /etc/nginx/sites-enabled/my_site
+
+#+BEGIN_SRC nginx
+server {
+        listen   80;
+        server_name  mysite.com www.mysite.com;
+        access_log  /var/log/nginx/mysite.com.access.log;
+        location / {
+                proxy_pass http://127.0.0.1:8000;
+        }
+}
+#+END_SRC
+
+*** SSL-Only Sample: /etc/nginx/sites/enabled/my_secure_site
+
+This configuration will server only SSL. It will redirect all requests
+from the HTTP port (port 80) to the HTTPS port (port 443) and load the certificates
+
+#+BEGIN_SRC nginx
+# My config for a site that I only want serving SSL content.
+server {
+        listen   80;
+
+        server_name www.mysite.com, mysite.com;
+        access_log  /var/log/nginx/mysite.com.access.log;
+
+  # rewrite all requests to be SSL
+        rewrite ^(.*) https://$host$1 permanent;
+}
+
+server {
+        listen 443;
+        server_name mysite.com www.mysite.com
+        access_log /var/log/nginx/mysite.ssl.access.log;
+
+        ssl on;
+
+        ssl_certificate ssl/mysite/mysite.com.crt;
+        ssl_certificate_key ssl/mysite/mysite.com.key;
+        ssl_client_certificate ssl/mysite/ca.crt;
+
+        location / {
+        # This installation is running on port 8021, as you can plainly see.
+          proxy_pass http://127.0.0.1:8000;
+        }
+}
+#+END_SRC
