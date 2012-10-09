@@ -235,6 +235,14 @@ event_validation_group(ValidationGroup) ->
     Event = event_context(),
     event_context(Event#event_context { validation_group = ValidationGroup }).
 
+clear_validators(Target) ->
+	Validators = state_handler:get_state(validators, []),
+	RealTarget = wf_render_actions:normalize_path(Target),
+
+	%% Keep only the validators that don't match the Target Path
+	FilteredValidators = [X || X={_, ValPath, _} <- Validators, ValPath =/= RealTarget],
+	state_handler:set_state(validators, FilteredValidators).
+
 
 
 %%% HANDLERS %%%

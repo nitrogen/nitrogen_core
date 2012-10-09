@@ -122,10 +122,15 @@ NitrogenClass.prototype.$validate_and_serialize = function(validationGroup) {
         n = this;
 
     jQuery(":input").not(".no_postback").each(function(i) {
-        if (this.validator && this.validator.group == this.validationGroup && !this.validator.validate()) {
+		var LV = getLiveValidation(this);
+		console.log({lv: LV,vg,validationGroup});
+		console.log(validationGroup);
+        if (LV && LV.group == validationGroup && !LV.validate()) {
+			console.log("invalid");
             // Set a flag, but keep validating to show all messages.
             is_valid = false;
         } else {
+			console.log("valid");
             // Skip any unchecked radio boxes.
             if ((this.type == "radio" || this.type=="checkbox") && !this.checked) return;
             params[n.$make_id(this)] = this.value;

@@ -1,3 +1,4 @@
+% vim: ts=4 sw=4 ee
 % Nitrogen Web Framework for Erlang
 % Copyright (c) 2008-2010 Rusty Klophaus
 % See MIT-LICENSE for licensing information.
@@ -18,6 +19,9 @@ wire(Trigger, Target, Actions) ->
 
 update(Target, Elements) -> 
     ok = action_update:update(Target, Elements).
+
+clear_validators(Target) ->
+    ok = wf_context:clear_validators(Target).
 
 replace(Target, Elements) ->
     ok = action_update:replace(Target, Elements).
@@ -147,7 +151,7 @@ temp_id() ->
     _String = wf_render_elements:temp_id().
 
 normalize_id(Path) ->
-	_String = wf_render_elements:normalize_id(Path).
+    _String = wf_render_elements:normalize_id(Path).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -241,7 +245,7 @@ qs_pl(KeyList) when is_list(KeyList) ->
 %   {Hds,Tls}.
         
 params() ->
-	query_handler:get_params().
+    query_handler:get_params().
 
 
 %%% EXPOSE LOG_HANDLER %%%

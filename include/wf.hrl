@@ -182,7 +182,10 @@
 
 
 %%% Actions %%%
--define(ACTION_BASE(Module), is_action=is_action, module=Module, anchor, trigger, target, actions, show_if=true).
+-define(AV_BASE(Module,Defer), is_action=is_action, module=Module, anchor, trigger, target, actions, show_if=true, defer=Defer).
+
+-define(ACTION_BASE(Module), ?AV_BASE(Module,0)).
+
 -record(actionbase, {?ACTION_BASE(undefined)}).
 -record(wire, {?ACTION_BASE(action_wire)}).
 -record(update, {?ACTION_BASE(action_update), type=update, elements=[]}).
@@ -215,7 +218,7 @@
 -record(disable, {?ACTION_BASE(action_disable)}).
 
 %%% Validators %%%
--define(VALIDATOR_BASE(Module), ?ACTION_BASE(Module), text="Failed.").
+-define(VALIDATOR_BASE(Module), ?AV_BASE(Module,true), text="Failed.").
 -record(validatorbase, {?VALIDATOR_BASE(undefined)}).
 -record(is_required, {?VALIDATOR_BASE(validator_is_required)}).
 -record(is_email, {?VALIDATOR_BASE(validator_is_email)}).
