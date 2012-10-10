@@ -1,4 +1,4 @@
-
+# vim: ts=3 sw=3 et ft=org
 #+TITLE: Validate Action Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Rusty Klophaus (@rklophaus)
@@ -30,4 +30,6 @@
 
 ** See Also
 
-   + [[./base.html][base element]]
+   + [[./base.html][base action]]
+
+   + [[./clear_validation.html][clear validation action]]

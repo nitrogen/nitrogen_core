@@ -1,3 +1,4 @@
+# vim: ts=2 sw=2 et ft=org
 #+STYLE: <LINK href="stylesheet.css" rel="stylesheet" type="text/css" />
 #+TITLE: Nitrogen 2.x Documentation
 #+AUTHOR: Rusty Klophaus (@rklophaus)
@@ -14,6 +15,7 @@
   + [[./actions/event.org][Event]]
   + [[./actions/script.org][Script]]
   + [[./actions/validate.org][Validate]]
+  + [[./actions/clear_validation.org][Clear Validation]]
   + [[./actions/api.org][Ajax API]]
 
 * Effects

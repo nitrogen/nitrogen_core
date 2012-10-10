@@ -60,6 +60,7 @@ wire(Trigger, Target, Actions) when ?IS_STRING(Actions) ->
 wire(Trigger, Target, Actions) ->
     Anchor = wf_context:anchor(),
     Action = #wire {
+		%% TODO: Add defer property then the actions should be sorted before being rendered
         anchor  = Anchor, 
         trigger = wf:coalesce([Trigger, Anchor]), 
         target  = wf:coalesce([Target, Anchor]), 

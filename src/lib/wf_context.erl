@@ -235,8 +235,6 @@ event_validation_group(ValidationGroup) ->
     Event = event_context(),
     event_context(Event#event_context { validation_group = ValidationGroup }).
 
-
-
 %%% HANDLERS %%%
 
 handlers() ->
