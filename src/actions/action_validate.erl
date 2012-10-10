@@ -23,7 +23,7 @@ render_action(Record) ->
     end,
 
     % Create the validator Javascript...
-	ConstructorJS = wf:f("var v = addLiveValidation(obj('~s'), { validMessage: \"~s\", onlyOnBlur: ~s, onlyOnSubmit: ~s ~s});", [TargetPath, wf:js_escape(ValidMessage), OnlyOnBlur, OnlyOnSubmit, InsertAfterNode]),
+	ConstructorJS = wf:f("var v = Nitrogen.$add_validation(obj('~s'), { validMessage: \"~s\", onlyOnBlur: ~s, onlyOnSubmit: ~s ~s});", [TargetPath, wf:js_escape(ValidMessage), OnlyOnBlur, OnlyOnSubmit, InsertAfterNode]),
 
     TriggerJS = wf:f("v.group = '~s';", [ValidationGroup]),
 

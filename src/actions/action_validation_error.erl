@@ -10,6 +10,7 @@ render_action(Record) ->
     TargetPath = Record#validation_error.target,
     Text = wf:js_escape(Record#validation_error.text),
     [
+		%% Is this going to be a problem with memory leaks? I'm not sure.
         wf:f("var v = new LiveValidation(obj('~s'), { onlyOnSubmit: true });", [TargetPath]),
         wf:f("v.add(Validate.Custom, { against: Nitrogen.$return_false, failureMessage: \"~s\", displayMessageWhenEmpty: true });", [Text]),
         "v.validate();"

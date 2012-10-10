@@ -40,6 +40,7 @@
 	anchor=undefined,    % Holds the unique ID of the current anchor element.
 	data=[],             % Holds whatever the page_module:main/1 method returns: HTML, Elements, Binary, etc..
 	queued_actions=[],   % List of actions queued in main/1, event/2, or when rendering elements.
+	deferred_actions=[], % List of actions to be rendered after the primary actions
 
 	% These are all serialized, sent to the browser
 	% and de-serialized on each request.
@@ -182,9 +183,9 @@
 
 
 %%% Actions %%%
--define(AV_BASE(Module,Defer), is_action=is_action, module=Module, anchor, trigger, target, actions, show_if=true, defer=Defer).
+-define(AV_BASE(Module,Type), is_action=Type, module=Module, anchor, trigger, target, actions, show_if=true).
 
--define(ACTION_BASE(Module), ?AV_BASE(Module,0)).
+-define(ACTION_BASE(Module), ?AV_BASE(Module,is_action)).
 
 -record(actionbase, {?ACTION_BASE(undefined)}).
 -record(wire, {?ACTION_BASE(action_wire)}).
@@ -196,8 +197,10 @@
 -record(set, {?ACTION_BASE(action_set), value}).
 -record(redirect, {?ACTION_BASE(action_redirect), url}).
 -record(event, {?ACTION_BASE(action_event), type=default, keycode=undefined, shift_key=false, delay=0, postback, validation_group, delegate, extra_param}).
+%% we want validation assignments to happen last, so we use AV_BASE and set deferral to zero first
 -record(validate, {?ACTION_BASE(action_validate), on=submit, success_text=" ", group, validators, attach_to }).
 -record(validation_error, {?ACTION_BASE(action_validation_error), text="" }).
+-record(clear_validation, {?ACTION_BASE(action_clear_validation), validation_trigger, validation_target, validation_all}).
 -record(alert, {?ACTION_BASE(action_alert), text=""}).
 -record(confirm, {?ACTION_BASE(action_confirm), text="", postback, delegate}).
 -record(script, {?ACTION_BASE(action_script), script}).
@@ -218,7 +221,9 @@
 -record(disable, {?ACTION_BASE(action_disable)}).
 
 %%% Validators %%%
--define(VALIDATOR_BASE(Module), ?AV_BASE(Module,true), text="Failed.").
+%%% %% TODO: Switch this from is_action to is_validator once deferred is implemented
+%%% This will allow users to bind validators directly, instead of needing the #validate{} action
+-define(VALIDATOR_BASE(Module), ?AV_BASE(Module,is_action), text="Failed.").
 -record(validatorbase, {?VALIDATOR_BASE(undefined)}).
 -record(is_required, {?VALIDATOR_BASE(validator_is_required)}).
 -record(is_email, {?VALIDATOR_BASE(validator_is_email)}).

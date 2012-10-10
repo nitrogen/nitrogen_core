@@ -1,4 +1,4 @@
-% vim: ts=4 sw=4 ee
+% vim: ts=4 sw=4 et
 % Nitrogen Web Framework for Erlang
 % Copyright (c) 2008-2010 Rusty Klophaus
 % See MIT-LICENSE for licensing information.
@@ -19,9 +19,6 @@ wire(Trigger, Target, Actions) ->
 
 update(Target, Elements) -> 
     ok = action_update:update(Target, Elements).
-
-clear_validators(Target) ->
-    ok = wf_context:clear_validators(Target).
 
 replace(Target, Elements) ->
     ok = action_update:replace(Target, Elements).
