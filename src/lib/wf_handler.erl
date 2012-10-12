@@ -19,7 +19,8 @@ call(Name, FunctionName, Args) ->
     % Get the handler and state from the context. Then, call
     % the function, passing in the Args and State.
     #handler_context { module=Module, config=Config, state=State } = get_handler(Name),
-    Result = erlang:apply(Module, FunctionName, Args ++ [Config, State]),
+    Result = try erlang:apply(Module, FunctionName, Args ++ [Config, State])
+    catch A:B -> error_log:error_msg("~p:~p ~p",[?MODULE,?LINE,erlang:get_stacktrace()]) end,
 
     % Result will be {ok, State}, {ok, Value1, State}, or {ok, Value1, Value2, State}.
     % Update the context with the new state.
@@ -43,7 +44,8 @@ call_readonly(Name, FunctionName, Args) ->
     % Get the handler and state from the context. Then, call
     % the function, passing in the Args with State appended.
     #handler_context { module=Module, config=Config, state=State } = get_handler(Name),
-    erlang:apply(Module, FunctionName, Args ++ [Config, State]).
+    try erlang:apply(Module, FunctionName, Args ++ [Config, State])
+    catch A:B -> error_log:error_msg("~p:~p ~p",[?MODULE,?LINE,erlang:get_stacktrace()]) end.
 
 set_handler(Module, Config) ->
     {module, Module} = code:ensure_loaded(Module),
