@@ -58,35 +58,22 @@ finish_dynamic_request() ->
     Elements = wf_context:data(),
     wf_context:clear_data(),
 
-    Actions = wf_context:actions(),
-    wf_context:clear_actions(),
+    % Render Elements...
+    {ok, Html} = wf_render_elements:render_elements(Elements),
 
-    % Render...
-    {ok, Html1, Javascript1} = wf_render:render(Elements, Actions, undefined, undefined, undefined),
+	% Render Actions
+	ActionQueue = wf_context:action_queue(),
 
-    % Update flash and render
-    % Has to be here because has_flash state is not set before render
-    element_flash:update(),	
-    ActionsFlash = wf_context:actions(),
-    wf_context:clear_actions(),
-    {ok, Html2, Javascript2} = wf_render:render([], ActionsFlash, undefined, undefined, undefined),
-
-%%	%% Like the flash stuff, we have to load the deferred actions last, since
-	%% in an offensively non-functional way, some elements and actions will be
-	%% deferred when rendered above
-%%	ActionsDeferred = wf_context:deferred(),
-%%	wf_contxt:clear_deferred(),
-%%	{ok, _, Javascript3} = wf_render:render([], ActionsDeferred, undefined, undefined, undefined),
-
+	{ok, Javascript} = wf_render_actions:render_action_queue(ActionQueue),
 
     % Call finish on all handlers.
     call_finish_on_handlers(),
 
     % Create Javascript to set the state...
     StateScript = serialize_context(),
-    JavascriptFinal = [StateScript, Javascript1 ++ Javascript2],
+    JavascriptFinal = [StateScript, Javascript],
     case wf_context:type() of
-        first_request       -> build_first_response(Html1 ++ Html2, JavascriptFinal);
+        first_request       -> build_first_response(Html, JavascriptFinal);
         postback_request    -> build_postback_response(JavascriptFinal)
     end.
 

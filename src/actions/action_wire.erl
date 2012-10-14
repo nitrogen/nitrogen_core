@@ -49,23 +49,36 @@ set_trigger(Action, Trigger) -> setelement(5, Action, Trigger).
 get_target(Action) -> element(6, Action).
 set_target(Action, Target) -> setelement(6, Action, Target).
 
-wire(_, _, undefined) -> 
-    ok;
-
-wire(_, _, []) -> 
-    ok;
-
-wire(Trigger, Target, Actions) when is_binary(Actions) orelse ?IS_STRING(Actions) ->
-    wire(Trigger, Target, #script { script=Actions });
+eager(Trigger, Target, Actions) ->
+	wire(eager, Trigger, Target, Actions).
 
 wire(Trigger, Target, Actions) ->
+	wire(normal, Trigger, Target, Actions).
+
+defer(Trigger, Target, Actions) ->
+	wire(defer, Trigger, Target, Actions).
+
+
+
+wire(_, _, _, undefined) -> 
+    ok;
+
+wire(_, _, _, []) -> 
+    ok;
+
+wire(_, _, _, <<>>) ->
+	ok;
+
+wire(Priority, Trigger, Target, Actions) when is_binary(Actions) orelse ?IS_STRING(Actions) ->
+    wire(Priority, Trigger, Target, #script { script=Actions });
+
+wire(Priority, Trigger, Target, Actions) ->
     Anchor = wf_context:anchor(),
     Action = #wire {
-		%% TODO: Add defer property then the actions should be sorted before being rendered
         anchor  = Anchor, 
         trigger = wf:coalesce([Trigger, Anchor]), 
         target  = wf:coalesce([Target, Anchor]), 
         actions = Actions
     },
-    wf_context:add_action(Action),
+    wf_context:add_action(Priority, Action),
     ok.

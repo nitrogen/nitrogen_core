@@ -17,26 +17,86 @@ wire(Target, Actions) ->
 wire(Trigger, Target, Actions) -> 
     ok = action_wire:wire(Trigger, Target, Actions).
 
+defer(Actions) ->
+    ok = defer(undefined, undefined, Actions).
+
+defer(Target, Actions) ->
+    ok = defer(Target, Target, Actions).
+
+defer(Trigger, Target, Actions) ->
+    ok = action_wire:defer(Trigger, Target, Actions).
+
+eager(Actions) ->
+    ok = eager(undefined, undefined, Actions).
+
+eager(Target, Actions) ->
+    ok = eager(Target, Target, Actions).
+
+eager(Trigger, Target, Actions) ->
+    ok = action_wire:eager(Trigger, Target, Actions).
+
+priority_wire(Priority, Actions) ->
+    ok = priority_wire(Priority, undefined, undefined, Actions).
+
+priority_wire(Priority, Target, Actions) ->
+    ok = priority_wire(Priority, Target, Target, Actions).
+
+priority_wire(eager, Trigger, Target, Actions) ->
+    ok = wf:eager(Trigger, Target, Actions);
+
+priority_wire(normal, Trigger, Target, Actions) ->
+    ok = wf:wire(Trigger, Target, Actions);
+
+priority_wire(defer, Trigger, Target, Actions) ->
+    ok = wf:defer(Trigger, Target, Actions).
+
+set(Element, Value) -> 
+    ok = set(normal, Element, Value).
+
+set(Priority, Element, Value) when ?IS_ACTION_PRIORITY(Priority) -> 
+    ok = action_set:set(Priority, Element, Value).
+
 update(Target, Elements) -> 
-    ok = action_update:update(Target, Elements).
+    ok = update(normal, Target, Elements).
+
+update(Priority, Target, Elements) when ?IS_ACTION_PRIORITY(Priority) ->
+    ok = action_update:update(Priority, Target, Elements).
 
 replace(Target, Elements) ->
-    ok = action_update:replace(Target, Elements).
+    ok = replace(normal, Target, Elements).
+
+replace(Priority, Target, Elements) when ?IS_ACTION_PRIORITY(Priority) ->
+    ok = action_update:replace(Priority, Target, Elements).
 
 insert_top(Target, Elements) -> 
-    ok = action_update:insert_top(Target, Elements).
+    ok = insert_top(normal, Target, Elements).
+
+insert_top(Priority, Target, Elements) when ?IS_ACTION_PRIORITY(Priority) -> 
+    ok = action_update:insert_top(Priority, Target, Elements).
 
 insert_bottom(Target, Elements) -> 
-    ok = action_update:insert_bottom(Target, Elements).
+    ok = insert_bottom(normal, Target, Elements).
+
+insert_bottom(Priority, Target, Elements) when ?IS_ACTION_PRIORITY(Priority) ->
+    ok = action_update:insert_bottom(Priority, Target, Elements).
 
 insert_before(Target, Elements) ->
-    ok = action_update:insert_before(Target, Elements).
+    ok = insert_before(normal, Target, Elements).
+
+insert_before(Priority, Target, Elements) when ?IS_ACTION_PRIORITY(Priority) ->
+    ok = action_update:insert_before(Priority, Target, Elements).
 
 insert_after(Target, Elements) ->
-    ok = action_update:insert_after(Target, Elements).
+    ok = insert_after(normal, Target, Elements).
+
+insert_after(Priority, Target, Elements) when ?IS_ACTION_PRIORITY(Priority) ->
+    ok = action_update:insert_after(Priority, Target, Elements).
 
 remove(Target) ->
-    ok = action_update:remove(Target).
+    ok = remove(normal, Target).
+
+remove(Priority, Target) when ?IS_ACTION_PRIORITY(Priority) ->
+    ok = action_update:remove(Priority, Target).
 
 flash(Elements) ->
     element_flash:add_flash(Elements).
@@ -122,17 +182,13 @@ join(List,Delimiter) ->
 
 %%% EXPOSE WF_BIND %%%
 % TODO
-set(Element, Value) -> 
-    ok = action_set:set(Element, Value).
 
 % bind(BindingTuple, Record) -> wf_bind:bind(BindingTuple, Record).
 % reverse_bind(BindingTuple) -> wf_bind:reverse_bind(BindingTuple).
 % reverse_bind(BindingTuple, Record) -> wf_bind:reverse_bind(BindingTuple, Record).
 
-
-
 %%% OTHER %%%
-% TODO
+
 logout() -> clear_user(), clear_roles(), clear_state(), clear_session().
 
 to_js_id(Path) -> 

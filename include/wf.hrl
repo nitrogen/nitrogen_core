@@ -40,8 +40,7 @@
     response_bridge,     % Holds the simple_bridge response object
     anchor=undefined,    % Holds the unique ID of the current anchor element.
     data=[],             % Holds whatever the page_module:main/1 method returns: HTML, Elements, Binary, etc..
-    queued_actions=[],   % List of actions queued in main/1, event/2, or when rendering elements.
-    deferred_actions=[], % List of actions to be rendered after the primary actions
+    action_queue=undefined, %% Holds the reference to the action priority queue
 
     % These are all serialized, sent to the browser
     % and de-serialized on each request.
@@ -59,7 +58,21 @@
 -endif.
 
 %%% GUARDS %%%
--define(IS_STRING(Term), (is_list(Term) andalso Term /= [] andalso is_integer(hd(Term)))).
+
+-define (IS_STRING(Term),
+    (is_list(Term) andalso Term /= [] andalso is_integer(hd(Term)))).
+
+-define (IS_ACTION_PRIORITY(Priority),
+    (Priority=:=normal orelse Priority=:=eager orelse Priority=:=defer)).
+
+-define (PRIORITY_WIRE(Priority),
+        (case Priority of
+            eager   -> eager;
+            defer   -> defer;
+            normal  -> wire;
+            wire    -> wire
+        end)
+    ).
 
 %%% TERNARY IF AND VARIATIONS %%%
 -define(WF_IF(Term,IfTrue,IfFalse),
@@ -69,7 +82,6 @@
     end).
 
 -define(WF_IF(Term,IfTrue), ?WF_IF(Term,IfTrue,"")).
-
 
 %%% FRAMEWORK %%%
 

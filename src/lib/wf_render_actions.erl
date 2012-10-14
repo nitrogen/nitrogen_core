@@ -6,6 +6,7 @@
 -module (wf_render_actions).
 -include_lib ("wf.hrl").
 -export ([
+	render_action_queue/1,
     render_actions/2,
     render_actions/4,
     normalize_path/1,
@@ -14,6 +15,18 @@
 ]).
 
 %%% RENDER ACTIONS %%%
+
+render_action_queue(ActionQueue) ->
+	{ok, get_and_render_actions(ActionQueue)}.
+	
+get_and_render_actions(ActionQueue) ->
+	case wf_action_queue:out(ActionQueue) of
+		{error, empty} ->
+			[];
+		{ok, Action} ->
+			{ok, JS} = wf_render_actions:render_actions(Action, undefined),
+			[JS | get_and_render_actions(ActionQueue)]
+	end.
 
 % render_actions(Actions) -> {ok, Script}.
 render_actions(Actions, Anchor) ->
@@ -26,13 +39,9 @@ render_actions(Actions, Anchor, Trigger, Target) ->
 % render_actions(Actions, ScriptAcc) -> {ok, Script}.
 inner_render_actions(Action, Anchor, Trigger, Target) ->
     if 
-        Action == [] -> 
+        Action == [] orelse Action==undefined -> 
             [];
-        Action == undefined -> 
-            [];
-        is_binary(Action)   -> 
-            [Action];
-        ?IS_STRING(Action)  -> 
+        is_binary(Action) orelse ?IS_STRING(Action)   -> 
             [Action];
         is_tuple(Action) ->    
             Script = inner_render_action(Action, Anchor, Trigger, Target),
@@ -75,11 +84,8 @@ inner_render_action(Action, Anchor, Trigger, Target) when is_tuple(Action) ->
 
             % Render the action...
             ActionScript = call_action_render(Module, Action1, Anchor2, Trigger2, Target2),
-            AnchorScript = case needs_anchor_script(ActionScript) of
-                true  -> "\n" ++ generate_anchor_script(Anchor2, Target2);
-                false -> ""
-            end,
-            case ActionScript /= undefined andalso lists:flatten(ActionScript) /= [] of
+            AnchorScript = generate_anchor_script_if_needed(ActionScript, Anchor2, Target2),
+   			case ActionScript /= undefined andalso lists:flatten(ActionScript) /= [] of
                 true  -> [AnchorScript, ActionScript];
                 false -> []
             end;
@@ -87,24 +93,28 @@ inner_render_action(Action, Anchor, Trigger, Target) when is_tuple(Action) ->
             []
     end.
 
+generate_anchor_script_if_needed(ActionScript, Anchor, Target) ->
+	case needs_anchor_script(ActionScript) of
+		true  -> generate_anchor_script(Anchor, Target);
+		false -> ""
+	end.
+
 needs_anchor_script(undefined) -> 
     false;
-needs_anchor_script(Script) when is_binary(Script) ->
-    needs_anchor_script(binary_to_list(Script));
+needs_anchor_script(<<"Nitrogen.$anchor",_/binary>>) ->
+	false;
+needs_anchor_script("Nitrogen.$anchor" ++ _) ->
+	false;
+needs_anchor_script(<<"\n",Script/binary>>) ->
+	needs_anchor_script(Script);
 needs_anchor_script("\n" ++ Script) ->
-    needs_anchor_script(Script);
-needs_anchor_script(Script) when ?IS_STRING(Script) ->
-    case Script of
-        "Nitrogen.$anchor" ++ _ -> false;
-        _ -> true
-    end;
-needs_anchor_script([Script|_]) ->
-    needs_anchor_script(Script);
-needs_anchor_script([]) -> 
-    false.
+	needs_anchor_script(Script);
+needs_anchor_script(_) ->
+	true.
+
 
 generate_anchor_script(Anchor, Target) ->
-    wf:f("Nitrogen.$anchor('~s', '~s');", [Anchor, Target]).
+	wf:f(<<"\nNitrogen.$anchor('~s', '~s');">>, [Anchor, Target]).
 
 % call_action_render(Module, Action) -> {ok, Script}.
 % Calls the render_action/4 function of an action to turn an action record into Javascript.
@@ -131,9 +141,6 @@ normalize_path(String) ->
         "temp" ++ _ -> ".wfid_" ++ String;
         _ -> wf_utils:replace(String, "##", ".wfid_")
     end.
-
-
-
 
 to_js_id(P) ->
     P1 = lists:reverse(P),
