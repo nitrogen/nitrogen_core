@@ -21,4 +21,5 @@ render_element(Record) ->
         class=[spinner, Record#spinner.class],
         style=Record#spinner.style,
         body=#image { image=Record#spinner.image }
-    }.
+    },
+    element_panel:render_element(Terms).

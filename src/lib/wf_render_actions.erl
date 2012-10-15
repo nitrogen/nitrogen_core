@@ -89,10 +89,13 @@ inner_render_action(Action, Anchor, Trigger, Target) when is_tuple(Action) ->
 
 needs_anchor_script(undefined) -> 
     false;
+needs_anchor_script(Script) when is_binary(Script) ->
+    needs_anchor_script(binary_to_list(Script));
+needs_anchor_script("\n" ++ Script) ->
+    needs_anchor_script(Script);
 needs_anchor_script(Script) when ?IS_STRING(Script) ->
     case Script of
         "Nitrogen.$anchor" ++ _ -> false;
-        "\nNitrogen.$anchor" ++ _ -> false;
         _ -> true
     end;
 needs_anchor_script([Script|_]) ->
