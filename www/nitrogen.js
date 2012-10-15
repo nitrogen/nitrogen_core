@@ -298,8 +298,8 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input,set
     if(typeof(form.$nitrogen_pending_files)=="undefined")
         form.$nitrogen_pending_files = [];
 
-    jQuery.getScript("/nitrogen/jquery.iframe-transport.js",function(){
-        jQuery.getScript("/nitrogen/jquery.fileupload.js",function(){
+    jQuery.getScript("/nitrogen/jquery.iframe-transport.min.js",function(){
+        jQuery.getScript("/nitrogen/jquery.fileupload.min.js",function(){
             var dropzone = jQuery(form).children(".upload_drop");
         
             jQuery(input).fileupload({
