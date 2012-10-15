@@ -139,26 +139,30 @@ NitrogenClass.prototype.$validate_and_serialize = function(validationGroup) {
 
 NitrogenClass.prototype.$add_validation = function(element, args) {
     if($(element)){
-        if(!$(element).data(this.$live_validation_data_field))
-            $(element).data(this.$live_validation_data_field, new LiveValidation(element, args));
-        return this.$get_validation(element);
+        if(!$(element).data(Nitrogen.$live_validation_data_field))
+            $(element).data(Nitrogen.$live_validation_data_field, new LiveValidation(element, args));
+        return Nitrogen.$get_validation(element);
     } else
         return null;
 }
 
 NitrogenClass.prototype.$get_validation = function(element) {
-    return $(element).data(this.$live_validation_data_field);
+    return $(element).data(Nitrogen.$live_validation_data_field);
 }
 
+// TODO: This needs to be made smarter. Right now, I'm pretty sure elements have
+// single validation groups, while it should be a list of groups that get validated
 NitrogenClass.prototype.$destroy_specific_validation = function(trigger, target) {
-    alert("$destroy_specific_validation Not Implemented");
+	var v = NitrogenClass.$get_validation(target);
+	if(v.group==trigger)
+		Nitrogen.$destroy_target_validation(element);
 }
 
 NitrogenClass.prototype.$destroy_target_validation = function(element) {
-    var v = this.$get_validation(element);
+    var v = Nitrogen.$get_validation(element);
     if(v) {
-        v.destroy(true)
-        $(element).data(this.$live_validation_data_field,undefined);
+        v.destroy();
+        $(element).data(Nitrogen.$live_validation_data_field,null);
     }
 }
 
