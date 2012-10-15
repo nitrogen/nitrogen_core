@@ -14,7 +14,7 @@ render_element(Record) ->
             #script{script=["objs('me').hide()",
                             ".ajaxStart(function(){$(this).show();})",
                             ".ajaxStop(function(){$(this).hide();});" ]} ),
-    #panel {
+    Terms = #panel {
         html_id=Record#spinner.html_id,
         id=Record#spinner.id,
         anchor=Record#spinner.anchor,
