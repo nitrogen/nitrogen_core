@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-lang="en" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Nitrogen 2.x Documentation</title>
-<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<meta name="title" content="Nitrogen 2.x Documentation"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2011-10-28 03:27:31 CDT"/>
-<meta name="author" content="Rusty Klophaus (@rklophaus)"/>
+<meta name="generated" content="2012-10-15 16:46:30 CDT"/>
+<meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
 <style type="text/css">
@@ -44,6 +44,12 @@ lang="en" xml:lang="en">
   dt { font-weight: bold; }
   div.figure { padding: 0.5em; }
   div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
   textarea { overflow-x: auto; }
   .linenr { font-size:smaller }
   .code-highlighted {background-color:#ffff00;}
@@ -80,11 +86,15 @@ lang="en" xml:lang="en">
 
 </head>
 <body>
-<div id="content">
 
+<div id="preamble">
+
+</div>
+
+<div id="content">
 <h1 class="title">Nitrogen 2.x Documentation</h1>
 
-<p><a href="./index.html">Getting Started</a> | <a href="./api.html">API</a> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | About
+<p><a href="./index.html">Getting Started</a> | <a href="./api.html">API</a> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./config.html">Configuration Options</a> | <b>About</b>
 </p>
 
 
@@ -95,38 +105,33 @@ lang="en" xml:lang="en">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1 Resources </a></li>
-<li><a href="#sec-2">2 Versions </a></li>
-<li><a href="#sec-3">3 Thanks </a></li>
-<li><a href="#sec-4">4 Documentation </a></li>
+<li><a href="#sec-1">1 Resources</a></li>
+<li><a href="#sec-2">2 Versions</a></li>
+<li><a href="#sec-3">3 Thanks</a></li>
+<li><a href="#sec-4">4 Documentation</a></li>
 </ul>
 </div>
 </div>
 
 <div id="outline-container-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> Resources </h2>
+<h2 id="sec-1"><span class="section-number-2">1</span> Resources</h2>
 <div class="outline-text-2" id="text-1">
 
 
 <ul>
-<li>
-NitrogenProject.com - <a href="http://nitrogenproject.com">http://nitrogenproject.com</a>
+<li>NitrogenProject.com - <a href="http://nitrogenproject.com">http://nitrogenproject.com</a>
 
 </li>
-<li>
-Source Code - <a href="http://github.com/nitrogen/nitrogen">http://github.com/nitrogen/nitrogen</a>
+<li>Source Code - <a href="http://github.com/nitrogen/nitrogen">http://github.com/nitrogen/nitrogen</a>
 
 </li>
-<li>
-Donations - <a href="http://pledgie.com/campaigns/2057">http://pledgie.com/campaigns/2057</a>
+<li>Donations - <a href="http://pledgie.com/campaigns/2057">http://pledgie.com/campaigns/2057</a>
 
 </li>
-<li>
-Mailing List - <a href="http://groups.google.com/group/nitrogenweb">http://groups.google.com/group/nitrogenweb</a>
+<li>Mailing List - <a href="http://groups.google.com/group/nitrogenweb">http://groups.google.com/group/nitrogenweb</a>
 
 </li>
-<li>
-Bugs and Issues - <a href="http://nitrogen.lighthouseapp.com">http://nitrogen.lighthouseapp.com</a>
+<li>Bugs and Issues - <a href="http://github.com/nitrogen/nitrogen/issues">http://github.com/nitrogen/nitrogen/issues</a>
 </li>
 </ul>
 
@@ -136,73 +141,79 @@ Bugs and Issues - <a href="http://nitrogen.lighthouseapp.com">http://nitrogen.li
 </div>
 
 <div id="outline-container-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> Versions </h2>
+<h2 id="sec-2"><span class="section-number-2">2</span> Versions</h2>
 <div class="outline-text-2" id="text-2">
 
 
 <p>
-Nitrogen relies on some or all of the following software:
+  Nitrogen relies on some or all of the following software:
 </p>
 <ul>
-<li>
-<b>Erlang R13B03</b> or later - <a href="http://erlang.org">http://erlang.org</a>
+<li><b>Erlang R14B03</b> or later - <a href="http://erlang.org">http://erlang.org</a>
 
 </li>
-<li>
-<b>SimpleBridge</b> - Common interface to Erlang HTTP servers.
+<li><b>SimpleBridge</b> - Common interface to Erlang HTTP servers.
 <ul>
-<li>
-Git Repo: <a href="https://github.com/nitrogen/simple_bridge">https://github.com/nitrogen/simple_bridge</a>
+<li>Git Repo: <a href="https://github.com/nitrogen/simple_bridge">https://github.com/nitrogen/simple_bridge</a>
 
 </li>
 </ul>
+
 </li>
-<li>
-<b>mochiweb</b> - HTTP Server (Optional)
+<li><b>cowboy</b> - HTTP Server (Optional)
 <ul>
-<li>
-SVN Repo: <a href="https://github.com/nitrogen/mochiweb">https://github.com/nitrogen/mochiweb</a>
+<li>Git Repo: <a href="https://github.com/extend/cowboy">https://github.com/extend/cowboy</a>
 
 </li>
 </ul>
+
 </li>
-<li>
-<b>webmachine</b> - HTTP Server (Optional)
+<li><b>mochiweb</b> - HTTP Server (Optional)
 <ul>
-<li>
-SVN Repo: <a href="https://github.com/basho/webmachine">https://github.com/basho/webmachine</a>
+<li>Git Repo: <a href="https://github.com/nitrogen/mochiweb">https://github.com/nitrogen/mochiweb</a>
 
 </li>
 </ul>
+
 </li>
-<li>
-<b>yaws</b> - HTTP Server - <a href="http://yaws.hyber.org/">http://yaws.hyber.org/</a> (Optional)
+<li><b>webmachine</b> - HTTP Server (Optional)
 <ul>
-<li>
-Source: <a href="https://yaws.hyber.org/download/">https://yaws.hyber.org/download/</a>
+<li>Homepage: <a href="http://webmachine.basho.com">http://webmachine.basho.com</a> 
+</li>
+<li>Git Repo: <a href="https://github.com/basho/webmachine">https://github.com/basho/webmachine</a>
 
 </li>
 </ul>
+
 </li>
-<li>
-<b>Sync</b> - Automatically recompile changed Erlang modules.
+<li><b>yaws</b> - HTTP Server (Optional)
 <ul>
-<li>
-Source: <a href="https://github.com/rklophaus/Sync">https://github.com/rklophaus/Sync</a>
+<li>Homepage: <a href="https://yaws.hyber.org">https://yaws.hyber.org</a>
+</li>
+<li>Git Repo: <a href="https://github.com/klacke/yaws">https://github.com/klacke/yaws</a> 
 
 </li>
 </ul>
-</li>
-<li>
-<b>JQuery 1.4.2</b> - <a href="http://jquery.com">http://jquery.com</a>
 
 </li>
-<li>
-<b>JQuery UI 1.8rc2</b> - <a href="http://jqueryui.com">http://jqueryui.com</a>
+<li><b>Sync</b> - Automatically recompile changed Erlang modules.
+<ul>
+<li>Git Repo: <a href="https://github.com/rustyio/sync">https://github.com/rustyio/sync</a>
 
 </li>
-<li>
-<b>Live Validation 1.3</b> - <a href="http://livevalidation.com/">http://livevalidation.com/</a>
+</ul>
+
+</li>
+<li><b>jQuery 1.8.2</b> - <a href="http://jquery.com">http://jquery.com</a>
+
+</li>
+<li><b>jQuery UI 1.8.23</b> - <a href="http://jqueryui.com">http://jqueryui.com</a>
+
+</li>
+<li><b>jQuery Mobile 1.1.1</b> - <a href="http://jquerymobile.com">http://jquerymobile.com</a>
+
+</li>
+<li><b>Live Validation 1.3</b> - <a href="http://livevalidation.com/">http://livevalidation.com/</a>
 </li>
 </ul>
 
@@ -212,108 +223,152 @@ Source: <a href="https://github.com/rklophaus/Sync">https://github.com/rklophaus
 </div>
 
 <div id="outline-container-3" class="outline-2">
-<h2 id="sec-3"><span class="section-number-2">3</span> Thanks </h2>
+<h2 id="sec-3"><span class="section-number-2">3</span> Thanks</h2>
 <div class="outline-text-2" id="text-3">
 
 
 <p>
-Sincere thanks to all the people who have helped make Nitrogen great, including:
+  Sincere thanks to all the people who have helped make Nitrogen great, including:
 </p>
 <ul>
-<li>
-Rusty Klophaus (@rustyio)
+<li>Rusty Klophaus (@rustyio)
 </li>
-<li>
-Chris Williams (@voodootikigod)
+<li>Chris Williams (@voodootikigod)
 </li>
-<li>
-Joel Reymont (@wagerlabs)
+<li>Joel Reymont (@wagerlabs)
 </li>
-<li>
-Tom McNulty
+<li>Tom McNulty
 </li>
-<li>
-Martin Scholl (@zeit_geist)
+<li>Martin Scholl (@zeit_geist)
 </li>
-<li>
-Dave Peticolas
+<li>Dave Peticolas
 </li>
-<li>
-Jon Gretar Borgthorsson (@jongretar)
+<li>Jon Gretar Borgthorsson (@jongretar)
 </li>
-<li>
-Dan Bravender (@dbravender)
+<li>Dan Bravender (@dbravender)
 </li>
-<li>
-Taavi Talvik
+<li>Taavi Talvik
 </li>
-<li>
-Torbjorn Tornkvist (@kruskakli)
+<li>Torbjorn Tornkvist (@kruskakli)
 </li>
-<li>
-Marius A. Eriksen (@marius)
+<li>Marius A. Eriksen (@marius)
 </li>
-<li>
-Michael Mullis
+<li>Michael Mullis
 </li>
-<li>
-John Dragos
+<li>John Dragos
 </li>
-<li>
-Benjamin Nortier (@bjnortier)
+<li>Benjamin Nortier (@bjnortier)
 </li>
-<li>
-Jay Doane
+<li>Jay Doane
 </li>
-<li>
-Robert Schonberger
+<li>Robert Schonberger
 </li>
-<li>
-Yurii Rashkovskii (@yrashk)
+<li>Yurii Rashkovskii (@yrashk)
 </li>
-<li>
-Ville Koivula
+<li>Ville Koivula
 </li>
-<li>
-Jesse Gumm
+<li>Jesse Gumm (@jessegumm)
 </li>
-<li>
-Andreas Hasselberg 
+<li>Jan-Felix Wittmann
 </li>
-<li>
-Jonas Adahl
+<li>Martin Sivak
 </li>
-<li>
-Susan Potter
+<li>Markus Flambard
+</li>
+<li>Jonas Ådahl
+</li>
+<li>Boris Faure
+</li>
+<li>Rajiv M. Ranganath
+</li>
+<li>Gregory Haskins
+</li>
+<li>Andy Skelton
+</li>
+<li>Tino Breddin
+</li>
+<li>Dave Peticolas
+</li>
+<li>Susan Potter (@susanpotter)
+</li>
+<li>Rado Kozmer
+</li>
+<li>Ward Bekkar
+</li>
+<li>Gleb Peregud
+</li>
+<li>Lorant Kurthy
+</li>
+<li>Andreas Hasselberg
+</li>
+<li>Mattias Holmlund
+</li>
+<li>Justin Kirby
+</li>
+<li>Tuncer Ayaz
+</li>
+<li>Loïc Hoguin (@lhoguin)
+</li>
+<li>Sergei Lebedev
+</li>
+<li>Stephen Panning
+</li>
+<li>James Pharaoh
+</li>
+<li>Milan Svoboda
+</li>
+<li>Jenő I. Hajdu
+</li>
+<li>Maxim Sothatsky
 </li>
 </ul>
 
 
-<p>
-Roughly sorted by date of contribution. Send your twitter handles to @rustyio or @jessegumm
+<p>   
+  Roughly sorted by date of contribution. Send your twitter handles to @jessegumm or @rustyio
 </p>
 </div>
 
 </div>
 
 <div id="outline-container-4" class="outline-2">
-<h2 id="sec-4"><span class="section-number-2">4</span> Documentation </h2>
+<h2 id="sec-4"><span class="section-number-2">4</span> Documentation</h2>
 <div class="outline-text-2" id="text-4">
 
 
 <p>
-This documentation is created using org-mode. To contribute updates
-or corrections, contact Rusty Klophaus (@rustyio) or fork and
-update the code in <a href="http://github.com/nitrogen/nitrogen">http://github.com/nitrogen/nitrogen</a> under the
-<code>./docs/org-mode</code> directory
+  This documentation is created using org-mode. To contribute updates
+  or corrections, contact Jesse Gumm (@jessegumm) or fork and
+  update the code in <a href="http://github.com/nitrogen/nitrogen_core">http://github.com/nitrogen/nitrogen_core</a> under the
+  <code>./docs/org-mode</code> directory
 </p></div>
 </div>
+</div>
+
 <div id="postamble">
-<p class="author"> Author: Rusty Klophaus (@rklophaus)
-</p>
-<p class="date"> Date: 2011-10-28 03:27:31 CDT</p>
-<p class="creator">HTML generated by org-mode 7.4 in emacs 23</p>
-</div>
-</div>
+<p class="date">Date: 2012-10-15 16:46:30 CDT</p>
+<p class="author">Author: Rusty Klophaus (@rustyio)</p>
+<p class="creator">Org version 7.8.02 with Emacs version 23</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div><h2>Comments</h2>
+<b>Note:</b><!-- Disqus does not currently support Erlang for its syntax highlighting, so t-->To specify <!--Erlang--> code blocks, just use the generic code block syntax: <pre><b>&lt;pre&gt;&lt;code&gt;your code here&lt;/code&gt;&lt;/pre&gt;</b></pre>
+<br />
+<br />
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	var disqus_shortname = 'nitrogenproject'; // required: replace example with your forum shortname
+	var disqus_identifier = 'html/about.html'; //This will be replaced with the path part of the url
+
+	/* * * DON'T EDIT BELOW THIS LINE * * */
+	(function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 </body>
 </html>

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-lang="en" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>Nitrogen 2.x Documentation</title>
+<title>Nitrogen Handlers</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="Nitrogen Handlers"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2011-10-28 03:26:53 CDT"/>
-<meta name="author" content="Rusty Klophaus (@rklophaus)"/>
+<meta name="generated" content="2012-10-15 14:20:01 CDT"/>
+<meta name="author" content="Rusty Klophaus(@rustyio), Jesse Gumm (@jessegumm)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
 <style type="text/css">
@@ -44,6 +44,12 @@ lang="en" xml:lang="en">
   dt { font-weight: bold; }
   div.figure { padding: 0.5em; }
   div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
   textarea { overflow-x: auto; }
   .linenr { font-size:smaller }
   .code-highlighted {background-color:#ffff00;}
@@ -80,51 +86,94 @@ lang="en" xml:lang="en">
 
 </head>
 <body>
+
+<div id="preamble">
+
+</div>
+
 <div id="content">
+<h1 class="title">Nitrogen Handlers</h1>
 
-<h1 class="title">Nitrogen 2.x Documentation</h1>
-
-<p><a href="./index.html">Getting Started</a> | <a href="./api.html">API</a> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | Handlers | <a href="./about.html">About</a>
+<p><a href="./index.html">Getting Started</a> | <a href="./api.html">API</a> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <b>Handlers</b> | <a href="./config.html">Configuration Options</a> | <a href="../about.html">About</a>
 </p>
 
 
 <div class=headline>Nitrogen Handlers</div>
 
-<p>
-Coming soon.
-</p>
 
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1 Config Handler </a></li>
-<li><a href="#sec-2">2 Log Handler </a></li>
-<li><a href="#sec-3">3 Process Registry Handler </a></li>
-<li><a href="#sec-4">4 Cache Handler </a></li>
-<li><a href="#sec-5">5 Query Handler </a></li>
-<li><a href="#sec-6">6 Session Handler </a></li>
-<li><a href="#sec-7">7 State Handler </a></li>
-<li><a href="#sec-8">8 Identity Handler </a></li>
-<li><a href="#sec-9">9 Role Handler </a></li>
-<li><a href="#sec-10">10 Route Handler </a></li>
-<li><a href="#sec-11">11 Security Handler </a></li>
+<li><a href="#sec-1">1 Handler Overview</a></li>
+<li><a href="#sec-2">2 nitrogen:handler(HandlerName, Config)</a></li>
+<li><a href="#sec-3">3 Common Handler Behavior Arguments</a></li>
+<li><a href="#sec-4">4 The Handlers</a></li>
 </ul>
 </div>
 </div>
 
 <div id="outline-container-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> Config Handler </h2>
+<h2 id="sec-1"><span class="section-number-2">1</span> Handler Overview</h2>
 <div class="outline-text-2" id="text-1">
 
 
+<p>
+Core Nitrogen behavior has been broken out into well-defined, pluggable 
+behavior modules called <i>handlers</i>. Handlers allow you to easily substitute
+your own logic for things like session, security, routing, and others. Simply
+create a module that implements one of the existing behaviors, and register it
+to call <code>nitrogen:handler/2</code> between the <code>nitrogen:init_request/2</code> and
+<code>nitrogen:run/0</code> calls found inside the <code>nitrogen_xxx</code> (where <code>xxx</code> is the
+webserver used, for example 'mochiweb', 'yaws', 'cowboy', etc).
+</p>
+<p>
+For example, let's add custom session and config handlers to our mochiweb
+install. To do so, let's add our handlers to  <code>nitrogen_mochiweb:loop/1</code>:
+</p>
+
+
+
+<pre class="src src-erlang"><span class="org-function-name">loop</span>(<span class="org-variable-name">Req</span>) -&gt;
+  {ok, <span class="org-variable-name">DocRoot</span>} = <span class="org-type">application</span>:<span class="org-type">get_env</span>(mochiweb, document_root),
+  <span class="org-variable-name">RequestBridge</span> = <span class="org-type">simple_bridge</span>:<span class="org-type">make_request</span>(mochiweb_request_bridge, <span class="org-variable-name">Req</span>),
+  <span class="org-variable-name">ResponseBridge</span> = <span class="org-type">simple_bridge</span>:<span class="org-type">make_response</span>(mochiweb_response_bridge, {<span class="org-variable-name">Req</span>, <span class="org-variable-name">DocRoot</span>}),
+  <span class="org-type">nitrogen</span>:<span class="org-type">init_request</span>(<span class="org-variable-name">RequestBridge</span>, <span class="org-variable-name">ResponseBridge</span>),
+  <span class="org-type">nitrogen</span>:<span class="org-type">handler</span>(my_config_handler,[]),   <span class="org-comment-delimiter">%% </span><span class="org-comment">Add custom config handler</span>
+  <span class="org-type">nitrogen</span>:<span class="org-type">handler</span>(my_session_handler,[]),  <span class="org-comment-delimiter">%% </span><span class="org-comment">Add custom session handler</span>
+  <span class="org-type">nitrogen</span>:<span class="org-type">run</span>().
+</pre>
+
+
+<p>
+It may seem odd to you that we're not specifying <b>which</b> handler we're actually
+loading, but that's because the <code>nitrogen:handler/2</code> function determines,
+based on the <code>behavior()</code> defined within the handler module, which handler it
+is we're actually loading.
+</p>
 </div>
 
 </div>
 
 <div id="outline-container-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> Log Handler </h2>
+<h2 id="sec-2"><span class="section-number-2">2</span> nitrogen:handler(HandlerName, Config)</h2>
 <div class="outline-text-2" id="text-2">
+
+
+<p>
+<code>nitrogen:handler/2</code> is the way to function to connect your custom handler into
+Nitrogen's handler system. This function takes two arguments:
+</p>
+<ul>
+<li><code>HandlerName</code> - The name of the module.
+
+</li>
+<li><code>Config</code> - Any configuration settings for this handler. This variable
+      could be just about anything, a proplist containing API keys or IP
+      addresses of related servers (say for a session handler connected to
+      an external memcache or something.
+</li>
+</ul>
 
 
 </div>
@@ -132,8 +181,23 @@ Coming soon.
 </div>
 
 <div id="outline-container-3" class="outline-2">
-<h2 id="sec-3"><span class="section-number-2">3</span> Process Registry Handler </h2>
+<h2 id="sec-3"><span class="section-number-2">3</span> Common Handler Behavior Arguments</h2>
 <div class="outline-text-2" id="text-3">
+
+
+<p>
+In all of the handler behavior functions are found two particular variables:
+</p>
+<ul>
+<li><code>Config</code> - When a handler is initialized using <code>nitrogen:handler/2</code>, the
+      second argument is <code>Config</code>, which is then passed into each handler
+      function.
+
+</li>
+<li><code>State</code> - The current state of the handler. Each handler maintains its own
+      state.
+</li>
+</ul>
 
 
 </div>
@@ -141,80 +205,120 @@ Coming soon.
 </div>
 
 <div id="outline-container-4" class="outline-2">
-<h2 id="sec-4"><span class="section-number-2">4</span> Cache Handler </h2>
+<h2 id="sec-4"><span class="section-number-2">4</span> The Handlers</h2>
 <div class="outline-text-2" id="text-4">
 
 
-</div>
-
-</div>
-
-<div id="outline-container-5" class="outline-2">
-<h2 id="sec-5"><span class="section-number-2">5</span> Query Handler </h2>
-<div class="outline-text-2" id="text-5">
-
-
-</div>
-
-</div>
-
-<div id="outline-container-6" class="outline-2">
-<h2 id="sec-6"><span class="section-number-2">6</span> Session Handler </h2>
-<div class="outline-text-2" id="text-6">
-
-
-</div>
-
-</div>
-
-<div id="outline-container-7" class="outline-2">
-<h2 id="sec-7"><span class="section-number-2">7</span> State Handler </h2>
-<div class="outline-text-2" id="text-7">
-
-
-</div>
-
-</div>
-
-<div id="outline-container-8" class="outline-2">
-<h2 id="sec-8"><span class="section-number-2">8</span> Identity Handler </h2>
-<div class="outline-text-2" id="text-8">
-
-
-</div>
-
-</div>
-
-<div id="outline-container-9" class="outline-2">
-<h2 id="sec-9"><span class="section-number-2">9</span> Role Handler </h2>
-<div class="outline-text-2" id="text-9">
-
-
-</div>
-
-</div>
-
-<div id="outline-container-10" class="outline-2">
-<h2 id="sec-10"><span class="section-number-2">10</span> Route Handler </h2>
-<div class="outline-text-2" id="text-10">
-
-
-</div>
-
-</div>
-
-<div id="outline-container-11" class="outline-2">
-<h2 id="sec-11"><span class="section-number-2">11</span> Security Handler </h2>
-<div class="outline-text-2" id="text-11">
-
-</div>
-</div>
-<div id="postamble">
-<p class="author"> Author: Rusty Klophaus (@rklophaus)
+<p>
+  <b>Note</b>: The <code>init/2</code> function is called on each handler in a specific order
+  as defined in <code>wf_context:init_context/2</code>.
 </p>
-<p class="date"> Date: 2011-10-28 03:26:53 CDT</p>
-<p class="creator">HTML generated by org-mode 7.4 in emacs 23</p>
+<p>
+  In the order they are loaded, here are all the handlers, and their
+  documentation:
+</p>
+
+</div>
+
+<div id="outline-container-4-1" class="outline-4">
+<h4 id="sec-4-1"><span class="section-number-4"></span> Core handlers:</h4>
+<div class="outline-text-4" id="text-4-1">
+
+<ul>
+<li><a href="./handlers/config.html">Config Handler</a> - Controls how and from where the
+      configuration settings are loaded.
+</li>
+<li><a href="./handlers/log.html">Log Handler</a> - Controls the logging system for your
+      Nitrogen app.
+</li>
+<li><a href="./handlers/process_registry.html">Process Registry Handler</a> - Controls
+      how processes are tracked. The default backend for the process registry
+      is <a href="https://github.com/nitrogen/nprocreg">nprocreg</a>.
+</li>
+</ul>
+
+<ul>
+<li><a href="./handlers/query.html">Query Handler</a> - Controls the how <code>wf:q</code> (and its
+      siblings, <code>wf:qs</code>, <code>wf:mq</code>, etc), functions retrieve their values from the
+      POST, GET, or other methods.
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-4-2" class="outline-4">
+<h4 id="sec-4-2"><span class="section-number-4"></span> Stateful Handlers</h4>
+<div class="outline-text-4" id="text-4-2">
+
+<ul>
+<li><a href="./handlers/session.html">Session Handler</a> - Controls how session
+      information and variables are set, stored, and/or distributed.
+</li>
+<li><a href="./handlers/state.html">State Handler</a> - Controls how the <code>wf:state</code>
+      functions store and retrieve their values. The default uses a simple
+      proplist.
+</li>
+<li><a href="./handlers/identity.html">Identity Handler</a> - Controls how the identity
+      of the client is stored and retrieved. This is related to the <code>wf:user</code>
+      functions.
+</li>
+<li><a href="./handlers/role.html">Role Handler</a> - Controls how the roles of the
+      client are stored and retrieved. This is related to the <code>wf:role</code>
+      functions.
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-4-3" class="outline-4">
+<h4 id="sec-4-3"><span class="section-number-4"></span> Handlers that possibly redirect</h4>
+<div class="outline-text-4" id="text-4-3">
+
+<ul>
+<li><a href="./handlers/route.html">Route Handler</a> - Controls how Nitrogen routes
+      requests to modules or static files.
+</li>
+<li><a href="./handlers/security.html">Security Handler</a> - Controls whether or not a user
+      has access to a resource, and if not, should determine what to do with
+      the request.
+</li>
+</ul>
+
 </div>
 </div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2012-10-15 14:20:01 CDT</p>
+<p class="author">Author: Rusty Klophaus(@rustyio), Jesse Gumm (@jessegumm)</p>
+<p class="creator">Org version 7.8.02 with Emacs version 23</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div><h2>Comments</h2>
+<b>Note:</b><!-- Disqus does not currently support Erlang for its syntax highlighting, so t-->To specify <!--Erlang--> code blocks, just use the generic code block syntax: <pre><b>&lt;pre&gt;&lt;code&gt;your code here&lt;/code&gt;&lt;/pre&gt;</b></pre>
+<br />
+<br />
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	var disqus_shortname = 'nitrogenproject'; // required: replace example with your forum shortname
+	var disqus_identifier = 'html/handlers.html'; //This will be replaced with the path part of the url
+
+	/* * * DON'T EDIT BELOW THIS LINE * * */
+	(function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 </body>
 </html>

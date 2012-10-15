@@ -1,10 +1,10 @@
-#vim: sw=2 ts=2 et ft=org
+# vim: sw=2 ts=2 et ft=org
 #+STYLE: <LINK href="stylesheet.css" rel="stylesheet" type="text/css">
 #+TITLE: Nitrogen 2.x Documentation
 #+AUTHOR: Rusty Klophaus (@rustyio)
 #+EMAIL: 
 
-#+TEXT: [[file:./index.org][Getting Started]] | [[file:./api.org][API]] | [[file:./elements.org][Elements]] | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | [[file:./handlers.org][Handlers]] | About
+#+TEXT: [[file:./index.org][Getting Started]] | [[file:./api.org][API]] | [[file:./elements.org][Elements]] | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | [[file:./handlers.org][Handlers]] | [[file:./config.org][Configuration Options]] | *About*
 #+HTML: <div class=headline>About Nitrogen</div>
 
 * Resources
@@ -38,7 +38,7 @@
     - Homepage: http://webmachine.basho.com 
     - Git Repo: https://github.com/basho/webmachine
 
-  + *yaws* - HTTP Server - http://yaws.hyber.org/ (Optional)
+  + *yaws* - HTTP Server (Optional)
     - Homepage: https://yaws.hyber.org
     - Git Repo: https://github.com/klacke/yaws 
 

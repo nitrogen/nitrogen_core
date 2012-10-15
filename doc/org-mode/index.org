@@ -1,9 +1,10 @@
+# vim: ts=2 sw=2 et ft=org
 #+STYLE: <LINK href="stylesheet.css" rel="stylesheet" type="text/css">
 #+TITLE: Getting Started with Nitrogen
 #+AUTHOR: Rusty Klophaus (@rklophaus)
 #+EMAIL: 
 
-#+TEXT: Getting Started | [[file:./api.org][API]] | [[file:./elements.org][Elements]] | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | [[file:./handlers.org][Handlers]] | [[file:./about.org][About]]
+#+TEXT: *Getting Started* | [[file:./api.org][API]] | [[file:./elements.org][Elements]] | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | [[file:./handlers.org][Handlers]] | [[file:./config.org][Configuration Options]] | [[file:./about.org][About]]
 #+HTML: <div class=headline>Getting Started</div>
 
 * Common Questions
@@ -20,7 +21,7 @@
 * Is there a Nitrogen Tutorial?
 # <<0>>
 
-  Yes! You can [[file:./tutorial.org][view the slides]] from Rusty's Nitrogen Tutorial at the
+  Yes! You can [[file:./tutorial.org][view the updated slides]] from Rusty's Nitrogen Tutorial at the
   Erlang User Conference 2010 here.
   
 * How do I create a new Nitrogen application?
@@ -36,7 +37,11 @@
   want to try running from the latest code in source control, then
   follow the steps below:
 
-  Pull the latest source code from GitHub and run:
+  Pull the latest source code from GitHub:
+
+  : git clone https://github.com/nitrogen/nitrogen
+
+  Then run:
 
   : make rel_inets
 
@@ -49,18 +54,57 @@
 
   : make package_inets
 
-  You can also run Nitrogen on Mochiweb or Yaws. Run one of the
-  scripts provided in the =./deps/= directory to download the
+  You can also run Nitrogen with Mochiweb, Yaws, Cowboy, or Webmachine. Run one of the following make commands:
+
+  : make rel_mochiweb
+  : make rel_yaws
+  : make rel_cowboy
+  : make rel_webmachine
+
+  *Note*: There are special instructions for Windows users who wish to compile on Windows. Read about 
+  [[https://github.com/nitrogen/nitrogen/blob/master/rel/overlay/win/README.md][Compiling Nitrogen on Windows]]
+
 * How do I start/stop/manage Nitrogen?
 # <<2>>
 
-  : ./deps/get_mochiweb.sh
+  To start Nitrogen in the console
+
+  : bin/nitrogen console
+
+  To start Nitrogen, type
+
+  : bin/nitrogen start
+
+  To attach to a detached Nitrogen console
+
+  : bin/nitrogen attach
+
+  To stop Nitrogen
+
+  : bin/nitrogen stop
+
 * How do I change configuration settings?
 # <<3>>
-  : ./deps/get_webmachine.sh
+
+  Read all about the [[file./config.org][configuration options]].
+
 * Where is the code for my website?
 # <<4>>
-  : ./deps/get_yaws.sh
+
+  Your entire site's code can be found in =site/=.
+
+  Within there, you'll find:
+  
+  + =site/src= :: Your erlang code
+
+  + =site/static= :: Where static resources like CSS, Javascript, and Images Go
+
+  + =site/templates= :: Where your site's HTML templates go
+
+  + =site/ebin= :: Where the compiled BEAM files go.
+
+  It is currently recommended to play the =site/= directory under source control.
+
 * How do I compile my code?
 # <<5>>
 
@@ -68,8 +112,12 @@
 
   + If you are *in the Erlang console* then run =sync:go().=
 
-    This will look at all loaded modules, find their associated
-    Emakefiles, and run =make:all([load]).= to recompile.
+    This will start the =sync= process, which scans the filesystem
+    for changes and automatically recompiles modules as they are changed.
+
+    *Note:* sync will only recompile files that are changed /after/ sync was
+    started. That means that if sync is not currently running, and you change a
+    file, it will not detect that change.
 
   + If *Nitrogen is running in the background* then run =./bin/dev
     compile=
@@ -85,7 +133,7 @@
 * How do I create new pages, custom elements, or custom actions?
 # <<6>>
 
-  Nitrogen 2.0 includes a developer tool to help you get started with a
+  Nitrogen 2.0+ includes a developer tool to help you get started with a
   bare-bones page, element, or action. This tool uses the files found
   in =./site/.prototypes= as templates. If you wish, you can edit files in this
   directory to make them more suitable for your application.
@@ -109,8 +157,18 @@
 * How do I upgrade to a new version of Nitrogen?
 # <<7>>
 
-  To upgrade to new versions of Nitrogen 2.0:
+  If you're running a a version of Nitrogen 2.1.0 and above:
 
+  + Run
+
+    : make upgrade
+
+    This will upgrade to the latest version of Nitrogen and it's dependencies. It will *not*
+    upgrade to the latest Erlang Runtime System. If you wish to upgrade your version of ERTS,
+    You'll want to follow the directions below for upgrading from pre-2.1 to 2.1+.    
+
+  If you're running a version of Nitrogen pre 2.1 and want to upgrade to 2.1.0 and above:
+  
   + Build or download the new Nitrogen environment for your
     architecture and preferred web server. Unzip to a new directory.
 

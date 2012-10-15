@@ -7,7 +7,10 @@ clean:
 	./rebar clean
 
 docs:  
-	./make_docs.el
+	utils/make_docs/make_docs.el
 	@(cd doc;perl add_disqus.pl)
 
 doc: docs
+
+vim:
+	utils/vim-headers/add_vim.sh

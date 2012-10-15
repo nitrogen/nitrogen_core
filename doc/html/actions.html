@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-lang="en" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Nitrogen 2.x Documentation</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="Nitrogen 2.x Documentation"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2011-10-28 03:27:21 CDT"/>
+<meta name="generated" content="2012-10-15 15:12:12 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rklophaus)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -44,6 +44,12 @@ lang="en" xml:lang="en">
   dt { font-weight: bold; }
   div.figure { padding: 0.5em; }
   div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
   textarea { overflow-x: auto; }
   .linenr { font-size:smaller }
   .code-highlighted {background-color:#ffff00;}
@@ -80,11 +86,15 @@ lang="en" xml:lang="en">
 
 </head>
 <body>
-<div id="content">
 
+<div id="preamble">
+
+</div>
+
+<div id="content">
 <h1 class="title">Nitrogen 2.x Documentation</h1>
 
-<p><a href="./index.html">Getting Started</a> | <a href="./api.html">API</a> | <a href="./elements.html">Elements</a> | Actions | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./about.html">About</a>
+<p><a href="./index.html">Getting Started</a> | <a href="./api.html">API</a> | <a href="./elements.html">Elements</a> | <b>Actions</b> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./config.html">Configuration Options</a> | <a href="../about.html">About</a>
 </p>
 
 
@@ -95,22 +105,21 @@ lang="en" xml:lang="en">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1 Base Action </a></li>
-<li><a href="#sec-2">2 Page Manipulation </a></li>
-<li><a href="#sec-3">3 Effects </a></li>
-<li><a href="#sec-4">4 Feedback </a></li>
-<li><a href="#sec-5">5 See Also </a></li>
+<li><a href="#sec-1">1 Base Action</a></li>
+<li><a href="#sec-2">2 Page Manipulation</a></li>
+<li><a href="#sec-3">3 Effects</a></li>
+<li><a href="#sec-4">4 Feedback</a></li>
+<li><a href="#sec-5">5 See Also</a></li>
 </ul>
 </div>
 </div>
 
 <div id="outline-container-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> Base Action </h2>
+<h2 id="sec-1"><span class="section-number-2">1</span> Base Action</h2>
 <div class="outline-text-2" id="text-1">
 
 <ul>
-<li>
-<a href="./actions/base.html">Base Action</a> - All actions contain these attributes.
+<li><a href="./actions/base.html">Base Action</a> - All actions contain these attributes.
 </li>
 </ul>
 
@@ -120,18 +129,19 @@ lang="en" xml:lang="en">
 </div>
 
 <div id="outline-container-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> Page Manipulation </h2>
+<h2 id="sec-2"><span class="section-number-2">2</span> Page Manipulation</h2>
 <div class="outline-text-2" id="text-2">
 
 <ul>
-<li>
-<a href="./actions/event.html">Event</a>
+<li><a href="./actions/event.html">Event</a>
 </li>
-<li>
-<a href="./actions/script.html">Script</a>
+<li><a href="./actions/script.html">Script</a>
 </li>
-<li>
-<a href="./actions/validate.html">Validate</a>
+<li><a href="./actions/validate.html">Validate</a>
+</li>
+<li><a href="./actions/clear_validation.html">Clear Validation</a>
+</li>
+<li><a href="./actions/api.html">Ajax API</a>
 </li>
 </ul>
 
@@ -141,36 +151,33 @@ lang="en" xml:lang="en">
 </div>
 
 <div id="outline-container-3" class="outline-2">
-<h2 id="sec-3"><span class="section-number-2">3</span> Effects </h2>
+<h2 id="sec-3"><span class="section-number-2">3</span> Effects</h2>
 <div class="outline-text-2" id="text-3">
 
 <ul>
-<li>
-<a href="./actions/show.html">Show</a>
+<li><a href="./actions/show.html">Show</a>
 </li>
-<li>
-<a href="./actions/hide.html">Hide</a>
+<li><a href="./actions/hide.html">Hide</a>
 </li>
-<li>
-<a href="./actions/appear.html">Appear</a>
+<li><a href="./actions/appear.html">Appear</a>
 </li>
-<li>
-<a href="./actions/fade.html">Fade</a>
+<li><a href="./actions/fade.html">Fade</a>
 </li>
-<li>
-<a href="./actions/animate.html">Animate</a>
+<li><a href="./actions/slide_down.html">Slide Down</a>
 </li>
-<li>
-<a href="./actions/toggle.html">Toggle</a>
+<li><a href="./actions/slide_up.html">Slide Up</a>
 </li>
-<li>
-<a href="./actions/effect.html">Effect</a>
+<li><a href="./actions/animate.html">Animate</a>
 </li>
-<li>
-<a href="./actions/add_class.html">Add Class</a>
+<li><a href="./actions/toggle.html">Toggle</a>
 </li>
-<li>
-<a href="./actions/remove_class.html">Remove Class</a>
+<li><a href="./actions/effect.html">Effect</a>
+</li>
+<li><a href="./actions/add_class.html">Add Class</a>
+</li>
+<li><a href="./actions/remove_class.html">Remove Class</a>
+</li>
+<li><a href="./actions/disable.html">Disable</a>
 </li>
 </ul>
 
@@ -180,18 +187,15 @@ lang="en" xml:lang="en">
 </div>
 
 <div id="outline-container-4" class="outline-2">
-<h2 id="sec-4"><span class="section-number-2">4</span> Feedback </h2>
+<h2 id="sec-4"><span class="section-number-2">4</span> Feedback</h2>
 <div class="outline-text-2" id="text-4">
 
 <ul>
-<li>
-<a href="./actions/alert.html">Alert</a>
+<li><a href="./actions/alert.html">Alert</a>
 </li>
-<li>
-<a href="./actions/confirm.html">Confirm</a>
+<li><a href="./actions/confirm.html">Confirm</a>
 </li>
-<li>
-<a href="./actions/other.html">Other</a>
+<li><a href="./actions/other.html">Other</a>
 </li>
 </ul>
 
@@ -200,23 +204,42 @@ lang="en" xml:lang="en">
 </div>
 
 <div id="outline-container-5" class="outline-2">
-<h2 id="sec-5"><span class="section-number-2">5</span> See Also </h2>
+<h2 id="sec-5"><span class="section-number-2">5</span> See Also</h2>
 <div class="outline-text-2" id="text-5">
 
 <ul>
-<li>
-<a href="./paths.html">Nitrogen Element Paths</a>
+<li><a href="./paths.html">Nitrogen Element Paths</a>
 </li>
 </ul>
 
 </div>
 </div>
+</div>
+
 <div id="postamble">
-<p class="author"> Author: Rusty Klophaus (@rklophaus)
-</p>
-<p class="date"> Date: 2011-10-28 03:27:21 CDT</p>
-<p class="creator">HTML generated by org-mode 7.4 in emacs 23</p>
-</div>
-</div>
+<p class="date">Date: 2012-10-15 15:12:12 CDT</p>
+<p class="author">Author: Rusty Klophaus (@rklophaus)</p>
+<p class="creator">Org version 7.8.02 with Emacs version 23</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div><h2>Comments</h2>
+<b>Note:</b><!-- Disqus does not currently support Erlang for its syntax highlighting, so t-->To specify <!--Erlang--> code blocks, just use the generic code block syntax: <pre><b>&lt;pre&gt;&lt;code&gt;your code here&lt;/code&gt;&lt;/pre&gt;</b></pre>
+<br />
+<br />
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	var disqus_shortname = 'nitrogenproject'; // required: replace example with your forum shortname
+	var disqus_identifier = 'html/actions.html'; //This will be replaced with the path part of the url
+
+	/* * * DON'T EDIT BELOW THIS LINE * * */
+	(function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 </body>
 </html>

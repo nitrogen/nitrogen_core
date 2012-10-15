@@ -1,3 +1,4 @@
+% vim: sw=4 ts=4 et ft=erlang
 %% @author Bob Ippolito <bob@mochimedia.com>
 %% @copyright 2010 Mochi Media, Inc.
 %% @doc Abuse module constant pools as a "read-only shared heap" (since erts 5.6)

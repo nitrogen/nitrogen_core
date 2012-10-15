@@ -1,3 +1,4 @@
+% vim: sw=4 ts=4 et ft=erlang
 %%% Datepicker Control Element.
 %%% Copyright (c) 2009 Torbjorn Tornkvist
 %%% See MIT-LICENSE for the Nitrogen Web Framework for Erlang

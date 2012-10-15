@@ -1,10 +1,11 @@
+# vim: sw=3 ts=3 ft=org
 
 #+TITLE: Template Element Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Rusty Klophaus (@rklophaus)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | Elements | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
+#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
 
 * Template Element - #template {}
 
@@ -12,7 +13,7 @@
   The template element allows you to specify html chrome for your page (header, footer, columns, etc.)
   while using a special placeholder syntax to call back to your page or any Erlang module.
 
-  To specify a placeholder in the html template file, use the form =\[\[\[Module:Function(Args)\]\]\]=. 
+  To specify a placeholder in the html template file, use the form =[[[Module:Function(Args)]]]=. 
   Module can be any module, or can be the atom 'page' to refer to the currently Nitrogen page. 
   The function must return either one or more Nitrogen elements, an Erlang string, or 
   an Erlang binary.

@@ -4,11 +4,11 @@
 #+AUTHOR: Steffen Panning
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | Elements | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../about.org][About]]
+#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
 
-* RESTfulForm Element - #restful\_form {}
+* RESTful Form Element - #restful\_form {}
 
-  The #restful\_form{} element produces a form element.
+  The #restful\_form{} element produces an HTML form element.
   The form element is necessary if your website has to work without
   javascript. It is _not_ necessary for a pure ajax/javascript driven
   website. 

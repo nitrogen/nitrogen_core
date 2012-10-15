@@ -1,3 +1,4 @@
+% vim: sw=4 ts=4 et ft=erlang
 %% @author Bob Ippolito <bob@mochimedia.com>
 %% @copyright 2007 Mochi Media, Inc.
 

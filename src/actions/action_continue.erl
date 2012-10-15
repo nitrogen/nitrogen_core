@@ -1,3 +1,4 @@
+% vim: sw=4 ts=4 et ft=erlang
 -module (action_continue).
 -include_lib ("wf.hrl").
 -compile(export_all).

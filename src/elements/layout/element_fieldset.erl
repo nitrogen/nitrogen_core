@@ -1,3 +1,4 @@
+% vim: sw=4 ts=4 et ft=erlang
 -module (element_fieldset).
 -compile(export_all).
 -include_lib("wf.hrl").
