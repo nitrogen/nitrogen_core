@@ -34,7 +34,12 @@ get_pid(Key) ->
 % Return the process associated with Key. If that process does not
 % exist, then create a new process and associate it with Key.
 get_pid(Key, Function) ->
-    {ok, _Pid} = wf_handler:call(process_registry_handler, get_pid, [Key, Function]).
+%    {ok, _Pid} = wf_handler:call(process_registry_handler, get_pid, [Key, Function]).
+    {ok, nprocreg:get_pid(Key,Function)}.
+%     case wf_handler:call(process_registry_handler, get_pid, [Key, Function]) of
+%           {ok, Pid} -> {ok, Pid};
+%           ok -> {ok, undefined}
+%    end.
 
 
 
