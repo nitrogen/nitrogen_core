@@ -1282,4 +1282,4 @@ Open http://localhost:8000 in your Browser
    + Mailing List, Bugs, etc: [[http://nitrogenproject.com/community]]
    + Follow Nitrogen on Twitter: [[http://twitter.com/nitrogenproject][@nitrogenproject]]
    + Follow Rusty on Twitter: [[http://twitter.com/rustyio][@rustyio]]
-   + Fully Jesse on Twitter: [[http://twitter.com/jessegumm][@jessegumm]]
+   + Follow Jesse on Twitter: [[http://twitter.com/jessegumm][@jessegumm]]
