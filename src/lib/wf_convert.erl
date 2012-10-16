@@ -16,8 +16,7 @@
     hex_encode/1, hex_decode/1,
     url_encode/1, url_decode/1,
     js_escape/1,
-	join/2,
-	short_if/2,short_if/3
+	join/2
 
 ]).
 
@@ -180,21 +179,6 @@ js_escape(<<"<script", Rest/binary>>, Acc) -> js_escape(Rest, <<Acc/binary, "<sc
 js_escape(<<"script>", Rest/binary>>, Acc) -> js_escape(Rest, <<Acc/binary, "scr\" + \"ipt>">>);
 js_escape(<<C, Rest/binary>>, Acc) -> js_escape(Rest, <<Acc/binary, C>>);
 js_escape(<<>>, Acc) -> Acc.
-
-%%% SHORT IF %%%
-
-short_if(true,IfTrue,_IfFalse) when is_function(IfTrue) ->
-	IfTrue();
-short_if(true,IfTrue,_IfFalse) ->
-	IfTrue;
-short_if(_,_IfTrue,IfFalse) when is_function(IfFalse) ->
-	IfFalse();
-short_if(_,_IfTrue,IfFalse) ->
-	IfFalse.
-
-
-short_if(Cond,IfTrue) ->
-	short_if(Cond,IfTrue,"").
 
 
 %%% JOIN %%%

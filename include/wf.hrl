@@ -1,3 +1,4 @@
+% vim: sw=4 ts=4 et ft=erlang
 -ifndef(wf_inc).
 -define(wf_inc, ok).
 
@@ -5,10 +6,10 @@
 
 % Page Request Information.
 -record(page_context, {
-	series_id,   % A unique ID assigned to the first request which stays constant on repeated requests.
-	module,      % The requested page module
-	path_info,   % Any extra info passed with the request
-	async_mode= comet % {poll, Interval} or comet
+    series_id,   % A unique ID assigned to the first request which stays constant on repeated requests.
+    module,      % The requested page module
+    path_info,   % Any extra info passed with the request
+    async_mode= comet % {poll, Interval} or comet
 }).
 
 % Event Information. A serialized version of this record
@@ -26,27 +27,27 @@
 % to allow other frameworks to substitute their own behaviour.
 % These are set in wf_context:make_context/1
 -record(handler_context, {
-	name,    % The name of a handler. See wf_context for a list.
-	module,     % A module that provides the logic for a handler. This can be substituted by your app.
-	config,     % The config of the handler, set at the beginning of each request.
-	state       % The state of the handler, serialized and maintained between postbacks in a series.
+    name,    % The name of a handler. See wf_context for a list.
+    module,     % A module that provides the logic for a handler. This can be substituted by your app.
+    config,     % The config of the handler, set at the beginning of each request.
+    state       % The state of the handler, serialized and maintained between postbacks in a series.
 }).
 
 -record(context, {
-	% Transient Information
-	type,                % Either first_request, postback_request, or static_file
-	request_bridge,      % Holds the simple_bridge request object
-	response_bridge,     % Holds the simple_bridge response object
-	anchor=undefined,    % Holds the unique ID of the current anchor element.
-	data=[],             % Holds whatever the page_module:main/1 method returns: HTML, Elements, Binary, etc..
-	queued_actions=[],   % List of actions queued in main/1, event/2, or when rendering elements.
-	deferred_actions=[], % List of actions to be rendered after the primary actions
+    % Transient Information
+    type,                % Either first_request, postback_request, or static_file
+    request_bridge,      % Holds the simple_bridge request object
+    response_bridge,     % Holds the simple_bridge response object
+    anchor=undefined,    % Holds the unique ID of the current anchor element.
+    data=[],             % Holds whatever the page_module:main/1 method returns: HTML, Elements, Binary, etc..
+    queued_actions=[],   % List of actions queued in main/1, event/2, or when rendering elements.
+    deferred_actions=[], % List of actions to be rendered after the primary actions
 
-	% These are all serialized, sent to the browser
-	% and de-serialized on each request.
-	page_context,
-	event_context,
-	handler_list
+    % These are all serialized, sent to the browser
+    % and de-serialized on each request.
+    page_context,
+    event_context,
+    handler_list
 }).
 
 %%% LOGGING %%%
@@ -58,7 +59,17 @@
 -endif.
 
 %%% GUARDS %%%
--define (IS_STRING(Term), (is_list(Term) andalso Term /= [] andalso is_integer(hd(Term)))).
+-define(IS_STRING(Term), (is_list(Term) andalso Term /= [] andalso is_integer(hd(Term)))).
+
+%%% TERNARY IF AND VARIATIONS %%%
+-define(WF_IF(Term,IfTrue,IfFalse),
+    case (Term) of
+        F when F==false;F==undefined;F==[] -> IfFalse;
+        _ -> IfTrue
+    end).
+
+-define(WF_IF(Term,IfTrue), ?WF_IF(Term,IfTrue,"")).
+
 
 %%% FRAMEWORK %%%
 
@@ -146,7 +157,7 @@
 -record(mobile_grid_block, {?ELEMENT_BASE(element_mobile_grid_block), data_fields=[], text="", body=[], new_row=default}).
 
 
-		
+        
 %% HTML5 semantic elements
 -record(section, {?ELEMENT_BASE(element_section), body=""}).
 -record(nav, {?ELEMENT_BASE(element_nav), body=""}).

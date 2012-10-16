@@ -44,7 +44,7 @@ render_element(Record) ->
             #panel { 
 				id=ViewPanelID, 
 				class="view", 
-				style = wf:short_if(StartMode==edit,"diplay:none"),	
+				style = ?WF_IF(StartMode==edit,"diplay:none"),
 				body=[
                 #span { id=LabelID, class="inplace_textarea", text=Text, html_encode=HTMLEncode, actions=[
                     #buttonize { target=ViewPanelID }
@@ -62,7 +62,7 @@ render_element(Record) ->
             #panel { 
 				id=EditPanelID, 
 				class="edit", 
-				style = wf:short_if(StartMode==view,"display:none"),
+				style = ?WF_IF(StartMode==view,"display:none"),
 				body=[
 					#textarea { id=TextBoxID, text=Text },
 					#button { id=OKButtonID, text="OK", actions=OKEvent#event { type=click } },

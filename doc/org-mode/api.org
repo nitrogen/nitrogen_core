@@ -129,18 +129,6 @@
 
    Convert a String to a JS-safe string by adding backslashes to quotes and newlines.
 
-** wf:short\_if(Bool,IfTrue,IfFalse) -> Term
-
-   If =Bool= is =true= return =IfTrue=, otherwise, return =IfFalse=.  =IfTrue= and =IfFalse= can be functions arity 1, which will be evaluated instead of returned, and their return value is what gets returned.
-
-#+BEGIN_SRC erlang
-   wf:short_if(Name /= "", Name, "Name Not Specified").
-#+END_SRC
-
-** wf:short\_if(Bool,IfTrue) -> Term
-
-   If =Bool= is =true=, return =IfTrue=, otherwise return an empty list. Shorthand for =wf:short_if(Bool,IfTrue,"")=
-
 ** wf:join([Terms],Delimiter) -> [Terms]
 
    Because Erlang doesn't provide a means to join a list in a non-string fashion, this will join the =Terms= on the delimiter, regardless of the type of =Delimiter=.
