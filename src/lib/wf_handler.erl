@@ -20,11 +20,14 @@ call(Name, FunctionName, Args) ->
     % the function, passing in the Args and State.
     #handler_context { module=Module, config=Config, state=State } = get_handler(Name),
     Result = try erlang:apply(Module, FunctionName, Args ++ [Config, State])
-    catch A:B -> error_logger:error_msg("~p:~p ~p",[?MODULE,?LINE,erlang:get_stacktrace()]) end,
+    catch A:B -> error_logger:error_msg("~p:~p ~p:~p ~p",[?MODULE,?LINE,A,B,erlang:get_stacktrace()]) end,
 
     % Result will be {ok, State}, {ok, Value1, State}, or {ok, Value1, Value2, State}.
     % Update the context with the new state.
     case Result of
+        ok -> 
+            update_handler_state(Name, State),
+            ok;
         {ok, NewState} -> 
             update_handler_state(Name, NewState),
             ok;
