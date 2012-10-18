@@ -53,6 +53,8 @@
 
   + *Live Validation 1.3* - http://livevalidation.com/
 
+  + jQuery File Upload 5.19* - https://github.com/blueimp/jQuery-File-Upload
+
 * Thanks
 
   Sincere thanks to all the people who have helped make Nitrogen great, including:
