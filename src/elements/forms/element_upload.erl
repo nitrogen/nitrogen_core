@@ -80,6 +80,11 @@ render_element(Record) ->
 
     % Render the controls and hidden iframe...
     FormContent = [
+        %% IE9 does not support the droppable option, so let's just hide the drop field
+        "<!--[if lte IE 9]>
+            <style type='text/css'> .upload_drop {display: none} </style>
+        <![endif]-->",
+
         #panel{
             show_if=Droppable,
             id=DropID,
