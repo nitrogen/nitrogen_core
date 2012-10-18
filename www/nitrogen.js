@@ -322,10 +322,7 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input,set
                 var prog = parseInt(data.loaded / data.total * 100,10);
                 // TODO: Convert this to a progress bar
                 // Neede to add #progress{} element to continue with that
-                if(data.loaded == data.total)
-                    jQuery(form).children(".upload_progress").fadeOut();
-                else
-                    jQuery(form).children(".upload_progress").text(prog + "% (" + data.loaded + "/" + data.total + " bytes)");
+                jQuery(form).children(".upload_progress").text(prog + "% (" + data.loaded + "/" + data.total + " bytes)");
             },
             progress: function(e,data) {
                 // Single file progress
@@ -381,7 +378,10 @@ NitrogenClass.prototype.$increment_pending_upload_counter = function(form,increm
     counter+=incrementer;
     $(form).data("pending_uploads",counter);
     if(counter==0)
+    {
+        jQuery(form).children(".upload_progress").fadeOut();
         Nitrogen.$alert_unfinished_files(form);
+    }
 }
 
 
