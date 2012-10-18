@@ -1,3 +1,4 @@
+// vim: sw=4 ts=4 et
 // The idea is to have one high level
 // Nitrogen object, created from NitrogenClass, that 
 // encapsulates everything in order to prevent collisions.
@@ -153,9 +154,9 @@ NitrogenClass.prototype.$get_validation = function(element) {
 // TODO: This needs to be made smarter. Right now, I'm pretty sure elements have
 // single validation groups, while it should be a list of groups that get validated
 NitrogenClass.prototype.$destroy_specific_validation = function(trigger, target) {
-	var v = NitrogenClass.$get_validation(target);
-	if(v.group==trigger)
-		Nitrogen.$destroy_target_validation(element);
+    var v = NitrogenClass.$get_validation(target);
+    if(v.group==trigger)
+        Nitrogen.$destroy_target_validation(element);
 }
 
 NitrogenClass.prototype.$destroy_target_validation = function(element) {
@@ -284,10 +285,11 @@ NitrogenClass.prototype.$send_pending_files = function(form,input) {
     var file=null;
     if(typeof(form.$nitrogen_pending_files)=="object")
     {
-    while(file=form.$nitrogen_pending_files.shift())
-    {
-        file.submit();
-    }
+        // not a typo, doing an assignment here
+        while(file=form.$nitrogen_pending_files.shift())
+        {
+            file.submit();
+        }
     }
 }
 
@@ -298,59 +300,108 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input,set
     if(typeof(form.$nitrogen_pending_files)=="undefined")
         form.$nitrogen_pending_files = [];
 
-    jQuery.getScript("/nitrogen/jquery.iframe-transport.min.js",function(){
-        jQuery.getScript("/nitrogen/jquery.fileupload.min.js",function(){
-            var dropzone = jQuery(form).children(".upload_drop");
-        
-            jQuery(input).fileupload({
+    jQuery.getScript("/nitrogen/jquery.fileupload.min.js",function(){
+        var dropzone = jQuery(form).children(".upload_drop");
+    
+        jQuery(input).fileupload({
             dropZone:(settings.droppable ? dropzone : null),
-                singleFileUploads:true,
-                sequentialUploads:true,
-                url:thisNitro.$url,
-                paramName:"file",
-                formData: function() {
-                    form.elements["pageContext"].value = thisNitro.$params["pageContext"];
-                    var d = jQuery(form).serializeArray();
-                    return d;
-                },
-                start: function() {
-                    form.pageContext.value = thisNitro.$params["pageContext"];
-                    jQuery(form).children(".upload_progress").innerHTML = "Uploading...";
-                },
-                progressall: function(e,data) {
-                    var prog = parseInt(data.loaded / data.total * 100,10);
-                    // TODO: Convert this to a progress bar
+            singleFileUploads:true,
+            sequentialUploads:true,
+            url:thisNitro.$url,
+            paramName:"file",
+            formData: function() {
+                form.elements["pageContext"].value = thisNitro.$params["pageContext"];
+                var d = jQuery(form).serializeArray();
+                return d;
+            },
+            start: function(e) {
+                form.pageContext.value = thisNitro.$params["pageContext"];
+                jQuery(form).children(".upload_progress").fadeIn().text("Uploading...");
+            },
+            progressall: function(e,data) {
+                var prog = parseInt(data.loaded / data.total * 100,10);
+                // TODO: Convert this to a progress bar
+                // Neede to add #progress{} element to continue with that
+                if(data.loaded == data.total)
+                    jQuery(form).children(".upload_progress").fadeOut();
+                else
                     jQuery(form).children(".upload_progress").text(prog + "% (" + data.loaded + "/" + data.total + " bytes)");
-                },
-                send: function(e,data) {
-                },
-                stop: function(e,data) {
-
-                },
-                add: function(e,data) {
-                    jQuery.each(data.files,function(i,f) {
-                        jQuery(form).children(".upload_droplist")
-                            .prepend(jQuery("<li></li>").attr("filename",f.name).text(f.name));
-                    });
-            if(settings.autoupload)
-             data.submit();
-            else
-                     form.$nitrogen_pending_files.push(data);
-                },
-                done: function(e,data) {
-                    Postback = data.result;
-                    jQuery.globalEval(Postback);
+            },
+            progress: function(e,data) {
+                // Single file progress
+            },
+            send: function(e,data) {
+            },
+            stop: function(e,data) {
+                
+            },
+            always: function(e,data) {
+            },
+            fail: function(e,data, options) {
+                Nitrogen.$increment_pending_upload_counter(form,-1);
+            },
+            add: function(e,data) {
+                jQuery.each(data.files,function(i,f) {
+                    // Let's add the visual list of pending files
+                    jQuery(form).children(".upload_droplist")
+                        .prepend(jQuery("<li></li>").attr("filename",f.name).text(f.name));
+                    Nitrogen.$increment_pending_upload_counter(form,1);
+                });
+                if(settings.autoupload)
+                    data.submit();
+                else
+                    form.$nitrogen_pending_files.push(data);
+            },
+            done: function(e,data) {
+                if(typeof data.result == "string") {
+                    // Good browsers will use XHR file transfers, and so this
+                    // will return a string
+                    var Postback = data.result;
+                } else if(typeof data.result == "object") {
+                    // Crappy browsers (IE9 and below) will do the transfer
+                    // as with an iframe and return a document-type object
+                    var Postback = data.result[0].body.innerHTML;
+                } else {
+                    // IE also has data.result as "undefined" on failure
+                    // So let's just treat it as an empty string
+                    var Postback = "";
                 }
-            })
+
+                jQuery.globalEval(Postback);
+                Nitrogen.$increment_pending_upload_counter(form,-1);
+            }
         })
     })
 }
 
+NitrogenClass.prototype.$increment_pending_upload_counter = function(form,incrementer) {
+    var counter = $(form).data("pending_uploads");
+    if(typeof(counter)=="undefined")
+        counter=0;
+    counter+=incrementer;
+    $(form).data("pending_uploads",counter);
+    if(counter==0)
+        Nitrogen.$alert_unfinished_files(form);
+}
+
+
 NitrogenClass.prototype.$upload_finished = function(Name) {
     jQuery(".upload_droplist").children("li[filename=\"" + Name + "\"]")
         .css("text-decoration","line-through")
+        .addClass("upload_successful")
         .fadeOut();
 }
+
+NitrogenClass.prototype.$alert_unfinished_files = function(form) {
+    var files = $(form).find(".upload_droplist li:not(.upload_successful):visible");
+    if(files.length > 0)
+    {
+        $(form).find(".upload_droplist li:not(.upload_successful)").css("color","red").fadeOut("slow");
+
+        var filenames = $(files).get().map(function(f) { return $(f).text() }).join("\r\n");
+        alert("There was an error uploading the following file(s):\r\n" + filenames + "\r\n\r\nThis is likely due to the file(s) being too large or a misconfiguration on the server");
+    }
+} 
 
 
 /*** PATH LOOKUPS ***/
