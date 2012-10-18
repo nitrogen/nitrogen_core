@@ -11,6 +11,7 @@ documentation I want to see added, in no particular order.
 * Recommendations for contributing to Nitrogen
 * Building a simple HTTP API in Nitrogen
 * Using the RESTful elements
+* Set up links from Elements and Actions to related Demos and back
 
 ## Desired Guides
 
