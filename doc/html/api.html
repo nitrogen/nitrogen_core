@@ -7,8 +7,8 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Nitrogen 2.x Documentation"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-15 14:22:30 CDT"/>
-<meta name="author" content="Rusty Klophaus (@rklophaus)"/>
+<meta name="generated" content="2012-10-18 03:26:12 CDT"/>
+<meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
 <style type="text/css">
@@ -465,39 +465,8 @@
 </div>
 
 <div id="outline-container-3-16" class="outline-3">
-<h3 id="sec-3-16"><span class="section-number-3"></span> wf:short_if(Bool,IfTrue,IfFalse) -&gt; Term</h3>
+<h3 id="sec-3-16"><span class="section-number-3"></span> wf:join([Terms],Delimiter) -&gt; [Terms]</h3>
 <div class="outline-text-3" id="text-3-16">
-
-
-<p>
-   If <code>Bool</code> is <code>true</code> return <code>IfTrue</code>, otherwise, return <code>IfFalse</code>.  <code>IfTrue</code> and <code>IfFalse</code> can be functions arity 1, which will be evaluated instead of returned, and their return value is what gets returned.
-</p>
-
-
-
-<pre class="src src-erlang"><span class="org-type">wf</span>:<span class="org-type">short_if</span>(<span class="org-variable-name">Name</span> /= <span class="org-string">""</span>, <span class="org-variable-name">Name</span>, <span class="org-string">"Name Not Specified"</span>).
-</pre>
-
-
-</div>
-
-</div>
-
-<div id="outline-container-3-17" class="outline-3">
-<h3 id="sec-3-17"><span class="section-number-3"></span> wf:short_if(Bool,IfTrue) -&gt; Term</h3>
-<div class="outline-text-3" id="text-3-17">
-
-
-<p>
-   If <code>Bool</code> is <code>true</code>, return <code>IfTrue</code>, otherwise return an empty list. Shorthand for <code>wf:short_if(Bool,IfTrue,"")</code>
-</p>
-</div>
-
-</div>
-
-<div id="outline-container-3-18" class="outline-3">
-<h3 id="sec-3-18"><span class="section-number-3"></span> wf:join([Terms],Delimiter) -&gt; [Terms]</h3>
-<div class="outline-text-3" id="text-3-18">
 
 
 <p>
@@ -1545,8 +1514,8 @@ Example:
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-15 14:22:30 CDT</p>
-<p class="author">Author: Rusty Klophaus (@rklophaus)</p>
+<p class="date">Date: 2012-10-18 03:26:12 CDT</p>
+<p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
 
