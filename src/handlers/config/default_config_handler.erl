@@ -29,7 +29,7 @@ get_value(Key, DefaultValue, Config, State) ->
     end.
 
 get_values(Key, DefaultValue, _Config, _State) -> 
-    case application:get_env(nitrogen, Key) of
+    case application:get_env(nitrogen_core, Key) of
         {ok, Value} -> 
             [Value];
         undefined ->
