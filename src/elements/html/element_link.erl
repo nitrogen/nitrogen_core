@@ -28,7 +28,7 @@ render_element(Record) ->
     %% jquery mobile use its default setting. Anything other than a boolean
     %% will just treat it as blank
 
-    DataFields1 = add_field(Record#link.mobile_target==false,{ajax,false},[]),
+    DataFields1 = add_field(Record#link.mobile_target==false,{ajax,false},Record#link.data_fields),
     DataFields2 = add_field(Record#link.mobile_dialog==true,{rel,dialog},DataFields1),
 
     wf_tags:emit_tag(a, Body, [

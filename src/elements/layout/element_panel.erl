@@ -18,5 +18,5 @@ render_element(Record) ->
         {id, Record#panel.html_id},
         {class, ["panel", Record#panel.class]},
         {style, Record#panel.style},
-        {data, Record#panel.data_fields}
+        {data_fields, Record#panel.data_fields}
     ]).
