@@ -21,6 +21,8 @@
 ]).
 -record (state, {unique, node}).
 
+-define(SESSION_TO_MIN, 600).
+
 init(_Config, _State) -> 
     % Get the session cookie and node...
     Cookie = wf:cookie(get_cookie_name()),
@@ -32,7 +34,7 @@ init(_Config, _State) ->
 
 finish(_Config, State) -> 
     % Drop the session cookie...
-    Timeout = wf:config_default(session_timeout, 20),
+    Timeout = wf:config_default(session_timeout, ?SESSION_TO_MIN),
     ok = wf:cookie(get_cookie_name(), wf:pickle(State), "/", Timeout),
     {ok, []}.
 
@@ -70,7 +72,7 @@ get_cookie_name() ->
     wf:config_default(cookie_name, "newcookie").
 
 get_session_pid(_Config, State) ->
-    Timeout = wf:config_default(session_timeout, 1),
+    Timeout = wf:config_default(session_timeout, ?SESSION_TO_MIN),
     F = fun() -> session_loop([], Timeout) end,
     SessionTag = {session, State#state.unique},
     {ok, _Pid} = process_registry_handler:get_pid(SessionTag, F).
