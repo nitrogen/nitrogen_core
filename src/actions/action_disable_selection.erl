@@ -8,4 +8,4 @@
 -compile(export_all).
 
 render_action(_Record) -> 
-    "Nitrogen.$disable_selection(obj(me));".
+    "Nitrogen.$disable_selection(obj('me'));".
