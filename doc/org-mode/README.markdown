@@ -4,7 +4,7 @@ There is always room to add more documenation. So here is a quick list of
 documentation I want to see added, in no particular order.
 
 * How to add custom Elements
-* How to add custsom Actions
+* How to add custom Actions
 * How to add custom Mobile Elements
 * How to add custom Validators
 * Tips for debugging Nitrogen app
