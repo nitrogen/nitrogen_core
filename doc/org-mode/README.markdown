@@ -3,10 +3,11 @@
 There is always room to add more documenation. So here is a quick list of
 documentation I want to see added, in no particular order.
 
-* Guide for adding custom Elements
-* Guide for adding custom Actions
-* Guide for adding custom Mobile Elements
-* Guide for adding custom Validators
+* How to add custom Elements
+* How to add custsom Actions
+* How to add custom Mobile Elements
+* How to add custom Validators
+* Tips for debugging Nitrogen app
 * Improvements to the guides for adding custom handlers
 * Recommendations for contributing to Nitrogen
 * Building a simple HTTP API in Nitrogen
@@ -21,6 +22,8 @@ in some cases, even Erlang-specific, but useful questions that answer questions
 commonly presented on Stackoverflow or the mailing lists.
 
 * Integrating with common databases
+* Working with JSON
+* Working with dates
 * Secure password hashing
 * Amazon S3 integration
 * Email integration
