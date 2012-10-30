@@ -20,18 +20,18 @@ It can remove validators en masse.
 ** Attributes
 
    + validation\_target - (/Nitrogen ID/) :: Validation target is the ID of the
-field (textbox, dropdown, etc) that's being validated. Set this to remove
-validations from specific form fields (ie, fields that are being removed during
-postbacks).
+      field (textbox, dropdown, etc) that's being validated. Set this to remove
+      validations from specific form fields (ie, fields that are being removed during
+      postbacks).
 
    + validation\_trigger - (/Nitrogen ID/) :: Validation target is the ID of the
-element initiating the validation (ie #button{} or #link{} elements). Set this
-to have all validations triggered by that element removed.
+      element initiating the validation (ie #button{} or #link{} elements). Set this
+      to have all validations triggered by that element removed.
 
    + validation\_all - (/Nitrogen ID/) :: This is the nuclear option for
-removing validation. Set this to any Nitrogen element to have any validations
-connected to this element removed, either if this element is the trigger or if
-this element is the target.
+      removing validation. Set this to any Nitrogen element to have any validations
+      connected to this element removed, either if this element is the trigger or if
+      this element is the target.
 
 ** Wiping all validations from the page
 
