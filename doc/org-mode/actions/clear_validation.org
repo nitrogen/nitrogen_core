@@ -6,7 +6,7 @@
 #+EMAIL: 
 #+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][Elements]] | [[file:../actions.org][*Actions*]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
 
-* Clear Validation Action - #clear_validation {}
+* Clear Validation Action - #clear\_validation {}
 
 This action tells Nitrogen to remove the validation requirements from the page.
 It can remove validators en masse.
@@ -19,16 +19,16 @@ It can remove validators en masse.
 
 ** Attributes
 
-   + validation_target - (/Nitrogen ID/) :: Validation target is the ID of the
+   + validation\_target - (/Nitrogen ID/) :: Validation target is the ID of the
 field (textbox, dropdown, etc) that's being validated. Set this to remove
 validations from specific form fields (ie, fields that are being removed during
 postbacks).
 
-   + validation_trigger - (/Nitrogen ID/) :: Validation target is the ID of the
+   + validation\_trigger - (/Nitrogen ID/) :: Validation target is the ID of the
 element initiating the validation (ie #button{} or #link{} elements). Set this
 to have all validations triggered by that element removed.
 
-   + validation_all - (/Nitrogen ID/) :: This is the nuclear option for
+   + validation\_all - (/Nitrogen ID/) :: This is the nuclear option for
 removing validation. Set this to any Nitrogen element to have any validations
 connected to this element removed, either if this element is the trigger or if
 this element is the target.
