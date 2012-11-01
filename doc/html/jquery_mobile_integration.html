@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Nitrogen's jQuery Mobile Integration Guide"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-18 03:24:04 CDT"/>
+<meta name="generated" content="2012-10-31 22:44:47 CDT"/>
 <meta name="author" content="Jesse Gumm (@jessegumm)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -60,7 +60,7 @@
                                  font-weight:bold; }
   /*]]>*/-->
 </style>
-<LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+<LINK href='stylesheet.css' rel='stylesheet' type='text/css' />
 <script type="text/javascript">
 <!--/*--><![CDATA[/*><!--*/
  function CodeHighlightOn(elem, id)
@@ -94,7 +94,7 @@
 <div id="content">
 <h1 class="title">Nitrogen's jQuery Mobile Integration Guide</h1>
 
-<p><a href="./index.html">Getting Started</a> | *<a href="./api.html">API</a>* | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./config.html">Configuration Options</a> | <a href="../about.html">About</a>
+<p><a href="./index.html">Getting Started</a> | <a href="./api.html"><b>API</b></a> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./config.html">Configuration Options</a> | <a href="./about.html">About</a>
 </p>
 
 <div id="table-of-contents">
@@ -123,7 +123,7 @@
 
 
 <p>
-   There are two new javascript files that must be included in order properly integrate with jQuery Mobile: jQuery mobile itself (jquery-mobile.js) and the Nitrogen jQuery Mobile script (nitrogen<sub>jqm</sub>.js), which makes necessary structural changes to the Nitrogen object.
+   There are two new javascript files that must be included in order properly integrate with jQuery Mobile: jQuery mobile itself (jquery-mobile.js) and the Nitrogen jQuery Mobile script (nitrogen_jqm.js), which makes necessary structural changes to the Nitrogen object.
 </p>
 <p>
    The &lt;script&gt; elements in the head should look something like this. Please note that the order of these includes does matter.
@@ -162,7 +162,7 @@
 You want to separate the page into three specific divs with a wrapper div.
 </p>
 <p>
-The wrapper div must have the attributes 'data-role="page"' and 'id="pagediv"'
+The wrapper div must have the attributes data-role="page" and id="pagediv"
 </p>
 <p>
 Contained within the Wrapper div are expected three other divs with the data-roles "header", "content" and "footer".
@@ -194,13 +194,19 @@ This is demonstrated below:
 </div>
 
 <div id="outline-container-1-2-2" class="outline-4">
-<h4 id="sec-1-2-2"><span class="section-number-4"></span> The <a href="#script">script</a>] tag loading properly.</h4>
+<h4 id="sec-1-2-2"><span class="section-number-4"></span> The script tag with jquery mobile version</h4>
 <div class="outline-text-4" id="text-1-2-2">
 
 
 <p>
-   The last step in order to ensure the proper loading of javascript from page to page while using transitions, is to include the <a href="#script">script</a>] section of the template inside a data-code attribute in the wrapper div.
+   The last step in order to ensure the proper loading of javascript from page to page while using transitions, is to add
+</p><pre class="example">
+[[[mobile_script]]]
+</pre>
+
+<p>   to template inside a data-code attribute in the wrapper div.
 </p>
+
 <p>
 This is demonstrated below:
 </p>
@@ -208,7 +214,7 @@ This is demonstrated below:
 
 
 <pre class="src src-html">&lt;<span class="org-function-name">body</span>&gt;
-   &lt;<span class="org-function-name">div</span> <span class="org-variable-name">data-role</span>=<span class="org-string">"page"</span> <span class="org-variable-name">id</span>=<span class="org-string">"pagediv"</span> <span class="org-variable-name">data-code</span>=<span class="org-string">"[[[script]]]"</span>&gt;
+   &lt;<span class="org-function-name">div</span> <span class="org-variable-name">data-role</span>=<span class="org-string">"page"</span> <span class="org-variable-name">id</span>=<span class="org-string">"pagediv"</span> <span class="org-variable-name">data-code</span>=<span class="org-string">"[[[mobile_script]]]"</span>&gt;
       &lt;<span class="org-function-name">div</span> <span class="org-variable-name">data-role</span>=<span class="org-string">"header"</span>&gt;
          &lt;<span class="org-function-name">h1</span>&gt;<span class="org-underline"><span class="org-bold">[[[page:title()]]]</span></span>&lt;/<span class="org-function-name">h1</span>&gt;
       &lt;/<span class="org-function-name">div</span>&gt;
@@ -234,7 +240,7 @@ This is demonstrated below:
 
 
 <p>
-To see the completed jQuery mobile template, check out ./site/templates/mobile.html in your Nitrogen instllation, or <a href="https://github.com/nitrogen/nitrogen/blob/master/rel/overlay/common/site/templates/mobile.html">see it on github</a>.
+To see the completed jQuery mobile template, check out ./site/templates/mobile.html in your Nitrogen installation, or <a href="https://github.com/nitrogen/nitrogen/blob/master/rel/overlay/common/site/templates/mobile.html">see it on github</a>.
 </p>
 </div>
 
@@ -249,7 +255,7 @@ To see the completed jQuery mobile template, check out ./site/templates/mobile.h
 <li><a href="./base.html">base element</a>
 
 </li>
-<li><a href="./jquery_mobile.html">jQuery Mobile Elements</a>
+<li><a href="./elements/jquery_mobile.html">jQuery Mobile Elements</a>
 
 </li>
 <li><a href="http://jquerymobile.com">jQuery Mobile Homepage</a>
@@ -262,7 +268,7 @@ To see the completed jQuery mobile template, check out ./site/templates/mobile.h
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-18 03:24:04 CDT</p>
+<p class="date">Date: 2012-10-31 22:44:47 CDT</p>
 <p class="author">Author: Jesse Gumm (@jessegumm)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

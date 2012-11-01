@@ -1,10 +1,10 @@
 # vim: ts=3 sw=3 et ft=org
 #+TITLE: Nitrogen's jQuery Mobile Integration Guide
-#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+STYLE: <LINK href='stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Jesse Gumm (@jessegumm)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:./index.org][Getting Started]] | *[[file:./api.org][API]]* | [[file:./elements.org][Elements]] | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | [[file:./handlers.org][Handlers]] | [[file:./config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[file:./index.org][Getting Started]] | [[file:./api.org][*API*]] | [[file:./elements.org][Elements]] | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | [[file:./handlers.org][Handlers]] | [[file:./config.org][Configuration Options]] | [[file:./about.org][About]]
 
 * jQuery Mobile Integration
 
@@ -12,7 +12,7 @@
 
 ** Include the necessary javascript.
 
-   There are two new javascript files that must be included in order properly integrate with jQuery Mobile: jQuery mobile itself (jquery-mobile.js) and the Nitrogen jQuery Mobile script (nitrogen_jqm.js), which makes necessary structural changes to the Nitrogen object.
+   There are two new javascript files that must be included in order properly integrate with jQuery Mobile: jQuery mobile itself (jquery-mobile.js) and the Nitrogen jQuery Mobile script (nitrogen\_jqm.js), which makes necessary structural changes to the Nitrogen object.
 
    The <script> elements in the head should look something like this. Please note that the order of these includes does matter.
 
@@ -31,7 +31,7 @@
 
 You want to separate the page into three specific divs with a wrapper div.
 
-The wrapper div must have the attributes 'data-role="page"' and 'id="pagediv"'
+The wrapper div must have the attributes data-role="page" and id="pagediv"
 
 Contained within the Wrapper div are expected three other divs with the data-roles "header", "content" and "footer".
 
@@ -53,15 +53,18 @@ This is demonstrated below:
    </body>
 #+END_SRC
 
-*** The [[[script]]] tag loading properly.
+*** The script tag with jquery mobile version
 
-   The last step in order to ensure the proper loading of javascript from page to page while using transitions, is to include the [[[script]]] section of the template inside a data-code attribute in the wrapper div.
+   The last step in order to ensure the proper loading of javascript from page to page while using transitions, is to add
+   : [[[mobile_script]]]
+   to template inside a data-code attribute in the wrapper div.
+
 
 This is demonstrated below:
 
 #+BEGIN_SRC html
    <body>
-      <div data-role="page" id="pagediv" data-code="[[[script]]]">
+      <div data-role="page" id="pagediv" data-code="[[[mobile_script]]]">
          <div data-role="header">
             <h1>[[[page:title()]]]</h1>
          </div>
@@ -77,12 +80,12 @@ This is demonstrated below:
 
 ** The Complete Template
 
-To see the completed jQuery mobile template, check out ./site/templates/mobile.html in your Nitrogen instllation, or [[https://github.com/nitrogen/nitrogen/blob/master/rel/overlay/common/site/templates/mobile.html][see it on github]].
+To see the completed jQuery mobile template, check out ./site/templates/mobile.html in your Nitrogen installation, or [[https://github.com/nitrogen/nitrogen/blob/master/rel/overlay/common/site/templates/mobile.html][see it on github]].
 
 ** See Also
 
    + [[./base.html][base element]]
 
-   + [[./jquery_mobile.html][jQuery Mobile Elements]]
+   + [[./elements/jquery_mobile.html][jQuery Mobile Elements]]
 
    + [[http://jquerymobile.com][jQuery Mobile Homepage]]

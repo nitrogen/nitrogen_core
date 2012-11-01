@@ -26,7 +26,7 @@
 
    + theme - (/atom/) :: Sets the jQuery Mobile Swatch Letter. Can be a-z.
 
-   + data_fields - (/[{field, Attribute},...]/) :: Sets HTML5 data attributes, which are commonly used for jQuery mobile integration. While most Nitrogen mobile elements already include common data attributes (such as 'data-role', 'data-mini' or 'data-theme', etc), this allows the user to add ones that might not be immediately supported by Nitrogen. See the [[http://jquerymobile.com/test/docs/api/data-attributes.html][jQuery Mobile data attributes]]
+   + data\_fields - (/[{field, Attribute},...]/) :: Sets HTML5 data attributes, which are commonly used for jQuery mobile integration. While most Nitrogen mobile elements already include common data attributes (such as 'data-role', 'data-mini' or 'data-theme', etc), this allows the user to add ones that might not be immediately supported by Nitrogen. See the [[http://jquerymobile.com/test/docs/api/data-attributes.html][jQuery Mobile data attributes]]
 
 ** See Also
 
