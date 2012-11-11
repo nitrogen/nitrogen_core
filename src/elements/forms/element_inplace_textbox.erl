@@ -19,13 +19,11 @@ render_element(Record) ->
     MouseOverID = wf:temp_id(),
     TextBoxID = wf:temp_id(),
     Tag = Record#inplace_textbox.tag,
-    OriginalText = Record#inplace_textbox.text,
     Delegate = Record#inplace_textbox.delegate,
 
     % Set up the events...
     Controls = {ViewPanelID, LabelID, EditPanelID, TextBoxID},
     OKEvent = #event { delegate=?MODULE, postback={ok, Delegate, Controls, Tag} },
-    CancelEvent = #event { delegate=?MODULE, postback={cancel, Controls, Tag, OriginalText} },
 
     % Create the view...
     Text = Record#inplace_textbox.text,
@@ -51,7 +49,11 @@ render_element(Record) ->
             #panel { id=EditPanelID, class="edit", body=[
                 #textbox { id=TextBoxID, text=Text, next=OKButtonID },
                 #button { id=OKButtonID, text="OK" },
-                #button { id=CancelButtonID, text="Cancel" }
+                #button { id=CancelButtonID, text="Cancel", click=[
+                    #hide{ target=EditPanelID },
+                    #show{ target=ViewPanelID },
+                    #script{ script=wf:f("obj('~s').value=obj('~s').defaultValue;",[TextBoxID, TextBoxID]) }
+                ]}
             ]}
         ]
     },
@@ -64,7 +66,6 @@ render_element(Record) ->
             wf:wire(TextBoxID, Script)
     end,
 
-    wf:wire(CancelButtonID, CancelEvent#event { type=click }),
     wf:wire(OKButtonID, OKEvent#event { type=click }),
 
     wf:wire(OKButtonID, TextBoxID, #validate { attach_to=CancelButtonID, validators=Record#inplace_textbox.validators }),
@@ -79,12 +80,7 @@ event({ok, Delegate, {ViewPanelID, LabelID, EditPanelID, TextBoxID}, Tag}) ->
     wf:set(TextBoxID, Value1),
     wf:wire(EditPanelID, #hide {}),
     wf:wire(ViewPanelID, #show {}),
-    ok;
-
-event({cancel, {ViewPanelID, _LabelID, EditPanelID, TextBoxID}, _Tag, OriginalText}) ->
-    wf:set(TextBoxID, OriginalText),
-    wf:wire(EditPanelID, #hide {}),
-    wf:wire(ViewPanelID, #show {}),
+    wf:wire(wf:f("obj('~s').defaultValue = '~s';",[TextBoxID,wf:js_escape(Value1)])),
     ok;
 
 event(_Tag) -> ok.

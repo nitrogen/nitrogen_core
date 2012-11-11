@@ -20,7 +20,6 @@ render_element(Record) ->
     TextBoxID = wf:temp_id(),
     
     Tag = Record#inplace_textarea.tag,
-    OriginalText = Record#inplace_textarea.text,
     Delegate = Record#inplace_textarea.delegate,
     HTMLEncode = Record#inplace_textarea.html_encode,
    
@@ -30,7 +29,6 @@ render_element(Record) ->
     % Set up the events...
     Controls = {ViewPanelID, LabelID, EditPanelID, TextBoxID},
     OKEvent = #event { delegate=?MODULE, postback={ok, Delegate, Controls, Tag} },
-    CancelEvent = #event { delegate=?MODULE, postback={cancel, Controls, Tag, OriginalText} },
 
 	StartMode = Record#inplace_textarea.start_mode,
 
@@ -66,7 +64,11 @@ render_element(Record) ->
 				body=[
 					#textarea { id=TextBoxID, text=Text },
 					#button { id=OKButtonID, text="OK", actions=OKEvent#event { type=click } },
-					#button { id=CancelButtonID, text="Cancel", actions=CancelEvent#event { type=click } }
+					#button { id=CancelButtonID, text="Cancel", click=[
+                        #hide{ target=EditPanelID },
+                        #show{ target=ViewPanelID },
+                        #script{ script=wf:f("obj('~s').value=obj('~s').defaultValue;",[TextBoxID, TextBoxID]) }
+                    ]}
             	]
 			}
         ]
@@ -96,12 +98,7 @@ event({ok, Delegate, {ViewPanelID, LabelID, EditPanelID, TextBoxID}, Tag}) ->
     wf:set(TextBoxID, Value1),
     wf:wire(EditPanelID, #hide {}),
     wf:wire(ViewPanelID, #show {}),
-    ok;
-
-event({cancel, {ViewPanelID, _LabelID, EditPanelID, TextBoxID}, _Tag, OriginalText}) ->
-    wf:set(TextBoxID, OriginalText),
-    wf:wire(EditPanelID, #hide {}),
-    wf:wire(ViewPanelID, #show {}),
+    wf:wire(wf:f("obj('~s').defaultValue = '~s';",[TextBoxID,wf:js_escape(Value1)])),
     ok;
 
 event(_Tag) -> ok.
