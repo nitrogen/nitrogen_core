@@ -29,7 +29,9 @@ commonly presented on Stackoverflow or the mailing lists.
 * Email integration
 * Reverse Proxy configuration
 * Working with HTML5 Canvas
-* Builing a sample app that does something from the ground up
+* Building a sample app that does something from the ground up
+* Building a template/social router module (for loading templates or functions
+  based on target module exported functions)
 
 ## Other things that are worth doing with documentation
 
