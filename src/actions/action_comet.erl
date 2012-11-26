@@ -62,6 +62,10 @@ comet(F) ->
     comet(F, default).
 
 %% @doc Convenience method to start a comet process.
+comet({Name, F, Msg}, Pool) when is_function(F) ->
+    Pid = spawn_with_context({Name, F, Msg}, page),
+    wf:wire(page, page, #comet { function={Name, F, Msg}, pool=Pool, scope=local }),
+    {ok, Pid};
 comet({Name, F}, Pool) when is_function(F) ->
     Pid = spawn_with_context({Name, F}, page),
     wf:wire(page, page, #comet { function={Name, F}, pool=Pool, scope=local }),
@@ -72,6 +76,10 @@ comet(F, Pool) ->
     {ok, Pid}.
 
 %% @doc Convenience method to start a comet process with global pool.
+comet_global({Name, F, Msg}, Pool) ->
+    Pid = spawn_with_context({Name, F, Msg}, page),
+    wf:wire(page, page, #comet { function={Name, F, Msg}, pool=Pool, scope=global }),
+    {ok, Pid};
 comet_global({Name, F}, Pool) ->
     Pid = spawn_with_context({Name, F}, page),
     wf:wire(page, page, #comet { function={Name, F}, pool=Pool, scope=global }),
@@ -133,6 +141,10 @@ event({spawn_async_function, Record}) ->
 
     % Create a process for the AsyncFunction...
     FunctionPid = case Record#comet.function of
+        {Name, F, Msg} when is_function(F) ->
+            P = spawn_with_context({Name, F, Msg}, postback),
+            notify_accumulator_checker(P),
+            P;
         {Name, F} when is_function(F) ->
             P = spawn_with_context({Name, F}, postback),
             notify_accumulator_checker(P),
@@ -356,6 +368,22 @@ guardian_process(FunctionPid, AccumulatorPid, PoolPid, DyingMessage) ->
 %% is not started until after the comet postback. So we have to run a checker to fix it
 %% postbak means it's spawned from the postback event already along with the accumulator
 %% and everything. So no need to check for it.
+spawn_with_context({Name, Function, Msg}, Mode) ->
+    Context = wf_context:context(),
+    SeriesID = wf_context:series_id(),
+    Key = {SeriesID, Name},
+    {ok, Pid} = process_registry_handler:get_pid(Key, fun() ->
+        wf_context:context(Context),
+        wf_context:clear_actions(),
+        case erlang:fun_info(Function, arity) of
+        {arity, 1} -> Function(Mode);
+        {arity, 0} -> Function()
+        end,
+        flush() 
+    end),
+    Pid ! {comet, Mode, Msg},
+    start_accumulator_check_timer(Mode, Pid),
+    Pid;
 spawn_with_context({Name, Function}, Mode) ->
     Context = wf_context:context(),
     SeriesID = wf_context:series_id(),
