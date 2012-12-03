@@ -15,7 +15,7 @@ continue(Tag, Fun, TimeoutMS) ->
 %%% - ACTIONS - %%%
 
 render_action(Record) -> 
-    ?PRINT(render_action),
+    % ?PRINT(render_action),
     % Spawn a wrapped comet function.
     #comet {
         function=fun() -> continue_wrapper(Record) end
@@ -24,9 +24,9 @@ render_action(Record) ->
 continue_wrapper(Record) ->
     % Run the user's function. The results will either
     % be the actual result of the function, 'timeout', or 'error'
-    ?PRINT(running_function),
+    % ?PRINT(running_function),
     Result = run_continue_function(Record),
-    ?PRINT({result, Result}),
+    % ?PRINT({result, Result}),
     
 
     % Initiate a postback on the page to gather the requests...
@@ -35,10 +35,10 @@ continue_wrapper(Record) ->
     wf:flush(),
 
     % Wait for the event/1 function below to request the results...
-    ?PRINT(waiting_for_request),
+    % ?PRINT(waiting_for_request),
     receive 
         {get_results, Pid, Ref} -> 
-            ?PRINT(requested),
+            % ?PRINT(requested),
             Pid ! {get_results_response, Record, Result, Ref}
     end.
 
