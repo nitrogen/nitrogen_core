@@ -17,9 +17,19 @@ render_element(Record) ->
         {src, Record#image.image}
     ],
 
+    WidthAtts = case Record#image.width of
+      undefined -> Attributes;
+      Width -> [{width, Width}|Attributes]
+    end,
+
+    HeightAtts = case Record#image.height of
+      undefined -> WidthAtts;
+      Height -> [{height, Height}|WidthAtts]
+    end,
+
     FinalAttributes = case Record#image.alt of
-        undefined -> Attributes;
-        ImageAlt -> [{alt, ImageAlt}|Attributes] 
+      undefined -> HeightAtts;
+      ImageAlt -> [{alt, ImageAlt}|HeightAtts]
     end,
 
     wf_tags:emit_tag(img, FinalAttributes).
