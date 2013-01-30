@@ -62,12 +62,28 @@ comet(F) ->
     comet(F, default).
 
 %% @doc Convenience method to start a comet process.
+comet({Name, F, Msg}, Pool) when is_function(F) ->
+    Pid = spawn_with_context({Name, F, Msg}, page),
+    wf:wire(page, page, #comet { function={Name, F, Msg}, pool=Pool, scope=local }),
+    {ok, Pid};
+comet({Name, F}, Pool) when is_function(F) ->
+    Pid = spawn_with_context({Name, F}, page),
+    wf:wire(page, page, #comet { function={Name, F}, pool=Pool, scope=local }),
+    {ok, Pid};
 comet(F, Pool) ->
     Pid = spawn_with_context(F,page),
     wf:wire(page, page, #comet { function=Pid, pool=Pool, scope=local }),
     {ok, Pid}.
 
 %% @doc Convenience method to start a comet process with global pool.
+comet_global({Name, F, Msg}, Pool) ->
+    Pid = spawn_with_context({Name, F, Msg}, page),
+    wf:wire(page, page, #comet { function={Name, F, Msg}, pool=Pool, scope=global }),
+    {ok, Pid};
+comet_global({Name, F}, Pool) ->
+    Pid = spawn_with_context({Name, F}, page),
+    wf:wire(page, page, #comet { function={Name, F}, pool=Pool, scope=global }),
+    {ok, Pid};
 comet_global(F, Pool) ->
     Pid = spawn_with_context(F,page),
     wf:wire(page, page, #comet { function=Pid, pool=Pool, scope=global }),
@@ -125,15 +141,18 @@ event({spawn_async_function, Record}) ->
 
     % Create a process for the AsyncFunction...
     FunctionPid = case Record#comet.function of
-        F when is_function(F) -> spawn_with_context(F,postback);
+        {Name, F, Msg} when is_function(F) ->
+            P = spawn_with_context({Name, F, Msg}, postback),
+            notify_accumulator_checker(P),
+            P;
+        {Name, F} when is_function(F) ->
+            P = spawn_with_context({Name, F}, postback),
+            notify_accumulator_checker(P),
+            P;
+        F when is_function(F) ->
+            spawn_with_context(F, postback);
         P when is_pid(P) -> 
-            %% If P is a pid, then it was initiated on the page
-            %% and that means we have to kill the checker pid that's
-            %% waiting to kill it for us.  Hacky, I know. Real
-            %% spaghetti-like. I don't particularly like it, but it
-            %% fixes the bug.
-            {ok,CheckerPid} = get_accumulator_checker_pid(P),
-            CheckerPid ! accumulator_started,
+            notify_accumulator_checker(P),
             P
     end,
 
@@ -349,6 +368,37 @@ guardian_process(FunctionPid, AccumulatorPid, PoolPid, DyingMessage) ->
 %% is not started until after the comet postback. So we have to run a checker to fix it
 %% postbak means it's spawned from the postback event already along with the accumulator
 %% and everything. So no need to check for it.
+spawn_with_context({Name, Function, Msg}, Mode) ->
+    Context = wf_context:context(),
+    SeriesID = wf_context:series_id(),
+    Key = {SeriesID, Name},
+    {ok, Pid} = process_registry_handler:get_pid(Key, fun() ->
+        wf_context:context(Context),
+        wf_context:clear_actions(),
+        case erlang:fun_info(Function, arity) of
+        {arity, 1} -> Function(Mode);
+        {arity, 0} -> Function()
+        end,
+        flush() 
+    end),
+    Pid ! {comet, Mode, Msg},
+    start_accumulator_check_timer(Mode, Pid),
+    Pid;
+spawn_with_context({Name, Function}, Mode) ->
+    Context = wf_context:context(),
+    SeriesID = wf_context:series_id(),
+    Key = {SeriesID, Name},
+    {ok, Pid} = process_registry_handler:get_pid(Key, fun() ->
+        wf_context:context(Context),
+        wf_context:clear_actions(),
+        case erlang:fun_info(Function, arity) of
+        {arity, 1} -> Function(Mode);
+        {arity, 0} -> Function()
+        end,
+        flush() 
+    end),
+    start_accumulator_check_timer(Mode, Pid),
+    Pid;
 spawn_with_context(Function,Mode) ->
     Context = wf_context:context(),
     Pid = erlang:spawn(fun() -> 
@@ -357,21 +407,34 @@ spawn_with_context(Function,Mode) ->
         Function(),
         flush() 
     end),
-
-    case Mode of
-        postback -> do_nothing;
-        page ->
-            %% This function gets called before we've verified that the browser
-            %% is even doing JS, and without JS, this will never get assigned 
-            %% an accumulator.  So here's a hack to make sure that the accumulator
-            %% exists after 20 seconds, and if not, it simply kills the pid
-            start_accumulator_check_timer(Pid)
-    end,
+    start_accumulator_check_timer(Mode, Pid),
     Pid.
+
+start_accumulator_check_timer(page, Pid) ->
+    %% This function gets called before we've verified that the browser
+    %% is even doing JS, and without JS, this will never get assigned 
+    %% an accumulator.  So here's a hack to make sure that the accumulator
+    %% exists after 20 seconds, and if not, it simply kills the pid
+    start_accumulator_check_timer(Pid);
+start_accumulator_check_timer(_, _) ->
+    do_nothing.
+
+%% If P is a pid, then it was initiated on the page
+%% and that means we have to kill the checker pid that's
+%% waiting to kill it for us.  Hacky, I know. Real
+%% spaghetti-like. I don't particularly like it, but it
+%% fixes the bug.
+notify_accumulator_checker(Pid) ->
+    case get_accumulator_checker_pid(Pid) of
+    {ok, CheckerPid} when is_pid(CheckerPid) ->
+        CheckerPid ! accumulator_started;
+    _ ->
+        ok
+    end.
 
 get_accumulator_checker_pid(Pid) ->
     Key = get_accumulator_checker_key(Pid),
-    {ok, _CheckPid} = process_registry_handler:get_pid(Key).
+    process_registry_handler:get_pid(Key).
 
 get_accumulator_checker_key(Pid) ->
     _Key = {accumulator_check_timer,Pid}.
