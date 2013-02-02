@@ -23,7 +23,13 @@ render_element(Record) ->
     Template = get_cached_template(File),
 
     % Evaluate the template.
-    Body = eval(Template, Record),
+
+    %% erl_eval:exprs/2 expects Bindings to be an orddict, but Nitrogen 
+    %% does not have this requirement, so let's fix that.
+    %% create the needed Ord-Dict just once instead for every eval call down the chain
+    OrdDictBindings = orddict:from_list(Record#template.bindings),
+    Fixed_bindings_record = Record#template{bindings=OrdDictBindings},
+    Body = eval(Template, Fixed_bindings_record),
     Body.
 
 get_cached_template(File) ->
@@ -126,12 +132,9 @@ peel([H|T], Delim, Acc) -> peel(T, Delim, [H|Acc]).
 
 to_term(X, Bindings) ->
     S = wf:to_list(X),
-    %% erl_eval:exprs/2 expects Bindings to be an orddict, but Nitrogen 
-    %% does not have this requirement, so let's fix that.
-    OrdDictBindings = orddict:from_list(Bindings),
     {ok, Tokens, 1} = erl_scan:string(S),
     {ok, Exprs} = erl_parse:parse_exprs(Tokens),
-    {value, Value, _} = erl_eval:exprs(Exprs, OrdDictBindings),
+    {value, Value, _} = erl_eval:exprs(Exprs, Bindings),
     Value.
 
 
