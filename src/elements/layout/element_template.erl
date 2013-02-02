@@ -29,7 +29,7 @@ render_element(Record) ->
     %% create the needed Ord-Dict just once instead for every eval call down the chain
     OrdDictBindings = orddict:from_list(Record#template.bindings),
     Fixed_bindings_record = Record#template{bindings=OrdDictBindings},
-    Body = eval(Template, Record),
+    Body = eval(Template, Fixed_bindings_record),
     Body.
 
 get_cached_template(File) ->
