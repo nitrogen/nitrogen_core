@@ -1,0 +1,44 @@
+# vim: sw=3 ts=3 ft=org
+# vim: ts=3 sw=3 et ft=org
+#+TITLE: Textboxlist Element Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Rusty Klophaus (@rustyio)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+
+* Textboxlist Element - #textboxlist {}
+
+  The textboxlist element produces a widget that an be navigated with the keyboard,
+  effectively turning your input into a “list” of items that can be easily deleted. 
+
+  The element include an autocomplete functionality.
+
+** Usage
+
+#+BEGIN_SRC erlang
+  #textboxlist{id=first, tag=auto1},
+#+END_SRC
+
+** Attributes
+
+   + unique - (/boolean/) :: If set to true, an id of a bit can’t be repeated.
+
+   + values - (/List/) :: The initial values.
+
+   + autocomplete - (/boolean/) :: If set to true, the component initialized with autocomplete plugin.
+
+   + queryRemote - (/boolean/) :: If set to true, the component attempt to retrieve suggestions from 
+      an event postback initiated by Nitrogen.
+
+   + onlyFromValues - (/boolean/) :: If set to true, the user can only pick values from the suggestions.
+
+   + minLenght - (/integer/) :: Minimum number of characters typed in to trigger search.
+
+#+BEGIN_SRC html
+   <script src='/nitrogen/textboxlist.js' type='text/javascript'></script>
+#+END_SRC
+
+** See Also
+
+   + [[./base.html][base element]]

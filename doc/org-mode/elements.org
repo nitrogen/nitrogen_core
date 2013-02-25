@@ -68,6 +68,7 @@
   + [[./elements/sortitem.org][Sort Item]]
   + [[./elements/gravatar.org][Gravatar]]
   + [[./elements/recaptcha.org][Recaptcha]]
+  + [[./elements/textboxlist.org][Textboxlist]]
 
 * See Also
   + [[./paths.org][Nitrogen Element Paths]]
