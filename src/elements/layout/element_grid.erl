@@ -15,6 +15,8 @@ render_element(Record0)  ->
         html_id=Record#grid.html_id,
         class=to_classes(Record),
         body=case Record#grid.type of
+            clear ->
+                Body;
             container ->
                 Body;
             grid ->
@@ -40,16 +42,26 @@ rewrite_body(Body) ->
             [First|L1] = Body,
             First1 = to_grid_record(First),
             Body1 = [First1#grid {alpha = true }|L1],
-
-            %% Add omega to last element, and add a clear div.
-            {L2, Last} = lists:split(length(Body1) - 1, Body1),
-            Last1 = to_grid_record(hd(Last)),
-            Body2 = L2 ++ [Last1#grid { omega = true }, #grid_clear {}],
-            
+            Body2 = append_clear_if_necessary(Body1),
             Body2;
 
         false -> 
             Body
+    end.
+
+%% Will append a grid_clear element if the last element isn't already a grid_clear{}
+append_clear_if_necessary(Body) ->
+    {L2, Last} = lists:split(length(Body) - 1, Body),
+    case Last of
+        [#grid_clear{}] -> 
+            %% The last element is already grid_clear, so we'll just trust the body to be just fine,
+            Body;
+        [#grid{type=clear}] ->
+            %% This is the basically the same as the previous clause, just a different way to write it
+            Body;
+        _ -> 
+            Last1 = to_grid_record(hd(Last)),
+            L2 ++ [Last1#grid { omega = true }, #grid_clear {}]
     end.
 
 %% Return true if all elements are grid elements.
@@ -64,6 +76,8 @@ is_grid_body(Body) ->
 %% this grid.
 to_classes(Record) ->
     C = case Record#grid.type of
+        clear -> 
+            [clear];
         container -> 
             %% Construct the container_N class, and add any other user
             %% defined classes.
