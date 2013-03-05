@@ -22,11 +22,13 @@ render_element(Record) ->
     end,
 
     Value = wf:html_encode(Record#password.text, Record#password.html_encode),
+    Placeholder  = wf:html_encode(Record#password.placeholder, true),
     wf_tags:emit_tag(input, [
         {id, Record#password.html_id},
         {type, password},
         {class, [password, Record#password.class]},
         {style, Record#password.style},
         {name, Record#password.html_name},
+        {placeholder, Placeholder},
         {value, Value}
     ]).
