@@ -111,7 +111,7 @@
 -record(checkbox, {?ELEMENT_BASE(element_checkbox), text="", html_encode=true, checked=false, value="on", postback, delegate, html_name}).
 -record(radiogroup, {?ELEMENT_BASE(element_radiogroup), body=[]}).
 -record(radio, {?ELEMENT_BASE(element_radio), text="", html_encode=true, value, name, checked=false, postback, delegate, html_name}).
--record(password, {?ELEMENT_BASE(element_password), text="", html_encode=true, next, postback, delegate, html_name}).
+-record(password, {?ELEMENT_BASE(element_password), text="", placeholder="", html_encode=true, next, postback, delegate, html_name}).
 -record(restful_form, {?ELEMENT_BASE(element_restful_form), method="POST", action, html_name, enctype, body=[]}).
 -record(restful_submit, {?ELEMENT_BASE(element_restful_submit), text="Submit", html_encode=true, html_name}).
 -record(restful_reset, {?ELEMENT_BASE(element_restful_reset), text="Cancel", html_encode=true, html_name}).
