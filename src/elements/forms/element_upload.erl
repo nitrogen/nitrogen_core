@@ -188,7 +188,9 @@ event({upload_finished, Record}) ->
     {Filename,NewTag} = case Req:post_files() of
         [] -> 
             {undefined,{upload_event, Record, undefined, undefined, undefined}};
-        [#uploaded_file { original_name=OriginalName, temp_file=TempFile }|_] ->
+        [UploadedFile | _] ->
+            OriginalName = uploaded_file:original_name(UploadedFile),
+            TempFile = uploaded_file:temp_file(UploadedFile),
             {OriginalName,{upload_event, Record, OriginalName, TempFile, node()}}
     end,
 
