@@ -37,37 +37,37 @@ continue_wrapper(Record) ->
     end.
 
 run_continue_function(Record) ->
-% Some values we'll need...
-Fun = Record#continue.function,
-Tag = Record#continue.tag,
-Timeout = Record#continue.timeout,
-Ref = make_ref(),
-Self = self(),
+    % Some values we'll need...
+    Fun = Record#continue.function,
+    Tag = Record#continue.tag,
+    Timeout = Record#continue.timeout,
+    Ref = make_ref(),
+    Self = self(),
 
-Context = wf_context:context(),			
-% Spawn the user's function...
-Pid = spawn(fun() -> 
-wf_context:context(Context),
-wf_context:clear_actions(),
-try 
-    Self ! {result, Fun(), Ref}
-catch 
-    _Type : timeout ->
-        timeout;
-    Type : Error ->
-        error_logger:error_msg("Error in continuation function ~p (~p) - ~p : ~p~n", [Fun, Tag, Type, Error]),
-        Self ! {result, error, Ref}
-end
+    Context = wf_context:context(),			
+    % Spawn the user's function...
+    Pid = spawn(fun() -> 
+        wf_context:context(Context),
+        wf_context:clear_actions(),
+        try 
+            Self ! {result, Fun(), Ref}
+        catch 
+            _Type : timeout ->
+                timeout;
+            Type : Error ->
+                error_logger:error_msg("Error in continuation function ~p (~p) - ~p : ~p~nStack Trace: ~p", [Fun, Tag, Type, Error, erlang:get_stacktrace()]),
+                Self ! {result, error, Ref}
+        end
 
-end),
+    end),
 
-% Wait for the result, and return it...
-receive {result, Result, Ref} -> 
-Result
-after Timeout ->
-erlang:exit(Pid, timeout),
-timeout 
-end.
+    % Wait for the result, and return it...
+    receive {result, Result, Ref} -> 
+        Result
+    after Timeout ->
+        erlang:exit(Pid, timeout),
+        timeout 
+    end.
 
 
 event({finished, Pid, Ref}) ->
