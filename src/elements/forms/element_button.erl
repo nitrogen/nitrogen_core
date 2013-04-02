@@ -22,7 +22,7 @@ render_element(Record) ->
 		ClickActions -> wf:wire(Anchor, #event { type=click, actions=ClickActions })
 	end,
 
-    Value = ["  ", wf:html_encode(Record#button.text, Record#button.html_encode), "  "], 
+    Value = wf:html_encode(Record#button.text, Record#button.html_encode), 
     wf_tags:emit_tag(input, [
         {id, Record#button.html_id},
         {type, button},
