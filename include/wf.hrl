@@ -107,7 +107,8 @@
 -record(range, {?ELEMENT_BASE(element_range), data_fields=[], min=0, max=100, step=1, value=0, next, postback, delegate}).
 -record(datepicker_textbox, {?ELEMENT_BASE(element_datepicker_textbox), text="", next, html_encode=true, validators=[], options = [{dateFormat, "yy-mm-dd"}] }).
 -record(dropdown, {?ELEMENT_BASE(element_dropdown), options=[], html_encode=true, postback, delegate, value, multiple=false, disabled=false, data_fields=[], html_name}).
--record(option, { text="", value=undefined, selected=false, show_if=true }).
+-record(option, { text="", value=undefined, selected=false, show_if=true, disabled=false }).
+-record(option_group, {text="", options=[], show_if=true, disabled=false }).
 -record(checkbox, {?ELEMENT_BASE(element_checkbox), text="", html_encode=true, checked=false, value="on", postback, delegate, html_name}).
 -record(radiogroup, {?ELEMENT_BASE(element_radiogroup), body=[]}).
 -record(radio, {?ELEMENT_BASE(element_radio), text="", html_encode=true, value, name, checked=false, postback, delegate, html_name}).
