@@ -19,5 +19,6 @@ render_element(Record) ->
         {id, Record#span.html_id},
         {class, Record#span.class}, 
         {style, Record#span.style},
+        {title, wf:html_encode(Record#span.title, Record#span.html_encode)},
         {data_fields, Record#span.data_fields}
     ]).

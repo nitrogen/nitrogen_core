@@ -125,7 +125,7 @@
 -record(link, {?ELEMENT_BASE(element_link), title = "", text="", body="", new=false, html_encode=true, mobile_target=false, mobile_dialog=false, data_fields=[], url="javascript:", postback, delegate}).
 -record(email_link, {?ELEMENT_BASE(element_email_link), title="",text="",body="",html_encode=true,email=""}).
 -record(error, {?ELEMENT_BASE(element_error), text="", html_encode=true}).
--record(span, {?ELEMENT_BASE(element_span), body="", text="", html_encode=true, data_fields=[]}).
+-record(span, {?ELEMENT_BASE(element_span), body="", text="", title="", html_encode=true, data_fields=[]}).
 -record(button, {?ELEMENT_BASE(element_button), text="", body="", image=undefined, html_encode=true, click, postback, delegate, data_fields=[]}).
 -record(literal, {?ELEMENT_BASE(element_literal), text="", html_encode=true}).
 -record(textbox, {?ELEMENT_BASE(element_textbox), text="", maxlength="", placeholder="", html_encode=true, next, postback, delegate, html_name}).
