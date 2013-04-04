@@ -19,9 +19,13 @@ render_element(Record) ->
             wf:f("File not found: ~s.", [FilePath])
     end,
 
-    Panel = #panel {
-        html_id=Record#file.html_id,
-        body=FileContents
-    },
-
-    element_panel:render_element(Panel).
+    case Record#file.include_panel of
+        false ->
+            FileContents;
+        true ->
+            Panel = #panel {
+                html_id=Record#file.html_id,
+                body=FileContents
+            },
+            element_panel:render_element(Panel)
+    end.
