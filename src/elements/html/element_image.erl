@@ -14,7 +14,7 @@ render_element(Record) ->
         {id, Record#image.html_id},
         {class, [image, Record#image.class]},
         {style, Record#image.style},
-        {src, Record#image.image}
+        {src, wf:to_list(Record#image.image)}
     ],
 
     WidthAtts = case Record#image.width of
