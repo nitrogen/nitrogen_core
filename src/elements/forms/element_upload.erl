@@ -73,11 +73,6 @@ render_element(Record) ->
 
     wf:wire(UploadJS),
 
-    % Set the dimensions of the file input element the same as
-    % faked file input button has.
-    wf:wire(wf:f("jQuery('#~s').width(jQuery('#~s').width()); jQuery('#~s').height(jQuery('#~s').height());",
-        [FileInputID, FakeFileInputID, FileInputID, FakeFileInputID])),
-
     % Render the controls and hidden iframe...
     FormContent = [
         %% IE9 does not support the droppable option, so let's just hide the drop field
