@@ -27,8 +27,6 @@ render_element(Record) ->
     wf_tags:emit_tag( table, Content, [
         {id, Record#table.html_id},
         {border, 0},
-        {cellpadding, 0},
-        {cellspacing, 0},
         {class, [table, Record#table.class]},
         {style, Record#table.style}
     ]).
