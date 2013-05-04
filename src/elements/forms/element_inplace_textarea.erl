@@ -63,7 +63,7 @@ render_element(Record) ->
 				style = ?WF_IF(StartMode==view,"display:none"),
 				body=[
 					#textarea { id=TextBoxID, text=Text },
-					#button { id=OKButtonID, text="OK", actions=OKEvent#event { type=click } },
+					#button { id=OKButtonID, text="OK"},
 					#button { id=CancelButtonID, text="Cancel", click=[
                         #hide{ target=EditPanelID },
                         #show{ target=ViewPanelID },
@@ -80,6 +80,8 @@ render_element(Record) ->
             Script = #script { script="obj('me').focus(); obj('me').select();" },
             wf:wire(TextBoxID, Script)
     end,
+
+    wf:wire(OKButtonID, OKEvent#event{type=click }),
 
     wf:wire(OKButtonID, TextBoxID, #validate { attach_to=CancelButtonID, validators=Record#inplace_textarea.validators }),
 
