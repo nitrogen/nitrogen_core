@@ -49,6 +49,7 @@ render_element(Record) ->
     ButtonID = wf:temp_id(),
     DropID = wf:temp_id(),
     DropListingID = wf:temp_id(),
+    FileInputWrapperID = wf:temp_id(),
     FileInputID = wf:temp_id(),
     FakeFileInputID = wf:temp_id(),
 
@@ -60,6 +61,9 @@ render_element(Record) ->
 	JSONParam = nitro_mochijson2:encode({struct,Param}),
 	SubmitJS = wf:f("Nitrogen.$send_pending_files(jQuery('#~s').get(0),jQuery('#~s').get(0));",[FormID,FileInputID]),
     UploadJS = wf:f("Nitrogen.$attach_upload_handle_dragdrop(jQuery('#~s').get(0),jQuery('#~s').get(0),~s);", [FormID,FileInputID,JSONParam]),
+
+    wf:wire(wf:f("jQuery('#~s').width(jQuery('#~s').outerWidth(true)); jQuery('#~s').height(jQuery('#~s').outerHeight(true));",
+                 [FileInputWrapperID, FakeFileInputID, FileInputWrapperID, FakeFileInputID] )),
 
     PostbackInfo = wf_event:serialize_event_context(FinishedTag, Record#upload.id, undefined, ?MODULE),
 
@@ -73,10 +77,22 @@ render_element(Record) ->
 
     wf:wire(UploadJS),
 
-    % Set the dimensions of the file input element the same as
-    % faked file input button has.
-    wf:wire(wf:f("jQuery('#~s').width(jQuery('#~s').width()); jQuery('#~s').height(jQuery('#~s').height());",
-        [FileInputID, FakeFileInputID, FileInputID, FakeFileInputID])),
+    WrapperContent = [
+        wf_tags:emit_tag(input, [
+            {type, button},
+            {style, "margin: 2px; border: 2px outset rgb(221, 221, 221); padding: 1px 6px; position: absolute; top: 0px; left: 0px; z-index: 1;"},
+            {value, FileInputText},
+            {id, FakeFileInputID}
+        ]),
+        wf_tags:emit_tag(input, [
+            {name, file},
+            {multiple, Multiple},
+            {class, [no_postback, FileInputID|Anchor]},
+            {id, FileInputID},
+            {type, file},
+            {style, "margin: 2px; border: 2px outset rgb(221, 221, 221); padding: 1px 6px; font-size: 50px; opacity: 0; filter:alpha(opacity: 0); -moz-opacity: 0; filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0); position: relative; z-index: 2;"}
+        ])
+    ],
 
     % Render the controls and hidden iframe...
     FormContent = [
@@ -102,39 +118,15 @@ render_element(Record) ->
             body=""
         },
         #list{
-            show_if=Droppable,
+            %show_if=Droppable,
             id=DropListingID,
             class=upload_droplist
         },
 
-%%  ORIGINAL!
-%%        wf_tags:emit_tag(input, [
-%%            {name, file},
-%%            {multiple,Multiple},
-%%            {class, [no_postback,FileInputID|Anchor]},
-%%            {id, FileInputID},
-%%            {type, file}
-%%        ]),	
-        #panel{
-            style="position: relative;",
-            body=[
-                wf_tags:emit_tag(input, [
-                    {type, button},
-                    {style, "margin: 2px; border: 2px outset rgb(221, 221, 221); padding: 1px 6px; position: absolute; top: 0px; left: 0px; z-index: 1;"},
-                    {value, FileInputText},
-                    {id, FakeFileInputID}
-                ]),
-
-                wf_tags:emit_tag(input, [
-                    {name, file},
-                    {multiple, Multiple},
-                    {class, [no_postback, FileInputID|Anchor]},
-                    {id, FileInputID},
-                    {type, file},
-                    {style, "margin: 2px; border: 2px outset rgb(221, 221, 221); padding: 1px 6px; opacity: 0; filter:alpha(opacity: 0); position: relative; z-index: 2;"}
-                ])
-            ]
-        },
+        wf_tags:emit_tag('div', WrapperContent, [
+            {id, FileInputWrapperID},
+            {style, "position: relative; overflow: hidden; cursor: pointer;"}
+        ]),
 
         wf_tags:emit_tag(input, [
             {name, eventContext},
