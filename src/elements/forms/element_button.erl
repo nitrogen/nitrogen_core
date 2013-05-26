@@ -22,11 +22,31 @@ render_element(Record) ->
 		ClickActions -> wf:wire(Anchor, #event { type=click, actions=ClickActions })
 	end,
 
-    Value = wf:html_encode(Record#button.text, Record#button.html_encode), 
-    wf_tags:emit_tag(input, [
+    Text = wf:html_encode(Record#button.text, Record#button.html_encode), 
+  
+    Image = format_image(Record#button.image),
+    Body = case {Image,Record#button.body} of
+        {[], []} -> [];
+        {I, B} -> [I, B]
+    end,
+
+
+    UniversalAttributes = [
         {id, Record#button.html_id},
-        {type, button},
         {class, [button, Record#button.class]},
-        {style, Record#button.style},
-        {value, Value}
-    ]).
+        {style, Record#button.style}
+    ],
+
+    case Body of
+        [] ->
+            wf_tags:emit_tag(input, [
+                {type, button},
+                {value, Text}
+                | UniversalAttributes
+            ]);
+        _ ->
+            wf_tags:emit_tag(button, [Body, Text], UniversalAttributes)
+    end.
+
+format_image(undefined) -> [];
+format_image(Path) -> [#image{image=Path}," "].

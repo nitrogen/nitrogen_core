@@ -20,9 +20,13 @@
 
 ** Attributes
 
-   + text - (/string/) :: The button's title.
+   + body - (/List of Nitrogen Elements/) :: The button's body (if you wanted to use something richer than a simple text)
+
+   + text - (/string/) :: The text of the button.
 
    + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
+
+   + image - (/Path to Image/) :: This is a shortcut attribute to prepending the body of the button with an image (for example, specifying a "Floppy Disk" icon on a "Save" button). The image will display before any body or text.
 
    + postback - (/Erlang term/) :: Clicking on the button will initiate a Nitrogen postback with the supplied term.
 
