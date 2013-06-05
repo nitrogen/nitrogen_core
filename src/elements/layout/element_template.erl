@@ -153,10 +153,13 @@ replace_callbacks(CallbackTuples, Record) ->
     #function_el { anchor=page, function=Functions }.
 
 convert_callback_tuple_to_function(Module, Function, ArgString, Bindings) ->
-    % De-reference to page module...
-    Module1 = case Module of
-        page -> wf_context:page_module();
-        _ -> Module
+    % De-reference to page module and custom module aliases...
+    ModuleAliases = [{page, wf_context:page_module()} | wf:config_default(module_aliases, [])],
+    Module1 = case proplists:lookup(Module, ModuleAliases) of
+        {Module, AliasedModule} ->
+            AliasedModule;
+        none ->
+            Module
     end,
 	
     _F = fun() ->

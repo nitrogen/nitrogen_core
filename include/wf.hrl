@@ -98,7 +98,7 @@
 -record(link, {?ELEMENT_BASE(element_link), title = "", text="", body="", new=false, html_encode=true, mobile_target=false, mobile_dialog=false, data_fields=[], url="javascript:", postback, delegate}).
 -record(email_link, {?ELEMENT_BASE(element_email_link), title="",text="",body="",html_encode=true,email=""}).
 -record(error, {?ELEMENT_BASE(element_error), text="", html_encode=true}).
--record(span, {?ELEMENT_BASE(element_span), body="", text="", html_encode=true}).
+-record(span, {?ELEMENT_BASE(element_span), body="", text="", title="", html_encode=true}).
 -record(button, {?ELEMENT_BASE(element_button), text="Button", html_encode=true, click, postback, delegate}).
 -record(literal, {?ELEMENT_BASE(element_literal), text="", html_encode=true}).
 -record(textbox, {?ELEMENT_BASE(element_textbox), text="", maxlength="", placeholder="", html_encode=true, next, postback, delegate, html_name}).
@@ -127,7 +127,7 @@
 -record(tableheader, {?ELEMENT_BASE(element_tableheader), text="", html_encode=true, body="", align="left", valign="middle", colspan=1, rowspan=1}).
 -record(tablecell, {?ELEMENT_BASE(element_tablecell), text="", html_encode=true, body="", align="left", valign="middle", colspan=1, rowspan=1}).
 -record(singlerow, {?ELEMENT_BASE(element_singlerow), cells}).
--record(file, {?ELEMENT_BASE(element_file), file}).
+-record(file, {?ELEMENT_BASE(element_file), file, include_panel=true}).
 -record(flash, {?ELEMENT_BASE(element_flash)}).
 -record(placeholder, {?ELEMENT_BASE(element_placeholder), body=[]}).
 -record(bind, {?ELEMENT_BASE(element_bind), data=[], map=[], transform, acc=[], body=[], empty_body=[]}).
