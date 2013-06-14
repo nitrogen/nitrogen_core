@@ -63,10 +63,12 @@
 
 %%% TERNARY IF AND VARIATIONS %%%
 -define(WF_IF(Term,IfTrue,IfFalse),
-    case (Term) of
-        F when F==false;F==undefined;F==[] -> IfFalse;
-        _ -> IfTrue
-    end).
+    fun() ->
+        case (Term) of
+            F when F==false;F==undefined;F==[] -> IfFalse;
+            _ -> IfTrue
+        end
+    end()).
 
 -define(WF_IF(Term,IfTrue), ?WF_IF(Term,IfTrue,"")).
 
