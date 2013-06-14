@@ -166,3 +166,15 @@ div.inplace_textbox .LV_invalid {
 .dropzone-container div.ui-state-highlight {
     /*background: limegreen;*/
 }
+
+/*** jQuery Tabs ***/
+
+/* Move hiddent tabs off the screen to hide them. This provides
+ * a correct tabs element placement and width for cases when
+ * they are immediately used / modified by a java script. */
+.ui-tabs .ui-tabs-hide {
+    display: inline !important;
+    position: absolute;
+    left:-10000px;
+}
+
