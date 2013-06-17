@@ -14,5 +14,6 @@ render_element(Record) ->
 			   {type, file}, 
 			   {class, [restful_upload, Record#restful_upload.class]},
 			   {style, Record#restful_upload.style},
-			   {name, Record#restful_upload.html_name}
+			   {name, Record#restful_upload.html_name},
+			   {data_fields, Record#restful_upload.data_fields}
 			  ]).

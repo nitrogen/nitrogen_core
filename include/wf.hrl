@@ -112,8 +112,8 @@
 -record(link, {?ELEMENT_BASE(element_link), title = "", text="", body="", new=false, html_encode=true, mobile_target=false, mobile_dialog=false, data_fields=[], url="javascript:", postback, delegate}).
 -record(email_link, {?ELEMENT_BASE(element_email_link), title="",text="",body="",html_encode=true,email=""}).
 -record(error, {?ELEMENT_BASE(element_error), text="", html_encode=true}).
--record(span, {?ELEMENT_BASE(element_span), body="", text="", html_encode=true}).
--record(button, {?ELEMENT_BASE(element_button), text="", body="", image, html_encode=true, click, postback, delegate}).
+-record(span, {?ELEMENT_BASE(element_span), body="", text="", html_encode=true, data_fields=[]}).
+-record(button, {?ELEMENT_BASE(element_button), text="", html_encode=true, click, postback, delegate, data_fields=[]}).
 -record(literal, {?ELEMENT_BASE(element_literal), text="", html_encode=true}).
 -record(textbox, {?ELEMENT_BASE(element_textbox), text="", maxlength="", placeholder="", html_encode=true, next, postback, delegate, html_name}).
 -record(hidden, {?ELEMENT_BASE(element_hidden), text="", html_encode=true, html_name, disabled=false}).
@@ -130,7 +130,7 @@
 -record(restful_form, {?ELEMENT_BASE(element_restful_form), method="POST", action, html_name, enctype, body=[]}).
 -record(restful_submit, {?ELEMENT_BASE(element_restful_submit), text="Submit", html_encode=true, html_name}).
 -record(restful_reset, {?ELEMENT_BASE(element_restful_reset), text="Cancel", html_encode=true, html_name}).
--record(restful_upload, {?ELEMENT_BASE(element_restful_upload), html_encode=true, html_name}).
+-record(restful_upload, {?ELEMENT_BASE(element_restful_upload), html_encode=true, html_name, data_fields=[]}).
 -record(panel, {?ELEMENT_BASE(element_panel), body="", text="", html_encode=true, data_fields=[]}).
 -record(fieldset, {?ELEMENT_BASE(element_fieldset), body="", text="", html_encode=true, legend_body="", legend_text="", legend_html_encode=true}).
 -record(spinner, {?ELEMENT_BASE(element_spinner), image="/nitrogen/spinner.gif"}).
