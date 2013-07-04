@@ -8,7 +8,7 @@
 -export ([
     render_elements/1,
     temp_id/0,
-	normalize_id/1
+    normalize_id/1
 ]).
 
 % render_elements(Elements) - {ok, Html}
@@ -38,15 +38,15 @@ render_elements(Element, HtmlAcc) when is_tuple(Element) ->
     {ok, HtmlAcc1};
 
 render_elements(mobile_script, HtmlAcc) ->
-	HtmlAcc1 = [mobile_script|HtmlAcc],
-	{ok, HtmlAcc1};
+    HtmlAcc1 = [mobile_script|HtmlAcc],
+    {ok, HtmlAcc1};
 
 render_elements(script, HtmlAcc) ->
     HtmlAcc1 = [script|HtmlAcc],
     {ok, HtmlAcc1};
 
 render_elements(Atom, HtmlAcc) when is_atom(Atom) ->
-	render_elements(wf:to_binary(Atom), HtmlAcc);
+    render_elements(wf:to_binary(Atom), HtmlAcc);
 
 render_elements(Unknown, _HtmlAcc) ->
     throw({unanticipated_case_in_render_elements, Unknown}).
@@ -55,7 +55,6 @@ render_elements(Unknown, _HtmlAcc) ->
 render_element(Element) when is_tuple(Element) ->
     % Get the element's backing module...
     Base = wf_utils:get_elementbase(Element),
-    Module = Base#elementbase.module, 
 
     % Verify that this is an element...
     case Base#elementbase.is_element == is_element of
@@ -64,62 +63,70 @@ render_element(Element) when is_tuple(Element) ->
     end,
 
     case Base#elementbase.show_if of
-        false -> 
+        false ->
             {ok, []};
-        "" ->
-            {ok, []};
-        undefined ->
-            {ok, []};
-        0 ->
-            {ok, []};
+        true ->
+            Module = Base#elementbase.module, 
 
-        _ ->
-            % If no ID is defined, then use the same
-            % temp_id() for both the HtmlID and TempID.
-            % Otherwise, create a new TempID. Update the class
-            % with either one or both.
+            case erlang:function_exported(Module,transform_element,1) of
+                true ->
+                    %% Module:transform_element is a special shortcut mechanism
+                    %% of rendering elements without any of the overhead of
+                    %% the pre-rendering that goes on with each element. This
+                    %% should be used for custom elements that are simply
+                    %% defined in terms of other Nitrogen elements.
+                    {ok, _Html} = call_element_render(transform_element, Module, Element);
 
-            % Get the anchor, or create a new one if it's not defined...
-            Anchor = case Base#elementbase.anchor of
-                undefined -> normalize_id(temp_id());
-                Other1 -> normalize_id(Other1)
-            end,
+                false ->
+                    % If no ID is defined, then use the same
+                    % temp_id() for both the HtmlID and TempID.
+                    % Otherwise, create a new TempID. Update the class
+                    % with either one or both.
 
-            % Get the ID, or use the anchor if it's not defined...
-            ID = case Base#elementbase.id of
-                undefined -> Anchor;
-                Other2 -> normalize_id(Other2)
-            end,
-            
-            % Update the class...
-            Class = case Anchor == ID of
-                true  -> [ID, Base#elementbase.class];
-                false -> [ID, Anchor, Base#elementbase.class]
-            end,
+                    % Get the anchor, or create a new one if it's not defined...
+                    Anchor = case Base#elementbase.anchor of
+                        undefined -> normalize_id(temp_id());
+                        Other1 -> normalize_id(Other1)
+                    end,
 
-            % Update the base element with the new id and class...
-            Base1 = Base#elementbase { id=ID, anchor=Anchor, class=Class },
-            Element1 = wf_utils:replace_with_base(Base1, Element),
+                    % Get the ID, or use the anchor if it's not defined...
+                    ID = case Base#elementbase.id of
+                        undefined -> Anchor;
+                        Other2 -> normalize_id(Other2)
+                    end,
+                    
+                    % Update the class...
+                    Class = case Anchor == ID of
+                        true  -> [ID, Base#elementbase.class];
+                        false -> [ID, Anchor, Base#elementbase.class]
+                    end,
 
-            % Wire the actions...			
-            wf_context:anchor(Anchor),
-            wf:wire(Base1#elementbase.actions),
+                    % Update the base element with the new id and class...
+                    Base1 = Base#elementbase { id=ID, anchor=Anchor, class=Class },
+                    Element1 = wf_utils:replace_with_base(Base1, Element),
 
-            % Render the element...
-            {ok, Html} = call_element_render(Module, Element1),
+                    % Wire the actions...           
+                    wf_context:anchor(Anchor),
+                    wf:wire(Base1#elementbase.actions),
 
-            % Reset the anchor (likely changed during the inner render)...
-            wf_context:anchor(Anchor),
-            {ok, Html}
+                    % Render the element...
+                    {ok, Html} = call_element_render(render_element, Module, Element1),
+
+                    % Reset the anchor (likely changed during the inner render)...
+                    wf_context:anchor(Anchor),
+                    {ok, Html}
+            end
     end.
 
-% call_element_render(Module, Element) -> {ok, Html}.
+% call_element_render(RenderOrTransform, Module, Element) -> {ok, Html}.
 % Calls the render_element/3 function of an element to turn an element record into
 % HTML.
-call_element_render(Module, Element) ->
+
+call_element_render(RenderOrTransform, Module, Element) ->
     {module, Module} = code:ensure_loaded(Module),
-    NewElements = Module:render_element(Element),
+    NewElements = Module:RenderOrTransform(Element),
     {ok, _Html} = render_elements(NewElements, []).
+
 
 normalize_id(ID) -> 
     case wf:to_string_list(ID) of
@@ -131,14 +138,3 @@ normalize_id(ID) ->
 temp_id() ->
     {_, _, C} = now(), 
     "temp" ++ integer_to_list(C).
-
-
-% is_temp_element(undefined) -> true;
-% is_temp_element([P]) -> is_temp_element(P);
-% is_temp_element(P) -> 
-% 	Name = wf:to_list(P),
-% 	length(Name) > 4 andalso
-% 	lists:nth(1, Name) == $t andalso
-% 	lists:nth(2, Name) == $e andalso
-% 	lists:nth(3, Name) == $m andalso
-% 	lists:nth(4, Name) == $p.

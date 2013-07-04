@@ -130,24 +130,36 @@ clear_data() ->
     Context = context(),
     context(Context#context { data = [] }).
 
-
-add_action(Action) ->
-    Context = context(),
-    Actions = Context#context.queued_actions,
-    context(Context#context { queued_actions=[Action|Actions] }).
+add_action(Priority, Action) when ?IS_ACTION_PRIORITY(Priority) ->
+	ActionQueue = action_queue(),
+	wf_action_queue:in(Priority, Action, ActionQueue).
+	%% Action queue is a process, so we don't need to store it in the context
 
 actions() ->
-    Context = context(),
-    Actions = Context#context.queued_actions,
-    lists:reverse(Actions).
+	ActionQueue = action_queue(),
+	Actions = wf_action_queue:all(ActionQueue),
+	wf_action_queue:clear(ActionQueue),
+	Actions.
 
-actions(Actions) ->
-    Context = context(),
-    context(Context#context { queued_actions = lists:reverse(Actions) }).
+next_action() ->
+	ActionQueue = action_queue(),
+	case wf_action_queue:out(ActionQueue) of
+		{ok, Action} -> Action;
+		{error, empty} -> empty
+	end.
 
-clear_actions() ->
+action_queue() ->
+	Context = context(),
+	Context#context.action_queue.
+
+action_queue(ActionQueue) ->
     Context = context(),
-    context(Context#context { queued_actions=[] }).
+    context(Context#context { action_queue = ActionQueue }).
+
+new_action_queue() ->
+    Context = context(),
+    ActionQueue = wf_action_queue:new(),
+    context(Context#context { action_queue=ActionQueue}).
 
 
 %%% PAGE CONTEXT %%%
@@ -255,6 +267,7 @@ init_context(RequestBridge, ResponseBridge) ->
         response_bridge = ResponseBridge,
         page_context = #page_context { series_id = wf:temp_id() },
         event_context = #event_context {},
+		action_queue = wf_action_queue:new(),		
         handler_list = [
             % Core handlers...
             make_handler(config_handler, default_config_handler), 

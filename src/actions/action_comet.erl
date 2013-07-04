@@ -94,7 +94,6 @@ flush() ->
     SeriesID = wf_context:series_id(),
     {ok, AccumulatorPid} = get_accumulator_pid(SeriesID),
     Actions = wf_context:actions(),
-    wf_context:clear_actions(),
     AccumulatorPid!{add_actions, Actions},
     ok.
 
@@ -374,7 +373,7 @@ spawn_with_context({Name, Function, Msg}, Mode) ->
     Key = {SeriesID, Name},
     {ok, Pid} = process_registry_handler:get_pid(Key, fun() ->
         wf_context:context(Context),
-        wf_context:clear_actions(),
+        wf_context:new_action_queue(),
         case erlang:fun_info(Function, arity) of
         {arity, 1} -> Function(Mode);
         {arity, 0} -> Function()
@@ -390,7 +389,7 @@ spawn_with_context({Name, Function}, Mode) ->
     Key = {SeriesID, Name},
     {ok, Pid} = process_registry_handler:get_pid(Key, fun() ->
         wf_context:context(Context),
-        wf_context:clear_actions(),
+        wf_context:new_action_queue(),
         case erlang:fun_info(Function, arity) of
         {arity, 1} -> Function(Mode);
         {arity, 0} -> Function()
@@ -403,7 +402,7 @@ spawn_with_context(Function,Mode) ->
     Context = wf_context:context(),
     Pid = erlang:spawn(fun() -> 
         wf_context:context(Context),
-        wf_context:clear_actions(),
+        wf_context:new_action_queue(),
         Function(),
         flush() 
     end),
