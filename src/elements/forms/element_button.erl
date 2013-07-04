@@ -49,4 +49,5 @@ render_element(Record) ->
     end.
 
 format_image(undefined) -> [];
+format_image([]) -> [];
 format_image(Path) -> [#image{image=Path}," "].

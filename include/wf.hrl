@@ -2,6 +2,18 @@
 -ifndef(wf_inc).
 -define(wf_inc, ok).
 
+%%% TYPES FOR DIALYZER %%%
+
+-type nitrogen_element() :: tuple().
+-type body_element() ::     nitrogen_element() | binary() | string() | iolist().
+-type body() ::             body_element() | [body_element()].
+-type action_element() ::   tuple() | string() | binary() | iolist().
+-type actions() ::          action_element() | [action_element()].
+-type tag() ::              term().
+-type id() ::               atom() | string() | binary().
+-type data_fields() ::      erlang:proplist().
+
+
 %%% CONTEXT %%%
 
 % Page Request Information.
@@ -113,7 +125,7 @@
 -record(email_link, {?ELEMENT_BASE(element_email_link), title="",text="",body="",html_encode=true,email=""}).
 -record(error, {?ELEMENT_BASE(element_error), text="", html_encode=true}).
 -record(span, {?ELEMENT_BASE(element_span), body="", text="", html_encode=true, data_fields=[]}).
--record(button, {?ELEMENT_BASE(element_button), text="", html_encode=true, click, postback, delegate, data_fields=[]}).
+-record(button, {?ELEMENT_BASE(element_button), text="", body="", image=undefined, html_encode=true, click, postback, delegate, data_fields=[]}).
 -record(literal, {?ELEMENT_BASE(element_literal), text="", html_encode=true}).
 -record(textbox, {?ELEMENT_BASE(element_textbox), text="", maxlength="", placeholder="", html_encode=true, next, postback, delegate, html_name}).
 -record(hidden, {?ELEMENT_BASE(element_hidden), text="", html_encode=true, html_name, disabled=false}).

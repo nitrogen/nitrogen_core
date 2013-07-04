@@ -23,11 +23,24 @@ run() ->
                 Response1:build_response()
         end
     catch Type : Error -> 
-        ?LOG("~p~n", [{error, Type, Error, erlang:get_stacktrace()}]),
+        run_crash(Response, Type, Error, erlang:get_stacktrace())
+    end.
+
+run_crash(Response, Type, Error, Stacktrace) ->
+    try
+        case wf_context:type() of
+            first_request       -> run_crashed_first_request(Type, Error, Stacktrace);
+            static_file         -> run_crashed_first_request(Type, Error, Stacktrace);
+            postback_request    -> run_crashed_postback_request(Type, Error, Stacktrace)
+        end,
+        finish_dynamic_request()
+    catch Type2:Error2 ->
+        ?LOG("~p~n", [{error, Type2, Error2, erlang:get_stacktrace()}]),
         ErrResponse = Response:status_code(500),
         ErrResponse1 = ErrResponse:data("Internal Server Error"),
         ErrResponse1:build_response()
     end.
+
 
 run_catched() ->
     % Get the handlers from querystring, if they exist...
@@ -63,7 +76,6 @@ finish_dynamic_request() ->
 
 	% Render Actions
 	ActionQueue = wf_context:action_queue(),
-
 	{ok, Javascript} = wf_render_actions:render_action_queue(ActionQueue),
 
     % Call finish on all handlers.
@@ -162,6 +174,9 @@ run_first_request() ->
     Data = Module:main(),
     wf_context:data(Data).
 
+run_crashed_first_request(Type, Error, Stacktrace) ->
+    Data = crash_handler:first_request(Type, Error, Stacktrace),
+    wf_context:data(Data).
 
 %%% POSTBACK REQUEST %%%
 
@@ -178,6 +193,9 @@ run_postback_request() ->
         true -> Module:event(Tag);
         false -> ok
     end.
+
+run_crashed_postback_request(Type, Error, Stacktrace) ->
+    crash_handler:postback_request(Type, Error, Stacktrace).
 
 %%% BUILD THE RESPONSE %%%
 
