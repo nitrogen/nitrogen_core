@@ -156,9 +156,10 @@ action_queue(ActionQueue) ->
     Context = context(),
     context(Context#context { action_queue = ActionQueue }).
 
-%%clear_actions() ->
-%%    Context = context(),
-%%    context(Context#context { queued_actions=[] }).
+new_action_queue() ->
+    Context = context(),
+    ActionQueue = wf_action_queue:new(),
+    context(Context#context { action_queue=ActionQueue}).
 
 
 %%% PAGE CONTEXT %%%
