@@ -537,6 +537,15 @@ NitrogenClass.prototype.$remove = function(anchor, path) {
 
 /*** MISC ***/
 
+NitrogenClass.prototype.$console_log = function(text) {
+    try {
+        console.log(text);
+    } catch (e) {
+        // console.log failed, let's just do nothing
+        // If you're feeling adventurous, you could put an alert(text) here.
+    }
+}
+
 NitrogenClass.prototype.$return_false = function(value, args) { 
     return false; 
 }

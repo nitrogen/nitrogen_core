@@ -280,16 +280,6 @@ q_pl(KeyList) when is_list(KeyList) ->
 
 qs_pl(KeyList) when is_list(KeyList) ->
     [{K,qs(K)} || K <- KeyList].
-
-%qs_pls(KeyList) when is_list(KeyList) ->
-%   Temp = mqs(KeyList),
-%   Vals = length(hd(Temp)),
-%   PL = 
-        
-%hd_all(Lists) ->
-%   Hds = [hd(L) || L <- Lists],
-%   Tls = [tl(L) || L <- Lists],
-%   {Hds,Tls}.
         
 params() ->
     query_handler:get_params().
@@ -314,7 +304,11 @@ error(String, Args) ->
 error(String) -> 
     ok = log_handler:error(String).
 
+console_log(String) ->
+    action_console_log:console_log(String).
 
+console_log(Priority, String) ->
+    action_console_log:console_log(Priority, String).
 
 %%% EXPOSE SESSION_HANDLER %%% 
 session(Key) -> 

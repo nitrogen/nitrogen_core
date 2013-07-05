@@ -12,6 +12,7 @@
 -type tag() ::              term().
 -type id() ::               atom() | string() | binary().
 -type data_fields() ::      erlang:proplist().
+-type wire_priority() ::    eager | normal | defer.
 
 
 %%% CONTEXT %%%
@@ -241,6 +242,7 @@
 -record(clear_validation, {?ACTION_BASE(action_clear_validation), validation_trigger, validation_target, validation_all}).
 -record(alert, {?ACTION_BASE(action_alert), text=""}).
 -record(confirm, {?ACTION_BASE(action_confirm), text="", postback, delegate}).
+-record(console_log, {?ACTION_BASE(action_console_log), text=""}).
 -record(script, {?ACTION_BASE(action_script), script}).
 -record(disable_selection, {?ACTION_BASE(action_disable_selection)}).
 -record(jquery_effect, {?ACTION_BASE(action_jquery_effect), type, effect, speed, options=[], class, easing}).
