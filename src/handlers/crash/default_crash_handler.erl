@@ -18,7 +18,6 @@ first_request(Type, Error, Stacktrace, _Config, _State) ->
 	?LOG("~p~n", [{error, Type, Error, Stacktrace}]),
 	wf:status_code(500),
 	"Internal Server Error".
-	%% Demonstrate how to do this with a template, possibly requires setting a "delegate" module for the #template
 
 postback_request(Type, Error, Stacktrace, _Config, _State) ->
 	?LOG("~p~n", [{error, Type, Error, Stacktrace}]),
