@@ -29,40 +29,40 @@
 
   Here is the complete text of the default vm.args:
 
-  #+BEGIN_SRC bash
-    ## Name of the Nitrogen node
-    -name nitrogen@127.0.0.1
+#+BEGIN_SRC bash
+  ## Name of the Nitrogen node
+  -name nitrogen@127.0.0.1
 
-    ## Cookie for distributed erlang
-    -setcookie nitrogen
+  ## Cookie for distributed erlang
+  -setcookie nitrogen
 
-    ## Heartbeat management; auto-restarts VM if it dies or becomes unresponsive
-    ## (Disabled by default..use with caution!)
-    ##-heart
+  ## Heartbeat management; auto-restarts VM if it dies or becomes unresponsive
+  ## (Disabled by default..use with caution!)
+  ##-heart
 
-    ## Enable kernel poll and a few async threads
-    +K true
-    +A 5
+  ## Enable kernel poll and a few async threads
+  +K true
+  +A 5
 
-    ## Increase number of concurrent ports/sockets
-    -env ERL_MAX_PORTS 4096
+  ## Increase number of concurrent ports/sockets
+  -env ERL_MAX_PORTS 4096
 
-    ## Tweak GC to run more often
-    -env ERL_FULLSWEEP_AFTER 10
+  ## Tweak GC to run more often
+  -env ERL_FULLSWEEP_AFTER 10
 
-    ## If you run the sync application, this will switch it to
-    ## nitrogen_mode for proper include file detection
-    -sync sync_mode nitrogen
+  ## If you run the sync application, this will switch it to
+  ## nitrogen_mode for proper include file detection
+  -sync sync_mode nitrogen
 
-    ## Include .beam files for site.
-    -pa ./site/ebin
+  ## Include .beam files for site.
+  -pa ./site/ebin
 
-    ## Include .beam files for dependencies.
-    -pa ./deps/*/ebin
+  ## Include .beam files for dependencies.
+  -pa ./deps/*/ebin
 
-    ## Run code at startup.
-    -eval "application:start(nitrogen)"
-  #+END_SRC
+  ## Run code at startup.
+  -eval "application:start(nitrogen)"
+#+END_SRC
 
 ** etc/app.config
 
@@ -94,16 +94,80 @@
       example, if =module_prefix= was set to "abc", then a request for /mypage would
       be directed to the module "abc\_mypage".
 
+    + =module_aliases= - (/proplist/) :: This provides the template system with
+      a default list of module aliases to use within Nitrogen templates. (See
+      the [[./elements/template.org][Template Element]] for more details).
 
-  #+BEGIN_SRC erlang
-      {sasl, [
-          {sasl_error_logger, {file, "log/sasl-error.log"}},
-          {errlog_type, error},
-          {error_logger_mf_dir, "log/sasl"},      % Log directory
-          {error_logger_mf_maxbytes, 10485760},   % 10 MB max file size
-          {error_logger_mf_maxfiles, 5}           % 5 files max
-      ]}
-  #+END_SRC
+
+#+BEGIN_SRC erlang
+    {sasl, [
+        {sasl_error_logger, {file, "log/sasl-error.log"}},
+        {errlog_type, error},
+        {error_logger_mf_dir, "log/sasl"},      % Log directory
+        {error_logger_mf_maxbytes, 10485760},   % 10 MB max file size
+        {error_logger_mf_maxfiles, 5}           % 5 files max
+    ]}
+#+END_SRC
+
+** plugins.config
+
+   The Nitrogen plugin system is capable of automatically including plugin
+   header files, along with importing static web resources (javascript files,
+   images, etc).  This can be done, and can be configured to work with just
+   about *any* Nitrogen configuration, including non-standard configurations,
+   such as manually importing Nitrogen as a dependency.
+
+   The plugins.config file contains information for how Nitrogen will import
+   plugins.
+
+   It's a standard Erlang config file that takes three arguments.
+
+   + =plugins_hrl= - (/path string/) :: Tell the Nitrogen plugin importer where
+     to put the generated plugins.hrl file for the purposes of including plugin
+     elements into your application. (default: ="./site/include/plugins.hrl"=)
+
+   + =static_dir= - (/path string/) :: Tell the plugin system where you wish to
+     put your plugins' static resources. (default: ="./site/static/plugins"=)
+
+   + =copy_mode= - (/copy|link/) :: Tell the plugins system how to include any
+     static resources.  =copy= will copy the entire contents of your plugins'
+     static directories, while =link= will merely create a symlink. If you work
+     primarily with Linux or OSX, you can probably get away with using =link=,
+     while if you use Windows, you should stick with =copy=. (default: =copy=).
+
+Here's the complete text of the default plugins.config:
+
+#+BEGIN_SRC erlang
+  %% vim: ts=2 sw=2 et ft=erlang
+  %% Nitrogen Plugin Installer Configuration
+  %%
+  %% This will tell the plugin-installer script where to put Nitrogen plugin
+  %% information it finds.
+  %%
+
+  %% plugins_hrl tells the Nitrogen plugin installer where to put the .hrl file
+  %% containing links to all your plugins' respective header files.
+  %% The default is "./site/include/plugins.hrl".
+  {plugins_hrl, "./site/include/plugins.hrl"}.
+
+  %% static_dir tells the Nitrogen plugin installer where to copy your plugins'
+  %% static resources (images, js, etc).
+  %% The default is "./site/static/plugins"
+  {static_dir, "./site/static/plugins"}.
+
+  %% copy_mode determines if static resources are copied or merely symlinked.
+  %% Keep in mind, symlinks do not work on Windows, so "copy" is the default.
+  %% Valid values are the atoms 'copy' or 'link'
+  %% Default: copy
+  {copy_mode, copy}.
+#+END_SRC
+
+*** More about Plugins
+
+    The plugin system has its own complete documentation along with a sample
+    plugin stub for creating your own plugins.
+
+    We strongly advise reading the [[./plugins.org][Plugin Documentation]].
 
 ** Notable mention: rebar.config
 
