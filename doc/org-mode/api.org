@@ -62,10 +62,13 @@
 * Convenience Functions
 # <<2>>
 
-** wf:f(Format, Data) -> String
+** wf:f(Format, Data) -> String or Binary
 
    Convenience function to format a string similar to
    io\_lib:format(Format, Data). Returns a flattened list.
+
+   Note, if =Format= is a binary, the return type will be a binary, and if
+   =Format= is a string, the return type will be a string.
    
 ** wf:coalesce([List]) -> Item
 

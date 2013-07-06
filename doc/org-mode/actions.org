@@ -35,6 +35,6 @@
 * Feedback
   + [[./actions/alert.org][Alert]]
   + [[./actions/confirm.org][Confirm]]
-  + [[./actions/other.org][Other]]
+  + [[./actions/console_log.org][Browser Console Log]]
 * See Also
   + [[./paths.org][Nitrogen Element Paths]]
