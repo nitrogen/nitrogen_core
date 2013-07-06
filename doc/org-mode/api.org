@@ -175,10 +175,24 @@
    wf:wire(ButtonID, PanelID, #event { type=click, actions=#hide {} })
 #+END_SRC
 
+** wf:eager(Actions) -> ok
+** wf:eager(TargetID, Actions) -> ok
+** wf:eager(TriggerID, TargetID, Actions) -> ok
+
+   Wire actions to the page, however, execute the actions before any
+   normal or deferred priority wired actions.
+
+** wf:defer(Actions) -> ok
+** wf:defer(TargetID, Actions) -> ok
+** wf:defer(TriggerID, TargetID, Actions) -> ok
+
+   Wire actions to the page, however, execute these actions after any
+   normal or eager priority wired actions.
+
 ** wf:continue(Tag, Function, IntervalInMS, TimeoutInMS) -> ok
 
    Spawn the provided function (arity 0) and tell the browser to poll for the results at the specified interval, with a timeout setting.
-   See [[http://nitrogenproject.com/web/samples/continuations][continuations example]] for usage.
+   so See [[http://nitrogenproject.com/demos/continuations][continuations example]] for usage.
 
 * Asynchronous Page Updates (Comet, Continuations)
 # <<4>>
@@ -209,7 +223,7 @@
 ** wf:flush() -> ok
 
    Normally, the results of a comet function are sent to the browser when the function exits.
-   comet\_flush/0 pushes results to the browser immediately, useful for a looping comet function.
+   =flush/0= pushes results to the browser immediately, useful for a looping comet function.
 
 ** wf:async\_mode()
 
@@ -521,14 +535,17 @@ Example:
 
    Log a warning message.
   
-
 ** wf:error(String)
 
    Log an error message.
 
 ** wf:error(Format, Args)
 
-   Log an error message.
+   Log and error message.
+
+** wf:console_log(Terms)
+
+   Send a =console.log()= to the browser with =Terms= as the value. (See [[file:./actions/console_log.org][Console Log Action]])
 
 * Configuration
 # <<14>>
