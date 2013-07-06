@@ -87,6 +87,7 @@ to_string_list([H|T], Acc) ->
 
 html_encode(L,Fun) when is_function(Fun) -> Fun(L);
 
+html_encode(L,EncType) when is_binary(L) -> html_encode(wf:to_list(L),EncType);
 html_encode(L,EncType) when is_atom(L) -> html_encode(wf:to_list(L),EncType);
 html_encode(L,EncType) when is_integer(L) -> html_encode(integer_to_list(L),EncType);
 html_encode(L,EncType) when is_float(L) -> html_encode(nitro_mochinum:digits(L),EncType);

@@ -154,7 +154,7 @@
 -record(tableheader, {?ELEMENT_BASE(element_tableheader), text="", html_encode=true, body="", align="left", valign="middle", colspan=1, rowspan=1}).
 -record(tablecell, {?ELEMENT_BASE(element_tablecell), text="", html_encode=true, body="", align="left", valign="middle", colspan=1, rowspan=1}).
 -record(singlerow, {?ELEMENT_BASE(element_singlerow), cells}).
--record(file, {?ELEMENT_BASE(element_file), file, include_panel=true}).
+-record(file, {?ELEMENT_BASE(element_file), file, include_panel=true, html_encode=false}).
 -record(flash, {?ELEMENT_BASE(element_flash)}).
 -record(placeholder, {?ELEMENT_BASE(element_placeholder), body=[]}).
 -record(bind, {?ELEMENT_BASE(element_bind), data=[], map=[], transform, acc=[], body=[], empty_body=[]}).
