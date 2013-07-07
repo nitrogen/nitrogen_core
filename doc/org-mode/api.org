@@ -554,7 +554,7 @@ Example:
    
    Get the Nitrogen configuration setting under the specified Key.
 
-** wf:config(Key, DefaultValue) -> Term
+** wf:config_default(Key, DefaultValue) -> Term
 
    Get the Nitrogen configuration setting under the specified Key. If
    not set, then return DefaultValue.

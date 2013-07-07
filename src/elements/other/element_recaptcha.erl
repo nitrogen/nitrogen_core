@@ -1,8 +1,11 @@
 %% -*- mode: nitrogen -*-
 %% vim: ts=4 sw=4 et
 -module (element_recaptcha).
--include_lib("nitrogen_core/include/wf.hrl").
--export([reflect/0, render_element/1, event/1]).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1,
+    event/1]).
 %% implemented according to google-documentation
 %% https://developers.google.com/recaptcha/docs/display
 %% https://developers.google.com/recaptcha/docs/verify
@@ -10,47 +13,55 @@
 reflect() -> record_info(fields, recaptcha).
 
 render_element(#recaptcha{id=ID, class=Cl, delegate=Delegate,
-               fail_body=FB, captcha_opts=COPts, 
+               fail_body=FB, captcha_opts=COPts, tag=Tag,
                button_label=ButtonLabel, button_id=ButtonId})->
     % Since the recaptcha is rendered outside of the nitrogen framework
     % it doesn't play along when it comes to data exchange.
     % This hack transfers the alien content into #hidden elements before
     % postback. The content is then accessible via wf:q()
-    wf:wire(ButtonId, #event{type=click, actions=[
+    %
+    % wf:defer instead of wire so a recaptcha can be made during a postback
+    wf:defer(ButtonId, #event{type=click, actions=[
         % transfer happens here
         #script{script="Nitrogen.$from_alien('recaptcha_challenge_field')"},
-        #script{script="Nitrogen.$from_alien('recaptcha_response_field')" }]}),
-    Src = lists:flatten([challenge_url(), "?k=", public_key()]),
-    Postback={eval_recaptcha, ID, Delegate, FB},
-    #panel{id=ID, class=Cl, style="width:315px",
-        body=[
-            render_options(COPts, default_opts()),
-            % the hidden elements
-            #hidden{id=recaptcha_challenge_field},
-            #hidden{id=recaptcha_response_field},
-            "<script type=\"text/javascript\" src=\""++ Src ++ "\"></script>",
-            #panel{body=[
-                #panel{id=fail_msg,
-                       style="visibility:hidden;float:left",
-                       body=FB},
-                #button{id=ButtonId, style="float:right",
-                        text=ButtonLabel,
-                        postback=Postback, delegate=?MODULE}]},
-            #p{style="clear:both"}]}.
+        #script{script="Nitrogen.$from_alien('recaptcha_response_field')" }]
+    }),
 
-event({eval_recaptcha, CaptchaID, Delegate, Fail}) ->
+    Src = lists:flatten([challenge_url(), "?k=", public_key()]),
+    Postback={eval_recaptcha, ID, Delegate, FB, Tag},
+
+    #panel{id=ID, class=[Cl,recaptcha], body=[
+        render_options(COPts, default_opts()),
+        % the hidden elements
+        #hidden{id=recaptcha_challenge_field},
+        #hidden{id=recaptcha_response_field},
+        "<script type=\"text/javascript\" src=\""++ Src ++ "\"></script>",
+        #panel{body=[
+            #panel{id=recaptcha_fail_msg,
+                   style="visibility:hidden;float:left",
+                   body=FB
+            },
+            #button{id=ButtonId, style="float:right",
+                    text=ButtonLabel,
+                    postback=Postback,
+                    delegate=?MODULE
+            }
+        ]},
+        #p{style="clear:both"}
+    ]}.
+
+event({eval_recaptcha, CaptchaID, Delegate, Fail, Tag}) ->
     Challenge = wf:q(recaptcha_challenge_field),
     Response = wf:q(recaptcha_response_field),
     Evaled = evaluate_captcha(CaptchaID, Challenge, Response),
     case Evaled of
-        ok     -> process_callback({recaptcha, Evaled}, Delegate);
-        _else  -> wf:wire("Recaptcha.reload()"),
-		  replace_error_message(Fail)
+        ok     -> process_successful_callback(Tag, Delegate);
+        _else  -> process_failure_callback(Fail, Tag, Delegate)
     end.
 
 %% internal
 get_config_fields(Field)->
-    Cfg = config_handler:get_value(recaptcha),
+    Cfg = wf:config_default(recaptcha,[]),
     proplists:get_value(Field, Cfg).
 
 private_key() ->
@@ -79,11 +90,10 @@ ip_to_str(IPTuple) ->
 
 mk_post_request(Url, Params)->
     MkField = fun(K, V) ->
-                      lists:flatten([atom_to_list(K), "=",
-                                     http_uri:encode(V)])
-              end,
+        wf:to_list([atom_to_list(K), "=", http_uri:encode(V)])
+    end,
     Fields = [MkField(K,V) || {K,V} <- Params],
-   {Url, [], "application/x-www-form-urlencoded", string:join(Fields,"&")}.
+    {Url, [], "application/x-www-form-urlencoded", string:join(Fields,"&")}.
 
 render_options(OptProps, Defaults) ->
     ValToStr = fun(V) ->
@@ -130,10 +140,11 @@ evaluate_captcha(CaptchaID, Challenge, Response) ->
     end.
 
 replace_error_message(Msg) ->
-    wf:replace(fail_msg,
-	       #panel{id=fail_msg,
-		      style="visibility:visible;float:left",
-		      body=Msg}).
+    wf:replace(recaptcha_fail_msg,
+           #panel{id=recaptcha_fail_msg,
+              style="visibility:visible;float:left",
+              body=Msg
+           }).
 
 parse_response(_CaptchaID, Body) ->
     case string:tokens(Body, "\n") of
@@ -142,11 +153,20 @@ parse_response(_CaptchaID, Body) ->
         ERROR               -> {unknown, ERROR}
     end.
 
-process_callback(Event, Delegate) ->
+process_successful_callback(Tag, Delegate) ->
     Module = wf:coalesce([Delegate, wf:page_module()]),
-    case Module:event(Event) of
+    case Module:recaptcha_event(Tag, ok) of
         ok          -> ok;
         error       -> wf:wire("Recaptcha.reload()");
         {error,Msg} -> wf:wire("Recaptcha.reload()"),
-		       replace_error_message(Msg)
+                       replace_error_message(Msg)
+    end.
+
+process_failure_callback(FailMsg, Tag, Delegate) ->
+    Module = wf:coalesce([Delegate, wf:page_module()]),
+    wf:wire("Recaptcha.reload()"),
+    case Module:recaptcha_event(Tag, error) of
+        ok          -> replace_error_message(FailMsg);
+        error       -> replace_error_message(FailMsg);
+        {error,Msg} -> replace_error_message(Msg)
     end.

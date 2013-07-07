@@ -166,3 +166,13 @@ div.inplace_textbox .LV_invalid {
 .dropzone-container div.ui-state-highlight {
     /*background: limegreen;*/
 }
+
+/* Recaptcha */
+
+.recaptcha * {
+	line-height:1em;
+}
+
+.recaptcha {
+	width:315px !important;
+}

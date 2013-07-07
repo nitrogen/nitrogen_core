@@ -172,7 +172,7 @@
 -record(wizard, {?ELEMENT_BASE(element_wizard), tag, titles, steps, next="Next", back="Back", finish="Finish",show_progress=true,progress_step="Step ",progress_of=" of "}).
 -record(sparkline, {?ELEMENT_BASE(element_sparkline), type, values, options }).
 -record(textbox_autocomplete, {?ELEMENT_BASE(element_textbox_autocomplete), tag, text="", minLength=2, delay=300, html_encode=true, next, postback, delegate=undefined }).
--record(recaptcha, {?ELEMENT_BASE(element_recaptcha), captcha_opts=[], button_id, button_label="Check!", delegate, fail_body="Please try again!"}).
+-record(recaptcha, {?ELEMENT_BASE(element_recaptcha), captcha_opts=[], button_id, button_label="Check!", delegate, tag, fail_body="Please try again!"}).
 
 %% Mobile Shortcut elements
 -record(mobile_list, {?ELEMENT_BASE(element_mobile_list), body=[], data_fields=[], theme, inset=true}).
