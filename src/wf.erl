@@ -162,6 +162,9 @@ html_encode(S) ->
 html_encode(S, Encode) -> 
     _String = wf_convert:html_encode(S, Encode).
 
+html_decode(S) ->
+    _String = wf_convert:html_decode(S).
+
 url_encode(S) ->
     _String = wf_convert:url_encode(S).
 

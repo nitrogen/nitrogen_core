@@ -13,6 +13,7 @@
     to_string_list/1,
     encode/2, decode/2,
     html_encode/1, html_encode/2,
+    html_decode/1,
     hex_encode/1, hex_decode/1,
     url_encode/1, url_decode/1,
     js_escape/1,
@@ -127,7 +128,14 @@ html_encode_whites([H|T]) ->
 		_ -> [H|html_encode_whites(T)]
 	end.
 
-
+html_decode(B) when is_binary(B) -> html_decode(binary_to_list(B));
+html_decode([]) -> [];
+html_decode("&amp;" ++ T) -> [$&|html_decode(T)];
+html_decode("&#39;" ++ T) -> [$'|html_decode(T)];
+html_decode("&quot;" ++ T) -> [$"|html_decode(T)];
+html_decode("&gt;" ++ T) -> [$>|html_decode(T)];
+html_decode("&lt;" ++ T) -> [$<|html_decode(T)];
+html_decode([H|T]) -> [H|html_decode(T)].
 
 %%% HEX ENCODE and HEX DECODE
 
