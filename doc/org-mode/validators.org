@@ -16,6 +16,7 @@
 * Data Format
   + [[./validators/is_email.org][Is Email]]
   + [[./validators/is_integer.org][Is Integer]]
+  + [[./validators/confirm_same.org][Confirm Same Value]]
   + [[./validators/confirm_password.org][Confirm Passwords]]
 
 * Custom Validators

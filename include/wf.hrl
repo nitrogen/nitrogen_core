@@ -271,6 +271,7 @@
 -record(min_length, {?VALIDATOR_BASE(validator_min_length), length}).
 -record(max_length, {?VALIDATOR_BASE(validator_max_length), length}).
 -record(confirm_password, {?VALIDATOR_BASE(validator_confirm_password), password}).
+-record(confirm_same, {?VALIDATOR_BASE(validator_confirm_same), confirm_id}).
 -record(custom, {?VALIDATOR_BASE(validator_custom), function, tag }).
 -record(js_custom, {?VALIDATOR_BASE(validator_js_custom), function, args="{}" }).
 

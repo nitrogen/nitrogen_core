@@ -5,19 +5,14 @@
 
 -module (validator_confirm_password).
 -include_lib ("wf.hrl").
--compile(export_all).
+-export([
+    render_action/1
+]).
 
 render_action(Record)  ->
-    TriggerPath= Record#confirm_password.trigger,
-    TargetPath = Record#confirm_password.target,
-    Text = wf:js_escape(Record#confirm_password.text),
-    PasswordElement = Record#confirm_password.password,
-
-    validator_custom:render_action(#custom { trigger=TriggerPath, target=TargetPath, function=fun validate/2, text = Text, tag=Record }),
-
-    JSFunction = wf:f("function(value, args) { return (value == obj('~s').value); }", [PasswordElement]),
-    validator_js_custom:render_action(#js_custom { trigger=TriggerPath, target=TargetPath, function=JSFunction, text=Text }).
-
-validate(Record, Value) ->
-    Password = wf:q(Record#confirm_password.password),
-    Value == Password.
+    #confirm_general{
+        trigger=Record#confirm_password.trigger,
+        target=Record#confirm_password.target,
+        text=Record#confirm_password.text,
+        confirm_id=Record#confirm_password.password
+    }.
