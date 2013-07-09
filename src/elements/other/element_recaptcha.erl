@@ -10,6 +10,9 @@
 %% https://developers.google.com/recaptcha/docs/display
 %% https://developers.google.com/recaptcha/docs/verify
 
+-define(DEFAULT_CHALLENGE_URL,"http://www.google.com/recaptcha/api/challenge").
+-define(DEFAULT_VERIFY_URL,"http://www.google.com/recaptcha/api/verify").
+
 reflect() -> record_info(fields, recaptcha).
 
 render_element(Rec = #recaptcha{id=ID, class=Cl,
@@ -76,10 +79,10 @@ get_config(Field)->
     proplists:get_value(Field, Cfg).
 
 challenge_url(#recaptcha{challenge_url=Url}) ->
-    ?WF_IF(Url=/=undefined,Url,get_config(challenge_url)).
+    ?WF_IF(Url=/=undefined,Url,wf:coalesce([get_config(challenge_url),?DEFAULT_CHALLENGE_URL])).
 
 verify_url(#recaptcha{verify_url=Url}) ->
-    ?WF_IF(Url=/=undefined,Url,get_config(verify_url)).
+    ?WF_IF(Url=/=undefined,Url,wf:coalesce([get_config(verify_url),?DEFAULT_VERIFY_URL])).
 
 public_key(#recaptcha{public_key=Key}) ->
     ?WF_IF(Key=/=undefined,Key,get_config(public_key)).
