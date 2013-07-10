@@ -5,30 +5,27 @@
 
 -module (element_textbox).
 -include_lib ("wf.hrl").
--compile(export_all).
+-export([
+    reflect/0,
+    render_element/1
+]).
 
 reflect() -> record_info(fields, textbox).
 
 render_element(Record) -> 
     ID = Record#textbox.id,
     Anchor = Record#textbox.anchor,
-    case Record#textbox.next of
-        undefined -> ignore;
-        Next -> 
-            Next1 = wf_render_actions:normalize_path(Next),
-            wf:wire(Anchor, #event { type=enterkey, actions=wf:f("Nitrogen.$go_next('~s');", [Next1]) })
-    end,
+    Delegate = Record#textbox.delegate,
+    Postback = Record#textbox.postback,
 
-    case Record#textbox.postback of
-        undefined -> ignore;
-        Postback -> wf:wire(Anchor, #event { type=enterkey, postback=Postback, validation_group=ID, delegate=Record#textbox.delegate })
-    end,
+    wire_next(Anchor, Record#textbox.next),
+    wire_postback(Anchor, ID, Delegate, Postback),
 
     Value = wf:html_encode(Record#textbox.text, Record#textbox.html_encode),
     Placeholder  = wf:html_encode(Record#textbox.placeholder, true),
     wf_tags:emit_tag(input, [
         {id, Record#textbox.html_id},
-        {type, text}, 
+        {type, Record#textbox.type}, 
         {class, [textbox, Record#textbox.class]},
         {maxlength, Record#textbox.maxlength},
         {style, Record#textbox.style},
@@ -36,3 +33,19 @@ render_element(Record) ->
         {placeholder, Placeholder},
         {value, Value}
     ]).
+
+wire_next(_, undefined) ->
+    do_nothing;
+wire_next(Anchor, Next) ->
+    Next1 = wf_render_actions:normalize_path(Next),
+    wf:wire(Anchor, #event { type=enterkey, actions=wf:f("Nitrogen.$go_next('~s');", [Next1]) }).
+
+wire_postback(_, _, _, undefined) ->
+    do_nothing;
+wire_postback(Anchor, ID, Delegate, Postback) ->
+    wf:wire(Anchor, #event {
+        type=enterkey,
+        postback=Postback,
+        validation_group=ID,
+        delegate=Delegate
+    }).

@@ -128,7 +128,7 @@
 -record(span, {?ELEMENT_BASE(element_span), body="", text="", title="", html_encode=true, data_fields=[]}).
 -record(button, {?ELEMENT_BASE(element_button), text="", body="", image=undefined, html_encode=true, click, postback, delegate, data_fields=[]}).
 -record(literal, {?ELEMENT_BASE(element_literal), text="", html_encode=true}).
--record(textbox, {?ELEMENT_BASE(element_textbox), text="", maxlength="", placeholder="", html_encode=true, next, postback, delegate, html_name}).
+-record(textbox, {?ELEMENT_BASE(element_textbox), text="", maxlength="", placeholder="", html_encode=true, next, postback, delegate, html_name, type=text}).
 -record(hidden, {?ELEMENT_BASE(element_hidden), text="", html_encode=true, html_name, disabled=false}).
 -record(textarea, {?ELEMENT_BASE(element_textarea), text="", placeholder="", html_encode=true, html_name}).
 -record(range, {?ELEMENT_BASE(element_range), data_fields=[], min=0, max=100, step=1, value=0, next, postback, delegate}).
@@ -139,7 +139,7 @@
 -record(checkbox, {?ELEMENT_BASE(element_checkbox), text="", html_encode=true, checked=false, value="on", postback, delegate, html_name}).
 -record(radiogroup, {?ELEMENT_BASE(element_radiogroup), body=[]}).
 -record(radio, {?ELEMENT_BASE(element_radio), text="", html_encode=true, value, name, checked=false, postback, delegate, html_name}).
--record(password, {?ELEMENT_BASE(element_password), text="", placeholder="", html_encode=true, next, postback, delegate, html_name}).
+-record(password, {?ELEMENT_BASE(element_password), text="", maxlength="", placeholder="", html_encode=true, next, postback, delegate, html_name}).
 -record(restful_form, {?ELEMENT_BASE(element_restful_form), method="POST", action, html_name, enctype, body=[]}).
 -record(restful_submit, {?ELEMENT_BASE(element_restful_submit), text="Submit", html_encode=true, html_name}).
 -record(restful_reset, {?ELEMENT_BASE(element_restful_reset), text="Cancel", html_encode=true, html_name}).

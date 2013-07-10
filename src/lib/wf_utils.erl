@@ -1,6 +1,6 @@
 % vim: sw=4 ts=4 et ft=erlang
 % Nitrogen Web Framework for Erlang
-% Copyright (c) 2008-2010 Rusty Klophaus
+% Copyright (c) 2008-2013 Rusty Klophaus
 % See MIT-LICENSE for licensing information.
 
 -module (wf_utils).
@@ -16,7 +16,8 @@
     get_elementbase/1, get_actionbase/1, get_validatorbase/1, replace_with_base/2,
     indexof/2,
     replace_field/4,
-    get_field/3
+    get_field/3,
+    copy_fields/2
 ]).
 
 -define(COPY_TO_BASERECORD(Name, Size, Record),
@@ -121,6 +122,43 @@ replace_with_base(Base, Record) ->
     Len = size(Record) - Start + 1,
     RecordEnd = lists:sublist(tuple_to_list(Record), Start, Len),
     list_to_tuple([RecordType] ++ BaseMiddle ++ RecordEnd).
+
+%%% COPY ELEMENT FIELDS %%%
+
+-spec copy_fields(tuple(), tuple()) -> tuple().
+%% @doc Copies any fields from FromElement to ToElement if the record
+%% fields have EXACTLY the same name.
+copy_fields(FromElement, ToElement) ->
+    FromModule = element(3,FromElement),
+    ToModule = element(3,ToElement),
+    FromFieldList = FromModule:reflect(),
+    ToFieldList = ToModule:reflect(),
+
+    %% get tail because reflect() doesn't include first element (record tag)
+    FromValueList = tl(tuple_to_list(FromElement)), 
+
+    lists:foldl(fun({Field, Value}, NewElement) ->
+        case index_of(Field, ToFieldList) of
+            undefined -> NewElement;
+            Index ->
+                %% Because first element is the record tag, we must use Index+1
+                setelement(Index+1, NewElement, Value)
+        end
+
+    %% Here we use tl(tl( to ignore the first 2 fields from reflect()
+    end, ToElement, tl(tl(lists:zip(FromFieldList,FromValueList)))).
+
+
+index_of(Field, FieldList) ->
+    index_of(Field, FieldList, 1).
+
+index_of(_,[],_) ->
+    undefined;
+index_of(Field, [Field|_], Index) ->
+    Index;
+index_of(Field, [_|T], Index) ->
+    index_of(Field, T, Index+1).
+
 
 %%% DEBUG %%%
 

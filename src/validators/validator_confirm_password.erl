@@ -10,7 +10,7 @@
 ]).
 
 render_action(Record)  ->
-    #confirm_general{
+    #confirm_same{
         trigger=Record#confirm_password.trigger,
         target=Record#confirm_password.target,
         text=Record#confirm_password.text,
