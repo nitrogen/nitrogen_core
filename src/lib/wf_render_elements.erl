@@ -67,7 +67,7 @@ render_element(Element) when is_tuple(Element) ->
             {ok, []};
         true ->
             Module = Base#elementbase.module, 
-
+            {module, Module} = code:ensure_loaded(Module),
             case erlang:function_exported(Module,transform_element,1) of
                 true ->
                     %% Module:transform_element is a special shortcut mechanism
@@ -123,7 +123,6 @@ render_element(Element) when is_tuple(Element) ->
 % HTML.
 
 call_element_render(RenderOrTransform, Module, Element) ->
-    {module, Module} = code:ensure_loaded(Module),
     NewElements = Module:RenderOrTransform(Element),
     {ok, _Html} = render_elements(NewElements, []).
 

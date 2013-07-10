@@ -17,6 +17,7 @@
 -type class()               :: string() | binary() | atom().
 -type text()                :: string() | binary() | iolist().
 -type html_encode()         :: boolean() | whites | fun((term()) -> text()).
+-type html()                :: string() | binary() | iolist().
 
 
 %%% CONTEXT %%%
@@ -130,31 +131,21 @@
         title=""                :: text(),
         body=[]                 :: body()
     }).
--record(h1, {?ELEMENT_BASE(element_h1),
+
+-define(H_ELEMENT(Size), {?ELEMENT_BASE(element_h),
         text=""                 :: text(),
         body=[]                 :: body(),
-        html_encode=true        :: html_encode()
+        html_encode=true        :: html_encode(),
+        size=Size               :: undefined | integer()
     }).
--record(h2, {?ELEMENT_BASE(element_h2),
-        text="",
-        html_encode=true
-    }).
--record(h3, {?ELEMENT_BASE(element_h3),
-        text="",
-        html_encode=true
-    }).
--record(h4, {?ELEMENT_BASE(element_h4),
-        text="",
-        html_encode=true
-    }).
--record(h5, {?ELEMENT_BASE(element_h5),
-        text="",
-        html_encode=true
-    }).
--record(h6, {?ELEMENT_BASE(element_h6),
-        text="",
-        html_encode=true
-    }).
+-record(h,  ?H_ELEMENT(undefined)).
+-record(h1, ?H_ELEMENT(1)).
+-record(h2, ?H_ELEMENT(2)).
+-record(h3, ?H_ELEMENT(3)).
+-record(h4, ?H_ELEMENT(4)).
+-record(h5, ?H_ELEMENT(5)).
+-record(h6, ?H_ELEMENT(6)).
+
 -record(list, {?ELEMENT_BASE(element_list),
         numbered=false,
         body=[],
