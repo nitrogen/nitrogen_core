@@ -30,12 +30,22 @@
 
    + group - (/atom or string/) :: The name of this drag group, for use in the droppable element's accept\_groups attribute.
 
-   + handle - (/atom or string/) :: 
+   + handle - (/atom or string/) :: The class of the handle element on the page. Then handle will then be the part of the element that will be clicked and dragged around.
 
-   + clone - (/boolean/) :: 
+   + clone - (/boolean/) :: If true, the element will be cloned in the DOM while dragged. If false, the element will be detached from the DOM while dragging.
 
-   + revert - (/boolean/) :: 
+   + revert - (/boolean/) :: If true, the element will be reverted back to its original position if the drop fails.
+
+	+ scroll - (/boolean/) :: If true, the window or container will scroll when the item is dragged to the edge.
+
+	+ container - (/atom or string/) :: How you wish to contain the draggable element. Common containers are =window=, =document=, or =parent=.  Otherwise, it can be specified in the form of a jquery selector. See the documentation on the "Containment" option for the jquery Draggable element for more information.
+
+	+ zindex - (/integer/) :: the z-index of the element to be dragged around the page.
 
 ** See Also
 
-   + [[./droppable.html][Droppable]]
+   + [[./droppable.html][Droppable Element]]
+
+	+ [[/demos/dragdrop][Drag and Drop Demo]]
+
+	+ [[http://api.jqueryui.com/draggable/][jQuery Draggable Documentation]]

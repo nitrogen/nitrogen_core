@@ -33,6 +33,10 @@
 
    + handle - (/atom or string/) :: A CSS class that will be used as the drag handle for #sortitems.
 
+	+ placeholder - (/atom or string/) :: The class of the placeholder when an item is dragged away
+
+	+ force\_placeholder\_size - (/boolean/) :: Force the placeholder to be the same size as the moved sortblock item
+
 ** Callbacks
 
 *** sort\_event(BlockTag, ListOfItemTags)

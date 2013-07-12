@@ -9,15 +9,21 @@
 -type body()                :: body_element() | [body_element()].
 -type action_element()      :: tuple() | string() | binary() | iolist().
 -type actions()             :: action_element() | [action_element()].
+-type validator_element()   :: nitrogen_element().
+-type validators()          :: validator_element() | [validator_element()].
 -type tag()                 :: term().
 -type id()                  :: atom() | string() | binary().
 -type proplist()            :: [{term(), term()}].
--type data_fields()         :: proplist().
+-type data_fields()         :: [{text() | atom(), text()}].
 -type wire_priority()       :: eager | normal | defer.
 -type class()               :: string() | binary() | atom().
 -type text()                :: string() | binary() | iolist().
 -type html_encode()         :: boolean() | whites | fun((term()) -> text()).
 -type html()                :: string() | binary() | iolist().
+-type script()              :: string() | binary() | iolist().
+-type url()                 :: text().
+-type path()                :: string() | binary().
+-type html_name()           :: string() | binary() | atom().
 
 
 %%% CONTEXT %%%
@@ -147,368 +153,373 @@
 -record(h6, ?H_ELEMENT(6)).
 
 -record(list, {?ELEMENT_BASE(element_list),
-        numbered=false,
-        body=[],
-        data_fields=[]
+        numbered=false          :: boolean(),
+        body=[]                 :: body(),
+        data_fields=[]          :: data_fields()
     }).
 -record(listitem, {?ELEMENT_BASE(element_listitem),
-        body=[],
-        text="",
-        html_encode=true,
-        role="",
-        data_fields=[] 
+        body=[]                 :: body(),
+        text=""                 :: text(),
+        html_encode=true        :: html_encode(),
+        role=""                 :: term(),
+        data_fields=[]          :: data_fields()
     }).
 -record(br, {?ELEMENT_BASE(element_br) }).
 -record(hr, {?ELEMENT_BASE(element_hr) }).
 -record(p, {?ELEMENT_BASE(element_p),
-        body="",
-        text="",
-        html_encode=true
+        body=[]                 :: body(),
+        text=""                 :: text(),
+        html_encode=true        :: html_encode()
     }).
 -record(label, {?ELEMENT_BASE(element_label),
-        body="",
-        text="",
-        html_encode=true,
-        for=""
+        body=[]                 :: body(),
+        text=""                 :: text(),
+        html_encode=true        :: html_encode(),
+        for=""                  :: id()
     }).
 -record(pre, {?ELEMENT_BASE(element_pre),
-        text="",
-        html_encode=true
+        text=""                 :: text(),
+        html_encode=true        :: html_encode()
      }).
 -record(strong, {?ELEMENT_BASE(element_strong),
-        body="",
-        text="",
-        html_encode=true
+        body=""                 :: body(),
+        text=""                 :: text(),
+        html_encode=true        :: html_encode()
     }).
 -record(em, {?ELEMENT_BASE(element_em),
-        body="",
-        text="",
-        html_encode=true
+        body=""                 :: body(),
+        text=""                 :: text(),
+        html_encode=true        :: html_encode()
     }).
 -record(value, {?ELEMENT_BASE(element_value),
-        text="",
-        html_encode=true
+        text=""                 :: text(),
+        html_encode=true        :: html_encode()
     }).
 -record(link, {?ELEMENT_BASE(element_link),
-        title = "",
-        text="",
-        body="",
-        new=false,
-        html_encode=true,
-        mobile_target=false,
-        mobile_dialog=false,
-        data_fields=[],
-        url="javascript:",
-        postback,
-        delegate
+        title = ""              :: text(),
+        text=""                 :: text(),
+        body=""                 :: body(),
+        new=false               :: boolean(),
+        html_encode=true        :: html_encode(),
+        mobile_target=false     :: boolean(),
+        mobile_dialog=false     :: boolean(),
+        data_fields=[]          :: data_fields(),
+        url="javascript:"       :: script() | url(),
+        postback                :: term(),
+        delegate                :: module()
     }).
 -record(email_link, {?ELEMENT_BASE(element_email_link),
-        title="",
-        text="",
-        body="",
-        html_encode=true,
-        email=""
+        title=""                :: text(),
+        text=""                 :: text(),
+        body=""                 :: body(),
+        html_encode=true        :: html_encode(),
+        email=""                :: text()
     }).
 -record(error, {?ELEMENT_BASE(element_error),
-        text="",
-        html_encode=true
+        text=""                 :: text(),
+        html_encode=true        :: html_encode()
     }).
 -record(span, {?ELEMENT_BASE(element_span),
-        body="",
-        text="",
-        title="",
-        html_encode=true,
-        data_fields=[]
+        body=""                 :: body(),
+        text=""                 :: text(),
+        title=""                :: text(),
+        html_encode=true        :: html_encode(),
+        data_fields=[]          :: data_fields()
     }).
 -record(button, {?ELEMENT_BASE(element_button),
-        text="",
-        body="",
-        image=undefined,
-        html_encode=true,
-        click,
-        postback,
-        delegate,
-        data_fields=[]
+        text=""                 :: text(),
+        body=""                 :: body(),
+        image=undefined         :: url(),
+        html_encode=true        :: html_encode(),
+        click                   :: actions(),
+        postback                :: term(),
+        delegate                :: module(),
+        data_fields=[]          :: data_fields()
     }).
 -record(literal, {?ELEMENT_BASE(element_literal),
-        text="",
-        html_encode=true
+        text=""                 :: text(),
+        html_encode=true        :: html_encode()
     }).
 -record(textbox, {?ELEMENT_BASE(element_textbox),
-        text="",
-        maxlength="",
-        placeholder="",
-        html_encode=true,
-        next,
-        postback,
-        delegate,
-        html_name,
-        type=text
+        text=""                 :: text(),
+        maxlength=""            :: integer() | string(),
+        placeholder=""          :: text(),
+        html_encode=true        :: html_encode(),
+        next                    :: id(),
+        postback                :: term(),
+        delegate                :: module(),
+        html_name               :: html_name(),
+        type=text               :: string() | atom()
     }).
 -record(hidden, {?ELEMENT_BASE(element_hidden),
-        text="",
-        html_encode=true,
-        html_name,
-        disabled=false
+        text=""                 :: text(),
+        html_encode=true        :: html_encode(),
+        html_name               :: html_name(),
+        disabled=false          :: boolean()
     }).
 -record(textarea, {?ELEMENT_BASE(element_textarea),
-        text="",
-        placeholder="",
-        html_encode=true,
-        html_name
+        text=""                 :: text(),
+        placeholder=""          :: text(),
+        html_encode=true        :: html_encode(),
+        html_name               :: html_name()
     }).
 -record(range, {?ELEMENT_BASE(element_range),
-        data_fields=[],
-        min=0,
-        max=100,
-        step=1,
-        value=0,
-        next,
-        postback,
-        delegate
+        data_fields=[]          :: data_fields(),
+        min=0                   :: integer(),
+        max=100                 :: integer(),
+        step=1                  :: integer(),
+        value=0                 :: integer(),
+        next                    :: id(),
+        postback                :: term(),
+        delegate                :: module()
     }).
 -record(datepicker_textbox, {?ELEMENT_BASE(element_datepicker_textbox),
-        text="",
-        next,
-        html_encode=true,
-        validators=[],
-        options = [{dateFormat, "yy-mm-dd"}]
+        text=""                 :: text(),
+        next                    :: id(),
+        html_encode=true        :: html_encode(),
+        validators=[]           :: validators(),
+        options = [{dateFormat, "yy-mm-dd"}]    :: proplist()
     }).
--record(dropdown, {?ELEMENT_BASE(element_dropdown),
-        options=[],
-        html_encode=true,
-        postback,
-        delegate,
-        value,
-        multiple=false,
-        disabled=false,
-        data_fields=[],
-        html_name
-    }).
+
 -record(option, {
-        text="",
-        value=undefined,
-        selected=false,
-        show_if=true,
-        disabled=false 
+        text=""                 :: text(),
+        value=undefined         :: text() | undefined,
+        selected=false          :: boolean(),
+        show_if=true            :: boolean(),
+        disabled=false          :: boolean()
     }).
+
+-type short_option()        :: {text(), text()}.
 -record(option_group, {
-        text="",
-        options=[],
-        show_if=true,
-        disabled=false 
+        text=""                 :: text(),
+        options=[]              :: [#option{} | short_option()],
+        show_if=true            :: boolean(),
+        disabled=false          :: boolean()
     }).
+
+-type options()             :: [#option{} | short_option()] | [#option_group{}].
+-record(dropdown, {?ELEMENT_BASE(element_dropdown),
+        options=[]              :: options(),
+        html_encode=true        :: html_encode(),
+        postback                :: term(),
+        delegate                :: module(),
+        value                   :: text(),
+        multiple=false          :: boolean(),
+        disabled=false          :: boolean(),
+        data_fields=[]          :: data_fields(),
+        html_name               :: html_name()
+    }).
+
 -record(checkbox, {?ELEMENT_BASE(element_checkbox),
-        text="",
-        html_encode=true,
-        checked=false,
-        value="on",
-        postback,
-        delegate,
-        html_name
+        text=""                 :: text(),
+        html_encode=true        :: html_encode(),
+        checked=false           :: boolean(),
+        value="on"              :: text(),
+        postback                :: term(),
+        delegate                :: module(),
+        html_name               :: html_name()
     }).
 -record(radiogroup, {?ELEMENT_BASE(element_radiogroup),
-        body=[]
+        body=[]                 :: body()
     }).
 -record(radio, {?ELEMENT_BASE(element_radio),
-        text="",
-        html_encode=true,
-        value,
-        name,
-        checked=false,
-        postback,
-        delegate,
-        html_name
+        text=""                 :: text(),
+        html_encode=true        :: html_encode(),
+        value                   :: text(),
+        name                    :: html_name(),
+        checked=false           :: boolean(),
+        postback                :: term(),
+        delegate                :: module(),
+        html_name               :: html_name()
     }).
 -record(password, {?ELEMENT_BASE(element_password),
-        text="",
-        maxlength="",
-        placeholder="",
-        html_encode=true,
-        next,
-        postback,
-        delegate,
-        html_name
+        text=""                 :: text(),
+        maxlength=""            :: integer() | string(),
+        placeholder=""          :: text(),
+        html_encode=true        :: html_encode(),
+        next                    :: id(),
+        postback                :: term(),
+        delegate                :: module(),
+        html_name               :: html_name()
     }).
 -record(restful_form, {?ELEMENT_BASE(element_restful_form),
-        method="POST",
-        action,
-        html_name,
-        enctype,
-        body=[]
+        method="POST"           :: string() | atom(),
+        action                  :: url(),
+        html_name               :: html_name(),
+        enctype                 :: text(),
+        body=[]                 :: body()
       }).
 -record(restful_submit, {?ELEMENT_BASE(element_restful_submit),
-        text="Submit",
-        html_encode=true,
-        html_name
+        text="Submit"           :: text(),
+        html_encode=true        :: html_encode(),
+        html_name               :: html_name()
     }).
 -record(restful_reset, {?ELEMENT_BASE(element_restful_reset),
-        text="Cancel",
-        html_encode=true,
-        html_name
+        text="Cancel"           :: text(),
+        html_encode=true        :: html_encode(),
+        html_name               :: html_name()
     }).
 -record(restful_upload, {?ELEMENT_BASE(element_restful_upload),
-        html_encode=true,
-        html_name,
-        data_fields=[]
+        html_encode=true        :: html_encode(),
+        html_name               :: html_name(),
+        data_fields=[]          :: data_fields()
     }).
 -record(panel, {?ELEMENT_BASE(element_panel),
-        body="",
-        text="",
-        html_encode=true,
-        data_fields=[]
+        body=[]                 :: body(),
+        text=""                 :: text(),
+        html_encode=true        :: html_encode(),
+        data_fields=[]          :: data_fields()
     }).
 -record(fieldset, {?ELEMENT_BASE(element_fieldset),
-        body="",
-        text="",
-        html_encode=true,
-        legend_body="",
-        legend_text="",
-        legend_html_encode=true
+        body=[]                 :: body(),
+        text=""                 :: text(),
+        html_encode=true        :: html_encode(),
+        legend_body=[]          :: body(),
+        legend_text=""          :: text(),
+        legend_html_encode=true :: html_encode()
     }).
 -record(spinner, {?ELEMENT_BASE(element_spinner),
-        image="/nitrogen/spinner.gif"
+        image="/nitrogen/spinner.gif"   :: url()
     }).
 -record(image, {?ELEMENT_BASE(element_image),
-        image="",
-        alt,
-        width,
-        height
+        image=""                :: url(),
+        alt                     :: text(),
+        width                   :: integer(),
+        height                  :: integer()
     }).
 -record(lightbox, {?ELEMENT_BASE(element_lightbox),
-        body="" 
+        body=[]                 :: body()
     }).
 -record(table, {?ELEMENT_BASE(element_table),
-        rows,
-        header=[],
-        footer=[]
+        rows                    :: body(),
+        header=[]               :: body(),
+        footer=[]               :: body()
     }).
 -record(tablerow, {?ELEMENT_BASE(element_tablerow),
-        cells
+        cells                   :: body()
     }).
 -record(tableheader, {?ELEMENT_BASE(element_tableheader),
-        text="",
-        html_encode=true,
-        body="",
-        align="left",
-        valign="middle",
-        colspan=1,
-        rowspan=1
+        text=""                 :: text(),
+        html_encode=true        :: html_encode(),
+        body=[]                 :: body(),
+        align="left"            :: text() | atom(),
+        valign="middle"         :: text() | atom(),
+        colspan=1               :: integer(),
+        rowspan=1               :: integer()
     }).
 -record(tablecell, {?ELEMENT_BASE(element_tablecell),
-        text="",
-        html_encode=true,
-        body="",
-        align="left",
-        valign="middle",
-        colspan=1,
-        rowspan=1
+        text=""                 :: text(),
+        html_encode=true        :: html_encode(),
+        body=""                 :: body(),
+        align="left"            :: text() | atom(),
+        valign="middle"         :: text() | atom(),
+        colspan=1               :: integer(),
+        rowspan=1               :: integer()
     }).
 -record(singlerow, {?ELEMENT_BASE(element_singlerow),
-        cells
+        cells                   :: body()
     }).
 -record(file, {?ELEMENT_BASE(element_file),
-        file,
-        include_panel=true,
-        html_encode=false
+        file                    :: path(),
+        include_panel=true      :: boolean(),
+        html_encode=false       :: boolean()
     }).
 -record(flash, {?ELEMENT_BASE(element_flash)}).
 -record(placeholder, {?ELEMENT_BASE(element_placeholder),
-        body=[]
+        body=[]                 :: body()
     }).
 -record(bind, {?ELEMENT_BASE(element_bind),
-        data=[],
-        map=[],
-        transform,
-        acc=[],
-        body=[],
-        empty_body=[]
+        data=[]                 :: list(),
+        map=[]                  :: list() | tuple(),
+        transform               :: fun(),
+        acc=[]                  :: term(),
+        body=[]                 :: body(),
+        empty_body=[]           :: body()
     }).
 -record(sortblock, {?ELEMENT_BASE(element_sortblock),
-        tag,
-        items=[],
-        group,
-        connect_with_groups=none,
-        handle,
-        placeholder="",
-        force_placeholder_size=false,
-        delegate=undefined 
+        tag                     :: term(),
+        items=[]                :: body(),
+        group                   :: atom() | string() | binary(),
+        connect_with_groups=none :: none | [atom() | string() | binary()],
+        handle                  :: class(),
+        placeholder=""          :: class(),
+        force_placeholder_size=false :: boolean(),
+        delegate                :: module()
     }).
 -record(sortitem, {?ELEMENT_BASE(element_sortitem),
-        tag,
-        body=[] 
+        tag                     :: term(),
+        body=[]                 :: body()
     }).
 -record(draggable, {?ELEMENT_BASE(element_draggable),
-        tag,
-        body=[],
-        group,
-        handle,
-        clone=true,
-        revert=true,
-        scroll=true,
-        container = false,
-        zindex = false
+        tag                     :: term(),
+        body=[]                 :: body(),
+        group                   :: atom() | string() | binary(),
+        handle                  :: class(),
+        clone=true              :: boolean(),
+        revert=true             :: boolean() | valid | invalid,
+        scroll=true             :: boolean(),
+        container               :: undefined | window | parent | document | string(),
+        zindex                  :: integer() | undefined
     }).
 -record(droppable, {?ELEMENT_BASE(element_droppable),
-        tag,
-        body=[],
-        accept_groups=all,
-        active_class=active,
-        hover_class=hover,
-        delegate=undefined
+        tag                     :: term(),
+        body=[]                 :: body(),
+        accept_groups=all       :: all | [atom() | string() | binary()],
+        active_class=active     :: class(),
+        hover_class=hover       :: class(),
+        delegate                :: module()
     }).
 -record(gravatar, {?ELEMENT_BASE(element_gravatar),
-        email="",
-        size="80",
-        rating="g",
-        default=""
+        email=""                :: text(),
+        size="80"               :: integer() | text(),
+        rating="g"              :: text(),
+        default=""              :: text()
     }).
 
 -record(inplace_textarea, {?ELEMENT_BASE(element_inplace_textarea),
-        tag,
-        text="",
-        html_encode=true,
-        start_mode=view,
-        validators=[],
-        delegate=undefined
+        tag                     :: term(),
+        text=""                 :: text(),
+        html_encode=true        :: html_encode(),
+        start_mode=view         :: view | edit,
+        validators=[]           :: validators(),
+        delegate                :: module()
     }).
 -record(inplace_textbox, {?ELEMENT_BASE(element_inplace_textbox),
-        tag,
-        text="",
-        html_encode=true,
-        start_mode=view,
-        validators=[],
-        delegate=undefined
+        tag                     :: term(),
+        text=""                 :: text(),
+        html_encode=true        :: html_encode(),
+        start_mode=view         :: view | edit,
+        validators=[]           :: validators(),
+        delegate                :: module()
     }).
 -record(inplace, {?ELEMENT_BASE(element_inplace),
-        tag,
-        text="",
-        delegate=undefined,
-        view,
-        edit,
-        start_mode=view
+        tag                     :: term(),
+        text=""                 :: text(),
+        delegate                :: module(),
+        view                    :: body(),
+        edit                    :: body(),
+        start_mode=view         :: view | edit
     }).
 
 -record(upload, {?ELEMENT_BASE(element_upload),
-        delegate,
-        tag,
-        show_button=true,
-        file_text="Select file",
-        button_text="Upload",
-        droppable=false,
-        droppable_text="Drop Files Here",
-        multiple=false
+        delegate                :: module(),
+        tag                     :: term(),
+        show_button=true        :: boolean(),
+        file_text="Select file" :: text(),
+        button_text="Upload"    :: text(),
+        droppable=false         :: boolean(),
+        droppable_text="Drop Files Here" :: text(),
+        multiple=false          :: boolean()
     }).
 -record(wizard, {?ELEMENT_BASE(element_wizard),
-        tag,
-        titles,
-        steps,
-        next="Next",
-        back="Back",
-        finish="Finish",
-        show_progress=true,
-        progress_step="Step ",
-        progress_of=" of "
+        tag                     :: term(),
+        titles                  :: [text()],
+        steps                   :: [body()],
+        next="Next"             :: text(),
+        back="Back"             :: text(),
+        finish="Finish"         :: text(),
+        show_progress=true      :: boolean(),
+        progress_text="(Step ~p of ~p)" :: text()
     }).
 -record(sparkline, {?ELEMENT_BASE(element_sparkline),
         type,

@@ -12,7 +12,7 @@ reflect() -> record_info(fields, draggable).
 render_element(Record) -> 
     % Get properties...
     Anchor = Record#draggable.anchor,
-    PickledTag = wf:pickle(Record#draggable.tag),	
+    PickledTag = wf:pickle(Record#draggable.tag),   
     GroupClasses = groups_to_classes(Record#draggable.group),
 
     Handle = case Record#draggable.handle of
@@ -33,12 +33,12 @@ render_element(Record) ->
     end,
 
     Container = case Record#draggable.container of
-                    false -> false;
-                    window -> "'window'";
-                    parent -> "'parent'";
-                    document -> "'document'";
-                    V -> V
-                end,
+        false -> false;
+        window -> "'window'";
+        parent -> "'parent'";
+        document -> "'document'";
+        V -> V
+    end,
     
     % Write out the script to make this element draggable...
     Script = wf:f(
@@ -50,8 +50,8 @@ render_element(Record) ->
                 Revert, 
                 Record#draggable.scroll,
                 Container,
-		Record#draggable.zindex,
-		PickledTag
+                Record#draggable.zindex,
+                PickledTag
                ]),
     wf:wire(Script),
 
