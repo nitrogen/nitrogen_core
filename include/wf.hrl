@@ -24,6 +24,7 @@
 -type url()                 :: text().
 -type path()                :: string() | binary().
 -type html_name()           :: string() | binary() | atom().
+-type mobile_theme()        :: string() | binary() | atom().
 
 
 %%% CONTEXT %%%
@@ -522,140 +523,140 @@
         progress_text="(Step ~p of ~p)" :: text()
     }).
 -record(sparkline, {?ELEMENT_BASE(element_sparkline),
-        type,
-        values,
-        options 
+        type=line               :: line | bar | tristate | bullet | discrete | pie | box,
+        values=[]               :: [integer()],
+        options=[]              :: proplist()
     }).
 -record(textbox_autocomplete, {?ELEMENT_BASE(element_textbox_autocomplete),
-        tag,
-        text="",
-        minLength=2,
-        delay=300,
-        html_encode=true,
-        next,
-        postback,
-        delegate=undefined 
+        tag                     :: term(),
+        text=""                 :: text(),
+        minLength=2             :: integer(),
+        delay=300               :: integer(),
+        html_encode=true        :: html_encode(),
+        next                    :: id(),
+        postback                :: term(),
+        delegate                :: module()
     }).
 -record(recaptcha, {?ELEMENT_BASE(element_recaptcha),
-        captcha_opts=[],
-        button_id,
-        button_label="Check!",
-        delegate,
-        tag,
-        fail_body="Please try again!",
-        public_key,
-        private_key,
-        challenge_url,
-        verify_url
+        captcha_opts=[]         :: proplist(),
+        button_id               :: id(),
+        button_label="Check!"   :: text(),
+        delegate                :: module(),
+        tag                     :: term(),
+        fail_body="Please try again!" :: body(),
+        public_key              :: string() | undefined,
+        private_key             :: string() | undefined,
+        challenge_url           :: url() | undefined,
+        verify_url              :: url() | undefined
     }).
 
 %% Mobile Shortcut elements
 -record(mobile_list, {?ELEMENT_BASE(element_mobile_list),
-        body=[],
-        data_fields=[],
-        theme,
-        inset=true
+        body=[]                 :: body(),
+        data_fields=[]          :: data_fields(),
+        theme                   :: mobile_theme(),
+        inset=true              :: boolean()
      }).
 -record(mobile_list_divider, {?ELEMENT_BASE(element_mobile_list_divider),
-        data_fields=[],
-        theme,
-        text="",
-        body="",
-        role=heading
+        data_fields=[]          :: data_fields(),
+        theme                   :: mobile_theme(),
+        text=""                 :: text(),
+        body=[]                 :: body(),
+        role=heading            :: atom() | string()
      }).
 -record(mobile_listitem, {?ELEMENT_BASE(element_mobile_listitem),
-        data_fields=[],
-        text="",
-        body=[],
-        theme=""
+        data_fields=[]          :: data_fields(),
+        text=""                 :: text(),
+        body=[]                 :: body(),
+        theme=""                :: atom() | string()
     }).
 -record(mobile_toggle, {?ELEMENT_BASE(element_mobile_toggle),
-        data_fields=[],
-        on_text="On",
-        on_value="on",
-        off_text="Off",
-        off_value="off",
-        selected="on",
-        postback,
-        delegate,
-        width=undefined,
-        theme=""
+        data_fields=[]          :: data_fields(),
+        on_text="On"            :: text(),
+        on_value="on"           :: text(),
+        off_text="Off"          :: text(),
+        off_value="off"         :: text(),
+        selected="on"           :: atom() | text(),
+        postback                :: term(),
+        delegate                :: module(),
+        width                   :: integer() | undefined,
+        theme=""                :: mobile_theme()
     }).
 -record(mobile_collapsible, {?ELEMENT_BASE(element_mobile_collapsible),
-        data_fields=[],
-        header_theme,
-        content_theme,
-        header_text="",
-        content_body=[],
-        content_text="",
-        header_size=3,
-        mini=false,
-        collapsed=true
+        data_fields=[]          :: data_fields(),
+        header_theme            :: mobile_theme(),
+        content_theme           :: mobile_theme(),
+        header_text=""          :: text(),
+        content_body=[]         :: body(),
+        content_text=""         :: text(),
+        header_size=3           :: integer(),
+        mini=false              :: boolean(),
+        collapsed=true          :: boolean()
     }).
 -record(mobile_collapsible_set, {?ELEMENT_BASE(element_mobile_collapsible_set),
-        data_fields=[],
-        header_theme,
-        content_theme,
-        mini=false,
-        body=[]
+        data_fields=[]          :: data_fields(),
+        header_theme            :: mobile_theme(),
+        content_theme           :: mobile_theme(),
+        mini=false              :: boolean(),
+        body=[]                 :: body()
+    }).
+-record(mobile_grid_block, {?ELEMENT_BASE(element_mobile_grid_block),
+        data_fields=[]          :: data_fields(),
+        text=""                 :: text(),
+        body=[]                 :: body(),
+        new_row=default         :: atom()
     }).
 -record(mobile_grid, {?ELEMENT_BASE(element_mobile_grid),
-        data_fields=[],
-        columns=2,
-        blocks=[]
+        data_fields=[]          :: data_fields(),
+        columns=2               :: integer(),
+        blocks=[]               :: [#mobile_grid_block{}]
      }).
--record(mobile_grid_block, {?ELEMENT_BASE(element_mobile_grid_block),
-        data_fields=[],
-        text="",
-        body=[],
-        new_row=default
-    }).
 
 
         
 %% HTML5 semantic elements
 -record(section, {?ELEMENT_BASE(element_section),
-        body=""
+        body=""                 :: body()
     }).
 -record(nav, {?ELEMENT_BASE(element_nav),
-        body=""
+        body=""                 :: body()
     }).
 -record(article, {?ELEMENT_BASE(element_article),
-        body=""
+        body=""                 :: body()
     }).
 -record(aside, {?ELEMENT_BASE(element_aside),
-        body=""
+        body=""                 :: body()
     }).
 -record(hgroup, {?ELEMENT_BASE(element_hgroup),
-        body=""
+        body=""                 :: body()
     }).
 -record(html5_header, {?ELEMENT_BASE(element_html5_header),
-        body=""
+        body=""                 :: body()
     }).
 -record(html5_footer, {?ELEMENT_BASE(element_html5_footer),
-        body=""
+        body=""                 :: body()
     }).
 -record(time, {?ELEMENT_BASE(element_time),
-        pubdate=false,
-        datetime="",
-        body=""
+        pubdate=false           :: boolean(),
+        datetime=""             :: text(),
+        body=""                 :: body()
     }).
 -record(mark, {?ELEMENT_BASE(element_mark),
-        body=""
+        body=""                 :: body()
     }).
 
 %% 960.gs Grid
 
 -define(GRID_ELEMENT(Type, Columns), {?ELEMENT_BASE(element_grid),
-        type=Type,
-        columns=Columns,
-        alpha,
-        omega,
-        push,
-        pull,
-        prefix,
-        suffix,
-        body
+        type=Type               :: undefined | container | grid | clear,
+        columns=Columns         :: integer(),
+        alpha=false             :: boolean(),
+        omega=false             :: boolean(),
+        push                    :: integer() | undefined,
+        pull                    :: integer() | undefined,
+        prefix                  :: integer() | undefined,
+        suffix                  :: integer() | undefined,
+        body=[]                 :: body()
     }).
 
 -record(grid,           ?GRID_ELEMENT(undefined, undefined)).
@@ -682,13 +683,13 @@
 
 %%% Actions %%%
 -define(AV_BASE(Module,Type),
-   is_action=Type,
-   module=Module,
-   anchor,
-   trigger,
-   target,
-   actions,
-   show_if=true
+   is_action=Type               :: is_action | is_validator,
+   module=Module                :: module(),
+   anchor                       :: id(),
+   trigger                      :: id(),
+   target                       :: id(),
+   actions                      :: actions(),
+   show_if=true                 :: boolean()
 ).
 
 -define(ACTION_BASE(Module), ?AV_BASE(Module,is_action)).
@@ -696,128 +697,130 @@
 -record(actionbase, {?ACTION_BASE(undefined)}).
 -record(wire, {?ACTION_BASE(action_wire)}).
 -record(update, {?ACTION_BASE(action_update),
-        type=update,
-        elements=[]
+        type=update             :: update | replace | insert_top | insert_bottom
+                                 | insert_before | insert_after | remove
+                                 | atom(),
+         elements=[]             :: body()
     }).
 -record(comet, {?ACTION_BASE(action_comet),
-        pool=undefined,
-        scope=local,
-        function,
-        dying_message
+        pool=undefined          :: term(),
+        scope=local             :: local | global,
+        function                :: undefined | fun(),
+        dying_message           :: term()
     }).
 -record(continue, {?ACTION_BASE(action_continue),
-        function,
-        delegate,
-        tag,
-        timeout
+        function                :: undefined | fun(),
+        delegate                :: module(),
+        tag                     :: term(),
+        timeout                 :: integer() | infinity | undefined
     }).
 -record(api, {?ACTION_BASE(action_api),
-        name,
-        tag,
-        delegate 
+        name                    :: string(),
+        tag                     :: term(),
+        delegate                :: module()
     }).
 -record(function, {?ACTION_BASE(action_function),
-        function 
+        function                :: fun() | undefined
     }).
 -record(set, {?ACTION_BASE(action_set),
-        value
+        value=""                :: text()
     }).
 -record(redirect, {?ACTION_BASE(action_redirect),
-        url
+        url=""                  :: url()
     }).
 -record(event, {?ACTION_BASE(action_event),
-        type=default,
-        keycode=undefined,
-        shift_key=false,
-        delay=0,
-        postback,
-        validation_group,
-        delegate,
-        extra_param
+        type=default            :: atom(),
+        keycode=undefined       :: integer() | undefined,
+        shift_key=false         :: boolean(),
+        delay=0                 :: integer(),
+        postback                :: term(),
+        validation_group        :: string() | binary() | atom(),
+        delegate                :: module(),
+        extra_param             :: string() | binary() | undefined
     }).
 %% we want validation assignments to happen last, so we use AV_BASE and set deferral to zero first
 -record(validate, {?ACTION_BASE(action_validate),
-        on=submit,
-        success_text=" ",
-        group,
-        validators,
-        attach_to 
+        on=submit               :: atom(),
+        success_text=" "        :: text(),
+        group                   :: string() | binary() | atom(),
+        validators              :: validators(),
+        attach_to               :: id()
     }).
 -record(validation_error, {?ACTION_BASE(action_validation_error),
-        text="" 
+        text=""                 :: text()
     }).
 -record(clear_validation, {?ACTION_BASE(action_clear_validation),
-        validation_trigger,
-        validation_target,
-        validation_all
+        validation_trigger      :: id(),
+        validation_target       :: id(),
+        validation_all          :: id()
     }).
 -record(alert, {?ACTION_BASE(action_alert),
-        text=""
+        text=""                 :: text()
     }).
 -record(confirm, {?ACTION_BASE(action_confirm),
-        text="",
-        postback,
-        delegate
+        text=""                 :: text(),
+        postback                :: term(),
+        delegate                :: module()
     }).
 -record(console_log, {?ACTION_BASE(action_console_log),
-        text=""
+        text=""                 :: text()
     }).
 -record(script, {?ACTION_BASE(action_script),
-        script
+        script                  :: text()
     }).
 -record(disable_selection, {?ACTION_BASE(action_disable_selection)}).
 -record(jquery_effect, {?ACTION_BASE(action_jquery_effect),
-        type,
-        effect,
-        speed,
-        options=[],
-        class,
-        easing
+        type                    :: atom() | string() | binary(),
+        effect                  :: atom() | string() | binary(),
+        speed                   :: integer(),
+        options=[]              :: proplist(),
+        class                   :: class(),
+        easing                  :: atom()
     }).
 -record(show, {?ACTION_BASE(action_show),
-        effect=none,
-        options=[],
-        speed=500
+        effect=none             :: atom(),
+        options=[]              :: proplist(),
+        speed=500               :: integer()
     }).
 -record(hide, {?ACTION_BASE(action_hide),
-        effect=none,
-        options=[],
-        speed=500
+        effect=none             :: atom(),
+        options=[]              :: proplist(),
+        speed=500               :: integer()
     }).
 -record(appear, {?ACTION_BASE(action_appear),
-        speed=500
+        speed=500               :: integer()
     }).
 -record(fade, {?ACTION_BASE(action_fade),
-        speed=500
+        speed=500               :: integer()
     }).
 -record(slide_down, {?ACTION_BASE(action_slide_down),
-        speed=500
+        speed=500               :: integer()
     }).
 -record(slide_up, {?ACTION_BASE(action_slide_up),
-        speed=500
+        speed=500               :: integer()
     }).
 -record(effect, {?ACTION_BASE(action_effect),
-        effect=none,
-        options=[],
-        speed=500
+        effect=none             :: atom(),
+        options=[]              :: proplist(),
+        speed=500               :: integer()
     }).
 -record(toggle, {?ACTION_BASE(action_toggle),
-        effect=none,
-        options=[],
-        speed=500
+        effect=none             :: atom(),
+        options=[]              :: proplist(),
+        speed=500               :: integer()
     }).
 -record(add_class, {?ACTION_BASE(action_add_class),
-        class=none,
-        speed=0
+        class=none              :: class(),
+        speed=0                 :: integer()
     }).
 -record(remove_class, {?ACTION_BASE(action_remove_class),
-        class=none,
-        speed=0
+        class=none              :: class(),
+        speed=0                 :: integer()
     }).
 -record(animate, {?ACTION_BASE(action_animate),
-        options=[],
-        speed=500,
-        easing=swing
+        options=[]              :: proplist(),
+        speed=500               :: integer(),
+        easing=swing            :: atom()
     }).
 -record(buttonize, {?ACTION_BASE(action_buttonize)}).
 -record(disable, {?ACTION_BASE(action_disable)}).
@@ -826,31 +829,31 @@
 %%% %% TODO: Switch this from is_action to is_validator once deferred is implemented
 %%% This will allow users to bind validators directly, instead of needing the #validate{} action
 -define(VALIDATOR_BASE(Module), ?AV_BASE(Module,is_action),
-    text="Failed."
+    text="Failed."              :: text()
 ).
 -record(validatorbase, {?VALIDATOR_BASE(undefined)}).
 -record(is_required, {?VALIDATOR_BASE(validator_is_required)}).
 -record(is_email, {?VALIDATOR_BASE(validator_is_email)}).
 -record(is_integer, {?VALIDATOR_BASE(validator_is_integer)}).
 -record(min_length, {?VALIDATOR_BASE(validator_min_length),
-        length
+        length                  :: integer()
     }).
 -record(max_length, {?VALIDATOR_BASE(validator_max_length),
-        length
+        length                  :: integer()
     }).
 -record(confirm_password, {?VALIDATOR_BASE(validator_confirm_password),
-        password
+        password                :: id()
     }).
 -record(confirm_same, {?VALIDATOR_BASE(validator_confirm_same),
-        confirm_id
+        confirm_id              :: id()
     }).
 -record(custom, {?VALIDATOR_BASE(validator_custom),
-        function,
-        tag 
+        function                :: fun(),
+        tag                     :: term()
     }).
 -record(js_custom, {?VALIDATOR_BASE(validator_js_custom),
-        function,
-        args="{}"
+        function                :: fun(),
+        args="{}"               :: text()
     }).
 
 
