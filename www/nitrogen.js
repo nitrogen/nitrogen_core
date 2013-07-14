@@ -15,6 +15,7 @@ function NitrogenClass(o) {
     this.$system_event_obj = null;
     this.$going_away = false;
     this.$live_validation_data_field = "LV_live_validation";
+    this.$js_dependencies = new Array();
     return this;
 }
 
@@ -230,8 +231,8 @@ NitrogenClass.prototype.$do_event = function(validationGroup, eventContext, extr
         success: function(data, textStatus) {
           n.$event_is_running = false;
           typeof s.success  == 'function' && s.success(data, textStatus) || eval(data);
-            },
-            error: function(xmlHttpRequest, textStatus, errorThrown) {
+        },
+        error: function(xmlHttpRequest, textStatus, errorThrown) {
           n.$event_is_running = false;
           typeof s.success == 'function' && s.error(xmlHttpRequest, textStatus, errorThrown);
         }
@@ -271,15 +272,6 @@ NitrogenClass.prototype.$do_system_event = function(eventContext) {
 }
 
 /*** FILE UPLOAD ***/
-/*NitrogenClass.prototype.$upload = function(form,input) {
-    // Assemble other parameters...
-    form.action = this.$url;
-    form.pageContext.value = this.$params["pageContext"];
-    form.submit();
-    form.reset();
-}*/
-
-/*** GMAIL-STYLE UPLOAD ***/
 
 NitrogenClass.prototype.$send_pending_files = function(form,input) {
     var file=null;
@@ -469,16 +461,16 @@ function objs(path, anchor) {
     // Find all results under the anchor...
     var results = anchor_obj.find(path);
     if (results.length > 0) {
-    return results;
+        return results;
     }
     
     // If no results under the anchor, then try on each parent, moving upwards...
     var results = anchor_obj.parentsUntil( Nitrogen.$anchor_root_path );
     for (var i=0; i<results.length; i++) {
-    var results2 = jQuery(results.get(i)).find(path);
-    if (results2.length > 0) {
-        return results2;
-    }       
+        var results2 = jQuery(results.get(i)).find(path);
+        if (results2.length > 0) {
+            return results2;
+        }       
     }
 
     // No results, so try in context of entire page.
@@ -535,6 +527,73 @@ NitrogenClass.prototype.$remove = function(anchor, path) {
 }
 
 
+
+/*** REQUIRING SCRIPT BEFORE EXECUTION ***/
+/* This process works when a depdendency javascript file is requested, it's
+ * first registered as a pending dependency, then the ajax request is sent to
+ * load and execute the script. Additionally, any functions that depend on that
+ * particular file will not be executed, but will instead be queued for
+ * execution after the script is finally loaded.  When the script finally
+ * successfully loads, the pending requests depending on that script will be
+ * executed one at a time. Finally, any calls depending on the script made
+ * after the script has been loaded will be executed right away.
+ */
+
+// Queue up functions to be run when a dependency is loaded. If it's already
+// loaded, execute right away. If it's not loaded, start the process of loading
+// it.
+NitrogenClass.prototype.$dependency_register_function = function(dependency, fun) {
+    if(this.$is_dependency_loaded(dependency))
+        fun();
+    else
+    {
+        this.$load_js_dependency(dependency);
+        this.$js_dependencies[dependency].pending_calls.push(fun);
+    }
+}
+
+// Load the js file (if it's not already pending)
+NitrogenClass.prototype.$load_js_dependency = function(url) {
+    // This check will ensure that a js dependency isn't loaded more than once
+    if(!this.$is_dependency_initialized(url))
+    {
+        this.$init_dependency_if_needed(url);
+
+        // Request the file, and when it finishes, mark the file is loaded, and
+        // execute any pending requests
+        jQuery.getScript(url, function() { 
+            Nitrogen.$js_dependencies[url].loaded=true;
+            Nitrogen.$execute_dependency_scripts(url);
+        });
+    }
+}
+
+NitrogenClass.prototype.$init_dependency_if_needed = function(dependency) {
+    if(this.$js_dependencies[dependency]===undefined)
+        this.$js_dependencies[dependency] = {
+            loaded: false,
+            pending_calls: []
+        };
+}
+
+NitrogenClass.prototype.$is_dependency_initialized = function(dependency) {
+    return this.$js_dependencies[dependency]!==undefined
+}
+
+NitrogenClass.prototype.$is_dependency_loaded = function(dependency) {
+    if(!this.$is_dependency_initialized(dependency))
+        return false;
+    else
+        return this.$js_dependencies[dependency].loaded;
+}
+
+// Loop through each pending call and execute them in queue order
+NitrogenClass.prototype.$execute_dependency_scripts = function(dependency) {
+    var fun;
+    while(fun = this.$js_dependencies[dependency].pending_calls.shift())
+        fun();
+}
+
 /*** MISC ***/
 
 NitrogenClass.prototype.$console_log = function(text) {
@@ -563,7 +622,7 @@ NitrogenClass.prototype.$go_next = function(controlID) {
 
 NitrogenClass.prototype.$disable_selection = function(element) {
     element.onselectstart = function() {
-    return false;
+        return false;
     };
     element.unselectable = "on";
     element.style.MozUserSelect = "none";
@@ -573,11 +632,11 @@ NitrogenClass.prototype.$disable_selection = function(element) {
 NitrogenClass.prototype.$set_value = function(anchor, element, value) {
     if (!element.id) element = objs(element);
     element.each(function(index, el) {
-                     if (el.value != undefined) el.value = value;
-                     else if (el.checked != undefined) el.checked = value;
-                     else if (el.src != undefined) el.src = value;
-                     else $(el).html(value);
-                 });
+        if (el.value != undefined) el.value = value;
+        else if (el.checked != undefined) el.checked = value;
+        else if (el.src != undefined) el.src = value;
+        else $(el).html(value);
+    });
 }
 
 NitrogenClass.prototype.$get_value = function(anchor, element) {
@@ -602,7 +661,7 @@ NitrogenClass.prototype.$encode_arguments_object = function(Obj) {
     if (! Bert) { alert("Bert.js library not included in template.") }
     var a = new Array();
     for (var i=0; i<Obj.length; i++) {
-    a.push(Obj[i]);
+        a.push(Obj[i]);
     }
     var s = Bert.encode(a);
     return "args=" + this.$urlencode(s);

@@ -1,0 +1,42 @@
+# vim: sw=3 ts=3 ft=org
+
+#+TITLE: New Paragraph Element Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Jesse Gumm (@jessegumm)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../about.org][About]]
+
+* Sparkline Element - #sparkline{}
+
+  A sparkline is a small graph which can be used in dashboards or inline with
+  text. They can be presented in several different ways, as described in the
+  Sparkline documentation.
+
+** Usage
+
+#+BEGIN_SRC erlang
+	#sparkline{
+		type=bar,
+		values=[1,5,4,8,3,2]
+	}
+#+END_SRC
+
+** Attributes
+
+	+ type - (/atom/) :: The type of sparkline to draw.  Can be =line=, =bar=,
+	=tristate=, =discrete=, =bullet=, =pie=, =box=. (Default: =line=)
+
+	+ values - (/list of integers/) :: The data for the sparkline. Just a list
+	of integers.
+
+	+ options - (/proplist/) :: A list of options using a standard Erlang
+	proplists (a list of 2-tuples, like ={Option, Value}=.
+
+** See Also
+
+   + [[./base.html][base element]]
+
+	+ [[/demos/sparkline][Sparkline Demonstration]]
+
+ 	+ [[http://omnipotent.net/jquery.sparkline][Official Sparkline Documentation]]

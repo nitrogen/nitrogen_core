@@ -17,7 +17,8 @@
     indexof/2,
     replace_field/4,
     get_field/3,
-    copy_fields/2
+    copy_fields/2,
+    is_iolist_empty/1
 ]).
 
 -define(COPY_TO_BASERECORD(Name, Size, Record),
@@ -159,6 +160,29 @@ index_of(Field, [Field|_], Index) ->
 index_of(Field, [_|T], Index) ->
     index_of(Field, T, Index+1).
 
+
+%%% EMPTY LIST/BINARY TEST
+
+-spec is_iolist_empty(iolist()) -> boolean().
+%% @doc Without flattening the whole list, this will check to make sure there
+%% exists *something* other than empty lists or binaries of length 0. It takes
+%% a list, binary, or iolist and returns true if iolist_to_binary would end up
+%% returning <<>>, but it does so by short circuiting as soon as it encounters
+%% non-empty token (atom, character, tuple, etc).
+is_iolist_empty([]) ->
+    true;
+is_iolist_empty(<<>>) ->
+    true;
+is_iolist_empty([[]|T]) ->
+    is_iolist_empty(T);
+is_iolist_empty([<<>>|T]) ->
+    is_iolist_empty(T);
+is_iolist_empty([ListH | T]) when is_list(ListH) ->
+    case is_iolist_empty(ListH) of
+        true -> is_iolist_empty(T);
+        false -> false
+    end;
+is_iolist_empty(_) -> false.
 
 %%% DEBUG %%%
 

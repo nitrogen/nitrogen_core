@@ -85,13 +85,22 @@ inner_render_action(Action, Anchor, Trigger, Target) when is_tuple(Action) ->
             % Render the action...
             ActionScript = call_action_render(Module, Action1, Anchor2, Trigger2, Target2),
             AnchorScript = generate_anchor_script_if_needed(ActionScript, Anchor2, Target2),
-   			case ActionScript /= undefined andalso lists:flatten(ActionScript) /= [] of
-                true  -> [AnchorScript, ActionScript];
+            case ActionScript /= undefined andalso not(wf_utils:is_iolist_empty(ActionScript)) of
+                true  ->
+                    DepJS = Base1#actionbase.dependency_js,
+                    wrap_in_dependency(DepJS,[AnchorScript, ActionScript]);
                 false -> []
             end;
         _ -> 
             []
     end.
+
+wrap_in_dependency(undefined, Script) ->
+    Script;
+wrap_in_dependency("", Script) ->
+    Script;
+wrap_in_dependency(Url, Script) ->
+    [<<"Nitrogen.$dependency_register_function('">>,Url,<<"',function() {">>, Script, <<"});">>].
 
 generate_anchor_script_if_needed(ActionScript, Anchor, Target) ->
 	case needs_anchor_script(ActionScript) of

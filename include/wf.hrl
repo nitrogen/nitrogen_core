@@ -524,7 +524,7 @@
     }).
 -record(sparkline, {?ELEMENT_BASE(element_sparkline),
         type=line               :: line | bar | tristate | bullet | discrete | pie | box,
-        values=[]               :: [integer()],
+        values=[]               :: [integer() | float() | null | undefined],
         options=[]              :: proplist()
     }).
 -record(textbox_autocomplete, {?ELEMENT_BASE(element_textbox_autocomplete),
@@ -689,7 +689,8 @@
    trigger                      :: id(),
    target                       :: id(),
    actions                      :: actions(),
-   show_if=true                 :: boolean()
+   show_if=true                 :: boolean(),
+   dependency_js                :: url() | undefined
 ).
 
 -define(ACTION_BASE(Module), ?AV_BASE(Module,is_action)).
