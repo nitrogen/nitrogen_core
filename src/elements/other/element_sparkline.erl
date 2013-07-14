@@ -51,4 +51,6 @@ format_option({Key, Value}) when ?IS_STRING(Value) ->
 format_option({Key, Value}) when Value=:=true, Value=:=false ->
     wf:f(<<"~s: ~s">>, [Key, Value]);
 format_option({Key, Value}) ->
-    wf:f(<<"~s: ~p">>, [Key, Value]).
+    wf:f(<<"~s: ~p">>, [Key, Value]);
+format_option(V) ->
+    throw({invalid_sparkline_option, V}).
