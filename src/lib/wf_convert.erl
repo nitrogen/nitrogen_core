@@ -85,48 +85,60 @@ to_string_list([H|T], Acc) ->
 
 
 %%% HTML ENCODE %%%
+-spec html_encode(L :: term()) -> iolist().
+html_encode(L) -> 
+    After = ihe(L, normal),
+    error_logger:info_msg("Before: ~p~n~nAfter: ~p",[L, After]),
+    After.
 
-html_encode(L,Fun) when is_function(Fun) -> Fun(L);
+-spec html_encode(L :: term(), EncType :: fun() | boolean() | whites) -> iolist().
+html_encode(L,EncType) when is_function(EncType) -> EncType(L);
 
-html_encode(L,EncType) when is_binary(L) -> html_encode(wf:to_list(L),EncType);
-html_encode(L,EncType) when is_atom(L) -> html_encode(wf:to_list(L),EncType);
+html_encode(L,EncType) when is_atom(L) -> html_encode(atom_to_list(L),EncType);
 html_encode(L,EncType) when is_integer(L) -> html_encode(integer_to_list(L),EncType);
 html_encode(L,EncType) when is_float(L) -> html_encode(nitro_mochinum:digits(L),EncType);
 
-html_encode(L, false) -> wf:to_list(lists:flatten([L]));
-html_encode(L, true) -> html_encode(wf:to_list(lists:flatten([L])));
-html_encode(L, whites) -> html_encode_whites(wf:to_list(lists:flatten([L]))).
+html_encode(L, false) -> L;
+html_encode(L, true) when is_list(L); is_binary(L) -> ihe(L, normal);
+html_encode(L, whites) when is_list(L); is_binary(L) -> ihe(L, whites).
 
-html_encode([]) -> [];
-html_encode([H|T]) ->
-	case H of
-		$< -> "&lt;" ++ html_encode(T);
-		$> -> "&gt;" ++ html_encode(T);
-		$" -> "&quot;" ++ html_encode(T);
-		$' -> "&#39;" ++ html_encode(T);
-		$& -> "&amp;" ++ html_encode(T);
-		BigNum when is_integer(BigNum) andalso BigNum > 255 ->
-			%% Any integers above 255 are converted to their HTML encode equivilant,
-			%% Example: 7534 gets turned into &#7534;
-			[$&,$# | wf:to_list(BigNum)] ++ ";" ++ html_encode(T);
-		Tup when is_tuple(Tup) -> 
-			throw({html_encode,encountered_tuple,Tup});
-		_ -> [H|html_encode(T)]
-	end.
-
-html_encode_whites([]) -> [];
-html_encode_whites([H|T]) ->
-	case H of
-		$\s -> "&nbsp;" ++ html_encode_whites(T);
-		$\t -> "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" ++ html_encode_whites(T);
-		$< -> "&lt;" ++ html_encode_whites(T);
-		$> -> "&gt;" ++ html_encode_whites(T);
-		$" -> "&quot;" ++ html_encode_whites(T);
-		$' -> "&#39;" ++ html_encode_whites(T);
-		$& -> "&amp;" ++ html_encode_whites(T);
-		$\n -> "<br>" ++ html_encode_whites(T);
-		_ -> [H|html_encode_whites(T)]
-	end.
+-spec ihe(binary() | list(), whites | normal) -> iolist().
+%% @doc ihe means "inner html encode". It's a short version for encoding "ET"
+%% will be "encoding type", which usually would be 'whites'
+%%
+%% TODO for Nitrogen 3.
+%% This will remain backwards compatible for Nitrogen 2 releases, in Nitrogen
+%% 3, This will very likely be converted to a full binary conversion, with
+%% typespec being term() -> binary().
+ihe([], _)                              -> [];
+ihe(<<>>, _)                            -> <<>>;
+ihe(A, ET) when is_atom(A)              -> html_encode(atom_to_list(A), ET);
+ihe([Bin|T], ET) when is_binary(Bin)    -> [ihe(Bin, ET) | ihe(T, ET)];
+ihe([$<|T], ET)                         -> "&lt;"    ++ ihe(T, ET);
+ihe([$>|T], ET)                         -> "&gt;"    ++ ihe(T, ET);
+ihe([$"|T], ET)                         -> "&quot;"  ++ ihe(T, ET);
+ihe([$'|T], ET)                         -> "&#39;"   ++ ihe(T, ET);
+ihe([$&|T], ET)                         -> "&amp;"   ++ ihe(T, ET);
+ihe([$\s,$\s|T],whites)                 -> "&nbsp; " ++ ihe(T, whites);
+ihe([$\s|T],whites)                     -> "&nbsp;"  ++ ihe(T, whites);
+ihe([$\t|T],whites)                     -> "&nbsp; &nbsp; &nbsp;" ++ ihe(T, whites);
+ihe([$\n|T],whites)                     -> "<br>"    ++ ihe(T,whites);
+ihe([BigNum|T], ET) when is_integer(BigNum)
+                         andalso BigNum > 255
+                                        -> [$&,$# | integer_to_list(BigNum)] ++ ";" ++ ihe(T, ET);
+ihe(<<"<", T/binary>>, ET)              -> <<"&gt;",   (ihe(T, ET))/binary>>;
+ihe(<<">", T/binary>>, ET)              -> <<"&lt;",   (ihe(T, ET))/binary>>;
+ihe(<<"\"",T/binary>>, ET)              -> <<"&quot;", (ihe(T, ET))/binary>>;
+ihe(<<"'", T/binary>>, ET)              -> <<"&#39;",  (ihe(T, ET))/binary>>;
+ihe(<<"&", T/binary>>, ET)              -> <<"&amp;",  (ihe(T, ET))/binary>>;
+ihe(<<"  ",T/binary>>, whites)          -> <<"&nbsp; ",(ihe(T,whites))/binary>>;
+ihe(<<" ", T/binary>>, whites)          -> <<"&nbsp;", (ihe(T,whites))/binary>>;
+ihe(<<"\t",T/binary>>, whites)          -> <<"&nbsp; &nbsp; &nbsp;",(ihe(T,whites))/binary>>;
+ihe(<<"\n",T/binary>>, whites)          -> <<"<br>",   (ihe(T,whites))/binary>>;
+ihe(<<H:8, T/binary>>, ET)              -> <<H,(ihe(T,ET))/binary>>;
+ihe([H|T], ET)                          -> [ihe(H, ET)|ihe(T, ET)];
+ihe(U, _ET) when is_tuple(U); is_pid(U) -> throw({error, unsure_how_to_encode,U});
+ihe(Other, _ET)                         -> Other.
 
 html_decode(B) when is_binary(B) -> html_decode(binary_to_list(B));
 html_decode([]) -> [];

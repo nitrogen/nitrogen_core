@@ -3,34 +3,37 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_upload).
--include_lib ("wf.hrl").
--include_lib ("simple_bridge.hrl").
--compile(export_all).
+-include("wf.hrl").
+-include_lib("simple_bridge.hrl").
+-export([
+    reflect/0,
+    render_element/1,
+    event/1
+]).
 
 %% #upload allows a user to upload a file.
 %% 
-%% How it works:
-%% - This element creates an <input type=file ...> HTML element on the page, wrapped
-%%   in a <form>, with all of the required parameters necessary to fake the system
-%%   into believing it is a real postback call. 
+%% How it works: - This element creates an <input type=file ...> HTML element
+%% on the page, wrapped in a <form>, with all of the required parameters
+%% necessary to fake the system into believing it is a real postback call. 
 %%
 %% - When the user clicks the upload button, first the 'upload_started' event
-%%   gets fired, calling start_upload_event(Tag) on the Module or Page.
+%% gets fired, calling start_upload_event(Tag) on the Module or Page.
 %%
-%% - Then, the browser begins uploading the file to the server. The multipart file
-%%   is parsed in SimpleBridge.
+%% - Then, the browser begins uploading the file to the server. The multipart
+%% file is parsed in SimpleBridge.
 %%
-%% - Finally, once the upload is complete, control is passed on to Nitrogen, which reads 
-%%   the parameters sent over in the first step and calls the 'upload_finished' event in
-%%   this module.
+%% - Finally, once the upload is complete, control is passed on to Nitrogen,
+%% which reads the parameters sent over in the first step and calls the
+%% 'upload_finished' event in this module.
 %%
-%% - The 'upload_finished' emits Javascript that causes *another* postback, this time
-%%   to the 'upload_event' event in this module, which then calls 
-%%   Module:finish_upload_event(Tag, OriginalName, TempFile, Node).
-%%   The reason we do this extra postback is because the upload itself happens in a form
-%%   separate from the main Nitrogen page (otherwise the main Nitrogen page would need to 
-%%   refresh) so this is our way of getting the main page to see the event.
-
+%% - The 'upload_finished' emits Javascript that causes *another* postback,
+%% this time to the 'upload_event' event in this module, which then calls
+%% Module:finish_upload_event(Tag, OriginalName, TempFile, Node).  The reason
+%% we do this extra postback is because the upload itself happens in a form
+%% separate from the main Nitrogen page (otherwise the main Nitrogen page would
+%% need to refresh) so this is our way of getting the main page to see the
+%% event.
 
 reflect() -> record_info(fields, upload).
 
@@ -102,14 +105,6 @@ render_element(Record) ->
             class=upload_droplist
         },
 
-%%  ORIGINAL!
-%%        wf_tags:emit_tag(input, [
-%%            {name, file},
-%%            {multiple,Multiple},
-%%            {class, [no_postback,FileInputID|Anchor]},
-%%            {id, FileInputID},
-%%            {type, file}
-%%        ]),	
         #panel{
             style="position: relative;",
             body=[

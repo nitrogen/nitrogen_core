@@ -4,8 +4,11 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_button).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
 reflect() -> record_info(fields, button).
 

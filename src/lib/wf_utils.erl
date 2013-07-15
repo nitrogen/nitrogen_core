@@ -139,29 +139,16 @@ copy_fields(FromElement, ToElement) ->
     FromValueList = tl(tuple_to_list(FromElement)), 
 
     lists:foldl(fun({Field, Value}, NewElement) ->
-        case index_of(Field, ToFieldList) of
+        case indexof(Field, ToFieldList) of
             undefined -> NewElement;
             Index ->
-                %% Because first element is the record tag, we must use Index+1
-                setelement(Index+1, NewElement, Value)
+                setelement(Index, NewElement, Value)
         end
 
     %% Here we use tl(tl( to ignore the first 2 fields from reflect()
     end, ToElement, tl(tl(lists:zip(FromFieldList,FromValueList)))).
 
-
-index_of(Field, FieldList) ->
-    index_of(Field, FieldList, 1).
-
-index_of(_,[],_) ->
-    undefined;
-index_of(Field, [Field|_], Index) ->
-    Index;
-index_of(Field, [_|T], Index) ->
-    index_of(Field, T, Index+1).
-
-
-%%% EMPTY LIST/BINARY TEST
+%%% EMPTY LIST/BINARY CHECK
 
 -spec is_iolist_empty(iolist()) -> boolean().
 %% @doc Without flattening the whole list, this will check to make sure there

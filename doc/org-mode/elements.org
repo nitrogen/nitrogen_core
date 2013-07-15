@@ -50,6 +50,7 @@
   + [[./elements/mobile_collapsible.org][Mobile Collapsible]]
   + [[./elements/mobile_collapsible_set.org][Mobile Collapsible Set]]
   + [[./elements/mobile_grid.org][Mobile Grid]] | [[./elements/mobile_grid_block.org][Mobile Grid Block]]
+  + [[./elements/mobile_panel.org][Mobile Panel]]
 
 * RESTful Elements
   + [[./elements/restful_overview.org][RESTful Overview]]

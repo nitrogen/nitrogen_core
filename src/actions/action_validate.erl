@@ -4,9 +4,16 @@
 % See MIT-LICENSE for licensing information.
 
 -module (action_validate).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_action/1
+]).
 
+-spec reflect() -> [atom()].
+reflect() -> record_info(fields, validate).
+
+-spec render_action(#validate{}) -> script().
 render_action(Record) -> 
     % Some values...
     TriggerPath = Record#validate.trigger,
@@ -20,13 +27,13 @@ render_action(Record) ->
     OnlyOnSubmit = (Record#validate.on == submit),	
     InsertAfterNode = case Record#validate.attach_to of
         undefined -> "";
-        Node -> wf:f(", insertAfterWhatNode : obj(\"~s\")", [Node])
+        Node -> wf:f(<<", insertAfterWhatNode : obj(\"~s\")">>, [Node])
     end,
 
     % Create the validator Javascript...
-	ConstructorJS = wf:f("var v = Nitrogen.$add_validation(obj('~s'), { validMessage: \"~s\", onlyOnBlur: ~s, onlyOnSubmit: ~s ~s});", [TargetPath, wf:js_escape(ValidMessage), OnlyOnBlur, OnlyOnSubmit, InsertAfterNode]),
+	ConstructorJS = wf:f(<<"var v = Nitrogen.$add_validation(obj('~s'), { validMessage: \"~s\", onlyOnBlur: ~s, onlyOnSubmit: ~s ~s});">>, [TargetPath, wf:js_escape(ValidMessage), OnlyOnBlur, OnlyOnSubmit, InsertAfterNode]),
 
-    TriggerJS = wf:f("v.group = '~s';", [ValidationGroup]),
+    TriggerJS = wf:f(<<"v.group = '~s';">>, [ValidationGroup]),
 
     % Update all child validators with TriggerPath and TargetPath...
     F = fun(X) ->

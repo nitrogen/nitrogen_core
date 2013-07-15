@@ -610,8 +610,16 @@
         data_fields=[]          :: data_fields(),
         columns=2               :: integer(),
         blocks=[]               :: [#mobile_grid_block{}]
-     }).
-
+    }).
+-record(mobile_panel, {?ELEMENT_BASE(element_mobile_panel),
+        data_fields=[]          :: data_fields(),
+        mini=false              :: boolean(),
+        position=left           :: left | right,
+        dismissible=true        :: boolean(),
+        theme                   :: mobile_theme(),
+        display_mode=reveal     :: reveal | overlay | push,
+        body=[]                 :: body()
+    }).
 
         
 %% HTML5 semantic elements
@@ -810,6 +818,7 @@
         options=[]              :: proplist(),
         speed=500               :: integer()
     }).
+-record(toggle_mobile_panel, {?ACTION_BASE(action_toggle_mobile_panel)}).
 -record(add_class, {?ACTION_BASE(action_add_class),
         class=none              :: class(),
         speed=0                 :: integer()
