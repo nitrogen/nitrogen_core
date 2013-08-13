@@ -8,7 +8,7 @@
 
 * Mobile Collapsible Element - #mobile_collapsible {}
 
-This element produces a [[http://jquerymobile.com/test/docs/content/content-collapsible.html][jQuery Mobile Collapsible Content]] Element
+This element produces a [[http://api.jquerymobile.com/collapsible-set/][jQuery Mobile Collapsible Content]] Element, which groups together #collapsible elements into a single unified structure.  The resulting collapsibles will then close any open collapsibles when another within the same group is opened.
 
 ** Usage
 
@@ -38,3 +38,5 @@ This element produces a [[http://jquerymobile.com/test/docs/content/content-coll
    + [[./base.html][base element]]
 
    + [[./mobile_collapsible.html][mobile collapsible element]]
+
+   + [[http://nitrogenproject.com/demos/mobile_collapsibles][Mobile Collapsible Demos]]
