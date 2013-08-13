@@ -48,4 +48,4 @@
 
    + [[file:../actions/toggle_mobile_panel.org][toggle_mobile_panel action]]
 
-   + [[/demos/mobile_panel][Mobile Panel Demonstration]]
+   + [[http://nitrogenproject.com/demos/mobile_panel][Mobile Panel Demonstration]]
