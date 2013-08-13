@@ -6,7 +6,7 @@
 #+EMAIL: 
 #+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../about.org][About]]
 
-* Mobile List Divider Element - #mobile_list_divider {}
+* Mobile List Divider Element - #mobile\_list\_divider {}
 
 This element produces a [[http://jquerymobile.com/test/docs/lists/lists-divider.html][jQuery Mobile List Divider]] for jQuery Mobile Listviews.
 

@@ -6,7 +6,7 @@
 #+EMAIL: 
 #+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../about.org][About]]
 
-* Mobile Panel Element - #mobile_panel {}
+* Mobile Panel Element - #mobile\_panel {}
 
   This element produces a
   [[http://view.jquerymobile.com/1.3.1/dist/demos/widgets/panels/][jQuery Mobile Panel]]

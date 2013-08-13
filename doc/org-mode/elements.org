@@ -46,7 +46,7 @@
 * Mobile Elements
   + [[./elements/jquery_mobile.org][jQuery Mobile Elements]]
   + [[./elements/mobile_list.org][Mobile List]] | [[./elements/mobile_listitem.org][Mobile List Item]] | [[./elements/mobile_list_divider.org][Mobile List Divider]]
-  + [[./elements/mobile_slider.org][Mobile Slider]]
+  + [[./elements/mobile_toggle.org][Mobile Toggle]]
   + [[./elements/mobile_collapsible.org][Mobile Collapsible]]
   + [[./elements/mobile_collapsible_set.org][Mobile Collapsible Set]]
   + [[./elements/mobile_grid.org][Mobile Grid]] | [[./elements/mobile_grid_block.org][Mobile Grid Block]]

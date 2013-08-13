@@ -6,7 +6,7 @@
 #+EMAIL: 
 #+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../about.org][About]]
 
-* Mobile List Element - #mobile_list {}
+* Mobile List Element - #mobile\_list {}
 
 This element produces a wrapper for [[http://jquerymobile.com/test/docs/lists/docs-lists.html][jQuery Mobile Listviews]].
 

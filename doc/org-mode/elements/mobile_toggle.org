@@ -6,7 +6,7 @@
 #+EMAIL: 
 #+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../about.org][About]]
 
-* Mobile Toggle Element - #mobile_toggle {}
+* Mobile Toggle Element - #mobile\_toggle {}
 
 This element produces a [[http://jquerymobile.com/demos/1.1.0/docs/forms/switch/index.html][toggle switch]] formatted by jQuery Mobile.
 
@@ -27,13 +27,13 @@ This element produces a [[http://jquerymobile.com/demos/1.1.0/docs/forms/switch/
 
 ** Attributes
  
-   + on_text - (/string/) :: The text label of the 'on' position (default "On")
+   + on\_text - (/string/) :: The text label of the 'on' position (default "On")
 
-   + off_text - (/string/) :: The text label of the 'off' position (default "Off")
+   + off\_text - (/string/) :: The text label of the 'off' position (default "Off")
 
-   + on_value - (/string/) :: The value that is submitted with postbacks when in the 'on' position (default "on")
+   + on\_value - (/string/) :: The value that is submitted with postbacks when in the 'on' position (default "on")
 
-   + off_value - (/string/) :: The value that is submitted with postbacks when in the 'off' position (default "off")
+   + off\_value - (/string/) :: The value that is submitted with postbacks when in the 'off' position (default "off")
 
    + selected - (/string/) :: The default selected value (default "off")
 
