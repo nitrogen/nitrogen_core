@@ -21,7 +21,9 @@ This element produces a list item formatted for jQuery Mobile list item for jQue
 
 ** Attributes
  
-   + text - (/string/) :: The text of the divider.
+   + text - (/string/) :: Set the text of the list item.
+
+   + body - (/Nitrogen Element or Elements/) :: Set the element or elements that will be rendered in this list item
 
 ** See Also
 
@@ -31,6 +33,4 @@ This element produces a list item formatted for jQuery Mobile list item for jQue
 
    + [[./mobile_list.html][mobile list element]]
 
-   + [[./mobile_listitem.html][mobile listitem element]]
-
-   + [[./list.html][list element]]
+   + [[./listitem.html][listitem element]]
