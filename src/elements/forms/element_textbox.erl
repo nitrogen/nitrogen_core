@@ -31,7 +31,8 @@ render_element(Record) ->
         {style, Record#textbox.style},
         {name, Record#textbox.html_name},
         {placeholder, Placeholder},
-        {value, Value}
+        {value, Value},
+        {data_fields, Record#textbox.data_fields}
     ]).
 
 wire_next(_, undefined) ->

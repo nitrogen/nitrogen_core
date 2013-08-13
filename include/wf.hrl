@@ -250,7 +250,8 @@
         postback                :: term(),
         delegate                :: module(),
         html_name               :: html_name(),
-        type=text               :: string() | atom()
+        type=text               :: string() | atom(),
+        data_fields=[]          :: data_fields()
     }).
 -record(hidden, {?ELEMENT_BASE(element_hidden),
         text=""                 :: text(),
@@ -262,7 +263,8 @@
         text=""                 :: text(),
         placeholder=""          :: text(),
         html_encode=true        :: html_encode(),
-        html_name               :: html_name()
+        html_name               :: html_name(),
+        data_fields=[]          :: data_fields()
     }).
 -record(range, {?ELEMENT_BASE(element_range),
         data_fields=[]          :: data_fields(),

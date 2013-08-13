@@ -17,7 +17,8 @@ render_element(Record) ->
         {id, Record#textarea.html_id},
         {style, Record#textarea.style},
         {name, Record#textarea.html_name},
-        {placeholder, Placeholder}
+        {placeholder, Placeholder},
+        {data_fields, Record#textarea.data_fields}
     ]).
 
 html_encode(L, false) -> wf:to_list(lists:flatten([L]));
