@@ -87,9 +87,7 @@ to_string_list([H|T], Acc) ->
 %%% HTML ENCODE %%%
 -spec html_encode(L :: term()) -> iolist().
 html_encode(L) -> 
-    After = ihe(L, normal),
-    error_logger:info_msg("Before: ~p~n~nAfter: ~p",[L, After]),
-    After.
+    ihe(L, normal).
 
 -spec html_encode(L :: term(), EncType :: fun() | boolean() | whites) -> iolist().
 html_encode(L,EncType) when is_function(EncType) -> EncType(L);
