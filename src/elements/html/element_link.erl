@@ -4,7 +4,7 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_link).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -compile(export_all).
 
 reflect() -> record_info(fields, link).
@@ -16,6 +16,11 @@ render_element(Record) ->
         undefined -> ignore;
         Postback -> wf:wire(Anchor, #event { type=click, postback=Postback, validation_group=ID, delegate=Record#link.delegate })
     end,
+
+	case Record#link.click of
+		undefined -> ignore;
+		ClickActions -> wf:wire(Anchor, #event { type=click, actions=ClickActions })
+	end,
 
     Body = [
         wf:html_encode(Record#link.text, Record#link.html_encode),

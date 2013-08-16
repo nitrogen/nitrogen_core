@@ -206,6 +206,7 @@
         mobile_dialog=false     :: boolean(),
         data_fields=[]          :: data_fields(),
         url="javascript:"       :: script() | url(),
+        click                   :: actions(),
         postback                :: term(),
         delegate                :: module()
     }).
