@@ -38,6 +38,14 @@
 
    + new - (/boolean/) :: Set to true to make link open in a new window.
 
+   + click - (/Action/ or /List of Actions/) :: Wires the selected actons to the \"click\" events.  Due to the commonality of binding actions to the click event, this is merely a shortcut for 
+
+#+BEGIN_SRC ERLANG
+   #link{ text="Do Something", actions=[
+      #event{type=click,actions=ListOfActions}
+   ]}
+#+END_SRC
+
    + postback - (/Erlang term/) :: If set, clicking on the link will cause a Nitrogen postback with the supplied term.
 
    + mobile_target - (/Boolean/) :: If set to false, this will work with jQuery Mobile to ensure that it skips using jQuery Mobile's automatic page transition loading system.
