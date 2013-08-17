@@ -47,4 +47,6 @@ Called when the user sorts elements. BlockTag is the tag associated with this so
 
    + [[./sortitem.html][sortitem element]]
 
- 
+	+ [[http://nitrogenproject.com/demos/sorting1][Sorting Demo]]
+
+	+ [[http://nitrogenproject.com/demos/sorting2][Nested Sorting Demo]]
