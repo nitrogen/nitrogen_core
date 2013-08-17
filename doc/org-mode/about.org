@@ -4,7 +4,7 @@
 #+AUTHOR: Rusty Klophaus (@rustyio)
 #+EMAIL: 
 
-#+TEXT: [[file:./index.org][Getting Started]] | [[file:./api.org][API]] | [[file:./elements.org][Elements]] | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | [[file:./handlers.org][Handlers]] | [[file:./config.org][Configuration Options]] | [[file:./plugins.org][Plugins]] | *About*
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:./index.org][Getting Started]] | [[file:./api.org][API]] | [[file:./elements.org][Elements]] | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | [[file:./handlers.org][Handlers]] | [[file:./config.org][Configuration Options]] | [[file:./plugins.org][Plugins]] | *About*
 #+HTML: <div class=headline>About Nitrogen</div>
 
 * Resources
