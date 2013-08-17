@@ -38,4 +38,4 @@ The list element produces an HTML list element (<ol> and <ul>).
 
    + [[./listitem.html][listitem element]] 
 
-   + [[./mobile_list.html][mobile_list element]]
+   + [[./mobile_list.html][mobile\_list element]]
