@@ -94,4 +94,4 @@
 
    + [[file:./base.org][base element]]
 
-   + [[/demos/wizard][Wizard Demonstration]]
+   + [[http://nitrogenproject.com/demos/wizard][Wizard Demonstration]]

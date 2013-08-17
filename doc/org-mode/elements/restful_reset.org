@@ -47,3 +47,5 @@
    + [[./restful_submit.org][RESTful Submit]]
 
    + [[./restful_upload.org][RESTful Upload]]
+
+   + [[http://nitrogenproject.com/demos/restful][RESTful Forms Demo]]

@@ -58,3 +58,4 @@
 
    + [[./restful_upload.org][RESTful Upload]]
     
+   + [[http://nitrogenproject.com/demos/restful][RESTful Forms Demo]]

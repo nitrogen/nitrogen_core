@@ -70,4 +70,5 @@
 
    + [[https://github.com/mathiasbynens/jquery-placeholder][jQuery Placeholder Readme]]
 
+	+ [[http://nitrogenproject.com/demos/simplecontrols][Simple Controls Demos]]
  

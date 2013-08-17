@@ -58,3 +58,6 @@
 
    + [[../restful_overfiew.html][RESTful element overview]]
 
+	+ [[http://nitrogenproject.com/demos/simplecontrols][Simple Controls Demos]]
+
+   + [[http://nitrogenproject.com/demos/radio][Radio Buttons Demo]]

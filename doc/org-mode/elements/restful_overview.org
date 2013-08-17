@@ -13,6 +13,10 @@
   depend on AJAX/Javascript. This is sometimes useful, for example if you
   want to provide a fallback option when a client does not support
   javascript or sits behind a firewall that filters active content.
+
+* Demo
+
+  Check out the [[http://nitrogenproject.com/demos/restful][RESTful Forms Demo]]
   
 * How it works
 

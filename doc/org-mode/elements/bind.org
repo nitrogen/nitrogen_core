@@ -74,3 +74,9 @@
    + body - (/Nitrogen elements/) :: The block of Nitrogen elements to which data is bound.
 
    + empty\_body - (/Nitrogen elements/) :: A block of Nitrogen elements to render if the supplied data has no rows.
+
+** See Also
+
+   + [[./base.html][base element]]
+
+	+ [[http://nitrogenproject.com/demos][Data Binding Section of the Demos page]]
