@@ -761,7 +761,8 @@
         attach_to               :: id()
     }).
 -record(validation_error, {?ACTION_BASE(action_validation_error),
-        text=""                 :: text()
+        text=""                 :: text(),
+        attach_to               :: id()
     }).
 -record(clear_validation, {?ACTION_BASE(action_clear_validation),
         validation_trigger      :: id(),
