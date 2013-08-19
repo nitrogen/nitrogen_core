@@ -98,6 +98,18 @@ remove(Target) ->
 remove(Priority, Target) when ?IS_ACTION_PRIORITY(Priority) ->
     ok = action_update:remove(Priority, Target).
 
+disable(Target) ->
+    ok = disable(normal, Target).
+
+disable(Priority, Target) when ?IS_ACTION_PRIORITY(Priority) ->
+    ok = action_disable:disable(Priority, Target).
+ 
+enable(Target) ->
+    ok = enable(normal, Target).
+
+enable(Priority, Target) when ?IS_ACTION_PRIORITY(Priority) ->
+    ok = action_enable:enable(Priority, Target).
+
 flash(Elements) ->
     element_flash:add_flash(Elements).
 

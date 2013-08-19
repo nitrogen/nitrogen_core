@@ -1,31 +1,31 @@
 # vim: sw=3 ts=3 ft=org
 
-#+TITLE: Disable Field Action
+#+TITLE: Enable Field Action
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Jesse Gumm (@jessegumm)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
 #+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][Elements]] | [[file:../actions.org][*Actions*]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../about.org][About]]
 
-* Disable Field - #enable {}
+* Enable Field - #enable {}
 
-	Disable a form field or button. Sets the HTML 'disabled' attribute.
+	Enable a form field or button. Sets the HTML 'disabled' attribute.
 
 ** Usage
 
 #+BEGIN_SRC erlang
-	wf:wire(myButton, #disable{}).
+	wf:wire(myButton, #enable{}).
 
 	%% or
 
-	wf:disable(myButton).
+	wf:enable(myButton).
 #+END_SRC
 
 ** See Also
 
    + [[./base.html][base action]]
 
-   + [[./enable.html][enable action]]
+   + [[./disable.html][disable action]]
 
    + [[./show.html][show action]]
 

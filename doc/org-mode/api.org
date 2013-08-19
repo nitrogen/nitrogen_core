@@ -35,6 +35,12 @@
 ** wf:set(TargetID,Value) -> ok
    Update a form element (textbox, dropdown, checkbox, etc) to set text value of TargetID. Can also be used to set the =src= attribute of an image tag.
    
+** wf:enable(Target) -> ok
+   Enables the target form field or button.
+
+** wf:disable(Target) ->
+   Disables the target form field or button.
+
 ** wf:update(TargetID, Elements) -> ok
    Update the contents of TargetID with a new set of Nitrogen Elements.
 
