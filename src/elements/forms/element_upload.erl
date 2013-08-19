@@ -4,7 +4,6 @@
 
 -module (element_upload).
 -include("wf.hrl").
--include_lib("simple_bridge.hrl").
 -export([
     reflect/0,
     render_element/1,
