@@ -11,7 +11,7 @@ init(_Config, State) -> {ok, State}.
 finish(_Config, State) -> {ok, State}.
 
 get_pid(Key, _Config, State) -> 
-    PList = qlc:e(qlc:q([P || {{p,l,K},P,Val} <- gproc:table(props), K == Key ])),
+    PList = qlc:e(qlc:q([P || {{p,l,K},P,_Val} <- gproc:table(props), K == Key ])),
     Pid = lists:nth(1,PList),
     error_logger:info_msg("GProc Lookup: ~p ~p~n",[Key,Pid]),
     {ok, Pid, State}.
