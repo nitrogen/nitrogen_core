@@ -38,7 +38,7 @@ render_action(Record) ->
     % Update all child validators with TriggerPath and TargetPath...
     F = fun(X) ->
         Base = wf_utils:get_validatorbase(X),
-        Base1 = Base#validatorbase { trigger = TriggerPath, target = TargetPath },
+        Base1 = Base#validatorbase { trigger = TriggerPath, target = TargetPath, attach_to = Record#validate.attach_to },
         wf_utils:replace_with_base(Base1, X)
     end,
     Validators = lists:flatten([Record#validate.validators]),

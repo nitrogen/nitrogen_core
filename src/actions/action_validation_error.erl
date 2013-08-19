@@ -9,10 +9,14 @@
 
 render_action(Record) -> 
     TargetPath = Record#validation_error.target,
+    InsertAfterNode = case Record#validation_error.attach_to of
+        undefined -> "";
+        Node -> wf:f(", insertAfterWhatNode : obj(\"~s\")", [Node])
+    end,
     Text = wf:js_escape(Record#validation_error.text),
     [
 		%% Is this going to be a problem with memory leaks? I'm not sure.
-        wf:f("var v = new LiveValidation(obj('~s'), { onlyOnSubmit: true });", [TargetPath]),
+        wf:f("var v = new LiveValidation(obj('~s'), { onlyOnSubmit: true ~s});", [TargetPath, InsertAfterNode]),
         wf:f("v.add(Validate.Custom, { against: Nitrogen.$return_false, failureMessage: \"~s\", displayMessageWhenEmpty: true });", [Text]),
         "v.validate();"
     ].

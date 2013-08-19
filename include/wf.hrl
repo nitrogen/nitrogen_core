@@ -844,7 +844,8 @@
 %%% %% TODO: Switch this from is_action to is_validator once deferred is implemented
 %%% This will allow users to bind validators directly, instead of needing the #validate{} action
 -define(VALIDATOR_BASE(Module), ?AV_BASE(Module,is_action),
-    text="Failed."              :: text()
+    text="Failed."              :: text(),
+    attach_to                   :: undefined | id()
 ).
 -record(validatorbase, {?VALIDATOR_BASE(undefined)}).
 -record(is_required, {?VALIDATOR_BASE(validator_is_required)}).
@@ -870,6 +871,5 @@
         function                :: fun(),
         args="{}"               :: text()
     }).
-
 
 -endif.

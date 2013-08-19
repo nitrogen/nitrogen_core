@@ -21,7 +21,8 @@ render_action(Record)  ->
         target=TargetPath,
         function=fun validate/2,
         text=Text,
-        tag=Record
+        tag=Record,
+        attach_to=Record#confirm_same.attach_to
     }),
 
     JSFunction = wf:f("function(value, args) { return (value == obj('~s').value); }", [ConfirmID]),
@@ -30,7 +31,8 @@ render_action(Record)  ->
         trigger=TriggerPath,
         target=TargetPath,
         function=JSFunction,
-        text=Text
+        text=Text,
+        attach_to=Record#confirm_same.attach_to
     }).
 
 validate(Record, Value) ->
