@@ -263,6 +263,8 @@
 -record(textarea, {?ELEMENT_BASE(element_textarea),
         text=""                 :: text(),
         placeholder=""          :: text(),
+        columns                 :: undefined | integer(),
+        rows                    :: undefined | integer(),
         html_encode=true        :: html_encode(),
         html_name               :: html_name(),
         data_fields=[]          :: data_fields()

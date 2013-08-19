@@ -20,6 +20,10 @@
 
    + text - (/string/) :: Set the textarea's contents.
 
+   + rows - (/integer/) :: Set the number of rows in the textarea.
+
+   + columns - (/integer/) :: Set the number of columns in the textarea.
+
    + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
 
    + placeholder - (/string/) :: Sets the placeholder text (text that will be
