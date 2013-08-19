@@ -179,8 +179,8 @@ event({upload_finished, Record}) ->
         [] -> 
             {undefined,{upload_event, Record, undefined, undefined, undefined}};
         [UploadedFile | _] ->
-            OriginalName = uploaded_file:original_name(UploadedFile),
-            TempFile = uploaded_file:temp_file(UploadedFile),
+            OriginalName = UploadedFile:original_name(),
+            TempFile = UploadedFile:temp_file(),
             {OriginalName,{upload_event, Record, OriginalName, TempFile, node()}}
     end,
 
