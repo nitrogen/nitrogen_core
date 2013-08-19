@@ -24,3 +24,9 @@
    + text - (/string/) :: The text to display if validation fails.
 
    + length - (/integer/) :: The maximum length of text.
+
+** See Also
+
+	+ [[../actions/validate.org][Validate Action]]
+
+	+ [[http://nitrogenproject.com/demos/validation][Validation Demos]]

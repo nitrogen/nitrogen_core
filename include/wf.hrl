@@ -851,12 +851,15 @@
 -record(validatorbase, {?VALIDATOR_BASE(undefined)}).
 -record(is_required, {?VALIDATOR_BASE(validator_is_required)}).
 -record(is_email, {?VALIDATOR_BASE(validator_is_email)}).
--record(is_integer, {?VALIDATOR_BASE(validator_is_integer)}).
+-record(is_integer, {?VALIDATOR_BASE(validator_is_integer),
+        min                     :: undefined | integer(),
+        max                     :: undefined | integer()
+    }).
 -record(min_length, {?VALIDATOR_BASE(validator_min_length),
-        length                  :: integer()
+        length                  :: undefined | integer()
     }).
 -record(max_length, {?VALIDATOR_BASE(validator_max_length),
-        length                  :: integer()
+        length                  :: undefined | integer()
     }).
 -record(confirm_password, {?VALIDATOR_BASE(validator_confirm_password),
         password                :: id()

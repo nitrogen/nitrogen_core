@@ -34,3 +34,9 @@
 
    + confirm_id - (/atom/) :: Specify the Nitrogen Element ID of the field
 		against which you wish to confirm.
+
+** See Also
+
+	+ [[../actions/validate.org][Validate Action]]
+
+	+ [[http://nitrogenproject.com/demos/validation][Validation Demos]]
