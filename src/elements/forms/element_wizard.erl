@@ -88,6 +88,7 @@ render_element(Record = #wizard{}) ->
 	% Combine the steps.
 	Terms = #panel {
 		class=[wizard,Record#wizard.class],
+        data_fields=Record#wizard.data_fields,
 		body=[F(X) || X <- StepSeq] 
 	},
 	

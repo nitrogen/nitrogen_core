@@ -4,11 +4,17 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_inplace_textbox).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1,
+    event/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, inplace_textbox).
 
+-spec render_element(#inplace_textbox{}) -> body().
 render_element(Record) -> 
     % Get vars...
     OKButtonID = wf:temp_id(),
@@ -30,6 +36,7 @@ render_element(Record) ->
     Terms = #panel { 
         html_id=Record#inplace_textbox.html_id,
         class=[inplace_textbox, Record#inplace_textbox.class],
+        data_fields=Record#inplace_textbox.data_fields,
         style=Record#inplace_textbox.style,
         body = [
             #panel { id=ViewPanelID, class="view", body=[
@@ -72,6 +79,7 @@ render_element(Record) ->
 
     element_panel:render_element(Terms).
 
+-spec event(any()) -> ok.
 event({ok, Delegate, {ViewPanelID, LabelID, EditPanelID, TextBoxID}, Tag}) -> 
     Value = wf:q(TextBoxID),
     Module = wf:coalesce([Delegate, wf:page_module()]),

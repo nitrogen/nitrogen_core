@@ -4,11 +4,16 @@
 %%% See MIT-LICENSE for the Nitrogen Web Framework for Erlang
 
 -module (element_datepicker_textbox).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, datepicker_textbox).
 
+-spec render_element(#datapicker_textbox{}) -> body().
 render_element(Record) -> 
     Anchor = Record#datepicker_textbox.anchor,
     Options = action_jquery_effect:options_to_js(Record#datepicker_textbox.options),
@@ -18,7 +23,8 @@ render_element(Record) ->
         class       = [datepicker_textbox, Record#datepicker_textbox.class],
         style       = Record#datepicker_textbox.style,
         text        = Record#datepicker_textbox.text,
-        html_encode = Record#datepicker_textbox.html_encode
+        html_encode = Record#datepicker_textbox.html_encode,
+        data_fields = Record#datepicker_textbox.data_fields
     },
 
     Script = wf:f("Nitrogen.$datepicker(obj('~s'), ~s);", [Anchor, Options]),

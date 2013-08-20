@@ -34,8 +34,10 @@
 %% need to refresh) so this is our way of getting the main page to see the
 %% event.
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, upload).
 
+-spec render_element(#upload{}) -> body().
 render_element(Record) ->
     Anchor = Record#upload.anchor,
 	Multiple = Record#upload.multiple,
@@ -44,6 +46,7 @@ render_element(Record) ->
     FileInputText = Record#upload.file_text,
     ShowButton = Record#upload.show_button,
     ButtonText = Record#upload.button_text,
+    DataFields = Record#upload.data_fields,
     StartedTag = {upload_started, Record},
     FinishedTag = {upload_finished, Record}, 
     FormID = wf:temp_id(),
@@ -116,6 +119,7 @@ render_element(Record) ->
 
                 wf_tags:emit_tag(input, [
                     {name, file},
+                    {data_fields, DataFields},
                     {multiple, Multiple},
                     {class, [no_postback, FileInputID|Anchor]},
                     {id, FileInputID},
@@ -160,6 +164,7 @@ render_element(Record) ->
     ].
 
 
+-spec event(any()) -> any().
 % This event is fired when the user first clicks the upload button.
 event({upload_started, Record}) ->
     Module = wf:coalesce([Record#upload.delegate, wf:page_module()]),

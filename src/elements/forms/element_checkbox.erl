@@ -5,10 +5,15 @@
 
 -module (element_checkbox).
 -include("wf.hrl").
--compile(export_all).
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, checkbox).
 
+-spec render_element(#checkbox{}) -> body().
 render_element(Record) -> 
     ID = Record#checkbox.id,
     Anchor = case Record#checkbox.anchor of
@@ -40,7 +45,8 @@ render_element(Record) ->
             {class, [checkbox, Record#checkbox.class]},
             {style, Record#checkbox.style},
             {value, Record#checkbox.value},
-            {CheckedOrNot, true}
+            {CheckedOrNot, true},
+            {data_fields, Record#checkbox.data_fields}
         ]),
 
         % Label for Checkbox...

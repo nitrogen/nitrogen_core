@@ -4,17 +4,23 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_restful_reset).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, restful_reset).
 
+-spec render_element(#restful_reset{}) -> body().
 render_element(Record) ->
     Value = ["  ", wf:html_encode(Record#restful_reset.text, Record#restful_reset.html_encode), "  "], 
     wf_tags:emit_tag(input, [
         {type,  reset},
-	{name,  Record#restful_reset.html_name},
+        {name,  Record#restful_reset.html_name},
         {class, [restful_reset, Record#restful_reset.class]},
         {style, Record#restful_reset.style},
-        {value, Value}
+        {value, Value},
+        {data_fields, Record#restful_reset.data_fields}
     ]).

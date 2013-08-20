@@ -133,7 +133,8 @@
         show_if=true            :: boolean(),
         class=""                :: class() | [class()],
         style=""                :: text(),
-        html_id=""              :: id()
+        html_id=""              :: id(),
+        data_fields=[]          :: data_fields()
     ).
 
 -record(elementbase, {?ELEMENT_BASE(undefined)}).
@@ -166,15 +167,13 @@
 
 -record(list, {?ELEMENT_BASE(element_list),
         numbered=false          :: boolean(),
-        body=[]                 :: body(),
-        data_fields=[]          :: data_fields()
+        body=[]                 :: body()
     }).
 -record(listitem, {?ELEMENT_BASE(element_listitem),
         body=[]                 :: body(),
         text=""                 :: text(),
         html_encode=true        :: html_encode(),
-        role=""                 :: term(),
-        data_fields=[]          :: data_fields()
+        role=""                 :: term()
     }).
 -record(br, {?ELEMENT_BASE(element_br) }).
 -record(hr, {?ELEMENT_BASE(element_hr) }).
@@ -215,7 +214,6 @@
         html_encode=true        :: html_encode(),
         mobile_target=false     :: boolean(),
         mobile_dialog=false     :: boolean(),
-        data_fields=[]          :: data_fields(),
         url="javascript:"       :: script() | url(),
         click                   :: actions(),
         postback                :: term(),
@@ -238,8 +236,7 @@
         body=""                 :: body(),
         text=""                 :: text(),
         title=""                :: text(),
-        html_encode=true        :: html_encode(),
-        data_fields=[]          :: data_fields()
+        html_encode=true        :: html_encode()
     }).
 -record(button, {?ELEMENT_BASE(element_button),
         text=""                 :: text(),
@@ -251,8 +248,7 @@
         disabled=false          :: boolean(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | script(),
-        delegate                :: module(),
-        data_fields=[]          :: data_fields()
+        delegate                :: module()
     }).
 -record(literal, {?ELEMENT_BASE(element_literal),
         text=""                 :: text(),
@@ -271,8 +267,7 @@
         on_invalid              :: undefined | script(),
         delegate                :: module(),
         html_name               :: html_name(),
-        type=text               :: string() | atom(),
-        data_fields=[]          :: data_fields()
+        type=text               :: string() | atom()
     }).
 -record(hidden, {?ELEMENT_BASE(element_hidden),
         text=""                 :: text(),
@@ -288,11 +283,9 @@
         columns                 :: undefined | integer(),
         rows                    :: undefined | integer(),
         html_encode=true        :: html_encode(),
-        html_name               :: html_name(),
-        data_fields=[]          :: data_fields()
+        html_name               :: html_name()
     }).
 -record(range, {?ELEMENT_BASE(element_range),
-        data_fields=[]          :: data_fields(),
         min=0                   :: integer(),
         max=100                 :: integer(),
         step=1                  :: integer(),
@@ -338,7 +331,6 @@
         value                   :: text(),
         multiple=false          :: boolean(),
         disabled=false          :: boolean(),
-        data_fields=[]          :: data_fields(),
         html_name               :: html_name()
     }).
 
@@ -402,14 +394,12 @@
     }).
 -record(restful_upload, {?ELEMENT_BASE(element_restful_upload),
         html_encode=true        :: html_encode(),
-        html_name               :: html_name(),
-        data_fields=[]          :: data_fields()
+        html_name               :: html_name()
     }).
 -record(panel, {?ELEMENT_BASE(element_panel),
         body=[]                 :: body(),
         text=""                 :: text(),
-        html_encode=true        :: html_encode(),
-        data_fields=[]          :: data_fields()
+        html_encode=true        :: html_encode()
     }).
 -record(fieldset, {?ELEMENT_BASE(element_fieldset),
         body=[]                 :: body(),
@@ -595,25 +585,21 @@
 %% Mobile Shortcut elements
 -record(mobile_list, {?ELEMENT_BASE(element_mobile_list),
         body=[]                 :: body(),
-        data_fields=[]          :: data_fields(),
         theme                   :: mobile_theme(),
         inset=true              :: boolean()
      }).
 -record(mobile_list_divider, {?ELEMENT_BASE(element_mobile_list_divider),
-        data_fields=[]          :: data_fields(),
         theme                   :: mobile_theme(),
         text=""                 :: text(),
         body=[]                 :: body(),
         role=heading            :: atom() | string()
      }).
 -record(mobile_listitem, {?ELEMENT_BASE(element_mobile_listitem),
-        data_fields=[]          :: data_fields(),
         text=""                 :: text(),
         body=[]                 :: body(),
         theme=""                :: atom() | string()
     }).
 -record(mobile_toggle, {?ELEMENT_BASE(element_mobile_toggle),
-        data_fields=[]          :: data_fields(),
         on_text="On"            :: text(),
         on_value="on"           :: text(),
         off_text="Off"          :: text(),
@@ -627,7 +613,6 @@
         theme=""                :: mobile_theme()
     }).
 -record(mobile_collapsible, {?ELEMENT_BASE(element_mobile_collapsible),
-        data_fields=[]          :: data_fields(),
         header_theme            :: mobile_theme(),
         content_theme           :: mobile_theme(),
         header_text=""          :: text(),
@@ -638,25 +623,21 @@
         collapsed=true          :: boolean()
     }).
 -record(mobile_collapsible_set, {?ELEMENT_BASE(element_mobile_collapsible_set),
-        data_fields=[]          :: data_fields(),
         header_theme            :: mobile_theme(),
         content_theme           :: mobile_theme(),
         mini=false              :: boolean(),
         body=[]                 :: body()
     }).
 -record(mobile_grid_block, {?ELEMENT_BASE(element_mobile_grid_block),
-        data_fields=[]          :: data_fields(),
         text=""                 :: text(),
         body=[]                 :: body(),
         new_row=default         :: atom()
     }).
 -record(mobile_grid, {?ELEMENT_BASE(element_mobile_grid),
-        data_fields=[]          :: data_fields(),
         columns=2               :: integer(),
         blocks=[]               :: [#mobile_grid_block{}]
     }).
 -record(mobile_panel, {?ELEMENT_BASE(element_mobile_panel),
-        data_fields=[]          :: data_fields(),
         mini=false              :: boolean(),
         position=left           :: left | right,
         dismissible=true        :: boolean(),
