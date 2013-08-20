@@ -13,7 +13,7 @@
 -spec reflect() -> [atom()].
 reflect() -> record_info(fields, datepicker_textbox).
 
--spec render_element(#datapicker_textbox{}) -> body().
+-spec render_element(#datepicker_textbox{}) -> body().
 render_element(Record) -> 
     Anchor = Record#datepicker_textbox.anchor,
     Options = action_jquery_effect:options_to_js(Record#datepicker_textbox.options),
