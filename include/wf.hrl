@@ -104,9 +104,18 @@
 %%% TERNARY IF AND VARIATIONS %%%
 -define(WF_IF(Term,IfTrue,IfFalse),
     fun() ->
-        case (Term) of
-            F when F==false;F==undefined;F==[] -> IfFalse;
-            _ -> IfTrue
+        case Term of
+            %% We use the long "WF_IF_VALUE" variable to prevent the likelyhood
+            %% of ambiguity in a function. This will throw some matching or
+            %% "shadowing" errors if, in a function, you define a variable
+            %% called "WF_IF_VALUE" before calling ?WF_IF. Given that this is
+            %% unlikely to happen, this is an acceptable compromise.
+            WF_IF_VALUE when WF_IF_VALUE==false;
+                         WF_IF_VALUE==undefined;
+                         WF_IF_VALUE==[] ->
+                IfFalse;
+            _ -> 
+                IfTrue
         end
     end()).
 
@@ -239,6 +248,7 @@
         html_encode=true        :: html_encode(),
         click                   :: actions(),
         postback                :: term(),
+        disabled=false          :: boolean(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | script(),
         delegate                :: module(),
@@ -253,6 +263,8 @@
         maxlength=""            :: integer() | string(),
         placeholder=""          :: text(),
         html_encode=true        :: html_encode(),
+        disabled=false          :: boolean(),
+        readonly=false          :: boolean(),
         next                    :: id(),
         postback                :: term(),
         handle_invalid=false    :: boolean(),
@@ -271,6 +283,8 @@
 -record(textarea, {?ELEMENT_BASE(element_textarea),
         text=""                 :: text(),
         placeholder=""          :: text(),
+        disabled=false          :: boolean(),
+        readonly=false          :: boolean(),
         columns                 :: undefined | integer(),
         rows                    :: undefined | integer(),
         html_encode=true        :: html_encode(),
@@ -359,6 +373,8 @@
         maxlength=""            :: integer() | string(),
         placeholder=""          :: text(),
         html_encode=true        :: html_encode(),
+        disabled=false          :: boolean(),
+        readonly=false          :: boolean(),
         next                    :: id(),
         postback                :: term(),
         handle_invalid=false    :: boolean(),

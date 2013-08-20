@@ -1,0 +1,26 @@
+# vim: sw=3 ts=3 ft=org
+
+#+TITLE: Make Field Writable Action
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Jesse Gumm (@jessegumm)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][Elements]] | [[file:../actions.org][*Actions*]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../about.org][About]]
+
+* Make Field Writable - #make\_writable {}
+
+	Make a form field writable by removing the HTML =readonly= attribute.
+
+** Usage
+
+#+BEGIN_SRC erlang
+	wf:wire(myButton, #make_writable{}).
+#+END_SRC
+
+** See Also
+
+   + [[./base.html][base action]]
+
+   + [[./enable.html][enable action]]
+
+   + [[./make_readonly.html][make_readonly action]]

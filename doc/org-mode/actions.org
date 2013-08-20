@@ -19,22 +19,20 @@
   + [[./actions/api.org][Ajax API]]
 
 * Effects
-  + [[./actions/show.org][Show]]
-  + [[./actions/hide.org][Hide]]
-  + [[./actions/appear.org][Appear]]
-  + [[./actions/fade.org][Fade]]
-  + [[./actions/slide_down.org][Slide Down]]
-  + [[./actions/slide_up.org][Slide Up]]
-  + [[./actions/animate.org][Animate]]
+  + [[./actions/show.org][Show]] | [[./actions/hide.org][Hide]]
+  + [[./actions/appear.org][Appear]] | [[./actions/fade.org][Fade]]
+  + [[./actions/slide_down.org][Slide Down]] | [[./actions/slide_up.org][Slide Up]]
   + [[./actions/toggle.org][Toggle]]
+  + [[./actions/animate.org][Animate]]
   + [[./actions/effect.org][Effect]]
-  + [[./actions/add_class.org][Add Class]]
-  + [[./actions/remove_class.org][Remove Class]]
-  + [[./actions/disable.org][Disable]]
+  + [[./actions/add_class.org][Add Class]] | [[./actions/remove_class.org][Remove Class]]
+  + [[./actions/disable.org][Disable]] | [[./actions/enable.org][Enable]]
+  + [[./actions/make_readonly.org][Make Readonly]] | [[./actions/make_writable.org][Make Writable]]
 
 * Feedback
   + [[./actions/alert.org][Alert]]
   + [[./actions/confirm.org][Confirm]]
   + [[./actions/console_log.org][Browser Console Log]]
+
 * See Also
   + [[./paths.org][Nitrogen Element Paths]]

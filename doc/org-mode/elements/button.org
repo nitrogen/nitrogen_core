@@ -20,17 +20,29 @@
 
 ** Attributes
 
-   + body - (/List of Nitrogen Elements/) :: The button's body (if you wanted to use something richer than a simple text)
+	+ body - (/List of Nitrogen Elements/) :: The button's body (if you wanted
+		to use something richer than a simple text)
 
    + text - (/string/) :: The text of the button.
 
    + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
 
-   + image - (/Path to Image/) :: This is a shortcut attribute to prepending the body of the button with an image (for example, specifying a "Floppy Disk" icon on a "Save" button). The image will display before any body or text.
+   + disabled - (/boolean/) :: Set to true to disable this button in the
+      browser (sets the HTML =disabled= property, effectly greying out the
+      element). Can be dynamically re-enabled with =wf:enable(ElementID)= or
+      =wf:wire(ElementID, #enable{})= (Default: =false=)
 
-   + postback - (/Erlang term/) :: Clicking on the button will initiate a Nitrogen postback with the supplied term.
+	+ image - (/Path to Image/) :: This is a shortcut attribute to prepending
+		the body of the button with an image (for example, specifying a "Floppy
+		Disk" icon on a "Save" button). The image will display before any body or
+		text.
 
-   + click - (/Action/ or /List of Actions/) :: Wires the selected actons to the \"click\" events.  Due to the commonality of binding actions to the click event, this is merely a shortcut for
+	+ postback - (/Erlang term/) :: Clicking on the button will initiate a
+		Nitrogen postback with the supplied term.
+
+	+ click - (/Action/ or /List of Actions/) :: Wires the selected actons to
+		the \"click\" events.  Due to the commonality of binding actions to the
+		click event, this is merely a shortcut for
 
 #+BEGIN_SRC ERLANG
    #button { text="Do Something", actions=[

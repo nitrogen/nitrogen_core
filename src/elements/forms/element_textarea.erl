@@ -19,6 +19,8 @@ render_element(Record) ->
         {name, Record#textarea.html_name},
         {cols, Record#textarea.columns},
         {rows, Record#textarea.rows},
+        ?WF_IF(Record#textarea.disabled,disabled,undefined),
+        ?WF_IF(Record#textarea.readonly,readonly,undefined),
         {placeholder, Placeholder},
         {data_fields, Record#textarea.data_fields}
     ]).

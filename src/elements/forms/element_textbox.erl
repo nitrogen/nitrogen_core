@@ -17,6 +17,8 @@ render_element(Record) ->
     Anchor = Record#textbox.anchor,
     Delegate = Record#textbox.delegate,
     Postback = Record#textbox.postback,
+    Disabled = Record#textbox.disabled,
+    Readonly = Record#textbox.readonly,
     HandleInvalid = Record#textbox.handle_invalid,
     OnInvalid = Record#textbox.on_invalid,
 
@@ -25,7 +27,8 @@ render_element(Record) ->
 
     Value = wf:html_encode(Record#textbox.text, Record#textbox.html_encode),
     Placeholder  = wf:html_encode(Record#textbox.placeholder, true),
-    wf_tags:emit_tag(input, [
+
+    Attributes = [
         {id, Record#textbox.html_id},
         {type, Record#textbox.type}, 
         {class, [textbox, Record#textbox.class]},
@@ -33,9 +36,13 @@ render_element(Record) ->
         {style, Record#textbox.style},
         {name, Record#textbox.html_name},
         {placeholder, Placeholder},
+        ?WF_IF(Disabled,disabled,undefined),
+        ?WF_IF(Readonly,readonly,undefined),
         {value, Value},
         {data_fields, Record#textbox.data_fields}
-    ]).
+    ],
+
+    wf_tags:emit_tag(input, Attributes).
 
 wire_next(_, undefined) ->
     do_nothing;

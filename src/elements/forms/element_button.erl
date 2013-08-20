@@ -44,7 +44,8 @@ render_element(Record) ->
         {id, Record#button.html_id},
         {class, [button, Record#button.class]},
         {style, Record#button.style},
-        {data_fields, Record#button.data_fields}
+        {data_fields, Record#button.data_fields},
+        ?WF_IF(Record#button.disabled, disabled)
     ],
 
     case Body of

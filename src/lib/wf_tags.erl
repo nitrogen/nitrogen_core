@@ -75,8 +75,23 @@ emit_tag(TagName, Content, Props) ->
 write_props(Props) ->
     lists:map(fun display_property/1, Props).
 
-display_property({Prop}) when is_atom(Prop) ->
-    [" ", atom_to_list(Prop)];
+display_property(undefined) ->
+    [];
+
+display_property([]) ->
+    [];
+
+display_property({Prop}) ->
+    display_property(Prop);
+
+display_property(Prop) when is_atom(Prop) ->
+    display_property(wf:to_binary(Prop));
+
+display_property(Prop) when is_binary(Prop) ->
+    [" ", Prop];
+
+display_property(Prop) when ?IS_STRING(Prop) ->
+    [" ", Prop];
 
 %% Data fields are special in HTML5.
 %% In this case, the DataTags value is expected to be a
@@ -107,6 +122,7 @@ display_property({Prop, Values}) ->
         _ -> StrValues1
     end,
     [" ", Prop, "=\"", StrValues2, "\""].
+
 
 %% 
 data_tags(Data) ->
