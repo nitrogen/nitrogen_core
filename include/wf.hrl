@@ -882,6 +882,8 @@
 -record(buttonize, {?ACTION_BASE(action_buttonize)}).
 -record(disable, {?ACTION_BASE(action_disable)}).
 -record(enable, {?ACTION_BASE(action_enable)}).
+-record(make_readonly, {?ACTION_BASE(action_make_readonly)}).
+-record(make_writable, {?ACTION_BASE(action_make_writable)}).
 
 %%% Validators %%%
 %%% %% TODO: Switch this from is_action to is_validator once deferred is implemented
