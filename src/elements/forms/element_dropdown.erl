@@ -77,20 +77,11 @@ create_options(Selected,HtmlEncode,[X=#option{show_if=true} | Rest]) ->
     SelectedOrNot = selected_or_not(Selected,X),
     Content = wf:html_encode(X#option.text, HtmlEncode),
 
-    SelectedProp = [{SelectedOrNot, true}],
-    DisabledProp = case X#option.disabled of
-        true -> [{disabled,disabled}];
-        false -> []
-    end,
-
-    %% if value property is 'undefined', then we don't want to emit it at all
-    %% This keeps it consistent with the behavior of HTML forms
-    ValueProp = case X#option.value of
-        undefined -> [];
-        V -> [{value,wf:html_encode(V,HtmlEncode)}]
-    end,
-
-    Props = SelectedProp ++ DisabledProp ++ ValueProp,
+    Props = [
+        {SelectedOrNot},
+        ?WF_IF(X#option.disabled, disabled, undefined),
+        ?WF_IF(X#option.value=:=undefined,[],{value, wf:html_encode(X#option.value,HtmlEncode)})
+    ],
 
     [wf_tags:emit_tag(option, Content, Props) | create_options(Selected,HtmlEncode,Rest)];
 create_options(Selected,HtmlEncode,[#option{show_if=false} | Rest]) ->
