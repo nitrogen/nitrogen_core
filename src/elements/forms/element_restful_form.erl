@@ -32,7 +32,8 @@ render_element(Record) ->
         {class, WithName#restful_form.class},
         {action, WithName#restful_form.action},
         {method, WithName#restful_form.method},
-        {enctype, WithName#restful_form.enctype}
+        {enctype, WithName#restful_form.enctype},
+        {target, WithName#restful_form.target}
     ]).
 
 %%internal

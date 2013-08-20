@@ -370,6 +370,7 @@
         method="POST"           :: string() | atom(),
         action                  :: url(),
         html_name               :: html_name(),
+        target                  :: string() | atom(),
         enctype                 :: text(),
         body=[]                 :: body()
       }).
