@@ -4,8 +4,11 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_template).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
 % TODO - Revisit parsing in the to_module_callback. This
 % will currently fail if we encounter a string like:
@@ -14,8 +17,10 @@
 % "String with ]]] will fail"
 
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, template).
 
+-spec render_element(#template{}) -> body().
 render_element(Record) ->
     % Parse the template file...
 

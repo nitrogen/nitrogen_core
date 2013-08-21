@@ -4,11 +4,16 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_sortitem).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, sortitem).
 
+-spec render_element(#sortitem{}) -> body().
 render_element(Record) -> 
     Anchor = Record#sortitem.anchor,
     PickledTag = wf:pickle(Record#sortitem.tag),
@@ -23,6 +28,7 @@ render_element(Record) ->
         anchor=Record#sortitem.anchor,
         class=[sortitem, Record#sortitem.class],
         style=Record#sortitem.style,
+        data_fields=Record#sortitem.data_fields,
         body=Record#sortitem.body
     },
 

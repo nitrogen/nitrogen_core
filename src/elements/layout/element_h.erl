@@ -25,7 +25,8 @@ render_element(Rec) ->
     wf_tags:emit_tag(Tag, [Text, Body], [
         {id, Rec#h.html_id},
         {class, [Tag, Rec#h.class]},
-        {style, Rec#h.style}
+        {style, Rec#h.style},
+        {data_fields, Rec#h.data_fields}
     ]).
 
 tag(1) -> h1;

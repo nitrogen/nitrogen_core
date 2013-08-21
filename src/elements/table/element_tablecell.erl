@@ -4,11 +4,16 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_tablecell).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, tablecell).
 
+-spec render_element(#tablecell{}) -> body().
 render_element(Record) -> 
     Body = [
         wf:html_encode(Record#tablecell.text, Record#tablecell.html_encode),
@@ -22,5 +27,6 @@ render_element(Record) ->
         {align, Record#tablecell.align},
         {valign, Record#tablecell.valign},
         {colspan, Record#tablecell.colspan},
-        {rowspan, Record#tablecell.rowspan}	
+        {rowspan, Record#tablecell.rowspan},
+        {data_fields, Record#tablecell.data_fields}
     ]).

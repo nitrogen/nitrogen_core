@@ -4,11 +4,16 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_singlerow).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, singlerow).
 
+-spec render_element(#singlerow{}) -> body().
 render_element(Record) -> 
     Table = #table {
         html_id=Record#singlerow.html_id,
@@ -16,6 +21,7 @@ render_element(Record) ->
         anchor=Record#singlerow.anchor,
         class=[singlerow, Record#singlerow.class],
         style=Record#singlerow.style,
+        data_fields=Record#singlerow.data_fields,
         rows=#tablerow { cells=Record#singlerow.cells }
     },
     element_table:render_element(Table).

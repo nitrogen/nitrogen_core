@@ -4,11 +4,16 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_draggable).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, draggable).
 
+-spec render_element(#draggable{}) -> body().
 render_element(Record) -> 
     % Get properties...
     Anchor = Record#draggable.anchor,
@@ -61,6 +66,7 @@ render_element(Record) ->
         anchor=Anchor,
         class=[draggable, GroupClasses, Record#draggable.class],
         style=Record#draggable.style,
+        data_fields=Record#draggable.data_fields,
         body=Record#draggable.body
     }).
 

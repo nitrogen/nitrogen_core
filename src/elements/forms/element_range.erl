@@ -4,11 +4,16 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_range).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, range).
 
+-spec render_element(#range{}) -> body().
 render_element(Record) -> 
     ID = Record#range.id,
     Anchor = Record#range.anchor,

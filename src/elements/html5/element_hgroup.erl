@@ -3,11 +3,16 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_hgroup).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, hgroup).
 
+-spec render_element(#hgroup{}) -> body().
 render_element(Record) ->
     CheckH1ThruH6 = fun (X) ->
                         if
@@ -33,7 +38,8 @@ render_element(Record) ->
             wf_tags:emit_tag(hgroup, Record#hgroup.body, [
                 {id, Record#hgroup.html_id},
                 {class, ["hgroup", Record#hgroup.class]},
-                {style, Record#hgroup.style}
+                {style, Record#hgroup.style},
+                {data_fields, Record#hgroup.data_fields}
             ]);
         true ->
             "<b style=\"color: red;\">hgroup can only have h1 thru h6 as child elements</b>"

@@ -13,9 +13,12 @@
 -define(DEFAULT_CHALLENGE_URL,"http://www.google.com/recaptcha/api/challenge").
 -define(DEFAULT_VERIFY_URL,"http://www.google.com/recaptcha/api/verify").
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, recaptcha).
 
+-spec render_element(#recaptcha{}) -> body().
 render_element(Rec = #recaptcha{id=ID, class=Cl,
+               data_fields=DataFields,
                captcha_opts=COPts,
                button_label=ButtonLabel, button_id=ButtonId})->
     % Since the recaptcha is rendered outside of the nitrogen framework
@@ -38,7 +41,7 @@ render_element(Rec = #recaptcha{id=ID, class=Cl,
     }),
 
 
-    #panel{id=ID, class=[Cl,recaptcha], body=[
+    #panel{id=ID, class=[Cl,recaptcha], data_fields=DataFields, body=[
         render_options(COPts, default_opts()),
         % the hidden elements
         #hidden{id=ChallengeFieldID},
@@ -58,6 +61,7 @@ render_element(Rec = #recaptcha{id=ID, class=Cl,
         #p{style="clear:both"}
     ]}.
 
+-spec event(any()) -> any().
 event({eval_recaptcha, Rec, ChallengeFieldID, ResponseFieldID, FailPanelID}) ->
     #recaptcha{
         tag=Tag,

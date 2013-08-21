@@ -4,11 +4,17 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_droppable).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1,
+    event/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, droppable).
 
+-spec render_element(#droppable{}) -> body().
 render_element(Record) -> 
     % Get properties...
     Delegate = Record#droppable.delegate,
@@ -31,9 +37,11 @@ render_element(Record) ->
         anchor=Record#droppable.anchor,
         class=[droppable, Record#droppable.class],
         style=Record#droppable.style,
+        data_fields=Record#droppable.data_fields,
         body=Record#droppable.body
     }).
 
+-spec event(any()) -> any().
 event({Delegate, DropTag}) ->
     DragItem = wf:q(drag_item),
     DragTag = wf:depickle(DragItem),

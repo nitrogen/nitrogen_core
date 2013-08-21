@@ -13,7 +13,7 @@
 -spec reflect() -> [atom()].
 reflect() -> record_info(fields, password).
 
--spec transform_element(Record :: nitrogen_element()) -> nitrogen_element().
+-spec transform_element(#password{}) -> nitrogen_element().
 transform_element(Record) -> 
     Textbox = wf_utils:copy_fields(Record, #textbox{}),
     Textbox#textbox{

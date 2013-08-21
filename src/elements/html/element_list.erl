@@ -4,11 +4,16 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_list).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, list).
 
+-spec render_element(#list{}) -> body().
 render_element(Record) -> 
     Tag = case Record#list.numbered of 
         true -> ol;

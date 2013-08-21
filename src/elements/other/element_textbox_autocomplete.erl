@@ -1,10 +1,16 @@
 % vim: sw=4 ts=4 et ft=erlang
 -module (element_textbox_autocomplete).
--compile(export_all).
--include_lib("wf.hrl").
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1,
+    event/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, textbox_autocomplete).
 
+-spec render_element(#textbox_autocomplete{}) -> body().
 render_element(Record) ->
     % Get properties...
     Delegate = Record#textbox_autocomplete.delegate,
@@ -40,9 +46,11 @@ render_element(Record) ->
         {type, text},
         {class, [textbox_autocomplete, Record#textbox_autocomplete.class]},
         {style, Record#textbox_autocomplete.style},
+        {data_fields, Record#textbox_autocomplete.data_fields},
         {value, Value}
     ]).
 
+-spec event(any()) -> any().
 event({autocomplete_select_event, Delegate, SelectTag})->
     SelectItem = nitro_mochijson2:decode(wf:q(select_item)),
     Module = wf:coalesce([Delegate, wf:page_module()]),

@@ -15,8 +15,10 @@
 %% http://willarson.com/code/sparklines/sparklines.html
 %% http://omnipotent.net/jquery.sparkline/
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, sparkline).
 
+-spec render_element(#sparkline{}) -> body().
 render_element(Record) -> 
     Anchor = Record#sparkline.anchor,
     Values = Record#sparkline.values,
@@ -31,6 +33,7 @@ render_element(Record) ->
         id = Record#sparkline.id,
         anchor = Record#sparkline.anchor,
         class = [sparkline, Record#sparkline.class],
+        data_fields = Record#sparkline.data_fields,
         style = Record#sparkline.style
     },
     element_span:render_element(Span).

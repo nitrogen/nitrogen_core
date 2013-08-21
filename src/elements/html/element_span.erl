@@ -4,11 +4,16 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_span).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, span).
 
+-spec render_element(#span{}) -> body().
 render_element(Record) -> 
     Body = [
         wf:html_encode(Record#span.text, Record#span.html_encode),

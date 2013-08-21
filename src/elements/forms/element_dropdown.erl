@@ -4,11 +4,16 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_dropdown).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, dropdown).
 
+-spec render_element(#dropdown{}) -> body().
 render_element(Record) -> 
 
     wire_postback(Record),

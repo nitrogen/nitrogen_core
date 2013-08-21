@@ -4,11 +4,16 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_table).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, table).
 
+-spec render_element(#table{}) -> body().
 render_element(Record) -> 
 
     Header = case Record#table.header of
@@ -28,5 +33,6 @@ render_element(Record) ->
         {id, Record#table.html_id},
         {border, 0},
         {class, [table, Record#table.class]},
-        {style, Record#table.style}
+        {style, Record#table.style},
+        {data_fields, Record#table.data_fields}
     ]).

@@ -10,8 +10,10 @@
     render_element/1
 ]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, button).
 
+-spec render_element(#button{}) -> body().
 render_element(Record) ->
     ID = Record#button.id,
     Anchor = Record#button.anchor,

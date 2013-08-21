@@ -3,14 +3,20 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_aside).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, aside).
 
+-spec render_element(#aside{}) -> body().
 render_element(Record) ->
     wf_tags:emit_tag(aside, Record#aside.body, [
         {id, Record#aside.html_id},
         {class, ["aside", Record#aside.class]},
-        {style, Record#aside.style}
+        {style, Record#aside.style},
+        {data_fields, Record#aside.data_fields}
     ]).

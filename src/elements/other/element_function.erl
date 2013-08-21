@@ -4,8 +4,11 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_function).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
 % The 'function' attribute is an Erlang function of arity 0 that returns [Elements].
 %
@@ -16,12 +19,15 @@
 % one that exists and returns a value (not undefined) will
 % be used.
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, function_el).
 
+-spec render_element(#function{}) -> body().
 render_element(Record) ->
     Functions = lists:flatten([Record#function_el.function]),
     call_next_function(Functions).
 
+-spec call_next_function([fun()]) -> body().
 call_next_function([]) -> [];
 call_next_function([F|Functions]) ->
     % Call the function. If it provides results, then return it, 

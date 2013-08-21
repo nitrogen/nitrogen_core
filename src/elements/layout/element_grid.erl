@@ -1,10 +1,15 @@
 % vim: sw=4 ts=4 et ft=erlang
 -module (element_grid).
--compile(export_all).
--include_lib("wf.hrl").
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, grid).
 
+-spec render_element(nitrogen_element()) -> body().
 render_element(#grid_clear {}) ->
     "<div class='clear'></div>\n";
 render_element(Record0)  ->
@@ -14,6 +19,7 @@ render_element(Record0)  ->
     element_panel:render_element(#panel {
         html_id=Record#grid.html_id,
         class=to_classes(Record),
+        data_fields=Record#grid.data_fields,
         body=case Record#grid.type of
             clear ->
                 Body;

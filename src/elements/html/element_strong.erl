@@ -4,11 +4,16 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_strong).
--compile(export_all).
--include_lib ("wf.hrl").
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, strong).
 
+-spec render_element(#strong{}) -> body().
 render_element(Record) ->
     Body = [
         wf:html_encode(Record#strong.text, Record#strong.html_encode),
@@ -16,5 +21,6 @@ render_element(Record) ->
     ],
     wf_tags:emit_tag(strong, Body, [
         {class, [p, Record#strong.class]},
-        {style, Record#strong.style}
+        {style, Record#strong.style},
+        {data_fields, Record#strong.data_fields}
     ]).
