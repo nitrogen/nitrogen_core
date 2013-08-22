@@ -2,19 +2,26 @@
 -ifndef(wf_inc).
 -define(wf_inc, ok).
 
+
 %%% TYPES FOR DIALYZER %%%
 
+%% Allow Dialzer to be run on the .ebin files
+-compile(debug_info).
+
 -type nitrogen_element()    :: tuple().
--type body_element()        :: nitrogen_element() | binary() | string() | iolist().
+-type template_script_element() :: script | mobile_script.
+-type body_element()        :: nitrogen_element() | binary() | string() | iolist() | template_script_element().
 -type body()                :: body_element() | [body_element()].
--type action_element()      :: tuple() | string() | binary() | iolist().
+-type action_element()      :: undefined | tuple() | string() | binary() | iolist().
 -type actions()             :: action_element() | [action_element()].
 -type validator_element()   :: nitrogen_element().
 -type validators()          :: validator_element() | [validator_element()].
 -type tag()                 :: term().
 -type id()                  :: atom() | string() | binary().
 -type proplist()            :: [{term(), term()}].
--type data_fields()         :: [{text() | atom(), text()}].
+-type data_field_name()     :: atom() | text().
+-type data_field_value()    :: atom() | text().
+-type data_fields()         :: [{data_field_name(),data_field_value()}].
 -type wire_priority()       :: eager | normal | defer.
 -type class()               :: string() | binary() | atom().
 -type text()                :: string() | binary() | iolist().
@@ -25,6 +32,13 @@
 -type path()                :: string() | binary().
 -type html_name()           :: string() | binary() | atom().
 -type mobile_theme()        :: string() | binary() | atom().
+-type comet_name()          :: term().
+-type comet_restart_msg()   :: term().
+-type comet_function()      :: pid() | function() 
+                            | {comet_name(), function()} 
+                            | {comet_name(), function(), comet_restart_msg()}.
+-type handler_config()      :: any().
+-type handler_state()       :: any().
 
 
 %%% CONTEXT %%%
@@ -125,7 +139,17 @@
 
 %%% Elements %%%
 -define(ELEMENT_BASE(Module),
-        is_element=is_element   :: is_element, 
+        %% attribute is_element should only ever be the atom `is_element` but
+        %% because Nitrogen copies the base element when it needs to, it's
+        %% possible it might accidentally copy the wrong kind of element that
+        %% it may think is an element but its not. In such an event, we allow
+        %% any() here, so that it passes the dialyzer warning, and will throw
+        %% an error appropriately during runtime.
+        %%
+        %% If we kept it as just `is_element`, that may be just fine, but then
+        %% users would probably have to use dialyzer to debug the "is not an
+        %% element" error
+        is_element=is_element   :: is_element | any(), 
         module=Module           :: atom(),
         id                      :: id(),
         anchor                  :: id(),
@@ -144,7 +168,7 @@
        bindings=[]              :: proplist()
     }).
 -record(function_el, {?ELEMENT_BASE(element_function),
-        function=fun() ->[]end  :: fun()
+        function=fun() ->[]end  :: fun() | [fun()]
     }).
 -record(body, {?ELEMENT_BASE(element_body),
         title=""                :: text(),
@@ -241,7 +265,7 @@
 -record(button, {?ELEMENT_BASE(element_button),
         text=""                 :: text(),
         body=""                 :: body(),
-        image=undefined         :: url(),
+        image=undefined         :: undefined | url(),
         html_encode=true        :: html_encode(),
         click                   :: actions(),
         postback                :: term(),
@@ -322,7 +346,7 @@
 
 -type options()             :: [#option{} | short_option()] | [#option_group{}].
 -record(dropdown, {?ELEMENT_BASE(element_dropdown),
-        options=[]              :: options(),
+        options=[]              :: undefined | options(),
         html_encode=true        :: html_encode(),
         postback                :: term(),
         handle_invalid=false    :: boolean(),
@@ -471,7 +495,7 @@
         tag                     :: term(),
         items=[]                :: body(),
         group                   :: atom() | string() | binary(),
-        connect_with_groups=none :: none | [atom() | string() | binary()],
+        connect_with_groups=none :: undefined | none | all | [atom() | string() | binary()],
         handle                  :: class(),
         placeholder=""          :: class(),
         force_placeholder_size=false :: boolean(),
@@ -489,13 +513,13 @@
         clone=true              :: boolean(),
         revert=true             :: boolean() | valid | invalid,
         scroll=true             :: boolean(),
-        container               :: undefined | window | parent | document | string(),
+        container               :: undefined | window | parent | document | atom() | binary() | string(),
         zindex                  :: integer() | undefined
     }).
 -record(droppable, {?ELEMENT_BASE(element_droppable),
         tag                     :: term(),
         body=[]                 :: body(),
-        accept_groups=all       :: all | [atom() | string() | binary()],
+        accept_groups=all       :: undefined | none | all | [atom() | string() | binary()],
         active_class=active     :: class(),
         hover_class=hover       :: class(),
         delegate                :: module()
@@ -682,7 +706,7 @@
 
 -define(GRID_ELEMENT(Type, Columns), {?ELEMENT_BASE(element_grid),
         type=Type               :: undefined | container | grid | clear,
-        columns=Columns         :: integer(),
+        columns=Columns         :: undefined | integer(),
         alpha=false             :: boolean(),
         omega=false             :: boolean(),
         push                    :: integer() | undefined,
@@ -739,7 +763,7 @@
 -record(comet, {?ACTION_BASE(action_comet),
         pool=undefined          :: term(),
         scope=local             :: local | global,
-        function                :: undefined | fun(),
+        function                :: comet_function(),
         dying_message           :: term()
     }).
 -record(continue, {?ACTION_BASE(action_continue),
@@ -897,7 +921,7 @@
         tag                     :: term()
     }).
 -record(js_custom, {?VALIDATOR_BASE(validator_js_custom),
-        function                :: fun(),
+        function                :: script(),
         args="{}"               :: text()
     }).
 

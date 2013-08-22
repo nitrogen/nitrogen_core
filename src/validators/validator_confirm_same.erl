@@ -4,12 +4,13 @@
 % See MIT-LICENSE for licensing information.
 
 -module (validator_confirm_same).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -export([
     render_action/1,
     validate/2
 ]).
 
+-spec render_action(#confirm_same{}) -> script().
 render_action(Record)  ->
     TriggerPath= Record#confirm_same.trigger,
     TargetPath = Record#confirm_same.target,
@@ -35,6 +36,7 @@ render_action(Record)  ->
         attach_to=Record#confirm_same.attach_to
     }).
 
+-spec validate(#confirm_same{}, text()) -> boolean().
 validate(Record, Value) ->
     Password = wf:q(Record#confirm_same.confirm_id),
     Value == Password.

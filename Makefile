@@ -12,5 +12,8 @@ docs:
 
 doc: docs
 
+dialyzer: compile
+	dialyzer -r ./ebin
+
 vim:
 	utils/vim-headers/add_vim.sh

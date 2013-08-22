@@ -51,9 +51,7 @@ format_option({Key, Value}) when is_binary(Value) ->
     format_option({Key, wf:to_list(Value)});
 format_option({Key, Value}) when ?IS_STRING(Value) ->
     wf:f(<<"~s: '~s'">>, [Key, wf:js_escape(Value)]);
-format_option({Key, Value}) when Value=:=true, Value=:=false ->
+format_option({Key, Value}) when Value=:=true; Value=:=false ->
     wf:f(<<"~s: ~s">>, [Key, Value]);
 format_option({Key, Value}) ->
-    wf:f(<<"~s: ~p">>, [Key, Value]);
-format_option(V) ->
-    throw({invalid_sparkline_option, V}).
+    wf:f(<<"~s: ~p">>, [Key, Value]).

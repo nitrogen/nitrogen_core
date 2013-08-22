@@ -22,13 +22,13 @@
 -spec reflect() -> [atom()].
 reflect() -> record_info(fields, function_el).
 
--spec render_element(#function{}) -> body().
+-spec render_element(#function_el{}) -> body().
 render_element(Record) ->
     Functions = lists:flatten([Record#function_el.function]),
     call_next_function(Functions).
 
 -spec call_next_function([fun()]) -> body().
-call_next_function([]) -> [];
+call_next_function([]) -> []; 
 call_next_function([F|Functions]) ->
     % Call the function. If it provides results, then return it, 
     % Otherwise, call the next function.

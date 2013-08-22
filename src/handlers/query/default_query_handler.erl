@@ -10,7 +10,7 @@
 
 -module (default_query_handler).
 -behaviour (query_handler).
--include_lib ("wf.hrl").
+-include ("wf.hrl").
 -export ([
     init/2, 
     finish/2,

@@ -38,7 +38,7 @@ render_element(Record) ->
         Record#link.body
     ],
 
-    Target = target(Record#link.new),
+    Target = ?WF_IF(Record#link.new,<<"_blank">>,""),
 
     %% Basically, the default for mobile_target is to say nothing and let
     %% jquery mobile use its default setting. Anything other than a boolean
@@ -56,13 +56,6 @@ render_element(Record) ->
         {title, wf:html_encode(Record#link.title, Record#link.html_encode)},
         {data_fields, DataFields2}
     ]).
-
-target(New) ->
-    case New of
-        false -> "";
-        true -> "_blank";
-        _ -> ""
-    end.
 
 add_field(true,ToAdd,DataFields) -> [ToAdd | DataFields];
 add_field(_,_,DataFields) -> DataFields.

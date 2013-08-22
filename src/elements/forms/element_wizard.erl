@@ -122,7 +122,7 @@ next_button_ids(Step, NumSteps) ->
         button_id(bottom, NextOrFinish, Step)
     ].
 
--spec button_id(TB :: top|bottom, BNF :: back|next|finish, Step :: integer()) -> string().
+-spec button_id(TB :: top|bottom, BNF :: back|next|finish, Step :: integer()) -> id().
 button_id(TB, BNF, Step) ->
     wf:to_atom(wf:to_list([TB,"_",BNF,"_",Step])).
 

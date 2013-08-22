@@ -4,11 +4,31 @@
 % See MIT-LICENSE for licensing information.
 
 -module (role_handler).
+-include("wf.hrl").
 -export ([
-    behaviour_info/1, get_has_role/1, set_has_role/2, get_roles/0, clear_all/0
+    get_has_role/1,
+    set_has_role/2,
+    get_roles/0,
+    clear_all/0
 ]).
 
 
+-callback init(         handler_config(),
+                        handler_state()) -> {ok, handler_state()}.
+-callback finish(       handler_config(),
+                        handler_state()) -> {ok, handler_state()}.
+-callback get_has_role( Role :: term(),
+                        handler_config(),
+                        handler_state()) -> IsInRole :: boolean().
+-callback set_has_role( Role :: term(),
+                        IsInRole :: boolean(),
+                        handler_config(),
+                        handler_state()) -> {ok, handler_state()}.
+-callback get_roles(    handler_config(),
+                        handler_state()) -> [Role :: term()].
+
+-callback clear_all(    handler_config(),
+                        handler_state()) -> {ok, handler_state()}.
 
 % get_has_role(Role, State) -> {ok, IsInRole, NewState}.
 % Returns true or false depending on whether the user is in the specified role.
@@ -29,15 +49,3 @@ get_roles() ->
 % Clear all roles.
 clear_all() ->
     wf_handler:call(role_handler, clear_all).
-
-
-
-behaviour_info(callbacks) -> [
-    {init, 2},
-    {finish, 2},
-    {get_has_role, 3},
-    {set_has_role, 4},
-    {get_roles, 2},
-    {clear_all, 2}
-];
-behaviour_info(_) -> undefined.

@@ -94,21 +94,20 @@ render_element(#inplace{
 
 	% Create the main panel...
 
-	#panel { class=[inplace, Class], data_fields=DataFields, style=Style, body=[
-			#panel { id=ViewPanelID, class="view", body=[ View3 ], actions = [
-					#event { type=click, actions=[
-							#hide { target=ViewPanelID },
-							#show { target=EditPanelID },
-							#script { script = wf:f("objs('~s').focus(); objs('~s').select();", [EditID, EditID]) }
-						]}
-				]},
-			#panel { id=EditPanelID, class="edit", body=[
-					Edit3,
-					#button { id=OKButtonID, text="OK", delegate=?MODULE, postback=OKPostback },
-					#button { id=CancelButtonID, text="Cancel", actions = [CancelEvent#event{ type=click }] }
-				]}
-		]
-	}.
+    #panel { class=[inplace, Class], data_fields=DataFields, style=Style, body=[
+        #panel { id=ViewPanelID, class="view", body=[ View3 ], actions = [
+            #event { type=click, actions=[
+                #hide { target=ViewPanelID },
+                #show { target=EditPanelID },
+                #script { script = wf:f("objs('~s').focus(); objs('~s').select();", [EditID, EditID]) }
+            ]}
+        ]},
+        #panel { id=EditPanelID, class="edit", body=[
+            Edit3,
+            #button { id=OKButtonID, text="OK", delegate=?MODULE, postback=OKPostback },
+            #button { id=CancelButtonID, text="Cancel", actions = [CancelEvent#event{ type=click }] }
+        ]}
+    ]}.
 
 -spec event(any()) -> ok.
 event({ok, Delegate, {ViewPanelID, ViewID, EditPanelID, EditID}, Tag}) ->

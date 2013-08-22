@@ -10,6 +10,7 @@
     finish/2,
     main/0
 ]).
+-include("wf.hrl").
 
 -author('tobbe@tornkvist.org').
 

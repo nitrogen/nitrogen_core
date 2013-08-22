@@ -14,7 +14,7 @@
 -spec reflect() -> [atom()].
 reflect() -> record_info(fields, mobile_panel).
 
--spec transform_element(#mobile_panel{}) -> #panel{}.
+-spec transform_element(#mobile_panel{}) -> body().
 transform_element(Record) -> 
     Panel = wf_utils:copy_fields(Record, #panel{}),
     Panel#panel{

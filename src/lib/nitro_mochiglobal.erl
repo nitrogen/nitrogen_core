@@ -1,4 +1,3 @@
-% vim: sw=4 ts=4 et ft=erlang
 %% @author Bob Ippolito <bob@mochimedia.com>
 %% @copyright 2010 Mochi Media, Inc.
 %% @doc Abuse module constant pools as a "read-only shared heap" (since erts 5.6)
@@ -20,7 +19,7 @@ get(K, Default) ->
 get(_K, Default, Mod) ->
     try Mod:term()
     catch error:undef ->
-        Default
+            Default
     end.
 
 -spec put(atom(), any()) -> ok.
@@ -31,7 +30,7 @@ put(K, V) ->
 put(_K, V, Mod) ->
     Bin = compile(Mod, V),
     code:purge(Mod),
-    code:load_binary(Mod, atom_to_list(Mod) ++ ".erl", Bin),
+    {module, Mod} = code:load_binary(Mod, atom_to_list(Mod) ++ ".erl", Bin),
     ok.
 
 -spec delete(atom()) -> boolean().
@@ -50,7 +49,7 @@ key_to_module(K) ->
 -spec compile(atom(), any()) -> binary().
 compile(Module, T) ->
     {ok, Module, Bin} = compile:forms(forms(Module, T),
-        [verbose, report_errors]),
+                                      [verbose, report_errors]),
     Bin.
 
 -spec forms(atom(), any()) -> [erl_syntax:syntaxTree()].
@@ -60,49 +59,49 @@ forms(Module, T) ->
 -spec term_to_abstract(atom(), atom(), any()) -> [erl_syntax:syntaxTree()].
 term_to_abstract(Module, Getter, T) ->
     [%% -module(Module).
-        erl_syntax:attribute(
-            erl_syntax:atom(module),
-            [erl_syntax:atom(Module)]),
-        %% -export([Getter/0]).
-        erl_syntax:attribute(
-            erl_syntax:atom(export),
-            [erl_syntax:list(
-                [erl_syntax:arity_qualifier(
-                    erl_syntax:atom(Getter),
-                    erl_syntax:integer(0))])]),
-        %% Getter() -> T.
-        erl_syntax:function(
+     erl_syntax:attribute(
+       erl_syntax:atom(module),
+       [erl_syntax:atom(Module)]),
+     %% -export([Getter/0]).
+     erl_syntax:attribute(
+       erl_syntax:atom(export),
+       [erl_syntax:list(
+         [erl_syntax:arity_qualifier(
             erl_syntax:atom(Getter),
-            [erl_syntax:clause([], none, [erl_syntax:abstract(T)])])].
+            erl_syntax:integer(0))])]),
+     %% Getter() -> T.
+     erl_syntax:function(
+       erl_syntax:atom(Getter),
+       [erl_syntax:clause([], none, [erl_syntax:abstract(T)])])].
 
 %%
 %% Tests
 %%
--include_lib("eunit/include/eunit.hrl").
 -ifdef(TEST).
+-include_lib("eunit/include/eunit.hrl").
 get_put_delete_test() ->
     K = '$$test$$nitro_mochiglobal',
     delete(K),
     ?assertEqual(
-        bar,
-        get(K, bar)),
+       bar,
+       get(K, bar)),
     try
         ?MODULE:put(K, baz),
         ?assertEqual(
-            baz,
-            get(K, bar)),
+           baz,
+           get(K, bar)),
         ?MODULE:put(K, wibble),
         ?assertEqual(
-            wibble,
-            ?MODULE:get(K))
+           wibble,
+           ?MODULE:get(K))
     after
         delete(K)
     end,
     ?assertEqual(
-        bar,
-        get(K, bar)),
+       bar,
+       get(K, bar)),
     ?assertEqual(
-        undefined,
-        ?MODULE:get(K)),
+       undefined,
+       ?MODULE:get(K)),
     ok.
 -endif.

@@ -24,36 +24,50 @@ get_and_render_actions(ActionQueue) ->
 		{error, empty} ->
 			[];
 		{ok, Action} ->
-			{ok, JS} = wf_render_actions:render_actions(Action, undefined),
+			{ok, JS} = render_actions(Action, undefined),
 			[JS | get_and_render_actions(ActionQueue)]
 	end.
 
-% render_actions(Actions) -> {ok, Script}.
+-spec render_actions(Actions :: actions(),
+                     Anchor :: id()) -> {ok, script()}.
 render_actions(Actions, Anchor) ->
     render_actions(Actions, Anchor, Anchor, Anchor).
 
+-spec render_actions(Actions :: actions(),
+                     Anchor :: id(),
+                     Trigger :: id(),
+                     Target :: id()) -> {ok, script()}.
 render_actions(Actions, Anchor, Trigger, Target) ->
     Script = inner_render_actions(Actions, Anchor, Trigger, Target),
     {ok, Script}.
 
-% render_actions(Actions, ScriptAcc) -> {ok, Script}.
-inner_render_actions(Action, Anchor, Trigger, Target) ->
+% @doc note: inner_render_actions always returns a list of of binaries or strings.
+% This may not be necessary. But for now, we'll keep it like this.
+-spec inner_render_actions(Actions :: actions(),
+                           Anchor :: id(),
+                           Trigger :: id(),
+                           Target :: id()) -> script().
+inner_render_actions(Actions, Anchor, Trigger, Target) ->
     if 
-        Action == [] orelse Action==undefined -> 
+        Actions == [];
+        Actions==undefined -> 
             [];
-        is_binary(Action) orelse ?IS_STRING(Action)   -> 
-            [Action];
-        is_tuple(Action) ->    
-            Script = inner_render_action(Action, Anchor, Trigger, Target),
+        is_binary(Actions) orelse ?IS_STRING(Actions)   -> 
+            [Actions];
+        is_tuple(Actions) ->    
+            Script = inner_render_action(Actions, Anchor, Trigger, Target),
             [Script];
-        is_list(Action) ->
-            [inner_render_actions(hd(Action), Anchor, Trigger, Target)|
-                inner_render_actions(tl(Action), Anchor, Trigger, Target)];
+        is_list(Actions) ->
+            [inner_render_actions(hd(Actions), Anchor, Trigger, Target)|
+                inner_render_actions(tl(Actions), Anchor, Trigger, Target)];
         true ->
-            throw({unanticipated_case_in_render_actions, Action})
+            throw({unanticipated_case_in_render_actions, Actions})
     end.
 
-% render_action(Action) -> {ok, Script}.
+-spec inner_render_action(Action :: action_element(),
+                          Anchor :: id(),
+                          Trigger :: id(),
+                          Target :: id()) -> script().
 inner_render_action(Action, Anchor, Trigger, Target) when is_tuple(Action) ->
     Base = wf_utils:get_actionbase(Action),
     Module = Base#actionbase.module, 
@@ -95,6 +109,8 @@ inner_render_action(Action, Anchor, Trigger, Target) when is_tuple(Action) ->
             []
     end.
 
+-spec wrap_in_dependency(Url :: undefined | url(),
+                         Script :: script()) -> script().
 wrap_in_dependency(undefined, Script) ->
     Script;
 wrap_in_dependency("", Script) ->
@@ -102,14 +118,23 @@ wrap_in_dependency("", Script) ->
 wrap_in_dependency(Url, Script) ->
     [<<"Nitrogen.$dependency_register_function('">>,Url,<<"',function() {">>, Script, <<"});">>].
 
+-spec generate_anchor_script_if_needed(ActionScript :: script(),
+                                       Anchor :: id(),
+                                       Target :: id()) -> script().
 generate_anchor_script_if_needed(ActionScript, Anchor, Target) ->
 	case needs_anchor_script(ActionScript) of
 		true  -> generate_anchor_script(Anchor, Target);
 		false -> ""
 	end.
 
-needs_anchor_script(undefined) -> 
-    false;
+-spec needs_anchor_script(Script :: script()) -> boolean().
+% @doc here we do a rudimentary check if a string starts with
+% "Nitrogen.$anchor" discarding leading newlines and looking at the first depth
+% where we encounter an element that isn't just another nested list. This
+% should be faster than converting the whole script to a binary first just for
+% this comparison.  That said, it's probably worthwhile to convert to binary
+% and then doing all actions on it based on that. Most actions probably aren't
+% that longm, so it shouldn't be that big of a performance hit.
 needs_anchor_script(<<"Nitrogen.$anchor",_/binary>>) ->
 	false;
 needs_anchor_script("Nitrogen.$anchor" ++ _) ->
@@ -118,15 +143,21 @@ needs_anchor_script(<<"\n",Script/binary>>) ->
 	needs_anchor_script(Script);
 needs_anchor_script("\n" ++ Script) ->
 	needs_anchor_script(Script);
+needs_anchor_script([Script|_]) when is_list(Script); is_binary(Script) ->
+    needs_anchor_script(Script);
 needs_anchor_script(_) ->
 	true.
 
-
+-spec generate_anchor_script(Anchor :: id(), Target :: id()) -> script().
 generate_anchor_script(Anchor, Target) ->
 	wf:f(<<"\nNitrogen.$anchor('~s', '~s');">>, [Anchor, Target]).
 
-% call_action_render(Module, Action) -> {ok, Script}.
 % Calls the render_action/4 function of an action to turn an action record into Javascript.
+-spec call_action_render(Module :: module(),
+                         Action :: action_element(),
+                         Anchor :: id(),
+                         Trigger:: id(),
+                         Target :: id()) -> script().
 call_action_render(Module, Action, Anchor, Trigger, Target) ->
     {module, Module} = code:ensure_loaded(Module),
     NewActions = Module:render_action(Action),
@@ -135,6 +166,7 @@ call_action_render(Module, Action, Anchor, Trigger, Target) ->
 % Turn an atom into ".wfid_atom"
 % Turn atom.atom... into ".wfid_atom .wfid_atom"
 % If it's a string, replace double "##" with ".wfid_"
+-spec normalize_path(Path :: atom() | string() | binary()) -> string() | atom().
 normalize_path(undefined) -> 
     undefined;
 normalize_path(page) ->
@@ -144,6 +176,8 @@ normalize_path(Path) when is_atom(Path) ->
     Tokens = string:tokens(String, "."),
     Tokens1 = [".wfid_" ++ X || X <- Tokens],
     string:join(Tokens1, " ");
+normalize_path(String) when is_binary(String) ->
+    normalize_path(binary_to_list(String));
 normalize_path(String) ->
     case String of
         "wfid_" ++ _ -> "." ++ String;
@@ -151,6 +185,7 @@ normalize_path(String) ->
         _ -> wf_utils:replace(String, "##", ".wfid_")
     end.
 
+-spec to_js_id(P :: [string()]) -> string().
 to_js_id(P) ->
     P1 = lists:reverse(P),
     string:join(P1, ".").

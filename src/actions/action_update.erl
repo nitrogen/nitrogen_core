@@ -43,14 +43,9 @@ render_action(Record) ->
     Elements = Record#update.elements,
 	{ok, Html} = wf_render_elements:render_elements(Elements),
 
-    %% {ok, Html, Script} = wf_render:render(Elements, [], Anchor, Trigger, Target), 
-
     % Turn the HTML into a Javascript statement that will update the right element.
 	ScriptifiedHtml = wf:f(<<"Nitrogen.$~s(\"~s\", \"~s\", \"~s\");">>, [Type, Anchor, Target, wf:js_escape(Html)]),
 
-	%% We no longer need to render the "Script" here, because any actions will be added to the action queue anyway and retrieved during the process. Also needs to be tested
-    %% ORIGINAL:
-	%% [ScriptifiedHtml, Script].
 	ScriptifiedHtml.
 
 

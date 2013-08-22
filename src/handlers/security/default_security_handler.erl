@@ -5,6 +5,7 @@
 
 -module (default_security_handler).
 -behaviour (security_handler).
+-include("wf.hrl").
 -export ([
     init/2, 
     finish/2
