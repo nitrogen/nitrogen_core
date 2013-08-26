@@ -35,11 +35,12 @@ init(_Config, State) ->
     % Convert the path to a module. If there are no routes defined, then just
     % convert everything without an extension to a module.
     % Otherwise, look through all routes for the first matching route.
-    {Module, PathInfo} = route(Path),
+    {Module, EntryPoint, PathInfo} = route(Path),
     {Module1, PathInfo1} = check_for_404(Module, PathInfo, Path),
 
     wf_context:page_module(Module1),
     wf_context:path_info(PathInfo1),
+    wf_context:entry_point(EntryPoint),
 
     {ok, State}.
 
@@ -55,43 +56,26 @@ finish(_Config, State) ->
 % First, cycle through code:all_loaded(). If not there, then check erl_prim_loader:get_file()
 % If still not there, then 404.
 route("/") -> 
-    {list_to_atom(module_name(["index"])), []};
+    {list_to_atom(module_name(["index"])), main, []};
 
 route(Path) ->
     IsStatic = (filename:extension(Path) /= []),
     case IsStatic of
         true ->
             % Serve this up as a static file.
-            {static_file, Path};
+            {static_file, main, Path};
 
         false ->
             Path1 = string:strip(Path, both, $/),
             Tokens = string:tokens(Path1, "/"),
             % Check for a loaded module. If not found, then try to load it.
             case try_load_module(Tokens) of
-                {Module, PathInfo} -> 
-                    {Module, PathInfo};
+                {Module, EntryPoint, PathInfo} -> 
+                    {Module, EntryPoint, PathInfo};
                 undefined ->
-                    {web_404, Path1}
+                    {web_404, main, Path1}
             end
     end.
-
-%% find_loaded_module(Tokens) -> find_loaded_module(Tokens, []).	
-%% find_loaded_module([], _ExtraTokens) -> undefined;
-%% find_loaded_module(Tokens, ExtraTokens) ->
-%%     BeamFile = "/" ++ string:join(Tokens, "_") ++ ".beam",
-%%     F = fun({_Module, Path}) -> is_list(Path) andalso string:rstr(Path, BeamFile) /= 0 end,
-%%     case lists:filter(F, code:all_loaded()) of 
-%%         [{Module, _}] -> 
-%%             case erlang:function_exported(Module, main, 0) of
-%%                 true ->
-%%                     {Module, string:join(lists:reverse(ExtraTokens), "/")};
-%%                 false ->
-%%                     find_loaded_module(tl(lists:reverse(Tokens)), [hd(lists:reverse(Tokens))|ExtraTokens])
-%%             end;
-%%         [] -> 
-%%             find_loaded_module(tl(lists:reverse(Tokens)), [hd(lists:reverse(Tokens))|ExtraTokens])
-%%     end.
 
 module_name(Tokens) ->
     ModulePrefix = wf:config_default(module_prefix, ""),
@@ -120,9 +104,17 @@ try_load_module(Tokens, ExtraTokens) ->
     case erlang:function_exported(Module, main, 0) of
         true -> 
             PathInfo = string:join(ExtraTokens, "/"),
-            {Module, PathInfo};
+            {Module, main, PathInfo};
         false ->
-            next_try_load_module(Tokens, ExtraTokens)
+            case is_rest_module(Module) of
+                true ->
+                    PathInfo = string:join(ExtraTokens, "/"),
+                    %% If this is a rest request, we handle it with the nitrogen_rest module
+                    Entry = fun() -> nitrogen_rest:handle_request(Module) end,
+                    {Module, Entry, PathInfo};
+                false ->
+                    next_try_load_module(Tokens, ExtraTokens)
+            end
     end.
 
 
@@ -130,6 +122,17 @@ next_try_load_module(Tokens, ExtraTokens) ->
     Tokens1 = lists:reverse(tl(lists:reverse(Tokens))),
     ExtraTokens1 = [hd(lists:reverse(Tokens))|ExtraTokens],
     try_load_module(Tokens1, ExtraTokens1).
+
+is_rest_module(Module) ->
+    try
+        Attributes = Module:module_info(attributes),
+        case lists:keyfind(behaviour, 1, Attributes) of
+            {behaviour, Behaviours} -> lists:member(nitrogen_rest, Behaviours);
+            false -> false
+        end
+    catch
+        _:_ -> false
+    end.
 
 check_for_404(static_file, _PathInfo, Path) ->
     {static_file, Path};
