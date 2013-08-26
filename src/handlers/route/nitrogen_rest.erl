@@ -30,11 +30,12 @@
 -callback get(    	PathInfo :: string()) -> restful_return().
 -callback post(   	PathInfo :: string()) -> restful_return().
 -callback put(    	PathInfo :: string()) -> restful_return().
--callback connect(	PathInfo :: string()) -> restful_return().
--callback head(   	PathInfo :: string()) -> restful_return().
--callback trace(  	PathInfo :: string()) -> restful_return().
--callback options(	PathInfo :: string()) -> restful_return().
 -callback delete( 	PathInfo :: string()) -> restful_return().
+%% Less commonly used methods, not sure if they should be included in the
+%% behaviour because their lack generates warnings
+%%-callback connect(	PathInfo :: string()) -> restful_return().
+%%-callback trace(  	PathInfo :: string()) -> restful_return().
+%%-callback options(	PathInfo :: string()) -> restful_return().
 
 
 -spec handle_request(Module :: module()) -> body().
