@@ -1,6 +1,6 @@
 % vim: sw=4 ts=4 et
 -module (wf_core).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -export ([
     run/0
 ]).
