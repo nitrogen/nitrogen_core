@@ -36,7 +36,6 @@
   + [[./elements/html5_header.org][Header]]
   + [[./elements/html5_footer.org][Footer]]
   + [[./elements/aside.org][Aside]]
-  + [[./elements/hgroup.org][HGroup]]
   + [[./elements/mark.org][Mark]]
   + [[./elements/nav.org][Nav]]
   + [[./elements/section.org][Section]]
