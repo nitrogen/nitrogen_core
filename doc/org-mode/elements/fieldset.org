@@ -20,11 +20,11 @@
 
 ** Attributes
 
-   + legend_text - (/string/) :: The legend (or title) of the fieldset element
+   + legend\_text - (/string/) :: The legend (or title) of the fieldset element
 
-   + legend_html_encode - (/boolean/) :: Set to true to safely html-encode the displayed text
+   + legend\_html\_encode - (/boolean/) :: Set to true to safely html-encode the displayed text
 
-   + legend_body - (/Elements/) :: The body of the legend in Nitrogen terms and raw HTML.
+   + legend\_body - (/Elements/) :: The body of the legend in Nitrogen terms and raw HTML.
 
    + text - (/string/) :: The body of the fieldset in a text format.
 

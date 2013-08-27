@@ -33,7 +33,7 @@ This element produces a block element for a container [[./mobile_grid.html][Mobi
 
    + text - (/string/) :: Set to the text of the block, instead of specifying Nitrogen elements.
 
-   + html\_encode - (/boolean|whites|encoding fun/) :: Set to true to have the text safely html_encoded (default: 'true'). Set to 'whites' to also encode whitespace. Set to a function with arity 1 to have the contents encoded using that function.
+   + html\_encode - (/boolean|whites|encoding fun/) :: Set to true to have the text safely html encoded (default: 'true'). Set to 'whites' to also encode whitespace. Set to a function with arity 1 to have the contents encoded using that function.
    
 ** See Also
 
