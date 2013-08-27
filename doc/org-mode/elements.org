@@ -31,6 +31,17 @@
   + [[./elements/literal.org][Literal]]
   + [[./elements/hr.org][Horizontal Rule]]
 
+* HTML5 Semantic Elements
+  + [[./elements/article.org][Article]]
+  + [[./elements/html5_header.org][Header]]
+  + [[./elements/html5_footer.org][Footer]]
+  + [[./elements/aside.org][Aside]]
+  + [[./elements/hgroup.org][HGroup]]
+  + [[./elements/mark.org][Mark]]
+  + [[./elements/nav.org][Nav]]
+  + [[./elements/section.org][Section]]
+  + [[./elements/time.org][Time]]
+
 * Form
   + [[./elements/button.org][Button]]
   + [[./elements/textbox.org][Textbox]]
