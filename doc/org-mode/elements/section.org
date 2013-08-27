@@ -1,41 +1,36 @@
 # vim: sw=3 ts=3 ft=org
 
-#+TITLE: Aside Element
+#+TITLE: Section Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Jesse Gumm (@jessegumm)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
 #+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../about.org][About]]
 
-* Aside Element - #aside {}
+* Section Element - #section {}
 
-  Produces the HTML5 Aside element. The aside element can be used as a
-  container of information that's not necessarily part of the content, but is
-  related to the content, like a glossary of terms, or a list of relevant
-  items. We recommend reading the "About the Aside HTML Element" to understand
-  its semantics properly.
+  Produces the HTML5 =<section>= element. Note, that the section element is not
+  a generate container for anything, that's a =<div>= (which, in Nitrogen is
+  represented by a =#panel= element). We strongly recommend reading the "About
+  the Section HTML Element" link in the "See Also" section here.
 
 ** Usage
 
 #+BEGIN_SRC erlang
-   #article { body=[
-		"Here is some article content",
-		#aside{body=[
-			GlossaryOfTerms,
-			#br{},
-			RelatedArticles
-		]}
+   #section{ body=[
+		#h1{text="Some heading"},
+		"Here is some content for this section"
 	]}.
 #+END_SRC
 
 ** Attributes
 
-   + body - (/Nitrogen Elements/) :: The body of the aside element.
+   + body - (/Nitrogen Elements/) :: The body of the section element.
 
-** See Also 
+** See Also
 
    + [[./base.html][Base element]]
 
 	+ [[./article.org][Article element]]
 	
-	+ [[http://html5doctor.com/aside-revisited/][About the Aside HTML Element]]
+	+ [[http://html5doctor.com/http://html5doctor.com/the-section-element//][About the Section HTML Element]]
