@@ -691,14 +691,15 @@
         body=""                 :: body()
     }).
 -record(time, {?ELEMENT_BASE(element_time),
-        pubdate=false           :: boolean(),
         datetime=""             :: text(),
-        body=""                 :: body()
+        body=""                 :: body(),
+        text=""                 :: text(),
+        html_encode=true        :: html_encode()
     }).
 -record(mark, {?ELEMENT_BASE(element_mark),
         body=""                 :: body(),
         text=""                 :: text(),
-        html_encode             :: html_encode()
+        html_encode=true        :: html_encode()
     }).
 
 %% 960.gs Grid
