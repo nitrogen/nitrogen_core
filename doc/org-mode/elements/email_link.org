@@ -1,15 +1,16 @@
 # vim: sw=3 ts=3 ft=org
 
-#+TITLE: Link Element Element
+#+TITLE: Email Link Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
-#+AUTHOR: Rusty Klophaus (@rustyio)
+#+AUTHOR: Jesse Gumm (@jessegumm)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
 #+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../about.org][About]]
 
-* Email Link Element - #email_link{}
+* Email Link Element - #email\_link{}
 
   The link element produces a clickable email link.
+
 ** Usage
 
 #+BEGIN_SRC erlang

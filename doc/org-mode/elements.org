@@ -27,7 +27,7 @@
   + [[./elements/p.org][Paragraph]]
   + [[./elements/br.org][Break]]
   + [[./elements/image.org][Image]]
-  + [[./elements/link.org][Link]]
+  + [[./elements/link.org][Link]] | [[./elements/email_link.org][Email Link]]
   + [[./elements/literal.org][Literal]]
   + [[./elements/hr.org][Horizontal Rule]]
 
