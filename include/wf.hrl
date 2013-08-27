@@ -684,9 +684,6 @@
 -record(aside, {?ELEMENT_BASE(element_aside),
         body=""                 :: body()
     }).
--record(hgroup, {?ELEMENT_BASE(element_hgroup),
-        body=""                 :: body()
-    }).
 -record(html5_header, {?ELEMENT_BASE(element_html5_header),
         body=""                 :: body()
     }).
@@ -699,7 +696,9 @@
         body=""                 :: body()
     }).
 -record(mark, {?ELEMENT_BASE(element_mark),
-        body=""                 :: body()
+        body=""                 :: body(),
+        text=""                 :: text(),
+        html_encode             :: html_encode()
     }).
 
 %% 960.gs Grid

@@ -1,0 +1,41 @@
+# vim: sw=3 ts=3 ft=org
+
+#+TITLE: Mark Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Jesse Gumm (@jessegumm)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../about.org][About]]
+
+* Mark Element - #mark {}
+
+  The mark element produces an HTML mark element. The HTML5 mark tag is used
+  for highlighting words or prases (such as highlighting search phrases).
+
+** Usage
+
+#+BEGIN_SRC erlang
+	#panel{body=[
+		<<"In this sentence, ">>,
+		#mark { text="just this phrase" },
+		" will be highlighted"
+	]}.
+#+END_SRC
+
+** Attributes
+
+   + text - (/string/) :: The text to display.
+
+	+ html\_encode - (/boolean/) :: Set to true to safely html-encode the
+		displayed text.
+
+	+ body - (/Nitrogen element or list of elements./) :: Set the element or
+		elements that will be rendered within this panel.
+
+** See Also
+
+   + [[./base.html][base element]]
+
+   + [[./span.html][span element]]
+
+	+ [[http://html5doctor.com/draw-attention-with-mark/][About the HTML Mark Element]] 

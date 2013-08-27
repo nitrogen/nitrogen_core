@@ -13,8 +13,9 @@
 reflect() -> record_info(fields, mark).
 
 -spec render_element(#mark{}) -> body().
-render_element(Record) ->
-    wf_tags:emit_tag(mark, Record#mark.body, [
+render_element(Record = #mark{}) ->
+    Text = wf_convert:html_encode(Record#mark.text, Record#mark.html_encode),
+    wf_tags:emit_tag(mark, [Text, Record#mark.body], [
         {id, Record#mark.html_id},
         {class, ["mark", Record#mark.class]},
         {style, Record#mark.style},
