@@ -1,6 +1,6 @@
 %% vim: ts=4 sw=4 et
 -module(wf_action_queue).
--include_lib("nitrogen_core/include/wf.hrl").
+-include("wf.hrl").
 -behavior(gen_server).
 
 -export([
@@ -24,7 +24,11 @@
 ]).
 
 -record(state,{eager,normal,defer}).
--record(wf_action_queue,{pid}).
+-record(wf_action_queue,{
+    pid     :: pid()
+}).
+
+-type action_queue() :: #wf_action_queue{}.
 
 %% This is a basic 3-queue priority queue.
 %% At the initialization of each nitrogen request, priority_queue server will
@@ -34,41 +38,52 @@
 %% This queue can be referred to 
 %%
 
+-spec new() -> action_queue().
 new() ->
     {ok, AQ} = start_link(),
     AQ.
 
+-spec start_link() -> {ok, action_queue()}.       
 start_link() ->
     {ok,Pid} = gen_server:start_link(?MODULE,self(),[]),
     {ok,#wf_action_queue{pid=Pid}}.
 
+-spec stop(action_queue()) -> ok.
 stop(#wf_action_queue{pid=Pid}) ->
     gen_server:call(die, Pid).
 
+-spec in(Val :: actions(), Q :: action_queue()) -> ok.
 in(Val, Q) ->
-    in(Val, normal, Q).
+    in(normal, Val, Q).
 
+-spec in(Pri :: wire_priority(), Val :: actions(), action_queue()) -> ok.
 in(Pri, Val, #wf_action_queue{pid=Pid}) when Pri==normal orelse Pri==defer orelse Pri==eager ->
     gen_server:call(Pid, {in, Val, Pri}).
 
+-spec out(action_queue()) -> {ok, actions()} | {error, empty}.
 out(#wf_action_queue{pid=Pid}) ->
     gen_server:call(Pid, out).
 
+-spec all(action_queue()) -> [actions()].
 all(#wf_action_queue{pid=Pid}) ->
     gen_server:call(Pid, all).
 
+-spec clear(action_queue()) -> ok.
 clear(#wf_action_queue{pid=Pid}) ->
     gen_server:call(Pid, clear).
 
 %% gen_server functions
 
+-spec blank_state() -> #state{}.
 blank_state() ->
     #state{eager=queue:new(), normal=queue:new(), defer=queue:new()}.
 
-init(_CallingPid) ->
+-spec init(term()) -> {ok, #state{}}.
+init(_) ->
     %% link and trap exits?
     {ok, blank_state()}.
 
+-spec terminate(any(), #state{}) -> ok.
 terminate(_Reason,_State) ->
     ok.
 
