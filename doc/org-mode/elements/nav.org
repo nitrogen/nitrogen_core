@@ -1,4 +1,4 @@
-# vim: sw=3 ts=3 ft=org
+# vim: sw=3 ts=3 ft=org et
 
 #+TITLE: Nav Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
@@ -15,10 +15,10 @@
 
 #+BEGIN_SRC erlang
    #nav { class=main_navigation, body=[
-		#link{text="Menu item 1", url="/item1"},
-		#link{text="Menu item 2", url="/item2"},
-		...
-	]}.
+      #link{text="Menu item 1", url="/item1"},
+      #link{text="Menu item 2", url="/item2"},
+      ...
+   ]}.
 #+END_SRC
 
 ** Attributes
@@ -29,4 +29,4 @@
 
    + [[./base.html][Base element]]
 
-	+ [[http://html5doctor.com/nav-element/][About the Nav HTML5 Element]]
+   + [[http://html5doctor.com/nav-element/][About the Nav HTML5 Element]]

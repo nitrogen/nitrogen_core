@@ -1,4 +1,4 @@
-# vim: sw=3 ts=3 ft=org
+# vim: sw=3 ts=3 ft=org et
 
 #+TITLE: HTML5 Header Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
@@ -15,13 +15,13 @@
 
 #+BEGIN_SRC erlang
    #article { body=[
-		#html5_header{ body=[
-			#h1{ text="My Article Title"},
-			#time{ pubdate="2013-08-27"}
-		]},
-		"Here is some article content",
-		#html5_footer{ body="Some footer content"}
-	]}.
+      #html5_header{ body=[
+         #h1{ text="My Article Title"},
+         #time{ pubdate="2013-08-27"}
+      ]},
+      "Here is some article content",
+      #html5_footer{ body="Some footer content"}
+   ]}.
 #+END_SRC
 
 ** Attributes
@@ -32,10 +32,10 @@
 
    + [[./base.html][Base element]]
 
-	+ [[./article.org][Article element]]
-	
-	+ [[./html5_footer.org][HTML5 Footer element]]
+   + [[./article.html][Article element]]
+   
+   + [[./html5_footer.html][HTML5 Footer element]]
 
-   + [[./panel.org][Panel element]]
+   + [[./panel.html][Panel element]]
 
-	+ [[http://html5doctor.com/the-header-element/][About the Header Element]]
+   + [[http://html5doctor.com/the-header-element/][About the Header Element]]

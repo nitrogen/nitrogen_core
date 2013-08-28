@@ -1,4 +1,4 @@
-# vim: sw=3 ts=3 ft=org
+# vim: sw=3 ts=3 ft=org et
 
 #+TITLE: Section Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
@@ -18,9 +18,9 @@
 
 #+BEGIN_SRC erlang
    #section{ body=[
-		#h1{text="Some heading"},
-		"Here is some content for this section"
-	]}.
+      #h1{text="Some heading"},
+      "Here is some content for this section"
+   ]}.
 #+END_SRC
 
 ** Attributes
@@ -31,6 +31,6 @@
 
    + [[./base.html][Base element]]
 
-	+ [[./article.org][Article element]]
-	
-	+ [[http://html5doctor.com/http://html5doctor.com/the-section-element//][About the Section HTML Element]]
+   + [[./article.org][Article element]]
+   
+   + [[http://html5doctor.com/http://html5doctor.com/the-section-element//][About the Section HTML Element]]

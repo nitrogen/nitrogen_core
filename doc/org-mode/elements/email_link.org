@@ -1,4 +1,4 @@
-# vim: sw=3 ts=3 ft=org
+# vim: sw=3 ts=3 ft=org et
 
 #+TITLE: Email Link Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />

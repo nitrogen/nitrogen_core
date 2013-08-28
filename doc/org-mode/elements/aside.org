@@ -1,4 +1,4 @@
-# vim: sw=3 ts=3 ft=org
+# vim: sw=3 ts=3 ft=org et
 
 #+TITLE: Aside Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
@@ -19,13 +19,13 @@
 
 #+BEGIN_SRC erlang
    #article { body=[
-		"Here is some article content",
-		#aside{body=[
-			GlossaryOfTerms,
-			#br{},
-			RelatedArticles
-		]}
-	]}.
+      "Here is some article content",
+      #aside{body=[
+         GlossaryOfTerms,
+         #br{},
+         RelatedArticles
+      ]}
+   ]}.
 #+END_SRC
 
 ** Attributes
@@ -36,6 +36,6 @@
 
    + [[./base.html][Base element]]
 
-	+ [[./article.org][Article element]]
-	
-	+ [[http://html5doctor.com/aside-revisited/][About the Aside HTML Element]]
+   + [[./article.org][Article element]]
+   
+   + [[http://html5doctor.com/aside-revisited/][About the Aside HTML Element]]
