@@ -1,0 +1,47 @@
+# vim: ts=2 sw=2 et ft=org
+#+STYLE: <LINK href="stylesheet.css" rel="stylesheet" type="text/css">
+#+TITLE: Troubleshooting Nitrogen Applications
+#+AUTHOR: Jesse Gumm (@jessegumm)
+#+EMAIL: 
+
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:./index.org][Getting Started]] | [[file:./api.org][API]] | [[file:./elements.org][Elements]] | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | [[file:./handlers.org][Handlers]] | [[file:./config.org][Configuration Options]] | [[file:./plugins.org][Plugins]] | [[file:./about.org][About]]
+#+HTML: <div class=headline>Troubleshooting</div>
+
+* Common Questions when Troubleshooting Nitrogen Apps
+
+  + [[0][What tools do I need for troubleshooting Nitrogen apps?]]
+  + [[100][I got an error on the Erlang shell. What does it mean?]]
+  + [[200][I started Nitrogen but nothing is happening. What do I do?]]
+  + [[300][Why aren't postbacks working?]]
+  + [[400][My postbacks aren't doing what I expect, how can I figure out what's happening?]]
+
+* What tools do I need for troubleshooting Nitrogen apps?
+# <<0>>
+
+  Here are a few recommendations:
+
+  + Have =sync= running. (run in the Erlang shell with =sync:go()=)
+
+  + Have a browser with decent Javsacript debugging and network inspecting
+    (Chrome's inspector, Firebug for Firefox, etc). Because Nitrogen does a lot
+    of AJAX requests, you'll be watching those requests happen, and when or if
+    they error out, you'll see those changes.
+
+  + Don't be afraid to use Nitrogen's log handler with: =wf:info/1,2=,
+    =wf:warning/1,2=, or =wf:error/1,2= , or send Erlang terms formatted as
+    strings to the javascript console with =wf:console_log/1,2=.
+
+  + Finally, when you're really not sure, don't be afraid to dig into the
+    nitrogen source code to see what's going on.
+ 
+* I got an error on the Erlang shell. What does it mean?
+# <<100>>
+
+* I started Nitrogen but nothing is happening. What do I do?
+# <<200>>
+
+* Why aren't postbacks working?
+# <<300>>
+
+* My postbacks aren't doing what I expect, how can I figure out what's happening?
+# <<400>>

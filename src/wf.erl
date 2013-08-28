@@ -319,6 +319,7 @@ error(String, Args) ->
 error(String) -> 
     ok = log_handler:error(String).
 
+%% console_log is not part of the log handler, but  relevant
 console_log(String) ->
     action_console_log:console_log(String).
 
