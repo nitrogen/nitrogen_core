@@ -73,10 +73,9 @@
 
   Understanding this error takes a little digging. The top line
 
-  #+BEGIN_SRC erlang
-  
-  #+END_SRC 
-  : {error, error, function_clause
+#+BEGIN_SRC erlang
+  {error, error, function_clause
+#+END_SRC 
   
   Lets us know that a Erlang tried to call a function for which there was no
   matching clause. The next line tells us what function was attempted and what
@@ -143,7 +142,8 @@ style::[],html_id::[],data_fields::[],title::[],text::[32 | 76 | 77 | 105 | 107 
 | 121,...],body::[],new::'false',html_encode::'true',mobile_target::'false',
 mobile_dialog::'false',url::[58 | 97 | 99 | 105 | 106 | 112 | 114 | 115 | 116 | 118,...],
 handle_invalid::'false'},title::[],html_encode::'true'} violates the declared type of
-field text::binary() | maybe_improper_list(binary() | maybe_improper_list(any(),binary() | []) | char(),binary() | [])
+field text::binary() | maybe_improper_list(binary() | maybe_improper_list(any(),binary()
+| []) | char(),binary() | [])
 #+END_SRC
 
   And while this is a hugely long error, the key informaton is the =Record
