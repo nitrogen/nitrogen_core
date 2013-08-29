@@ -28,7 +28,7 @@
 -type html_encode()         :: boolean() | whites | fun((term()) -> text()).
 -type html()                :: string() | binary() | iolist().
 -type script()              :: string() | binary() | iolist().
--type url()                 :: text().
+-type url()                 :: text() | atom().
 -type path()                :: string() | binary().
 -type html_name()           :: string() | binary() | atom().
 -type mobile_theme()        :: string() | binary() | atom().
@@ -242,7 +242,7 @@
         click                   :: actions(),
         postback                :: term(),
         handle_invalid=false    :: boolean(),
-        on_invalid              :: undefined | script(),
+        on_invalid              :: undefined | actions(),
         delegate                :: module()
     }).
 -record(email_link, {?ELEMENT_BASE(element_email_link),
@@ -271,7 +271,7 @@
         postback                :: term(),
         disabled=false          :: boolean(),
         handle_invalid=false    :: boolean(),
-        on_invalid              :: undefined | script(),
+        on_invalid              :: undefined | actions(),
         delegate                :: module()
     }).
 -record(literal, {?ELEMENT_BASE(element_literal),
@@ -288,7 +288,7 @@
         next                    :: id(),
         postback                :: term(),
         handle_invalid=false    :: boolean(),
-        on_invalid              :: undefined | script(),
+        on_invalid              :: undefined | actions(),
         delegate                :: module(),
         html_name               :: html_name(),
         type=text               :: string() | atom()
@@ -317,7 +317,7 @@
         next                    :: id(),
         postback                :: term(),
         handle_invalid=false    :: boolean(),
-        on_invalid              :: undefined | script(),
+        on_invalid              :: undefined | actions(),
         delegate                :: module()
     }).
 -record(datepicker_textbox, {?ELEMENT_BASE(element_datepicker_textbox),
@@ -330,7 +330,7 @@
 
 -record(option, {
         text=""                 :: text(),
-        value=undefined         :: text() | undefined,
+        value=undefined         :: text() | atom() | undefined,
         selected=false          :: boolean(),
         show_if=true            :: boolean(),
         disabled=false          :: boolean()
@@ -350,7 +350,7 @@
         html_encode=true        :: html_encode(),
         postback                :: term(),
         handle_invalid=false    :: boolean(),
-        on_invalid              :: undefined | script(),
+        on_invalid              :: undefined | actions(),
         delegate                :: module(),
         value                   :: text(),
         multiple=false          :: boolean(),
@@ -365,7 +365,7 @@
         value="on"              :: text(),
         postback                :: term(),
         handle_invalid=false    :: boolean(),
-        on_invalid              :: undefined | script(),
+        on_invalid              :: undefined | actions(),
         delegate                :: module(),
         html_name               :: html_name()
     }).
@@ -380,7 +380,7 @@
         checked=false           :: boolean(),
         postback                :: term(),
         handle_invalid=false    :: boolean(),
-        on_invalid              :: undefined | script(),
+        on_invalid              :: undefined | actions(),
         delegate                :: module(),
         html_name               :: html_name()
     }).
@@ -394,7 +394,7 @@
         next                    :: id(),
         postback                :: term(),
         handle_invalid=false    :: boolean(),
-        on_invalid              :: undefined | script(),
+        on_invalid              :: undefined | actions(),
         delegate                :: module(),
         html_name               :: html_name()
     }).
@@ -495,7 +495,7 @@
         tag                     :: term(),
         items=[]                :: body(),
         group                   :: atom() | string() | binary(),
-        connect_with_groups=none :: undefined | none | all | [atom() | string() | binary()],
+        connect_with_groups=none :: atom() | string() | binary() | [atom() | string() | binary()],
         handle                  :: class(),
         placeholder=""          :: class(),
         force_placeholder_size=false :: boolean(),
@@ -513,13 +513,13 @@
         clone=true              :: boolean(),
         revert=true             :: boolean() | valid | invalid,
         scroll=true             :: boolean(),
-        container               :: undefined | window | parent | document | atom() | binary() | string(),
+        container               :: atom() | binary() | string(),
         zindex                  :: integer() | undefined
     }).
 -record(droppable, {?ELEMENT_BASE(element_droppable),
         tag                     :: term(),
         body=[]                 :: body(),
-        accept_groups=all       :: undefined | none | all | [atom() | string() | binary()],
+        accept_groups=all       :: atom() | string() | binary() | [atom() | string() | binary()],
         active_class=active     :: class(),
         hover_class=hover       :: class(),
         delegate                :: module()
@@ -590,7 +590,7 @@
         next                    :: id(),
         postback                :: term(),
         handle_invalid=false    :: boolean(),
-        on_invalid              :: undefined | script(),
+        on_invalid              :: undefined | actions(),
         delegate                :: module()
     }).
 -record(recaptcha, {?ELEMENT_BASE(element_recaptcha),
@@ -631,7 +631,7 @@
         selected="on"           :: atom() | text(),
         postback                :: term(),
         handle_invalid=false    :: boolean(),
-        on_invalid              :: undefined | script(),
+        on_invalid              :: undefined | actions(),
         delegate                :: module(),
         width                   :: integer() | undefined,
         theme=""                :: mobile_theme()
@@ -773,7 +773,7 @@
         timeout                 :: integer() | infinity | undefined
     }).
 -record(api, {?ACTION_BASE(action_api),
-        name                    :: string(),
+        name                    :: string() | binary() | atom(),
         tag                     :: term(),
         delegate                :: module()
     }).
@@ -793,7 +793,7 @@
         delay=0                 :: integer(),
         postback                :: term(),
         handle_invalid=false    :: boolean(),
-        on_invalid              :: undefined | script(),
+        on_invalid              :: undefined | actions(),
         validation_group        :: string() | binary() | atom(),
         delegate                :: module(),
         extra_param             :: string() | binary() | undefined
