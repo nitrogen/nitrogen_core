@@ -51,3 +51,5 @@ For example:
    + [[./base.html][base action]]
 
    + [[./validate.html][validate action]]
+
+   + [[http://nitrogenproject.com/demos/clear_validation][Clear Validation Demo]]
