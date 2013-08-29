@@ -7,13 +7,9 @@ documentation I want to see added, in no particular order.
 * How to add custom Actions
 * How to add custom Mobile Elements
 * How to add custom Validators
-* Tips for debugging Nitrogen app
-* Improvements to the guides for adding custom handlers
 * Recommendations for contributing to Nitrogen
-* Building a simple HTTP API in Nitrogen
-* Using the RESTful elements
-* Set up links from Elements and Actions to related Demos and back
-* Add wf:peer_ip docs to api.org
+* Building a simple REST API in Nitrogen (2.3.0)
+* Building a simple JSON API in Nitrogen (2.3.0)
 
 ## Desired Guides
 
@@ -23,12 +19,8 @@ in some cases, even Erlang-specific, but useful questions that answer questions
 commonly presented on Stackoverflow or the mailing lists.
 
 * Integrating with common databases
-* Working with JSON
-* Working with dates
-* Secure password hashing
 * Amazon S3 integration
 * Email integration
-* Reverse Proxy configuration
 * Working with HTML5 Canvas
 * Building a sample app that does something from the ground up
 * Building a template/social router module (for loading templates or functions

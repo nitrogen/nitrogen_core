@@ -40,12 +40,17 @@ peer_ip(Proxies,ForwardedHeader) ->
     ConnIP = peer_ip(),
     case header(ForwardedHeader) of
         undefined -> ConnIP;
-        ForwardedIP ->
-            case lists:member(ConnIP,Proxies) of
+        RawForwardedIP ->
+            ForwardedIP = wf_convert:parse_ip(RawForwardedIP),
+            DoesIPMatch = fun(Proxy) ->
+                wf_convert:parse_ip(Proxy) =:= ConnIP
+            end,
+            case lists:any(DoesIPMatch,Proxies) of
                 true -> ForwardedIP;
                 false -> ConnIP
             end
     end.
+
 
 request_body() ->
     Req = request_bridge(),
