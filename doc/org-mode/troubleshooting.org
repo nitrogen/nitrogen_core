@@ -14,6 +14,7 @@
   + [[200][I started Nitrogen but nothing is happening. What do I do?]]
   + [[300][Why aren't postbacks working?]]
   + [[400][My postbacks aren't doing what I expect, how can I figure out what's happening?]]
+  + [[10000][Other questions not answered here?]]
 
 * What tools do I need for troubleshooting Nitrogen apps?
 # <<0>>
@@ -174,5 +175,69 @@ field text::binary() | maybe_improper_list(binary() | maybe_improper_list(any(),
 * Why aren't postbacks working?
 # <<300>>
 
+  If the rest of your page is working, but postbacks aren't working, you can
+  narrow down the cause by first opening up the javascript console in your
+  browser and looking for any errors. If there are javascript errors during the
+  page generation, javascript will halt on the page, and very likely any
+  postbacks that haven't been wired to elements won't get wired at all. By far,
+  this is the most common cause - simple javascript errors.
+
+  To figure out why the javascript is erroring out, you'll need to look at the
+  line causing the error, and a good browser-based javascript console will give
+  you the line in question and the cause pf the error.  In this situation, it's
+  typically hand-rolled javascript sent out to the browser (e.g.
+  =wf:wire("do_somthing()")=), rather than generated javascript using Nitrogen
+  elements (e.g. ~wf:wire(#alert{text="Something"})~).
+
+  The other cause of javascript errors is with validations that might have been
+  removed. While efforts have been made to minimize this problem, it's still
+  good practice to [[file:./actions/clear_validation.org][clear validators]] if
+  a form with validation is removed from the page. For example, if a field has
+  a validator attached to it, but the field is removed from the page without
+  the submit button being removed, the validation system will still attempt to
+  confirm that the field has a value (which it doesn't, since it's not there).
+  This can throw off the validation system, and cause javascript errors when
+  the submit button is pressed.
+
+  *If there are no javascript errors in the console*, then the problem is
+  either one of two things:
+
+  + Your template doesn't have a =[[[script]]]= section like it should (in
+  which case, initializing javascript is never sent to the browser), or + Your
+  postbacks are silently failing on the server.
+
+  The most common cause of postbacks silently failing on the server (meaning
+  not generating console errors) is the presence of a catcha-all event. For
+  example:
+
+  : event(_) -> ok.
+
+  Having that clause on a page will cause unmatched postbacks to simply
+  silently fail and do nothing. For debugging purposes, we recommend against
+  that practice.
+
+  To figure out if postbacks are even making it to the server, open up your
+  browser's network inspector and click a button that will generate a postback.
+  You should see the AJAX request pop up there and do somthhing.  If you see it
+  fail for some reason, then you should usually get an error in the Erlang
+  console. However, if it succeeds, you can view the contents of the response.
+  You should see some javascript in there besides just the page context stuff.
+
+  This will give you some insight into what's going on, and why your postbacks
+  are failing.
+
 * My postbacks aren't doing what I expect, how can I figure out what's happening?
 # <<400>>
+
+  If your postbacks seem to be succeeding, but not responding as expected, then
+  resorting to "printf debugging" is a good way to test things.  You can print
+  text to the erlang console to inspect the status of variables with =wf:info=,
+  =wf:warn=, and =wf:error=, or you can send helper commands to the browser
+  with the =#alert{}= or =#console_log= actions.
+
+* Other questions not answered here?
+# <<10000>>
+
+  Running into an error that's not covered here?  Not sure where to start? Ask
+  your question in the comments below, or contact the
+  [[https://groups.google.com/forum/#!forum/nitrogenweb][mailing list]]
