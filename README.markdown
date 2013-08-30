@@ -8,3 +8,6 @@ The core functionality of the framework is here (elements, actions, handlers,
 libraries).
 
 The main Nitrogen repo is found here: http://github.com/nitrogen/nitrogen
+
+Want to contribute? [See our
+guidelines](https://github.com/nitrogen/nitrogen_core/blob/master/CONTRIB.markdown)
