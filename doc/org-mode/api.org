@@ -464,7 +464,7 @@ Example:
    4-tuples (IPv4) or 8-tuples (IPv6). For example: ={127,0,0,}= or
    ={8193,3512,51966,47806,0,0,0,1}=
 
-** wf_peer\_ip(ListOfProxies) -> IPAddress (4-tuple or 8-tuple)
+** wf:peer\_ip(ListOfProxies) -> IPAddress (4-tuple or 8-tuple)
 
    Shortcut method for =wf:peer_ip(ListOfProxies, x_forwarded_for)=
 
