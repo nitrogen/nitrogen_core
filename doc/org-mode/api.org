@@ -566,7 +566,7 @@ Example:
 
    Log and error message.
 
-** wf:console_log(Terms)
+** wf:console\_log(Terms)
 
    Send a =console.log()= to the browser with =Terms= as the value. (See [[file:./actions/console_log.org][Console Log Action]])
 
@@ -577,7 +577,7 @@ Example:
    
    Get the Nitrogen configuration setting under the specified Key.
 
-** wf:config_default(Key, DefaultValue) -> Term
+** wf:config\_default(Key, DefaultValue) -> Term
 
    Get the Nitrogen configuration setting under the specified Key. If
    not set, then return DefaultValue.
