@@ -1,10 +1,21 @@
 # Contributing to Nitrogen Web Framework
 
+Note: These guidelines apply to the Nitrogen Web Framework and it's subprojects:
+
+ + [nitrogen](http://github.com/nitrogen/nitrogen)
+ + [nitrogen\_core](http://github.com/nitrogen/nitrogen_core)
+ + [simple\_bridge](http://github.com/nitrogen/simple_bridge)
+ + [nprocreg](http://github.com/nitrogen/nprocreg)
+ + [sample\_nitrogen\_plugin](http://github.com/nitrogen/sample_nitrogen_plugin)
+
+
+## Basic Pull Request Guidelines
+
 Contributions from the community are thoroughly welcome and pull requests are
 fabulous! Those to make pull requests are even more fabulous! But there are
 some things to consider when you've got the itch to make a pull request.
 
-## Basic Pull Request Guidelines
+### Please try to keep the number of commits down
 
 While we're okay with pull requests being more than one commit, we *prefer*
 that pull requests be as minimal as possible (as few commits as possible,
