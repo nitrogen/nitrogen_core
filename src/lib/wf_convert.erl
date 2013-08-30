@@ -18,12 +18,9 @@
     url_encode/1, url_decode/1,
     js_escape/1,
 	join/2,
-    parse_ip/1,
-    parse_ipv4/1,
-    parse_ipv6/1
+    parse_ip/1
 ]).
 
--compile(export_all).
 -include_lib ("wf.hrl").
 
 %%% CONVERSION %%%
@@ -337,7 +334,7 @@ parse_ipv6(String) ->
 parse_ipv6_full(String) ->
     try
         Parts = [_,_,_,_,_,_,_,_] = parse_ipv6_chunk_of_parts(String),
-        IP = list_to_tuple([parse_ipv6_part(Part) || Part <- Parts]),
+        IP = list_to_tuple(Parts),
         {ok, IP}
     catch
         _:_ -> {error, einval}
