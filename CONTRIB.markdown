@@ -4,7 +4,7 @@ Contributions from the community are thoroughly welcome and pull requests are
 fabulous! Those to make pull requests are even more fabulous! But there are
 some things to consider when you've got the itch to make a pull request.
 
-## Basic Guidelines
+## Basic Pull Request Guidelines
 
 While we're okay with pull requests being more than one commit, we *prefer*
 that pull requests be as minimal as possible (as few commits as possible,
@@ -22,6 +22,15 @@ Commit messages should try to be at most 50 characters, but if you go over a
 few, it's not a big deal.  Keep the commit messages as concise as possible, and
 if you need to add more elaboration, put it on the lines below the commit.
 Please keep those lines under 80 characters.
+
+### Topic Branches
+
+One of the things you'll notice if you do a pull request from your master
+branch is that any future commits to that master branch will be automatically
+added to the pull request.  That's a problem, because then it muddles the
+intent of the pull request.  Please make a topic branch (`git checkout -b
+my-awesome-fix`) before submitting the pull request, then submit the pull
+request from your topic branch.
 
 ## Bugfixes
 
@@ -71,6 +80,14 @@ Removing things is obviously touchy - that's something that basically
 necessitates breaking API.  Post an issue or to the mailing list about it.
 That's something we can talk about for a future major version.
 
+### Adding Unit Tests
+
+One of the things we need more of in Nitrogen are unit tests.  We've been
+getting by by the seat of our pants, so to speak, in not having any unit tests.
+That's obviously a problem. Feel free to help us out there by adding as few or
+as many unit tests in some of the core Nitrogen library modules as you'd like.
+
+
 ## Documentation
 
 ### Fuond a typo to fix?
@@ -99,5 +116,5 @@ List](https://github.com/nitrogen/nitrogen/blob/master/TODO.markdown),
 List](https://github.com/nitrogen/nitrogen_core/blob/master/doc/org-mode/README.markdown),
 or any outstanding issues on our github repos.
 
-Or contact Jesse Gumm ([@jessegumm](http://twitter.com/jessegumm), or email the
-[mailing list](https://groups.google.com/forum/#!forum/nitrogenweb)
+Or contact Jesse Gumm ([@jessegumm](http://twitter.com/jessegumm)), or email
+the [mailing list](https://groups.google.com/forum/#!forum/nitrogenweb)
