@@ -6,7 +6,7 @@
 #+EMAIL: 
 #+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
-* In-Place Textbox Element - #inplace_textbox {}
+* In-Place Textbox Element - #inplace\_textbox {}
 
   The inplace\_textbox element creates a textbox that the user can
   edit in place.

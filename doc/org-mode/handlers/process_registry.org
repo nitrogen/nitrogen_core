@@ -10,11 +10,11 @@
 * Process Registry Handler
 
 The process registry handler is a simple key-value store specifically for
-storing and retrieving Erlang Pids from Keys. It's primary uses are in session
-tracking and in tracking Pids for [[../doc/api.html#sec-5][comet]]. The default
-nitrogen process registry is based around
-[[https://github.com/nitrogen/nprocreg][nprocreg]], which connects and
-synchronizes Nitrogen nodes' process registries together.
+  storing and retrieving Erlang Pids from Keys. It's primary uses are in
+  session tracking and in tracking Pids for [[../doc/api.html#sec-5][comet]].
+  The default nitrogen process registry is based around
+  [[https://github.com/nitrogen/nprocreg][nprocreg]], which connects and
+  synchronizes Nitrogen nodes' process registries together.
 
 ** Behavior Functions
  

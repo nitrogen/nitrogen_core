@@ -6,7 +6,7 @@
 #+EMAIL: 
 #+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
-* Mobile Collapsible Element - #mobile_collapsible {}
+* Mobile Collapsible Element - #mobile\_collapsible {}
 
 This element produces a [[http://api.jquerymobile.com/collapsible/][jQuery Mobile Collapsible Content]] Element
 

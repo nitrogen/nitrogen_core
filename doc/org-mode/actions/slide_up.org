@@ -7,7 +7,7 @@
 #+EMAIL: 
 #+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][Elements]] | [[file:../actions.org][*Actions*]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
-* Slide Up Action - #slide_up {}
+* Slide Up Action - #slide\_up {}
 
   Call JQuery's [[http://docs.jquery.com/Effects/slideUp][slideUp(speed)]] on the target element.
 
