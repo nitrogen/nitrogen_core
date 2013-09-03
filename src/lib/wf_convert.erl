@@ -87,7 +87,7 @@ to_string_list([H|T], Acc) ->
 %%% HTML ENCODE %%%
 -spec html_encode(L :: term()) -> iolist().
 html_encode(L) -> 
-    ihe(L, normal).
+    html_encode(L, normal).
 
 -spec html_encode(L :: term(), EncType :: fun() | boolean() | whites | normal) -> iolist().
 html_encode(L,EncType) when is_function(EncType) -> EncType(L);
