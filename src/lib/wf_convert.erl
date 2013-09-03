@@ -91,6 +91,7 @@ html_encode(L) ->
 
 -spec html_encode(L :: term(), EncType :: fun() | boolean() | whites) -> iolist().
 html_encode(L,EncType) when is_function(EncType) -> EncType(L);
+html_encode(undefined, _) -> [];    %% treat "undefined" as special
 
 html_encode(L,EncType) when is_atom(L) -> html_encode(atom_to_list(L),EncType);
 html_encode(L,EncType) when is_integer(L) -> html_encode(integer_to_list(L),EncType);
