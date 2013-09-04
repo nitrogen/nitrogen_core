@@ -12,6 +12,9 @@ docs:
 
 doc: docs
 
+test:
+	./rebar eunit
+
 DEPS_PLT=$(CURDIR)/.deps_plt
 DEPS=erts kernel stdlib sasl
 
@@ -32,7 +35,7 @@ ERLANG_VERSION_CHECK := erl -eval "io:format(\"~s\",[erlang:system_info(otp_rele
 ERLANG_VERSION = $(shell $(ERLANG_VERSION_CHECK))
 
 # This is primarily for Travis build testing, as each build instruction will overwrite the previous
-travis: $(ERLANG_VERSION)
+travis: test $(ERLANG_VERSION)
 
 R15B: dialyzer
 R15B01: dialyzer
