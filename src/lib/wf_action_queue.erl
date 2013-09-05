@@ -51,7 +51,7 @@ start_link() ->
 
 -spec stop(action_queue()) -> ok.
 stop(#wf_action_queue{pid=Pid}) ->
-    gen_server:call(die, Pid).
+    gen_server:call(Pid, die).
 
 -spec in(Val :: actions(), Q :: action_queue()) -> ok.
 in(Val, Q) ->
@@ -118,7 +118,7 @@ handle_call(all, _Pid, State) ->
     {reply, AllActions, State};
 
 handle_call(die,_Pid,State) ->
-    {stop,cancelled,ok,State}.
+    {stop, normal, cancelled, State}.
 
 handle_cast(_Request,State) ->
     {noreply, State}.
