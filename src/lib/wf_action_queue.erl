@@ -23,7 +23,7 @@
     code_change/3
 ]).
 
--record(state,{eager,normal,defer}).
+-record(state,{eager,normal,defer,caller}).
 -record(wf_action_queue,{
     pid     :: pid()
 }).
@@ -45,7 +45,8 @@ new() ->
 
 -spec start_link() -> {ok, action_queue()}.       
 start_link() ->
-    {ok,Pid} = gen_server:start_link(?MODULE,self(),[]),
+    Caller = self(),
+    {ok,Pid} = gen_server:start_link(?MODULE,Caller,[]),
     {ok,#wf_action_queue{pid=Pid}}.
 
 -spec stop(action_queue()) -> ok.
@@ -74,14 +75,14 @@ clear(#wf_action_queue{pid=Pid}) ->
 
 %% gen_server functions
 
--spec blank_state() -> #state{}.
-blank_state() ->
-    #state{eager=queue:new(), normal=queue:new(), defer=queue:new()}.
+-spec blank_state(Caller :: pid()) -> #state{}.
+blank_state(Caller) ->
+    #state{eager=queue:new(), normal=queue:new(), defer=queue:new(), caller=Caller}.
 
--spec init(term()) -> {ok, #state{}}.
-init(_) ->
-    %% link and trap exits?
-    {ok, blank_state()}.
+-spec init(Caller :: pid()) -> {ok, #state{}}.
+init(Caller) ->
+    process_flag(trap_exit, true),
+    {ok, blank_state(Caller)}.
 
 -spec terminate(any(), #state{}) -> ok.
 terminate(_Reason,_State) ->
@@ -108,8 +109,8 @@ handle_call(out,_Pid,State) ->
         defer=NewDefer
     },
     {reply, Reply, NewState};
-handle_call(clear, _Pid, _State) ->
-    {reply, ok, blank_state()};
+handle_call(clear, _Pid, State) ->
+    {reply, ok, blank_state(State#state.caller)};
 handle_call(all, _Pid, State) ->
     AllActions = queue:to_list(State#state.eager) 
                  ++ queue:to_list(State#state.normal)
@@ -122,6 +123,13 @@ handle_call(die,_Pid,State) ->
 handle_cast(_Request,State) ->
     {noreply, State}.
 
+handle_info({'EXIT', Pid, _Reason}, State) ->
+    case State#state.caller=:=Pid of
+        true ->
+            {stop, normal, State};
+        false ->
+            {noreply, State}
+    end;
 handle_info(_Info, State) ->
     {noreply, State}.
 
