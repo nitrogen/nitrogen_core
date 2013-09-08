@@ -10,7 +10,8 @@
 
 -type nitrogen_element()    :: tuple().
 -type template_script_element() :: script | mobile_script.
--type body_element()        :: nitrogen_element() | binary() | string() | iolist() | template_script_element().
+-type body_element()        :: nitrogen_element() | binary() | string() | iolist() 
+                            | template_script_element().
 -type body()                :: body_element() | [body_element()].
 -type action_element()      :: undefined | tuple() | string() | binary() | iolist().
 -type actions()             :: action_element() | [action_element()].
@@ -21,7 +22,9 @@
 -type proplist()            :: [{term(), term()}].
 -type data_field_name()     :: atom() | text().
 -type data_field_value()    :: atom() | text().
--type data_fields()         :: [{data_field_name(),data_field_value()}].
+-type data_fields()         :: [data_field_name() 
+                                | {data_field_name()} 
+                                | {data_field_name(),data_field_value()}].
 -type wire_priority()       :: eager | normal | defer.
 -type class()               :: string() | binary() | atom().
 -type text()                :: string() | binary() | iolist().
