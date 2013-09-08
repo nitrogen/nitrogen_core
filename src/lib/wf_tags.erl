@@ -130,8 +130,13 @@ display_property({Prop, Values}) ->
 
 %% 
 data_tags(Data) ->
-	[display_property({data_tag(FieldName),Value}) || {FieldName,Value} <- Data].
+	[display_property(data_tag(Datum)) || Datum <- Data].
 
-data_tag(FieldName) ->
+data_tag({FieldName,Value}) ->
 	DataField = wf:to_binary(FieldName),
-	<<"data-",DataField/binary>>.
+    {<<"data-",DataField/binary>>,Value};
+data_tag({FieldName}) ->
+    DataField = wf:to_binary(FieldName),
+    {<<"data-",DataField/binary>>};
+data_tag(FieldName) when is_atom(FieldName) ->
+    data_tag({FieldName}).
