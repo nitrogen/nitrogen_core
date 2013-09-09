@@ -16,7 +16,8 @@ test:
 	./rebar eunit
 
 DEPS_PLT=$(CURDIR)/.deps_plt
-DEPS=erts kernel stdlib sasl
+DEPS=erts kernel stdlib
+# removed 'sasl' in attempt to minimize memory usage for Travis
 
 $(DEPS_PLT):
 	@echo Building local plt at $(DEPS_PLT)
