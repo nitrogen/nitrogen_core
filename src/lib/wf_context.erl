@@ -167,6 +167,9 @@ action_queue(ActionQueue) ->
     Context = context(),
     context(Context#context { action_queue = ActionQueue }).
 
+clear_action_queue() ->
+    action_queue(new_action_queue()).
+
 new_action_queue() ->
     wf_action_queue:new().
 
