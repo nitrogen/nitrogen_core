@@ -241,7 +241,7 @@ NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventCo
         },
         error: function(xmlHttpRequest, textStatus, errorThrown) {
           n.$event_is_running = false;
-          typeof s.success == 'function' && s.error(xmlHttpRequest, textStatus, errorThrown);
+          typeof s.error == 'function' && s.error(xmlHttpRequest, textStatus, errorThrown);
         }
     });         
 }

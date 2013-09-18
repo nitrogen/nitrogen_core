@@ -1,8 +1,7 @@
 %% vim: ts=4 sw=4 et
+%% This is a basic 3-priority queue.
 -module(wf_action_queue).
 -include("wf.hrl").
--behavior(gen_server).
-
 -export([
     new/0,
     in/2,
@@ -12,135 +11,77 @@
     clear/1
 ]).
 
--export([
-    start_link/0,
-    stop/1,
-    init/1,
-    handle_call/3,
-    handle_cast/2,
-    handle_info/2,
-    terminate/2,
-    code_change/3
-]).
+-record(wf_action_queue,{eager,normal,defer}).
 
--record(state,{eager,normal,defer}).
--record(wf_action_queue,{
-    pid     :: pid()
-}).
-
--type action_queue() :: #wf_action_queue{}.
-
-%% This is a basic 3-queue priority queue.
-%% At the initialization of each nitrogen request, priority_queue server will
-%% be spawned for the request and linked to the nitrogen request process.
-%%
-%% start() or start_link() instantiate the server and return a "Queue" object.
-%% This queue can be referred to 
-%%
+-type action_queue()    :: #wf_action_queue{}.
+-type out_reply()       :: {error, empty} | {ok, actions(), action_queue()}.
 
 -spec new() -> action_queue().
 new() ->
-    {ok, AQ} = start_link(),
-    AQ.
+    blank_state().
+   
+-spec blank_state() -> action_queue().
+blank_state() ->
+    #wf_action_queue{eager=queue:new(), normal=queue:new(), defer=queue:new()}.
 
--spec start_link() -> {ok, action_queue()}.       
-start_link() ->
-    {ok,Pid} = gen_server:start_link(?MODULE,self(),[]),
-    {ok,#wf_action_queue{pid=Pid}}.
-
--spec stop(action_queue()) -> ok.
-stop(#wf_action_queue{pid=Pid}) ->
-    gen_server:call(die, Pid).
-
--spec in(Val :: actions(), Q :: action_queue()) -> ok.
+-spec in(Val :: actions(), action_queue()) -> action_queue().
 in(Val, Q) ->
     in(normal, Val, Q).
 
--spec in(Pri :: wire_priority(), Val :: actions(), action_queue()) -> ok.
-in(Pri, Val, #wf_action_queue{pid=Pid}) when Pri==normal orelse Pri==defer orelse Pri==eager ->
-    gen_server:call(Pid, {in, Val, Pri}).
+-spec in(Pri :: wire_priority(), Val :: actions(), action_queue()) -> action_queue().
+in(eager, Val, AQ = #wf_action_queue{eager=Queue}) ->
+    NewQueue = queue:in(Val,Queue),
+    AQ#wf_action_queue{eager=NewQueue};
 
--spec out(action_queue()) -> {ok, actions()} | {error, empty}.
-out(#wf_action_queue{pid=Pid}) ->
-    gen_server:call(Pid, out).
+in(normal, Val, AQ = #wf_action_queue{normal=Queue}) ->
+    NewQueue = queue:in(Val,Queue),
+    AQ#wf_action_queue{normal=NewQueue};
+
+in(defer, Val, AQ = #wf_action_queue{defer=Queue}) ->
+    NewQueue = queue:in(Val,Queue),
+    AQ#wf_action_queue{defer=NewQueue}.
+
+-spec out(action_queue()) -> out_reply().
+out(AQ = #wf_action_queue{}) ->
+    QueueList = [
+        AQ#wf_action_queue.eager,
+        AQ#wf_action_queue.normal,
+        AQ#wf_action_queue.defer
+    ],
+    case get_next(QueueList) of
+        empty ->
+            {error, empty};
+        {ok, Value, [NewEager, NewNormal, NewDefer]} ->
+            NewAQ = AQ#wf_action_queue{
+                eager=NewEager,
+                normal=NewNormal,
+                defer=NewDefer
+            },
+            {ok, Value, NewAQ}
+    end.
 
 -spec all(action_queue()) -> [actions()].
-all(#wf_action_queue{pid=Pid}) ->
-    gen_server:call(Pid, all).
+all(AQ = #wf_action_queue{}) ->
+    queue:to_list(AQ#wf_action_queue.eager)
+        ++ queue:to_list(AQ#wf_action_queue.normal)
+        ++ queue:to_list(AQ#wf_action_queue.defer).
 
--spec clear(action_queue()) -> ok.
-clear(#wf_action_queue{pid=Pid}) ->
-    gen_server:call(Pid, clear).
-
-%% gen_server functions
-
--spec blank_state() -> #state{}.
-blank_state() ->
-    #state{eager=queue:new(), normal=queue:new(), defer=queue:new()}.
-
--spec init(term()) -> {ok, #state{}}.
-init(_) ->
-    %% link and trap exits?
-    {ok, blank_state()}.
-
--spec terminate(any(), #state{}) -> ok.
-terminate(_Reason,_State) ->
-    ok.
-
-handle_call({in,Value,eager},_Pid,State) ->
-    NewQueue = queue:in(Value,State#state.eager),
-    {reply, ok, State#state{eager=NewQueue}};
-handle_call({in,Value,normal},_Pid,State) ->
-    NewQueue = queue:in(Value,State#state.normal),
-    {reply, ok, State#state{normal=NewQueue}};
-handle_call({in,Value,defer},_Pid,State) ->
-    NewQueue = queue:in(Value,State#state.defer),
-    {reply, ok, State#state{defer=NewQueue}};
-handle_call(out,_Pid,State) ->
-    {Reply, [NewEager, NewNormal, NewDefer]} = 
-        get_next({error,empty}, [
-                State#state.eager,
-                State#state.normal,
-                State#state.defer]),
-    NewState = State#state{
-        eager=NewEager,
-        normal=NewNormal,
-        defer=NewDefer
-    },
-    {reply, Reply, NewState};
-handle_call(clear, _Pid, _State) ->
-    {reply, ok, blank_state()};
-handle_call(all, _Pid, State) ->
-    AllActions = queue:to_list(State#state.eager) 
-                 ++ queue:to_list(State#state.normal)
-                 ++ queue:to_list(State#state.defer),
-    {reply, AllActions, State};
-
-handle_call(die,_Pid,State) ->
-    {stop,cancelled,ok,State}.
-
-handle_cast(_Request,State) ->
-    {noreply, State}.
-
-handle_info(_Info, State) ->
-    {noreply, State}.
-
-code_change(_OldVsn, State, _Extra) ->
-    {ok, State}.
+-spec clear(action_queue()) -> action_queue().
+clear(_) ->
+    blank_state().
 
 %% PRIVATE
 
-get_next(DefaultReply, Qs) ->
-    get_next(DefaultReply, [], Qs).
+get_next(Qs) ->
+    get_next([], Qs).
 
-get_next(DefaultReply, PassedQs, []) ->
-    {DefaultReply, lists:reverse(PassedQs)};
-get_next(DefaultReply, PassedQs, [CurQ | RestQ]) ->
+get_next(_PassedQs, []) ->
+    empty;
+get_next(PassedQs, [CurQ | RestQ]) ->
     case queue:is_empty(CurQ) of
         true ->
-            get_next(DefaultReply, [CurQ | PassedQs], RestQ);
+            get_next([CurQ | PassedQs], RestQ);
         false ->
             {{value, Item}, NewQ} = queue:out(CurQ),
-            Reply = {ok, Item},
-            {Reply, lists:reverse(PassedQs) ++ [NewQ | RestQ]}
+            {ok, Item, lists:reverse(PassedQs) ++ [NewQ | RestQ]}
     end.

@@ -67,8 +67,11 @@
   : make rel_webmachine
   : make rel_yaws
 
-  *Note*: There are special instructions for Windows users who wish to compile
-  on Windows. Read about
+  *FreeBSD*: Compiling on FreeBSD requires using =gmake= instead of =make=,
+  otherwise the steps are the same
+
+  *Microsoft Windows*: There are special instructions for Windows users who
+  wish to compile on Windows. Read about
   [[https://github.com/nitrogen/nitrogen/blob/master/rel/overlay/win/README.md][Compiling
   Nitrogen on Windows]]
  

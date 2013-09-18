@@ -4,7 +4,7 @@
 % See MIT-LICENSE for licensing information.
 
 -module (wf_context).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -compile(export_all).
 
 %%% REQUEST AND RESPONSE BRIDGE %%%
@@ -135,22 +135,28 @@ clear_data() ->
     Context = context(),
     context(Context#context { data = [] }).
 
+-spec add_action(Priority :: wire_priority(), Action :: actions()) -> ok.
 add_action(Priority, Action) when ?IS_ACTION_PRIORITY(Priority) ->
-	ActionQueue = action_queue(),
-	wf_action_queue:in(Priority, Action, ActionQueue).
-	%% Action queue is a process, so we don't need to store it in the context
+    ActionQueue = action_queue(),
+    NewActionQueue = wf_action_queue:in(Priority, Action, ActionQueue),
+    action_queue(NewActionQueue).
 
 actions() ->
-	ActionQueue = action_queue(),
-	Actions = wf_action_queue:all(ActionQueue),
-	wf_action_queue:clear(ActionQueue),
-	Actions.
+    ActionQueue = action_queue(),
+    Actions = wf_action_queue:all(ActionQueue),
+    NewActionQueue = wf_action_queue:clear(ActionQueue),
+    action_queue(NewActionQueue),
+    Actions.
 
+-spec next_action() -> {ok, actions()} | empty.
 next_action() ->
 	ActionQueue = action_queue(),
 	case wf_action_queue:out(ActionQueue) of
-		{ok, Action} -> Action;
-		{error, empty} -> empty
+		{ok, Action, NewActionQueue} ->
+            action_queue(NewActionQueue),
+            {ok, Action};
+		{error, empty} ->
+            empty
 	end.
 
 action_queue() ->
@@ -161,11 +167,11 @@ action_queue(ActionQueue) ->
     Context = context(),
     context(Context#context { action_queue = ActionQueue }).
 
-new_action_queue() ->
-    Context = context(),
-    ActionQueue = wf_action_queue:new(),
-    context(Context#context { action_queue=ActionQueue}).
+clear_action_queue() ->
+    action_queue(new_action_queue()).
 
+new_action_queue() ->
+    wf_action_queue:new().
 
 %%% PAGE CONTEXT %%%
 
@@ -280,7 +286,7 @@ init_context(RequestBridge, ResponseBridge) ->
         response_bridge = ResponseBridge,
         page_context = #page_context { series_id = wf:temp_id() },
         event_context = #event_context {},
-		action_queue = wf_action_queue:new(),		
+        action_queue = new_action_queue(),		
         handler_list = [
             % Core handlers...
             make_handler(config_handler, default_config_handler), 

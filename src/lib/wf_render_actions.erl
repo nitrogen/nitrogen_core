@@ -4,9 +4,9 @@
 % See MIT-LICENSE for licensing information.
 
 -module (wf_render_actions).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -export ([
-	render_action_queue/1,
+	render_action_queue/0,
     render_actions/2,
     render_actions/4,
     normalize_path/1,
@@ -16,16 +16,16 @@
 
 %%% RENDER ACTIONS %%%
 
-render_action_queue(ActionQueue) ->
-	{ok, get_and_render_actions(ActionQueue)}.
+render_action_queue() ->
+	{ok, get_and_render_actions()}.
 	
-get_and_render_actions(ActionQueue) ->
-	case wf_action_queue:out(ActionQueue) of
-		{error, empty} ->
+get_and_render_actions() ->
+    case wf_context:next_action() of
+		empty ->
 			[];
 		{ok, Action} ->
 			{ok, JS} = render_actions(Action, undefined),
-			[JS | get_and_render_actions(ActionQueue)]
+			[JS | get_and_render_actions()]
 	end.
 
 -spec render_actions(Actions :: actions(),

@@ -75,8 +75,7 @@ finish_dynamic_request() ->
     {ok, Html} = wf_render_elements:render_elements(Elements),
 
 	% Render Actions
-	ActionQueue = wf_context:action_queue(),
-	{ok, Javascript} = wf_render_actions:render_action_queue(ActionQueue),
+	{ok, Javascript} = wf_render_actions:render_action_queue(),
 
     % Call finish on all handlers.
     call_finish_on_handlers(),

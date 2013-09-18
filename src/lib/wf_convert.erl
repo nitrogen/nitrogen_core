@@ -87,16 +87,18 @@ to_string_list([H|T], Acc) ->
 %%% HTML ENCODE %%%
 -spec html_encode(L :: term()) -> iolist().
 html_encode(L) -> 
-    ihe(L, normal).
+    html_encode(L, normal).
 
--spec html_encode(L :: term(), EncType :: fun() | boolean() | whites) -> iolist().
+-spec html_encode(L :: term(), EncType :: fun() | boolean() | whites | normal) -> iolist().
 html_encode(L,EncType) when is_function(EncType) -> EncType(L);
+html_encode(undefined, _) -> [];    %% treat "undefined" as special
 
 html_encode(L,EncType) when is_atom(L) -> html_encode(atom_to_list(L),EncType);
 html_encode(L,EncType) when is_integer(L) -> html_encode(integer_to_list(L),EncType);
 html_encode(L,EncType) when is_float(L) -> html_encode(nitro_mochinum:digits(L),EncType);
 
 html_encode(L, false) -> L;
+html_encode(L, normal) when is_list(L); is_binary(L) -> ihe(L, normal);
 html_encode(L, true) when is_list(L); is_binary(L) -> ihe(L, normal);
 html_encode(L, whites) when is_list(L); is_binary(L) -> ihe(L, whites).
 
