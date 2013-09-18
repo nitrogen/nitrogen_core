@@ -115,17 +115,16 @@ display_property({Prop, undefined}) when Prop =/= "value" ->
 display_property({Prop, Value}) when is_integer(Value); is_atom(Value); is_float(Value) ->
     [" ", Prop, "=\"", wf:to_list(Value), "\""];
 
-display_property({Prop, Value}) when is_binary(Value); ?IS_STRING(Value) ->
-    [" ", Prop, "=\"", Value, "\""];
-
-display_property({Prop, Values}) ->
+%% 'class' is a special kind of field, which will be reformatted to handle
+display_property({"class", Values}) ->
     StrValues = wf:to_string_list(Values),
     StrValues1 = string:strip(string:join(StrValues, " ")),
-    StrValues2 = case Prop of
-        "class" -> wf_utils:replace(StrValues1, ".", "");
-        _ -> StrValues1
-    end,
-    [" ", Prop, "=\"", StrValues2, "\""].
+    StrValues2 = wf_utils:replace(StrValues1, ".", ""),
+    [" class=\"", StrValues2, "\""];
+
+display_property({Prop, Value}) ->
+    [" ", Prop, "=\"", Value, "\""].
+
 
 
 %% 
