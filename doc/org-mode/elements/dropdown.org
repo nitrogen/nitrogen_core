@@ -23,15 +23,17 @@ The dropdown element produces an HTML dropdown.
 
 ** Attributes
 
-   + options - (/list of option elements/) :: Set the available options for this dropdown.
+	+ options - (/list of option elements or {Value, Text} tuple/) :: Set the
+		available options for this dropdown.
 
-   + html\_encode - (/boolean/) :: Set to true to safely html-encode the options' text.
+	+ html\_encode - (/boolean/) :: Set to true to safely html-encode the
+		options' text.
 
-   + postback - (/Erlang term/) :: 
-			If set, selecting an option will automatically
-      initiate a Nitrogen postback with the supplied term.
+	+ postback - (/Erlang term/) :: If set, selecting an option will
+		automatically initiate a Nitrogen postback with the supplied term.
 
-   + value - (/string/) :: If set, the option matching this value will be selected by default.
+	+ value - (/string/) :: If set, the option matching this value will be
+		selected by default.
 
    + html\_name - (/string/) :: The name attribute of the dropdownbox
 
