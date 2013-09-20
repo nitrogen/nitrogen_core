@@ -57,7 +57,7 @@ format_options(#dropdown{options=Opts, value=Value, html_encode=HtmlEncode}) ->
 create_options(_,_,[]) ->
     [];
 
-create_options(Selected,HtmlEncode, [{Text, Value} | Rest]) ->
+create_options(Selected,HtmlEncode, [{Value, Text} | Rest]) ->
     Option = #option{text=Text, value=Value},
     create_options(Selected,HtmlEncode,[Option|Rest]);
 create_options(Selected,HtmlEncode,
