@@ -21,7 +21,7 @@ render_element(Record) ->
     ],
     wf_tags:emit_tag(label, Body, [
         {id, Record#label.html_id},
-        {class, [label, Record#label.class]},
+        {class, [nitrogen_label, Record#label.class]},
         {style, Record#label.style},
         {for, Record#label.for},
         {data_fields, Record#label.data_fields}

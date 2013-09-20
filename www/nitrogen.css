@@ -4,7 +4,7 @@
 
 /***** Nitrogen Elements *****/
 
-.label {
+label.nitrogen_label {
     display: block;
     font-weight: bold;
 }
