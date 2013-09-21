@@ -134,6 +134,9 @@ redirect(Url) ->
 redirect_to_login(LoginUrl) -> 
     action_redirect:redirect_to_login(LoginUrl).
 
+redirect_to_login(LoginUrl, PostLoginUrl) ->
+    action_redirect:redirect_to_login(LoginUrl, PostLoginUrl).
+
 redirect_from_login(DefaultUrl) -> 
     action_redirect:redirect_from_login(DefaultUrl).
 

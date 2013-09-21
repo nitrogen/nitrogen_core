@@ -263,19 +263,28 @@
 * Redirect
 # <<5>>
 
-** wf:redirect(Url) -> ok
-   Redirect to the provided URL.
+** wf:redirect(URL) -> ok
+   Redirect to the provided =URL=.
    
-** wf:redirect\_to\_login(Url) -> ok
+** wf:redirect\_to\_login(URL) -> ok
 
-   Redirect to the provided URL, attaching a token on the end. The receiving page can call
-   =wf:redirect\_from\_login(DefaultUrl)= to send the user back to the current page.
-   
-** wf:redirect\_from\_login(DefaultUrl) -> ok
+  See Below.
 
-   Redirect the user back to a page that called =wf:redirect\_to\_login(Url)=. If
-   the user came to the page for some other reason, then the user is redirected to the
-   provided DefaultUrl.
+** wf:redirect\_to\_login(URL, PostLoginURL)= -> ok
+
+   Redirect to the provided URL, attaching a token on the end. The receiving
+   page can subsequently call =wf:redirect\_from\_login(DefaultURL)= to send
+   the user to =PostLoginURL=.
+
+   If =PostLoginURL= is not provided, it will default to the current page's
+   URL.
+
+** wf:redirect\_from\_login(DefaultURL) -> ok
+
+   Redirect the user back to a page that called =wf:redirect_to_login(URL)= or
+   to the =PostLoginURL= provided to =wf:redirect_to_login(URL, PostLoginURL)=
+   If the user came to the page for some other reason, then the user is
+   redirected to the provided =DefaultURL=.
 
 * Session State
 # <<6>>
