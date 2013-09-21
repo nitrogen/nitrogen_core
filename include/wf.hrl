@@ -328,6 +328,7 @@
         next                    :: id(),
         html_encode=true        :: html_encode(),
         validators=[]           :: validators(),
+        placeholder=""          :: text(),
         options = [{dateFormat, "yy-mm-dd"}]    :: proplist()
     }).
 
