@@ -329,6 +329,8 @@
         html_encode=true        :: html_encode(),
         validators=[]           :: validators(),
         placeholder=""          :: text(),
+        readonly=false          :: boolean(),
+        disabled=false          :: boolean(),
         options = [{dateFormat, "yy-mm-dd"}]    :: proplist()
     }).
 
