@@ -9,7 +9,7 @@
 * Datepicker Textbox Element - #datepicker\_textbox {}
 
   The datepicker textbox element produces an HTML textbox that automatically
-  pops up a [jQuery UI Datepicker](http://jqueryui.com/datepicker/) when the
+  pops up a [[http://jqueryui.com/datepicker/][jQuery UI Datepicker]] when the
   control takes the focus.
 
 ** Usage
@@ -32,11 +32,11 @@
    + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
 
    + options - (/list of {Key,Value} properties/) :: Set the jQuery UI options. You can view the full
-      list of options at the official [jQuery UI Datepicker API
-      Documentation](http://api.jqueryui.com/datepicker/). Here are a few common options:
+      list of options at the official [[http://api.jqueryui.com/datepicker/][jQuery UI Datepicker API Documentation]].
+      Here are a few common options:
 
      * formatDate - (/format string/) :: Change the format of the displayed
-         date (e.g.: ="yy-mm-dd"=, ="mm/dd/yy"=)
+         date (e.g.: ="yy-mm-dd"=, ="mm/dd/yy"= ).
 
      * showOtherMonths - (/boolean/) :: Set to true to allow the datepicker to
          show the previous and next month's last and first days in the otherwise
@@ -57,8 +57,7 @@
 
      * showButtonPanel - (/boolean/) :: Put a button panel below the calendar
          popup which includes a "Today" button, and a "Close" button (the text of
-         which [can be
-         customized](http://api.jqueryui.com/datepicker/#option-showButtonPanel)
+         which [[http://api.jqueryui.com/datepicker/#option-showButtonPanel][can be customized]].
 
    + disabled - (/boolean/) :: Set to true to disable this textbox in the
       browser (sets the HTML =disabled= property, effectly greying out the
