@@ -40,15 +40,9 @@ render_element(Record) ->
     wf:wire(AutoCompleteScript),
 
     % Render as a textbox.
-    Value = wf:html_encode(Record#textbox_autocomplete.text, Record#textbox_autocomplete.html_encode),
-    wf_tags:emit_tag(input, [
-        {id, Record#textbox_autocomplete.html_id},
-        {type, text},
-        {class, [textbox_autocomplete, Record#textbox_autocomplete.class]},
-        {style, Record#textbox_autocomplete.style},
-        {data_fields, Record#textbox_autocomplete.data_fields},
-        {value, Value}
-    ]).
+    Textbox = wf_utils:copy_fields(Record, #textbox{}),
+    Textbox1 = Textbox#textbox{class=[textbox_autocomplete | Textbox#textbox.class]},
+    element_textbox:render_element(Textbox1).
 
 -spec event(any()) -> any().
 event({autocomplete_select_event, Delegate, SelectTag})->

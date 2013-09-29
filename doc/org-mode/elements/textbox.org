@@ -22,6 +22,12 @@
 
    + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
 
+   + max\_length - (/integer/) :: Specify the maximum number of characters that
+      can be typed by the user.
+
+   + size - (/integer/) :: Specify the width of the textbox in characters. The
+      HTML Default is =20=. Keep in mind, CSS Rules will override this setting.
+
    + disabled - (/boolean/) :: Set to true to disable this textbox in the
       browser (sets the HTML =disabled= property, effectly greying out the
       element). Can be dynamically re-enabled with =wf:enable(ElementID)= or

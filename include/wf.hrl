@@ -284,6 +284,7 @@
 -record(textbox, {?ELEMENT_BASE(element_textbox),
         text=""                 :: text(),
         maxlength=""            :: integer() | string(),
+        size=""                 :: integer() | string(),
         placeholder=""          :: text(),
         html_encode=true        :: html_encode(),
         disabled=false          :: boolean(),
@@ -295,6 +296,22 @@
         delegate                :: module(),
         html_name               :: html_name(),
         type=text               :: string() | atom()
+    }).
+-record(textbox_autocomplete, {?ELEMENT_BASE(element_textbox_autocomplete),
+        tag                     :: term(),
+        text=""                 :: text(),
+        minLength=2             :: integer(),
+        size=""                 :: integer() | string(),
+        html_encode=true        :: html_encode(),
+        placeholder=""          :: text(),
+        disabled=false          :: boolean(),
+        readonly=false          :: boolean(),
+        delay=300               :: integer(),
+        next                    :: id(),
+        postback                :: term(),
+        handle_invalid=false    :: boolean(),
+        on_invalid              :: undefined | actions(),
+        delegate                :: module()
     }).
 -record(hidden, {?ELEMENT_BASE(element_hidden),
         text=""                 :: text(),
@@ -393,6 +410,7 @@
 -record(password, {?ELEMENT_BASE(element_password),
         text=""                 :: text(),
         maxlength=""            :: integer() | string(),
+        size=""                 :: integer | string(),
         placeholder=""          :: text(),
         html_encode=true        :: html_encode(),
         disabled=false          :: boolean(),
@@ -586,18 +604,6 @@
         type=line               :: line | bar | tristate | bullet | discrete | pie | box,
         values=[]               :: [integer() | float() | null | undefined],
         options=[]              :: proplist()
-    }).
--record(textbox_autocomplete, {?ELEMENT_BASE(element_textbox_autocomplete),
-        tag                     :: term(),
-        text=""                 :: text(),
-        minLength=2             :: integer(),
-        delay=300               :: integer(),
-        html_encode=true        :: html_encode(),
-        next                    :: id(),
-        postback                :: term(),
-        handle_invalid=false    :: boolean(),
-        on_invalid              :: undefined | actions(),
-        delegate                :: module()
     }).
 -record(recaptcha, {?ELEMENT_BASE(element_recaptcha),
         captcha_opts=[]         :: proplist(),

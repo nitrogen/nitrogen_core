@@ -4,7 +4,7 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_password).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -export([
     reflect/0,
     transform_element/1

@@ -33,6 +33,7 @@ render_element(Record) ->
         {type, Record#textbox.type}, 
         {class, [textbox, Record#textbox.class]},
         {maxlength, Record#textbox.maxlength},
+        {size, Record#textbox.size},
         {style, Record#textbox.style},
         {name, Record#textbox.html_name},
         {placeholder, Placeholder},
