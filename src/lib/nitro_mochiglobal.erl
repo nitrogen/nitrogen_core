@@ -44,7 +44,9 @@ delete(_K, Mod) ->
 
 -spec key_to_module(atom()) -> atom().
 key_to_module(K) ->
-    list_to_atom("nitro_mochiglobal:" ++ atom_to_list(K)).
+    %% In vanilla mochiglobal, the delimiter is ":" instead of "____" % But in
+    %% MS Windows, filenames can't have colons in them, so we do "____" instead
+    list_to_atom("nitro_mochiglobal____" ++ atom_to_list(K)).
 
 -spec compile(atom(), any()) -> binary().
 compile(Module, T) ->
