@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Draggable Element Element"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-18 03:25:49 CDT"/>
+<meta name="generated" content="2013-08-28 23:50:18 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -94,7 +94,7 @@
 <div id="content">
 <h1 class="title">Draggable Element Element</h1>
 
-<p><a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html"><b>Elements</b></a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html"><b>Elements</b></a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../plugins.html">Plugins</a> | <a href="../jquery_mobile_integration.html">Mobile</a> | <a href="../troubleshooting.html">Troubleshooting</a> | <a href="../about.html">About</a>
 </p>
 
 
@@ -155,13 +155,25 @@
 <dt>group - (<i>atom or string</i>)</dt><dd>The name of this drag group, for use in the droppable element's accept_groups attribute.
 
 </dd>
-<dt>handle - (<i>atom or string</i>)</dt><dd>
+<dt>handle - (<i>atom or string</i>)</dt><dd>The class of the handle element on the page. Then handle will then be the part of the element that will be clicked and dragged around.
 
 </dd>
-<dt>clone - (<i>boolean</i>)</dt><dd>
+<dt>clone - (<i>boolean</i>)</dt><dd>If true, the element will be cloned in the DOM while dragged. If false, the element will be detached from the DOM while dragging.
 
 </dd>
-<dt>revert - (<i>boolean</i>)</dt><dd>
+<dt>revert - (<i>boolean</i>)</dt><dd>If true, the element will be reverted back to its original position if the drop fails.
+
+<dl>
+<dt>scroll - (<i>boolean</i>)</dt><dd>If true, the window or container will scroll when the item is dragged to the edge.
+
+</dd>
+<dt>container - (<i>atom or string</i>)</dt><dd>How you wish to contain the draggable element. Common containers are <code>window</code>, <code>document</code>, or <code>parent</code>.  Otherwise, it can be specified in the form of a jquery selector. See the documentation on the "Containment" option for the jquery Draggable element for more information.
+
+</dd>
+<dt>zindex - (<i>integer</i>)</dt><dd>the z-index of the element to be dragged around the page.
+</dd>
+</dl>
+
 </dd>
 </dl>
 
@@ -176,7 +188,16 @@
 
 
 <ul>
-<li><a href="./droppable.html">Droppable</a>
+<li><a href="./droppable.html">Droppable Element</a>
+
+<ul>
+<li><a href="file:///demos/dragdrop">Drag and Drop Demo</a>
+
+</li>
+<li><a href="http://api.jqueryui.com/draggable/">jQuery Draggable Documentation</a>
+</li>
+</ul>
+
 </li>
 </ul>
 
@@ -186,7 +207,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-18 03:25:49 CDT</p>
+<p class="date">Date: 2013-08-28 23:50:18 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Button Element Element"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-18 03:25:52 CDT"/>
+<meta name="generated" content="2013-08-28 23:50:19 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -94,7 +94,7 @@
 <div id="content">
 <h1 class="title">Button Element Element</h1>
 
-<p><a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html"><b>Elements</b></a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html"><b>Elements</b></a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../plugins.html">Plugins</a> | <a href="../jquery_mobile_integration.html">Mobile</a> | <a href="../troubleshooting.html">Troubleshooting</a> | <a href="../about.html">About</a>
 </p>
 
 
@@ -141,16 +141,38 @@
 
 
 <dl>
-<dt>text - (<i>string</i>)</dt><dd>The button's title.
+<dt>body - (<i>List of Nitrogen Elements</i>)</dt><dd>The button's body (if you wanted
+                to use something richer than a simple text)
+
+</dd>
+<dt>text - (<i>string</i>)</dt><dd>The text of the button.
 
 </dd>
 <dt>html_encode - (<i>boolean</i>)</dt><dd>Set to true to safely html-encode the text.
 
 </dd>
-<dt>postback - (<i>Erlang term</i>)</dt><dd>Clicking on the button will initiate a Nitrogen postback with the supplied term.
+<dt>disabled - (<i>boolean</i>)</dt><dd>Set to true to disable this button in the
+</dd>
+</dl>
+
+<p>      browser (sets the HTML <code>disabled</code> property, effectly greying out the
+      element). Can be dynamically re-enabled with <code>wf:enable(ElementID)</code> or
+      <code>wf:wire(ElementID, #enable{})</code> (Default: <code>false</code>)
+</p>
+<dl>
+<dt>image - (<i>Path to Image</i>)</dt><dd>This is a shortcut attribute to prepending
+                the body of the button with an image (for example, specifying a "Floppy
+                Disk" icon on a "Save" button). The image will display before any body or
+                text.
 
 </dd>
-<dt>click - (<i>Action</i> or <i>List of Actions</i>)</dt><dd>Wires the selected actons to the \"click\" events.  Due to the commonality of binding actions to the click event, this is merely a shortcut for
+<dt>postback - (<i>Erlang term</i>)</dt><dd>Clicking on the button will initiate a
+                Nitrogen postback with the supplied term.
+
+</dd>
+<dt>click - (<i>Action</i> or <i>List of Actions</i>)</dt><dd>Wires the selected actons to
+                the \"click\" events.  Due to the commonality of binding actions to the
+                click event, this is merely a shortcut for
 </dd>
 </dl>
 
@@ -196,6 +218,12 @@
 
 </li>
 <li><a href="./option.html">Dropdown Option</a>
+
+<ul>
+<li><a href="http://nitrogenproject.com/demos/simplecontrols">Simple Controls Demos</a>
+</li>
+</ul>
+
 </li>
 </ul>
 
@@ -207,7 +235,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-18 03:25:52 CDT</p>
+<p class="date">Date: 2013-08-28 23:50:19 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

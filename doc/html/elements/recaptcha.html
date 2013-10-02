@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Recaptcha Element"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-18 03:24:50 CDT"/>
+<meta name="generated" content="2013-08-28 23:49:57 CDT"/>
 <meta name="author" content="Steffen Panning"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -94,7 +94,7 @@
 <div id="content">
 <h1 class="title">Recaptcha Element</h1>
 
-<p><a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html"><b>Elements</b></a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html"><b>Elements</b></a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../plugins.html">Plugins</a> | <a href="../jquery_mobile_integration.html">Mobile</a> | <a href="../troubleshooting.html">Troubleshooting</a> | <a href="../about.html">About</a>
 </p>
 
 <div id="table-of-contents">
@@ -133,18 +133,20 @@
 <li>The user solves the captcha.
 </li>
 <li>If the solution is wrong the captcha gets refreshed until the user
-      gives up or the solution is correct.
+      gives up or the solution is correct, and a <code>Page:recaptcha_event</code> is
+      called with a <code>Result</code> of <code>error</code>.
 </li>
-<li>If the solution is correct the Page:event callback is called.
+<li>If the solution is correct the Page:recaptcha<sub>event</sub> callback is called
+      with a <code>Result</code> of <code>ok</code>.
 </li>
-<li>The return value of the Page:event callback is evaluated as
+<li>The return value of the <code>Page:recaptcha_event</code> callback is evaluated as
       follows:
 <ul>
-<li>If the value is 'ok' nothing is done.
+<li>If the value is <code>ok</code> nothing is done.
 </li>
-<li>If the return value is 'error', the captcha gets refreshed.
+<li>If the return value is <code>error</code>, the captcha gets refreshed.
 </li>
-<li>If the return value is {'error', Msg}, the captcha gets
+<li>If the return value is <code>{error, Msg}</code>, the captcha gets
         refreshed and the Msg is shown as the error message.
 </li>
 </ul>
@@ -167,8 +169,9 @@
    <a href="https://www.google.com/recaptcha/admin/create">https://www.google.com/recaptcha/admin/create</a>.
 </p>
 <p>
-   After that you have to enter your credentials and link information
-   into /rel/nitrogen/etc/app.config as follows:
+   After that, you have to either specify the following values in your
+   app.config or specify them as attributes to the <code>#recaptcha{}</code> element
+   itself.
 </p>
 
 
@@ -199,7 +202,10 @@
 
 
 
-<pre class="src src-erlang">#<span class="org-type">recaptcha</span> { }
+<pre class="src src-erlang">#<span class="org-type">recaptcha</span> {
+   public_key=<span class="org-string">"some_public_key"</span>,
+   private_key=<span class="org-string">"some_private_key"</span>
+}
 </pre>
 
 
@@ -213,24 +219,44 @@
 
 
 <p>
-All attributes are optional
+   The following attributes are required unless they are defined as nitrogen
+   environment variables above.
 </p>
 <dl>
-<dt>btn_id - (<i>atom</i>)</dt><dd>The button's id
+<dt>public_key - (<i>string</i>)</dt><dd>Public key provided by the Recaptcha service.
 </dd>
-<dt>btn_label - (<i>string</i>)</dt><dd>The button's label
+<dt>private_key - (<i>string</i>)</dt><dd>Private key provided by the Recaptcha service.
 </dd>
-<dt>captcha_opts - (<i>proplist</i>)</dt><dd>The captcha's options. For more
-        information visit
-        <a href="https://developers.google.com/recaptcha/docs/customization">https://developers.google.com/recaptcha/docs/customization</a>
+</dl>
+
 
 <p>
-        custom_theme_widget is not supported
-</p></dd>
+The following attributes are optional
+</p>
+<dl>
+<dt>tag - (<i>term</i>)</dt><dd>The "tag" for the recaptcha element to be passed to the
+      <code>recaptcha_event/2</code> function
+</dd>
+<dt>button_id - (<i>atom</i>)</dt><dd>The button's id
+</dd>
+<dt>button_label - (<i>string</i>)</dt><dd>The button's label
+</dd>
+<dt>captcha_opts - (<i>proplist</i>)</dt><dd>The captcha's options. For more
+      information see the official
+      <a href="https://developers.google.com/recaptcha/docs/customization">Recaptcha Documentation</a>
+      <code>custom_theme_widget</code> is not supported
+</dd>
 <dt>delegate (<i>Module</i>)</dt><dd>The module where the event callback gets called
 </dd>
 <dt>fail_body (<i>List</i>) </dt><dd>The fail message. It can be a simple string
-        or an array of element<sub>*</sub> items
+      or an array of Nitrogen elements. It will be displayed below the
+      recaptcha if the user fails to enter the correct recaptcha.
+</dd>
+<dt>challenge_url - (<i>string</i>)</dt><dd>The challenge URL as specified in the
+      Recaptcha Documentation (default: <a href="https://www.google.com/recaptcha/api/challenge">https://www.google.com/recaptcha/api/challenge</a>")
+</dd>
+<dt>verify_url - (<i>string</i>)</dt><dd>The verification URL as specified in the
+      Recaptcha Documentation (default: <a href="https://www.google.com/recaptcha/api/verify">https://www.google.com/recaptcha/api/verify</a>")
 </dd>
 </dl>
 
@@ -240,30 +266,123 @@ All attributes are optional
 </div>
 
 <div id="outline-container-1-5" class="outline-3">
-<h3 id="sec-1-5"><span class="section-number-3"></span> Example</h3>
+<h3 id="sec-1-5"><span class="section-number-3"></span> Postback Function</h3>
 <div class="outline-text-3" id="text-1-5">
 
-<p>Code in a page module may looks like this:
+
+<p>
+   When a recaptcha succeeds or fails, the <code>recaptcha_event/2</code> function
+   is called on your page module. <code>Tag</code> will be from the <code>tag</code> attribute above,
+   and <code>Result</code> will be a status atom, either <code>ok</code> if successful, or
+   <code>{error, ErrorMessage}</code>  if the recaptcha fails.
+</p>
+<p>
+   <code>recaptcha_event/2</code> can return any of the following:
+</p>
+<ul>
+<li><code>ok</code> - Everything is okay.
+</li>
+<li><code>error</code> - There was something that failed (maybe you did some data
+      validation in the <code>event_recaptcha/2</code> function and something failed so
+      let's just return an error.
+</li>
+<li><code>{error, ErrorMessage}</code> - Something went wrong, and let's set the error
+      message to the contents of <code>ErrorMessage</code> (which, like <code>fail_body</code> above,
+      can be either text or Nitrogen elements).
+</li>
+</ul>
+
+
+
+
+
+<pre class="src src-erlang"><span class="org-function-name">recaptcha_event</span>(<span class="org-variable-name">_Tag</span>, ok) -&gt;
+   <span class="org-type">wf</span>:<span class="org-type">wire</span>(#<span class="org-type">alert</span>{text=<span class="org-string">"Congrats, you're human"</span>}),
+   ok;
+<span class="org-function-name">recaptcha_event</span>(<span class="org-variable-name">_Tag</span>, {error, <span class="org-variable-name">ErrorReason</span>}) -&gt;
+   <span class="org-type">wf</span>:<span class="org-type">wire</span>(#<span class="org-type">alert</span>{text=<span class="org-string">"WE THINK YOU'RE A ROBOT! YOU MUST PROVE OTHERWISE!"</span>}),
+   {error, <span class="org-string">"Please Try again!"</span>}.
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-6" class="outline-3">
+<h3 id="sec-1-6"><span class="section-number-3"></span> Regarding Validation with Recaptcha</h3>
+<div class="outline-text-3" id="text-1-6">
+
+
+<p>
+   If you wish to trigger validators before the Recaptcha gets used, you'll
+   need to wire the validators to the Recaptcha's <code>button_id</code> attribute.
+</p>
+<p>
+   You can see this in use in the example below:
+</p>
+
+</div>
+
+</div>
+
+<div id="outline-container-1-7" class="outline-3">
+<h3 id="sec-1-7"><span class="section-number-3"></span> Example</h3>
+<div class="outline-text-3" id="text-1-7">
+
+
+<p>
+Code in a page module may look like this:
 </p>
 
 
-<pre class="src src-erlang"><span class="org-function-name">inner_body</span>() -&gt;<span class="org-function-name"> </span>
-    [
-        #<span class="org-type">recaptcha</span>{id=re_captcha, captcha_opts=[{theme,white}]},
-    ].
+<pre class="src src-erlang"><span class="org-function-name">inner_body</span>() -&gt;
+   <span class="org-comment-delimiter">%% </span><span class="org-comment">Wire a validator to be triggered by `recaptcha_button`, and target `name`</span>
+   <span class="org-type">wf</span>:<span class="org-type">wire</span>(recaptcha_button, name, #<span class="org-type">validate</span>{ validators=[
+      #<span class="org-type">is_required</span>{}
+   ]}),
+   [
+      #<span class="org-type">label</span>{text=<span class="org-string">"Enter your name"</span>},
+      #<span class="org-type">textbox</span>{id=name},
+      #<span class="org-type">recaptcha</span>{
+         button_id=recaptcha_button,
+         id=recaptcha,
+         tag=my_recaptcha,
+         captcha_opts=[{theme,white}]
+      }
+   ].
 
-<span class="org-function-name">event</span>({recaptcha, ok}) -&gt;
+<span class="org-function-name">event_recaptcha</span>(my_recaptcha, ok) -&gt;
     <span class="org-keyword">case</span> <span class="org-type">check_user_input</span>() <span class="org-keyword">of</span>
-        ok     -&gt;<span class="org-function-name"> </span><span class="org-type">wf</span>:<span class="org-type">remove</span>(re_captcha),
+        ok     -&gt;<span class="org-function-name"> </span><span class="org-type">wf</span>:<span class="org-type">remove</span>(recaptcha),
                   ok;
         error  -&gt;<span class="org-function-name"> </span>{error, <span class="org-string">"FAIL!"</span>}
     <span class="org-keyword">end</span>.
 
-<span class="org-function-name">user_input</span>() -&gt;
+<span class="org-function-name">check_user_input</span>() -&gt;
 <span class="org-comment-delimiter">%% </span><span class="org-comment">your check routine</span>
-.
 </pre>
 
+
+</div>
+
+</div>
+
+<div id="outline-container-1-8" class="outline-3">
+<h3 id="sec-1-8"><span class="section-number-3"></span> See Also</h3>
+<div class="outline-text-3" id="text-1-8">
+
+
+<ul>
+<li><a href="./base.html">Base Element</a>
+
+</li>
+<li><a href="../validators.html">Validators</a>
+
+</li>
+<li><a href="https://nitrogenproject.com/demos/recaptcha">Recaptcha Demo</a>
+</li>
+</ul>
 
 </div>
 </div>
@@ -271,7 +390,7 @@ All attributes are optional
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-18 03:24:50 CDT</p>
+<p class="date">Date: 2013-08-28 23:49:57 CDT</p>
 <p class="author">Author: Steffen Panning</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

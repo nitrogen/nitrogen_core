@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Textarea Element Element"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-18 03:24:33 CDT"/>
+<meta name="generated" content="2013-08-28 23:49:49 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -94,7 +94,7 @@
 <div id="content">
 <h1 class="title">Textarea Element Element</h1>
 
-<p><a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html"><b>Elements</b></a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html"><b>Elements</b></a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../plugins.html">Plugins</a> | <a href="../jquery_mobile_integration.html">Mobile</a> | <a href="../troubleshooting.html">Troubleshooting</a> | <a href="../about.html">About</a>
 </p>
 
 <div id="table-of-contents">
@@ -142,7 +142,24 @@
 <dt>text - (<i>string</i>)</dt><dd>Set the textarea's contents.
 
 </dd>
+<dt>rows - (<i>integer</i>)</dt><dd>Set the number of rows in the textarea.
+
+</dd>
+<dt>columns - (<i>integer</i>)</dt><dd>Set the number of columns in the textarea.
+
+</dd>
 <dt>html_encode - (<i>boolean</i>)</dt><dd>Set to true to safely html-encode the text.
+
+</dd>
+<dt>disabled - (<i>boolean</i>)</dt><dd>Set to true to disable this element in the
+      browser (sets the HTML <code>disabled</code> property, effectly greying out the
+      element). Can be dynamically re-enabled with <code>wf:enable(ElementID)</code> or
+      <code>wf:wire(ElementID, #enable{})</code> (Default: <code>false</code>)
+
+</dd>
+<dt>readonly - (<i>boolean</i>)</dt><dd>Set to true to make this element readonly in the
+      browser. Can be toggled with <code>wf:wire(ElementID, #make_writable{})</code> and
+      <code>wf:wire(ElementID, #make_readonly{})</code>.
 
 </dd>
 <dt>placeholder - (<i>string</i>)</dt><dd>Sets the placeholder text (text that will be
@@ -209,7 +226,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-18 03:24:33 CDT</p>
+<p class="date">Date: 2013-08-28 23:49:49 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

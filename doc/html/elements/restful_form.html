@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="restful<sub>form</sub> Element"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-18 03:24:47 CDT"/>
+<meta name="generated" content="2013-08-28 23:49:56 CDT"/>
 <meta name="author" content="Steffen Panning"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -94,7 +94,7 @@
 <div id="content">
 <h1 class="title">restful<sub>form</sub> Element</h1>
 
-<p><a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html"><b>Elements</b></a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html"><b>Elements</b></a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../plugins.html">Plugins</a> | <a href="../jquery_mobile_integration.html">Mobile</a> | <a href="../troubleshooting.html">Troubleshooting</a> | <a href="../about.html">About</a>
 </p>
 
 <div id="table-of-contents">
@@ -147,12 +147,19 @@
 
 
 <dl>
-<dt>method - (<i>string</i>)</dt><dd>Set the request-method (typically 'post' or 'get')
+<dt>method - (<i>string or atom</i>)</dt><dd>Set the HTTP request-method (typically
+                            <code>post</code> or <code>get</code>).
 
 </dd>
 <dt>action - (<i>string</i>)</dt><dd>Set the target-url of the form submit. If
                             left blank, the same page module is used as
                             target.
+
+</dd>
+<dt>target - (<i>string or atom</i>)</dt><dd>Set the HTML <code>target</code> attribute, which can
+                             be used for redirecting the form submission to a 
+                             new window, or to a frame. If left blank, will
+                             just target the current window.
 
 </dd>
 <dt>enctype - (<i>string</i>)</dt><dd>Sets the encoding for the form transmission.
@@ -205,6 +212,9 @@
 
 </li>
 <li><a href="./restful_upload.html">RESTful Upload</a>
+
+</li>
+<li><a href="http://nitrogenproject.com/demos/restful">RESTful Forms Demo</a>
 </li>
 </ul>
 
@@ -215,7 +225,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-18 03:24:47 CDT</p>
+<p class="date">Date: 2013-08-28 23:49:56 CDT</p>
 <p class="author">Author: Steffen Panning</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Troubleshooting Nitrogen Applications</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="Troubleshooting Nitrogen Applications"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2013-08-29 21:37:25 CDT"/>
+<meta name="author" content="Jesse Gumm (@jessegumm)"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<LINK href="stylesheet.css" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">Troubleshooting Nitrogen Applications</h1>
+
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="./index.html">Getting Started</a> | <a href="./api.html">API</a> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./config.html">Configuration Options</a> | <a href="./plugins.html">Plugins</a> | <a href="./jquery_mobile_integration.html">Mobile</a> | <b>Troubleshooting</b> | <a href="./about.html">About</a>
+</p>
+
+
+<div class=headline>Troubleshooting</div>
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Common Questions when Troubleshooting Nitrogen Apps</a></li>
+<li><a href="#sec-2">2 What tools do I need for troubleshooting Nitrogen apps?</a></li>
+<li><a href="#sec-3">3 I got an error on the Erlang shell. What does it mean?</a></li>
+<li><a href="#sec-4">4 I started Nitrogen but nothing is happening. What do I do?</a></li>
+<li><a href="#sec-5">5 Why aren't postbacks working?</a></li>
+<li><a href="#sec-6">6 My postbacks aren't doing what I expect, how can I figure out what's happening?</a></li>
+<li><a href="#sec-7">7 Other questions not answered here?</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Common Questions when Troubleshooting Nitrogen Apps</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<ul>
+<li><a href="#sec-2">What tools do I need for troubleshooting Nitrogen apps?</a>
+</li>
+<li><a href="#sec-3">I got an error on the Erlang shell. What does it mean?</a>
+</li>
+<li><a href="#sec-4">I started Nitrogen but nothing is happening. What do I do?</a>
+</li>
+<li><a href="#sec-5">Why aren't postbacks working?</a>
+</li>
+<li><a href="#sec-6">My postbacks aren't doing what I expect, how can I figure out what's happening?</a>
+</li>
+<li><a href="#sec-7">Other questions not answered here?</a>
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2"><a name="0" id="0"></a><span class="section-number-2">2</span> What tools do I need for troubleshooting Nitrogen apps?</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>
+  Here are a few recommendations:
+</p>
+<ul>
+<li>Have <code>sync</code> running. (run in the Erlang shell with <code>sync:go()</code>)
+
+</li>
+<li>Have a browser with decent Javsacript debugging and network inspecting
+    (Chrome's inspector, Firebug for Firefox, etc). Because Nitrogen does a lot
+    of AJAX requests, you'll be watching those requests happen, and when or if
+    they error out, you'll see those changes.
+
+</li>
+<li>Don't be afraid to use Nitrogen's log handler with: <code>wf:info/1,2</code>,
+    <code>wf:warning/1,2</code>, or <code>wf:error/1,2</code> , or send Erlang terms formatted as
+    strings to the javascript console with <code>wf:console_log/1,2</code>.
+
+</li>
+<li>Finally, when you're really not sure, don't be afraid to dig into the
+    nitrogen source code to see what's going on.
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3"><a name="100" id="100"></a><span class="section-number-2">3</span> I got an error on the Erlang shell. What does it mean?</h2>
+<div class="outline-text-2" id="text-3">
+
+
+<p>
+  Erlang errors can be a little scary to the uninitiated, but are very helpful once you get the feel for them.  They include relatively complete stack traces, so you can see the stack of calling functions (what functions called which functions, which lead to this particular crash).
+</p>
+<p>  
+  Conveniently, as of R15, errors at least show line numbers, so you're no longer wading throught long, multi-clause functions to find the cause of the error. Prior to R15, tracking down the cause of an error in something like an <code>event</code> function or a `gen<sub>server`'s</sub> `handle<sub>call`</sub> function was a tedius endeavor.
+</p>
+<p>
+  Anyway, here's a pretty typical-looking Nitrogen error:
+</p>
+
+
+
+<pre class="src src-erlang">=<span class="org-variable-name">INFO</span> <span class="org-variable-name">REPORT</span>==== 28-<span class="org-variable-name">Aug</span>-2013::16:20:02 ===
+  {error,error,function_clause,
+         [{wf_convert,html_encode,
+                      [{link,is_element,element_link,undefined,undefined,
+                             undefined,true,[],[],[],[],[],<span class="org-string">"My Link"</span>,[],false,
+                             true,false,false,<span class="org-string">"javascript:"</span>,undefined,undefined,
+                             false,undefined,undefined},
+                       true],
+                      [{file,<span class="org-string">"src/lib/wf_convert.erl"</span>},{line,93}]},
+          {element_span,render_element,1,
+                        [{file,<span class="org-string">"src/elements/html/element_span.erl"</span>},{line,19}]},
+          {wf_render_elements,call_element_render,3,
+                              [{file,<span class="org-string">"src/lib/wf_render_elements.erl"</span>},
+                               {line,130}]},
+          {wf_render_elements,render_element,1,
+                              [{file,<span class="org-string">"src/lib/wf_render_elements.erl"</span>},
+                               {line,115}]},
+          {wf_render_elements,render_elements,2,
+                              [{file,<span class="org-string">"src/lib/wf_render_elements.erl"</span>},
+                               {line,37}]},
+          {lists,foldl,3,[{file,<span class="org-string">"lists.erl"</span>},{line,1248}]},
+          {wf_render_elements,render_elements,2,
+                              [{file,<span class="org-string">"src/lib/wf_render_elements.erl"</span>},
+                               {line,32}]},
+          {lists,foldl,3,[{file,<span class="org-string">"lists.erl"</span>},{line,1248}]}]}
+</pre>
+
+
+<p>
+  Understanding this error takes a little digging. The top line
+</p>
+
+
+
+<pre class="src src-erlang">{error, error, function_clause
+</pre>
+
+
+<p>  
+  Lets us know that a Erlang tried to call a function for which there was no
+  matching clause. The next line tells us what function was attempted and what
+  arguments were passed to it:
+</p>
+
+
+
+<pre class="src src-erlang">[{wf_convert,html_encode,
+       [{link,is_element,element_link,undefined,undefined,
+              undefined,true,[],[],[],[],[],<span class="org-string">"My Link"</span>,[],false,
+              true,false,false,<span class="org-string">"javascript:"</span>,undefined,undefined,
+              false,undefined,undefined},
+        true],
+       [{file,<span class="org-string">"src/lib/wf_convert.erl"</span>},{line,93}]},
+</pre>
+
+
+<p>
+  This tells us a lot of information. The function was <code>wf_convert:html_encode</code>
+  on line 93 in ="src/lib/wf<sub>convert</sub>.erl"= (which is actually a Nitrogen core
+  module). <i>Generally, if the module name starts with =wf_=, it's probably part   of Nitrogen core</i>.
+</p>
+<p>  
+  The first argument was that huge tuple that starts with <code>{link</code>, and the
+  second argument was the atom <code>true</code>.  This is already giving us a good hint
+  as to the cause of the error.
+</p>
+<p>
+  Because Nitrogen elements are simply Erlang records, and Erlang records are
+  just syntactic sugar for tuples, we can conclude based on
+  <code>{link, is_element,...</code> that the argument that's causing problems is a
+  <code>#link</code> element somewhere in our code.
+</p>
+<p>  
+  But if the cause is still not clear, let's go deeper.  The next chunk of the error is this:
+</p>
+
+
+
+<pre class="src src-erlang">{element_span,render_element,1,
+    [{file,<span class="org-string">"src/elements/html/element_span.erl"</span>},{line,19}]},
+</pre>
+
+
+<p>
+  This tells us that the <code>element_span:render_element</code> function is calling function. We can imply from this that there is a <code>#span</code> element containing a <code>#link</code> element, and something about that is causing a crash.
+</p>
+<p>
+  If we look at the code of our page, we'll see this line:
+</p>
+
+
+
+<pre class="src src-erlang">#<span class="org-type">span</span>{text=#<span class="org-type">link</span>{text=<span class="org-string">"My Link"</span>}},
+</pre>
+
+
+<p>
+  The error reveals itself: the problem is that you can't pass Nitrogen
+  elements into a <code>text</code> attribute. The <code>text</code> attribute of the <code>#span</code> element
+  attempts to call <code>html_encode</code> on the <code>#link</code> element, but <code>html_encode</code> only
+  accepts text (strings and binaries), so it crashes.
+</p>
+<p>
+  This has been a rather contrived example, but it's the kind of error you may
+  run into. Dialyzer support has been added to help eliminate some of this class of error.
+</p>
+<p>
+  If you're really stuck, run dialyzer:
+</p>
+<pre class="example">
+make dialyzer
+</pre>
+
+
+<p>
+  Which might give a message like this:
+</p>
+
+
+
+<pre class="src src-erlang">index.erl:30: <span class="org-variable-name">Record</span> construction #<span class="org-type">span</span>{is_element::<span class="org-string">'is_element'</span>,module::<span class="org-string">'element_span'</span>,
+show_if::<span class="org-string">'true'</span>,class::[],style::[],html_id::[],data_fields::[],body::[],
+text::#<span class="org-type">link</span>{is_element::<span class="org-string">'is_element'</span>,module::<span class="org-string">'element_link'</span>,show_if::<span class="org-string">'true'</span>,class::[],
+style::[],html_id::[],data_fields::[],title::[],text::[32 | 76 | 77 | 105 | 107 | 110
+| 121,...],body::[],new::<span class="org-string">'false'</span>,html_encode::<span class="org-string">'true'</span>,mobile_target::<span class="org-string">'false'</span>,
+mobile_dialog::<span class="org-string">'false'</span>,url::[58 | 97 | 99 | 105 | 106 | 112 | 114 | 115 | 116 | 118,...],
+handle_invalid::<span class="org-string">'false'</span>},title::[],html_encode::<span class="org-string">'true'</span>} violates the declared type <span class="org-keyword">of</span>
+field text::<span class="org-type">binary</span>() | <span class="org-builtin">maybe_improper_list</span>(<span class="org-builtin">binary</span>() | <span class="org-builtin">maybe_improper_list</span>(<span class="org-type">any</span>(),<span class="org-builtin">binary</span>()
+| []) | <span class="org-builtin">char</span>(),<span class="org-builtin">binary</span>() | [])
+</pre>
+
+
+<p>
+  And while this is a hugely long error, the key informaton is the <code>Record   contruction #span</code> is the culprit, and the reason it's failing is <code>violates the   declared type of field text::...</code>. This is telling us that something is wrong
+  with the <code>text</code> field, as it's expecting something other than what it was
+  given.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4"><a name="200" id="200"></a><span class="section-number-2">4</span> I started Nitrogen but nothing is happening. What do I do?</h2>
+<div class="outline-text-2" id="text-4">
+
+
+<p>
+  This is a very general kind of issue, and can be any number of the following:
+</p>
+<ul>
+<li>If Erlang crashes right from the get-go, make sure you don't already have
+    that port in use, and make sure you have access to open the specified port in
+    app.config.
+
+</li>
+<li>If Erlang launches without crashing, but the page <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a>
+    isn't responding, then either you want to make sure that you don't have a
+    firewall blocking that port from being bound.  Also make sure your config is
+    binding to the right IP address. ="0.0.0.0"= or <code>{0,0,0,0}</code> (depending on
+    server config) will bind to any of the machine's IPs.
+
+</li>
+<li>If neither of the above solve your problem, there might be something more
+    significant. Feel free to email the
+    <a href="https://groups.google.com/d/forum/nitrogenweb">Mailing List</a>
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5"><a name="300" id="300"></a><span class="section-number-2">5</span> Why aren't postbacks working?</h2>
+<div class="outline-text-2" id="text-5">
+
+
+<p>
+  If the rest of your page is working, but postbacks aren't working, you can
+  narrow down the cause by first opening up the javascript console in your
+  browser and looking for any errors. If there are javascript errors during the
+  page generation, javascript will halt on the page, and very likely any
+  postbacks that haven't been wired to elements won't get wired at all. By far,
+  this is the most common cause - simple javascript errors.
+</p>
+<p>
+  To figure out why the javascript is erroring out, you'll need to look at the
+  line causing the error, and a good browser-based javascript console will give
+  you the line in question and the cause pf the error.  In this situation, it's
+  typically hand-rolled javascript sent out to the browser (e.g.
+  <code>wf:wire("do_somthing()")</code>), rather than generated javascript using Nitrogen
+  elements (e.g. <code>wf:wire(#alert{text="Something"})</code>).
+</p>
+<p>
+  The other cause of javascript errors is with validations that might have been
+  removed. While efforts have been made to minimize this problem, it's still
+  good practice to <a href="./actions/clear_validation.html">clear validators</a> if
+  a form with validation is removed from the page. For example, if a field has
+  a validator attached to it, but the field is removed from the page without
+  the submit button being removed, the validation system will still attempt to
+  confirm that the field has a value (which it doesn't, since it's not there).
+  This can throw off the validation system, and cause javascript errors when
+  the submit button is pressed.
+</p>
+<p>
+  <b>If there are no javascript errors in the console</b>, then the problem is
+  either one of two things:
+</p>
+<ul>
+<li>Your template doesn't have a =<a href="#script">[script</a>]= section like it should (in
+</li>
+</ul>
+
+<p>  which case, initializing javascript is never sent to the browser), or + Your
+  postbacks are silently failing on the server.
+</p>
+<p>
+  The most common cause of postbacks silently failing on the server (meaning
+  not generating console errors) is the presence of a catcha-all event. For
+  example:
+</p>
+<pre class="example">
+event(_) -&gt; ok.
+</pre>
+
+
+<p>
+  Having that clause on a page will cause unmatched postbacks to simply
+  silently fail and do nothing. For debugging purposes, we recommend against
+  that practice.
+</p>
+<p>
+  To figure out if postbacks are even making it to the server, open up your
+  browser's network inspector and click a button that will generate a postback.
+  You should see the AJAX request pop up there and do somthhing.  If you see it
+  fail for some reason, then you should usually get an error in the Erlang
+  console. However, if it succeeds, you can view the contents of the response.
+  You should see some javascript in there besides just the page context stuff.
+</p>
+<p>
+  This will give you some insight into what's going on, and why your postbacks
+  are failing.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6"><a name="400" id="400"></a><span class="section-number-2">6</span> My postbacks aren't doing what I expect, how can I figure out what's happening?</h2>
+<div class="outline-text-2" id="text-6">
+
+
+<p>
+  If your postbacks seem to be succeeding, but not responding as expected, then
+  resorting to "printf debugging" is a good way to test things.  You can print
+  text to the erlang console to inspect the status of variables with <code>wf:info</code>,
+  <code>wf:warn</code>, and <code>wf:error</code>, or you can send helper commands to the browser
+  with the <code>#alert{}</code> or <code>#console_log</code> actions.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-7" class="outline-2">
+<h2 id="sec-7"><a name="10000" id="10000"></a><span class="section-number-2">7</span> Other questions not answered here?</h2>
+<div class="outline-text-2" id="text-7">
+
+
+<p>
+  Running into an error that's not covered here?  Not sure where to start? Ask
+  your question in the comments below, or contact the
+  <a href="https://groups.google.com/forum/#!forum/nitrogenweb">mailing list</a>
+</p></div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2013-08-29 21:37:25 CDT</p>
+<p class="author">Author: Jesse Gumm (@jessegumm)</p>
+<p class="creator">Org version 7.8.02 with Emacs version 23</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div><h2>Comments</h2>
+<b>Note:</b><!-- Disqus does not currently support Erlang for its syntax highlighting, so t-->To specify <!--Erlang--> code blocks, just use the generic code block syntax: <pre><b>&lt;pre&gt;&lt;code&gt;your code here&lt;/code&gt;&lt;/pre&gt;</b></pre>
+<br />
+<br />
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	var disqus_shortname = 'nitrogenproject'; // required: replace example with your forum shortname
+	var disqus_identifier = 'html/troubleshooting.html'; //This will be replaced with the path part of the url
+
+	/* * * DON'T EDIT BELOW THIS LINE * * */
+	(function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</body>
+</html>

@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Base Action Element"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-18 03:26:31 CDT"/>
+<meta name="generated" content="2013-08-28 23:50:30 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -94,7 +94,7 @@
 <div id="content">
 <h1 class="title">Base Action Element</h1>
 
-<p><a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html">Elements</a> | <a href="../actions.html"><b>Actions</b></a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html">Elements</a> | <a href="../actions.html"><b>Actions</b></a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../plugins.html">Plugins</a> | <a href="../jquery_mobile_integration.html">Mobile</a> | <a href="../troubleshooting.html">Troubleshooting</a> | <a href="../about.html">About</a>
 </p>
 
 
@@ -113,9 +113,9 @@
 
 
 <p>
-  In object-oriented parlance, all Nitrogen actions are subclasses
-  of the base actions. This means that all Nitrogen elements can
-  use the attributes listed below.
+  In object-oriented parlance, all Nitrogen actions are subclasses of the base
+  actions. This means that all Nitrogen elements can use the attributes listed
+  below.
 </p>
 
 </div>
@@ -126,29 +126,56 @@
 
 
 <dl>
-<dt>module - (<i>atom</i>)</dt><dd>The module containing the logic for this action. Set automatically.
-
-</dd>
-<dt>trigger - (<i>atom</i>)</dt><dd>The id of the Nitrogen element that will trigger this action. Set automatically.
-
-</dd>
-<dt>target - (<i>atom</i>)</dt><dd>The id of the Nitrogen element to be referenced by obj('me'). Set automatically.
-
-</dd>
-<dt>actions - (<i>list af actions</i>)</dt><dd>A list of actions grouped within this action.
-
-</dd>
-<dt>show_if - (<i>boolean</i>)</dt><dd>If set to true, this action will be rendered. Otherwise, it will not.
+<dt>module - (<i>atom</i>)</dt><dd>The module containing the logic for this action. Set
 </dd>
 </dl>
 
-</div>
+<p>        automatically.
+</p>
+<dl>
+<dt>trigger - (<i>atom</i>)</dt><dd>The id of the Nitrogen element that will trigger
+</dd>
+</dl>
+
+<p>        this action. Set automatically.
+</p>
+<dl>
+<dt>target - (<i>atom</i>)</dt><dd>The id of the Nitrogen element to be referenced by
+</dd>
+</dl>
+
+<p>        <code>obj('me')</code>. Set automatically.
+</p>
+<dl>
+<dt>actions - (<i>list af actions</i>)</dt><dd>A list of actions grouped within this
+</dd>
+</dl>
+
+<p>        action.
+</p>
+<dl>
+<dt>show_if - (<i>boolean</i>)</dt><dd>If set to true, this action will be rendered.
+</dd>
+</dl>
+
+<p>        Otherwise, it will not.
+</p>
+<dl>
+<dt>dependency_js - (<i>URL string</i>)</dt><dd>If this attribute is set, before this
+</dd>
+</dl>
+
+<p>        script is run, the specified URL script will be downloaded and executed.
+        This is useful when an action or element will not function without first
+        downloading a necessary jQuery plugin or otherwise to the page, but it saves
+        in bandwidth since it doesn't download the dependency until it's needed.
+</p></div>
 </div>
 </div>
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-18 03:26:31 CDT</p>
+<p class="date">Date: 2013-08-28 23:50:30 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

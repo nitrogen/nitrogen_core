@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Nitrogen 2.x Documentation"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-31 21:51:18 CDT"/>
+<meta name="generated" content="2013-09-23 15:12:33 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -95,7 +95,7 @@
 <div id="content">
 <h1 class="title">Nitrogen 2.x Documentation</h1>
 
-<p><a href="./index.html">Getting Started</a> | <b>API</b> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./config.html">Configuration Options</a> | <a href="./about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="./index.html">Getting Started</a> | <b>API</b> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./config.html">Configuration Options</a> | <a href="./plugins.html">Plugins</a> | <a href="./jquery_mobile_integration.html">Mobile</a> | <a href="./troubleshooting.html">Troubleshooting</a> | <a href="./about.html">About</a>
 </p>
 
 
@@ -189,8 +189,28 @@
 </div>
 
 <div id="outline-container-2-2" class="outline-3">
-<h3 id="sec-2-2"><span class="section-number-3"></span> wf:update(TargetID, Elements) -&gt; ok</h3>
+<h3 id="sec-2-2"><span class="section-number-3"></span> wf:enable(Target) -&gt; ok</h3>
 <div class="outline-text-3" id="text-2-2">
+
+<p>   Enables the target form field or button.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3"></span> wf:disable(Target) -&gt;</h3>
+<div class="outline-text-3" id="text-2-3">
+
+<p>   Disables the target form field or button.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3"></span> wf:update(TargetID, Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-4">
 
 <p>   Update the contents of TargetID with a new set of Nitrogen Elements.
 </p>
@@ -198,9 +218,9 @@
 
 </div>
 
-<div id="outline-container-2-3" class="outline-3">
-<h3 id="sec-2-3"><span class="section-number-3"></span> wf:replace(TargetID, Elements) -&gt; ok</h3>
-<div class="outline-text-3" id="text-2-3">
+<div id="outline-container-2-5" class="outline-3">
+<h3 id="sec-2-5"><span class="section-number-3"></span> wf:replace(TargetID, Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-5">
 
 <p>   Replace TargetID with a new set of Nitrogen Elements.
 </p>
@@ -208,9 +228,9 @@
 
 </div>
 
-<div id="outline-container-2-4" class="outline-3">
-<h3 id="sec-2-4"><span class="section-number-3"></span> wf:remove(TargetID) -&gt; ok</h3>
-<div class="outline-text-3" id="text-2-4">
+<div id="outline-container-2-6" class="outline-3">
+<h3 id="sec-2-6"><span class="section-number-3"></span> wf:remove(TargetID) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-6">
 
 <p>   Remove TargetID from the DOM.
 </p>
@@ -218,9 +238,9 @@
 
 </div>
 
-<div id="outline-container-2-5" class="outline-3">
-<h3 id="sec-2-5"><span class="section-number-3"></span> wf:insert_top(TargetID, Elements) -&gt; ok</h3>
-<div class="outline-text-3" id="text-2-5">
+<div id="outline-container-2-7" class="outline-3">
+<h3 id="sec-2-7"><span class="section-number-3"></span> wf:insert_top(TargetID, Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-7">
 
 <p>   Insert Nitrogen Elements at the top of TargetID (within the contents of TargetID), shifting the existing contents downward.
 </p>
@@ -228,9 +248,9 @@
 
 </div>
 
-<div id="outline-container-2-6" class="outline-3">
-<h3 id="sec-2-6"><span class="section-number-3"></span> wf:insert_bottom(TargetID, Elements) -&gt; ok</h3>
-<div class="outline-text-3" id="text-2-6">
+<div id="outline-container-2-8" class="outline-3">
+<h3 id="sec-2-8"><span class="section-number-3"></span> wf:insert_bottom(TargetID, Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-8">
 
 <p>   Insert Nitrogen Elements at the bottom of the TargetID (within the contents of TargetID), below the existing contents.
 </p>
@@ -238,9 +258,9 @@
 
 </div>
 
-<div id="outline-container-2-7" class="outline-3">
-<h3 id="sec-2-7"><span class="section-number-3"></span> wf:insert_before(TargetID, Elements) -&gt; ok</h3>
-<div class="outline-text-3" id="text-2-7">
+<div id="outline-container-2-9" class="outline-3">
+<h3 id="sec-2-9"><span class="section-number-3"></span> wf:insert_before(TargetID, Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-9">
 
 <p>   Insert Nitrogen Elements before TargetID in the DOM, shifting the existing contents downward.
 </p>
@@ -248,9 +268,9 @@
 
 </div>
 
-<div id="outline-container-2-8" class="outline-3">
-<h3 id="sec-2-8"><span class="section-number-3"></span> wf:insert_after(TargetID, Elements) -&gt; ok</h3>
-<div class="outline-text-3" id="text-2-8">
+<div id="outline-container-2-10" class="outline-3">
+<h3 id="sec-2-10"><span class="section-number-3"></span> wf:insert_after(TargetID, Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-10">
 
 <p>   Insert Nitrogen Elements after TargetID in the DOM, below the existing contents.
 </p>
@@ -258,9 +278,9 @@
 
 </div>
 
-<div id="outline-container-2-9" class="outline-3">
-<h3 id="sec-2-9"><span class="section-number-3"></span> wf:flash(Elements) -&gt; ok</h3>
-<div class="outline-text-3" id="text-2-9">
+<div id="outline-container-2-11" class="outline-3">
+<h3 id="sec-2-11"><span class="section-number-3"></span> wf:flash(Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-11">
 
 <p>   Insert the Nitrogen Elements as a new flash message.
 </p>
@@ -278,13 +298,17 @@
 </div>
 
 <div id="outline-container-3-1" class="outline-3">
-<h3 id="sec-3-1"><span class="section-number-3"></span> wf:f(Format, Data) -&gt; String</h3>
+<h3 id="sec-3-1"><span class="section-number-3"></span> wf:f(Format, Data) -&gt; String or Binary</h3>
 <div class="outline-text-3" id="text-3-1">
 
 
 <p>
    Convenience function to format a string similar to
    io_lib:format(Format, Data). Returns a flattened list.
+</p>
+<p>
+   Note, if <code>Format</code> is a binary, the return type will be a binary, and if
+   <code>Format</code> is a string, the return type will be a string.
 </p>
 </div>
 
@@ -560,13 +584,71 @@
 </div>
 
 <div id="outline-container-4-4" class="outline-3">
-<h3 id="sec-4-4"><span class="section-number-3"></span> wf:continue(Tag, Function, IntervalInMS, TimeoutInMS) -&gt; ok</h3>
+<h3 id="sec-4-4"><span class="section-number-3"></span> wf:eager(Actions) -&gt; ok</h3>
 <div class="outline-text-3" id="text-4-4">
+
+</div>
+
+</div>
+
+<div id="outline-container-4-5" class="outline-3">
+<h3 id="sec-4-5"><span class="section-number-3"></span> wf:eager(TargetID, Actions) -&gt; ok</h3>
+<div class="outline-text-3" id="text-4-5">
+
+</div>
+
+</div>
+
+<div id="outline-container-4-6" class="outline-3">
+<h3 id="sec-4-6"><span class="section-number-3"></span> wf:eager(TriggerID, TargetID, Actions) -&gt; ok</h3>
+<div class="outline-text-3" id="text-4-6">
+
+
+<p>
+   Wire actions to the page, however, execute the actions before any
+   normal or deferred priority wired actions.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-4-7" class="outline-3">
+<h3 id="sec-4-7"><span class="section-number-3"></span> wf:defer(Actions) -&gt; ok</h3>
+<div class="outline-text-3" id="text-4-7">
+
+</div>
+
+</div>
+
+<div id="outline-container-4-8" class="outline-3">
+<h3 id="sec-4-8"><span class="section-number-3"></span> wf:defer(TargetID, Actions) -&gt; ok</h3>
+<div class="outline-text-3" id="text-4-8">
+
+</div>
+
+</div>
+
+<div id="outline-container-4-9" class="outline-3">
+<h3 id="sec-4-9"><span class="section-number-3"></span> wf:defer(TriggerID, TargetID, Actions) -&gt; ok</h3>
+<div class="outline-text-3" id="text-4-9">
+
+
+<p>
+   Wire actions to the page, however, execute these actions after any
+   normal or eager priority wired actions.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-4-10" class="outline-3">
+<h3 id="sec-4-10"><span class="section-number-3"></span> wf:continue(Tag, Function, IntervalInMS, TimeoutInMS) -&gt; ok</h3>
+<div class="outline-text-3" id="text-4-10">
 
 
 <p>
    Spawn the provided function (arity 0) and tell the browser to poll for the results at the specified interval, with a timeout setting.
-   See <a href="http://nitrogenproject.com/web/samples/continuations">continuations example</a> for usage.
+   so See <a href="http://nitrogenproject.com/demos/continuations">continuations example</a> for usage.
 </p>
 </div>
 </div>
@@ -651,7 +733,7 @@
 
 <p>
    Normally, the results of a comet function are sent to the browser when the function exits.
-   comet_flush/0 pushes results to the browser immediately, useful for a looping comet function.
+   <code>flush/0</code> pushes results to the browser immediately, useful for a looping comet function.
 </p>
 </div>
 
@@ -744,37 +826,55 @@
 </div>
 
 <div id="outline-container-6-1" class="outline-3">
-<h3 id="sec-6-1"><span class="section-number-3"></span> wf:redirect(Url) -&gt; ok</h3>
+<h3 id="sec-6-1"><span class="section-number-3"></span> wf:redirect(URL) -&gt; ok</h3>
 <div class="outline-text-3" id="text-6-1">
 
-<p>   Redirect to the provided URL.
+<p>   Redirect to the provided <code>URL</code>.
 </p>
 </div>
 
 </div>
 
 <div id="outline-container-6-2" class="outline-3">
-<h3 id="sec-6-2"><span class="section-number-3"></span> wf:redirect_to_login(Url) -&gt; ok</h3>
+<h3 id="sec-6-2"><span class="section-number-3"></span> wf:redirect_to_login(URL) -&gt; ok</h3>
 <div class="outline-text-3" id="text-6-2">
 
 
 <p>
-   Redirect to the provided URL, attaching a token on the end. The receiving page can call
-   <code>wf:redirect_from_login(DefaultUrl)</code> to send the user back to the current page.
+  See Below.
 </p>
 </div>
 
 </div>
 
 <div id="outline-container-6-3" class="outline-3">
-<h3 id="sec-6-3"><span class="section-number-3"></span> wf:redirect_from_login(DefaultUrl) -&gt; ok</h3>
+<h3 id="sec-6-3"><span class="section-number-3"></span> wf:redirect_to_login(URL, PostLoginURL)= -&gt; ok</h3>
 <div class="outline-text-3" id="text-6-3">
 
 
 <p>
-   Redirect the user back to a page that called <code>wf:redirect_to_login(Url)</code>. If
-   the user came to the page for some other reason, then the user is redirected to the
-   provided DefaultUrl.
+   Redirect to the provided URL, attaching a token on the end. The receiving
+   page can subsequently call <code>wf:redirect_from_login(DefaultURL)</code> to send
+   the user to <code>PostLoginURL</code>.
+</p>
+<p>
+   If <code>PostLoginURL</code> is not provided, it will default to the current page's
+   URL.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-6-4" class="outline-3">
+<h3 id="sec-6-4"><span class="section-number-3"></span> wf:redirect_from_login(DefaultURL) -&gt; ok</h3>
+<div class="outline-text-3" id="text-6-4">
+
+
+<p>
+   Redirect the user back to a page that called <code>wf:redirect_to_login(URL)</code> or
+   to the <code>PostLoginURL</code> provided to <code>wf:redirect_to_login(URL, PostLoginURL)</code>
+   If the user came to the page for some other reason, then the user is
+   redirected to the provided <code>DefaultURL</code>.
 </p>
 </div>
 </div>
@@ -1203,8 +1303,49 @@ Example:
 
 
 <p>
-   Return the requested page module. Useful information to know when writing a custom
-   element or action.
+   Return the requested page module. Useful information to know when writing a
+   custom element or action.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-10-12" class="outline-3">
+<h3 id="sec-10-12"><span class="section-number-3"></span> wf:peer_ip() -&gt; IPAddress (4-tuple or 8-tuple)</h3>
+<div class="outline-text-3" id="text-10-12">
+
+
+
+<p>
+   Return the IP address of the client. Note that Erlang IP Addresses are
+   4-tuples (IPv4) or 8-tuples (IPv6). For example: <code>{127,0,0,}</code> or
+   <code>{8193,3512,51966,47806,0,0,0,1}</code>
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-10-13" class="outline-3">
+<h3 id="sec-10-13"><span class="section-number-3"></span> wf:peer_ip(ListOfProxies) -&gt; IPAddress (4-tuple or 8-tuple)</h3>
+<div class="outline-text-3" id="text-10-13">
+
+
+<p>
+   Shortcut method for <code>wf:peer_ip(ListOfProxies, x_forwarded_for)</code>
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-10-14" class="outline-3">
+<h3 id="sec-10-14"><span class="section-number-3"></span> wf:peer_ip(ListOfProxies, ForwardedHeader) -&gt; IPAddress (4-tuple or 8-tuple)</h3>
+<div class="outline-text-3" id="text-10-14">
+
+
+<p>
+   This will compare the peer_ip address against the provided list of proxies,
+   and if any of them match the connected IP, then return the IP address from
+   the <code>ForwardedHeader</code>.
 </p>
 </div>
 </div>
@@ -1448,7 +1589,6 @@ Example:
 <p>
    Log a warning message.
 </p>
-
 </div>
 
 </div>
@@ -1471,7 +1611,19 @@ Example:
 
 
 <p>
-   Log an error message.
+   Log and error message.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-14-7" class="outline-3">
+<h3 id="sec-14-7"><span class="section-number-3"></span> wf:console_log(Terms)</h3>
+<div class="outline-text-3" id="text-14-7">
+
+
+<p>
+   Send a <code>console.log()</code> to the browser with <code>Terms</code> as the value. (See <a href="./actions/console_log.html">Console Log Action</a>)
 </p>
 </div>
 </div>
@@ -1499,7 +1651,7 @@ Example:
 </div>
 
 <div id="outline-container-15-2" class="outline-3">
-<h3 id="sec-15-2"><span class="section-number-3"></span> wf:config(Key, DefaultValue) -&gt; Term</h3>
+<h3 id="sec-15-2"><span class="section-number-3"></span> wf:config_default(Key, DefaultValue) -&gt; Term</h3>
 <div class="outline-text-3" id="text-15-2">
 
 
@@ -1514,7 +1666,7 @@ Example:
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-31 21:51:18 CDT</p>
+<p class="date">Date: 2013-09-23 15:12:33 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
