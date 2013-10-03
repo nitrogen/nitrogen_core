@@ -59,7 +59,7 @@
 ** Sample Nitrogen Plugin
 
   The simplest way to create your own plugin is to start with the
-  [[https://github.com/choptastic/sample_nitrogen_plugin][Sample Nitrogen Plugin]]
+  [[https://github.com/nitrogen/sample_nitrogen_plugin][Sample Nitrogen Plugin]]
   and expand on it to make your own plugin.
 
 ** Creating your plugin from scratch

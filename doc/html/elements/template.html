@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Template Element Element"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-10-03 14:10:47 CDT"/>
+<meta name="generated" content="2013-10-03 14:52:17 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -118,8 +118,17 @@
   while using a special placeholder syntax to call back to your page or any Erlang module.
 </p>
 <p>
-  To specify a placeholder in the html template file, use the form =<a href="#Module-Function-Args">[Module:Function(Args)</a>]=. 
-  Module can be any module, or can be the atom 'page' to refer to the currently Nitrogen page. 
+  To specify a placeholder in the html template file, use the form:
+</p>
+
+
+
+<pre class="src src-erlang">[[[<span class="org-variable-name">Module</span>:<span class="org-variable-name">Function</span>(<span class="org-variable-name">Args</span>)]]]
+</pre>
+
+
+<p>
+  Module can be any module, or can be the atom 'page' to refer to the0 currently Nitrogen page. 
   The function must return either one or more Nitrogen elements, an Erlang string, or 
   an Erlang binary.
 </p>
@@ -205,7 +214,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-10-03 14:10:47 CDT</p>
+<p class="date">Date: 2013-10-03 14:52:17 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
