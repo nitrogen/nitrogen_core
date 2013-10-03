@@ -93,7 +93,7 @@
 #+END_SRC
 
   This tells us a lot of information. The function was =wf_convert:html_encode=
-  on line 93 in ="src/lib/wf_convert.erl"= (which is actually a Nitrogen core
+  on line 93 in =src/lib/wf_convert.erl= (which is actually a Nitrogen core
   module). /Generally, if the module name starts with =wf_=, it's probably part
   of Nitrogen core/.
   
@@ -165,7 +165,7 @@ field text::binary() | maybe_improper_list(binary() | maybe_improper_list(any(),
   + If Erlang launches without crashing, but the page http://127.0.0.1:8000
     isn't responding, then either you want to make sure that you don't have a
     firewall blocking that port from being bound.  Also make sure your config is
-    binding to the right IP address. ="0.0.0.0"= or ={0,0,0,0}= (depending on
+    binding to the right IP address. "=0.0.0.0=" or ={0,0,0,0}= (depending on
     server config) will bind to any of the machine's IPs.
 
   + If neither of the above solve your problem, there might be something more
