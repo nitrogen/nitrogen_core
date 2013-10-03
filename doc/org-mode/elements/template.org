@@ -46,7 +46,7 @@
 
    Example value: =[{'MyArg1', "Hello"}, {'MyArg2', "World"}]=
 
-   + module\_aliases - (/proplist of {alias, actual_module} pairs/) :: When 
+   + module\_aliases - (/proplist of {alias, actual\_module} pairs/) :: When 
       =alias= is encountered as the module of a Module:Function(Args) call,
       replace =alias= with =actual_module=.
 
