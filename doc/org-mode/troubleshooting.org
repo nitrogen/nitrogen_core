@@ -101,8 +101,8 @@
 
   This tells us a lot of information. The function was =wf_convert:html_encode=
   on line 93 in =src/lib/wf_convert.erl= (which is actually a Nitrogen core
-  module). /Generally, if the module name starts with =wf_=, it's probably part
-  of Nitrogen core/.
+  module). Generally, if the module name starts with =wf_=, it's probably part
+  of Nitrogen core.
   
   The first argument was that huge tuple that starts with ={link=, and the
   second argument was the atom =true=.  This is already giving us a good hint
