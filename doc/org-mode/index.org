@@ -132,7 +132,7 @@
 * How do I change configuration settings?
 # <<400>>
 
-  Read all about the [[file./config.org][configuration options]].
+  Read all about the [[file:./config.org][configuration options]].
 
 * Where is the code for my website?
 # <<500>>

@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Troubleshooting Nitrogen Applications"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-10-03 14:07:31 CDT"/>
+<meta name="generated" content="2013-10-04 06:25:43 CDT"/>
 <meta name="author" content="Jesse Gumm (@jessegumm)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -180,10 +180,17 @@
 
 
 <p>
-  Erlang errors can be a little scary to the uninitiated, but are very helpful once you get the feel for them.  They include relatively complete stack traces, so you can see the stack of calling functions (what functions called which functions, which lead to this particular crash).
+  Erlang errors can be a little scary to the uninitiated, but are very helpful
+  once you get the feel for them.  They include relatively complete stack
+  traces, so you can see the stack of calling functions (what functions called
+  which functions, which lead to this particular crash).
 </p>
 <p>  
-  Conveniently, as of R15, errors at least show line numbers, so you're no longer wading throught long, multi-clause functions to find the cause of the error. Prior to R15, tracking down the cause of an error in something like an <code>event</code> function or a `gen<sub>server`'s</sub> `handle<sub>call`</sub> function was a tedius endeavor.
+  Conveniently, as of R15, errors at least show line numbers, so you're no
+  longer wading throught long, multi-clause functions to find the cause of the
+  error. Prior to R15, tracking down the cause of an error in something like an
+  <code>event</code> function or a `gen<sub>server`'s</sub> `handle<sub>call`</sub> function was a tedius
+  endeavor.
 </p>
 <p>
   Anyway, here's a pretty typical-looking Nitrogen error:
@@ -346,6 +353,12 @@ field text::<span class="org-type">binary</span>() | <span class="org-builtin">m
     app.config.
 
 </li>
+<li>If you know the port is available, and you get an error about "name in use"
+    from epmd, that means you have a node of the same name running on the
+    machine. You can search for instances of the executable `erl` or `beam`
+    running.  
+
+</li>
 <li>If Erlang launches without crashing, but the page <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a>
     isn't responding, then either you want to make sure that you don't have a
     firewall blocking that port from being bound.  Also make sure your config is
@@ -401,13 +414,19 @@ field text::<span class="org-type">binary</span>() | <span class="org-builtin">m
   either one of two things:
 </p>
 <ul>
-<li>Your template doesn't have a =<a href="#script">[script</a>]= section like it should (in
+<li>Your template doesn't have a
+<pre class="example">
+[[[script]]]
+</pre>
+
+<p>    section like it should (in which case, initializing javascript is never
+    sent to the browser), or 
+</p></li>
+<li>Your postbacks are silently failing on the server.
 </li>
 </ul>
 
-<p>  which case, initializing javascript is never sent to the browser), or + Your
-  postbacks are silently failing on the server.
-</p>
+
 <p>
   The most common cause of postbacks silently failing on the server (meaning
   not generating console errors) is the presence of a catcha-all event. For
@@ -469,7 +488,7 @@ event(_) -&gt; ok.
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-10-03 14:07:31 CDT</p>
+<p class="date">Date: 2013-10-04 06:25:43 CDT</p>
 <p class="author">Author: Jesse Gumm (@jessegumm)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
