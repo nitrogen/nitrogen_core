@@ -160,4 +160,4 @@ check_user_input() ->
 
    + [[file:../validators.org][Validators]]
 
-   + [[https://nitrogenproject.com/demos/recaptcha][Recaptcha Demo]]
+   + [[http://nitrogenproject.com/demos/recaptcha][Recaptcha Demo]]
