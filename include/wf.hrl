@@ -297,6 +297,21 @@
         html_name               :: html_name(),
         type=text               :: string() | atom()
     }).
+-record(datepicker_textbox, {?ELEMENT_BASE(element_datepicker_textbox),
+        text=""                 :: text(),
+        maxlength=""            :: integer() | string(),
+        size=""                 :: integer() | string(),
+        placeholder=""          :: text(),
+        html_encode=true        :: html_encode(),
+        readonly=false          :: boolean(),
+        disabled=false          :: boolean(),
+        next                    :: id(),
+        handle_invalid=false    :: boolean(),
+        on_invalid              :: undefined | actions(),
+        html_name               :: html_name(),
+        validators=[]           :: validators(),
+        options = [{dateFormat, "yy-mm-dd"}]    :: proplist()
+    }).
 -record(textbox_autocomplete, {?ELEMENT_BASE(element_textbox_autocomplete),
         tag                     :: term(),
         text=""                 :: text(),
@@ -339,16 +354,6 @@
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module()
-    }).
--record(datepicker_textbox, {?ELEMENT_BASE(element_datepicker_textbox),
-        text=""                 :: text(),
-        next                    :: id(),
-        html_encode=true        :: html_encode(),
-        validators=[]           :: validators(),
-        placeholder=""          :: text(),
-        readonly=false          :: boolean(),
-        disabled=false          :: boolean(),
-        options = [{dateFormat, "yy-mm-dd"}]    :: proplist()
     }).
 
 -record(option, {
