@@ -120,7 +120,7 @@ render_element(Record) ->
                 wf_tags:emit_tag(input, [
                     {name, file},
                     {data_fields, DataFields},
-                    {multiple, Multiple},
+                    ?WF_IF(Multiple,multiple,[]),
                     {class, [no_postback, FileInputID|Anchor]},
                     {id, FileInputID},
                     {type, file},
