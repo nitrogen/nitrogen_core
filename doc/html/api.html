@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Nitrogen 2.x Documentation"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-10-03 13:42:01 CDT"/>
+<meta name="generated" content="2013-10-13 18:56:09 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -175,22 +175,48 @@
   TargetID can refer to the name of an element, or it can be a JQuery
   selector path. See <a href="./paths.html">Element Paths</a> for more information.
 </p>
+<p>
+  For every one of these functions which offer a <code>Priority</code> argument,
+  <code>Priority</code> can be either the atom <code>eager</code>, <code>normal</code>, or <code>defer</code>. <code>eager</code> will
+  always execute before <code>normal</code>, which will always execute before <code>defer</code>.
+</p>
+<p>
+  Any wiring which does not explicitly specify a priority will wire at <code>normal</code>
+  priority.
+</p>
 
 </div>
 
 <div id="outline-container-2-1" class="outline-3">
-<h3 id="sec-2-1"><span class="section-number-3"></span> wf:set(TargetID,Value) -&gt; ok</h3>
+<h3 id="sec-2-1"><span class="section-number-3"></span> wf:set(TargetID, Value) -&gt; ok</h3>
 <div class="outline-text-3" id="text-2-1">
 
-<p>   Update a form element (textbox, dropdown, checkbox, etc) to set text value of TargetID. Can also be used to set the <code>src</code> attribute of an image tag.
-</p>
 </div>
 
 </div>
 
 <div id="outline-container-2-2" class="outline-3">
-<h3 id="sec-2-2"><span class="section-number-3"></span> wf:enable(Target) -&gt; ok</h3>
+<h3 id="sec-2-2"><span class="section-number-3"></span> wf:set(Priority, TargetID, Value) -&gt; ok</h3>
 <div class="outline-text-3" id="text-2-2">
+
+<p>   Update a form element (textbox, dropdown, checkbox, etc) to set text value
+   of TargetID. Can also be used to set the <code>src</code> attribute of an image tag.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3"></span> wf:enable(Target) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-3">
+
+</div>
+
+</div>
+
+<div id="outline-container-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3"></span> wf:enable(Priority, Target) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-4">
 
 <p>   Enables the target form field or button.
 </p>
@@ -198,9 +224,17 @@
 
 </div>
 
-<div id="outline-container-2-3" class="outline-3">
-<h3 id="sec-2-3"><span class="section-number-3"></span> wf:disable(Target) -&gt;</h3>
-<div class="outline-text-3" id="text-2-3">
+<div id="outline-container-2-5" class="outline-3">
+<h3 id="sec-2-5"><span class="section-number-3"></span> wf:disable(Target) -&gt;</h3>
+<div class="outline-text-3" id="text-2-5">
+
+</div>
+
+</div>
+
+<div id="outline-container-2-6" class="outline-3">
+<h3 id="sec-2-6"><span class="section-number-3"></span> wf:disable(Priority, Target) -&gt;</h3>
+<div class="outline-text-3" id="text-2-6">
 
 <p>   Disables the target form field or button.
 </p>
@@ -208,9 +242,17 @@
 
 </div>
 
-<div id="outline-container-2-4" class="outline-3">
-<h3 id="sec-2-4"><span class="section-number-3"></span> wf:update(TargetID, Elements) -&gt; ok</h3>
-<div class="outline-text-3" id="text-2-4">
+<div id="outline-container-2-7" class="outline-3">
+<h3 id="sec-2-7"><span class="section-number-3"></span> wf:update(TargetID, Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-7">
+
+</div>
+
+</div>
+
+<div id="outline-container-2-8" class="outline-3">
+<h3 id="sec-2-8"><span class="section-number-3"></span> wf:update(Priority, TargetID, Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-8">
 
 <p>   Update the contents of TargetID with a new set of Nitrogen Elements.
 </p>
@@ -218,9 +260,17 @@
 
 </div>
 
-<div id="outline-container-2-5" class="outline-3">
-<h3 id="sec-2-5"><span class="section-number-3"></span> wf:replace(TargetID, Elements) -&gt; ok</h3>
-<div class="outline-text-3" id="text-2-5">
+<div id="outline-container-2-9" class="outline-3">
+<h3 id="sec-2-9"><span class="section-number-3"></span> wf:replace(TargetID, Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-9">
+
+</div>
+
+</div>
+
+<div id="outline-container-2-10" class="outline-3">
+<h3 id="sec-2-10"><span class="section-number-3"></span> wf:replace(Priority, TargetID, Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-10">
 
 <p>   Replace TargetID with a new set of Nitrogen Elements.
 </p>
@@ -228,9 +278,17 @@
 
 </div>
 
-<div id="outline-container-2-6" class="outline-3">
-<h3 id="sec-2-6"><span class="section-number-3"></span> wf:remove(TargetID) -&gt; ok</h3>
-<div class="outline-text-3" id="text-2-6">
+<div id="outline-container-2-11" class="outline-3">
+<h3 id="sec-2-11"><span class="section-number-3"></span> wf:remove(TargetID) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-11">
+
+</div>
+
+</div>
+
+<div id="outline-container-2-12" class="outline-3">
+<h3 id="sec-2-12"><span class="section-number-3"></span> wf:remove(Priority, TargetID) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-12">
 
 <p>   Remove TargetID from the DOM.
 </p>
@@ -238,49 +296,85 @@
 
 </div>
 
-<div id="outline-container-2-7" class="outline-3">
-<h3 id="sec-2-7"><span class="section-number-3"></span> wf:insert_top(TargetID, Elements) -&gt; ok</h3>
-<div class="outline-text-3" id="text-2-7">
+<div id="outline-container-2-13" class="outline-3">
+<h3 id="sec-2-13"><span class="section-number-3"></span> wf:insert_top(TargetID, Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-13">
 
-<p>   Insert Nitrogen Elements at the top of TargetID (within the contents of TargetID), shifting the existing contents downward.
+</div>
+
+</div>
+
+<div id="outline-container-2-14" class="outline-3">
+<h3 id="sec-2-14"><span class="section-number-3"></span> wf:insert_top(Priority, TargetID, Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-14">
+
+<p>   Insert Nitrogen Elements at the top of TargetID (within the contents of
+   TargetID), shifting the existing contents downward.
 </p>
 </div>
 
 </div>
 
-<div id="outline-container-2-8" class="outline-3">
-<h3 id="sec-2-8"><span class="section-number-3"></span> wf:insert_bottom(TargetID, Elements) -&gt; ok</h3>
-<div class="outline-text-3" id="text-2-8">
+<div id="outline-container-2-15" class="outline-3">
+<h3 id="sec-2-15"><span class="section-number-3"></span> wf:insert_bottom(TargetID, Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-15">
 
-<p>   Insert Nitrogen Elements at the bottom of the TargetID (within the contents of TargetID), below the existing contents.
+</div>
+
+</div>
+
+<div id="outline-container-2-16" class="outline-3">
+<h3 id="sec-2-16"><span class="section-number-3"></span> wf:insert_bottom(Priority, TargetID, Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-16">
+
+<p>   Insert Nitrogen Elements at the bottom of the TargetID (within the contents
+   of TargetID), below the existing contents.
 </p>
 </div>
 
 </div>
 
-<div id="outline-container-2-9" class="outline-3">
-<h3 id="sec-2-9"><span class="section-number-3"></span> wf:insert_before(TargetID, Elements) -&gt; ok</h3>
-<div class="outline-text-3" id="text-2-9">
+<div id="outline-container-2-17" class="outline-3">
+<h3 id="sec-2-17"><span class="section-number-3"></span> wf:insert_before(TargetID, Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-17">
 
-<p>   Insert Nitrogen Elements before TargetID in the DOM, shifting the existing contents downward.
+</div>
+
+</div>
+
+<div id="outline-container-2-18" class="outline-3">
+<h3 id="sec-2-18"><span class="section-number-3"></span> wf:insert_before(Priority, TargetID, Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-18">
+
+<p>   Insert Nitrogen Elements before TargetID in the DOM, shifting the existing
+   contents downward.
 </p>
 </div>
 
 </div>
 
-<div id="outline-container-2-10" class="outline-3">
-<h3 id="sec-2-10"><span class="section-number-3"></span> wf:insert_after(TargetID, Elements) -&gt; ok</h3>
-<div class="outline-text-3" id="text-2-10">
+<div id="outline-container-2-19" class="outline-3">
+<h3 id="sec-2-19"><span class="section-number-3"></span> wf:insert_after(TargetID, Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-19">
 
-<p>   Insert Nitrogen Elements after TargetID in the DOM, below the existing contents.
+</div>
+
+</div>
+
+<div id="outline-container-2-20" class="outline-3">
+<h3 id="sec-2-20"><span class="section-number-3"></span> wf:insert_after(Priority, TargetID, Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-20">
+
+<p>   Insert Nitrogen Elements after TargetID in the DOM, below the existing
+   contents.
 </p>
 </div>
 
 </div>
 
-<div id="outline-container-2-11" class="outline-3">
-<h3 id="sec-2-11"><span class="section-number-3"></span> wf:flash(Elements) -&gt; ok</h3>
-<div class="outline-text-3" id="text-2-11">
+<div id="outline-container-2-21" class="outline-3">
+<h3 id="sec-2-21"><span class="section-number-3"></span> wf:flash(Elements) -&gt; ok</h3>
+<div class="outline-text-3" id="text-2-21">
 
 <p>   Insert the Nitrogen Elements as a new flash message.
 </p>
@@ -1666,7 +1760,7 @@ Example:
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-10-03 13:42:01 CDT</p>
+<p class="date">Date: 2013-10-13 18:56:09 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

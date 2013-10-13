@@ -32,35 +32,57 @@
   TargetID can refer to the name of an element, or it can be a JQuery
   selector path. See [[./paths.org][Element Paths]] for more information.
 
-** wf:set(TargetID,Value) -> ok
-   Update a form element (textbox, dropdown, checkbox, etc) to set text value of TargetID. Can also be used to set the =src= attribute of an image tag.
+  For every one of these functions which offer a =Priority= argument,
+  =Priority= can be either the atom =eager=, =normal=, or =defer=. =eager= will
+  always execute before =normal=, which will always execute before =defer=.
+
+  Any wiring which does not explicitly specify a priority will wire at =normal=
+  priority.
+
+** wf:set(TargetID, Value) -> ok
+** wf:set(Priority, TargetID, Value) -> ok
+   Update a form element (textbox, dropdown, checkbox, etc) to set text value
+   of TargetID. Can also be used to set the =src= attribute of an image tag.
    
 ** wf:enable(Target) -> ok
+** wf:enable(Priority, Target) -> ok
    Enables the target form field or button.
 
 ** wf:disable(Target) ->
+** wf:disable(Priority, Target) ->
    Disables the target form field or button.
 
 ** wf:update(TargetID, Elements) -> ok
+** wf:update(Priority, TargetID, Elements) -> ok
    Update the contents of TargetID with a new set of Nitrogen Elements.
 
 ** wf:replace(TargetID, Elements) -> ok
+** wf:replace(Priority, TargetID, Elements) -> ok
    Replace TargetID with a new set of Nitrogen Elements.
 
 ** wf:remove(TargetID) -> ok
+** wf:remove(Priority, TargetID) -> ok
    Remove TargetID from the DOM.
    
 ** wf:insert\_top(TargetID, Elements) -> ok
-   Insert Nitrogen Elements at the top of TargetID (within the contents of TargetID), shifting the existing contents downward.
+** wf:insert\_top(Priority, TargetID, Elements) -> ok
+   Insert Nitrogen Elements at the top of TargetID (within the contents of
+   TargetID), shifting the existing contents downward.
    
 ** wf:insert\_bottom(TargetID, Elements) -> ok
-   Insert Nitrogen Elements at the bottom of the TargetID (within the contents of TargetID), below the existing contents.
+** wf:insert\_bottom(Priority, TargetID, Elements) -> ok
+   Insert Nitrogen Elements at the bottom of the TargetID (within the contents
+   of TargetID), below the existing contents.
 
 ** wf:insert\_before(TargetID, Elements) -> ok
-   Insert Nitrogen Elements before TargetID in the DOM, shifting the existing contents downward.
+** wf:insert\_before(Priority, TargetID, Elements) -> ok
+   Insert Nitrogen Elements before TargetID in the DOM, shifting the existing
+   contents downward.
    
 ** wf:insert\_after(TargetID, Elements) -> ok
-   Insert Nitrogen Elements after TargetID in the DOM, below the existing contents.
+** wf:insert\_after(Priority, TargetID, Elements) -> ok
+   Insert Nitrogen Elements after TargetID in the DOM, below the existing
+   contents.
 
 ** wf:flash(Elements) -> ok
    Insert the Nitrogen Elements as a new flash message.
