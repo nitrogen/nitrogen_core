@@ -12,7 +12,7 @@ docs:
 
 doc: docs
 
-test:
+test: compile
 	./rebar eunit
 
 DEPS_PLT=$(CURDIR)/.deps_plt
