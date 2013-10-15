@@ -15,12 +15,7 @@
     depickle/2
 ]).
 
-
--define(ENCRYPT, crypto:aes_cbc_128_encrypt).
--define(DECRYPT, crypto:aes_cbc_128_decrypt).
-
 -type pickled() :: binary() | string().
-
 
 -spec pickle(Data :: term()) -> pickled().
 pickle(Data) ->
@@ -29,8 +24,8 @@ pickle(Data) ->
     Bits = (16-Padding)*8,
     Key = signkey(),
     IV = crypto:rand_bytes(16),
-    Cipher = ?ENCRYPT(Key,IV,<<Message/binary,0:Bits>>),
-    Signature = crypto:hash(ripemd160,<<Key/binary,Cipher/binary>>),
+    Cipher = ?WF_ENCRYPT(Key,IV,<<Message/binary,0:Bits>>),
+    Signature = ?WF_HASH(<<Key/binary,Cipher/binary>>),
     modified_base64_encode(<<IV/binary,Signature/binary,Cipher/binary>>).
 
 -spec depickle(PickledData :: binary() | string()) -> undefined | term().
@@ -66,8 +61,8 @@ inner_depickle(PickledData) ->
     Key = signkey(),
     Decoded = modified_base64_decode(wf:to_binary(PickledData)),
     <<IV:16/binary,Signature:20/binary,Cipher/binary>> = Decoded,
-    Signature = crypto:hash(ripemd160,<<Key/binary,Cipher/binary>>),
-    {_Data,_Time} = binary_to_term(?DECRYPT(Key,IV,Cipher)).
+    Signature = ?WF_HASH(<<Key/binary,Cipher/binary>>),
+    {_Data,_Time} = binary_to_term(?WF_DECRYPT(Key,IV,Cipher)).
 
 -spec signkey() -> binary().
 signkey() ->
