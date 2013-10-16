@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Nitrogen 2.x Documentation"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-10-13 18:56:09 CDT"/>
+<meta name="generated" content="2013-10-16 14:51:26 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -1011,15 +1011,18 @@
 </div>
 
 <div id="outline-container-7-3" class="outline-3">
-<h3 id="sec-7-3"><span class="section-number-3"></span> wf:session(Key, Value) -&gt; ok</h3>
+<h3 id="sec-7-3"><span class="section-number-3"></span> wf:session(Key, Value) -&gt; OldValue</h3>
 <div class="outline-text-3" id="text-7-3">
 
 
 <p>   
    Store a session variable for the current user. Key and Value can be any Erlang term.
-   For example, store a count:
-   <code>wf:session(count, Count)</code>
+   For example, store a count: <code>wf:session(count, Count)</code>
 </p>
+<p>
+   Returns the previous value associated with Key.
+</p>
+
 </div>
 
 </div>
@@ -1760,7 +1763,7 @@ Example:
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-10-13 18:56:09 CDT</p>
+<p class="date">Date: 2013-10-16 14:51:26 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

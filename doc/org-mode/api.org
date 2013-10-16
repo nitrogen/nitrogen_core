@@ -322,11 +322,13 @@
    Retrieve the session value stored under a specific key. If not
    found, return the supplied default value.
    
-** wf:session(Key, Value) -> ok
+** wf:session(Key, Value) -> OldValue
    
    Store a session variable for the current user. Key and Value can be any Erlang term.
-   For example, store a count:
-   =wf:session(count, Count)=
+   For example, store a count: =wf:session(count, Count)=
+
+   Returns the previous value associated with Key.
+
    
 ** wf:clear\_session() -> ok
 
