@@ -2,3 +2,5 @@
 *.beam
 *~
 .*.sw?
+crypto_compat.hrl
+.deps_plt
