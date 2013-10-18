@@ -14,6 +14,7 @@
   + [[200][I started Nitrogen but nothing is happening. What do I do?]]
   + [[300][Why aren't postbacks working?]]
   + [[400][My postbacks aren't doing what I expect, how can I figure out what's happening?]]
+  + [[500][Why isn't upgrading working?]]
   + [[10000][Other questions not answered here?]]
 
 * What tools do I need for troubleshooting Nitrogen apps?
@@ -248,6 +249,29 @@ field text::binary() | maybe_improper_list(binary() | maybe_improper_list(any(),
   text to the erlang console to inspect the status of variables with =wf:info=,
   =wf:warn=, and =wf:error=, or you can send helper commands to the browser
   with the =#alert{}= or =#console_log= actions.
+
+* Why isn't upgrading working?
+# <<500>>
+  
+  If you run =make upgrade=, but find that it seems to go through all the steps
+  of downloading the latest versions, and yet you notice nothing really
+  happens, this can be evidence of a known issue with rebar. This is generally
+  caused by your the dependencies in your rebar.config looking like this:
+
+  : {nitrogen_core, ".*", {git, "git://github.com/nitrogen/nitrogen_core", "HEAD"}}
+
+  or this:
+
+  : {nitrogen_core, ".*", {git, "git://github.com/nitrogen/nitrogen_core", "master"}}
+  
+  The solution is to "fix" your rebar.config to have the dependency lines look like this:
+
+  : {nitrogen_core, ".*", {git, "git://github.com/nitrogen/nitrogen_core", {branch, master}}}
+
+  Notice that the difference is in the fact use of ={branch, master}= instead
+  of the plain text =master=.
+
+  Once you make this change, upgrading should work as intented.
 
 * Other questions not answered here?
 # <<10000>>

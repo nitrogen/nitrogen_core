@@ -246,6 +246,10 @@
     upgrade your version of ERTS, You'll want to follow the directions below for
     upgrading from pre-2.1 to 2.1+.
 
+    *Note:* If you've run =make upgrade= and nothing seems to have worked,
+    please check out the relevant question in the
+    [[file:./troubleshooting.org][Troubleshooting]] guide.
+
   *If you're running a version of Nitrogen pre 2.1 and want to upgrade to 2.1.0 and above:*
   
   + Build or download the new Nitrogen environment for your architecture and

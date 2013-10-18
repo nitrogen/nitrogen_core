@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Troubleshooting Nitrogen Applications"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-10-04 06:33:30 CDT"/>
+<meta name="generated" content="2013-10-17 20:40:55 CDT"/>
 <meta name="author" content="Jesse Gumm (@jessegumm)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -111,7 +111,8 @@
 <li><a href="#sec-4">4 I started Nitrogen but nothing is happening. What do I do?</a></li>
 <li><a href="#sec-5">5 Why aren't postbacks working?</a></li>
 <li><a href="#sec-6">6 My postbacks aren't doing what I expect, how can I figure out what's happening?</a></li>
-<li><a href="#sec-7">7 Other questions not answered here?</a></li>
+<li><a href="#sec-7">7 Why isn't upgrading working?</a></li>
+<li><a href="#sec-8">8 Other questions not answered here?</a></li>
 </ul>
 </div>
 </div>
@@ -132,7 +133,9 @@
 </li>
 <li><a href="#sec-6">My postbacks aren't doing what I expect, how can I figure out what's happening?</a>
 </li>
-<li><a href="#sec-7">Other questions not answered here?</a>
+<li><a href="#sec-7">Why isn't upgrading working?</a>
+</li>
+<li><a href="#sec-8">Other questions not answered here?</a>
 </li>
 </ul>
 
@@ -476,8 +479,51 @@ event(_) -&gt; ok.
 </div>
 
 <div id="outline-container-7" class="outline-2">
-<h2 id="sec-7"><a name="10000" id="10000"></a><span class="section-number-2">7</span> Other questions not answered here?</h2>
+<h2 id="sec-7"><a name="500" id="500"></a><span class="section-number-2">7</span> Why isn't upgrading working?</h2>
 <div class="outline-text-2" id="text-7">
+
+
+<p>  
+  If you run <code>make upgrade</code>, but find that it seems to go through all the steps
+  of downloading the latest versions, and yet you notice nothing really
+  happens, this can be evidence of a known issue with rebar. This is generally
+  caused by your the dependencies in your rebar.config looking like this:
+</p>
+<pre class="example">
+{nitrogen_core, ".*", {git, "git://github.com/nitrogen/nitrogen_core", "HEAD"}}
+</pre>
+
+
+<p>
+  or this:
+</p>
+<pre class="example">
+{nitrogen_core, ".*", {git, "git://github.com/nitrogen/nitrogen_core", "master"}}
+</pre>
+
+
+<p>  
+  The solution is to "fix" your rebar.config to have the dependency lines look like this:
+</p>
+<pre class="example">
+{nitrogen_core, ".*", {git, "git://github.com/nitrogen/nitrogen_core", {branch, master}}}
+</pre>
+
+
+<p>
+  Notice that the difference is in the fact use of <code>{branch, master}</code> instead
+  of the plain text <code>master</code>.
+</p>
+<p>
+  Once you make this change, upgrading should work as intented.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-8" class="outline-2">
+<h2 id="sec-8"><a name="10000" id="10000"></a><span class="section-number-2">8</span> Other questions not answered here?</h2>
+<div class="outline-text-2" id="text-8">
 
 
 <p>
@@ -489,7 +535,7 @@ event(_) -&gt; ok.
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-10-04 06:33:30 CDT</p>
+<p class="date">Date: 2013-10-17 20:40:55 CDT</p>
 <p class="author">Author: Jesse Gumm (@jessegumm)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
