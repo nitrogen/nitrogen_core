@@ -43,7 +43,8 @@
 
 * Form
   + [[./elements/button.org][Button]]
-  + [[./elements/textbox.org][Textbox]] | [[./elements/textbox.org][Textbox Autocomplete]]
+  + [[./elements/textbox.org][Textbox]]
+  + [[./elements/textbox_autocomplete.org][Textbox Autocomplete]]
   + [[./elements/datepicker_textbox.org][Datepicker Textbox]]
   + [[./elements/textarea.org][Textarea]]
   + [[./elements/checkbox.org][Checkbox]]
