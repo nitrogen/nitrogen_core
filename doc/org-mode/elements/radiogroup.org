@@ -24,7 +24,11 @@ Note: Currently, this will not do a "deep dive" for the radio buttons, but assum
 
 ** Attributes
 
-   + body - (/string/) :: The contents of the radio group.  Recommended to be a list of radio buttons, but it will not search the contents of child elements containing their own =body= attributes. So be aware. It's recommended to just be a list of =#radio{}= elements, separated by =#br{}= or =#p{}= elements.
+   + body - (/string/) :: The contents of the radio group.  Recommended to be a
+      list of radio buttons, but it will not search the contents of child elements
+      containing their own =body= attributes. So be aware. It's recommended to
+      just be a list of =#radio{}= elements, separated by =#br{}= or =#p{}=
+      elements.
 
 ** See Also
 
@@ -48,6 +52,6 @@ Note: Currently, this will not do a "deep dive" for the radio buttons, but assum
 
    + [[../restful_overfiew.html][RESTful element overview]]
 
-	+ [[http://nitrogenproject.com/demos/simplecontrols][Simple Controls Demos]]
+   + [[http://nitrogenproject.com/demos/simplecontrols][Simple Controls Demos]]
 
    + [[http://nitrogenproject.com/demos/radio][Radio Buttons Demo]]
