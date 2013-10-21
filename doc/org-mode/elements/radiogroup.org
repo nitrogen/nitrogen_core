@@ -50,7 +50,7 @@ Note: Currently, this will not do a "deep dive" for the radio buttons, but assum
 
    + [[./option.html][Dropdown Option]]
 
-   + [[../restful_overview.html][RESTful element overview]]
+   + [[./restful_overview.html][RESTful element overview]]
 
    + [[http://nitrogenproject.com/demos/simplecontrols][Simple Controls Demos]]
 
