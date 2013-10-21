@@ -27,10 +27,10 @@
 
    + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
 
-   + disabled - (/boolean/) :: Set to true to disable this button in the
-      browser (sets the HTML =disabled= property, effectly greying out the
-      element). Can be dynamically re-enabled with =wf:enable(ElementID)= or
-      =wf:wire(ElementID, #enable{})= (Default: =false=)
+	+ disabled - (/boolean/) :: Set to true to disable this button in the
+		browser (sets the HTML =disabled= property, effectly greying out the
+		element). Can be dynamically re-enabled with =wf:enable(ElementID)= or
+		=wf:wire(ElementID, #enable{})= (Default: =false=)
 
 	+ image - (/Path to Image/) :: This is a shortcut attribute to prepending
 		the body of the button with an image (for example, specifying a "Floppy

@@ -20,7 +20,7 @@
   + [[./elements/label.org][Label]]
   + [[./elements/value.org][Value]]
   + [[./elements/list.org][Lists]] | [[./elements/listitem.org][List Items]]
-  + [[./elements/radio.org][Radio Buttons]] | [[.elements/radiogroup.org][Radio Group]]
+  + [[./elements/radio.org][Radio Buttons]] | [[./elements/radiogroup.org][Radio Group]]
 
 * HTML
   + [[./elements/h1.org][Heading 1]] | [[./elements/h2.org][Heading 2]] | [[./elements/h3.org][Heading 3]] | [[./elements/h4.org][Heading 4]]

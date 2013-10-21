@@ -46,14 +46,11 @@
 
 ** Callbacks
 
-*** inplace\_event(Tag, Value)
-
-    Called when the user presses the OK button. Tag is specified in
-    the 'tag' attribute, above.  Value is the current value of the
-    textbox. This callback function should process the value as
-    necessary, and must return either the value itself, or a new value
-    that will be sent back to the page and set as the value of the
-    textbox.
+ + inplace\_event(Tag, Value) :: Called when the user presses the OK button.
+	Tag is specified in the 'tag' attribute, above.  Value is the current value
+	of the textbox. This callback function should process the value as
+	necessary, and must return either the value itself, or a new value that will
+	be sent back to the page and set as the value of the textbox.
 
 ** See Also
 

@@ -70,7 +70,7 @@
    + public\_key - (/string/) :: Public key provided by the Recaptcha service.
    + private\_key - (/string/) :: Private key provided by the Recaptcha service.
 
-The following attributes are optional
+*** The following attributes are optional
 
    + tag - (/term/) :: The "tag" for the recaptcha element to be passed to the
       =recaptcha_event/2= function

@@ -47,9 +47,7 @@
 
    + bindings - (/Bindings, as expected by erl\_eval/) :: A list of
       variable bindings to be used for arguments specified in the
-      template.
-
-   Example value: =[{'MyArg1', "Hello"}, {'MyArg2', "World"}]=
+      template. Example: =[{'MyArg1', "Hello"}, {'MyArg2', "World"}]=
 
    + module\_aliases - (/proplist of {alias, actual\_module} pairs/) :: When 
       =alias= is encountered as the module of a Module:Function(Args) call,
