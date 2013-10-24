@@ -125,8 +125,11 @@
   + Josh Pyle
   + Niclas Axelsson
   + Evgeny M.
+  + Boris Resnick
+  + Piotr Nosek
+  + Stefan Zegenhagen
    
-  Roughly sorted by date of contribution. Send your twitter handles to @jessegumm or @rustyio
+  Roughly sorted by date of contribution. Send your twitter handles to [[http://twitter.com][@jessegumm]]
 
 * Documentation
 
