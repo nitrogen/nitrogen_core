@@ -14,8 +14,8 @@ This element produces a block element for a container [[./mobile_grid.html][Mobi
 
 #+BEGIN_SRC erlang
    #mobile_grid { 
-      columns=2
-      body=[
+      columns=2,
+      block=[
          #mobile_grid_block{ text="Row 1, Cell 1" },
          #mobile_grid_block{ text="Row 1, Cell 2" },
          #mobile_grid_block{ text="Row 2, Cell 1" },
