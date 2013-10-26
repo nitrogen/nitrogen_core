@@ -75,8 +75,9 @@
       Nitrogen plugin, the root of your plugin must contain the file
       =nitrogen.plugin=. This file can be blank.
 
-   3) Place and static resources in a directory in the root of the plugin
-      and call that directory =static=.
+   3) Place and static resources in the =priv= directory in the root of the
+      plugin and call that directory =static=. So =priv/static= is where your
+      static resources should go.
 
    4) Place any necessary Erlang header files (e.g. if this plugin contains
       custom elements or actions) in a directory in the root of the plugin
