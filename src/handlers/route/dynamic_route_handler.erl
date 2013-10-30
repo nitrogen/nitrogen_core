@@ -29,7 +29,7 @@
 
 init(_Config, State) -> 
     % Get the path...
-    RequestBridge = wf_context:request_bridge(),
+    RequestBridge = wf_context:bridge(),
     Path = RequestBridge:path(),
 
     % Convert the path to a module. If there are no routes defined, then just

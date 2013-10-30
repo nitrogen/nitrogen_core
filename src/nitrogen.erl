@@ -6,11 +6,16 @@
 -module (nitrogen).
 -export ([
 	init_request/2,
+    init_request/1,
 	handler/2,
 	run/0]).
 
-init_request(RequestBridge, ResponseBridge) ->
-    wf_context:init_context(RequestBridge, ResponseBridge).
+%% init_request/2 kept for backwards compatibility, but is no longer needed
+init_request(Bridge, _) ->
+    init_request(Bridge).
+
+init_request(Bridge) ->
+    wf_context:init_context(Bridge).
 
 handler(Module, Config) ->
     wf_handler:set_handler(Module, Config).

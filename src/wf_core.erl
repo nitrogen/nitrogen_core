@@ -12,21 +12,20 @@
 % Erlang Web, ErlyWeb, etc.
 
 run() ->
-    Request = wf_context:request_bridge(),
-    Response = wf_context:response_bridge(),
+    Bridge = wf_context:bridge(),
     try 
-        case Request:error() of
+        case Bridge:error() of
             none -> run_catched();
             Other -> 
                 Message = wf:f("Errors: ~p~n", [Other]),
-                Response1 = Response:data(Message),
-                Response1:build_response()
+                Bridge1 = Bridge:set_response_data(Message),
+                Bridge1:build_response()
         end
     catch Type : Error -> 
-        run_crash(Response, Type, Error, erlang:get_stacktrace())
+        run_crash(Bridge, Type, Error, erlang:get_stacktrace())
     end.
 
-run_crash(Response, Type, Error, Stacktrace) ->
+run_crash(Bridge, Type, Error, Stacktrace) ->
     try
         case wf_context:type() of
             first_request       -> run_crashed_first_request(Type, Error, Stacktrace);
@@ -36,8 +35,8 @@ run_crash(Response, Type, Error, Stacktrace) ->
         finish_dynamic_request()
     catch Type2:Error2 ->
         ?LOG("~p~n", [{error, Type2, Error2, erlang:get_stacktrace()}]),
-        ErrResponse = Response:status_code(500),
-        ErrResponse1 = ErrResponse:data("Internal Server Error"),
+        ErrResponse = Bridge:status_code(500),
+        ErrResponse1 = ErrResponse:set_response_data("Internal Server Error"),
         ErrResponse1:build_response()
     end.
 
@@ -110,8 +109,8 @@ serialize_context() ->
 % Updates the context with values that were stored
 % in the browser by serialize_context_state/1.
 deserialize_context() ->
-    RequestBridge = wf_context:request_bridge(),	
-    Params = RequestBridge:post_params(),
+    Bridge = wf_context:bridge(),	
+    Params = Bridge:post_params(),
 
     % Save the old handles...
     OldHandlers = wf_context:handlers(),
@@ -204,8 +203,8 @@ run_crashed_postback_request(Type, Error, Stacktrace) ->
 %%% BUILD THE RESPONSE %%%
 
 build_static_file_response(Path) ->
-    Response = wf_context:response_bridge(),
-    Response1 = Response:file(Path),
+    Response = wf_context:bridge(),
+    Response1 = Response:set_response_file(Path),
     Response1:build_response().
 
 build_first_response(Html, Script) ->
@@ -213,15 +212,14 @@ build_first_response(Html, Script) ->
     Html1 = replace_script(Script, Html),
 
     % Update the response bridge and return.
-    Response = wf_context:response_bridge(),
-    Response1 = Response:data(Html1),
+    Response = wf_context:bridge(),
+    Response1 = Response:set_response_data(Html1),
     Response1:build_response().
 
 build_postback_response(Script) ->
     % Update the response bridge and return.
-    Response = wf_context:response_bridge(),
-    % TODO - does this need to be flattened?
-    Response1 = Response:data(lists:flatten(Script)),
+    Response = wf_context:bridge(),
+    Response1 = Response:set_response_data(Script),
     Response1:build_response().
 
 replace_script(_,Html) when ?IS_STRING(Html) -> Html;

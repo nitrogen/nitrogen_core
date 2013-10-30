@@ -13,7 +13,7 @@
 
 init(Module, State) -> 
     % Some values...
-    RequestBridge = wf_context:request_bridge(),
+    RequestBridge = wf_context:bridge(),
     Path = RequestBridge:path(),
 
     % Update the page_context with the path and module.

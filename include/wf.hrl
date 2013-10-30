@@ -81,8 +81,7 @@
 -record(context, {
     % Transient Information
     type,                % Either first_request, postback_request, or static_file
-    request_bridge,      % Holds the simple_bridge request object
-    response_bridge,     % Holds the simple_bridge response object
+    bridge,              % Holds the simple_bridge object
     anchor=undefined,    % Holds the unique ID of the current anchor element.
     data=[],             % Holds whatever the page_module:main/1 method returns: HTML, Elements, Binary, etc..
     action_queue=undefined, %% Holds the reference to the action priority queue

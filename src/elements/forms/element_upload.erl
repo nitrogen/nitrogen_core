@@ -176,7 +176,7 @@ event({upload_started, Record}) ->
 % is trigger a postback that happens inside of Nitrogen. 
 event({upload_finished, Record}) ->
     wf_context:type(first_request),
-    Req = wf_context:request_bridge(),
+    Req = wf_context:bridge(),
 
     % % Create the postback...
     {Filename,NewTag} = case Req:post_files() of

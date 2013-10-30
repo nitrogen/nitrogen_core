@@ -7,31 +7,36 @@
 -include("wf.hrl").
 -compile(export_all).
 
+-define(BRIDGE, (bridge())).
+
 %%% REQUEST AND RESPONSE BRIDGE %%%
 
-request_bridge() ->
-    Context = context(),
-    Context#context.request_bridge.
+bridge() ->
+    Context=context(),
+    Context#context.bridge.
 
-request_bridge(RequestBridge) ->
+bridge(Bridge) ->
     Context = context(),
-    Context#context { request_bridge = RequestBridge }.
+    context(Context#context{bridge=Bridge}).
+
+%% Kept for backwards compatibility
+request_bridge() ->
+    bridge().
+
+request_bridge(Bridge) ->
+    bridge(Bridge).
 
 response_bridge() ->
-    Context = context(),
-    Context#context.response_bridge.
+    bridge().
 
-response_bridge(ResponseBridge) ->
-    Context = context(),
-    context(Context#context { response_bridge = ResponseBridge }).
+respose_bridge(Bridge) ->
+    bridge(Bridge).
 
 socket() ->
-    Req = wf_context:request_bridge(), 
-    Req:socket().
+    ?BRIDGE:socket().
 
 peer_ip() ->
-    Req = request_bridge(),
-    Req:peer_ip().
+    ?BRIDGE:peer_ip().
 
 peer_ip(Proxies) ->
     peer_ip(Proxies,x_forwarded_for).
@@ -53,45 +58,34 @@ peer_ip(Proxies,ForwardedHeader) ->
 
 
 request_body() ->
-    Req = request_bridge(),
-    Req:request_body().
+    ?BRIDGE:request_body().
 
 status_code() ->
-    Req = request_bridge(),
-    Req:status_code().
+    ?BRIDGE:status_code().
 
 status_code(StatusCode) ->
-    Res = response_bridge(),
-    response_bridge(Res:status_code(StatusCode)),
+    bridge(?BRIDGE:set_status_code(StatusCode)),
     ok.
 
 content_type(ContentType) ->
-    Res = response_bridge(),
-    response_bridge(Res:header("Content-Type", ContentType)),
+    bridge(?BRIDGE:set_header("Content-Type", ContentType)),
     ok.
 
 headers() ->
-    Req = request_bridge(),
-    Req:headers().
+    ?BRIDGE:headers().
 
 header(Header) ->
-    Req = request_bridge(),
-    Req:header(Header).
+    ?BRIDGE:header(Header).
 
 header(Header, Value) ->
-    Res = response_bridge(),
-    response_bridge(Res:header(Header, Value)),
+    bridge(?BRIDGE:set_header(Header, Value)),
     ok.
 
 cookies() ->
-    Req = request_bridge(),
-    Req:cookies().
+    ?BRIDGE:cookies().
 
-cookie(Cookie) when is_atom(Cookie) ->
-    cookie(atom_to_list(Cookie));
 cookie(Cookie) ->
-    Req = request_bridge(),
-    Req:cookie(Cookie).
+    ?BRIDGE:cookie(Cookie).
 
 cookie_default(Cookie,DefaultValue) ->
     case cookie(Cookie) of
@@ -100,13 +94,10 @@ cookie_default(Cookie,DefaultValue) ->
     end.
 
 cookie(Cookie, Value) ->
-    Res = response_bridge(),
-    response_bridge(Res:cookie(Cookie, Value)),
-    ok.
+    bridge(?BRIDGE:set_cookie(Cookie, Value)).
 
 cookie(Cookie, Value, Path, MinutesToLive) ->
-    Res = response_bridge(),
-    response_bridge(Res:cookie(Cookie, Value, Path, MinutesToLive)),
+    bridge(?BRIDGE:cookie(Cookie, Value, Path, MinutesToLive)),
     ok.
 
 delete_cookie(Cookie) ->
@@ -279,11 +270,10 @@ handlers(Handlers) ->
 
 %%% CONTEXT CONSTRUCTION %%%
 
-init_context(RequestBridge, ResponseBridge) ->
+init_context(Bridge) ->
     % Create the new context using the default handlers.
     Context = #context {
-        request_bridge = RequestBridge,
-        response_bridge = ResponseBridge,
+        bridge = Bridge,
         page_context = #page_context { series_id = wf:temp_id() },
         event_context = #event_context {},
         action_queue = new_action_queue(),		
