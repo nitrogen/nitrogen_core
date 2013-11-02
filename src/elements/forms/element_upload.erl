@@ -97,12 +97,10 @@ render_element(Record) ->
             ]
         },
         #panel{
-            %show_if=Droppable,
             class=upload_progress,
             body=""
         },
         #list{
-            show_if=Droppable,
             id=DropListingID,
             class=upload_droplist
         },
