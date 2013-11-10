@@ -27,30 +27,28 @@ render_element(Record) ->
     case Record#checkbox.postback of
         undefined -> ignore;
         Postback -> wf:wire(Anchor, #event {
-                    type=change,
-                    postback=Postback,
-                    validation_group=ID,
-                    handle_invalid=Record#checkbox.handle_invalid,
-                    on_invalid=Record#checkbox.on_invalid,
-                    delegate=Record#checkbox.delegate })
+                        type=change,
+                        postback=Postback,
+                        validation_group=ID,
+                        handle_invalid=Record#checkbox.handle_invalid,
+                        on_invalid=Record#checkbox.on_invalid,
+                        delegate=Record#checkbox.delegate
+                    })
     end,
 
     Text = wf:html_encode(Record#checkbox.text, Record#checkbox.html_encode),
-    [
-        % Checkbox...
-        wf_tags:emit_tag(input, [
-            {name, Record#checkbox.html_name},
-            {id,   Anchor},
-            {type, checkbox},
-            {class, [checkbox, Record#checkbox.class]},
-            {style, Record#checkbox.style},
-            {value, Record#checkbox.value},
-            {CheckedOrNot, true},
-            {data_fields, Record#checkbox.data_fields}
-        ]),
-
-        % Label for Checkbox...
-        wf_tags:emit_tag(label, Text, [
-            {for, Anchor}
-        ])
-    ].
+    Checkbox = wf_tags:emit_tag(input, [
+        {name, Record#checkbox.html_name},
+        {id,   Anchor},
+        {type, checkbox},
+        {class, [checkbox, Record#checkbox.class]},
+        {style, Record#checkbox.style},
+        {value, Record#checkbox.value},
+        {CheckedOrNot, true},
+        {data_fields, Record#checkbox.data_fields}
+    ]),
+    
+    %% Contain the Checkbox within the label element itself
+    wf_tags:emit_tag(label, [Checkbox, Text], [
+        {for, Anchor}
+    ]).

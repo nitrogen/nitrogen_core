@@ -35,9 +35,9 @@ run_crash(Bridge, Type, Error, Stacktrace) ->
         finish_dynamic_request()
     catch Type2:Error2 ->
         ?LOG("~p~n", [{error, Type2, Error2, erlang:get_stacktrace()}]),
-        ErrResponse = Bridge:status_code(500),
-        ErrResponse1 = ErrResponse:set_response_data("Internal Server Error"),
-        ErrResponse1:build_response()
+        Bridge1 = sbw:set_status_code(500, Bridge),
+        Bridge2 = sbw:set_response_data("Internal Server Error", Bridge1),
+        sbw:build_response(Bridge2)
     end.
 
 
@@ -110,13 +110,12 @@ serialize_context() ->
 % in the browser by serialize_context_state/1.
 deserialize_context() ->
     Bridge = wf_context:bridge(),	
-    Params = Bridge:post_params(),
 
     % Save the old handles...
     OldHandlers = wf_context:handlers(),
 
     % Deserialize page_context and handler_list if available...
-    SerializedPageContext = proplists:get_value("pageContext", Params),
+    SerializedPageContext = sbw:post_param(<<"pageContext">>, Bridge),
     [Page, Handlers] = case SerializedPageContext of
         undefined -> [wf_context:page_context(), wf_context:handlers()];
         Other -> wf_pickle:depickle(Other)
@@ -203,24 +202,24 @@ run_crashed_postback_request(Type, Error, Stacktrace) ->
 %%% BUILD THE RESPONSE %%%
 
 build_static_file_response(Path) ->
-    Response = wf_context:bridge(),
-    Response1 = Response:set_response_file(Path),
-    Response1:build_response().
+    Bridge = wf_context:bridge(),
+    Bridge1 = sbw:set_response_file(Path, Bridge),
+    sbw:build_response(Bridge1).
 
 build_first_response(Html, Script) ->
     % Update the output with any script...
     Html1 = replace_script(Script, Html),
 
     % Update the response bridge and return.
-    Response = wf_context:bridge(),
-    Response1 = Response:set_response_data(Html1),
-    Response1:build_response().
+    Bridge = wf_context:bridge(),
+    Bridge1 = sbw:set_response_data(Html1, Bridge),
+    sbw:build_response(Bridge1).
 
 build_postback_response(Script) ->
     % Update the response bridge and return.
-    Response = wf_context:bridge(),
-    Response1 = Response:set_response_data(Script),
-    Response1:build_response().
+    Bridge = wf_context:bridge(),
+    Bridge1 = sbw:set_response_data(Script, Bridge),
+    sbw:build_response(Bridge1).
 
 replace_script(_,Html) when ?IS_STRING(Html) -> Html;
 replace_script(Script, [script|T]) -> [Script|T];

@@ -1,4 +1,4 @@
-# vim: sw=3 ts=3 ft=org
+# vim: sw=2 ts=2 ft=org
 
 #+TITLE: Base Element Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
@@ -31,9 +31,9 @@
 	+ show\_if - (/boolean/) :: If set to true, this element will be rendered.
 		Otherwise, it will not.
 
-   + class - (/atom or string/) :: Set the CSS class of the element.
+	+ class - (/atom or string/) :: Set the CSS class of the element.
 
-   + style - (/string/) :: Sets inline CSS style on the element.
+  + style - (/string/) :: Sets inline CSS style on the element.
 
 	+ data\_fields - (/property list/) :: Sets a series of HTML =data-= fields
 		in the element. For example, the following =#panel=:

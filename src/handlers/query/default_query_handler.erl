@@ -84,9 +84,10 @@ split_on(_,  []) -> false;
 split_on(El, [El|T]) -> {ok, T};
 split_on(El, [_|T]) -> split_on(El, T).
 
+normalize_path(Path) when is_binary(Path) ->
+    normalize_path(binary_to_list(Path));
 normalize_path(Path) when is_atom(Path) ->
     normalize_path(atom_to_list(Path));
-
 normalize_path(Path) when ?IS_STRING(Path) ->
     Tokens = string:tokens(Path, "."),
     Tokens1 = [strip_wfid(X) || X <- Tokens],

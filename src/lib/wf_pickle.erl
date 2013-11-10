@@ -69,8 +69,10 @@ signkey() ->
     case config_handler:get_value(signkey) of
         undefined ->
             erlang:md5(wf:to_list(erlang:get_cookie()));
-        Key -> 
-            Key
+        Key when byte_size(Key)==16 -> 
+            Key;
+        Key ->
+            erlang:md5(wf:to_list(Key))
     end.
 
 -spec modified_base64_encode(binary()) -> binary().
