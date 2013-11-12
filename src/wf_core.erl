@@ -220,8 +220,7 @@ build_first_response(Html, Script) ->
 build_postback_response(Script) ->
     % Update the response bridge and return.
     Response = wf_context:response_bridge(),
-    % TODO - does this need to be flattened?
-    Response1 = Response:data(lists:flatten(Script)),
+    Response1 = Response:data(Script),
     Response1:build_response().
 
 replace_script(_,Html) when ?IS_STRING(Html) -> Html;
