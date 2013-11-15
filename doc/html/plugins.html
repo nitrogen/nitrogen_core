@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Nitrogen Plugins"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-11-03 20:11:59 CST"/>
+<meta name="generated" content="2013-11-14 22:24:16 CST"/>
 <meta name="author" content="Jesse Gumm (@jessegumm)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -106,7 +106,8 @@
 <li><a href="#sec-2">2 Adding a plugin to your app</a></li>
 <li><a href="#sec-3">3 Finding plugins to include in your app</a></li>
 <li><a href="#sec-4">4 Creating your own plugins</a></li>
-<li><a href="#sec-5">5 See Also</a></li>
+<li><a href="#sec-5">5 Adding plugin support to an older version of Nitrogen</a></li>
+<li><a href="#sec-6">6 See Also</a></li>
 </ul>
 </div>
 </div>
@@ -262,8 +263,49 @@
 </div>
 
 <div id="outline-container-5" class="outline-2">
-<h2 id="sec-5"><span class="section-number-2">5</span> See Also</h2>
+<h2 id="sec-5"><span class="section-number-2">5</span> Adding plugin support to an older version of Nitrogen</h2>
 <div class="outline-text-2" id="text-5">
+
+
+<p>
+  What if you have a version of Nitrogen pre-2.2.0, but you still want to add
+  support to your Nitrogen app?
+</p>
+<p>
+  There's actually no <b>technical</b> reason you can't do that.  In fact, the core
+  of the plugin system is a single script, executed sometime after dependencies
+  are fetched and before compilation.
+</p>
+<p>
+  That script is called
+  <a href="https://raw.github.com/nitrogen/nitrogen/master/rel/overlay/common/do-plugins.escript">do-plugins.escript</a>
+  and it can be found in the main Nitrogen repo. The easiest way, then to add
+  the plugin system to your app is to do the following in the root of your app:
+</p>
+
+
+
+<pre class="src src-bash">wget https://raw.github.com/nitrogen/nitrogen/master/rel/overlay/common/do-plugins.escript
+chmod 755 do-plugins.escript
+</pre>
+
+
+<p>
+  Then simply modify your Makefile so that <code>./do-plugins.escript</code> is executed
+  before <code>./rebar compile</code>
+</p>
+<p>
+  For a good practical example of this, check out the standard
+  <a href="https://github.com/nitrogen/nitrogen/blob/master/rel/overlay/common/Makefile#L20">Makefile</a>
+  that comes with a Nitrogen install.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> See Also</h2>
+<div class="outline-text-2" id="text-6">
 
 
 <ul>
@@ -279,7 +321,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-11-03 20:11:59 CST</p>
+<p class="date">Date: 2013-11-14 22:24:16 CST</p>
 <p class="author">Author: Jesse Gumm (@jessegumm)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
