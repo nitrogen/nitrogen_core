@@ -1,4 +1,4 @@
-# vim: sw=3 ts=3 ft=org
+# vim: sw=2 ts=2 ft=org
 
 #+TITLE: Integer Validator Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
@@ -16,25 +16,25 @@
 #+BEGIN_SRC erlang
    wf:wire(ButtonID, TextBoxID, #validate { validators=[
      #is_integer {
-			min=1,
-			max=100,
-			text="Must be an integer between 1 and 100."
-		}
+       min=1,
+       max=100,
+       text="Must be an integer between 1 and 100."
+     }
    ]})
 #+END_SRC
 
 ** Attributes
 
-	+ text - (/string/) :: The text to display if validation fails.
+  + text - (/string/) :: The text to display if validation fails.
 
-	+ min - (/integer/) :: If set, will be the minimum acceptable value for the
-	field. If left blank, then no maximum will be enforced.
+  + min - (/integer/) :: If set, will be the minimum acceptable value for the
+   field. If left blank, then no maximum will be enforced.
 
-	+ max - (/integer/) :: If set, will be the maximum acceptable value for the
-	field. If left blank, then nno maximum will be enforced.
+  + max - (/integer/) :: If set, will be the maximum acceptable value for the
+   field. If left blank, then nno maximum will be enforced.
 
 ** See Also
 
-	+ [[../actions/validate.org][Validate Action]]
+  + [[../actions/validate.org][Validate Action]]
 
-	+ [[http://nitrogenproject.com/demos/validation][Validation Demos]]
+  + [[http://nitrogenproject.com/demos/validation][Validation Demos]]
