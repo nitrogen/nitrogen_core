@@ -30,7 +30,8 @@ run_crash(Bridge, Type, Error, Stacktrace) ->
         case wf_context:type() of
             first_request       -> run_crashed_first_request(Type, Error, Stacktrace);
             static_file         -> run_crashed_first_request(Type, Error, Stacktrace);
-            postback_request    -> run_crashed_postback_request(Type, Error, Stacktrace)
+            postback_request    -> run_crashed_postback_request(Type, Error, Stacktrace);
+            _                   -> run_crashed_first_request(Type, Error, Stacktrace)
         end,
         finish_dynamic_request()
     catch Type2:Error2 ->
@@ -84,7 +85,8 @@ finish_dynamic_request() ->
     JavascriptFinal = [StateScript, Javascript],
     case wf_context:type() of
         first_request       -> build_first_response(Html, JavascriptFinal);
-        postback_request    -> build_postback_response(JavascriptFinal)
+        postback_request    -> build_postback_response(JavascriptFinal);
+        _                   -> build_first_response(Html, JavascriptFinal)
     end.
 
 finish_static_request() ->
