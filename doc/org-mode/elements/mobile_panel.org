@@ -46,6 +46,6 @@
 
   + [[./base.html][base element]]
 
-  + [[file:../actions/toggle_mobile_panel.org][toggle_mobile_panel action]]
+  + [[file:../actions/toggle_mobile_panel.org][toggle\_mobile\_panel action]]
 
   + [[http://nitrogenproject.com/demos/mobile_panel][Mobile Panel Demonstration]]
