@@ -95,16 +95,16 @@ NitrogenClass.prototype.$event_loop = function() {
     }
 
     if (this.$system_event_queue.length == 0 || this.$event_queue.length == 0) {
-    if( this.$going_away ) {
-        // $destroy has been called for this Nitrogen object
-        // and the event queue is empty - let the event loop stop.
-        return;
-    }
-    else {
-        // No more events, sleep for 50 ms...
-        setTimeout( function() { this2.$event_loop() }, 50);
-        return;
-    }
+        if( this.$going_away ) {
+            // $destroy has been called for this Nitrogen object
+            // and the event queue is empty - let the event loop stop.
+            return;
+        }
+        else {
+            // No more events, sleep for 50 ms...
+            setTimeout( function() { this2.$event_loop() }, 50);
+            return;
+        }
     }
 
     // Events queued, but one is running, sleep for 10 ms...
