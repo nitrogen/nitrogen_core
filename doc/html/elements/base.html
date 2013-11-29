@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Base Element Element"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-11-03 20:16:45 CST"/>
+<meta name="generated" content="2013-11-29 00:34:41 CST"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -143,16 +143,16 @@
 
 <dl>
 <dt>id - (<i>atom</i>)</dt><dd>The id of the element within the element tree.  The id is
-                used to wire events and to reference the element in client side javascript.
-                See the Nitrogen wiki for more information.
+    used to wire events and to reference the element in client side javascript.
+    See the Nitrogen wiki for more information.
 
 </dd>
 <dt>actions - (<i>action, list of actions</i>)</dt><dd>The actions to attach to the
-                element. This can be a single Nitrogen action, or a list of actions.
+    element. This can be a single Nitrogen action, or a list of actions.
 
 </dd>
 <dt>show_if - (<i>boolean</i>)</dt><dd>If set to true, this element will be rendered.
-                Otherwise, it will not.
+    Otherwise, it will not.
 
 </dd>
 <dt>class - (<i>atom or string</i>)</dt><dd>Set the CSS class of the element.
@@ -160,12 +160,9 @@
 </dd>
 <dt>style - (<i>string</i>)</dt><dd>Sets inline CSS style on the element.
 
-<dl>
-<dt>data_fields - (<i>property list</i>)</dt><dd>Sets a series of HTML <code>data-</code> fields
-                in the element. For example, the following <code>#panel</code>:
 </dd>
-</dl>
-
+<dt>data_fields - (<i>property list</i>)</dt><dd>Sets a series of HTML <code>data-</code> fields in
+    the element. For example, the following <code>#panel</code>:
 </dd>
 </dl>
 
@@ -174,16 +171,16 @@
 
 
 <pre class="src src-erlang">#<span class="org-type">panel</span>{
-        data_fields=[
-                {ship, bounty},
-                {action, mutiny}
-        ]
+  data_fields=[
+    {ship, bounty},
+    {action, mutiny}
+  ]
 }
 </pre>
 
 
-<p>        
-                Would produce the following pseudo-HTML:
+<p>  
+    Would produce the following pseudo-HTML:
 </p>
 
 
@@ -197,7 +194,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-11-03 20:16:45 CST</p>
+<p class="date">Date: 2013-11-29 00:34:41 CST</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
