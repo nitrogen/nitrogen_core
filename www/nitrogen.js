@@ -16,6 +16,7 @@ function NitrogenClass(o) {
     this.$going_away = false;
     this.$live_validation_data_field = "LV_live_validation";
     this.$js_dependencies = new Array();
+    this.$websocket = null;
     return this;
 }
 
@@ -754,6 +755,19 @@ NitrogenClass.prototype.$sortblock = function(el, sortOptions, sortPostbackInfo)
 NitrogenClass.prototype.$from_alien = function(nativeID) {
     var input = $("input#" + nativeID).val();
     objs(nativeID).val(input);
+};
+
+/*** WEBSOCKETS ***/
+
+NitrogenClass.prototype.$ws_init = function() {
+    try {
+        var this2 = this;
+        this.$websocket = new WebSocket(location.href);
+        this.$websocket.onopen = function(evt) {this2.$ws_open()};
+        this.$websocket.onclose = function(evt) {this2.$ws_close()};
+        this.$websocket.onmessage = function(evt) {this2.$ws_message(evt.data)) };
+        this.$websocket.onerror = function(evt) {this2.$ws_close()};
+    }catch(ex){}
 };
 
 var Nitrogen = new NitrogenClass();
