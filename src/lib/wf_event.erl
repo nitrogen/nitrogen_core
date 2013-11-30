@@ -4,7 +4,7 @@
 % See MIT-LICENSE for licensing information.
 
 -module (wf_event).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -export ([
     update_context_with_event/0,
     generate_postback_script/7,
