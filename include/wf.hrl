@@ -772,12 +772,22 @@
 
 -record(actionbase, {?ACTION_BASE(undefined)}).
 -record(wire, {?ACTION_BASE(action_wire)}).
--record(update, {?ACTION_BASE(action_update),
-        type=update             :: update | replace | insert_top | insert_bottom
-                                 | insert_before | insert_after | remove
-                                 | atom(),
-         elements=[]             :: body()
+
+-define(ACTION_UPDATE(Type), {?ACTION_BASE(action_update),
+        type=Type               :: atom(),
+        elements=[]             :: body()
     }).
+
+%% #update records and its derivitives should all use the same template to
+%% ensure simple conversion performed by action_update:render_action/1
+-record(update, ?ACTION_UPDATE(update)).
+-record(replace, ?ACTION_UPDATE(replace)).
+-record(insert_top, ?ACTION_UPDATE(insert_top)).
+-record(insert_bottom, ?ACTION_UPDATE(insert_bottom)).
+-record(insert_before, ?ACTION_UPDATE(insert_before)).
+-record(insert_after, ?ACTION_UPDATE(insert_after)).
+-record(remove, ?ACTION_UPDATE(remove)).
+
 -record(comet, {?ACTION_BASE(action_comet),
         pool=undefined          :: term(),
         scope=local             :: local | global,
