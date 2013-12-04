@@ -25,7 +25,7 @@
   of the work of the handler is done.  It should read the path from the request
   bridge, and eventually call =wf_context:page_module(Module)= to tell Nitrogen
   which module should be handling the request, and in most cases, it should
-  also be calling =wf_context:path_info(Pathinfo)= to set the path_info so that
+  also be calling =wf_context:path_info(Pathinfo)= to set the path\_info so that
   pages can refer to the path.
 
   It's not exactly the "functional style" because it's highly dependent on side
