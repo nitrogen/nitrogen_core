@@ -49,7 +49,7 @@
 
    + [[./base.html][base element]]
 
-   + [[./inplace_textarea.html][inplace_textarea element]]
+   + [[./inplace_textarea.html][inplace\_textarea element]]
 
    + [[./inplace.html][inplace element]]
 

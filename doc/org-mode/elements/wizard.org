@@ -52,9 +52,9 @@
    + finish - (/string/) :: The text of the "Finish" button, which is presented
    on the last step, and triggers the =wizard_event/1= callback on your page.
 
-   + show_progress - (/boolean/) :: Show the progress through the wizard.
+   + show\_progress - (/boolean/) :: Show the progress through the wizard.
 
-   + progress_text - (/string/) :: The text progress "meter", the first =~p=
+   + progress\_text - (/string/) :: The text progress "meter", the first =~p=
    will be replaced with the current steps, and the second =~p= will be
    replaced with the total number of steps. For example, ="Step 6 of 12"=.
    (Default: ="Step ~p of ~p"=)

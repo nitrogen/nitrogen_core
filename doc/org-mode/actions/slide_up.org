@@ -27,6 +27,6 @@
 
    + [[./base.html][base element]]
 
-   + [[./slide_down.html][slide_down element]]
+   + [[./slide_down.html][slide\_down element]]
 
  

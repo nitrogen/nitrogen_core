@@ -348,7 +348,7 @@ Here's the complete text of the default plugins.config:
   ]}].
   #+END_SRC
 
-  Note that basically all it does it tell =inets= to load the inets_httpd.erlenv
+  Note that basically all it does it tell =inets= to load the inets\_httpd.erlenv
   proplist file, using the =proplist_file= option.
 
 **** etc/inets\_httpd.erlenv

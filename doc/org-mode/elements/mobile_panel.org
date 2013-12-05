@@ -37,7 +37,7 @@
   + position - (/left or right/) :: Tells which side of the screen to place
     the panel. (Default: =left=)
 
-  + display_mode - (/reveal, push, or overlay/) :: Which way to animate the
+  + display\_mode - (/reveal, push, or overlay/) :: Which way to animate the
     panel into visibility. (Default: =reveal=)
 
 ** See Also
