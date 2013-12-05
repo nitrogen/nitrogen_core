@@ -196,7 +196,7 @@ postback_request(Type, Error, Stacktrace, _Config, _State) ->
 ** Recommendations for postback requests
 
    If you want to gracefully handle crashes related to postbacks, comets, etc,
-   then you need to make sure you do *not* set the status_code to a failure
+   then you need to make sure you do *not* set the status\_code to a failure
    code (like 500). You might as well keep it as the default 200, and then wire
    whatever commands you wish.
 
@@ -228,4 +228,4 @@ postback_request(Type, Error, Stacktrace, _Config, _State) ->
 
   + [[file:../elements/template.org][Template Element]]
 
-   + [[file:../actions/alert.org][Alert Action]]
+  + [[file:../actions/alert.org][Alert Action]]
