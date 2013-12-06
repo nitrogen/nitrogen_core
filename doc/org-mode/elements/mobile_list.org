@@ -27,7 +27,7 @@ This element produces a wrapper for [[http://jquerymobile.com/test/docs/lists/do
  
    + inset - (/boolean/) :: Whether or not to render the list inset or outset.
 
-   + body - (/string/) :: The body of the list element, generally containing only #mobile_list{} elements.
+   + body - (/string/) :: The body of the list element, generally containing only =#mobile_list{}= elements.
 
 ** See Also
 

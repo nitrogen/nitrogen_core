@@ -55,7 +55,7 @@
 ** Example
 
 Here is the complete text of the default log handler in Nitrogen, which
-basically serves as a pass-through for the basic Erlang error_logger module.
+basically serves as a pass-through for the basic Erlang error\_logger module.
 
 #+BEGIN_SRC erlang
 

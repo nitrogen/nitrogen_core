@@ -32,7 +32,7 @@
 
    + text - (/string/) :: The text to display if validation fails.
 
-   + confirm_id - (/atom/) :: Specify the Nitrogen Element ID of the field
+   + confirm\_id - (/atom/) :: Specify the Nitrogen Element ID of the field
 		against which you wish to confirm.
 
 ** See Also

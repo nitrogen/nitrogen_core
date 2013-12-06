@@ -1,5 +1,5 @@
 # vim: sw=3 ts=3 ft=org
-#+TITLE: restful_submit Element
+#+TITLE: restful submit Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Steffen Panning
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t

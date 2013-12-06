@@ -21,7 +21,7 @@
    * If the solution is wrong the captcha gets refreshed until the user
       gives up or the solution is correct, and a =Page:recaptcha_event= is
       called with a =Result= of =error=.
-   * If the solution is correct the Page:recaptcha_event callback is called
+   * If the solution is correct the =Page:recaptcha_event= callback is called
       with a =Result= of =ok=.
    * The return value of the =Page:recaptcha_event= callback is evaluated as
       follows:
