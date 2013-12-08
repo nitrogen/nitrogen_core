@@ -29,6 +29,14 @@ socket() ->
     Req = wf_context:request_bridge(), 
     Req:socket().
 
+path() ->
+    Req = request_bridge(),
+    Req:path().
+
+uri() ->
+    Req = request_bridge(),
+    Req:uri().
+
 peer_ip() ->
     Req = request_bridge(),
     Req:peer_ip().
