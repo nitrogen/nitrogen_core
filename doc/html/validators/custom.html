@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Custom Server-Side Validator Element"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-10-03 13:40:51 CDT"/>
+<meta name="generated" content="2013-12-28 15:16:52 CST"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -113,7 +113,8 @@
 
 
 <p>
-  Attach a custom validator, written in Erlang, to an element. The validator will be executed on the server during a postback.
+  Attach a custom validator, written in Erlang, to an element. The validator
+  will be executed on the server during a postback.
 </p>
 
 </div>
@@ -154,11 +155,16 @@
 <dl>
 <dt>text - (<i>string</i>)</dt><dd>The text to display if validation fails.
 
-</dd>
-<dt>function - (<i>fun</i>)</dt><dd>An Erlang function that returns true if the value is valid, false if invalid. &lt;br&gt;fun(Tag, Value) -&gt; 'true' or 'false'
+<dl>
+<dt>function - (<i>fun</i>)</dt><dd>An Erlang function that returns true if the value is
+                valid, false if invalid. (<code>fun(Tag, Value) -&gt; true | false</code>)
 
 </dd>
-<dt>tag - (<i>Erlang term</i>)</dt><dd>Tag value is passed into the custom validation function.
+<dt>tag - (<i>Erlang term</i>)</dt><dd>Tag value is passed into the custom validation
+                function.
+</dd>
+</dl>
+
 </dd>
 </dl>
 
@@ -186,7 +192,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-10-03 13:40:51 CDT</p>
+<p class="date">Date: 2013-12-28 15:16:52 CST</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

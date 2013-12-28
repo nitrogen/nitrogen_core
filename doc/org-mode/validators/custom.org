@@ -9,7 +9,8 @@
 
 * Custom Server-Side Validator - #custom {}
 
-  Attach a custom validator, written in Erlang, to an element. The validator will be executed on the server during a postback.
+  Attach a custom validator, written in Erlang, to an element. The validator
+  will be executed on the server during a postback.
 
 ** Usage
 
@@ -33,9 +34,11 @@
 
    + text - (/string/) :: The text to display if validation fails.
 
-   + function - (/fun/) :: An Erlang function that returns true if the value is valid, false if invalid. <br>fun(Tag, Value) -> 'true' or 'false'
+	+ function - (/fun/) :: An Erlang function that returns true if the value is
+		valid, false if invalid. (=fun(Tag, Value) -> true | false=)
 
-   + tag - (/Erlang term/) :: Tag value is passed into the custom validation function.
+	+ tag - (/Erlang term/) :: Tag value is passed into the custom validation
+		function.
 
 ** See Also
 
