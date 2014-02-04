@@ -19,6 +19,12 @@
     get_params/2
 ]).
 
+%% TODO: It's worth considering reworking this page to use simple_bridge for
+%% all the query and post parameter evaluation, rather than reproducing a
+%% sub-set of the functionality here. This, however, does more than the
+%% typicaly query-string evaluation, as the normalized paths include all
+%% possible element ids.  Something to consider.
+
 init(_Config, _State) -> 
     % Get query params and post params
     % from the request bridge...
