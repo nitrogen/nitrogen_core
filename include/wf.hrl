@@ -402,6 +402,7 @@
         body=[]                 :: body()
     }).
 -record(radio, {?ELEMENT_BASE(element_radio),
+        body=""                 :: body(),
         text=""                 :: text(),
         html_encode=true        :: html_encode(),
         value                   :: text(),
