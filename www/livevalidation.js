@@ -60,13 +60,13 @@ LiveValidation.RADIOGROUP = 7;
 /****** Default configuration options *******/
 
 LiveValidation.OPTIONS  = {
-  validMessage:'Thankyou!',
+  validMessage:'',
   insertAfterWhatNode:null,
   onlyOnBlur:false,
   wait:0,
   onlyOnSubmit:false,
 
-  onValid:function(){ this.insertMessage(this.createMessageSpan()); this.addFieldClass(); },
+  onValid:function(){/* Removed for Nitrogen */ },
   onInvalid:function(){ this.insertMessage(this.createMessageSpan()); this.addFieldClass(); }
 };
 
