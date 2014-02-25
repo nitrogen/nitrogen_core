@@ -51,7 +51,8 @@ refresh(Pool, Trigger) ->
             Rendered = RenderFun(),
             wf:update(Targetid, Rendered),
             wf:send_global(Pool, {trigger, Trigger})
-            %wf:send_global(Pool, {body, Trigger, Rendered})
+            %% Disabled sending generated body across.
+            %% wf:send_global(Pool, {body, Trigger, Rendered})
     end.
 
 
@@ -65,14 +66,16 @@ update(Targetid, Triggers, RenderFun) ->
                     wf:update(Targetid, Rendered);
                 false ->
                     do_nothing
-            end;
-        {body, T, Body} ->
-            case lists:member(T, Triggers) of
-                true ->
-                    wf:update(Targetid, Body);
-                false ->
-                    do_nothing
             end
+%%        %% Sending Body to all clients?
+%%        %% Let's disable for now.
+%%        {body, T, Body} ->
+%%            case lists:member(T, Triggers) of
+%%                true ->
+%%                    wf:update(Targetid, Body);
+%%                false ->
+%%                    do_nothing
+%%            end
     end,
     wf:flush(),
     update(Targetid, Triggers, RenderFun).
