@@ -8,34 +8,34 @@
     refresh/2
 ]).
 
--define(STATE_KEY, sync_panel_render).
+-define(STATE_KEY, sync_panel_body_trigger).
 
 -spec reflect() -> [atom()].
 reflect() -> record_info(fields, sync_panel).
 
 -spec render_element(#sync_panel{}) -> #panel{}.
-render_element(#sync_panel{render_fun=Fun}) when not(is_function(Fun)) ->
-    throw({sync_panel_element, render_fun_is_not_function});
+render_element(#sync_panel{body_fun=Fun}) when not(is_function(Fun)) ->
+    throw({sync_panel_element, {body_fun_not_a_function, Fun}});
 render_element(E = #sync_panel{
-        render_fun=RenderFun,
+        body_fun=BodyFun,
         triggers=Triggers,
         pool=Pool}) ->
         
     Targetid = wf:temp_id(),
     SyncPanel = E#sync_panel{id=Targetid},
-    wf:comet_global(fun() -> update(Targetid, Triggers, RenderFun) end, Pool),
-    register_target_render_fun(Targetid, RenderFun, Pool, Triggers),
+    wf:comet_global(fun() -> update(Targetid, Triggers, BodyFun) end, Pool),
+    register_target_body_fun(Targetid, BodyFun, Pool, Triggers),
     Panel = wf_utils:copy_fields(SyncPanel, #panel{}),
-    Panel#panel{body=RenderFun()}.
+    Panel#panel{body=BodyFun()}.
    
--spec register_target_render_fun(Targetid :: id(), RenderFun :: fun(), Pool :: term(), [Trigger :: term()]) -> ok.
-register_target_render_fun(_,_,_,[]) -> ok;
-register_target_render_fun(Targetid, RenderFun, Pool, [Trigger|Triggers]) ->
-    wf:state({?STATE_KEY, Pool, Trigger},{Targetid, RenderFun}),
-    register_target_render_fun(Targetid, RenderFun, Pool, Triggers).
+-spec register_target_body_fun(Targetid :: id(), BodyFun :: fun(), Pool :: term(), [Trigger :: term()]) -> ok.
+register_target_body_fun(_,_,_,[]) -> ok;
+register_target_body_fun(Targetid, BodyFun, Pool, [Trigger|Triggers]) ->
+    wf:state({?STATE_KEY, Pool, Trigger},{Targetid, BodyFun}),
+    register_target_body_fun(Targetid, BodyFun, Pool, Triggers).
 
--spec get_target_render_fun(Pool :: term(), Trigger :: term()) -> {Targetid :: id(), RenderFun :: fun()} | undefined.
-get_target_render_fun(Pool, Trigger) ->
+-spec get_target_body_fun(Pool :: term(), Trigger :: term()) -> {Targetid :: id(), BodyFun :: fun()} | undefined.
+get_target_body_fun(Pool, Trigger) ->
     wf:state({?STATE_KEY, Pool, Trigger}).
 
 -spec refresh(Trigger :: term()) -> ok.
@@ -44,31 +44,32 @@ refresh(Trigger) ->
     
 -spec refresh(Pool :: term(), Trigger :: term()) -> ok.
 refresh(Pool, Trigger) ->
-    case get_target_render_fun(Pool, Trigger) of
+    case get_target_body_fun(Pool, Trigger) of
         undefined ->
             wf:send_global(Pool, {trigger, Trigger});
-        {Targetid, RenderFun} ->
-            Rendered = RenderFun(),
-            wf:update(Targetid, Rendered),
+        {Targetid, BodyFun} ->
+            Body = BodyFun(),
+            wf:update(Targetid, Body),
             wf:send_global(Pool, {trigger, Trigger})
             %% Disabled sending generated body across.
-            %% wf:send_global(Pool, {body, Trigger, Rendered})
+            %% wf:send_global(Pool, {body, Trigger, Body})
     end.
 
 
 %% This is the private cycle that receives message
-update(Targetid, Triggers, RenderFun) ->
+update(Targetid, Triggers, BodyFun) ->
     receive 
         {trigger, T} ->
             case lists:member(T, Triggers) of
                 true ->
-                    Rendered = RenderFun(),
-                    wf:update(Targetid, Rendered);
+                    Rendered = BodyFun(),
+                    wf:update(Targetid, Rendered),
+                    wf:flush();
                 false ->
                     do_nothing
             end
 %%        %% Sending Body to all clients?
-%%        %% Let's disable for now.
+%%        %% Let's disable for now. Needs more thought.
 %%        {body, T, Body} ->
 %%            case lists:member(T, Triggers) of
 %%                true ->
@@ -77,5 +78,4 @@ update(Targetid, Triggers, RenderFun) ->
 %%                    do_nothing
 %%            end
     end,
-    wf:flush(),
-    update(Targetid, Triggers, RenderFun).
+    update(Targetid, Triggers, BodyFun).

@@ -457,7 +457,7 @@
         html_encode=true        :: html_encode()
     }).
 -record(sync_panel, {?ELEMENT_BASE(element_sync_panel),
-        render_fun              :: undefined | fun(),
+        body_fun                :: undefined | fun(),
         triggers=[]             :: [term()],
         pool=sync_panel         :: atom()
     }).
