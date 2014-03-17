@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Recaptcha Element"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-12-06 01:07:57 CST"/>
+<meta name="generated" content="2014-03-17 15:22:36 CDT"/>
 <meta name="author" content="Steffen Panning"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -240,28 +240,31 @@
 
 <dl>
 <dt>tag - (<i>term</i>)</dt><dd>The "tag" for the recaptcha element to be passed to the
-      <code>recaptcha_event/2</code> function
+     <code>recaptcha_event/2</code> function
 </dd>
 <dt>button_id - (<i>atom</i>)</dt><dd>The button's id
 </dd>
 <dt>button_label - (<i>string</i>)</dt><dd>The button's label
 </dd>
+<dt>button_class - (<i>string, atom, or list of atoms</i>)</dt><dd>The button's HTML
+     class.
+</dd>
 <dt>captcha_opts - (<i>proplist</i>)</dt><dd>The captcha's options. For more
-      information see the official
-      <a href="https://developers.google.com/recaptcha/docs/customization">Recaptcha Documentation</a>
-      <code>custom_theme_widget</code> is not supported
+     information see the official
+     <a href="https://developers.google.com/recaptcha/docs/customization">Recaptcha Documentation</a>
+     <code>custom_theme_widget</code> is not supported
 </dd>
 <dt>delegate (<i>Module</i>)</dt><dd>The module where the event callback gets called
 </dd>
 <dt>fail_body (<i>List</i>) </dt><dd>The fail message. It can be a simple string
-      or an array of Nitrogen elements. It will be displayed below the
-      recaptcha if the user fails to enter the correct recaptcha.
+     or an array of Nitrogen elements. It will be displayed below the
+     recaptcha if the user fails to enter the correct recaptcha.
 </dd>
 <dt>challenge_url - (<i>string</i>)</dt><dd>The challenge URL as specified in the
-      Recaptcha Documentation (default: <a href="https://www.google.com/recaptcha/api/challenge">https://www.google.com/recaptcha/api/challenge</a>")
+     Recaptcha Documentation (default: <a href="https://www.google.com/recaptcha/api/challenge">https://www.google.com/recaptcha/api/challenge</a>")
 </dd>
 <dt>verify_url - (<i>string</i>)</dt><dd>The verification URL as specified in the
-      Recaptcha Documentation (default: <a href="https://www.google.com/recaptcha/api/verify">https://www.google.com/recaptcha/api/verify</a>")
+     Recaptcha Documentation (default: <a href="https://www.google.com/recaptcha/api/verify">https://www.google.com/recaptcha/api/verify</a>")
 </dd>
 </dl>
 
@@ -396,7 +399,7 @@ Code in a page module may look like this:
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-12-06 01:07:57 CST</p>
+<p class="date">Date: 2014-03-17 15:22:36 CDT</p>
 <p class="author">Author: Steffen Panning</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
