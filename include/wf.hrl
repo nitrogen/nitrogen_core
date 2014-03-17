@@ -439,6 +439,7 @@
       }).
 -record(restful_submit, {?ELEMENT_BASE(element_restful_submit),
         text="Submit"           :: text(),
+        body=[]                 :: body(),
         html_encode=true        :: html_encode(),
         html_name               :: html_name()
     }).
