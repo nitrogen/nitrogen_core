@@ -439,6 +439,7 @@
       }).
 -record(restful_submit, {?ELEMENT_BASE(element_restful_submit),
         text="Submit"           :: text(),
+        body=[]                 :: body(),
         html_encode=true        :: html_encode(),
         html_name               :: html_name()
     }).
@@ -621,6 +622,7 @@
         captcha_opts=[]         :: proplist(),
         button_id               :: id(),
         button_label="Check!"   :: text(),
+        button_class            :: text(),
         delegate                :: module(),
         tag                     :: term(),
         fail_body="Please try again!" :: body(),
