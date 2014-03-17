@@ -55,7 +55,7 @@ render_element(Rec = #recaptcha{id=ID, class=Cl,
             },
             #button{id=ButtonId, style="float:right",
                     text=ButtonLabel,
-					class = ButtonClass, 
+                    class = ButtonClass, 
                     postback=Postback,
                     delegate=?MODULE
             }
