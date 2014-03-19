@@ -32,7 +32,7 @@
 
   + /Return Value/ - ={ok, NewState}=
   
-**** =get_has_role(Role, Config, State)=
+**** =get\_has\_role(Role, Config, State)=
 
   Checks to see if the current user has the specified role enabled for his/her
   session.
@@ -42,7 +42,7 @@
   + /Return Value/ - =true= or =false= depending on whether or not the user is
                      is in the specified role.
 
-**** =set_has_role(Role, IsInRole, Config, State)=
+**** =set\_has\_role(Role, IsInRole, Config, State)=
 
   Sets the role status for a particular role for the current user
  
@@ -53,13 +53,13 @@
     
   + /Return Value/ - {ok, NewState}
 
-**** =get_roles(Config, State)=
+**** =get\_roles(Config, State)=
 
   Retrieves the list of all roles currently enabled for the user.
 
   + /Return Value/ - The list of roles
 
-**** = clear_all(Config, State)=
+**** = clear\_all(Config, State)=
 
   Clears all roles from the current user
 

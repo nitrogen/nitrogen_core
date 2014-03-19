@@ -13,6 +13,8 @@
 
 * Page Manipulation
   + [[./actions/event.org][Event]]
+  + [[./actions/update.org][Update]] (includes Update, Replace, Insert Top,
+    Insert Bottom, Insert Before, Insert, After, and Remove)
   + [[./actions/script.org][Script]]
   + [[./actions/validate.org][Validate]]
   + [[./actions/clear_validation.org][Clear Validation]]
@@ -29,7 +31,7 @@
   + [[./actions/disable.org][Disable]] | [[./actions/enable.org][Enable]]
   + [[./actions/make_readonly.org][Make Readonly]] | [[./actions/make_writable.org][Make Writable]]
 
-* Feedback
+* Feedback and Debugging
   + [[./actions/alert.org][Alert]]
   + [[./actions/confirm.org][Confirm]]
   + [[./actions/console_log.org][Browser Console Log]]

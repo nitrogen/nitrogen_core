@@ -401,6 +401,7 @@
         body=[]                 :: body()
     }).
 -record(radio, {?ELEMENT_BASE(element_radio),
+        body=""                 :: body(),
         text=""                 :: text(),
         html_encode=true        :: html_encode(),
         value                   :: text(),
@@ -437,6 +438,7 @@
       }).
 -record(restful_submit, {?ELEMENT_BASE(element_restful_submit),
         text="Submit"           :: text(),
+        body=[]                 :: body(),
         html_encode=true        :: html_encode(),
         html_name               :: html_name()
     }).
@@ -453,6 +455,11 @@
         body=[]                 :: body(),
         text=""                 :: text(),
         html_encode=true        :: html_encode()
+    }).
+-record(sync_panel, {?ELEMENT_BASE(element_sync_panel),
+        body_fun                :: undefined | fun(),
+        triggers=[]             :: [term()],
+        pool=sync_panel         :: atom()
     }).
 -record(fieldset, {?ELEMENT_BASE(element_fieldset),
         body=[]                 :: body(),
@@ -614,6 +621,7 @@
         captcha_opts=[]         :: proplist(),
         button_id               :: id(),
         button_label="Check!"   :: text(),
+        button_class            :: text(),
         delegate                :: module(),
         tag                     :: term(),
         fail_body="Please try again!" :: body(),
@@ -771,12 +779,22 @@
 
 -record(actionbase, {?ACTION_BASE(undefined)}).
 -record(wire, {?ACTION_BASE(action_wire)}).
--record(update, {?ACTION_BASE(action_update),
-        type=update             :: update | replace | insert_top | insert_bottom
-                                 | insert_before | insert_after | remove
-                                 | atom(),
-         elements=[]             :: body()
+
+-define(ACTION_UPDATE(Type), {?ACTION_BASE(action_update),
+        type=Type               :: atom(),
+        elements=[]             :: body()
     }).
+
+%% #update records and its derivitives should all use the same template to
+%% ensure simple conversion performed by action_update:render_action/1
+-record(update, ?ACTION_UPDATE(update)).
+-record(replace, ?ACTION_UPDATE(replace)).
+-record(insert_top, ?ACTION_UPDATE(insert_top)).
+-record(insert_bottom, ?ACTION_UPDATE(insert_bottom)).
+-record(insert_before, ?ACTION_UPDATE(insert_before)).
+-record(insert_after, ?ACTION_UPDATE(insert_after)).
+-record(remove, ?ACTION_UPDATE(remove)).
+
 -record(comet, {?ACTION_BASE(action_comet),
         pool=undefined          :: term(),
         scope=local             :: local | global,

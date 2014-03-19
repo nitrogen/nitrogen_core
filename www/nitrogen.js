@@ -133,7 +133,7 @@ NitrogenClass.prototype.$validate_and_serialize = function(validationGroup) {
         } else {
             // Skip any unchecked radio boxes.
             if ((this.type == "radio" || this.type=="checkbox") && !this.checked) return;
-            params[n.$make_id(this)] = this.value;
+            params[n.$make_id(this)] = $(this).val();
         }
     });
     // Return the params if valid. Otherwise, return null.
@@ -290,6 +290,19 @@ NitrogenClass.prototype.$send_pending_files = function(form,input) {
             file.submit();
         }
     }
+}
+
+NitrogenClass.prototype.$recalculate_upload_dimensions = function(form) {
+    // If the provided form is a string, let's get the object with objs() which
+    // does a little massaging.
+    if(typeof form == "string") {
+        form = objs(form);
+    }
+
+    var fakeinput = $(form).find(".upload-button");
+    var w = $(fakeinput).outerWidth(true);
+    var h = $(fakeinput).outerHeight(true);
+    $(form).find(".upload-content:visible").width(w).height(h);
 }
 
 NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input,settings) {

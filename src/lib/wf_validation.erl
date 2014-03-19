@@ -25,7 +25,10 @@ validate() ->
             false ->
                 Function = Record#custom.function,
                 Text = Record#custom.text,
-                Value = wf:q(TargetPath),
+                Value = case wf:qs(TargetPath) of
+                    [V | _] -> V;
+                    [] -> undefined
+                end,
                 case Function(Record#custom.tag, Value) of
                     true -> 
                         FailedPaths;

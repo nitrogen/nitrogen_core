@@ -1,4 +1,4 @@
-# vim: ft=org sw=3 ts=3 et
+# vim: ft=org sw=2 ts=2 et
 #+TITLE: Mobile Panel Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Jesse Gumm (@jessegumm)
@@ -15,37 +15,37 @@
 ** Usage
 
 #+BEGIN_SRC erlang
-   #mobile_panel { 
-      display_mode=push,
-      body=[
-         #h3{text="Menu"},
-         "Here is a slide-out side menu"
-      ]
-   }.
+  #mobile_panel { 
+    display_mode=push,
+    body=[
+      #h3{text="Menu"},
+      "Here is a slide-out side menu"
+    ]
+  }.
 #+END_SRC
 
 ** Attributes
    
-   + body - (/Nitrogen element or list of elements/) :: Set the element(s) that
-   will be rendered within this panel.
+  + body - (/Nitrogen element or list of elements/) :: Set the element(s) that
+    will be rendered within this panel.
 
-   + theme - (/atom/) :: Set the jQuery Mobile swatch letter for the content.
+  + theme - (/atom/) :: Set the jQuery Mobile swatch letter for the content.
    
-   + dismissible - (/boolean/) :: Set to true to allow it to be dismissed with
-   the Escape key or clicking outside of the panel contents.
+  + dismissible - (/boolean/) :: Set to true to allow it to be dismissed with
+    the Escape key or clicking outside of the panel contents.
 
-   + position - (/left or right/) :: Tells which side of the screen to place
-   the panel. (Default: =left=)
+  + position - (/left or right/) :: Tells which side of the screen to place
+    the panel. (Default: =left=)
 
-   + display_mode - (/reveal, push, or overlay/) :: Which way to animate the
-   panel into visibility. (Default: =reveal=)
+  + display\_mode - (/reveal, push, or overlay/) :: Which way to animate the
+    panel into visibility. (Default: =reveal=)
 
 ** See Also
 
-   + [[./jquery_mobile.html][jQuery mobile elements]]
+  + [[./jquery_mobile.html][jQuery mobile elements]]
 
-   + [[./base.html][base element]]
+  + [[./base.html][base element]]
 
-   + [[file:../actions/toggle_mobile_panel.org][toggle_mobile_panel action]]
+  + [[file:../actions/toggle_mobile_panel.org][toggle\_mobile\_panel action]]
 
-   + [[http://nitrogenproject.com/demos/mobile_panel][Mobile Panel Demonstration]]
+  + [[http://nitrogenproject.com/demos/mobile_panel][Mobile Panel Demonstration]]

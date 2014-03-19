@@ -348,9 +348,9 @@ guardian_process(FunctionPid, AccumulatorPid, PoolPid, DyingMessage) ->
             erlang:exit(FunctionPid, async_die),
             erlang:exit({guardian_process, exiting_accumulator_died});
 
-        {'DOWN', _, process, PoolPid, _} ->
+        {'DOWN', _, process, PoolPid, Info} ->
             % The pool should never die on us.
-            ?PRINT(unexpected_pool_death),
+            ?PRINT({unexpected_pool_death, Info}),
             erlang:exit({guardian_process, exiting_pool_died});
 
         Other ->

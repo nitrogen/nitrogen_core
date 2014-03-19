@@ -28,6 +28,7 @@ run() ->
 run_crash(Bridge, Type, Error, Stacktrace) ->
     try
         case wf_context:type() of
+            undefined           -> run_crashed_first_request(Type, Error, Stacktrace);
             first_request       -> run_crashed_first_request(Type, Error, Stacktrace);
             static_file         -> run_crashed_first_request(Type, Error, Stacktrace);
             postback_request    -> run_crashed_postback_request(Type, Error, Stacktrace);

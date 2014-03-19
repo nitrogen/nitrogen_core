@@ -12,6 +12,7 @@
 * Layout
   + [[./elements/template.org][Template]]
   + [[./elements/panel.org][Panel]]
+  + [[./elements/sync_panel][Sync Panel]]
   + [[./elements/span.org][Span]]
   + [[./elements/fieldset.org][Fieldset]]
   + [[./elements/table.org][Table]] | [[./elements/tablerow.org][Row]] | [[./elements/tablecell.org][Cell]] | [[./elements/tableheader.org][Header Cell]]

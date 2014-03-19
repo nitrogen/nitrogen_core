@@ -385,17 +385,17 @@
 * Web Request and Response
 # <<9>>
 
-** wf:q(AtomKey) -> String
+** wf:q(AtomKey) -> String | undefined
 
-   Get all query string and POST values for the provided key. If more
-   than one AtomKey matches, then this will throw an error, use
-   =wf:qs(AtomKey)= instead.
+   Get all query string and POST values for the provided key. If more than one
+   AtomKey matches, then this will throw an error, use =wf:qs(AtomKey)=
+   instead. Returns the atom =undefined= if there's no matching value.
 
    *Mnemonic:* Think =q= as "Query".
 
 ** wf:mq(ListOfAtomKeys) -> [ListOfStrings]
 
-   Get the list of query string and POST values for the provided keys, and 
+   Get the list of query string and POST values for the provided keys, and
    return the list of values for the keys. Syntactical sugar equivilant of:
 
 #+BEGIN_SRC erlang
@@ -479,11 +479,20 @@ Example:
    used to return text images or other files to the browser, rather than returning 
    HTML.
 
+** wf:uri() -> String
+
+   Return the complete requested URI for the page.
+
+** wf:path() -> String
+
+   Return the string of the requested path.
+
 ** wf:path\_info() -> String
 
-   Return the path info for the requested page. In other words, if the module
-   web\_my\_page is requsted with the path "/web/my/page/some/extra/stuff then
-   wf:get\_path\_info() would return "some/extra/stuff".
+   Return only the path info for the requested page module. In other words, if
+   the module web\_my\_page is requsted with the path
+   "/web/my/page/some/extra/stuff then =wf:path_info()= would return
+   "some/extra/stuff".
    
 ** wf:page\_module() -> Atom
 

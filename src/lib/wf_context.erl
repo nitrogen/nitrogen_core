@@ -35,6 +35,14 @@ respose_bridge(Bridge) ->
 socket() ->
     ?BRIDGE:socket().
 
+path() ->
+    Req = request_bridge(),
+    Req:path().
+
+uri() ->
+    Req = request_bridge(),
+    Req:uri().
+
 peer_ip() ->
     ?BRIDGE:peer_ip().
 

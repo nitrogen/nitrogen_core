@@ -19,6 +19,12 @@
     get_params/2
 ]).
 
+%% TODO: It's worth considering reworking this page to use simple_bridge for
+%% all the query and post parameter evaluation, rather than reproducing a
+%% sub-set of the functionality here. This, however, does more than the
+%% typicaly query-string evaluation, as the normalized paths include all
+%% possible element ids.  Something to consider.
+
 init(_Config, _State) -> 
     % Get query params and post params
     % from the request bridge...
@@ -90,7 +96,7 @@ normalize_path(Path) when is_atom(Path) ->
     normalize_path(atom_to_list(Path));
 normalize_path(Path) when ?IS_STRING(Path) ->
     Tokens = string:tokens(Path, "."),
-    Tokens1 = [strip_wfid(X) || X <- Tokens],
+    Tokens1 = [strip_array_brackets(strip_wfid(X)) || X <- Tokens],
     lists:reverse(Tokens1).
 
 %% Most tokens will start with "wfid_". Strip this out.
@@ -100,4 +106,12 @@ strip_wfid(Path) ->
         S -> S
     end.
 
+%% For multiselect elements, jquery appends [] to the element name if element's
+%% data is an array We strip it out, since Nitrogen doesn't care if it's an
+%% array or not, it just uses each key individually
+strip_array_brackets(Path) ->
+    case lists:reverse(Path) of
+        [ $], $[ | Rest ] -> lists:reverse(Rest);
+        _ -> Path
+    end.
 

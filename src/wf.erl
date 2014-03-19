@@ -225,8 +225,14 @@ normalize_id(Path) ->
 page_module() -> 
     wf_context:page_module().
 
+path() ->
+    wf_context:path().
+
 path_info() ->
     wf_context:path_info().
+
+uri() ->
+    wf_context:uri().
 
 status_code() -> 
     ok = wf_context:status_code().
