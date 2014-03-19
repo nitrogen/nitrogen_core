@@ -63,7 +63,7 @@ render_action(#event {
         enterkey ->
             [
                 wf:f("Nitrogen.$observe_event('~s', '~s', '~s', function anonymous(event) {", [Anchor, Trigger, keydown]),
-                wf:f("if (Nitrogen.$is_key_code(event, ~p, ~p)) { ", [13, ShiftKey]),
+                wf:f("if (Nitrogen.$is_key_code(event, ~p, ~p) || Nitrogen.$is_key_code(event, ~p, ~p) ) { ", [13, ShiftKey, 9, ShiftKey]),
                 AnchorScript, PostbackScript, WireAction,
                 "return false; }});"
             ];
