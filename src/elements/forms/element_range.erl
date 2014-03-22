@@ -21,7 +21,7 @@ render_element(Record) ->
         undefined -> ignore;
         Next -> 
             Next1 = wf_render_actions:normalize_path(Next),
-            wf:wire(Anchor, #event { type=enterkey, actions=wf:f("Nitrogen.$go_next('~s');", [Next1]) })
+            wf:wire(Anchor, #event { type=enter_or_tab, actions=wf:f("Nitrogen.$go_next('~s');", [Next1]) })
     end,
 
     case Record#range.postback of
