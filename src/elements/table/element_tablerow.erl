@@ -19,6 +19,7 @@ render_element(Record) ->
     wf_tags:emit_tag(tr, Cells, [
         {id, Record#tablerow.html_id},
         {class, [tablerow, Record#tablerow.class]},
+        {title, Record#tablerow.title},
         {style, Record#tablerow.style},
         {data_fields, Record#tablerow.data_fields}
     ]).

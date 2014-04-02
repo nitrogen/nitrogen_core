@@ -20,6 +20,7 @@ render_element(Record) ->
         {type,  reset},
         {name,  Record#restful_reset.html_name},
         {class, [restful_reset, Record#restful_reset.class]},
+        {title, Record#restful_reset.title},
         {style, Record#restful_reset.style},
         {value, Value},
         {data_fields, Record#restful_reset.data_fields}

@@ -162,7 +162,8 @@
         class=""                :: class() | [class()],
         style=""                :: text(),
         html_id=""              :: id(),
-        data_fields=[]          :: data_fields()
+        title=""                :: text(),
+        data_fields=[]          :: data_fields()        
     ).
 
 -record(elementbase, {?ELEMENT_BASE(undefined)}).
@@ -175,7 +176,6 @@
         function=fun() ->[]end  :: fun() | [fun()]
     }).
 -record(body, {?ELEMENT_BASE(element_body),
-        title=""                :: text(),
         body=[]                 :: body()
     }).
 
@@ -235,7 +235,6 @@
         html_encode=true        :: html_encode()
     }).
 -record(link, {?ELEMENT_BASE(element_link),
-        title = ""              :: text(),
         text=""                 :: text(),
         body=""                 :: body(),
         new=false               :: boolean(),
@@ -250,7 +249,6 @@
         delegate                :: module()
     }).
 -record(email_link, {?ELEMENT_BASE(element_email_link),
-        title=""                :: text(),
         text=""                 :: text(),
         body=""                 :: body(),
         html_encode=true        :: html_encode(),
@@ -263,7 +261,6 @@
 -record(span, {?ELEMENT_BASE(element_span),
         body=""                 :: body(),
         text=""                 :: text(),
-        title=""                :: text(),
         html_encode=true        :: html_encode()
     }).
 -record(button, {?ELEMENT_BASE(element_button),

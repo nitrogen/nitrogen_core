@@ -33,6 +33,7 @@ render_element(Record) ->
         {id, Record#table.html_id},
         {border, 0},
         {class, [table, Record#table.class]},
+        {title, Record#table.title},
         {style, Record#table.style},
         {data_fields, Record#table.data_fields}
     ]).

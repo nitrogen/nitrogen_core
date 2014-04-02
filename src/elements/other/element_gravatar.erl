@@ -14,6 +14,7 @@ render_element(Record) ->
     Image = #image {
         html_id=Record#gravatar.html_id,
         id=Record#gravatar.id,
+        title=Record#gravatar.title,
         anchor=Record#gravatar.anchor,
         data_fields=Record#gravatar.data_fields,
         image = gravatar_icon(Record)

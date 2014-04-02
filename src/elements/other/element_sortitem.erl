@@ -27,6 +27,7 @@ render_element(Record) ->
         id=Record#sortitem.id,
         anchor=Record#sortitem.anchor,
         class=[sortitem, Record#sortitem.class],
+        title=Record#sortitem.title,
         style=Record#sortitem.style,
         data_fields=Record#sortitem.data_fields,
         body=Record#sortitem.body

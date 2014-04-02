@@ -55,6 +55,7 @@ render_element(Record) ->
             {name, wf:coalesce([Record#radio.html_name,Record#radio.name])},
             {type, radio},
             {class, [radio, Record#radio.class]},
+            {title, Record#radio.title},
             {style, Record#radio.style},
             {data_fields, Record#radio.data_fields},
             {CheckedOrNot, true}
