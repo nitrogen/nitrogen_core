@@ -18,6 +18,7 @@ render_element(Record) ->
     Attributes = [
         {id, Record#image.html_id},
         {class, [image, Record#image.class]},
+        {title, Record#image.title},
         {style, Record#image.style},
         {data_fields, Record#image.data_fields},
         {height, Record#image.height},

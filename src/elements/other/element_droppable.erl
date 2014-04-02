@@ -36,6 +36,7 @@ render_element(Record) ->
         id=Record#droppable.id,
         anchor=Record#droppable.anchor,
         class=[droppable, Record#droppable.class],
+        title=Record#droppable.title,
         style=Record#droppable.style,
         data_fields=Record#droppable.data_fields,
         body=Record#droppable.body

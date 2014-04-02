@@ -45,6 +45,7 @@ render_element(Record) ->
     UniversalAttributes = [
         {id, Record#button.html_id},
         {class, [button, Record#button.class]},
+        {title, Record#button.title},
         {style, Record#button.style},
         {data_fields, Record#button.data_fields},
         ?WF_IF(Record#button.disabled, disabled)

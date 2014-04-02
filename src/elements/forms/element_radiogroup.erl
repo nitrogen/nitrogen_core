@@ -24,6 +24,7 @@ render_element(Record) ->
         id=Record#radiogroup.id,
         anchor=Record#radiogroup.anchor,
         class=[radiogroup, Record#radiogroup.class],
+        title=Record#radiogroup.title,
         style=Record#radiogroup.style,
         data_fields=Record#radiogroup.data_fields,
         body=Body

@@ -32,6 +32,7 @@ render_element(Record ) ->
             wf_tags:emit_tag('footer', Record#html5_footer.body, [
                 {id, Record#html5_footer.html_id},
                 {class, ["html5_footer", Record#html5_footer.class]},
+                {title, Record#html5_footer.title},
                 {style, Record#html5_footer.style},
                 {data_fields, Record#html5_footer.data_fields}
             ])

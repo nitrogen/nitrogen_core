@@ -41,6 +41,7 @@ render_element(Record) ->
         id=Record#sortblock.id,
         anchor=Record#sortblock.anchor,
         class=[sortblock, GroupClasses|Record#sortblock.class],
+        title=Record#sortblock.title,
         style=Record#sortblock.style,
         body=Record#sortblock.items,
         data_fields=Record#sortblock.data_fields
