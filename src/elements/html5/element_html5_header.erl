@@ -32,6 +32,7 @@ render_element(Record) ->
             wf_tags:emit_tag('header', Record#html5_header.body, [
                 {id, Record#html5_header.html_id},
                 {class, ["html5_header", Record#html5_header.class]},
+                {title, Record#html5_header.title},
                 {style, Record#html5_header.style},
                 {data_fields, Record#html5_header.data_fields}
             ])

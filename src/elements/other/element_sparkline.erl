@@ -33,6 +33,7 @@ render_element(Record) ->
         id = Record#sparkline.id,
         anchor = Record#sparkline.anchor,
         class = [sparkline, Record#sparkline.class],
+        title = Record#sparkline.title,
         data_fields = Record#sparkline.data_fields,
         style = Record#sparkline.style
     },

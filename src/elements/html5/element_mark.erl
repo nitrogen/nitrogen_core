@@ -18,6 +18,7 @@ render_element(Record = #mark{}) ->
     wf_tags:emit_tag(mark, [Text, Record#mark.body], [
         {id, Record#mark.html_id},
         {class, ["mark", Record#mark.class]},
+        {title, Record#mark.title},
         {style, Record#mark.style},
         {data_fields, Record#mark.data_fields}
     ]).

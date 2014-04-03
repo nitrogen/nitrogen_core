@@ -33,7 +33,12 @@
 
   + class - (/atom or string/) :: Set the CSS class of the element.
 
+	+ title - (/string/) :: Set the HTML =title= attribute of the element.
+
   + style - (/string/) :: Sets inline CSS style on the element.
+  
+	+ html\_id - (/atom or string/) :: Sets the HTML =id= attribute of the
+	  element.
 
   + data\_fields - (/property list/) :: Sets a series of HTML =data-= fields in
     the element. For example, the following =#panel=:

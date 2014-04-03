@@ -65,6 +65,7 @@ render_element(Record) ->
         id=Record#draggable.id,
         anchor=Anchor,
         class=[draggable, GroupClasses, Record#draggable.class],
+        title=Record#draggable.title,
         style=Record#draggable.style,
         data_fields=Record#draggable.data_fields,
         body=Record#draggable.body
