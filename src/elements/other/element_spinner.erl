@@ -24,6 +24,7 @@ render_element(Record) ->
         id=Record#spinner.id,
         anchor=Record#spinner.anchor,
         class=[spinner, Record#spinner.class],
+        title=Record#spinner.title,
         style=Record#spinner.style,
         data_fields=Record#spinner.data_fields,
         body=#image { image=Record#spinner.image }

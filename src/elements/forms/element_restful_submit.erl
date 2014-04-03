@@ -20,6 +20,7 @@ render_element(Record) ->
         {type,  submit},
         {name, Record#restful_submit.html_name},
         {class, [restful_submit, Record#restful_submit.class]},
+        {title, Record#restful_submit.title},
         {style, Record#restful_submit.style},
         {data_fields, Record#restful_submit.data_fields}
     ],

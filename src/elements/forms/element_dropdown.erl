@@ -32,6 +32,7 @@ render_element(Record) ->
     wf_tags:emit_tag(select, Options, [
         {id, Record#dropdown.html_id},
         {class, [dropdown, Record#dropdown.class]},
+        {title, Record#dropdown.title},
         {style, Record#dropdown.style},
         {name, Record#dropdown.html_name},
         {data_fields, Record#dropdown.data_fields}

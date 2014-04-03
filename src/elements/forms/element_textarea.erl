@@ -16,6 +16,7 @@ render_element(Record) ->
         {class, [textarea, Record#textarea.class]},
         {id, Record#textarea.html_id},
         {style, Record#textarea.style},
+        {title, Record#textarea.title},
         {name, Record#textarea.html_name},
         {cols, Record#textarea.columns},
         {rows, Record#textarea.rows},

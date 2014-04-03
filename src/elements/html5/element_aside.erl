@@ -17,6 +17,7 @@ render_element(Record) ->
     wf_tags:emit_tag(aside, Record#aside.body, [
         {id, Record#aside.html_id},
         {class, ["aside", Record#aside.class]},
+        {title, Record#aside.title},
         {style, Record#aside.style},
         {data_fields, Record#aside.data_fields}
     ]).
