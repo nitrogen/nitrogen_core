@@ -63,10 +63,20 @@ render_action(#event {
         enterkey ->
             [
                 wf:f("Nitrogen.$observe_event('~s', '~s', '~s', function anonymous(event) {", [Anchor, Trigger, keydown]),
-                wf:f("if (Nitrogen.$is_key_code(event, ~p, ~p)) { ", [13, ShiftKey]),
+                wf:f("if (Nitrogen.$is_key_code(event, ~p, ~p) ) { ", [13, ShiftKey]),
                 AnchorScript, PostbackScript, WireAction,
                 "return false; }});"
             ];
+        % Convenience method for Enter + Tab Key...
+        enter_or_tab ->
+            [
+                wf:f("Nitrogen.$observe_event('~s', '~s', '~s', function anonymous(event) {", [Anchor, Trigger, keydown]),
+                wf:f("if (Nitrogen.$is_key_code(event, ~p, ~p) || Nitrogen.$is_key_code(event, ~p, ~p) ) { ", [13, ShiftKey, 9, ShiftKey]),
+                AnchorScript, PostbackScript, WireAction,
+                "return false; }});"
+            ];
+
+
 
         % Run the event after a specified amount of time
         timer ->

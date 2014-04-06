@@ -50,7 +50,7 @@ wire_next(_, undefined) ->
     do_nothing;
 wire_next(Anchor, Next) ->
     Next1 = wf_render_actions:normalize_path(Next),
-    wf:wire(Anchor, #event { type=enterkey, actions=wf:f("Nitrogen.$go_next('~s');", [Next1]) }).
+    wf:wire(Anchor, #event { type=enter_or_tab, actions=wf:f("Nitrogen.$go_next('~s');", [Next1]) }).
 
 wire_postback(_, _, _, _, _, undefined) ->
     do_nothing;
