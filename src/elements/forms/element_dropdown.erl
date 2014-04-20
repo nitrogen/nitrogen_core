@@ -24,21 +24,9 @@ render_element(Record) ->
 
     Options = format_options(Record),
 
-    MultipleAttribute = case Record#dropdown.multiple of
-        true -> [{multiple}];
-        false -> []
-    end,
-
-    DisabledAttribute = case Record#dropdown.disabled of
-        true -> [{disabled}];
-        false -> []
-    end,
-
-    Size = case {Record#dropdown.size, Record#dropdown.multiple} of
-        {auto, true} -> ?DEFAULT_MULTISELECT_SIZE;
-        {auto, false} -> ?DEFAULT_SINGLESELECT_SIZE;
-        {Num, _} -> Num
-    end,
+    MultipleAttribute = ?WF_IF(Record#dropdown.multiple,multiple,undefined),
+    DisabledAttribute = ?WF_IF(Record#dropdown.disabled,disabled,undefined),
+    Size = provided_or_default_size(Record),
 
     wf_tags:emit_tag(select, Options, [
         {id, Record#dropdown.html_id},
@@ -52,6 +40,12 @@ render_element(Record) ->
         {data_fields, Record#dropdown.data_fields}
     ]).
 
+provided_or_default_size(#dropdown{size=auto, multiple=true}) ->
+    ?DEFAULT_MULTISELECT_SIZE;
+provided_or_default_size(#dropdown{size=auto, multiple=false}) ->
+    ?DEFAULT_SINGLESELECT_SIZE;
+provided_or_default_size(#dropdown{size=Size}) ->
+    Size.
 
 wire_postback(Dropdown) when Dropdown#dropdown.postback==undefined ->
     ignore;
