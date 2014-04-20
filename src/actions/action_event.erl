@@ -5,7 +5,10 @@
 
 -module (action_event).
 -include("wf.hrl").
--export([render_action/1]).
+-export([
+        render_action/1,
+        maybe_wire_next/2
+    ]).
 
 render_action(#event { 
         postback=Postback,
@@ -28,6 +31,7 @@ render_action(#event {
     AnchorScript = wf_render_actions:generate_anchor_script(Anchor, Target), 
     PostbackScript = wf_event:generate_postback_script(Postback, Anchor, ValidationGroup1, HandleInvalid, OnInvalid, Delegate, ExtraParam),
     SystemPostbackScript = wf_event:generate_system_postback_script(Postback, Anchor, ValidationGroup1, HandleInvalid, Delegate),
+    {EffectiveType, EffectiveKeyCode} = effective_type_and_keycode(Type, KeyCode),
     WireAction = #wire { trigger=Trigger, target=Target, actions=Actions },
 
     Script = case Type of
@@ -51,32 +55,13 @@ render_action(#event {
         %% USER EVENTS %%%
 
         % Handle keypress, keydown, or keyup when a keycode is defined...
-        _ when (Type==keypress orelse Type==keydown orelse Type==keyup) andalso (KeyCode /= undefined) ->
+        _ when ((EffectiveType==keypress orelse EffectiveType==keydown orelse EffectiveType==keyup) andalso (EffectiveKeyCode /= undefined)) ->
             [
-                wf:f("Nitrogen.$observe_event('~s', '~s', '~s', function anonymous(event) {", [Anchor, Trigger, Type]),
-                wf:f("if (Nitrogen.$is_key_code(event, ~p, ~p)) { ", [KeyCode, ShiftKey]),
+                wf:f("Nitrogen.$observe_event('~s', '~s', '~s', function anonymous(event) {", [Anchor, Trigger, EffectiveType]),
+                wf:f("if (Nitrogen.$is_key_code(event, ~p, ~p)) { ", [EffectiveKeyCode, ShiftKey]),
                 AnchorScript, PostbackScript, WireAction, 
                 "return false; }});"
             ];
-
-        % Convenience method for Enter Key...
-        enterkey ->
-            [
-                wf:f("Nitrogen.$observe_event('~s', '~s', '~s', function anonymous(event) {", [Anchor, Trigger, keydown]),
-                wf:f("if (Nitrogen.$is_key_code(event, ~p, ~p) ) { ", [13, ShiftKey]),
-                AnchorScript, PostbackScript, WireAction,
-                "return false; }});"
-            ];
-        % Convenience method for Enter + Tab Key...
-        enter_or_tab ->
-            [
-                wf:f("Nitrogen.$observe_event('~s', '~s', '~s', function anonymous(event) {", [Anchor, Trigger, keydown]),
-                wf:f("if (Nitrogen.$is_key_code(event, ~p, ~p) || Nitrogen.$is_key_code(event, ~p, ~p) ) { ", [13, ShiftKey, 9, ShiftKey]),
-                AnchorScript, PostbackScript, WireAction,
-                "return false; }});"
-            ];
-
-
 
         % Run the event after a specified amount of time
         timer ->
@@ -103,3 +88,13 @@ render_action(#event {
 
     end,
     Script.
+
+%% Simple conversion of convenience events enterkey and tabkey
+effective_type_and_keycode(enterkey, _) -> {keydown, 13};
+effective_type_and_keycode(tabkey, _) -> {keydown, 9};
+effective_type_and_keycode(Type, KeyCode) -> {Type, KeyCode}.
+
+maybe_wire_next(_Anchor, undefined) -> do_nothing;
+maybe_wire_next(Anchor, Next) ->
+    Next1 = wf_render_actions:normalize_path(Next),
+    wf:wire(Anchor, #event{ type=tabkey, actions=wf:f("Nitrogen.$go_next('~s');", [Next1])}).

@@ -10,6 +10,9 @@
     render_element/1
 ]).
 
+-define(DEFAULT_MULTISELECT_SIZE, 5).
+-define(DEFAULT_SINGLESELECT_SIZE, 1).
+
 -spec reflect() -> [atom()].
 reflect() -> record_info(fields, dropdown).
 
@@ -17,16 +20,24 @@ reflect() -> record_info(fields, dropdown).
 render_element(Record) -> 
 
     wire_postback(Record),
+    action_event:maybe_wire_next(Record#dropdown.anchor, Record#dropdown.next),
+
     Options = format_options(Record),
 
-    Multiple = case Record#dropdown.multiple of
+    MultipleAttribute = case Record#dropdown.multiple of
         true -> [{multiple}];
         false -> []
     end,
 
-    Disabled = case Record#dropdown.disabled of
+    DisabledAttribute = case Record#dropdown.disabled of
         true -> [{disabled}];
         false -> []
+    end,
+
+    Size = case {Record#dropdown.size, Record#dropdown.multiple} of
+        {auto, true} -> ?DEFAULT_MULTISELECT_SIZE;
+        {auto, false} -> ?DEFAULT_SINGLESELECT_SIZE;
+        {Num, _} -> Num
     end,
 
     wf_tags:emit_tag(select, Options, [
@@ -35,8 +46,12 @@ render_element(Record) ->
         {title, Record#dropdown.title},
         {style, Record#dropdown.style},
         {name, Record#dropdown.html_name},
+        {size, Size},
+        MultipleAttribute,
+        DisabledAttribute,
         {data_fields, Record#dropdown.data_fields}
-    ] ++ Multiple ++ Disabled).
+    ]).
+
 
 wire_postback(Dropdown) when Dropdown#dropdown.postback==undefined ->
     ignore;
@@ -94,7 +109,6 @@ create_options(Selected,HtmlEncode,[#option{show_if=false} | Rest]) ->
     create_options(Selected,HtmlEncode,Rest);
 create_options(_,_,[Other | _]) ->
     throw({unknown_option_provided_to_dropdown_element,Other}).
-
 
 selected_or_not(Selected,X) ->
     case (Selected =/= undefined andalso wf:to_list(X#option.value) == Selected)

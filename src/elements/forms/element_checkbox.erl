@@ -36,6 +36,8 @@ render_element(Record) ->
                     })
     end,
 
+    action_event:maybe_wire_next(Record#checkbox.anchor, Record#checkbox.next),
+
     Text = wf:html_encode(Record#checkbox.text, Record#checkbox.html_encode),
     Checkbox = wf_tags:emit_tag(input, [
         {name, Record#checkbox.html_name},
@@ -53,3 +55,4 @@ render_element(Record) ->
     wf_tags:emit_tag(label, [Checkbox, Text], [
         {for, Anchor}
     ]).
+
