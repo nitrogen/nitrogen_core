@@ -17,12 +17,7 @@ reflect() -> record_info(fields, range).
 render_element(Record) -> 
     ID = Record#range.id,
     Anchor = Record#range.anchor,
-    case Record#range.next of
-        undefined -> ignore;
-        Next -> 
-            Next1 = wf_render_actions:normalize_path(Next),
-            wf:wire(Anchor, #event { type=enterkey, actions=wf:f("Nitrogen.$go_next('~s');", [Next1]) })
-    end,
+    action_event:maybe_wire_next(Anchor, Record#range.next),
 
     case Record#range.postback of
         undefined -> ignore;

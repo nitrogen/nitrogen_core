@@ -36,6 +36,8 @@ render_element(Record) ->
                     delegate=Record#radio.delegate })
     end,
 
+    action_event:maybe_wire_next(Record#radio.anchor, Record#radio.next),
+
     Content = wf:html_encode(Record#radio.text, Record#radio.html_encode),
     Body = Record#radio.body,
 

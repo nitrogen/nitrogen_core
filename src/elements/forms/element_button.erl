@@ -33,6 +33,8 @@ render_element(Record) ->
 		ClickActions -> wf:wire(Anchor, #event { type=click, actions=ClickActions })
 	end,
 
+    action_event:maybe_wire_next(Record#button.anchor, Record#button.next),
+
     Text = wf:html_encode(Record#button.text, Record#button.html_encode), 
   
     Image = format_image(Record#button.image),
