@@ -343,6 +343,7 @@
         placeholder=""          :: text(),
         disabled=false          :: boolean(),
         readonly=false          :: boolean(),
+        trap_tabs=false         :: boolean(),
         next                    :: id(),
         columns                 :: undefined | integer(),
         rows                    :: undefined | integer(),
