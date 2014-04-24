@@ -559,7 +559,9 @@
         revert=true             :: boolean() | valid | invalid,
         scroll=true             :: boolean(),
         container               :: atom() | binary() | string(),
-        zindex                  :: integer() | undefined
+        zindex                  :: integer() | undefined,
+        distance=3              :: integer(),
+        options=[]              :: proplist()
     }).
 -record(droppable, {?ELEMENT_BASE(element_droppable),
         tag                     :: term(),
