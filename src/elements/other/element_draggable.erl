@@ -21,43 +21,33 @@ render_element(Record) ->
     GroupClasses = groups_to_classes(Record#draggable.group),
 
     Handle = case Record#draggable.handle of
-        undefined -> "null";
-        Other2 -> wf:f("'.~s'", [Other2])
+        undefined -> <<"null">>;
+        Other2 -> wf:f(<<".~s">>, [Other2])
     end,
 
-    Helper = case Record#draggable.clone of
-        true -> clone;
-        false -> original
-    end,
+    Helper = ?WF_IF(Record#draggable.clone, clone, original),
+    Revert = json_list_to_binary(Record#draggable.revert),
+    Container = json_list_to_binary(Record#draggable.container),
+    Distance = json_list_to_binary(Record#draggable.distance),
+    OtherOptions = [{json_list_to_binary(K), json_list_to_binary(V)} || {K,V} <- Record#draggable.options], 
 
-    Revert = case Record#draggable.revert of
-        true -> "true";
-        false -> "false";
-        valid -> "'valid'";
-        invalid -> "'invalid'"
-    end,
+    Options = [
+        {handle, Handle},
+        {helper, Helper},
+        {revert, Revert},
+        {distance, Distance},
+        {scroll, json_list_to_binary(Record#draggable.scroll)},
+        {containment, Container},
+        {appendTo, body},
+        {zIndex, json_list_to_binary(Record#draggable.zindex)}
+        | OtherOptions
+    ],
 
-    Container = case Record#draggable.container of
-        false -> false;
-        window -> "'window'";
-        parent -> "'parent'";
-        document -> "'document'";
-        V -> V
-    end,
-    
+    JsonOptions = nitro_mochijson2:encode({struct, Options}),
+     
     % Write out the script to make this element draggable...
-    Script = wf:f(
-               "Nitrogen.$draggable('~s', { handle: ~s, helper: '~s', revert: ~s, scroll: ~s, containment: ~s, zIndex: ~p, appendTo: 'body' }, '~s');",
-               [
-                Anchor,
-                Handle,
-                Helper, 
-                Revert, 
-                Record#draggable.scroll,
-                Container,
-                Record#draggable.zindex,
-                PickledTag
-               ]),
+    Script = wf:f(<<"Nitrogen.$draggable('~s', ~s, '~s');">>,
+                  [Anchor, JsonOptions, PickledTag ]),
     wf:wire(Script),
 
     % Render as a panel...
@@ -65,11 +55,16 @@ render_element(Record) ->
         id=Record#draggable.id,
         anchor=Anchor,
         class=[draggable, GroupClasses, Record#draggable.class],
-        title=Record#draggable.title,
         style=Record#draggable.style,
         data_fields=Record#draggable.data_fields,
         body=Record#draggable.body
     }).
+
+%% Mochijson encodes lists to actual lists of integers, this encodes lists to binaries
+json_list_to_binary(L) when is_list(L) ->
+    list_to_binary(L);
+json_list_to_binary(O) ->
+    O.
 
 groups_to_classes([]) -> "";
 groups_to_classes(undefined) -> "";
