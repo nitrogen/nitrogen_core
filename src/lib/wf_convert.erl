@@ -126,8 +126,8 @@ ihe([$\n|T],whites)                     -> "<br>"    ++ ihe(T,whites);
 ihe([BigNum|T], ET) when is_integer(BigNum)
                          andalso BigNum > 255
                                         -> [$&,$# | integer_to_list(BigNum)] ++ ";" ++ ihe(T, ET);
-ihe(<<"<", T/binary>>, ET)              -> <<"&gt;",   (ihe(T, ET))/binary>>;
-ihe(<<">", T/binary>>, ET)              -> <<"&lt;",   (ihe(T, ET))/binary>>;
+ihe(<<">", T/binary>>, ET)              -> <<"&gt;",   (ihe(T, ET))/binary>>;
+ihe(<<"<", T/binary>>, ET)              -> <<"&lt;",   (ihe(T, ET))/binary>>;
 ihe(<<"\"",T/binary>>, ET)              -> <<"&quot;", (ihe(T, ET))/binary>>;
 ihe(<<"'", T/binary>>, ET)              -> <<"&#39;",  (ihe(T, ET))/binary>>;
 ihe(<<"&", T/binary>>, ET)              -> <<"&amp;",  (ihe(T, ET))/binary>>;
