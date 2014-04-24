@@ -35,6 +35,9 @@
       browser. Can be toggled with =wf:wire(ElementID, #make_writable{})= and
       =wf:wire(ElementID, #make_readonly{})=.
 
+   + trap\_tabs - (/boolean) :: Set to =true= to allow tabs to be inserted into
+     the textarea, rather than moving the focus to the next element in the page.
+
    + placeholder - (/string/) :: Sets the placeholder text (text that will be
       in the textarea until the user focuses in the textarea). This uses the
       HTML5 placeholder attribute, which is only supported in newer browsers.
