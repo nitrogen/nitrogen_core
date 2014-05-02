@@ -1,4 +1,4 @@
-# vim: sw=3 ts=3 ft=org
+# vim: sw=2 ts=2 ft=org
 
 #+TITLE: Draggable Element Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
@@ -9,9 +9,11 @@
 
 * Draggable Element - #draggable {}
 
-  The draggable element allows you to make a block of Nitrogen elements draggable by the user.
+  The draggable element allows you to make a block of Nitrogen elements
+  draggable by the user.
 
-  Combine the draggable element with the droppable element to allow drag and drop behavior.
+  Combine the draggable element with the droppable element to allow drag and
+  drop behavior.
 
 ** Usage
 
@@ -24,28 +26,47 @@
 
 ** Attributes
 
-   + tag - (/Erlang term/) :: The drag term to pass into the drop\_event/2 event.
+  + tag - (/Erlang term/) :: The drag term to pass into the =drop\_event/2=
+    event.
 
-   + body - (/Nitrogen elements/) :: The elements that will be draggable.
+  + body - (/Nitrogen elements/) :: The elements that will be draggable.
 
-   + group - (/atom or string/) :: The name of this drag group, for use in the droppable element's accept\_groups attribute.
+  + group - (/atom or string/) :: The name of this drag group, for use in the
+    droppable element's accept\_groups attribute.
 
-   + handle - (/atom or string/) :: The class of the handle element on the page. Then handle will then be the part of the element that will be clicked and dragged around.
+  + handle - (/atom or string/) :: The class of the handle element on the page.
+    Then handle will then be the part of the element that will be clicked and
+    dragged around.
 
-   + clone - (/boolean/) :: If true, the element will be cloned in the DOM while dragged. If false, the element will be detached from the DOM while dragging.
+  + clone - (/boolean/) :: If true, the element will be cloned in the DOM while
+    dragged. If false, the element will be detached from the DOM while dragging.
 
-   + revert - (/boolean/) :: If true, the element will be reverted back to its original position if the drop fails.
+  + revert - (/boolean/) :: If true, the element will be reverted back to its
+    original position if the drop fails.
 
-	+ scroll - (/boolean/) :: If true, the window or container will scroll when the item is dragged to the edge.
+  + scroll - (/boolean/) :: If true, the window or container will scroll when
+    the item is dragged to the edge.
 
-	+ container - (/atom or string/) :: How you wish to contain the draggable element. Common containers are =window=, =document=, or =parent=.  Otherwise, it can be specified in the form of a jquery selector. See the documentation on the "Containment" option for the jquery Draggable element for more information.
+  + distance - (/integer/) :: Set to the minimum number of pixels the cursor
+    must move with the mouse down before the drag actually begins. (default: 3)
 
-	+ zindex - (/integer/) :: the z-index of the element to be dragged around the page.
+  + container - (/atom or string/) :: How you wish to contain the draggable
+    element. Common containers are =window=, =document=, or =parent=.
+    Otherwise, it can be specified in the form of a jquery selector. See the
+    documentation on the "Containment" option for the jquery Draggable element
+    for more information.
+
+  + zindex - (/integer/) :: The z-index of the element to be dragged around the
+    page.
+
+  + options - (/proplist/) :: A list of additional options to be passed to the
+    draggable function. (See the jQuery Draggable Documentation below for the
+    complete list of options).
 
 ** See Also
 
-   + [[./droppable.html][Droppable Element]]
+  + [[./droppable.html][Droppable Element]]
 
-	+ [[/demos/dragdrop][Drag and Drop Demo]]
+  + [[/demos/dragdrop][Drag and Drop Demo]]
 
-	+ [[http://api.jqueryui.com/draggable/][jQuery Draggable Documentation]]
+  + [[http://api.jqueryui.com/draggable/][jQuery Draggable Documentation]]

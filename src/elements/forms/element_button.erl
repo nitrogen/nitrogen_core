@@ -33,6 +33,8 @@ render_element(Record) ->
 		ClickActions -> wf:wire(Anchor, #event { type=click, actions=ClickActions })
 	end,
 
+    action_event:maybe_wire_next(Record#button.anchor, Record#button.next),
+
     Text = wf:html_encode(Record#button.text, Record#button.html_encode), 
   
     Image = format_image(Record#button.image),
@@ -45,6 +47,7 @@ render_element(Record) ->
     UniversalAttributes = [
         {id, Record#button.html_id},
         {class, [button, Record#button.class]},
+        {title, Record#button.title},
         {style, Record#button.style},
         {data_fields, Record#button.data_fields},
         ?WF_IF(Record#button.disabled, disabled)

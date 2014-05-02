@@ -43,6 +43,7 @@ render_element(Record) ->
     Terms = #panel { 
         html_id=Record#inplace_textarea.html_id,
         class=[inplace_textbox, Record#inplace_textarea.class],
+        title=Record#inplace_textarea.title,
         data_fields=Record#inplace_textarea.data_fields,
         style=Record#inplace_textarea.style,
         body = [

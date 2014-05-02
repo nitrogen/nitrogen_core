@@ -21,6 +21,7 @@ render_element(Record) ->
         anchor=Record#lightbox.anchor,
         class=[lightbox, Record#lightbox.class],
         style=wf:to_list(Record#lightbox.style),
+        title=Record#lightbox.title,
         data_fields=Record#lightbox.data_fields,
         body=[
             #panel { 			

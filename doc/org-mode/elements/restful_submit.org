@@ -1,4 +1,4 @@
-# vim: sw=3 ts=3 ft=org
+# vim: sw=2 ts=2 ft=org
 #+TITLE: restful submit Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Steffen Panning
@@ -18,11 +18,16 @@
 
 ** Attributes
 
-   + text - (/string/) :: The button's title.
+  + text - (/string/) :: The button's text.
 
-   + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
+  + body - (/Nitrogen element or list of elements/) :: Instead of using text
+    for the button label, this will allow you to embed HTML and Nitrogen
+    elements inside the button.
 
-   + html\_name - (/string/) :: the name attribute of the restful\_submit element 
+  + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
+
+  + html\_name - (/string/) :: the name attribute of the restful\_submit
+    element 
 
 ** See Also
 

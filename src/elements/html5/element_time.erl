@@ -18,6 +18,7 @@ render_element(Record) ->
     wf_tags:emit_tag(time, [Text, Record#time.body], [
         {id, Record#time.html_id},
         {class, ["time", Record#time.class]},
+        {title, Record#time.title},
         {style, Record#time.style},
         {data_fields, Record#time.data_fields},
         ?WF_IF(Record#time.datetime, {datetime, Record#time.datetime})

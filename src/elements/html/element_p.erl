@@ -22,6 +22,7 @@ render_element(Record) ->
     wf_tags:emit_tag(p, Body, [
         {id, Record#p.html_id},
         {class, [p, Record#p.class]},
+        {title, Record#p.title},
         {style, Record#p.style},
         {data_fields, Record#p.data_fields}
     ]).

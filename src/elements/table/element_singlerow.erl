@@ -20,6 +20,7 @@ render_element(Record) ->
         id=Record#singlerow.id,
         anchor=Record#singlerow.anchor,
         class=[singlerow, Record#singlerow.class],
+        title=Record#singlerow.title,
         style=Record#singlerow.style,
         data_fields=Record#singlerow.data_fields,
         rows=#tablerow { cells=Record#singlerow.cells }

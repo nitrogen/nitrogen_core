@@ -12,7 +12,7 @@
 -type nitrogen_element()    :: tuple().
 -type template_script_element() :: script | mobile_script.
 -type body_element()        :: nitrogen_element() | binary() | string() | iolist() 
-                            | template_script_element().
+                                | template_script_element().
 -type body()                :: body_element() | [body_element()].
 -type action_element()      :: undefined | tuple() | string() | binary() | iolist().
 -type actions()             :: action_element() | [action_element()].
@@ -39,11 +39,16 @@
 -type comet_name()          :: term().
 -type comet_restart_msg()   :: term().
 -type comet_function()      :: pid() | function() 
-                            | {comet_name(), function()} 
-                            | {comet_name(), function(), comet_restart_msg()}.
+                                | {comet_name(), function()} 
+                                | {comet_name(), function(), comet_restart_msg()}.
 -type handler_config()      :: any().
 -type handler_state()       :: any().
 
+-type google_chart_type()   :: line | sparkline | stacked_horizontal_bar
+                                | stacked_vertical_bar | grouped_horizontal_bar
+                                | grouped_vertical_bar | pie | pie3d.
+-type color()               :: string() | binary() | atom().
+-type google_chart_position()      :: top | left | bottom | right.
 
 %%% CONTEXT %%%
 
@@ -162,7 +167,8 @@
         class=""                :: class() | [class()],
         style=""                :: text(),
         html_id=""              :: id(),
-        data_fields=[]          :: data_fields()
+        title=""                :: undefined | text(),
+        data_fields=[]          :: data_fields()        
     ).
 
 -record(elementbase, {?ELEMENT_BASE(undefined)}).
@@ -175,7 +181,6 @@
         function=fun() ->[]end  :: fun() | [fun()]
     }).
 -record(body, {?ELEMENT_BASE(element_body),
-        title=""                :: text(),
         body=[]                 :: body()
     }).
 
@@ -235,7 +240,6 @@
         html_encode=true        :: html_encode()
     }).
 -record(link, {?ELEMENT_BASE(element_link),
-        title = ""              :: text(),
         text=""                 :: text(),
         body=""                 :: body(),
         new=false               :: boolean(),
@@ -250,7 +254,6 @@
         delegate                :: module()
     }).
 -record(email_link, {?ELEMENT_BASE(element_email_link),
-        title=""                :: text(),
         text=""                 :: text(),
         body=""                 :: body(),
         html_encode=true        :: html_encode(),
@@ -263,7 +266,6 @@
 -record(span, {?ELEMENT_BASE(element_span),
         body=""                 :: body(),
         text=""                 :: text(),
-        title=""                :: text(),
         html_encode=true        :: html_encode()
     }).
 -record(button, {?ELEMENT_BASE(element_button),
@@ -271,6 +273,7 @@
         body=""                 :: body(),
         image=undefined         :: undefined | url(),
         html_encode=true        :: html_encode(),
+        next                    :: id(),
         click                   :: actions(),
         postback                :: term(),
         disabled=false          :: boolean(),
@@ -340,6 +343,8 @@
         placeholder=""          :: text(),
         disabled=false          :: boolean(),
         readonly=false          :: boolean(),
+        trap_tabs=false         :: boolean(),
+        next                    :: id(),
         columns                 :: undefined | integer(),
         rows                    :: undefined | integer(),
         html_encode=true        :: html_encode(),
@@ -376,12 +381,14 @@
 -type options()             :: [#option{} | short_option()] | [#option_group{}].
 -record(dropdown, {?ELEMENT_BASE(element_dropdown),
         options=[]              :: undefined | options(),
+        size=auto               :: auto | integer(),
         html_encode=true        :: html_encode(),
         postback                :: term(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module(),
         value                   :: text(),
+        next                    :: id(),
         multiple=false          :: boolean(),
         disabled=false          :: boolean(),
         html_name               :: html_name()
@@ -392,6 +399,7 @@
         html_encode=true        :: html_encode(),
         checked=false           :: boolean(),
         value="on"              :: text(),
+        next                    :: id(),
         postback                :: term(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
@@ -406,6 +414,7 @@
         text=""                 :: text(),
         html_encode=true        :: html_encode(),
         value                   :: text(),
+        next                    :: id(),
         name                    :: html_name(),
         checked=false           :: boolean(),
         postback                :: term(),
@@ -439,6 +448,7 @@
       }).
 -record(restful_submit, {?ELEMENT_BASE(element_restful_submit),
         text="Submit"           :: text(),
+        body=[]                 :: body(),
         html_encode=true        :: html_encode(),
         html_name               :: html_name()
     }).
@@ -550,7 +560,9 @@
         revert=true             :: boolean() | valid | invalid,
         scroll=true             :: boolean(),
         container               :: atom() | binary() | string(),
-        zindex                  :: integer() | undefined
+        zindex                  :: integer() | undefined,
+        distance=3              :: integer(),
+        options=[]              :: proplist()
     }).
 -record(droppable, {?ELEMENT_BASE(element_droppable),
         tag                     :: term(),
@@ -621,6 +633,7 @@
         captcha_opts=[]         :: proplist(),
         button_id               :: id(),
         button_label="Check!"   :: text(),
+        button_class            :: text(),
         delegate                :: module(),
         tag                     :: term(),
         fail_body="Please try again!" :: body(),
@@ -760,6 +773,43 @@
 -record(grid_15,        ?GRID_ELEMENT(grid, 15)).
 -record(grid_16,        ?GRID_ELEMENT(grid, 16)).
 -record(grid_clear,     ?GRID_ELEMENT(clear, undefined)).
+
+%% Google Charts
+-record(chart_axis, {
+        position                :: google_chart_position(),
+        labels                  :: undefined | [text()],
+        color=909090            :: color(),
+        font_size=10            :: integer()
+    }).
+
+-record(chart_data, {
+        color                   :: color(),
+        legend                  :: text(),
+        values                  :: [text()],
+        min_value=0             :: integer(),
+        max_value=100           :: integer(),
+        line_width=1            :: integer(),
+        line_length=1           :: integer(),
+        blank_length=0          :: integer()
+    }).
+-record(google_chart,   {?ELEMENT_BASE(element_google_chart),
+        type=line               :: google_chart_type(),
+        color="909090"          :: color(),
+        font_size=10            :: integer(),
+        width=300               :: integer(),
+        height=150              :: integer(),
+        axes=[]                 :: undefined | [#chart_axis{}],
+        data=[]                 :: undefined | [#chart_data{}],
+        grid_x=undefined        :: undefined | integer(),
+        grid_y=undefined        :: undefined | integer(),
+        grid_line_length=1      :: integer(),
+        grid_blank_length=5     :: integer(),
+        background_color=ffffff :: color(),
+        chart_color=ffffff      :: color(),
+        legend_location=bottom  :: google_chart_position(),
+        bar_space=3             :: integer(),
+        bar_group_space=7       :: integer()
+    }).
 
 
 %%% Actions %%%
