@@ -15,6 +15,7 @@ function NitrogenClass(o) {
     this.$system_event_obj = null;
     this.$going_away = false;
     this.$live_validation_data_field = "LV_live_validation";
+    this.$before_postback_list = new Array();
     this.$js_dependencies = new Array();
     return this;
 }
@@ -119,11 +120,28 @@ NitrogenClass.prototype.$event_loop = function() {
 
 /*** VALIDATE AND SERIALIZE ***/
 
+NitrogenClass.prototype.$before_postback = function(f) {
+    this.$before_postback_list.push(f);
+}
+
+NitrogenClass.prototype.$execute_before_postbacks = function() {
+    var before_list = this.$before_postback_list;
+    for(var i=0; i<before_list.length; i++) {
+        try{
+            before_list[i]();
+        }catch(ex){
+            Nitrogen.console_log({before_postback_error: ex});
+        }
+    }
+}
+
 NitrogenClass.prototype.$validate_and_serialize = function(validationGroup) {
     // Check validatation, build object of params...
     var is_valid = true,
         params= {},
         n = this;
+
+    this.$execute_before_postbacks();
 
     jQuery(":input").not(".no_postback").each(function(i) {
         var LV = Nitrogen.$get_validation(this);
