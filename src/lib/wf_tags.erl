@@ -20,8 +20,8 @@
     TagName =/= 'a' andalso
     TagName =/= 'ul' andalso
     TagName =/= 'ol' andalso
-	TagName =/= 'select' andalso
-	TagName =/= 'script' andalso
+    TagName =/= 'select' andalso
+    TagName =/= 'script' andalso
     TagName =/= 'legend' andalso
     TagName =/= 'fieldset' andalso
     TagName =/= 'iframe')).
@@ -100,7 +100,7 @@ display_property(Prop) when ?IS_STRING(Prop) ->
 %% proplist of [{field,Value}]. Emitted will be data-field="value".
 %% "data-" gets prefixed on the fieldnames.
 display_property({data_fields,DataTags}) ->
-	[" ",data_tags(DataTags)];
+    [" ",data_tags(DataTags)];
 
 display_property({Prop, V}) when is_atom(Prop) ->
     display_property({atom_to_list(Prop), V});
@@ -131,10 +131,10 @@ display_property({Prop, Value}) ->
 
 %% 
 data_tags(Data) ->
-	[display_property(data_tag(Datum)) || Datum <- Data].
+    [display_property(data_tag(Datum)) || Datum <- Data].
 
 data_tag({FieldName,Value}) ->
-	DataField = wf:to_binary(FieldName),
+    DataField = wf:to_binary(FieldName),
     {<<"data-",DataField/binary>>,Value};
 data_tag({FieldName}) ->
     DataField = wf:to_binary(FieldName),
