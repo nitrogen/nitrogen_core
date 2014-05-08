@@ -881,6 +881,9 @@
         delegate                :: module(),
         extra_param             :: string() | binary() | undefined
     }).
+-record(before_postback, {?ACTION_BASE(action_before_postback),
+        script=""               :: string()
+    }).
 %% we want validation assignments to happen last, so we use AV_BASE and set deferral to zero first
 -record(validate, {?ACTION_BASE(action_validate),
         on=submit               :: atom(),
