@@ -22,6 +22,8 @@
     TagName =/= 'ol' andalso
 	TagName =/= 'select' andalso
 	TagName =/= 'script' andalso
+    TagName =/= 'legend' andalso
+    TagName =/= 'fieldset' andalso
     TagName =/= 'iframe')).
 
 -export ([emit_tag/2, emit_tag/3, html_name/2]).
