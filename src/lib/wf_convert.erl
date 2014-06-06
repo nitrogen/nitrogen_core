@@ -100,7 +100,9 @@ html_encode(L,EncType) when is_float(L) -> html_encode(nitro_mochinum:digits(L),
 html_encode(L, false) -> L;
 html_encode(L, normal) when is_list(L); is_binary(L) -> ihe(L, normal);
 html_encode(L, true) when is_list(L); is_binary(L) -> ihe(L, normal);
-html_encode(L, whites) when is_list(L); is_binary(L) -> ihe(L, whites).
+html_encode(L, whites) when is_list(L); is_binary(L) -> ihe(L, whites);
+
+html_encode(Other, EncType) -> ihe(Other, EncType).
 
 -spec ihe(binary() | list(), whites | normal) -> iolist().
 %% @doc ihe means "inner html encode". It's a short version for encoding "ET"
@@ -119,8 +121,7 @@ ihe([$>|T], ET)                         -> "&gt;"    ++ ihe(T, ET);
 ihe([$"|T], ET)                         -> "&quot;"  ++ ihe(T, ET);
 ihe([$'|T], ET)                         -> "&#39;"   ++ ihe(T, ET);
 ihe([$&|T], ET)                         -> "&amp;"   ++ ihe(T, ET);
-ihe([$\s,$\s|T],whites)                 -> "&nbsp; " ++ ihe(T, whites);
-ihe([$\s|T],whites)                     -> "&nbsp;"  ++ ihe(T, whites);
+ihe([$\s,$\s|T],whites)                 -> " &nbsp;" ++ ihe(T, whites);
 ihe([$\t|T],whites)                     -> "&nbsp; &nbsp; &nbsp;" ++ ihe(T, whites);
 ihe([$\n|T],whites)                     -> "<br>"    ++ ihe(T,whites);
 ihe([BigNum|T], ET) when is_integer(BigNum)
@@ -131,13 +132,15 @@ ihe(<<"<", T/binary>>, ET)              -> <<"&lt;",   (ihe(T, ET))/binary>>;
 ihe(<<"\"",T/binary>>, ET)              -> <<"&quot;", (ihe(T, ET))/binary>>;
 ihe(<<"'", T/binary>>, ET)              -> <<"&#39;",  (ihe(T, ET))/binary>>;
 ihe(<<"&", T/binary>>, ET)              -> <<"&amp;",  (ihe(T, ET))/binary>>;
-ihe(<<"  ",T/binary>>, whites)          -> <<"&nbsp; ",(ihe(T,whites))/binary>>;
-ihe(<<" ", T/binary>>, whites)          -> <<"&nbsp;", (ihe(T,whites))/binary>>;
+ihe(<<"  ",T/binary>>, whites)          -> <<" &nbsp;",(ihe(T,whites))/binary>>;
 ihe(<<"\t",T/binary>>, whites)          -> <<"&nbsp; &nbsp; &nbsp;",(ihe(T,whites))/binary>>;
 ihe(<<"\n",T/binary>>, whites)          -> <<"<br>",   (ihe(T,whites))/binary>>;
 ihe(<<H:8, T/binary>>, ET)              -> <<H,(ihe(T,ET))/binary>>;
 ihe([H|T], ET)                          -> [ihe(H, ET)|ihe(T, ET)];
-ihe(U, _ET) when is_tuple(U); is_pid(U) -> throw({error, unsure_how_to_encode,U});
+ihe(U, ET) when is_tuple(U);
+                is_pid(U);
+                is_reference(U);
+                is_port(U)              -> ihe(io_lib:format("~p", [U]), ET);
 ihe(Other, _ET)                         -> Other.
 
 html_decode(B) when is_binary(B) -> html_decode(binary_to_list(B));
@@ -147,6 +150,7 @@ html_decode("&#39;" ++ T) -> [$'|html_decode(T)];
 html_decode("&quot;" ++ T) -> [$"|html_decode(T)];
 html_decode("&gt;" ++ T) -> [$>|html_decode(T)];
 html_decode("&lt;" ++ T) -> [$<|html_decode(T)];
+html_decode("&nbsp;" ++ T) -> [$\s|html_decode(T)];
 html_decode([H|T]) -> [H|html_decode(T)].
 
 %%% HEX ENCODE and HEX DECODE
@@ -383,3 +387,52 @@ parse_ipv6_digits([H | T], Multiplier) ->
         $f -> 15
     end,
     Num * Multiplier + parse_ipv6_digits(T, Multiplier*16).
+
+-include_lib("eunit/include/eunit.hrl").
+
+html_encode_test() ->
+    %% Disabled with argument
+    ?assertEqual("<i>",html_encode("<i>", false)),
+
+    % Binaries
+    ?assertEqual(<<"&lt;">>, html_encode(<<"<">>)),
+    ?assertEqual(<<"&gt;">>, html_encode(<<">">>)),
+    ?assertEqual(<<"&quot;">>, html_encode(<<"\"">>)),
+    ?assertEqual(<<"&#39;">>, html_encode(<<"'">>)),
+    ?assertEqual(<<"&amp;">>, html_encode(<<"&">>)),
+    ?assertEqual(<<" ">>, html_encode(<<" ">>)),
+    ?assertEqual(<<" &nbsp;">>, html_encode(<<"  ">>, whites)),
+    ?assertEqual(<<"&nbsp; &nbsp; &nbsp;">>, html_encode(<<"\t">>, whites)),
+    ?assertEqual(<<"\n">>, html_encode(<<"\n">>)),
+    ?assertEqual(<<"<br>">>, html_encode(<<"\n">>,whites)),
+    ?assertEqual(<<"&lt;i&gt;yo&lt;/i&gt;">>, html_encode(<<"<i>yo</i>">>)),
+
+    % Strings
+    ?assertEqual("&lt;", html_encode("<")),
+    ?assertEqual("&gt;", html_encode(">")),
+    ?assertEqual("&quot;", html_encode("\"")),
+    ?assertEqual("&#39;", html_encode("'")),
+    ?assertEqual("&amp;", html_encode("&")),
+    ?assertEqual("&amp;amp;", html_encode("&amp;")),
+    ?assertEqual(" ", html_encode(" ")),
+    ?assertEqual(" &nbsp;", html_encode("  ", whites)),
+    ?assertEqual(" &nbsp; ", html_encode("   ", whites)),
+    ?assertEqual("&nbsp; &nbsp; &nbsp;", html_encode("\t", whites)),
+    ?assertEqual("\n", html_encode("\n")),
+    ?assertEqual("<br>", html_encode("\n",whites)),
+
+    % Binary and String mixes and other random types
+
+    ?assertEqual(<<"&amp;&amp;">>, iolist_to_binary(html_encode(["&", <<"&">>]))),
+    ?assertEqual(<<"ab">>, iolist_to_binary(html_encode([a, <<"b">>]))),
+
+    ?assertEqual("12345", html_encode(12345)),
+    ?assertEqual("3.14", html_encode(3.14)),
+    ?assertEqual("abc&#12345;", html_encode("abc" ++ [12345])),
+
+    ?assertEqual("ok", html_encode(ok)),
+    ?assertEqual("&lt;&gt;", html_encode('<>')),
+    ?assertEqual(<<"A{}">>,iolist_to_binary(html_encode(["A",{}]))),
+    ?assertEqual(<<"A{b,c,d}">>, iolist_to_binary(html_encode(["A",{b,c,d}]))),
+    ?assertEqual(<<"{a}">>, iolist_to_binary(html_encode({a}))),
+    ok.
