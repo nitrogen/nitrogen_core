@@ -33,9 +33,19 @@ path() ->
     Req = request_bridge(),
     Req:path().
 
+protocol() ->
+    Req = request_bridge(),
+    Req:protocol().
+
 uri() ->
     Req = request_bridge(),
     Req:uri().
+
+url() ->
+    Protocol = wf:to_list(protocol()),
+    Host = header(host),
+    Uri = uri(),
+    Protocol ++ "://" ++ Host ++ Uri.
 
 peer_ip() ->
     Req = request_bridge(),
