@@ -195,6 +195,9 @@ hex_decode(S) ->
 js_escape(String) -> 
     _String = wf_convert:js_escape(String).
 
+to_qs(List) ->
+    _Iolist = wf_convert:to_qs(List).
+
 join(List,Delimiter) ->
     _Result = wf_convert:join(List,Delimiter).
 
@@ -233,6 +236,9 @@ path_info() ->
 
 uri() ->
     wf_context:uri().
+
+url() ->
+    wf_context:url().
 
 status_code() -> 
     ok = wf_context:status_code().

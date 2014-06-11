@@ -142,6 +142,10 @@
 
    URL decode the supplied String, converting a percent-encoded String into a normal String.
 
+** wf:to\_qs(PropList) -> EncodedQueryString
+
+   Encode a PropList (a list of ={Key, Value}= tuples) into a URL-encoded query string (returned as an IOList).
+
 ** wf:hex\_encode(String) -> EncodedString.
   
    Hex-encode the supplied String.
@@ -479,25 +483,42 @@ Example:
    used to return text images or other files to the browser, rather than returning 
    HTML.
 
+** wf:url() -> String
+
+   Return the complete requested URL for the page. For exaple, if the request
+   is for =http://myapp.com/some/file?some_qs=, the return is
+   ="http://myapp.com/some/file?some_qs".
+
 ** wf:uri() -> String
 
-   Return the complete requested URI for the page.
+   Return the complete requested URI for the page. Note, this does not include
+   the protocol (http/https) or the hostname. For example, if the request is for
+   =http://myapp.com/some/file?some_qs=, the return is ="/some/file?some_qs"=).
 
 ** wf:path() -> String
 
-   Return the string of the requested path.
+   Return the string of the requested path.  This excludes any query_string
+   information. For example, if the request is for
+   =http://myapp.com/some/file?some_qs= the return value is ="/some/file"=
 
 ** wf:path\_info() -> String
 
    Return only the path info for the requested page module. In other words, if
    the module web\_my\_page is requsted with the path
-   "/web/my/page/some/extra/stuff then =wf:path_info()= would return
-   "some/extra/stuff".
+   ="/web/my/page/some/extra/stuff= then =wf:path_info()= would return
+   ="some/extra/stuff"=.
    
 ** wf:page\_module() -> Atom
 
    Return the requested page module. Useful information to know when writing a
    custom element or action.
+
+** wf:protocol() -> http | https
+
+   Return whether the request to the server is made by HTTP or HTTPS. Note,
+   that if the request is made behind a proxy, this will only return whether
+   the request from the proxy to the server is in HTTP or HTTPS, so the
+   protocol seen by Nitrogen might not be the same protocol used by the client.
 
 ** wf:peer\_ip() -> IPAddress (4-tuple or 8-tuple)
 

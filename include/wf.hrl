@@ -809,7 +809,10 @@
         bar_space=3             :: integer(),
         bar_group_space=7       :: integer()
     }).
-
+-record(qr, {?ELEMENT_BASE(element_qr),
+        data=undefined          :: any(),
+        size=200                :: integer()
+    }).
 
 %%% Actions %%%
 -define(AV_BASE(Module,Type),

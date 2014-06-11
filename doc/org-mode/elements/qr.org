@@ -1,0 +1,33 @@
+# vim: sw=3 ts=3 ft=org
+
+#+TITLE: QR Code Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Jesse Gumm (@jessegumm)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
+
+* QR Code Element - #qr {}
+
+  The QR element produces a QR code as an image on the page. Note: This element
+  uses the Google Charts API to contstruct the QR code.
+
+** Usage
+
+#+BEGIN_SRC erlang
+   #qr {data="http://nitrogenproject.com"}
+#+END_SRC
+
+** Attributes
+
+	+ size - (/integer/) :: How many pixels to make the image. (Default: 200)
+
+	+ data - (/string/) :: Whatever data you wish to encode in the QR code. If a
+	  URL is specified, then it will be a URL QR code.  If left blank, the URL of
+	  the current page will be used.
+
+** See Also
+
+   + [[./base.html][base element]]
+   + [[./image.html][image element]]
+	+ [[/demos/qr][QR Code Demos]]
