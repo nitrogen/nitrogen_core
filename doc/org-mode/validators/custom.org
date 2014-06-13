@@ -42,6 +42,8 @@
 
 ** See Also
 
+	+ [[./js_custom.org][JS Custom Action (client side)]]
+
 	+ [[../actions/validate.org][Validate Action]]
 
 	+ [[http://nitrogenproject.com/demos/validation][Validation Demos]]
