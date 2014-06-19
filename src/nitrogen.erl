@@ -4,7 +4,7 @@
 % See MIT-LICENSE for licensing information.
 
 -module(nitrogen).
--behaviour(simple_bridge_callout).
+-behaviour(simple_bridge_handler).
 -export([
         init_request/2,
         init_request/1,
@@ -20,7 +20,11 @@
         ws_info/2,
         ws_terminate/2
     ]).
-    
+
+-deprecated([
+        {run,0},
+        {init_request,2}
+    ]).
 
 
 %% init_request/2 kept for backwards compatibility, but is no longer needed
@@ -33,13 +37,9 @@ init_request(Bridge) ->
 handler(Module, Config) ->
     wf_handler:set_handler(Module, Config).
 
-run() -> 
-    wf_core:run().
-
-
 run(Bridge) ->
     init_request(Bridge),
-    nitrogen_callout:run().
+    nitrogen_main_handler:run().
 
 ws_init(Bridge) ->
     init_request(Bridge),
@@ -53,3 +53,9 @@ ws_info(_Msg, _Bridge) ->
 
 ws_terminate(_Reason, _Bridge) ->
     close.
+
+
+%% Deprecated, kept for backwards compatibility
+run() -> 
+    wf_core:run().
+
