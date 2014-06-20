@@ -47,7 +47,7 @@ finish(_Config, _State) ->
 get_value(Path, Config, State) ->
     case get_values(Path, Config, State) of
         [] -> undefined;
-        [One] -> One;
+        [One] -> wf:to_list(One);
         _Many -> throw({?MODULE, too_many_matches, Path})
     end.
 
@@ -61,7 +61,7 @@ get_params(_Config, State) ->
     F = fun({KeyPartsReversed, Value}) ->
         KeyParts = lists:reverse(KeyPartsReversed),
         Key = string:join(KeyParts, "."),
-        { Key, Value }
+        { Key, wf:to_list(Value) }
     end,
     lists:map(F, Params).
 
@@ -75,7 +75,7 @@ get_params(_Config, State) ->
 %%   Path   = [b, c]
 %%   Params = [y, b, c]
 refine_params([], Params) -> 
-    [V || {_, V} <- Params];
+    [wf:to_list(V) || {_, V} <- Params];
 refine_params([H|T], Params) ->
     F = fun({Path, Value}, Acc) ->
         case split_on(H, Path) of
