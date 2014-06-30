@@ -484,6 +484,7 @@
     }).
 -record(table, {?ELEMENT_BASE(element_table),
         rows                    :: body(),
+        border = 0              :: integer(),
         header=[]               :: body(),
         footer=[]               :: body()
     }).
