@@ -17,6 +17,7 @@ function NitrogenClass(o) {
     this.$live_validation_data_field = "LV_live_validation";
     this.$before_postback_list = new Array();
     this.$js_dependencies = new Array();
+    this.$websocket = null;
     return this;
 }
 
@@ -96,16 +97,16 @@ NitrogenClass.prototype.$event_loop = function() {
     }
 
     if (this.$system_event_queue.length == 0 || this.$event_queue.length == 0) {
-    if( this.$going_away ) {
-        // $destroy has been called for this Nitrogen object
-        // and the event queue is empty - let the event loop stop.
-        return;
-    }
-    else {
-        // No more events, sleep for 50 ms...
-        setTimeout( function() { this2.$event_loop() }, 50);
-        return;
-    }
+        if( this.$going_away ) {
+            // $destroy has been called for this Nitrogen object
+            // and the event queue is empty - let the event loop stop.
+            return;
+        }
+        else {
+            // No more events, sleep for 50 ms...
+            setTimeout( function() { this2.$event_loop() }, 50);
+            return;
+        }
     }
 
     // Events queued, but one is running, sleep for 10 ms...
@@ -801,6 +802,19 @@ NitrogenClass.prototype.$trap_tabs = function(el) {
 NitrogenClass.prototype.$from_alien = function(nativeID) {
     var input = $("input#" + nativeID).val();
     objs(nativeID).val(input);
+};
+
+/*** WEBSOCKETS ***/
+
+NitrogenClass.prototype.$ws_init = function() {
+    try {
+        var this2 = this;
+        this.$websocket = new WebSocket(location.href);
+        this.$websocket.onopen = function(evt) {this2.$ws_open()};
+        this.$websocket.onclose = function(evt) {this2.$ws_close()};
+        this.$websocket.onmessage = function(evt) {this2.$ws_message(evt.data)) };
+        this.$websocket.onerror = function(evt) {this2.$ws_close()};
+    }catch(ex){}
 };
 
 var Nitrogen = new NitrogenClass();

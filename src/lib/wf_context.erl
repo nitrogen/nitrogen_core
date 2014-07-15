@@ -5,7 +5,98 @@
 
 -module (wf_context).
 -include("wf.hrl").
--compile(export_all).
+
+-export([
+        bridge/0,
+        bridge/1,
+
+        socket/0,
+
+        peer_ip/0,
+        peer_ip/1,
+        peer_ip/2,
+
+        request_body/0,
+        status_code/0,
+        status_code/1,
+
+        content_type/1,
+        headers/0,
+        header/1,
+        header/2,
+
+        cookies/0,
+        cookie/1,
+        cookie_default/2,
+
+        cookie/2,
+        cookie/4,
+        delete_cookie/1,
+
+        anchor/1,
+        anchor/0,
+
+        data/0,
+        data/1,
+        clear_data/0,
+
+        add_action/2,
+        actions/0,
+        next_action/0,
+        action_queue/0,
+        action_queue/1,
+        clear_action_queue/0,
+        new_action_queue/0,
+
+        page_context/0,
+        page_context/1,
+        
+        series_id/0,
+        series_id/1,
+
+        page_module/0,
+        page_module/1,
+
+        path_info/0,
+        path_info/1,
+
+        async_mode/0,
+        async_mode/1,
+
+        event_context/0,
+        event_context/1,
+
+        type/0,
+        type/1,
+
+        event_module/0,
+        event_module/1,
+
+        event_tag/0,
+        event_tag/1,
+
+        event_validation_group/0,
+        event_validation_group/1,
+        event_handle_invalid/0,
+        event_handle_invalid/1,
+
+        handlers/0,
+        handlers/1,
+
+        init_context/1,
+        make_handler/2,
+
+        context/0,
+        context/1
+    ]).
+
+%% Exports for backwards compatibility
+-export([
+        request_bridge/0,
+        request_bridge/1,
+        response_bridge/0,
+        response_bridge/1
+    ]).
 
 -define(BRIDGE, (bridge())).
 
@@ -18,19 +109,6 @@ bridge() ->
 bridge(Bridge) ->
     Context = context(),
     context(Context#context{bridge=Bridge}).
-
-%% Kept for backwards compatibility
-request_bridge() ->
-    bridge().
-
-request_bridge(Bridge) ->
-    bridge(Bridge).
-
-response_bridge() ->
-    bridge().
-
-respose_bridge(Bridge) ->
-    bridge(Bridge).
 
 socket() ->
     ?BRIDGE:socket().
@@ -330,3 +408,19 @@ make_handler(Name, Module) ->
 % code much cleaner. Trust me.
 context() -> get(context).
 context(Context) -> put(context, Context).
+
+
+%% Kept for backwards compatibility with nitrogen 2.2 and below (and
+%% simple_bridge 1.x)
+request_bridge() ->
+    bridge().
+
+request_bridge(Bridge) ->
+    bridge(Bridge).
+
+response_bridge() ->
+    bridge().
+
+response_bridge(Bridge) ->
+    bridge(Bridge).
+
