@@ -1,6 +1,7 @@
 % vim: sw=4 ts=4 et ft=erlang
 % Nitrogen Web Framework for Erlang
 % Copyright (c) 2008-2010 Rusty Klophaus
+% Copyright (c) 2013-2014 Jesse Gumm
 % See MIT-LICENSE for licensing information.
 
 -module(nitrogen).
