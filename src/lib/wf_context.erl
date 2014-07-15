@@ -12,6 +12,11 @@
 
         socket/0,
 
+        path/0,
+        protocol/0,
+        uri/0,
+        url/0,
+
         peer_ip/0,
         peer_ip/1,
         peer_ip/2,
