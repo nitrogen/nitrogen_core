@@ -11,4 +11,5 @@ render_action(Record) ->
     Text = wf:js_escape(Record#js_custom.text),
     Function = Record#js_custom.function,
     Args = Record#js_custom.args,
-    wf:f("v.add(Validate.Custom, { against: ~s, args: ~s, failureMessage: \"~s\" });", [Function, Args, Text]).
+    WhenEmpty = Record#js_custom.when_empty,
+    wf:f("v.add(Validate.Custom, { against: ~s, args: ~s, failureMessage: \"~s\", displayMessageWhenEmpty: ~s });", [Function, Args, Text, WhenEmpty]).
