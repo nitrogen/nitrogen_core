@@ -45,7 +45,7 @@
 
 *** If you *do* have Erlang installed:
 
-Pull the [[http://github.com/nitrogen/nitrogen][Nitrogen Source Code]], then =make rel_inets; cd rel/nitrogen=.
+Pull the [[http://github.com/nitrogen/nitrogen][Nitrogen Source Code]], then =make rel_inets; cd ../myapp=.
 
 * Start the Website in Console Mode
 ** Install & Run Nitrogen
@@ -71,7 +71,7 @@ Open http://localhost:8000 in your Browser
     + etc/ :: Configuration settings.
     + site/ :: Contains the website files, templates, and Erlang modules.
     + log/ :: The logs.
-    + erts-X.Y.Z/ :: Embedded Erlang.
+    + erts-X.Y.Z/ :: Embedded Erlang (not found in slim release version)
     + releases/ :: Tells Erlang how to start the system.
     + lib/ :: Dependent libraries.
 
@@ -133,10 +133,10 @@ Open http://localhost:8000 in your Browser
 * Exercise: Debugging
 ** Install & Run Nitrogen
 *** Debug Statements
-    + Add =?DEBUG= to =index.erl=. Then compile and
+    + Add =?DEBUG= to the body of any function in =index.erl=. Then compile and
       reload. What happens?
-    + Add =?PRINT(node())= to =index.erl=. Then compile and reload. What
-      happens?
+    + Add =?PRINT(node())= to body of any function in =index.erl=. Then compile
+      and reload. What happens?
 
 * Emacs Mode
 ** Install & Run Nitrogen
