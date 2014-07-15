@@ -51,8 +51,8 @@
   : make rel_inets
 
   This creates a completely self-contained starter application under
-  =./rel/nitrogen= that runs on Inets, Erlang's built in HTTP server.
-  "Self-contained" here means that the =./rel/nitrogen= directory contains
+  =../myapp= that runs on Inets, Erlang's built in HTTP server.
+  "Self-contained" here means that the =../myapp= directory contains
   everything you need to develop and run nitrogen, including the Erlang VM. To
   create a =.tar.gz= version of this code, exactly like you would find on the
   [[http://nitrogenproject.com/downloads][Downloads]] page, run:
@@ -87,6 +87,18 @@
   : make slim_mochiweb
   : make slim_webmachine
   : make slim_yaws
+
+  All of the above commands can be provided with PREFIX or PROJECT variables to
+  change the destination of the project, and the project directory name and
+  node name. Note: it does not currently change the actual name of the Erlang
+  application (the Application will still be called "nitrogen").
+
+  For example:
+
+  : make slim_yaws PROJECT=my_awesome_yaws_app PREFIX=~/my_web_apps
+
+  Will create a =my_web_apps/my_awesome_yaws_app= directory in your home
+  directory.
 
 * How do I add Nitrogen into an existing Erlang application?
 # <<200>>

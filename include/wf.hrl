@@ -987,7 +987,9 @@
     attach_to                   :: undefined | id()
 ).
 -record(validatorbase, {?VALIDATOR_BASE(undefined)}).
--record(is_required, {?VALIDATOR_BASE(validator_is_required)}).
+-record(is_required, {?VALIDATOR_BASE(validator_is_required),
+        unless_has_value        :: undefined | [id()]
+    }).
 -record(is_email, {?VALIDATOR_BASE(validator_is_email)}).
 -record(is_integer, {?VALIDATOR_BASE(validator_is_integer),
         min                     :: undefined | integer(),
@@ -1010,8 +1012,9 @@
         tag                     :: term()
     }).
 -record(js_custom, {?VALIDATOR_BASE(validator_js_custom),
-        function                :: script(),
-        args="{}"               :: text()
+        function                :: atom() | script(),
+        args="{}"               :: text(),
+        when_empty=false        :: boolean()
     }).
 
 -endif.
