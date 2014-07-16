@@ -18,6 +18,7 @@ function NitrogenClass(o) {
     this.$before_postback_list = new Array();
     this.$js_dependencies = new Array();
     this.$websocket = null;
+    this.$websockets_enabled = false; // default to off
     return this;
 }
 
@@ -806,6 +807,14 @@ NitrogenClass.prototype.$from_alien = function(nativeID) {
 
 /*** WEBSOCKETS ***/
 
+Nitrogen.prototype.$enable_websockets() {
+    this.$websockets_enabled = true;
+}
+
+Nitrogen.prototype.$disable_websockets() {
+    this.$websockets_enabled = false;
+}
+
 NitrogenClass.prototype.$ws_init = function() {
     try {
         var this2 = this;
@@ -816,6 +825,20 @@ NitrogenClass.prototype.$ws_init = function() {
         this.$websocket.onerror = function(evt) {this2.$ws_close()};
     }catch(ex){}
 };
+
+NitrogenClass.prototype.$ws_open() {
+    this.$disable_websockets();
+    // validate websocket
+};
+
+NitrogenClass.prototype.$ws_close() {
+    this.$enable_websockets();
+}
+
+NitrogenClass.prototype.$ws_message(data) {
+    // extract executable data
+    // other data gets sent to a handler of sorts
+}
 
 var Nitrogen = new NitrogenClass();
 var page = document;
