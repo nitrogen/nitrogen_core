@@ -26,6 +26,7 @@
         status_code/1,
 
         content_type/1,
+        download_as/1,
         headers/0,
         header/1,
         header/2,
@@ -169,8 +170,11 @@ status_code(StatusCode) ->
     ok.
 
 content_type(ContentType) ->
-    bridge(?BRIDGE:set_header("Content-Type", ContentType)),
-    ok.
+    header("Content-Type", ContentType).
+
+download_as(Filename0) ->
+    Filename = wf_convert:url_encode(Filename0),
+    header("Content-Disposition", "attachment; filename=\"" ++ Filename ++ "\"").
 
 headers() ->
     ?BRIDGE:headers().

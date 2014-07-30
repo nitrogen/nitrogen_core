@@ -483,6 +483,11 @@ Example:
    used to return text images or other files to the browser, rather than returning 
    HTML.
 
+** wf:download\_as(Filename) -> ok
+
+   Set the HTTP Content-Disposition header in such a way that the browser will
+   treat the page as a download with the specified =Filename=.
+
 ** wf:url() -> String
 
    Return the complete requested URL for the page. For exaple, if the request
@@ -585,7 +590,7 @@ Example:
 ** wf:header(StringKey, HeaderValue) -> ok
 
    Set an HTTP header during the next response.
-   
+
 * Serialization
 # <<12>>
    
