@@ -249,6 +249,9 @@ status_code(StatusCode) ->
 content_type(ContentType) ->
     ok = wf_context:content_type(ContentType).
 
+download_as(Filename) ->
+    wf_context:download_as(Filename).
+
 headers() -> 
     wf_context:headers().
 
