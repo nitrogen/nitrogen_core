@@ -16,7 +16,7 @@ reflect() -> record_info(fields, google_chart).
 -spec render_element(#google_chart{}) -> body().
 render_element(Record) -> 
     % Path...
-    Path = "//chart.apis.google.com/chart?",
+    Path = "//chart.googleapis.com/chart?",
 
     % Chart Type...
     Type = [
