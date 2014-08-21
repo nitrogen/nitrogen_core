@@ -97,4 +97,5 @@ effective_type_and_keycode(Type, KeyCode) -> {Type, KeyCode}.
 maybe_wire_next(_Anchor, undefined) -> do_nothing;
 maybe_wire_next(Anchor, Next) ->
     Next1 = wf_render_actions:normalize_path(Next),
-    wf:defer(Anchor, #event{ type=tabkey, actions=wf:f("Nitrogen.$go_next('~s');", [Next1])}).
+    wf:defer(Anchor, #event{ type=tabkey,   actions=wf:f("Nitrogen.$go_next('~s');", [Next1])}),
+    wf:defer(Anchor, #event{ type=enterkey, actions=wf:f("Nitrogen.$go_next('~s');", [Next1])}).
