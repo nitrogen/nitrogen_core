@@ -27,7 +27,8 @@ init(_Config, _State) ->
     Cookie = wf:cookie(get_cookie_name()),
     State = case wf:depickle(Cookie) of
         undefined -> new_state();
-        Other -> Other
+        Other=#state{} -> Other;
+        _ -> new_state()
     end,
     {ok, State}.
 
