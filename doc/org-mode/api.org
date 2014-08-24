@@ -117,6 +117,12 @@
    Convert the supplied term into an Atom, if possible. Useful for
    turning Integers, Binaries, and Strings into Atoms.
 
+** wf:to\_existing\_atom(Term) -> Atom
+
+   Convert the supplied term to an Atom that already exists in the Erlang VM.
+   Same as =wf:to_atom/1= but safer when in doubt. (see
+   [[http://www.erlang.org/doc/efficiency_guide/advanced.html][the advanced section of the Erlang docs pertaining to atoms]]).
+
 ** wf:to\_binary(Term) -> Binary
 
    Convert the supplied term into a Binary, if possible. Useful for
