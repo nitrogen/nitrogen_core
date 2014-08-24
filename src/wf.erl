@@ -4,7 +4,7 @@
 % See MIT-LICENSE for licensing information.
 
 -module (wf).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -compile (export_all).
 
 %%% EXPOSE WIRE, UPDATE, FLASH %%%

@@ -1,6 +1,7 @@
 % vim: sw=4 ts=4 et ft=erlang
 % Nitrogen Web Framework for Erlang
 % Copyright (c) 2008-2010 Rusty Klophaus
+% Copyright (c) 2013-2014 Jesse Gumm
 % See MIT-LICENSE for licensing information.
 
 -module (wf_convert).
@@ -23,7 +24,7 @@
     parse_ip/1
 ]).
 
--include_lib ("wf.hrl").
+-include("wf.hrl").
 
 %%% CONVERSION %%%
 
@@ -55,6 +56,7 @@ to_atom(I) when is_integer(I) -> to_atom(integer_to_list(I));
 to_atom(F) when is_float(F) -> to_atom(nitro_mochinum:digits(F));
 to_atom(L) when is_list(L) -> list_to_atom(binary_to_list(iolist_to_binary(L))).
 
+-spec to_existing_atom(term()) -> atom().
 to_existing_atom(A) when is_atom(A) -> A;
 to_existing_atom(B) when is_binary(B) -> to_existing_atom(binary_to_list(B));
 to_existing_atom(I) when is_integer(I) -> to_existing_atom(integer_to_list(I));
