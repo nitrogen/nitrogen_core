@@ -8,6 +8,7 @@
     clean_lower/1,
     to_list/1,
     to_atom/1,
+    to_existing_atom/1,
     to_binary/1,
     to_integer/1,
     to_string_list/1,
@@ -52,14 +53,19 @@ to_atom(A) when is_atom(A) -> A;
 to_atom(B) when is_binary(B) -> to_atom(binary_to_list(B));
 to_atom(I) when is_integer(I) -> to_atom(integer_to_list(I));
 to_atom(F) when is_float(F) -> to_atom(nitro_mochinum:digits(F));
-to_atom(L) when is_list(L) -> list_to_atom(binary_to_list(list_to_binary(L))).
+to_atom(L) when is_list(L) -> list_to_atom(binary_to_list(iolist_to_binary(L))).
+
+to_existing_atom(A) when is_atom(A) -> A;
+to_existing_atom(B) when is_binary(B) -> to_existing_atom(binary_to_list(B));
+to_existing_atom(I) when is_integer(I) -> to_existing_atom(integer_to_list(I));
+to_existing_atom(L) when is_list(L) -> list_to_existing_atom(binary_to_list(iolist_to_binary(L))).
 
 -spec to_binary(term()) -> binary().
 to_binary(A) when is_atom(A) -> to_binary(atom_to_list(A));
 to_binary(B) when is_binary(B) -> B;
 to_binary(I) when is_integer(I) -> to_binary(integer_to_list(I));
 to_binary(F) when is_float(F) -> to_binary(nitro_mochinum:digits(F));
-to_binary(L) when is_list(L) -> list_to_binary(L).
+to_binary(L) when is_list(L) -> iolist_to_binary(L).
 
 -spec to_integer(term()) -> integer().
 to_integer(A) when is_atom(A) -> to_integer(atom_to_list(A));
