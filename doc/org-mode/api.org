@@ -148,6 +148,10 @@
 
    URL decode the supplied String, converting a percent-encoded String into a normal String.
 
+** wf:to\_qs(PropList) -> EncodedQueryString
+
+   Encode a PropList (a list of ={Key, Value}= tuples) into a URL-encoded query string (returned as an IOList).
+
 ** wf:hex\_encode(String) -> EncodedString.
   
    Hex-encode the supplied String.
@@ -391,17 +395,17 @@
 * Web Request and Response
 # <<9>>
 
-** wf:q(AtomKey) -> String
+** wf:q(AtomKey) -> String | undefined
 
-   Get all query string and POST values for the provided key. If more
-   than one AtomKey matches, then this will throw an error, use
-   =wf:qs(AtomKey)= instead.
+   Get all query string and POST values for the provided key. If more than one
+   AtomKey matches, then this will throw an error, use =wf:qs(AtomKey)=
+   instead. Returns the atom =undefined= if there's no matching value.
 
    *Mnemonic:* Think =q= as "Query".
 
 ** wf:mq(ListOfAtomKeys) -> [ListOfStrings]
 
-   Get the list of query string and POST values for the provided keys, and 
+   Get the list of query string and POST values for the provided keys, and
    return the list of values for the keys. Syntactical sugar equivilant of:
 
 #+BEGIN_SRC erlang
@@ -485,16 +489,47 @@ Example:
    used to return text images or other files to the browser, rather than returning 
    HTML.
 
+** wf:download\_as(Filename) -> ok
+
+   Set the HTTP Content-Disposition header in such a way that the browser will
+   treat the page as a download with the specified =Filename=.
+
+** wf:url() -> String
+
+   Return the complete requested URL for the page. For exaple, if the request
+   is for =http://myapp.com/some/file?some_qs=, the return is
+   ="http://myapp.com/some/file?some_qs".
+
+** wf:uri() -> String
+
+   Return the complete requested URI for the page. Note, this does not include
+   the protocol (http/https) or the hostname. For example, if the request is for
+   =http://myapp.com/some/file?some_qs=, the return is ="/some/file?some_qs"=).
+
+** wf:path() -> String
+
+   Return the string of the requested path.  This excludes any query_string
+   information. For example, if the request is for
+   =http://myapp.com/some/file?some_qs= the return value is ="/some/file"=
+
 ** wf:path\_info() -> String
 
-   Return the path info for the requested page. In other words, if the module
-   web\_my\_page is requsted with the path "/web/my/page/some/extra/stuff then
-   wf:get\_path\_info() would return "some/extra/stuff".
+   Return only the path info for the requested page module. In other words, if
+   the module web\_my\_page is requsted with the path
+   ="/web/my/page/some/extra/stuff= then =wf:path_info()= would return
+   ="some/extra/stuff"=.
    
 ** wf:page\_module() -> Atom
 
    Return the requested page module. Useful information to know when writing a
    custom element or action.
+
+** wf:protocol() -> http | https
+
+   Return whether the request to the server is made by HTTP or HTTPS. Note,
+   that if the request is made behind a proxy, this will only return whether
+   the request from the proxy to the server is in HTTP or HTTPS, so the
+   protocol seen by Nitrogen might not be the same protocol used by the client.
 
 ** wf:peer\_ip() -> IPAddress (4-tuple or 8-tuple)
 
@@ -561,7 +596,7 @@ Example:
 ** wf:header(StringKey, HeaderValue) -> ok
 
    Set an HTTP header during the next response.
-   
+
 * Serialization
 # <<12>>
    

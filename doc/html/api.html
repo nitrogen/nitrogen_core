@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Nitrogen 2.x Documentation"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-10-18 00:58:26 CDT"/>
+<meta name="generated" content="2014-02-16 10:55:22 CST"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -1189,14 +1189,14 @@
 </div>
 
 <div id="outline-container-10-1" class="outline-3">
-<h3 id="sec-10-1"><span class="section-number-3"></span> wf:q(AtomKey) -&gt; String</h3>
+<h3 id="sec-10-1"><span class="section-number-3"></span> wf:q(AtomKey) -&gt; String | undefined</h3>
 <div class="outline-text-3" id="text-10-1">
 
 
 <p>
-   Get all query string and POST values for the provided key. If more
-   than one AtomKey matches, then this will throw an error, use
-   <code>wf:qs(AtomKey)</code> instead.
+   Get all query string and POST values for the provided key. If more than one
+   AtomKey matches, then this will throw an error, use <code>wf:qs(AtomKey)</code>
+   instead. Returns the atom <code>undefined</code> if there's no matching value.
 </p>
 <p>
    <b>Mnemonic:</b> Think <code>q</code> as "Query".
@@ -1211,7 +1211,7 @@
 
 
 <p>
-   Get the list of query string and POST values for the provided keys, and 
+   Get the list of query string and POST values for the provided keys, and
    return the list of values for the keys. Syntactical sugar equivilant of:
 </p>
 
@@ -1381,22 +1381,47 @@ Example:
 </div>
 
 <div id="outline-container-10-10" class="outline-3">
-<h3 id="sec-10-10"><span class="section-number-3"></span> wf:path_info() -&gt; String</h3>
+<h3 id="sec-10-10"><span class="section-number-3"></span> wf:uri() -&gt; String</h3>
 <div class="outline-text-3" id="text-10-10">
 
 
 <p>
-   Return the path info for the requested page. In other words, if the module
-   web_my_page is requsted with the path "/web/my/page/some/extra/stuff then
-   wf:get_path_info() would return "some/extra/stuff".
+   Return the complete requested URI for the page.
 </p>
 </div>
 
 </div>
 
 <div id="outline-container-10-11" class="outline-3">
-<h3 id="sec-10-11"><span class="section-number-3"></span> wf:page_module() -&gt; Atom</h3>
+<h3 id="sec-10-11"><span class="section-number-3"></span> wf:path() -&gt; String</h3>
 <div class="outline-text-3" id="text-10-11">
+
+
+<p>
+   Return the string of the requested path.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-10-12" class="outline-3">
+<h3 id="sec-10-12"><span class="section-number-3"></span> wf:path_info() -&gt; String</h3>
+<div class="outline-text-3" id="text-10-12">
+
+
+<p>
+   Return only the path info for the requested page module. In other words, if
+   the module web_my_page is requsted with the path
+   "/web/my/page/some/extra/stuff then <code>wf:path_info()</code> would return
+   "some/extra/stuff".
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-10-13" class="outline-3">
+<h3 id="sec-10-13"><span class="section-number-3"></span> wf:page_module() -&gt; Atom</h3>
+<div class="outline-text-3" id="text-10-13">
 
 
 <p>
@@ -1407,9 +1432,9 @@ Example:
 
 </div>
 
-<div id="outline-container-10-12" class="outline-3">
-<h3 id="sec-10-12"><span class="section-number-3"></span> wf:peer_ip() -&gt; IPAddress (4-tuple or 8-tuple)</h3>
-<div class="outline-text-3" id="text-10-12">
+<div id="outline-container-10-14" class="outline-3">
+<h3 id="sec-10-14"><span class="section-number-3"></span> wf:peer_ip() -&gt; IPAddress (4-tuple or 8-tuple)</h3>
+<div class="outline-text-3" id="text-10-14">
 
 
 
@@ -1422,9 +1447,9 @@ Example:
 
 </div>
 
-<div id="outline-container-10-13" class="outline-3">
-<h3 id="sec-10-13"><span class="section-number-3"></span> wf:peer_ip(ListOfProxies) -&gt; IPAddress (4-tuple or 8-tuple)</h3>
-<div class="outline-text-3" id="text-10-13">
+<div id="outline-container-10-15" class="outline-3">
+<h3 id="sec-10-15"><span class="section-number-3"></span> wf:peer_ip(ListOfProxies) -&gt; IPAddress (4-tuple or 8-tuple)</h3>
+<div class="outline-text-3" id="text-10-15">
 
 
 <p>
@@ -1434,9 +1459,9 @@ Example:
 
 </div>
 
-<div id="outline-container-10-14" class="outline-3">
-<h3 id="sec-10-14"><span class="section-number-3"></span> wf:peer_ip(ListOfProxies, ForwardedHeader) -&gt; IPAddress (4-tuple or 8-tuple)</h3>
-<div class="outline-text-3" id="text-10-14">
+<div id="outline-container-10-16" class="outline-3">
+<h3 id="sec-10-16"><span class="section-number-3"></span> wf:peer_ip(ListOfProxies, ForwardedHeader) -&gt; IPAddress (4-tuple or 8-tuple)</h3>
+<div class="outline-text-3" id="text-10-16">
 
 
 <p>
@@ -1763,7 +1788,7 @@ Example:
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-10-18 00:58:26 CDT</p>
+<p class="date">Date: 2014-02-16 10:55:22 CST</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

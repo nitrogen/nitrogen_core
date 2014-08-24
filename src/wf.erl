@@ -198,6 +198,9 @@ hex_decode(S) ->
 js_escape(String) -> 
     _String = wf_convert:js_escape(String).
 
+to_qs(List) ->
+    _Iolist = wf_convert:to_qs(List).
+
 join(List,Delimiter) ->
     _Result = wf_convert:join(List,Delimiter).
 
@@ -228,8 +231,17 @@ normalize_id(Path) ->
 page_module() -> 
     wf_context:page_module().
 
+path() ->
+    wf_context:path().
+
 path_info() ->
     wf_context:path_info().
+
+uri() ->
+    wf_context:uri().
+
+url() ->
+    wf_context:url().
 
 status_code() -> 
     ok = wf_context:status_code().
@@ -239,6 +251,9 @@ status_code(StatusCode) ->
 
 content_type(ContentType) ->
     ok = wf_context:content_type(ContentType).
+
+download_as(Filename) ->
+    wf_context:download_as(Filename).
 
 headers() -> 
     wf_context:headers().

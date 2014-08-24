@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Log Handler"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-10-03 13:41:13 CDT"/>
+<meta name="generated" content="2013-12-06 01:07:54 CST"/>
 <meta name="author" content="Jesse Gumm (@jessegumm)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -236,7 +236,7 @@
 
 <p>
 Here is the complete text of the default log handler in Nitrogen, which
-basically serves as a pass-through for the basic Erlang error<sub>logger</sub> module.
+basically serves as a pass-through for the basic Erlang error_logger module.
 </p>
 
 
@@ -251,21 +251,21 @@ basically serves as a pass-through for the basic Erlang error<sub>logger</sub> m
     <span class="org-type">error/3</span>
 ]).
 
-<span class="org-function-name">init</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">init</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     {ok, <span class="org-variable-name">State</span>}.
 
-<span class="org-function-name">finish</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">finish</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     {ok, <span class="org-variable-name">State</span>}.
 
-<span class="org-function-name">info</span>(<span class="org-variable-name">S</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">info</span>(<span class="org-variable-name">S</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     <span class="org-type">error_logger</span>:<span class="org-type">info_msg</span>([<span class="org-variable-name">S</span>, <span class="org-string">"\n"</span>]),
     {ok, <span class="org-variable-name">State</span>}.
 
-<span class="org-function-name">warning</span>(<span class="org-variable-name">S</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">warning</span>(<span class="org-variable-name">S</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     <span class="org-type">error_logger</span>:<span class="org-type">warning_msg</span>([<span class="org-variable-name">S</span>, <span class="org-string">"\n"</span>]),
     {ok, <span class="org-variable-name">State</span>}.
 
-<span class="org-function-name">error</span>(<span class="org-variable-name">S</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">error</span>(<span class="org-variable-name">S</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     <span class="org-type">error_logger</span>:<span class="org-type">error_msg</span>([<span class="org-variable-name">S</span>, <span class="org-string">"\n"</span>]),
     {ok, <span class="org-variable-name">State</span>}.
 
@@ -296,7 +296,7 @@ basically serves as a pass-through for the basic Erlang error<sub>logger</sub> m
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-10-03 13:41:13 CDT</p>
+<p class="date">Date: 2013-12-06 01:07:54 CST</p>
 <p class="author">Author: Jesse Gumm (@jessegumm)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

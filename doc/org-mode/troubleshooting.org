@@ -47,7 +47,7 @@
   Conveniently, as of R15, errors at least show line numbers, so you're no
   longer wading throught long, multi-clause functions to find the cause of the
   error. Prior to R15, tracking down the cause of an error in something like an
-  =event= function or a `gen_server`'s `handle_call` function was a tedius
+  =event= function or a =gen_server='s =handle\_call= function was a tedius
   endeavor.
 
   Anyway, here's a pretty typical-looking Nitrogen error:

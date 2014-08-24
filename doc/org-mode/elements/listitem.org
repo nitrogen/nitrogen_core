@@ -32,6 +32,6 @@ The list element produces an HTML listitem element (<li>).
 
    + [[./list.html][list element]] 
 
-   + [[./mobile_listitem.html][mobile_listitem element]]
+   + [[./mobile_listitem.html][mobile\_listitem element]]
 
 	+ [[http://nitrogenproject.com/demos/simplecontrols][Simple Controls Demos]]

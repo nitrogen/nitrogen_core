@@ -17,6 +17,7 @@ render_element(Record ) ->
     wf_tags:emit_tag(nav, Record#nav.body, [
         {id, Record#nav.html_id},
         {class, ["nav", Record#nav.class]},
+        {title, Record#nav.title},
         {style, Record#nav.style},
         {data_fields, Record#nav.data_fields}
     ]).

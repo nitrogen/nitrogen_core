@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Crash Handler"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-10-03 13:41:15 CDT"/>
+<meta name="generated" content="2013-12-04 19:38:25 CST"/>
 <meta name="author" content="Jesse Gumm (@jessegumm)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -269,13 +269,13 @@
     <span class="org-type">postback_request/5</span>
 ]).
 
-<span class="org-function-name">init</span>(<span class="org-variable-name">_Config</span>,<span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">init</span>(<span class="org-variable-name">_Config</span>,<span class="org-variable-name">State</span>) -&gt;
     {ok, <span class="org-variable-name">State</span>}.
 
-<span class="org-function-name">finish</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">finish</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     {ok, <span class="org-variable-name">State</span>}.
 
-<span class="org-function-name">first_request</span>(<span class="org-variable-name">Type</span>, <span class="org-variable-name">Error</span>, <span class="org-variable-name">Stacktrace</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">_State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">first_request</span>(<span class="org-variable-name">Type</span>, <span class="org-variable-name">Error</span>, <span class="org-variable-name">Stacktrace</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">_State</span>) -&gt;
     <span class="org-comment-delimiter">%% </span><span class="org-comment">Print the error message to the Erlang console</span>
     ?<span class="org-constant">LOG</span>(<span class="org-string">"~p~n"</span>, [{error, <span class="org-variable-name">Type</span>, <span class="org-variable-name">Error</span>, <span class="org-variable-name">Stacktrace</span>}]),
 
@@ -285,7 +285,7 @@
     <span class="org-comment-delimiter">%% </span><span class="org-comment">Send just the text "Internal Server Error" with no formatting or layout</span>
     <span class="org-string">"Internal Server Error"</span>.
 
-<span class="org-function-name">postback_request</span>(<span class="org-variable-name">Type</span>, <span class="org-variable-name">Error</span>, <span class="org-variable-name">Stacktrace</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">_State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">postback_request</span>(<span class="org-variable-name">Type</span>, <span class="org-variable-name">Error</span>, <span class="org-variable-name">Stacktrace</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">_State</span>) -&gt;
     <span class="org-comment-delimiter">%% </span><span class="org-comment">Print the error message to the Erlang console</span>
     ?<span class="org-constant">LOG</span>(<span class="org-string">"~p~n"</span>, [{error, <span class="org-variable-name">Type</span>, <span class="org-variable-name">Error</span>, <span class="org-variable-name">Stacktrace</span>}]),
 
@@ -316,13 +316,13 @@
     <span class="org-type">body/1</span>
 ]).
 
-<span class="org-function-name">init</span>(<span class="org-variable-name">_Config</span>,<span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">init</span>(<span class="org-variable-name">_Config</span>,<span class="org-variable-name">State</span>) -&gt;
     {ok, <span class="org-variable-name">State</span>}.
 
-<span class="org-function-name">finish</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">finish</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     {ok, <span class="org-variable-name">State</span>}.
 
-<span class="org-function-name">first_request</span>(<span class="org-variable-name">Type</span>, <span class="org-variable-name">Error</span>, <span class="org-variable-name">Stacktrace</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">_State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">first_request</span>(<span class="org-variable-name">Type</span>, <span class="org-variable-name">Error</span>, <span class="org-variable-name">Stacktrace</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">_State</span>) -&gt;
     <span class="org-comment-delimiter">%% </span><span class="org-comment">Print the error message to the Erlang console</span>
     ?<span class="org-constant">LOG</span>(<span class="org-string">"~p~n"</span>, [{error, <span class="org-variable-name">Type</span>, <span class="org-variable-name">Error</span>, <span class="org-variable-name">Stacktrace</span>}]),
 
@@ -336,14 +336,14 @@
     }.
 
 <span class="org-comment-delimiter">%% </span><span class="org-comment">This is assuming that the error.html template includes a call to [[[page:body(Stacktrace)]]]</span>
-<span class="org-function-name">body</span>(<span class="org-variable-name">Stacktrace</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">body</span>(<span class="org-variable-name">Stacktrace</span>) -&gt;
     [
       #<span class="org-type">h1</span>{text=<span class="org-string">"UH OH! Something went wrong!"</span>},
       #<span class="org-type">panel</span>{text=<span class="org-type">wf</span>:<span class="org-type">f</span>(<span class="org-string">"Here's the contents of the error: ~p"</span>,[<span class="org-variable-name">Stacktrace</span>])}
     ].
 
 
-<span class="org-function-name">postback_request</span>(<span class="org-variable-name">Type</span>, <span class="org-variable-name">Error</span>, <span class="org-variable-name">Stacktrace</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">_State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">postback_request</span>(<span class="org-variable-name">Type</span>, <span class="org-variable-name">Error</span>, <span class="org-variable-name">Stacktrace</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">_State</span>) -&gt;
     <span class="org-comment-delimiter">%% </span><span class="org-comment">Print the error message to the Erlang console</span>
     ?<span class="org-constant">LOG</span>(<span class="org-string">"~p~n"</span>, [{error, <span class="org-variable-name">Type</span>, <span class="org-variable-name">Error</span>, <span class="org-variable-name">Stacktrace</span>}]),
 
@@ -392,7 +392,7 @@
 
 <p>
    If you want to gracefully handle crashes related to postbacks, comets, etc,
-   then you need to make sure you do <b>not</b> set the status<sub>code</sub> to a failure
+   then you need to make sure you do <b>not</b> set the status_code to a failure
    code (like 500). You might as well keep it as the default 200, and then wire
    whatever commands you wish.
 </p>
@@ -445,11 +445,8 @@
 </li>
 <li><a href="../elements/template.html">Template Element</a>
 
-<ul>
-<li><a href="../actions/alert.html">Alert Action</a>
 </li>
-</ul>
-
+<li><a href="../actions/alert.html">Alert Action</a>
 </li>
 </ul>
 
@@ -459,7 +456,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-10-03 13:41:15 CDT</p>
+<p class="date">Date: 2013-12-04 19:38:25 CST</p>
 <p class="author">Author: Jesse Gumm (@jessegumm)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

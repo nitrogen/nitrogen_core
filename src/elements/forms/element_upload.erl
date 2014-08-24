@@ -38,15 +38,18 @@
 reflect() -> record_info(fields, upload).
 
 -spec render_element(#upload{}) -> body().
-render_element(Record) ->
-    Anchor = Record#upload.anchor,
-	Multiple = Record#upload.multiple,
-    Droppable = Record#upload.droppable,
-    DroppableText = Record#upload.droppable_text,
-    FileInputText = Record#upload.file_text,
-    ShowButton = Record#upload.show_button,
-    ButtonText = Record#upload.button_text,
-    DataFields = Record#upload.data_fields,
+render_element(Record = #upload{
+        id=ID,
+        class=Class,
+        anchor=Anchor,
+        multiple=Multiple,
+        droppable=Droppable,
+        droppable_text=DroppableText,
+        file_text=FileInputText,
+        show_button=ShowButton,
+        button_text=ButtonText,
+        data_fields=DataFields}) ->
+    
     StartedTag = {upload_started, Record},
     FinishedTag = {upload_finished, Record}, 
     FormID = wf:temp_id(),
@@ -54,9 +57,7 @@ render_element(Record) ->
     ButtonID = wf:temp_id(),
     DropID = wf:temp_id(),
     DropListingID = wf:temp_id(),
-    FileInputWrapperID = wf:temp_id(),
     FileInputID = wf:temp_id(),
-    FakeFileInputID = wf:temp_id(),
 
 	Param = [
 		{droppable,Droppable},
@@ -67,35 +68,41 @@ render_element(Record) ->
 	SubmitJS = wf:f("Nitrogen.$send_pending_files(jQuery('#~s').get(0),jQuery('#~s').get(0));",[FormID,FileInputID]),
     UploadJS = wf:f("Nitrogen.$attach_upload_handle_dragdrop(jQuery('#~s').get(0),jQuery('#~s').get(0),~s);", [FormID,FileInputID,JSONParam]),
 
-    wf:wire(wf:f("jQuery('#~s').width(jQuery('#~s').outerWidth(true)); jQuery('#~s').height(jQuery('#~s').outerHeight(true));",
-                 [FileInputWrapperID, FakeFileInputID, FileInputWrapperID, FakeFileInputID] )),
-
-    PostbackInfo = wf_event:serialize_event_context(FinishedTag, Record#upload.id, undefined, false, ?MODULE),
+    PostbackInfo = wf_event:serialize_event_context(FinishedTag, ID, undefined, false, ?MODULE),
 
     % Create a postback that is called when the user first starts the upload...
-    wf:wire(Anchor, #event { show_if=(not ShowButton), type=change, delegate=?MODULE, postback=StartedTag }),
-    wf:wire(ButtonID, #event { show_if=ShowButton, type=click, delegate=?MODULE, postback=StartedTag }),
-
-    % If the button is invisible, then start uploading when the user selects a file.
-    %wf:wire(Anchor, #event { show_if=(not ShowButton), type=change, actions=SubmitJS }),
-    wf:wire(ButtonID, #event { show_if=ShowButton, type=click, actions=SubmitJS }),
+    case ShowButton of
+        true ->
+            wf:wire(ButtonID, #event {type=click, delegate=?MODULE, postback=StartedTag }),
+            wf:wire(ButtonID, #event {type=click, actions=SubmitJS });
+        false ->
+            % If the button is invisible, then start uploading when the user selects a file.
+            wf:wire(Anchor, #event {type=change, delegate=?MODULE, postback=StartedTag })
+    end,
 
     wf:wire(UploadJS),
+
+    %% Two things:
+    %% 1) This will resize elements only when they are visible, otherwise the
+    %% "Select File" button gets resized to almost invisible.
+    %% 2) This object must be prefixed with 'form' since ID and Anchor could be
+    %% the same, and we need to differentiate for the form.
+    %% (It's a little hacky)
+    wf:defer(wf:f("Nitrogen.$recalculate_upload_dimensions($('form~s'));", [ID])),
 
     WrapperContent = [
         wf_tags:emit_tag(input, [
             {type, button},
             {class, ['upload-button']},
-            {value, FileInputText},
-            {id, FakeFileInputID}
+            {value, FileInputText}
         ]),
         wf_tags:emit_tag(input, [
             {name, file},
             {data_fields, DataFields},
-            ?WF_IF(Multiple,multiple,[]),
             {class, [no_postback, 'upload-input', FileInputID|Anchor]},
             {id, FileInputID},
-            {type, file}
+            {type, file},
+            ?WF_IF(Multiple,multiple,[])
         ])
     ],
 
@@ -127,7 +134,6 @@ render_element(Record) ->
         },
 
         wf_tags:emit_tag('div', WrapperContent, [
-            {id, FileInputWrapperID},
             {class, 'upload-content'}
         ]),
 
@@ -160,7 +166,7 @@ render_element(Record) ->
             {name, upload}, 
             {method, 'POST'},
             {enctype, "multipart/form-data"},
-            {class, no_postback},
+            {class, [no_postback, Class]},
             {target, IFrameID}
         ])
     ].

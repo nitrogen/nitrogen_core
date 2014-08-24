@@ -27,6 +27,6 @@
 
    + [[./base.html][base element]]
 
-   + [[./slide_up.html][slide_up element]]
+   + [[./slide_up.html][slide\_up element]]
 
  

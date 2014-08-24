@@ -10,6 +10,9 @@
     render_element/1
 ]).
 
+-define(DEFAULT_MULTISELECT_SIZE, 5).
+-define(DEFAULT_SINGLESELECT_SIZE, 1).
+
 -spec reflect() -> [atom()].
 reflect() -> record_info(fields, dropdown).
 
@@ -17,25 +20,32 @@ reflect() -> record_info(fields, dropdown).
 render_element(Record) -> 
 
     wire_postback(Record),
+    action_event:maybe_wire_next(Record#dropdown.anchor, Record#dropdown.next),
+
     Options = format_options(Record),
 
-    Multiple = case Record#dropdown.multiple of
-        true -> [{multiple}];
-        false -> []
-    end,
-
-    Disabled = case Record#dropdown.disabled of
-        true -> [{disabled}];
-        false -> []
-    end,
+    MultipleAttribute = ?WF_IF(Record#dropdown.multiple,multiple,undefined),
+    DisabledAttribute = ?WF_IF(Record#dropdown.disabled,disabled,undefined),
+    Size = provided_or_default_size(Record),
 
     wf_tags:emit_tag(select, Options, [
         {id, Record#dropdown.html_id},
         {class, [dropdown, Record#dropdown.class]},
+        {title, Record#dropdown.title},
         {style, Record#dropdown.style},
         {name, Record#dropdown.html_name},
+        {size, Size},
+        MultipleAttribute,
+        DisabledAttribute,
         {data_fields, Record#dropdown.data_fields}
-    ] ++ Multiple ++ Disabled).
+    ]).
+
+provided_or_default_size(#dropdown{size=auto, multiple=true}) ->
+    ?DEFAULT_MULTISELECT_SIZE;
+provided_or_default_size(#dropdown{size=auto, multiple=false}) ->
+    ?DEFAULT_SINGLESELECT_SIZE;
+provided_or_default_size(#dropdown{size=Size}) ->
+    Size.
 
 wire_postback(Dropdown) when Dropdown#dropdown.postback==undefined ->
     ignore;
@@ -93,7 +103,6 @@ create_options(Selected,HtmlEncode,[#option{show_if=false} | Rest]) ->
     create_options(Selected,HtmlEncode,Rest);
 create_options(_,_,[Other | _]) ->
     throw({unknown_option_provided_to_dropdown_element,Other}).
-
 
 selected_or_not(Selected,X) ->
     case (Selected =/= undefined andalso wf:to_list(X#option.value) == Selected)

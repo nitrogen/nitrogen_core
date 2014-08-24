@@ -36,7 +36,10 @@ render_element(Record) ->
                     delegate=Record#radio.delegate })
     end,
 
+    action_event:maybe_wire_next(Record#radio.anchor, Record#radio.next),
+
     Content = wf:html_encode(Record#radio.text, Record#radio.html_encode),
+    Body = Record#radio.body,
 
     [
         %% Checkbox...
@@ -54,13 +57,14 @@ render_element(Record) ->
             {name, wf:coalesce([Record#radio.html_name,Record#radio.name])},
             {type, radio},
             {class, [radio, Record#radio.class]},
+            {title, Record#radio.title},
             {style, Record#radio.style},
             {data_fields, Record#radio.data_fields},
             {CheckedOrNot, true}
         ]),
 
         %% Label for Radio...
-        wf_tags:emit_tag(label, Content, [
+        wf_tags:emit_tag(label, [Body, Content], [
             {for, Anchor}
         ])
     ].

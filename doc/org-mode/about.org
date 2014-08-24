@@ -128,6 +128,8 @@
   + Boris Resnick
   + Piotr Nosek
   + Stefan Zegenhagen
+  + Mehmet Emin Tok
+  + Stuart Thackray
    
   Roughly sorted by date of contribution. Send your twitter handles to [[http://twitter.com][@jessegumm]]
 

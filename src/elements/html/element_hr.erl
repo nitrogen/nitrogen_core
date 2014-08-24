@@ -19,6 +19,7 @@ render_element(Record) ->
         {id, Record#hr.html_id},
         {size, 1},
         {class, [hr, Record#hr.class]},
+        {title, Record#hr.title},
         {style, Record#hr.style},
         {data_fields, Record#hr.data_fields}
     ]).

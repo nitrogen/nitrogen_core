@@ -86,6 +86,32 @@
 
    5) Finally, place your plugin's Erlang source code in the =src= directory.
 
+* Adding plugin support to an older version of Nitrogen
+
+  What if you have a version of Nitrogen pre-2.2.0, but you still want to add
+  support to your Nitrogen app?
+
+  There's actually no *technical* reason you can't do that.  In fact, the core
+  of the plugin system is a single script, executed sometime after dependencies
+  are fetched and before compilation.
+
+  That script is called
+  [[https://raw.github.com/nitrogen/nitrogen/master/rel/overlay/common/do-plugins.escript][do-plugins.escript]]
+  and it can be found in the main Nitrogen repo. The easiest way, then to add
+  the plugin system to your app is to do the following in the root of your app:
+
+#+BEGIN_SRC bash
+  wget https://raw.github.com/nitrogen/nitrogen/master/rel/overlay/common/do-plugins.escript
+  chmod 755 do-plugins.escript
+#+END_SRC
+
+  Then simply modify your Makefile so that =./do-plugins.escript= is executed
+  before =./rebar compile=
+
+  For a good practical example of this, check out the standard
+  [[https://github.com/nitrogen/nitrogen/blob/master/rel/overlay/common/Makefile#L20][Makefile]]
+  that comes with a Nitrogen install.
+
 * See Also
 
   + [[./config.org][Configuration Options]]

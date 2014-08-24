@@ -29,6 +29,24 @@ socket() ->
     Req = wf_context:request_bridge(), 
     Req:socket().
 
+path() ->
+    Req = request_bridge(),
+    Req:path().
+
+protocol() ->
+    Req = request_bridge(),
+    Req:protocol().
+
+uri() ->
+    Req = request_bridge(),
+    Req:uri().
+
+url() ->
+    Protocol = wf:to_list(protocol()),
+    Host = header(host),
+    Uri = uri(),
+    Protocol ++ "://" ++ Host ++ Uri.
+
 peer_ip() ->
     Req = request_bridge(),
     Req:peer_ip().
@@ -66,9 +84,11 @@ status_code(StatusCode) ->
     ok.
 
 content_type(ContentType) ->
-    Res = response_bridge(),
-    response_bridge(Res:header("Content-Type", ContentType)),
-    ok.
+    header("Content-Type", ContentType).
+
+download_as(Filename0) ->
+    Filename = wf_convert:url_encode(Filename0),
+    header("Content-Disposition", "attachment; filename=\"" ++ Filename ++ "\"").
 
 headers() ->
     Req = request_bridge(),
@@ -81,7 +101,7 @@ header(Header) ->
 header(Header, Value) ->
     Res = response_bridge(),
     response_bridge(Res:header(Header, Value)),
-    ok.
+    ok. 
 
 cookies() ->
     Req = request_bridge(),

@@ -20,6 +20,7 @@ reflect() -> record_info(fields, recaptcha).
 render_element(Rec = #recaptcha{id=ID, class=Cl,
                data_fields=DataFields,
                captcha_opts=COPts,
+               button_class = ButtonClass,				
                button_label=ButtonLabel, button_id=ButtonId})->
     % Since the recaptcha is rendered outside of the nitrogen framework
     % it doesn't play along when it comes to data exchange.
@@ -54,6 +55,7 @@ render_element(Rec = #recaptcha{id=ID, class=Cl,
             },
             #button{id=ButtonId, style="float:right",
                     text=ButtonLabel,
+                    class = ButtonClass, 
                     postback=Postback,
                     delegate=?MODULE
             }

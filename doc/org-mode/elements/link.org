@@ -1,4 +1,4 @@
-# vim: ts=3 sw=3 et ft=org
+# vim: ts=2 sw=2 et ft=org
 #+TITLE: Link Element Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Rusty Klophaus (@rustyio)
@@ -30,27 +30,35 @@
 
    + text - (/string/) :: The text to display.
 
-   + body - (/Nitrogen elements/) :: Instead of text, specify one or more Nitrogen elements (such as an #image) to wrap in a link.
+   + body - (/Nitrogen elements/) :: Instead of text, specify one or more
+     Nitrogen elements (such as an #image) to wrap in a link.
 
-   + html\_encode - (/boolean/) :: Set to true to safely html-encode the link's title.
+   + html\_encode - (/boolean/) :: Set to true to safely html-encode the link's
+     title.
 
-   + url - (/string/) :: If set, clicking on the link will navigate to this URL.
+   + url - (/string/) :: If set, clicking on the link will navigate to this
+     URL.
 
    + new - (/boolean/) :: Set to true to make link open in a new window.
 
-   + click - (/Action/ or /List of Actions/) :: Wires the selected actons to the \"click\" events.  Due to the commonality of binding actions to the click event, this is merely a shortcut for 
+   + click - (/Action/ or /List of Actions/) :: Wires the selected actons to
+     the \"click\" events.  Due to the commonality of binding actions to the
+     click event, this is merely a shortcut for 
 
-#+BEGIN_SRC ERLANG
-   #link{ text="Do Something", actions=[
-      #event{type=click,actions=ListOfActions}
-   ]}
-#+END_SRC
+     #+BEGIN_SRC ERLANG
+         #link{ text="Do Something", actions=[
+            #event{type=click,actions=ListOfActions}
+         ]}
+     #+END_SRC
 
-   + postback - (/Erlang term/) :: If set, clicking on the link will cause a Nitrogen postback with the supplied term.
+   + postback - (/Erlang term/) :: If set, clicking on the link will cause a
+     Nitrogen postback with the supplied term.
 
-   + mobile_target - (/Boolean/) :: If set to false, this will work with jQuery Mobile to ensure that it skips using jQuery Mobile's automatic page transition loading system.
+   + mobile\_target - (/Boolean/) :: If set to false, this will work with
+     jQuery Mobile to ensure that it skips using jQuery Mobile's automatic page
+     transition loading system.
 
-   + mobile_dialog - (/Boolean/) :: If set to true, this will work with jQuery mobile to load the target URL in a [[http://jquerymobile.com/demos/1.1.1/docs/pages/page-dialogs.html][jQuery Mobile Dialog]].
+   + mobile\_dialog - (/Boolean/) :: If set to true, this will work with jQuery mobile to load the target URL in a [[http://jquerymobile.com/demos/1.1.1/docs/pages/page-dialogs.html][jQuery Mobile Dialog]].
 
 ** See Also
 

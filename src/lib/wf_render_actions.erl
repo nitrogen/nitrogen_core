@@ -159,7 +159,10 @@ generate_anchor_script(Anchor, Target) ->
                          Trigger:: id(),
                          Target :: id()) -> script().
 call_action_render(Module, Action, Anchor, Trigger, Target) ->
-    {module, Module} = code:ensure_loaded(Module),
+    case code:ensure_loaded(Module) of
+        {module, Module} -> ok;
+        {error, Error} -> throw({error_loading_action_module, Module, {error, Error}})
+    end,
     NewActions = Module:render_action(Action),
     inner_render_actions(NewActions, Anchor, Trigger, Target).
 
