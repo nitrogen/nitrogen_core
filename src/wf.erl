@@ -4,7 +4,7 @@
 % See MIT-LICENSE for licensing information.
 
 -module (wf).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -compile (export_all).
 
 %%% EXPOSE WIRE, UPDATE, FLASH %%%
@@ -158,6 +158,9 @@ to_list(T) ->
 
 to_atom(T) -> 
     _Atom = wf_convert:to_atom(T).
+
+to_existing_atom(T) ->
+    _Atom = wf_convert:to_existing_atom(T).
 
 to_binary(T) -> 
     _Binary = wf_convert:to_binary(T).
