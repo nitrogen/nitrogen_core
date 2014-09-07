@@ -15,6 +15,10 @@
 
 #+BEGIN_SRC erlang
    #image { image="http://hostname.com/path/to/image.png" }
+	 
+	 %% or 
+
+	 #image { id=my_image, image="/path/to/local/image.png" }
 #+END_SRC
 
 ** Attributes
@@ -22,6 +26,12 @@
   + image - (/string/) :: Set the HTML =src= attribute of the image. This can
     be either an absolute URL (=http://hostname.com/path/to/image.png=) or a
     relative URL (=/path/to/image=).
+
+** To change the path of an image in a postback
+
+	 + =wf:set(my_image, "/path/to/new/image.png")= - will change the =image=
+	   attribute of the =#image= element with =id= set to =my_image= to the
+	   provided string.
 
 ** About Static Root and Relative URLs
 
@@ -67,9 +77,8 @@
    Nitrogen 2.3, you must edit the server-specific configuration file in =etc/=
    such as =etc/cowboy.config=. See the [[file:../config.org][configuration docs]] for more.
 
-
-
 ** See Also
 
    + [[./base.html][base element]]
    + [[file:../config.org][Configuration Options]]
+   + [[../api.html#sec-2][wf:set/2 in API docs]]
