@@ -132,7 +132,7 @@ NitrogenClass.prototype.$execute_before_postbacks = function() {
         try{
             before_list[i]();
         }catch(ex){
-            Nitrogen.console_log({before_postback_error: ex});
+            Nitrogen.$console_log({before_postback_error: ex});
         }
     }
 }
@@ -807,39 +807,49 @@ NitrogenClass.prototype.$from_alien = function(nativeID) {
 
 /*** WEBSOCKETS ***/
 
-Nitrogen.prototype.$enable_websockets() {
+NitrogenClass.prototype.$enable_websockets = function() {
+    this.$console_log("Websockets Enabled");
     this.$websockets_enabled = true;
-}
+};
 
-Nitrogen.prototype.$disable_websockets() {
+NitrogenClass.prototype.$disable_websockets = function() {
+    this.$console_log("Websockets disabled or disconnected");
     this.$websockets_enabled = false;
-}
+};
 
 NitrogenClass.prototype.$ws_init = function() {
     try {
         var this2 = this;
-        this.$websocket = new WebSocket(location.href);
+        var ws_url = this.$ws_url(location.href);
+        this.$websocket = new WebSocket(ws_url);
         this.$websocket.onopen = function(evt) {this2.$ws_open()};
         this.$websocket.onclose = function(evt) {this2.$ws_close()};
-        this.$websocket.onmessage = function(evt) {this2.$ws_message(evt.data)) };
+        this.$websocket.onmessage = function(evt) {this2.$ws_message(evt.data) };
         this.$websocket.onerror = function(evt) {this2.$ws_close()};
     }catch(ex){}
 };
 
-NitrogenClass.prototype.$ws_open() {
-    this.$disable_websockets();
+NitrogenClass.prototype.$ws_url = function(url) {
+    // Will ensure that http is replaced with ws and https is replaced with wss
+    return url.replace(/^http/, "ws");
+}
+
+NitrogenClass.prototype.$ws_open = function() {
+    this.$enable_websockets();
     // validate websocket
 };
 
-NitrogenClass.prototype.$ws_close() {
-    this.$enable_websockets();
+NitrogenClass.prototype.$ws_close = function() {
+    this.$disable_websockets();
+    this.$ws_init();
 }
 
-NitrogenClass.prototype.$ws_message(data) {
+NitrogenClass.prototype.$ws_message = function(data) {
     // extract executable data
     // other data gets sent to a handler of sorts
 }
 
 var Nitrogen = new NitrogenClass();
 var page = document;
+Nitrogen.$ws_init();
 Nitrogen.$event_loop();

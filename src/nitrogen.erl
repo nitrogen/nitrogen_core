@@ -56,7 +56,7 @@ ws_terminate(_Reason, _Bridge) ->
     close.
 
 
-%% Deprecated, kept for backwards compatibility
+%% Deprecated, kept for backwards compatibility. Use nitrogen:run/1 with simple_bridge
 run() -> 
     wf_core:run().
 
