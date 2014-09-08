@@ -220,15 +220,11 @@ NitrogenClass.prototype.$make_id = function(element) {
 
 /*** AJAX METHODS ***/
 
+//NitrogenClass.prototype.$do_ajax_event = function(validationGroup, onInvalid, eventContext, extraParam) {
+
+
 NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventContext, extraParam, ajaxSettings) {
     var n = this;
-    
-    var s = jQuery.extend({
-        dataType: 'text',
-        cache: false,
-        success: null,
-        error: null
-    }, ajaxSettings);
     
     // Flag to prevent firing multiple postbacks at the same time...
     this.$event_is_running = true;
@@ -248,22 +244,38 @@ NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventCo
 
     // Assemble other parameters...
     var params = jQuery.extend({}, n.$params, validationParams, { eventContext: eventContext });
+   
+    if(this.$websockets_enabled) {
+        var bertified = Bert.encode(Bert.tuple(Bert.atom("nitrogen_postback"), params));
+        var ws_encoded = btoa(bertified);
+        this.$console_log(params);
+        this.$websocket.send(ws_encoded);
+        this.$event_is_running = false;
+    }else{
+        var s = jQuery.extend({
+            dataType: 'text',
+            cache: false,
+            success: null,
+            error: null
+        }, ajaxSettings);
     
-    jQuery.ajax({ 
-        url: this.$url,
-        type:'post',
-        data: [jQuery.param(params), extraParam || ''].join('&'),
-        dataType: s.dataType,
-        cache: s.cache,
-        success: function(data, textStatus) {
-          n.$event_is_running = false;
-          typeof s.success  == 'function' && s.success(data, textStatus) || eval(data);
-        },
-        error: function(xmlHttpRequest, textStatus, errorThrown) {
-          n.$event_is_running = false;
-          typeof s.error == 'function' && s.error(xmlHttpRequest, textStatus, errorThrown);
-        }
-    });         
+
+        jQuery.ajax({ 
+            url: this.$url,
+            type:'post',
+            data: [jQuery.param(params), extraParam || ''].join('&'),
+            dataType: s.dataType,
+            cache: s.cache,
+            success: function(data, textStatus) {
+              n.$event_is_running = false;
+              typeof s.success  == 'function' && s.success(data, textStatus) || eval(data);
+            },
+            error: function(xmlHttpRequest, textStatus, errorThrown) {
+              n.$event_is_running = false;
+              typeof s.error == 'function' && s.error(xmlHttpRequest, textStatus, errorThrown);
+            }
+        });
+    }
 }
 
 /*** SYSTEM EVENTS (FOR ASYNC) ***/
@@ -841,7 +853,7 @@ NitrogenClass.prototype.$ws_open = function() {
 
 NitrogenClass.prototype.$ws_close = function() {
     this.$disable_websockets();
-    this.$ws_init();
+    //this.$ws_init();
 }
 
 NitrogenClass.prototype.$ws_message = function(data) {
@@ -851,5 +863,8 @@ NitrogenClass.prototype.$ws_message = function(data) {
 
 var Nitrogen = new NitrogenClass();
 var page = document;
-Nitrogen.$ws_init();
+$(document).ready(function() {
+    Bert.assoc_array_key_encoding("binary");
+    Nitrogen.$ws_init();
+});
 Nitrogen.$event_loop();

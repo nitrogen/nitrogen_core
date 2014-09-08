@@ -17,9 +17,9 @@
 -export([
         run/1,
         ws_init/1,
-        ws_message/2,
-        ws_info/2,
-        ws_terminate/2
+        ws_message/3,
+        ws_info/3,
+        ws_terminate/3
     ]).
 
 -deprecated([
@@ -46,13 +46,18 @@ ws_init(Bridge) ->
     init_request(Bridge),
     ok.
 
-ws_message({text, _Msg}, _Bridge) ->
+ws_message({text, Base64}, Bridge, _State) ->
+    try {nitrogen_postback, Msg} = binary_to_term(base64:decode(Base64), [safe]),
+        error_logger:info_msg("Msg: ~p",[Msg])
+    catch
+        _:_ -> error_logger:info_msg("Invalid")
+    end,
     noreply.
 
-ws_info(_Msg, _Bridge) ->
+ws_info(_Msg, _Bridge, _State) ->
     noreply.
 
-ws_terminate(_Reason, _Bridge) ->
+ws_terminate(_Reason, _Bridge, _State) ->
     close.
 
 

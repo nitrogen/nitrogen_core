@@ -99,6 +99,19 @@ BertClass.prototype.tuple = function () {
 	return new BertTuple(arguments);
 };
 
+// Default encoding to use atom (for backwards compatibility purposes)
+BertClass.prototype.key_encoding = BertClass.prototype.atom;
+
+// encoding_type should be "atom" or "binary"
+// "atom" might be unsafe due to the atom table
+BertClass.prototype.assoc_array_key_encoding = function(EncodingType) {
+	if (EncodingType == "atom") {
+		this.key_encoding = this.atom;
+	}
+	else if (EncodingType == "binary") {
+		this.key_encoding = this.binary;
+	}
+}
 
 
 // - ENCODING -
@@ -212,7 +225,7 @@ BertClass.prototype.encode_associative_array = function (Obj) {
 	var key, Arr = [];
 	for (key in Obj) {
 		if (Obj.hasOwnProperty(key)) {
-			Arr.push(this.tuple(this.atom(key), Obj[key]));
+			Arr.push(this.tuple(this.key_encoding(key), Obj[key]));
 		}
 	}
 	return this.encode_array(Arr);
