@@ -3,7 +3,7 @@
 -include("wf.hrl").
 -export ([
     run/0,
-    init_websocket/0,
+    init_websocket/1,
     run_websocket/1
 ]).
 
@@ -46,12 +46,13 @@ run_crash(Bridge, Type, Error, Stacktrace) ->
         sbw:build_response(Bridge2)
     end.
 
-init_websocket() ->
+init_websocket(SerializedPageContext) ->
+    deserialize_websocket_context(SerializedPageContext),
     call_init_on_handlers().
 
 run_websocket(Data) ->
-    deserialize_websocket_context(Data),
     wf_event:update_context_with_websocket_event(Data),
+    query_handler:set_websocket_params(Data),
     run_postback_request(),
     _ToSend = finish_dynamic_request().
 
@@ -78,11 +79,17 @@ finish_dynamic_request() ->
     {ok, Html} = wf_render_elements:render_elements(Elements),
 	{ok, Javascript} = wf_render_actions:render_action_queue(),
 
-    call_finish_on_handlers(),
 
     % Create Javascript to set the state...
-    StateScript = serialize_context(),
-    JavascriptFinal = [StateScript, Javascript],
+    JavascriptFinal = case wf_context:type() of
+        postback_websocket ->
+            Javascript;
+        _ -> 
+            %% We only want to "finish" handlers if we're not doing websockets
+            call_finish_on_handlers(),
+            StateScript = serialize_context(),
+            [StateScript, Javascript]
+    end,
     case wf_context:type() of
         first_request       -> build_first_response(Html, JavascriptFinal);
         postback_request    -> build_postback_response(JavascriptFinal);
@@ -114,9 +121,9 @@ deserialize_request_context() ->
     SerializedPageContext = sbw:post_param(<<"pageContext">>, Bridge),
     deserialize_context(SerializedPageContext).
 
-deserialize_websocket_context(Data) ->
-    {_,SerializedPageContext} = lists:keyfind(<<"pageContext">>, 1, Data),
+deserialize_websocket_context(SerializedPageContext) ->
     deserialize_context(SerializedPageContext).
+
 
 % deserialize_context/1 -
 % Updates the context with values that were stored

@@ -140,7 +140,7 @@ NitrogenClass.prototype.$execute_before_postbacks = function() {
 NitrogenClass.prototype.$validate_and_serialize = function(validationGroup) {
     // Check validatation, build object of params...
     var is_valid = true,
-        params= {},
+        params = {},
         n = this;
 
     this.$execute_before_postbacks();
@@ -246,6 +246,7 @@ NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventCo
     var params = jQuery.extend({}, n.$params, validationParams, { eventContext: eventContext });
    
     if(this.$websockets_enabled) {
+        delete params["pageContext"];
         var bertified = Bert.encode_to_bytearray(Bert.tuple(Bert.atom("nitrogen_postback"), params));
         this.$websocket.send(bertified.buffer);
         this.$event_is_running = false;
@@ -296,7 +297,7 @@ NitrogenClass.prototype.$do_system_event = function(eventContext) {
             n.$system_event_is_running = false;
             n.$system_event_obj = null;
             // A system event shouldn't clobber the pageContext.
-            // Easiest to cacount for it here.
+            // Easiest to account for it here.
             var pc = n.$params["pageContext"];
             eval(data);
             n.$set_param("pageContext", pc);
@@ -843,22 +844,29 @@ NitrogenClass.prototype.$ws_init = function() {
 NitrogenClass.prototype.$ws_url = function(url) {
     // Will ensure that http is replaced with ws and https is replaced with wss
     return url.replace(/^http/, "ws");
-}
+};
 
 NitrogenClass.prototype.$ws_open = function() {
-    this.$enable_websockets();
-    // validate websocket
+    this.$send_pagecontext();
+    // On success, will run Nitrogen.$enable_websockets();
 };
+
+NitrogenClass.prototype.$send_pagecontext = function() {
+    var pageContext = this.$params["pageContext"];
+    var bertified = Bert.encode_to_bytearray(Bert.tuple(Bert.atom("page_context"), Bert.binary(pageContext)));
+    this.$websocket.send(bertified);
+};
+    
 
 NitrogenClass.prototype.$ws_close = function() {
     this.$disable_websockets();
     //this.$ws_init();
-}
+};
 
 NitrogenClass.prototype.$ws_message = function(data) {
     console.log(data);
     eval(data);
-}
+};
 
 var Nitrogen = new NitrogenClass();
 var page = document;

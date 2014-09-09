@@ -8,13 +8,17 @@
 -export ([
     get_value/1,
     get_values/1,
-    get_params/0
+    get_params/0,
+    set_websocket_params/1
 ]).
 
 
 -callback init(         handler_config(),
                         handler_state()) -> {ok, handler_state()}.
 -callback finish(       handler_config(),
+                        handler_state()) -> {ok, handler_state()}.
+-callback set_websocket_params(Params :: proplist(),
+                        handler_config(),
                         handler_state()) -> {ok, handler_state()}.
 -callback get_value(    Path :: string() | atom(),
                         handler_config(),
@@ -24,6 +28,9 @@
                         handler_state()) -> [Value :: string()].
 -callback get_params(   handler_config(),
                         handler_state()) -> [{Key :: string(), Value :: string()}].
+
+set_websocket_params(Params) ->
+    ok = wf_handler:call(query_handler, set_websocket_params, [Params]).
 
 % get_value(Path, State) -> Value.  Given a path, return the parameter
 % value, undefined, or throw an exception if there are too many

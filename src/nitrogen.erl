@@ -9,6 +9,7 @@
 -export([
         init_request/2,
         init_request/1,
+        ws_init_context/1,
         handler/2,
         run/0
     ]).
@@ -44,8 +45,11 @@ run(Bridge) ->
 
 ws_init(Bridge) ->
     init_request(Bridge),
-    wf_core:init_websocket(),
     ok.
+
+ws_init_context(SerializedPageContext) ->
+    wf_core:init_websocket(SerializedPageContext).
+    
 
 %ws_message({text, Base64}, Bridge, _State) ->
 %    error_logger:info_msg("Text~n"),
@@ -57,13 +61,17 @@ ws_init(Bridge) ->
 %    noreply;
 
 ws_message({binary, Bin}, _Bridge, _State) ->
-    try {nitrogen_postback, Msg} = binary_to_term(Bin, [safe]),
-        error_logger:info_msg("Msg: ~p~n",[Msg]),
-        Return = wf_core:run_websocket(Msg),
-        error_logger:info_msg("Returning: ~p~n",[Return]),
-        {reply, {text, Return}}
+    try binary_to_term(Bin, [safe]) of
+        {nitrogen_postback, Msg} ->
+            Return = wf_core:run_websocket(Msg),
+            {reply, {text, Return}};
+        {page_context, PageContext} ->
+            ws_init_context(PageContext),
+            {reply, {text, <<"Nitrogen.$enable_websockets()">>}}
     catch
-        _:_ -> error_logger:info_msg("Invalid")
+        Class:Error ->
+            error_logger:error_msg("Error in Websocket Message: ~p:~p~n~p~n",
+                                   [Class, Error, erlang:get_stacktrace()])
     end.
 
 ws_info(Msg, _Bridge, _State) ->

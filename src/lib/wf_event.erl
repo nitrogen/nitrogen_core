@@ -26,7 +26,6 @@ update_context_with_event() ->
 
 update_context_with_websocket_event(Data) ->
     {_, SerializedEvent} = lists:keyfind(<<"eventContext">>, 1, Data),
-    error_logger:info_msg("SerializedEvent: ~p~n",[SerializedEvent]),
     update_context_with_event(SerializedEvent),
     postback_request = wf_context:type(),
     wf_context:type(postback_websocket),
@@ -34,7 +33,6 @@ update_context_with_websocket_event(Data) ->
 
 update_context_with_event(SerializedEvent) ->
     Event = wf_pickle:depickle(SerializedEvent),
-
     % Update the Context...
     PageModule = wf_context:page_module(),
     IsPostback = is_record(Event, event_context),
