@@ -44,18 +44,30 @@ run(Bridge) ->
 
 ws_init(Bridge) ->
     init_request(Bridge),
+    wf_core:init_websocket(),
     ok.
 
-ws_message({text, Base64}, Bridge, _State) ->
-    try {nitrogen_postback, Msg} = binary_to_term(base64:decode(Base64), [safe]),
-        error_logger:info_msg("Msg: ~p",[Msg])
+%ws_message({text, Base64}, Bridge, _State) ->
+%    error_logger:info_msg("Text~n"),
+%    try {nitrogen_postback, Msg} = binary_to_term(base64:decode(Base64), [safe]),
+%        error_logger:info_msg("Received ~p bytes~nDecoded to: ~p",[size(Base64), Msg])
+%    catch
+%        _:_ -> error_logger:info_msg("Invalid")
+%    end,
+%    noreply;
+
+ws_message({binary, Bin}, _Bridge, _State) ->
+    try {nitrogen_postback, Msg} = binary_to_term(Bin, [safe]),
+        error_logger:info_msg("Msg: ~p~n",[Msg]),
+        Return = wf_core:run_websocket(Msg),
+        error_logger:info_msg("Returning: ~p~n",[Return]),
+        {reply, {text, Return}}
     catch
         _:_ -> error_logger:info_msg("Invalid")
-    end,
-    noreply.
+    end.
 
-ws_info(_Msg, _Bridge, _State) ->
-    noreply.
+ws_info(Msg, _Bridge, _State) ->
+    {reply, {text, Msg}}.
 
 ws_terminate(_Reason, _Bridge, _State) ->
     close.

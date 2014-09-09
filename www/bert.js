@@ -76,6 +76,16 @@ BertClass.prototype.encode = function (Obj) {
 	return this.BERT_START + this.encode_inner(Obj);
 };
 
+BertClass.prototype.encode_to_bytearray = function (Obj) {
+	var temp = this.encode(Obj);
+	var templen = temp.length;
+	var bytearray = new Uint8Array(templen);
+	for (var i=0;i<templen;i++) {
+		bytearray[i] = temp.charCodeAt(i);
+	}
+	return bytearray;
+}
+
 BertClass.prototype.decode = function (S) {
 	if (S[0] !== this.BERT_START) {
 		throw ("Not a valid BERT.");

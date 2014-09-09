@@ -327,7 +327,7 @@ type() ->
     Context = context(),
     Context#context.type.
 
-type(Type) -> % either first_request, postback_request, or static_file
+type(Type) -> % either first_request, postback_request, postback_websocket, or static_file
     Context = context(),
     context(Context#context { type = Type }).
 

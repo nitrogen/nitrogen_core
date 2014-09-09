@@ -2,7 +2,9 @@
 -module (wf_core).
 -include("wf.hrl").
 -export ([
-    run/0
+    run/0,
+    init_websocket/0,
+    run_websocket/1
 ]).
 
 % nitrogen_core - 
@@ -25,6 +27,8 @@ run() ->
         run_crash(Bridge, Type, Error, erlang:get_stacktrace())
     end.
 
+    
+
 run_crash(Bridge, Type, Error, Stacktrace) ->
     try
         case wf_context:type() of
@@ -42,20 +46,20 @@ run_crash(Bridge, Type, Error, Stacktrace) ->
         sbw:build_response(Bridge2)
     end.
 
+init_websocket() ->
+    call_init_on_handlers().
+
+run_websocket(Data) ->
+    deserialize_websocket_context(Data),
+    wf_event:update_context_with_websocket_event(Data),
+    run_postback_request(),
+    _ToSend = finish_dynamic_request().
+
 
 run_catched() ->
-    % Get the handlers from querystring, if they exist...
-    deserialize_context(),
-
-    % Initialize all handlers...
+    deserialize_request_context(),
     call_init_on_handlers(),
-
-    % Deserialize the event if available...
-    wf_event:update_context_with_event(),
-
-    % TODO - Check for access
-
-    % Call the module...
+    wf_event:update_context_with_event(wf:q(eventContext)),
     case wf_context:type() of
         first_request    -> 
             run_first_request(), 
@@ -71,14 +75,9 @@ finish_dynamic_request() ->
     % Get elements and actions...
     Elements = wf_context:data(),
     wf_context:clear_data(),
-
-    % Render Elements...
     {ok, Html} = wf_render_elements:render_elements(Elements),
-
-	% Render Actions
 	{ok, Javascript} = wf_render_actions:render_action_queue(),
 
-    % Call finish on all handlers.
     call_finish_on_handlers(),
 
     % Create Javascript to set the state...
@@ -87,6 +86,8 @@ finish_dynamic_request() ->
     case wf_context:type() of
         first_request       -> build_first_response(Html, JavascriptFinal);
         postback_request    -> build_postback_response(JavascriptFinal);
+        postback_websocket  -> JavascriptFinal; %% We can just return the
+                                                %% javascript to caller
         _                   -> build_first_response(Html, JavascriptFinal)
     end.
 
@@ -108,17 +109,23 @@ serialize_context() ->
     SerializedContextState = wf_pickle:pickle([Page, Handlers]),
     wf:f("Nitrogen.$set_param('pageContext', '~s');~n", [SerializedContextState]).
 
-% deserialize_context_state/1 -
+deserialize_request_context() ->
+    Bridge = wf_context:bridge(),
+    SerializedPageContext = sbw:post_param(<<"pageContext">>, Bridge),
+    deserialize_context(SerializedPageContext).
+
+deserialize_websocket_context(Data) ->
+    {_,SerializedPageContext} = lists:keyfind(<<"pageContext">>, 1, Data),
+    deserialize_context(SerializedPageContext).
+
+% deserialize_context/1 -
 % Updates the context with values that were stored
 % in the browser by serialize_context_state/1.
-deserialize_context() ->
-    Bridge = wf_context:bridge(),	
-
+deserialize_context(SerializedPageContext) ->
     % Save the old handles...
     OldHandlers = wf_context:handlers(),
 
     % Deserialize page_context and handler_list if available...
-    SerializedPageContext = sbw:post_param(<<"pageContext">>, Bridge),
     [Page, Handlers] = case SerializedPageContext of
         undefined -> [wf_context:page_context(), wf_context:handlers()];
         Other -> wf_pickle:depickle(Other)
@@ -131,9 +138,8 @@ deserialize_context() ->
     % Create a new context...
     wf_context:page_context(Page),
     wf_context:handlers(Handlers1),
-
-    % Return the new context...
     ok.
+
 
 copy_handler_config([], []) -> [];
 copy_handler_config([H1|T1], [H2|T2]) when H1#handler_context.name == H2#handler_context.name ->

@@ -246,10 +246,8 @@ NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventCo
     var params = jQuery.extend({}, n.$params, validationParams, { eventContext: eventContext });
    
     if(this.$websockets_enabled) {
-        var bertified = Bert.encode(Bert.tuple(Bert.atom("nitrogen_postback"), params));
-        var ws_encoded = btoa(bertified);
-        this.$console_log(params);
-        this.$websocket.send(ws_encoded);
+        var bertified = Bert.encode_to_bytearray(Bert.tuple(Bert.atom("nitrogen_postback"), params));
+        this.$websocket.send(bertified.buffer);
         this.$event_is_running = false;
     }else{
         var s = jQuery.extend({
@@ -834,6 +832,7 @@ NitrogenClass.prototype.$ws_init = function() {
         var this2 = this;
         var ws_url = this.$ws_url(location.href);
         this.$websocket = new WebSocket(ws_url);
+        this.$websocket.binaryType="arraybuffer";
         this.$websocket.onopen = function(evt) {this2.$ws_open()};
         this.$websocket.onclose = function(evt) {this2.$ws_close()};
         this.$websocket.onmessage = function(evt) {this2.$ws_message(evt.data) };
@@ -857,8 +856,8 @@ NitrogenClass.prototype.$ws_close = function() {
 }
 
 NitrogenClass.prototype.$ws_message = function(data) {
-    // extract executable data
-    // other data gets sent to a handler of sorts
+    console.log(data);
+    eval(data);
 }
 
 var Nitrogen = new NitrogenClass();
