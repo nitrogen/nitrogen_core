@@ -10,6 +10,8 @@ function NitrogenClass(o) {
     this.$params = new Object();
     this.$event_queue = new Array();
     this.$event_is_running = false;
+    this.$event_success_fun = null;
+    this.$event_error_fun = null;
     this.$system_event_queue = new Array();
     this.$system_event_is_running = false;
     this.$system_event_obj = null;
@@ -53,7 +55,10 @@ NitrogenClass.prototype.$destroy = function() {
     // Clear the system event queue and abort any pending system events.
     this.$system_event_queue = new Array();
     if( this.$system_event_obj !== null ) {
-    this.$system_event_obj.abort();
+        this.$system_event_obj.abort();
+    }
+    if(this.$websocket) {
+        this.$websocket.disconnect();
     }
     this.$system_event_is_running = false;
 
@@ -244,36 +249,48 @@ NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventCo
 
     // Assemble other parameters...
     var params = jQuery.extend({}, n.$params, validationParams, { eventContext: eventContext });
-   
+
+    var s = jQuery.extend({
+        dataType: 'text',
+        cache: false,
+        success: null,
+        error: null
+    }, ajaxSettings);
+
+    this.$event_success_fun = s.success;
+    this.$event_error_fun = s.error;
+
     if(this.$websockets_enabled) {
         delete params["pageContext"];
         var bertified = Bert.encode_to_bytearray(Bert.tuple(Bert.atom("nitrogen_postback"), params));
         this.$websocket.send(bertified.buffer);
-        this.$event_is_running = false;
     }else{
-        var s = jQuery.extend({
-            dataType: 'text',
-            cache: false,
-            success: null,
-            error: null
-        }, ajaxSettings);
-    
-
         jQuery.ajax({ 
             url: this.$url,
             type:'post',
             data: [jQuery.param(params), extraParam || ''].join('&'),
             dataType: s.dataType,
             cache: s.cache,
-            success: function(data, textStatus) {
-              n.$event_is_running = false;
-              typeof s.success  == 'function' && s.success(data, textStatus) || eval(data);
-            },
-            error: function(xmlHttpRequest, textStatus, errorThrown) {
-              n.$event_is_running = false;
-              typeof s.error == 'function' && s.error(xmlHttpRequest, textStatus, errorThrown);
-            }
+            success: function(data, textStatus) { n.$event_success(data, textStatus) },
+            error: function(XHR, textStatus, errorThrown) { n.$event_error(XHR, textStatus, errorThrown) }
         });
+    }
+}
+
+NitrogenClass.prototype.$event_success = function(data, textStatus) {
+    this.$event_is_running = false;
+    if(typeof this.$event_success_fun == 'function') {
+        this.$event_success_fun(data, textStatus);
+    }
+    else{
+        eval(data);
+    }
+}
+
+NitrogenClass.prototype.$event_error = function(XHR, textStatus, errorThrown) {
+    this.$event_is_running = false;
+    if(typeof this.$event_error_fun == 'function') {
+        this.$event_error_fun(XHR, textStatus, errThrown)
     }
 }
 
@@ -287,27 +304,40 @@ NitrogenClass.prototype.$do_system_event = function(eventContext) {
     // Assemble other parameters...
     var params = jQuery.extend( {}, n.$params, { eventContext: eventContext, is_system_event: 1 });
 
-    n.$system_event_obj = $.ajax({
-           url: this.$url,
-           type:'post',
-           data: jQuery.param(params),
-           dataType: 'text',
-         cache: false,
-           success: function(data, textStatus) {
-            n.$system_event_is_running = false;
-            n.$system_event_obj = null;
-            // A system event shouldn't clobber the pageContext.
-            // Easiest to account for it here.
-            var pc = n.$params["pageContext"];
-            eval(data);
-            n.$set_param("pageContext", pc);
-           },
-           error: function(xmlHttpRequest, textStatus, errorThrown) {
-            n.$system_event_is_running = false;
-            n.$system_event_obj = null;
-           }
-       });                     
+    if(n.$websockets_enabled) {
+        delete params["pageContext"];
+        var bertified = Bert.encode_to_bytearray(Bert.tuple(Bert.atom("nitrogen_postback"), params));
+        n.$websocket.send(bertified.buffer);
+    }
+    else{
+        n.$system_event_obj = $.ajax({
+            url: this.$url,
+            type:'post',
+            data: jQuery.param(params),
+            dataType: 'text',
+            cache: false,
+            success: function(data, textStatus) { n.$system_event_success(data) },
+            error: function(XHR, textStatus, errorThrown) { n.$system_event_error() }
+        });                     
+    }
 }
+
+NitrogenClass.prototype.$system_event_success = function(data) {
+    var n = this;
+    n.$system_event_is_running = false;
+    n.$system_event_obj = null;
+    // A system event shouldn't clobber the pageContext.
+    // Easiest to account for it here.
+    var pc = n.$params["pageContext"];
+    eval(data);
+    n.$set_param("pageContext", pc);
+}
+
+NitrogenClass.prototype.$system_event_error = function() {
+    this.$system_event_is_running = false;
+    this.$system_event_obj = null;
+}
+
 
 /*** FILE UPLOAD ***/
 
@@ -864,14 +894,24 @@ NitrogenClass.prototype.$ws_close = function() {
 };
 
 NitrogenClass.prototype.$ws_message = function(data) {
-    console.log(data);
-    eval(data);
+    var matches = null;
+    if(matches = data.match(/^nitrogen_system_event:([\s\S]*)/)) {
+        this.$system_event_success(matches[1]);
+    }
+    else if(matches = data.match(/^nitrogen_event:([\s\S]*)/)) {
+        this.$event_success(matches[1]);
+    }    
 };
 
 var Nitrogen = new NitrogenClass();
 var page = document;
 $(document).ready(function() {
-    Bert.assoc_array_key_encoding("binary");
-    Nitrogen.$ws_init();
+    if(Bert) {
+        Bert.assoc_array_key_encoding("binary");
+        Nitrogen.$ws_init();
+    }
+    else{
+        Nitrogen.$console_log("Bert not included. Websockets will not be usable");
+    }
 });
 Nitrogen.$event_loop();

@@ -64,10 +64,10 @@ ws_message({binary, Bin}, _Bridge, _State) ->
     try binary_to_term(Bin, [safe]) of
         {nitrogen_postback, Msg} ->
             Return = wf_core:run_websocket(Msg),
-            {reply, {text, Return}};
+            {reply, {text, [<<"nitrogen_event:">>,Return]}};
         {page_context, PageContext} ->
             ws_init_context(PageContext),
-            {reply, {text, <<"Nitrogen.$enable_websockets()">>}}
+            {reply, {text, <<"nitrogen_event:Nitrogen.$enable_websockets()">>}}
     catch
         Class:Error ->
             error_logger:error_msg("Error in Websocket Message: ~p:~p~n~p~n",
