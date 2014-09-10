@@ -81,15 +81,15 @@ finish_dynamic_request() ->
 
 
     % Create Javascript to set the state...
-    JavascriptFinal = case wf_context:type() of
-        postback_websocket ->
-            Javascript;
+    case wf_context:type() of
+        postback_websocket -> ok;
         _ -> 
             %% We only want to "finish" handlers if we're not doing websockets
-            call_finish_on_handlers(),
-            StateScript = serialize_context(),
-            [StateScript, Javascript]
+            call_finish_on_handlers()
     end,
+    StateScript = serialize_context(),
+    JavascriptFinal = [StateScript, Javascript],
+
     case wf_context:type() of
         first_request       -> build_first_response(Html, JavascriptFinal);
         postback_request    -> build_postback_response(JavascriptFinal);
@@ -112,8 +112,8 @@ serialize_context() ->
     Page = wf_context:page_context(),
 
     % Get handler context, but don't serialize the config.
-    Handlers = [X#handler_context { config=undefined } || X <- wf_context:handlers()],
-    SerializedContextState = wf_pickle:pickle([Page, Handlers]),
+    StateHandler = wf_context:handler(state_handler),
+    SerializedContextState = wf_pickle:pickle([Page, StateHandler]),
     wf:f("Nitrogen.$set_param('pageContext', '~s');~n", [SerializedContextState]).
 
 deserialize_request_context() ->
@@ -129,32 +129,17 @@ deserialize_websocket_context(SerializedPageContext) ->
 % Updates the context with values that were stored
 % in the browser by serialize_context_state/1.
 deserialize_context(SerializedPageContext) ->
-    % Save the old handles...
-    OldHandlers = wf_context:handlers(),
+    OldStateHandler = wf_context:handler(state_handler),
 
     % Deserialize page_context and handler_list if available...
-    [Page, Handlers] = case SerializedPageContext of
-        undefined -> [wf_context:page_context(), wf_context:handlers()];
+    [PageContext, NewStateHandler] = case SerializedPageContext of
+        undefined -> [wf_context:page_context(), OldStateHandler];
         Other -> wf_pickle:depickle(Other)
     end,
 
-    % Config is not serialized, so copy config from old handler list to new
-    % handler list.
-    Handlers1 = copy_handler_config(OldHandlers, Handlers),
-
-    % Create a new context...
-    wf_context:page_context(Page),
-    wf_context:handlers(Handlers1),
+    wf_context:page_context(PageContext),
+    wf_context:restore_handler(NewStateHandler),
     ok.
-
-
-copy_handler_config([], []) -> [];
-copy_handler_config([H1|T1], [H2|T2]) when H1#handler_context.name == H2#handler_context.name ->
-    [H2#handler_context { config=H1#handler_context.config }|copy_handler_config(T1, T2)];
-copy_handler_config(L1, L2) -> 
-    ?PRINT(L1),
-    ?PRINT(L2),
-    throw({?MODULE, handler_list_has_changed}).
 
 %%% SET UP AND TEAR DOWN HANDLERS %%%
 

@@ -88,6 +88,8 @@
 
         handlers/0,
         handlers/1,
+        handler/1,
+        restore_handler/1,
 
         init_context/1,
         make_handler/2,
@@ -372,6 +374,33 @@ handlers() ->
 handlers(Handlers) ->
     Context = context(),
     context(Context#context { handler_list = Handlers }).
+
+handler(HandlerName) ->
+    Handlers = handlers(),
+    case lists:keyfind(HandlerName, #handler_context.name, Handlers) of
+        false -> undefined;
+        HandlerContext -> HandlerContext
+    end.
+
+restore_handler(NewHandler) ->
+    Handlers = handlers(),
+    NewHandlers = [maybe_restore_handler(H, NewHandler) || H <- Handlers],
+    handlers(NewHandlers).
+
+maybe_restore_handler(Orig = #handler_context{name=Name}, New = #handler_context{name=Name}) ->
+    New#handler_context{config=Orig#handler_context.config};
+maybe_restore_handler(Orig, _New) ->
+    Orig.
+
+%% MAYBE DO THIS?
+%%serializable_handlers() ->
+%%    [H || H <- handlers(), is_handler_serializable(H)].
+%%
+%%is_handler_serializable(#handler_context{module=Module}) ->
+%%    case erlang:function_exported(Module, is_serializable, 0) of
+%%        true -> Module:is_serializable();
+%%        false -> true
+%%    end.
 
 %%% CONTEXT CONSTRUCTION %%%
 

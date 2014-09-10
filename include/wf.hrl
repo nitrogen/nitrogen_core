@@ -77,10 +77,11 @@
 % to allow other frameworks to substitute their own behaviour.
 % These are set in wf_context:make_context/1
 -record(handler_context, {
-    name,    % The name of a handler. See wf_context for a list.
+    name,       % The name of a handler. See wf_context for a list.
     module,     % A module that provides the logic for a handler. This can be substituted by your app.
     config,     % The config of the handler, set at the beginning of each request.
     state       % The state of the handler, serialized and maintained between postbacks in a series.
+    %serialize=true % whether or not to serialize and deserialize this handler during requests. Usually, just the state handler needs to be serialized.
 }).
 
 -record(context, {

@@ -108,7 +108,6 @@ normalize_path(Path) when ?IS_STRING(Path) ->
     lists:reverse(Tokens1).
 
 normalize_params(Params) ->
-    error_logger:info_msg("params: ~p~n",[Params]),
     [{normalize_path(Path), Value} || {Path, Value} <- Params, Path /= undefined, Path /= []].
 
 %% Most tokens will start with "wfid_". Strip this out.
