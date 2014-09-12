@@ -34,7 +34,6 @@ run() ->
 run_crash(Bridge, Type, Error, Stacktrace) ->
     try
         case wf_context:type() of
-            undefined           -> run_crashed_first_request(Type, Error, Stacktrace);
             first_request       -> run_crashed_first_request(Type, Error, Stacktrace);
             static_file         -> run_crashed_first_request(Type, Error, Stacktrace);
             postback_request    -> run_crashed_postback_request(Type, Error, Stacktrace);
@@ -174,7 +173,10 @@ run_first_request() ->
     % Some values...
     Module = wf_context:event_module(),
     {module, Module} = code:ensure_loaded(Module),
-    Data = Module:main(),
+    Data = case wf_context:entry_point() of
+        Fun when is_function(Fun, 0) -> Fun();
+        Atom when is_atom(Atom) -> Module:Atom()
+    end,
     wf_context:data(Data).
 
 run_crashed_first_request(Type, Error, Stacktrace) ->

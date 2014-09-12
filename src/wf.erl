@@ -294,6 +294,9 @@ peer_ip(Proxies) ->
 peer_ip(Proxies,ForwardedHeader) ->
     wf_context:peer_ip(Proxies,ForwardedHeader).
 
+request_method() ->
+    wf_context:request_method().
+
 request_body() ->
     wf_context:request_body().
 

@@ -21,6 +21,7 @@
         peer_ip/1,
         peer_ip/2,
 
+        request_method/0,
         request_body/0,
         status_code/0,
         status_code/1,
@@ -56,7 +57,10 @@
 
         page_context/0,
         page_context/1,
-        
+       
+        entry_point/0,
+        entry_point/1,
+
         series_id/0,
         series_id/1,
 
@@ -160,6 +164,26 @@ peer_ip(Proxies,ForwardedHeader) ->
             end
     end.
 
+request_method() ->
+    case ?BRIDGE:request_method() of
+        'GET'       -> get;
+        get         -> get;
+        'POST'      -> post;
+        post        -> post;
+        'DELETE'    -> delete;
+        delete      -> delete;
+        'PUT'       -> put;
+        put         -> put;
+        'TRACE'     -> trace;
+        trace       -> trace;
+        'HEAD'      -> head;
+        head        -> head;
+        'CONNECT'   -> connect;
+        connect     -> connect;
+        'OPTIONS'   -> options;
+        options     -> options;
+        Other -> list_to_existing_atom(string:to_lower(wf:to_list(Other)))
+    end.
 
 request_body() ->
     ?BRIDGE:request_body().
@@ -294,7 +318,15 @@ page_module() ->
 
 page_module(Module) ->
     Page = page_context(),
-    page_context(Page#page_context { module = Module }).
+     page_context(Page#page_context { module = Module }).
+
+entry_point() ->
+    Page = page_context(),
+    Page#page_context.entry_point.
+
+entry_point(EntryPoint) ->
+    Page = page_context(),
+    page_context(Page#page_context { entry_point = EntryPoint}).
 
 path_info() -> 
     Page = page_context(),

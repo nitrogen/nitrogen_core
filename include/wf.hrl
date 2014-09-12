@@ -56,6 +56,8 @@
 -record(page_context, {
     series_id,   % A unique ID assigned to the first request which stays constant on repeated requests.
     module,      % The requested page module
+    entry_point=main, % The entry point for the module. Either an atom name
+                      % (for Module:Atom/0) or can be a function arity 0
     path_info,   % Any extra info passed with the request
     async_mode= comet % {poll, Interval}, comet, or {websocket, WebsocketConnectionPid}
 }).
