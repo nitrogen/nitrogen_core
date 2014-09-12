@@ -242,8 +242,7 @@ add_action(Priority, Action) when ?IS_ACTION_PRIORITY(Priority) ->
 actions() ->
     ActionQueue = action_queue(),
     Actions = wf_action_queue:all(ActionQueue),
-    NewActionQueue = wf_action_queue:clear(ActionQueue),
-    action_queue(NewActionQueue),
+    clear_action_queue(),
     Actions.
 
 -spec next_action() -> {ok, actions()} | empty.
@@ -307,9 +306,11 @@ path_info(PathInfo) ->
 
 async_mode() ->
     Page = page_context(),
+    error_logger:info_msg("(~p) Getting Async Mode: ~p",[self(), Page#page_context.async_mode]),
     Page#page_context.async_mode.
 
 async_mode(AsyncMode) ->
+    error_logger:info_msg("(~p) Setting Async Mode to: ~p",[self(), AsyncMode]),
     Page = page_context(),
     page_context(Page#page_context { async_mode=AsyncMode }).
 

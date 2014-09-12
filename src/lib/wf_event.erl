@@ -24,6 +24,9 @@
 update_context_with_event() ->
     update_context_with_event(wf:q(eventContext)).
 
+update_context_with_websocket_event([]) ->
+    wf_context:type(postback_websocket),
+    ok;
 update_context_with_websocket_event(Data) ->
     {_, SerializedEvent} = lists:keyfind(<<"eventContext">>, 1, Data),
     update_context_with_event(SerializedEvent),

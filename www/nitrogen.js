@@ -12,6 +12,7 @@ function NitrogenClass(o) {
     this.$event_is_running = false;
     this.$event_success_fun = null;
     this.$event_error_fun = null;
+    this.$system_event_queue_ready = false;
     this.$system_event_queue = new Array();
     this.$system_event_is_running = false;
     this.$system_event_obj = null;
@@ -90,8 +91,9 @@ NitrogenClass.prototype.$event_loop = function() {
     // Create a local copy of this for setTimeout callbacks.
     var this2 = this;
 
+    //console.log("ready: " + this.$system_event_queue_ready);
     // If no events are running and an event is queued, then fire it.
-    if (!this.$system_event_is_running && this.$system_event_queue.length > 0) {
+    if (this.$system_event_queue_ready && !this.$system_event_is_running && this.$system_event_queue.length > 0) {
         var o = this.$system_event_queue.shift();
         this.$do_system_event(o.eventContext);
     }
@@ -303,8 +305,8 @@ NitrogenClass.prototype.$do_system_event = function(eventContext) {
 
     // Assemble other parameters...
     var params = jQuery.extend( {}, n.$params, { eventContext: eventContext, is_system_event: 1 });
-
-    if(n.$websockets_enabled) {
+    this.$console_log("system event: " + this.$websockets_enabled);
+    if(this.$websockets_enabled) {
         delete params["pageContext"];
         var bertified = Bert.encode_to_bytearray(Bert.tuple(Bert.atom("nitrogen_postback"), params));
         n.$websocket.send(bertified.buffer);
@@ -868,7 +870,9 @@ NitrogenClass.prototype.$ws_init = function() {
         this.$websocket.onclose = function(evt) {this2.$ws_close()};
         this.$websocket.onmessage = function(evt) {this2.$ws_message(evt.data) };
         this.$websocket.onerror = function(evt) {this2.$ws_close()};
-    }catch(ex){}
+    }catch(ex){
+        this.$system_event_queue_ready = true;
+    }
 };
 
 NitrogenClass.prototype.$ws_url = function(url) {
@@ -878,6 +882,7 @@ NitrogenClass.prototype.$ws_url = function(url) {
 
 NitrogenClass.prototype.$ws_open = function() {
     this.$send_pagecontext();
+    this.$system_event_queue_ready = true;
     // On success, will run Nitrogen.$enable_websockets();
 };
 
@@ -896,6 +901,7 @@ NitrogenClass.prototype.$ws_close = function() {
 NitrogenClass.prototype.$ws_message = function(data) {
     var matches = null;
     if(matches = data.match(/^nitrogen_system_event:([\s\S]*)/)) {
+        //alert(matches[1]);
         this.$system_event_success(matches[1]);
     }
     else if(matches = data.match(/^nitrogen_event:([\s\S]*)/)) {
@@ -905,13 +911,14 @@ NitrogenClass.prototype.$ws_message = function(data) {
 
 var Nitrogen = new NitrogenClass();
 var page = document;
-$(document).ready(function() {
-    if(Bert) {
+//$(document).ready(function() {
+    if(typeof Bert == "object") {
         Bert.assoc_array_key_encoding("binary");
         Nitrogen.$ws_init();
     }
     else{
         Nitrogen.$console_log("Bert not included. Websockets will not be usable");
+        this.$system_event_queue_ready = true;
     }
-});
+//});
 Nitrogen.$event_loop();

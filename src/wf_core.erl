@@ -4,7 +4,9 @@
 -export ([
     run/0,
     init_websocket/1,
-    run_websocket/1
+    run_websocket/1,
+    run_websocket_comet/0,
+    serialize_context/0
 ]).
 
 % nitrogen_core - 
@@ -48,14 +50,17 @@ run_crash(Bridge, Type, Error, Stacktrace) ->
 
 init_websocket(SerializedPageContext) ->
     deserialize_websocket_context(SerializedPageContext),
+    wf_context:async_mode({websocket, self()}),
     call_init_on_handlers().
+
+run_websocket_comet() ->
+    _ToSend = finish_dynamic_request().
 
 run_websocket(Data) ->
     wf_event:update_context_with_websocket_event(Data),
     query_handler:set_websocket_params(Data),
     run_postback_request(),
     _ToSend = finish_dynamic_request().
-
 
 run_catched() ->
     deserialize_request_context(),
@@ -79,14 +84,8 @@ finish_dynamic_request() ->
     {ok, Html} = wf_render_elements:render_elements(Elements),
 	{ok, Javascript} = wf_render_actions:render_action_queue(),
 
+    maybe_call_finish_on_handlers(),
 
-    % Create Javascript to set the state...
-    case wf_context:type() of
-        postback_websocket -> ok;
-        _ -> 
-            %% We only want to "finish" handlers if we're not doing websockets
-            call_finish_on_handlers()
-    end,
     StateScript = serialize_context(),
     JavascriptFinal = [StateScript, Javascript],
 
@@ -151,6 +150,12 @@ call_init_on_handlers() ->
     Handlers = wf_context:handlers(),
     [wf_handler:call(X#handler_context.name, init) || X <- Handlers],
     ok.
+
+maybe_call_finish_on_handlers() ->
+    case wf_context:type() of
+        postback_websocket -> ok;
+        _ -> call_finish_on_handlers()
+    end.
 
 % finish_handlers/1 - 
 % Handlers are finished in the order that they exist in #context.handlers. The order
