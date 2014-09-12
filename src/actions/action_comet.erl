@@ -68,42 +68,44 @@ comet(F) ->
 
 %% @doc Convenience method to start a comet process.
 comet({Name, F, Msg}, Pool) when is_function(F) ->
-    Pid = spawn_with_context({Name, F, Msg}, postback),
-    wf:wire(page, page, #comet { function=Pid, pool=Pool, scope=local }),
-    %wf:wire(page, page, #comet { function={Name, F, Msg}, pool=Pool, scope=local }),
+    Pid = spawn_with_context({Name, F, Msg}, page),
+    wf:wire(page, page, #comet { function={Name, F, Msg}, pool=Pool, scope=local }),
     {ok, Pid};
 comet({Name, F}, Pool) when is_function(F) ->
-    Pid = spawn_with_context({Name, F}, postback),
-    %wf:wire(page, page, #comet { function={Name, F}, pool=Pool, scope=local }),
-    wf:wire(page, page, #comet { function=Pid, pool=Pool, scope=local }),
+    Pid = spawn_with_context({Name, F}, page),
+    wf:wire(page, page, #comet { function={Name, F}, pool=Pool, scope=local }),
     {ok, Pid};
 comet(F, Pool) ->
-    Pid = spawn_with_context(F,postback),
+    Pid = spawn_with_context(F,page),
     wf:wire(page, page, #comet { function=Pid, pool=Pool, scope=local }),
     {ok, Pid}.
 
 %% @doc Convenience method to start a comet process with global pool.
 comet_global({Name, F, Msg}, Pool) ->
-    Pid = spawn_with_context({Name, F, Msg}, postback),
-    %wf:wire(page, page, #comet { function={Name, F, Msg}, pool=Pool, scope=global }),
-    wf:wire(page, page, #comet { function=Pid, pool=Pool, scope=global }),
+    Pid = spawn_with_context({Name, F, Msg}, page),
+    wf:wire(page, page, #comet { function={Name, F, Msg}, pool=Pool, scope=global }),
     {ok, Pid};
 comet_global({Name, F}, Pool) ->
-    Pid = spawn_with_context({Name, F}, postback),
-    %wf:wire(page, page, #comet { function={Name, F}, pool=Pool, scope=global }),
-    wf:wire(page, page, #comet { function=Pid, pool=Pool, scope=global }),
+    Pid = spawn_with_context({Name, F}, page),
+    wf:wire(page, page, #comet { function={Name, F}, pool=Pool, scope=global }),
     {ok, Pid};
 comet_global(F, Pool) ->
-    Pid = spawn_with_context(F,postback),
+    Pid = spawn_with_context(F,page),
     wf:wire(page, page, #comet { function=Pid, pool=Pool, scope=global }),
     {ok, Pid}.
 
 %% @doc Gather all wired actions, and send to the accumulator.
 flush() ->
+    %% If we've managed to establish a websocket connection after the comet
+    %% process started, this will convert the current connection to use
+    %% websockets. Then instead of returning the function calls from the comet
+    %% request, it'll just send the actions to the websocket and the comet
+    %% request will die peacefully.
     maybe_convert_to_websocket_async(),
     case wf_context:async_mode() of
         {websocket, Pid} ->
             %% Because we're doing websockets, we can bypass the accumulator altogether
+            %% and send actions directly to the websocket
             Actions = wf_context:actions(),
             Pid ! {comet_actions, Actions};
         _ ->
