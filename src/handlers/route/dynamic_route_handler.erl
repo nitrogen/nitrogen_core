@@ -29,8 +29,8 @@
 
 init(_Config, State) -> 
     % Get the path...
-    RequestBridge = wf_context:bridge(),
-    Path = RequestBridge:path(),
+    Bridge = wf_context:bridge(),
+    Path = sbw:path(Bridge),
 
     % Convert the path to a module. If there are no routes defined, then just
     % convert everything without an extension to a module.
@@ -85,10 +85,11 @@ module_name(Tokens) ->
 	end,
 	_ModuleName = string:join(AllTokens, "_").
 
-try_load_module(Tokens) -> try_load_module(Tokens, []).
-try_load_module([], _ExtraTokens) -> undefined;
+try_load_module(Tokens) ->
+    try_load_module(Tokens, []).
+try_load_module([], _ExtraTokens) ->
+    undefined;
 try_load_module(Tokens, ExtraTokens) ->
-    %% Get the module name...
     ModuleName = module_name(Tokens),
     Module = try 
         list_to_existing_atom(ModuleName)
