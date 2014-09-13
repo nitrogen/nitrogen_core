@@ -697,7 +697,6 @@ NitrogenClass.prototype.$go_next = function(controlID) {
     var o = obj(controlID);
     if (o.focus) o.focus();
     if (o.select) o.select();
-    if (o.click) o.click();
 }
 
 NitrogenClass.prototype.$disable_selection = function(element) {
@@ -896,7 +895,6 @@ NitrogenClass.prototype.$ws_close = function() {
 NitrogenClass.prototype.$ws_message = function(data) {
     var matches = null;
     if(matches = data.match(/^nitrogen_system_event:([\s\S]*)/)) {
-        //alert(matches[1]);
         this.$system_event_success(matches[1]);
     }
     else if(matches = data.match(/^nitrogen_event:([\s\S]*)/)) {

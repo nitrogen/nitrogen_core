@@ -58,9 +58,10 @@ render_action(#event {
         _ when ((EffectiveType==keypress orelse EffectiveType==keydown orelse EffectiveType==keyup) andalso (EffectiveKeyCode /= undefined)) ->
             [
                 wf:f("Nitrogen.$observe_event('~s', '~s', '~s', function anonymous(event) {", [Anchor, Trigger, EffectiveType]),
-                wf:f("if (Nitrogen.$is_key_code(event, ~p, ~p)) { ", [EffectiveKeyCode, ShiftKey]),
-                AnchorScript, PostbackScript, WireAction, 
-                "return false; }});"
+                    wf:f("if (Nitrogen.$is_key_code(event, ~p, ~p)) { ", [EffectiveKeyCode, ShiftKey]),
+                        AnchorScript, PostbackScript, WireAction, 
+                        %wf:f("alert('~p:~p');",[EffectiveType, EffectiveKeyCode]),
+                        "return false; }});"
             ];
 
         % Run the event after a specified amount of time
