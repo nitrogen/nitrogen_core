@@ -20,6 +20,8 @@
     hex_encode/1, hex_decode/1,
     url_encode/1, url_decode/1,
     js_escape/1,
+    json_encode/1,
+    json_decode/1,
 	join/2,
     parse_ip/1
 ]).
@@ -332,6 +334,16 @@ qs_revdecode([Lo, Hi, ?PERCENT | Rest], Acc) when ?IS_HEX(Lo), ?IS_HEX(Hi) ->
 qs_revdecode([C | Rest], Acc) ->
     qs_revdecode(Rest, [C | Acc]).
 
+
+json_encode(Data) ->
+    nitro_mochijson2:encode({struct, Data}).
+
+json_decode(Json) ->
+    try nitro_mochijson2:decode(Json) of
+        {struct, Data} -> Data
+    catch _:_ ->
+        undefined
+    end.
 
 
 parse_ip(IP = {_,_,_,_}) ->

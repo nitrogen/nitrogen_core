@@ -59,22 +59,38 @@ route("/") ->
     {list_to_atom(module_name(["index"])), main, []};
 
 route(Path) ->
-    IsStatic = (filename:extension(Path) /= []),
-    case IsStatic of
-        true ->
-            % Serve this up as a static file.
+    case extension_type(Path) of
+        static ->
             {static_file, main, Path};
-
-        false ->
-            Path1 = string:strip(Path, both, $/),
+        {module, EntryFun, ProcessingFun} ->
+            Path1 = string:strip(filename:rootname(Path), both, $/),
             Tokens = string:tokens(Path1, "/"),
             % Check for a loaded module. If not found, then try to load it.
-            case try_load_module(Tokens) of
+            case try_load_module(EntryFun, ProcessingFun, Tokens) of
                 {Module, EntryPoint, PathInfo} -> 
                     {Module, EntryPoint, PathInfo};
                 undefined ->
                     {web_404, main, Path1}
             end
+    end.
+
+extension_type(Filename) ->
+    SmartExtensions = wf:config_default(smart_extensions, []),
+    Ext = string:strip(filename:extension(Filename), left, $.),
+    case lists:keyfind(Ext, 1, SmartExtensions) of
+        {Ext, EntryFun, ProcessingFun={_,_}} ->
+            {module, EntryFun, ProcessingFun};
+        {Ext, EntryFun, undefined} ->
+            {module, EntryFun, undefined};
+        {Ext, EntryFun} ->
+            {module, EntryFun, undefined};
+        false ->
+            case Ext of
+                [] -> {module, main, undefined};
+                _ -> static
+            end;
+        Other ->
+            throw({invalid_smart_extension, Other})
     end.
 
 module_name(Tokens) ->
@@ -85,27 +101,47 @@ module_name(Tokens) ->
 	end,
 	_ModuleName = string:join(AllTokens, "_").
 
-try_load_module(Tokens) ->
-    try_load_module(Tokens, []).
-try_load_module([], _ExtraTokens) ->
-    undefined;
-try_load_module(Tokens, ExtraTokens) ->
-    ModuleName = module_name(Tokens),
-    Module = try 
+verify_and_atomize_module(ModuleName) when is_list(ModuleName) ->
+    try 
         list_to_existing_atom(ModuleName)
     catch _:_ ->
         case erl_prim_loader:get_file(ModuleName ++ ".beam") of
             {ok, _, _} -> list_to_atom(ModuleName);
             _ -> list_to_atom("$not_found")
         end
-    end,
+    end.
+
+try_load_module(EntryFun, ProcessingFun, Tokens) ->
+    try_load_module(EntryFun, ProcessingFun, Tokens, []).
+
+try_load_module(_EntryFun, _ProcessingFun, [], _ExtraTokens) ->
+    undefined;
+try_load_module(EntryFun, ProcessingFun, Tokens, ExtraTokens) ->
+    ModuleName = module_name(Tokens),
+    Module = verify_and_atomize_module(ModuleName),
 
     %% Load the module, check if it exports the right method...
     code:ensure_loaded(Module),
-    case erlang:function_exported(Module, main, 0) of
+
+    %% EntryFun will usually be 'main', meaning we're looking for Module:main()
+    %% to enter by default. Smart Extensions might look for a different entry
+    %% function like 'json_main'.
+    case erlang:function_exported(Module, EntryFun, 0) of
         true -> 
             PathInfo = string:join(ExtraTokens, "/"),
-            {Module, main, PathInfo};
+            RealEntry = case ProcessingFun of
+                undefined ->
+                    %% There's no processing function, so we just enter the
+                    %% module normally
+                    EntryFun;
+                {ProcMod, ProcFun} ->
+                    %% We've identified that this has the entry point for the
+                    %% associated smart extension, and this smart extension has
+                    %% a processing Mod:Fun combination, so we'll pass that as
+                    %% the entry point.
+                    fun() -> ProcMod:ProcFun(EntryFun) end
+            end,
+            {Module, RealEntry, PathInfo};
         false ->
             case is_rest_module(Module) of
                 true ->
@@ -114,26 +150,19 @@ try_load_module(Tokens, ExtraTokens) ->
                     Entry = fun() -> nitrogen_rest:handle_request(Module) end,
                     {Module, Entry, PathInfo};
                 false ->
-                    next_try_load_module(Tokens, ExtraTokens)
+                    next_try_load_module(EntryFun, ProcessingFun, Tokens, ExtraTokens)
             end
     end.
 
 
-next_try_load_module(Tokens, ExtraTokens) ->
+next_try_load_module(EntryFun, ProcessingFun, Tokens, ExtraTokens) ->
     Tokens1 = lists:reverse(tl(lists:reverse(Tokens))),
     ExtraTokens1 = [hd(lists:reverse(Tokens))|ExtraTokens],
-    try_load_module(Tokens1, ExtraTokens1).
+    try_load_module(EntryFun, ProcessingFun, Tokens1, ExtraTokens1).
 
 is_rest_module(Module) ->
-    try
-        Attributes = Module:module_info(attributes),
-        case lists:keyfind(behaviour, 1, Attributes) of
-            {behaviour, Behaviours} -> lists:member(nitrogen_rest, Behaviours);
-            false -> false
-        end
-    catch
-        _:_ -> false
-    end.
+    wf_utils:has_behaviour(Module, nitrogen_rest).
+
 
 check_for_404(static_file, _PathInfo, Path) ->
     {static_file, Path};

@@ -1,6 +1,6 @@
 %% Nitrogen's RESTful Behaviour
 %%
-%% Enable this on a nitrogen module using:
+%% Enable this on a Nitrogen module using:
 %% -behaviour(nitrogen_rest).
 %%
 %% Then, add each of the callback methods (get/1, put/1, post/1, etc).

@@ -198,6 +198,12 @@ hex_decode(S) ->
 js_escape(String) -> 
     _String = wf_convert:js_escape(String).
 
+json_encode(Data) ->
+    _String = wf_convert:json_encode(Data).
+
+json_decode(Json) ->
+    _Data = wf_convert:json_decode(Json).
+
 to_qs(List) ->
     _Iolist = wf_convert:to_qs(List).
 

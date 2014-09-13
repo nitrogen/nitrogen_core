@@ -18,7 +18,8 @@
     replace_field/4,
     get_field/3,
     copy_fields/2,
-    is_iolist_empty/1
+    is_iolist_empty/1,
+    has_behaviour/2
 ]).
 
 -define(COPY_TO_BASERECORD(Name, Size, Record),
@@ -207,3 +208,16 @@ get_field(Key, Fields, Rec) ->
 		undefined -> undefined;
 		N -> element(N, Rec)
 	end.
+
+%% HAS BEHAVIOUR
+
+has_behaviour(Module, Behaviour) ->
+    try
+        Attributes = Module:module_info(attributes),
+        {behaviour, Behaviours} = lists:keyfind(behaviour, 1, Attributes),
+        lists:member(Behaviour, Behaviours)
+    catch
+        _:_ -> false
+    end.
+
+
