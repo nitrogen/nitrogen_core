@@ -833,6 +833,7 @@
 
 -record(actionbase, {?ACTION_BASE(undefined)}).
 -record(wire, {?ACTION_BASE(action_wire)}).
+-record(click, {?ACTION_BASE(action_click)}).
 
 -define(ACTION_UPDATE(Type), {?ACTION_BASE(action_update),
         type=Type               :: atom(),
