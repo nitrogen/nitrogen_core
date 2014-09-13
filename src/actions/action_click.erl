@@ -11,4 +11,4 @@
 
 render_action(Record) ->
     Target = Record#click.target,
-    wf:f(<<"var o = obj('~s'); if(o && typeof(o.click) == 'function') o.click();">>,[Target]).
+    wf:f(<<"var o = obj('~s'); if(o && typeof(o.click) == 'function') {o.focus(); o.click();} ">>,[Target]).
