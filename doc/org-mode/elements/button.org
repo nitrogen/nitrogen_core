@@ -1,4 +1,4 @@
-# vim: sw=3 ts=3 ft=org
+# vim: sw=3 ts=3 et ft=org
 
 #+TITLE: Button Element Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
@@ -23,9 +23,9 @@
 	+ body - (/List of Nitrogen Elements/) :: The button's body (if you wanted
 		to use something richer than a simple text)
 
-   + text - (/string/) :: The text of the button.
+  + text - (/string/) :: The text of the button.
 
-   + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
+  + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
 
 	+ disabled - (/boolean/) :: Set to true to disable this button in the
 		browser (sets the HTML =disabled= property, effectly greying out the
@@ -40,7 +40,7 @@
 	+ postback - (/Erlang term/) :: Clicking on the button will initiate a
 		Nitrogen postback with the supplied term.
 
-	+ click - (/Action/ or /List of Actions/) :: Wires the selected actons to
+	+ click - (/Action/ or /List of Actions/) :: Wires the selected actions to
 		the \"click\" events.  Due to the commonality of binding actions to the
 		click event, this is merely a shortcut for
 
@@ -50,24 +50,21 @@
    ]}
 #+END_SRC
 
+  + enter_clicks - (/List of Element IDs/) :: Wires to the provided ElementIDs
+    a =#click{}= event on the provided button if the user presses the "Enter"
+    key when any of the provided =ElementIDs= have the focus. To see a working
+    example, see the [[http://nitrogenproject.com/demos/security][Security Demo]]
+
 ** See Also
 
    + [[./base.html][Base]]
-
    + [[./link.html][Link]]
-
    + [[./textbox.html][Textbox]]
-
    + [[./password.html][Password]]
-
    + [[./textarea.html][Textarea]]
-
    + [[./checkbox.html][Checkbox]]
-
    + [[./dropdown.html][Dropdown]]
-
    + [[./option.html][Dropdown Option]]
-
-	+ [[http://nitrogenproject.com/demos/simplecontrols][Simple Controls Demos]]
-
-     
+	 + [[http://nitrogenproject.com/demos/simplecontrols][Simple Controls Demos]]
+   + [[http://nitrogenproject.com/demos/security][Security Demo]]
+     (showing the use of the =enter_clicks= attribute)
