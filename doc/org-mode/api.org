@@ -170,6 +170,14 @@
 
    Convert a String to a JS-safe string by adding backslashes to quotes and newlines.
 
+** wf:json\_encode(Data) -> JsonEncodedString
+
+   Convert a data structure (Proplist, list, etc) to a JSON encoded string.
+
+** wf:json\_decode(JsonEncodedString) ->
+
+   Convert a JSON-encoded string back to an Erlang data structure.
+
 ** wf:join([Terms],Delimiter) -> [Terms]
 
    Because Erlang doesn't provide a means to join a list in a non-string fashion, this will join the =Terms= on the delimiter, regardless of the type of =Delimiter=.
