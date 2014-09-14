@@ -3,6 +3,10 @@ all: compile
 compile:
 	./rebar compile
 
+dialyzer-deps-compile:
+	./rebar --config "rebar.dialyzer.config" get-deps
+	./rebar --config "rebar.dialyzer.config" compile
+
 clean:
 	./rebar clean
 
@@ -22,12 +26,12 @@ DEPS=erts kernel stdlib crypto sasl
 $(DEPS_PLT):
 	@echo Building local plt at $(DEPS_PLT)
 	@echo 
-	@(dialyzer --output_plt $(DEPS_PLT) --build_plt --apps $(DEPS))
+	@(dialyzer --output_plt $(DEPS_PLT) --build_plt --apps $(DEPS) -r ./deps)
 
-dialyzer: compile $(DEPS_PLT)
+dialyzer: dialyzer-deps-compile $(DEPS_PLT)
 	@(dialyzer --fullpath --plt $(DEPS_PLT) -Wrace_conditions -r ./ebin)
 
-dialyzer-no-race: compile $(DEPS_PLT)
+dialyzer-no-race: dialyzer-deps-compile $(DEPS_PLT)
 	@(dialyzer --fullpath --plt $(DEPS_PLT) -r ./ebin)
 
 # TRAVIS-CI STUFF

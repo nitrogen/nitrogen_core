@@ -102,11 +102,11 @@ to_string_list([H|T], Acc) ->
 
 
 %%% HTML ENCODE %%%
--spec html_encode(L :: term()) -> iolist().
+-spec html_encode(L :: term()) -> binary() | iolist().
 html_encode(L) -> 
     html_encode(L, normal).
 
--spec html_encode(L :: term(), EncType :: fun() | boolean() | whites | normal) -> iolist().
+-spec html_encode(L :: term(), EncType :: fun() | boolean() | whites | normal) -> binary() | iolist().
 html_encode(L,EncType) when is_function(EncType) -> EncType(L);
 html_encode(undefined, _) -> [];    %% treat "undefined" as special
 
@@ -121,7 +121,7 @@ html_encode(L, whites) when is_list(L); is_binary(L) -> ihe(L, whites);
 
 html_encode(Other, EncType) -> ihe(Other, EncType).
 
--spec ihe(binary() | list(), whites | normal) -> iolist().
+-spec ihe(binary() | list(), whites | normal) -> binary() | iolist().
 %% @doc ihe means "inner html encode". It's a short version for encoding "ET"
 %% will be "encoding type", which usually would be 'whites'
 %%

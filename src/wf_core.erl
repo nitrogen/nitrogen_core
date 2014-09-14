@@ -6,6 +6,7 @@
     init_websocket/1,
     run_websocket/1,
     run_websocket_comet/0,
+    run_websocket_crash/3,
     serialize_context/0
 ]).
 
@@ -51,6 +52,15 @@ init_websocket(SerializedPageContext) ->
     deserialize_websocket_context(SerializedPageContext),
     wf_context:async_mode({websocket, self()}),
     call_init_on_handlers().
+
+run_websocket_crash(Type, Error, Stacktrace) ->
+    try
+        crash_handler:postback_request(Type, Error, Stacktrace),
+        run_websocket_comet()
+    catch Type2:Error2 ->
+        ?LOG("~p~n", [{error_in_crash_handler, Type2, Error2, erlang:get_stacktrace()}]),
+        "Nitrogen.$console_log('crash_handler crashed in websocket');"
+    end.
 
 run_websocket_comet() ->
     _ToSend = finish_dynamic_request().

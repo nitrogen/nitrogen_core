@@ -46,15 +46,6 @@ ws_init(Bridge) ->
     init_request(Bridge),
     ok.
 
-%ws_message({text, Base64}, Bridge, _State) ->
-%    error_logger:info_msg("Text~n"),
-%    try {nitrogen_postback, Msg} = binary_to_term(base64:decode(Base64), [safe]),
-%        error_logger:info_msg("Received ~p bytes~nDecoded to: ~p",[size(Base64), Msg])
-%    catch
-%        _:_ -> error_logger:info_msg("Invalid")
-%    end,
-%    noreply;
-
 ws_message({binary, Bin}, _Bridge, _State) ->
     try binary_to_term(Bin, [safe]) of
         {nitrogen_postback, Msg} ->
@@ -71,8 +62,9 @@ ws_message({binary, Bin}, _Bridge, _State) ->
             ]}}
     catch
         Class:Error ->
-            error_logger:error_msg("Error in Websocket Message: ~p:~p~n~p~n",
-                                   [Class, Error, erlang:get_stacktrace()])
+            Stacktrace = erlang:get_stacktrace(),
+            Return = wf_core:run_websocket_crash(Class, Error, Stacktrace),
+            {reply, {text, [<<"nitrogen_event:">>,Return]}}
     end.
 
 ws_info({comet_actions, Actions} , _Bridge, _State) ->
@@ -84,7 +76,7 @@ ws_info(Msg, _Bridge, _State) ->
     noreply.
 
 ws_terminate(_Reason, _Bridge, _State) ->
-    close.
+    ok.
 
 
 %% Deprecated, kept for backwards compatibility. Use nitrogen:run/1 with simple_bridge
