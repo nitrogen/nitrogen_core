@@ -210,6 +210,12 @@ check_for_404(Module, PathInfo, Path) ->
    Extensions.  You can read all about them in the
    [[file:../smart_extensions.org][Smart Extensions documentation]].
 
+** RESTFul Handler
+
+   As of Nitrogen 2.3, the dynamic route handler also supports the use of a
+   RESTful module.  You can read about RESTFul Modules in the
+   [[../rest.org][REST API documentation]].
+
 ** See Also
 
   + [[../handlers.html][Handler Overview]]

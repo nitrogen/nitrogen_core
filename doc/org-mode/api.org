@@ -502,6 +502,11 @@ Example:
    Set the HTTP Content-Disposition header in such a way that the browser will
    treat the page as a download with the specified =Filename=.
 
+** wf:request\_method() -> atom()
+
+   Return the HTTP request method used (=POST=, =GET=, =PUT=, etc), as a
+   lower-case atom (example: =post=, =get=, and =put=).
+
 ** wf:url() -> String
 
    Return the complete requested URL for the page. For exaple, if the request
