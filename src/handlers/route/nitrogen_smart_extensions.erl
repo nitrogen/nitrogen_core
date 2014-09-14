@@ -9,6 +9,5 @@
 
 json(EntryFun) ->
     wf:content_type("application/json"),
-    Mod = wf_context:page_module(),
-    Json = Mod:EntryFun(),
+    Json = EntryFun(),
     _EncodedJson = wf:json_encode(Json).

@@ -522,6 +522,10 @@ Here's the complete text of the default plugins.config:
 
 * Additional Configuration
 
+** Smart Extensions
+
+   See [[./smart_extension.org][Smart Extensions Documentation]]
+
 ** nginx - A lightweight reverse proxy
 
   [[http://wiki.nginx.org/Main][Nginx]] is high performance, lightweight web

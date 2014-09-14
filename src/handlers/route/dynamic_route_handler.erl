@@ -139,7 +139,7 @@ try_load_module(EntryFun, ProcessingFun, Tokens, ExtraTokens) ->
                     %% associated smart extension, and this smart extension has
                     %% a processing Mod:Fun combination, so we'll pass that as
                     %% the entry point.
-                    fun() -> ProcMod:ProcFun(EntryFun) end
+                    fun() -> ProcMod:ProcFun(fun Module:EntryFun/0) end
             end,
             {Module, RealEntry, PathInfo};
         false ->

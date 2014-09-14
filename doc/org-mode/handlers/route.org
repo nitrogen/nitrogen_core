@@ -14,7 +14,7 @@
   or by marking a request as 404 Not Found.
 
   The default route handler (=dynamic_route_handler.erl=) also attempts to load
-  modules for pages if the modules need to be loaded by the Erlang Virtul
+  modules for pages if the modules need to be loaded by the Erlang Virtual
   Machine.
 
 ** Behavior Functions
@@ -69,9 +69,9 @@ finish(_Config, State) ->
 
 ** A More Complete Handler
 
-Here is the complete text of the default route handler for Nitrogen
-(found in handlers/dynamic\_route\_handler.erl). To help direct, I've kept the
-comments in the code explaining it along the way.
+   Here is the complete text of the default route handler for (as of Nitrogen
+   2.2) (found in handlers/dynamic\_route\_handler.erl). To help direct, I've
+   kept the comments in the code explaining it along the way.
 
 #+BEGIN_SRC erlang
 
@@ -204,6 +204,11 @@ check_for_404(Module, PathInfo, Path) ->
 
 #+END_SRC
 
+** Smart Extensions
+
+   As of Nitrogen 2.3, Nitrogen's dynamic route handler supports Smart
+   Extensions.  You can read all about them in the
+   [[file:../smart_extensions.org][Smart Extensions documentation]].
 
 ** See Also
 
