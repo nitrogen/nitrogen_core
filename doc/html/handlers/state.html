@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="State Handler"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-10-03 13:41:09 CDT"/>
+<meta name="generated" content="2014-09-14 14:14:13 CDT"/>
 <meta name="author" content="Jesse Gumm (@jessegumm)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -280,26 +280,26 @@ Here is the complete text of the default state handler
     <span class="org-type">init/2</span>, <span class="org-type">finish/2</span>, <span class="org-type">get_state/4</span>, <span class="org-type">set_state/4</span>, <span class="org-type">clear/3</span>, <span class="org-type">clear_all/2</span>
 ]).
 
-<span class="org-function-name">init</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">init</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     <span class="org-comment-delimiter">% </span><span class="org-comment">Deserialize the state from domState.</span>
     {ok, <span class="org-variable-name">State</span>}.
 
-<span class="org-function-name">finish</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">finish</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     {ok, <span class="org-variable-name">State</span>}.
 
-<span class="org-function-name">get_state</span>(<span class="org-variable-name">Key</span>, <span class="org-variable-name">DefaultValue</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">get_state</span>(<span class="org-variable-name">Key</span>, <span class="org-variable-name">DefaultValue</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     <span class="org-variable-name">_Value</span> = <span class="org-type">proplists</span>:<span class="org-type">get_value</span>(<span class="org-variable-name">Key</span>, <span class="org-variable-name">State</span>, <span class="org-variable-name">DefaultValue</span>).
 
-<span class="org-function-name">set_state</span>(<span class="org-variable-name">Key</span>, <span class="org-variable-name">Value</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">set_state</span>(<span class="org-variable-name">Key</span>, <span class="org-variable-name">Value</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     <span class="org-variable-name">State1</span> = <span class="org-type">proplists</span>:<span class="org-type">delete</span>(<span class="org-variable-name">Key</span>, <span class="org-variable-name">State</span>),
     <span class="org-variable-name">State2</span> = [{<span class="org-variable-name">Key</span>, <span class="org-variable-name">Value</span>}|<span class="org-variable-name">State1</span>],
     {ok, <span class="org-variable-name">State2</span>}.
 
-<span class="org-function-name">clear</span>(<span class="org-variable-name">Key</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">clear</span>(<span class="org-variable-name">Key</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     <span class="org-variable-name">State1</span> = <span class="org-type">proplists</span>:<span class="org-type">delete</span>(<span class="org-variable-name">Key</span>, <span class="org-variable-name">State</span>),
     {ok, <span class="org-variable-name">State1</span>}.
 
-<span class="org-function-name">clear_all</span>(<span class="org-variable-name">Config</span>, <span class="org-variable-name">_State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">clear_all</span>(<span class="org-variable-name">Config</span>, <span class="org-variable-name">_State</span>) -&gt;
     <span class="org-type">init</span>(<span class="org-variable-name">Config</span>, []).
 ~
 </pre>
@@ -329,7 +329,7 @@ Here is the complete text of the default state handler
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-10-03 13:41:09 CDT</p>
+<p class="date">Date: 2014-09-14 14:14:13 CDT</p>
 <p class="author">Author: Jesse Gumm (@jessegumm)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

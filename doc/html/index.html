@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Getting Started with Nitrogen"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-10-18 00:58:20 CDT"/>
+<meta name="generated" content="2014-09-14 14:14:12 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -209,8 +209,8 @@ make rel_inets
 
 <p>
   This creates a completely self-contained starter application under
-  <code>./rel/nitrogen</code> that runs on Inets, Erlang's built in HTTP server.
-  "Self-contained" here means that the <code>./rel/nitrogen</code> directory contains
+  <code>../myapp</code> that runs on Inets, Erlang's built in HTTP server.
+  "Self-contained" here means that the <code>../myapp</code> directory contains
   everything you need to develop and run nitrogen, including the Erlang VM. To
   create a <code>.tar.gz</code> version of this code, exactly like you would find on the
   <a href="http://nitrogenproject.com/downloads">Downloads</a> page, run:
@@ -259,6 +259,24 @@ make slim_yaws
 </pre>
 
 
+<p>
+  All of the above commands can be provided with PREFIX or PROJECT variables to
+  change the destination of the project, and the project directory name and
+  node name. Note: it does not currently change the actual name of the Erlang
+  application (the Application will still be called "nitrogen").
+</p>
+<p>
+  For example:
+</p>
+<pre class="example">
+make slim_yaws PROJECT=my_awesome_yaws_app PREFIX=~/my_web_apps
+</pre>
+
+
+<p>
+  Will create a <code>my_web_apps/my_awesome_yaws_app</code> directory in your home
+  directory.
+</p>
 </div>
 
 </div>
@@ -601,7 +619,7 @@ make upgrade
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-10-18 00:58:20 CDT</p>
+<p class="date">Date: 2014-09-14 14:14:12 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

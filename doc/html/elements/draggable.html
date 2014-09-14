@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Draggable Element Element"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-10-03 13:41:50 CDT"/>
+<meta name="generated" content="2014-09-14 14:14:38 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -113,10 +113,12 @@
 
 
 <p>
-  The draggable element allows you to make a block of Nitrogen elements draggable by the user.
+  The draggable element allows you to make a block of Nitrogen elements
+  draggable by the user.
 </p>
 <p>
-  Combine the draggable element with the droppable element to allow drag and drop behavior.
+  Combine the draggable element with the droppable element to allow drag and
+  drop behavior.
 </p>
 
 </div>
@@ -146,34 +148,52 @@
 
 
 <dl>
-<dt>tag - (<i>Erlang term</i>)</dt><dd>The drag term to pass into the drop_event/2 event.
+<dt>tag - (<i>Erlang term</i>)</dt><dd>The drag term to pass into the <code>drop_event/2</code>
+    event.
 
 </dd>
 <dt>body - (<i>Nitrogen elements</i>)</dt><dd>The elements that will be draggable.
 
 </dd>
-<dt>group - (<i>atom or string</i>)</dt><dd>The name of this drag group, for use in the droppable element's accept_groups attribute.
+<dt>group - (<i>atom or string</i>)</dt><dd>The name of this drag group, for use in the
+    droppable element's accept_groups attribute.
 
 </dd>
-<dt>handle - (<i>atom or string</i>)</dt><dd>The class of the handle element on the page. Then handle will then be the part of the element that will be clicked and dragged around.
+<dt>handle - (<i>atom or string</i>)</dt><dd>The class of the handle element on the page.
+    Then handle will then be the part of the element that will be clicked and
+    dragged around.
 
 </dd>
-<dt>clone - (<i>boolean</i>)</dt><dd>If true, the element will be cloned in the DOM while dragged. If false, the element will be detached from the DOM while dragging.
+<dt>clone - (<i>boolean</i>)</dt><dd>If true, the element will be cloned in the DOM while
+    dragged. If false, the element will be detached from the DOM while dragging.
 
 </dd>
-<dt>revert - (<i>boolean</i>)</dt><dd>If true, the element will be reverted back to its original position if the drop fails.
-
-<dl>
-<dt>scroll - (<i>boolean</i>)</dt><dd>If true, the window or container will scroll when the item is dragged to the edge.
+<dt>revert - (<i>boolean</i>)</dt><dd>If true, the element will be reverted back to its
+    original position if the drop fails.
 
 </dd>
-<dt>container - (<i>atom or string</i>)</dt><dd>How you wish to contain the draggable element. Common containers are <code>window</code>, <code>document</code>, or <code>parent</code>.  Otherwise, it can be specified in the form of a jquery selector. See the documentation on the "Containment" option for the jquery Draggable element for more information.
+<dt>scroll - (<i>boolean</i>)</dt><dd>If true, the window or container will scroll when
+    the item is dragged to the edge.
 
 </dd>
-<dt>zindex - (<i>integer</i>)</dt><dd>the z-index of the element to be dragged around the page.
-</dd>
-</dl>
+<dt>distance - (<i>integer</i>)</dt><dd>Set to the minimum number of pixels the cursor
+    must move with the mouse down before the drag actually begins. (default: 3)
 
+</dd>
+<dt>container - (<i>atom or string</i>)</dt><dd>How you wish to contain the draggable
+    element. Common containers are <code>window</code>, <code>document</code>, or <code>parent</code>.
+    Otherwise, it can be specified in the form of a jquery selector. See the
+    documentation on the "Containment" option for the jquery Draggable element
+    for more information.
+
+</dd>
+<dt>zindex - (<i>integer</i>)</dt><dd>The z-index of the element to be dragged around the
+    page.
+
+</dd>
+<dt>options - (<i>proplist</i>)</dt><dd>A list of additional options to be passed to the
+    draggable function. (See the jQuery Draggable Documentation below for the
+    complete list of options).
 </dd>
 </dl>
 
@@ -190,14 +210,11 @@
 <ul>
 <li><a href="./droppable.html">Droppable Element</a>
 
-<ul>
+</li>
 <li><a href="file:///demos/dragdrop">Drag and Drop Demo</a>
 
 </li>
 <li><a href="http://api.jqueryui.com/draggable/">jQuery Draggable Documentation</a>
-</li>
-</ul>
-
 </li>
 </ul>
 
@@ -207,7 +224,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-10-03 13:41:50 CDT</p>
+<p class="date">Date: 2014-09-14 14:14:38 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

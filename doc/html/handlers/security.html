@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Security Handler"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-10-03 13:41:10 CDT"/>
+<meta name="generated" content="2014-09-14 14:14:14 CDT"/>
 <meta name="author" content="Jesse Gumm (@jessegumm)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -193,14 +193,14 @@ requests through. The text of that handler is here:
 ]).
 
 
-<span class="org-function-name">init</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">init</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     <span class="org-comment-delimiter">% </span><span class="org-comment">By default, let all requests through. If we wanted to impose</span>
     <span class="org-comment-delimiter">% </span><span class="org-comment">security, then check the page module (via wf:page_module()),</span>
     <span class="org-comment-delimiter">% </span><span class="org-comment">and if the user doesn't have access, then set a new page module and path info,</span>
     <span class="org-comment-delimiter">% </span><span class="org-comment">via wf_context:page_module(Module), wf_context:path_info(PathInfo).</span>
     {ok, <span class="org-variable-name">State</span>}.
 
-<span class="org-function-name">finish</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">finish</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     {ok, <span class="org-variable-name">State</span>}.
 </pre>
 
@@ -233,11 +233,11 @@ a <code>Loginid</code> or <code>undefined</code>.
 ]).
 
 
-<span class="org-function-name">init</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">init</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     <span class="org-type">attempt_cookie_login</span>(),
     {ok, <span class="org-variable-name">State</span>}.
 
-<span class="org-function-name">finish</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">finish</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     {ok, <span class="org-variable-name">State</span>}.
 
 <span class="org-comment-delimiter">%% </span><span class="org-comment">PRIVATE FUNCTIONS %%</span>
@@ -322,7 +322,7 @@ The full text of this can be viewed on <a href="https://github.com/nitrogen/nitr
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-10-03 13:41:10 CDT</p>
+<p class="date">Date: 2014-09-14 14:14:14 CDT</p>
 <p class="author">Author: Jesse Gumm (@jessegumm)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

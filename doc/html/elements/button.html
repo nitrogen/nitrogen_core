@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Button Element Element"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-10-20 21:59:27 CDT"/>
+<meta name="generated" content="2014-09-14 14:16:39 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -167,7 +167,7 @@
                 Nitrogen postback with the supplied term.
 
 </dd>
-<dt>click - (<i>Action</i> or <i>List of Actions</i>)</dt><dd>Wires the selected actons to
+<dt>click - (<i>Action</i> or <i>List of Actions</i>)</dt><dd>Wires the selected actions to
                 the \"click\" events.  Due to the commonality of binding actions to the
                 click event, this is merely a shortcut for
 </dd>
@@ -186,6 +186,15 @@
 </pre>
 
 
+<dl>
+<dt>enter<sub>clicks</sub> - (<i>List of Element IDs</i>)</dt><dd>Wires to the provided ElementIDs
+    a <code>#click{}</code> event on the provided button if the user presses the "Enter"
+    key when any of the provided <code>ElementIDs</code> have the focus. To see a working
+    example, see the <a href="http://nitrogenproject.com/demos/security">Security Demo</a>
+</dd>
+</dl>
+
+
 </div>
 
 </div>
@@ -197,37 +206,30 @@
 
 <ul>
 <li><a href="./base.html">Base</a>
-
 </li>
 <li><a href="./link.html">Link</a>
-
 </li>
 <li><a href="./textbox.html">Textbox</a>
-
 </li>
 <li><a href="./password.html">Password</a>
-
 </li>
 <li><a href="./textarea.html">Textarea</a>
-
 </li>
 <li><a href="./checkbox.html">Checkbox</a>
-
 </li>
 <li><a href="./dropdown.html">Dropdown</a>
-
 </li>
 <li><a href="./option.html">Dropdown Option</a>
-
 <ul>
 <li><a href="http://nitrogenproject.com/demos/simplecontrols">Simple Controls Demos</a>
 </li>
 </ul>
 
 </li>
+<li><a href="http://nitrogenproject.com/demos/security">Security Demo</a>
+     (showing the use of the <code>enter_clicks</code> attribute)
+</li>
 </ul>
-
-
 
 </div>
 </div>
@@ -235,7 +237,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-10-20 21:59:27 CDT</p>
+<p class="date">Date: 2014-09-14 14:16:39 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

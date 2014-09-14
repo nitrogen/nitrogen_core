@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Custom Server-Side Validator Element"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-12-28 15:16:52 CST"/>
+<meta name="generated" content="2014-09-14 14:14:03 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -132,12 +132,15 @@
 <span class="org-variable-name">F</span> = <span class="org-keyword">fun</span>(<span class="org-variable-name">Tag</span>, <span class="org-variable-name">Value</span>) -&gt;
   <span class="org-keyword">case</span> <span class="org-variable-name">Tag</span> <span class="org-keyword">of</span>
     upper -&gt;<span class="org-function-name"> </span><span class="org-type">string</span>:<span class="org-type">to_upper</span>(<span class="org-variable-name">Value</span>) == <span class="org-variable-name">Value</span>;
-    lower -&gt;<span class="org-function-name"> </span><span class="org-type">string</span>:<span class="org-type">to_upper</span>(<span class="org-variable-name">Value</span>) == <span class="org-variable-name">Value</span>
+    lower -&gt;<span class="org-function-name"> </span><span class="org-type">string</span>:<span class="org-type">to_lower</span>(<span class="org-variable-name">Value</span>) == <span class="org-variable-name">Value</span>
   <span class="org-keyword">end</span>
 <span class="org-keyword">end</span>,
 
 <span class="org-comment-delimiter">% </span><span class="org-comment">Wire the validator in upper case mode...</span>
 <span class="org-type">wf</span>:<span class="org-type">wire</span>(<span class="org-variable-name">ButtonID</span>, <span class="org-variable-name">TextBoxID</span>, #<span class="org-type">validate</span> { validators=[
+  <span class="org-comment-delimiter">%% </span><span class="org-comment">If we wanted to validate lowercase, we could change</span>
+  <span class="org-comment-delimiter">%% </span><span class="org-comment">tag to 'lower' and it would execute the 'lower' clause</span>
+  <span class="org-comment-delimiter">%% </span><span class="org-comment">in the case statement above.</span>
   #<span class="org-type">custom</span> { text=<span class="org-string">"Must be uppercase"</span>, function=<span class="org-variable-name">F</span>, tag=upper }
 ]})
 </pre>
@@ -179,6 +182,9 @@
 
 
 <ul>
+<li><a href="./js_custom.html">JS Custom Action (client side)</a>
+
+</li>
 <li><a href="../actions/validate.html">Validate Action</a>
 
 </li>
@@ -192,7 +198,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-12-28 15:16:52 CST</p>
+<p class="date">Date: 2014-09-14 14:14:03 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

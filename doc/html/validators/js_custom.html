@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Custom Client-Side Validator Element"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-10-03 13:40:49 CDT"/>
+<meta name="generated" content="2014-09-14 14:14:01 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -122,12 +122,32 @@
   validation function and args.
 </p>
 
-
 </div>
 
 <div id="outline-container-1-1" class="outline-3">
-<h3 id="sec-1-1"><span class="section-number-3"></span> Usage</h3>
+<h3 id="sec-1-1"><span class="section-number-3"></span> Security Note</h3>
 <div class="outline-text-3" id="text-1-1">
+
+
+<p>
+        Note that because this is a purely Javascript-based validation, that you
+        can't trust this validator in the same way you can trust that the
+        server-side validators will ensure that a value is valid prior to postback.
+        You will still likely have to verify your values server-side to protect
+        against tampering.
+</p>
+<p>
+        This validator is provided more to give faster response to your users, since
+        Javascript doesn't have to communicate with the server to validate. It
+        usually goes together with the <code>#custom</code> server-side validator.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3"></span> Usage</h3>
+<div class="outline-text-3" id="text-1-2">
 
 
 
@@ -136,7 +156,21 @@
 <pre class="src src-erlang"><span class="org-comment-delimiter">% </span><span class="org-comment">Wire the validator against the 'my_validator' Javascript</span>
 <span class="org-comment-delimiter">% </span><span class="org-comment">function, passing in some args...</span>
 <span class="org-type">wf</span>:<span class="org-type">wire</span>(<span class="org-variable-name">ButtonID</span>, <span class="org-variable-name">TextBoxID</span>, #<span class="org-type">validate</span> { validators=[
-  #<span class="org-type">js_custom</span> { text=<span class="org-string">"Validation failed."</span>, function=my_validator, args=<span class="org-string">"{ amount: 5 }"</span> }
+  #<span class="org-type">js_custom</span> {
+    text=<span class="org-string">"Validation failed."</span>,
+    function=my_validator,
+    args=<span class="org-string">"{ amount: 5 }"</span>
+  }
+]})
+</pre>
+
+
+
+<pre class="src src-erlang"><span class="org-type">wf</span>:<span class="org-type">wire</span>(<span class="org-variable-name">ButtonID</span>, <span class="org-variable-name">TextBoxID</span>, #<span class="org-type">validate</span> { validators=[
+  #<span class="org-type">js_custom</span> {
+    text=<span class="org-string">"Validation failed."</span>,
+    function=<span class="org-string">"function(value, args) { return value == 'the only correct answer'} "</span>,
+    when_empty=true }
 ]})
 </pre>
 
@@ -145,21 +179,52 @@
 
 </div>
 
-<div id="outline-container-1-2" class="outline-3">
-<h3 id="sec-1-2"><span class="section-number-3"></span> Attributes</h3>
-<div class="outline-text-3" id="text-1-2">
+<div id="outline-container-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3"></span> Attributes</h3>
+<div class="outline-text-3" id="text-1-3">
 
 
 <dl>
 <dt>text - (<i>string</i>)</dt><dd>The text to display if validation fails.
 
 </dd>
-<dt>function - (<i>atom or string</i>)</dt><dd>The name of a a Javascript function that returns true if the value is valid, false if invalid.&lt;br&gt;function(Value, Args) -&gt; 'true' or 'false'
+<dt>function - (<i>atom or string</i>)</dt><dd>The name of a Javascript function of an
+     anonymous javascript function that returns true if the value is valid, false
+     if invalid.
+     function(Value, Args) -&gt; 'true' or 'false'
 
 </dd>
-<dt>args - (<i>JSON String</i>)</dt><dd>Extra arguments passed to the custom validation function.
+<dt>args - (<i>JSON String</i>)</dt><dd>Extra arguments passed to the custom validation
+     function.
+
+</dd>
+<dt>when<sub>empty</sub> - (<i>boolean</i>)</dt><dd>Run the validator even if the specified
+     field's value is empty. By default, the custom validator doesn't apply if
+     the field is empty, since you would normally use a separate <code>#is_required</code>
+     for that. (default: <code>false</code>)
 </dd>
 </dl>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-4" class="outline-3">
+<h3 id="sec-1-4"><span class="section-number-3"></span> See Also</h3>
+<div class="outline-text-3" id="text-1-4">
+
+
+<ul>
+<li><a href="./custom.html">Custom Action (server side)</a>
+
+</li>
+<li><a href="../actions/validate.html">Validate Action</a>
+
+</li>
+<li><a href="http://nitrogenproject.com/demos/validation">Validation Demos</a>
+</li>
+</ul>
 
 </div>
 </div>
@@ -167,7 +232,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-10-03 13:40:49 CDT</p>
+<p class="date">Date: 2014-09-14 14:14:01 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

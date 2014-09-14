@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Smart Extensions</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="Smart Extensions"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2014-09-14 14:16:36 CDT"/>
+<meta name="author" content="Jesse Gumm (@jessegumm)"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<LINK href="stylesheet.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">Smart Extensions</h1>
+
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="./index.html">Getting Started</a> | <a href="./api.html">API</a> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | *<a href="./handlers.html">Handlers</a>* | <a href="./config.html">Configuration Options</a> | <a href="./plugins.html">Plugins</a> | <a href="./jquery_mobile_integration.html">Mobile</a> | <a href="./troubleshooting.html">Troubleshooting</a> | <a href="./about.html">About</a>
+</p>
+
+
+<div class=headline>Smart Extensions</div>
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Overview</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Overview</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+  Smart Extensions are a feature of the Nitrogen Dynamic Route Handler, which
+  gives the ability to use different entry points into a page module based on
+  the extension provided to the request. Using this feature, through your
+  application's configuration, you can add, for example. a <code>.json</code> extension to
+  a request, and have Nitrogen call the <code>json_main()</code> function, which returns a
+  simple Erlang Proplist.  The routing system would then convert that proplist
+  to a properly formatted JSON string.
+</p>
+
+</div>
+
+<div id="outline-container-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3"></span> Usage</h3>
+<div class="outline-text-3" id="text-1-1">
+
+
+<p>
+  To use a smart extension, you would add the following to
+  your <code>nitrogen</code> application configuration:
+</p>
+
+
+
+<pre class="src src-erlang">{smart_extensions, [
+  {<span class="org-variable-name">EXTENSION</span>, <span class="org-variable-name">ENTRY_FUNCTION</span>, <span class="org-variable-name">PROCESSING_FUNCTION</span>}
+]}
+</pre>
+
+
+<dl>
+<dt>EXTENSION</dt><dd>is the string extension of the file
+    (="json"=, ="csv"=, etc).
+
+</dd>
+<dt>ENTRY<sub>FUNCTION</sub></dt><dd>is the function in our page module that
+    is called. For Nitrogen's built-in JSON smart extension, you might call
+    it <code>json_main</code>). This is expected to be an atom.
+
+</dd>
+<dt>PROCESSING<sub>FUNCTION</sub></dt><dd>identifies the module and function
+    of a pre and post- processing function. It can either be the atom
+    <code>undefined</code>, in which case no pre or post processing will be done.  If,
+    however it's a two-tuple consisting of <code>{Module, Function}</code>, it will call
+    <code>Module:Function(EntryFun)</code> passing <code>ENTRY_FUNCTION</code> above as the only
+    argument.
+</dd>
+</dl>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3"></span> Example</h3>
+<div class="outline-text-3" id="text-1-2">
+
+
+<p>
+  To use Nitrogen's built-in JSON smart extension the following would be
+  used:
+</p>
+
+
+
+<pre class="src src-erlang">{smart_extensions, [
+  {<span class="org-string">"json"</span>, json_main, {nitrogen_smart_extensions, json}}
+]}
+</pre>
+
+
+<p>    
+  Then add a <code>json_main()</code> function to your page module, which
+  returns an Erlang proplist. The proplist will automatically be
+  converted to a JSON string and the MIME-type will be set to
+  ="application/json"=.
+</p>
+<p>
+  Here's an example of a <code>json_main()</code> function in action.
+</p>
+
+
+
+<pre class="src src-erlang"><span class="org-function-name">json_main</span>() -&gt;
+  [
+    {favorite_fruit, &lt;&lt;<span class="org-string">"This is a string"</span>&gt;&gt;},
+    {a_list_of_numbers, [45, 100, 50000, 60]},
+    {some_value, <span class="org-string">"This would also render as a list of numbers"</span>}
+  ].
+</pre>
+
+
+<p>
+   The Smart Extensions feature knows that with the JSON to convert the
+   proplist into a JSON-encoded string that looks like this:
+</p>
+
+
+
+<pre class="src src-javascript">{
+ <span class="org-string">"favorite_fruit"</span>:<span class="org-string">"This is a string"</span>,
+ <span class="org-string">"a_list_of_numbers"</span>:[45,100,50000,60],
+ <span class="org-string">"some_value"</span>:[84,104,105,115,32,119,111,117,108,100,32,97,
+               108,115,111,32,114,101,110,100,101,114,32,97,
+               115,32,97,32,108,105,115,116,32,111,102,32,
+               110,117,109,98,101,114,115]
+}
+</pre>
+
+
+<p>
+  As you can see, "This would also render as a list of numbers" rendered as a
+  list of numbers. This is due to the JSON encoding which treats string-lists
+  as literal lists of integers. If you need a string to be encoded and sent to
+  the client, make sure to use a binary instead of a string list.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3"></span> A Simple Smart Extension</h3>
+<div class="outline-text-3" id="text-1-3">
+
+
+<p>
+  You can add your own smart extension as well.  The simplest smart extension would be to simply provide an entry point for an extension. First adding <code>{"my_ext", my_entry}</code> to to the list of smart extensions in your config:
+</p>
+
+
+
+<pre class="src src-erlang">{smart_extensions, [
+  {<span class="org-string">"my_ext"</span>, my_entry}
+]}
+</pre>
+
+
+<p>
+Then add the following to a page you wish to use the <code>my_ext</code> smart extension with:
+</p>
+
+
+
+<pre class="src src-erlang"><span class="org-function-name">my_entry</span>() -&gt;
+   <span class="org-string">"This is my the my_ext smart handler"</span>.
+</pre>
+
+
+<p>
+  This is the simplest kind of smart extension.  Simply put, if it sees a
+  =".my<sub>ext</sub>"= as the extension, it would use <code>my_entry()</code> as the entry point
+  in your module, and be done with it. There would be no pre- or
+  post-processing performed with it - whatever is returned by the function
+  would be sent to the browser.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-4" class="outline-3">
+<h3 id="sec-1-4"><span class="section-number-3"></span> An Advanced Smart Extension</h3>
+<div class="outline-text-3" id="text-1-4">
+
+
+<p>
+   Adding a more advanced smart extension allows you to do pre- and
+   post-processing.  Expanding on the above, let's say we have some weird
+   legacy system that expects a series of words in all upper-case, each one its
+   own line, and to automatically download as a file called "legacy.txt", and
+   we wanted the extension of the request to be "textlist".
+</p>
+<p>
+   So the specs would be something like this:
+</p>
+<ul>
+<li>Request: <code>/download/mydata.textlist</code>
+</li>
+<li>Which downloads a file to the filesystem called ="legacy.txt"=
+</li>
+<li>And which looks like this:
+</li>
+</ul>
+
+
+
+
+<pre class="src src-txt">WORD
+APPLE
+BANANA
+LINUX
+NINJA
+</pre>
+
+
+<p>
+  First, let's add smart extenion to our app.config:
+</p>
+
+
+
+<pre class="src src-erlang">{smart_extensions, [
+  {<span class="org-string">"textlist"</span>, textlist, {textlist_handler, handle}}
+]}
+</pre>
+
+
+<p>
+   Simply stated, this means: "If the request ends with .textlist, and our page
+   module has a <code>textlist/0</code> function, we're going to call
+   <code>textlist_handler:handle</code>, which will pre-process and call
+   <code>Page:textlist()</code>, then post-process the result.
+</p>
+<p>
+So let's edit our page module (by the request above, it should be <code>download_mydata</code> - remember slashes become underscores in modules):
+</p>
+
+
+
+<pre class="src src-erlang"><span class="org-preprocessor">-module</span>(download_mydata)
+<span class="org-preprocessor">-compile</span>(export_all).
+
+<span class="org-function-name">textlist</span>() -&gt;
+  <span class="org-comment-delimiter">%% </span><span class="org-comment">more likely, these words would be read from a database or something, but</span>
+  <span class="org-comment-delimiter">%% </span><span class="org-comment">for the sake of our demo, we're just hardcoding a list of words</span>
+  [<span class="org-string">"word"</span>, <span class="org-string">"apple"</span>, <span class="org-string">"banana"</span>, <span class="org-string">"linux"</span>, <span class="org-string">"ninja"</span>].
+</pre>
+
+
+<p>
+Now we need to create our <code>textlist_handler</code> module to do the pre and postprocessing.
+</p>
+
+
+
+<pre class="src src-erlang"><span class="org-preprocessor">-module</span>(textlist_handler).
+<span class="org-preprocessor">-export</span>([<span class="org-type">handle/1</span>]).
+
+<span class="org-erlang-font-lock-exported-function-name">handle</span>(<span class="org-variable-name">EntryFun</span>) -&gt;
+  <span class="org-comment-delimiter">%% </span><span class="org-comment">Force it to download as the filename legacy.txt</span>
+  <span class="org-type">wf</span>:<span class="org-type">download_as</span>(<span class="org-string">"legacy.txt"</span>)
+
+  <span class="org-comment-delimiter">%% </span><span class="org-comment">Force the content type to text/plain</span>
+  <span class="org-type">wf</span>:<span class="org-type">context_type</span>(<span class="org-string">"text/plain"</span>)
+
+  <span class="org-comment-delimiter">%% </span><span class="org-comment">Let's call the entry function, which is passed to us as a function.</span>
+  <span class="org-variable-name">List</span> = <span class="org-variable-name">EntryFun</span>(),
+
+  <span class="org-comment-delimiter">%% </span><span class="org-comment">Let's ensure all values are strings, and convert them to uppercase:</span>
+  <span class="org-variable-name">UpperList</span> = [<span class="org-type">string</span>:<span class="org-type">to_upper</span>(<span class="org-type">wf</span>:<span class="org-type">to_list</span>(<span class="org-variable-name">X</span>)) <span class="org-keyword">||</span> <span class="org-variable-name">X</span> <span class="org-keyword">&lt;-</span> <span class="org-variable-name">List</span>],
+
+  <span class="org-comment-delimiter">%% </span><span class="org-comment">Finally, let's make sure each ends up on its own line and return that</span>
+  <span class="org-type">wf</span>:<span class="org-type">join</span>(<span class="org-variable-name">UpperList</span>, <span class="org-string">"\n"</span>).
+</pre>
+
+
+<p>
+And that's it.  
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-5" class="outline-3">
+<h3 id="sec-1-5"><span class="section-number-3"></span> See Also</h3>
+<div class="outline-text-3" id="text-1-5">
+
+
+<ul>
+<li><a href="#handlers-route.org">Route Handler Docs</a>
+
+</li>
+<li><a href="http://nitrogenproject.com/demos/smart_extension">Smart Extension Demo</a>
+
+</li>
+<li><a href="https://github.com/nitrogen/nitrogen_core/blob/ws/src/handlers/route/nitrogen_smart_extensions.erl">Nitrogen's Smart Extension code</a>
+
+</li>
+<li><a href="https://github.com/nitrogen/nitrogen_core/blob/ws/src/handlers/route/dynamic_route_handler.erl">Dynamic Route Handler code</a>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2014-09-14 14:16:36 CDT</p>
+<p class="author">Author: Jesse Gumm (@jessegumm)</p>
+<p class="creator">Org version 7.8.02 with Emacs version 23</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div><h2>Comments</h2>
+<b>Note:</b><!-- Disqus does not currently support Erlang for its syntax highlighting, so t-->To specify <!--Erlang--> code blocks, just use the generic code block syntax: <pre><b>&lt;pre&gt;&lt;code&gt;your code here&lt;/code&gt;&lt;/pre&gt;</b></pre>
+<br />
+<br />
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	var disqus_shortname = 'nitrogenproject'; // required: replace example with your forum shortname
+	var disqus_identifier = 'html/smart_extensions.html'; //This will be replaced with the path part of the url
+
+	/* * * DON'T EDIT BELOW THIS LINE * * */
+	(function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</body>
+</html>

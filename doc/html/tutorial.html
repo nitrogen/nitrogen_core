@@ -7,8 +7,8 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Introduction to Nitrogen"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-12-04 19:52:15 CST"/>
-<meta name="author" content="Jesse"/>
+<meta name="generated" content="2014-09-14 14:14:09 CDT"/>
+<meta name="author" content="root"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
 <style type="text/css">
@@ -853,7 +853,7 @@ the Nitrogen Web Framework.
 
 
 <p>
-Pull the <a href="http://github.com/nitrogen/nitrogen">Nitrogen Source Code</a>, then <code>make rel_inets; cd rel/nitrogen</code>.
+Pull the <a href="http://github.com/nitrogen/nitrogen">Nitrogen Source Code</a>, then <code>make rel_inets; cd ../myapp</code>.
 </p>
 </div>
 </div>
@@ -963,7 +963,7 @@ ls -l
 </dd>
 <dt>log/</dt><dd>The logs.
 </dd>
-<dt>erts-X.Y.Z/</dt><dd>Embedded Erlang.
+<dt>erts-X.Y.Z/</dt><dd>Embedded Erlang (not found in slim release version)
 </dd>
 <dt>releases/</dt><dd>Tells Erlang how to start the system.
 </dd>
@@ -1200,11 +1200,11 @@ bin/dev compile
 <div class="outline-text-4" id="text-13-1-1">
 
 <ul>
-<li>Add <code>?DEBUG</code> to <code>index.erl</code>. Then compile and
+<li>Add <code>?DEBUG</code> to the body of any function in <code>index.erl</code>. Then compile and
       reload. What happens?
 </li>
-<li>Add <code>?PRINT(node())</code> to <code>index.erl</code>. Then compile and reload. What
-      happens?
+<li>Add <code>?PRINT(node())</code> to body of any function in <code>index.erl</code>. Then compile
+      and reload. What happens?
 </li>
 </ul>
 
@@ -4237,8 +4237,8 @@ $EDIT site/src/my_page.erl
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2013-12-04 19:52:15 CST</p>
-<p class="author">Author: Jesse</p>
+<p class="date">Date: 2014-09-14 14:14:09 CDT</p>
+<p class="author">Author: root</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
 
