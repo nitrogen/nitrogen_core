@@ -857,8 +857,8 @@ NitrogenClass.prototype.$disable_websockets = function() {
 };
 
 NitrogenClass.prototype.$ws_init = function() {
-    Bert.assoc_array_key_encoding("binary");
     try {
+        Bert.assoc_array_key_encoding("binary");
         var this2 = this;
         var ws_url = this.$ws_url(location.href);
         this.$websocket = new WebSocket(ws_url);
