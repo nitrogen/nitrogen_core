@@ -47,25 +47,27 @@ ws_init(Bridge) ->
     ok.
 
 ws_message({binary, Bin}, _Bridge, _State) ->
-    try binary_to_term(Bin, [safe]) of
-        {nitrogen_postback, Msg} ->
-            Return = wf_core:run_websocket(Msg),
-            {reply, {text, [<<"nitrogen_event:">>,Return]}};
-        {page_context, PageContext} ->
-            wf_core:init_websocket(PageContext),
-            {reply, {text, [
-                %% init_websocket has changed the async mode to websocket, so
-                %% let's tell the browser about our updated async_mode
-                <<"nitrogen_event:">>,
-                wf_core:serialize_context(),
-                <<"Nitrogen.$enable_websockets();">>
-            ]}}
+    try
+        ws_message_catched(binary_to_term(Bin, [safe]))
     catch
         Class:Error ->
             Stacktrace = erlang:get_stacktrace(),
-            Return = wf_core:run_websocket_crash(Class, Error, Stacktrace),
-            {reply, {text, [<<"nitrogen_event:">>,Return]}}
+            CrashReturn = wf_core:run_websocket_crash(Class, Error, Stacktrace),
+            {reply, {text, [<<"nitrogen_event:">>,CrashReturn]}}
     end.
+
+ws_message_catched({nitrogen_postback,Msg}) ->
+    Return = wf_core:run_websocket(Msg),
+    {reply, {text, [<<"nitrogen_event:">>,Return]}};
+ws_message_catched({page_context, PageContext}) ->
+    wf_core:init_websocket(PageContext),
+    {reply, {text, [
+        %% init_websocket has changed the async mode to websocket, so
+        %% let's tell the browser about our updated async_mode
+        <<"nitrogen_event:">>,
+        wf_core:serialize_context(),
+        <<"Nitrogen.$enable_websockets();">>
+    ]}}.
 
 ws_info({comet_actions, Actions} , _Bridge, _State) ->
     wf:wire(page, page, Actions),
