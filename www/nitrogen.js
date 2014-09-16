@@ -225,8 +225,6 @@ NitrogenClass.prototype.$make_id = function(element) {
 
 /*** AJAX METHODS ***/
 
-//NitrogenClass.prototype.$do_ajax_event = function(validationGroup, onInvalid, eventContext, extraParam) {
-
 
 NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventContext, extraParam, ajaxSettings) {
     var n = this;
@@ -248,7 +246,7 @@ NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventCo
     }
 
     // Assemble other parameters...
-    var params = jQuery.extend({}, n.$params, validationParams, { eventContext: eventContext });
+    var params = jQuery.extend({}, n.$params, validationParams, extraParam, { eventContext: eventContext });
 
     var s = jQuery.extend({
         dataType: 'text',
@@ -743,7 +741,7 @@ NitrogenClass.prototype.$encode_arguments_object = function(Obj) {
         a.push(Obj[i]);
     }
     var s = Bert.encode(a);
-    return "args=" + this.$urlencode(s);
+    return {args: s};
 }
 
 NitrogenClass.prototype.$urlencode = function(str) {
@@ -889,7 +887,6 @@ NitrogenClass.prototype.$send_pagecontext = function() {
 
 NitrogenClass.prototype.$ws_close = function() {
     this.$disable_websockets();
-    //this.$ws_init();
 };
 
 NitrogenClass.prototype.$ws_message = function(data) {

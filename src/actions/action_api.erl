@@ -4,8 +4,11 @@
 % See MIT-LICENSE for licensing information.
 
 -module (action_api).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    render_action/1,
+    event/1
+]).
 
 render_action(Record) ->
     Anchor = Record#api.anchor,
