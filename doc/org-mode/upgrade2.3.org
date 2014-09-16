@@ -1,0 +1,82 @@
+# vim: ts=2 sw=2 et ft=org
+#+STYLE: <LINK href="stylesheet.css" rel="stylesheet" type="text/css" />
+#+TITLE: Upgrading to Nitrogen 2.3
+#+AUTHOR: Jesse Gumm (@jessegumm)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:./index.org][Getting Started]] | [[file:./api.org][API]] | [[file:./elements.org][Elements]] | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | [[file:./handlers.org][Handlers]] | [[file:./config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:./jquery_mobile_integration.org][Mobile]] | [[file:./troubleshooting.org][Troubleshooting]] | [[file:./about.org][About]]
+#+HTML: <div class=headline>Upgrading to Nitrogen 2.3</div>
+
+* Overview
+
+  Upgrading to Nitrogen 2.3 is simple, however, ensuring that your upgraded app
+  supports Websockets will require a small amount of work (mostly copying a few
+  files, and checking simple configurations).
+
+** The Simple Method (which won't allow the use of Websockets)
+
+   Nitrogen 2.3 is designed to be completely backwards compatible with Nitrogen
+   2.2 and earlier, meaning no changes to your existing codebase should be
+   required (beyond recompiling your modules to support any changes to header
+   files).
+
+   If you want to ensure you don't experience any downtime during this upgrade,
+   you're going to want to upgrade your =sync= version first.
+
+   The easiest way to do this is to first start =sync= in your Nitrogen
+   application, either with =sync:go()= or at the Linux/Unix terminal with
+   =bin/dev compile=.
+
+   Then we're going to manually upgrade sync:
+
+#+BEGIN_SRC bash
+$ cd lib/sync
+$ git checkout master
+$ git pull origin master
+#+END_SRC
+
+   That second line is just to make sure we're actually on the master branch.
+   Previous versions of Nitrogen had an issue that might have caused us to be
+   on a detached branch, this will ensure we're good to go.
+  
+   After running that command, sync very likely would have crashed. That's
+   okay: it's supervised, so it would be restarted with a fresh state.
+
+   Now that sync is upgraded, we're going to want to pause it:
+
+   At the Erlang console, run:
+
+#+BEGIN_SRC erlang
+> sync:pause().
+#+END_SRC
+
+   Now let's upgrade.
+
+   To upgrade to Nitrogen 2.3, you'll want to update your rebar.config and
+   change the =nitrogen_core= appliation to use the "v2.3.0" tag, and update
+   the =simple_bridge= application to use the "v2.0.0" tag:
+
+#+BEGIN_SRC erlang
+  {nitrogen_core, "", {git, "git://github.com/nitrogen/nitrogen_core", {tag, "v2.3.0"}}},
+  {simple_bridge, "", {git, "git://github.com/nitrogen/simple_bridge", {tag, "v2.0.0"}}},
+#+END_SRC
+  
+   Then run =make upgrade= in your app, which should fetch the latest versions
+   and recompile your app accordingly.
+
+   Your application will then be upgraded.
+
+   Now let's unpause sync:
+
+#+BEGIN_SRC erlang
+> sync:unpause().
+#+END_SRC
+
+   This should start a whole slew of things going on in the console window, and
+   when its finished, your application will be upgraded and live.
+
+** The More Complete Method
+
+** See Also
+
