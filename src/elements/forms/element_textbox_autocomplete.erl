@@ -23,16 +23,16 @@ render_element(Record) ->
     AutoCompleteEnterPostbackInfo = wf_event:serialize_event_context({autocomplete_enter_event, Delegate, Tag}, Anchor, undefined, false, ?MODULE),
     AutoCompleteSelectPostbackInfo = wf_event:serialize_event_context({autocomplete_select_event, Delegate, Tag }, Anchor, undefined, false, ?MODULE ),
 
-    AutoCompleteOptions = {struct, [
+    AutoCompleteOptions = [
         {dataType, <<"json">>},
         {minLength, AutoCompleteMinLength},
         {delay, AutoCompleteDelay}
-    ]},
+    ],
 
     AutoCompleteScript = #script {
         script = wf:f("Nitrogen.$autocomplete('~s', ~s, '~s', '~s');", [
           Anchor,
-          nitro_mochijson2:encode(AutoCompleteOptions),
+          wf:json_encode(AutoCompleteOptions),
           AutoCompleteEnterPostbackInfo,
           AutoCompleteSelectPostbackInfo
         ])
@@ -52,10 +52,18 @@ event({autocomplete_select_event, Delegate, SelectTag})->
 
 event({autocomplete_enter_event, Delegate, EnterTag})->
     SearchTerm = wf:q(search_term),
-    wf_context:type(first_request),
-    wf:content_type("application/json"),
     Module = wf:coalesce([Delegate, wf:page_module()]),
-    wf_context:data([
-      Module:autocomplete_enter_event(SearchTerm, EnterTag)
-    ]).
+    Json = Module:autocomplete_enter_event(SearchTerm, EnterTag),
+    change_headers_for_nonwebsocket(),
+    wf_context:data(Json).
+
+change_headers_for_nonwebsocket() ->
+    case wf_context:type() of
+        postback_websocket ->
+            ok;
+        _ ->
+            wf_context:type(first_request),
+            wf:content_type("application/json")
+    end.
+            
 

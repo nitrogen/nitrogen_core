@@ -356,7 +356,6 @@ event_context(EventContext) ->
     Context = context(),
     context(Context#context { event_context = EventContext }).
 
-
 type() ->
     Context = context(),
     Context#context.type.

@@ -64,13 +64,13 @@ run_websocket_crash(Type, Error, Stacktrace) ->
 
 run_websocket_comet() ->
     wf_context:type(postback_websocket),
-    _ToSend = finish_dynamic_request().
+    _ToSend = finish_websocket_request().
 
 run_websocket(Data) ->
     wf_event:update_context_with_websocket_event(Data),
     query_handler:set_websocket_params(Data),
     run_postback_request(),
-    _ToSend = finish_dynamic_request().
+    _ToSend = finish_websocket_request().
 
 run_catched() ->
     deserialize_request_context(),
@@ -88,13 +88,12 @@ run_catched() ->
     end.
 
 finish_dynamic_request() ->
-    % Get elements and actions...
     Elements = wf_context:data(),
     wf_context:clear_data(),
     {ok, Html} = wf_render_elements:render_elements(Elements),
 	{ok, Javascript} = wf_render_actions:render_action_queue(),
 
-    maybe_call_finish_on_handlers(),
+    call_finish_on_handlers(),
 
     StateScript = serialize_context(),
     JavascriptFinal = [StateScript, Javascript],
@@ -102,10 +101,21 @@ finish_dynamic_request() ->
     case wf_context:type() of
         first_request       -> build_first_response(Html, JavascriptFinal);
         postback_request    -> build_postback_response(JavascriptFinal);
-        postback_websocket  -> JavascriptFinal; %% We can just return the
-                                                %% javascript to caller
         _                   -> build_first_response(Html, JavascriptFinal)
     end.
+
+finish_websocket_request() ->
+    ContextData = wf_context:data(),
+    wf_context:clear_data(),
+    finish_websocket_request(ContextData).
+
+finish_websocket_request(Empty)
+        when Empty==undefined; Empty==[]; Empty == <<>> ->
+    {ok, Javascript} = wf_render_actions:render_action_queue(),
+    StateScript = serialize_context(),
+    [StateScript, Javascript];
+finish_websocket_request(Data) ->
+    Data.
 
 finish_static_request() ->
     Path = wf_context:path_info(),
@@ -161,12 +171,6 @@ call_init_on_handlers() ->
     [wf_handler:call(X#handler_context.name, init) || X <- Handlers],
     ok.
 
-maybe_call_finish_on_handlers() ->
-    case wf_context:type() of
-        postback_websocket -> ok;
-        _ -> call_finish_on_handlers()
-    end.
-
 % finish_handlers/1 - 
 % Handlers are finished in the order that they exist in #context.handlers. The order
 % is important, as some handlers should finish after others. At the very least,
@@ -181,14 +185,16 @@ call_finish_on_handlers() ->
 %%% FIRST REQUEST %%%
 
 run_first_request() ->
-    % Some values...
     Module = wf_context:event_module(),
     {module, Module} = code:ensure_loaded(Module),
-    Data = case wf_context:entry_point() of
-        Fun when is_function(Fun, 0) -> Fun();
-        Atom when is_atom(Atom) -> Module:Atom()
-    end,
+    EntryPoint = wf_context:entry_point(),
+    Data = run_entry_point(Module, EntryPoint),
     wf_context:data(Data).
+
+run_entry_point(_Module, Fun) when is_function(Fun, 0) ->
+    Fun();
+run_entry_point(Module, Fun) when is_atom(Fun) ->
+    Module:Fun().
 
 run_crashed_first_request(Type, Error, Stacktrace) ->
     Data = crash_handler:first_request(Type, Error, Stacktrace),
@@ -197,23 +203,18 @@ run_crashed_first_request(Type, Error, Stacktrace) ->
 %%% POSTBACK REQUEST %%%
 
 run_postback_request() ->
-    % Some values...
     Module = wf_context:event_module(),
     Tag = wf_context:event_tag(),
     HandleInvalid = wf_context:event_handle_invalid(),
-
-    % Validate...
     {ok, IsValid} = wf_validation:validate(),
+    call_postback_event(IsValid, HandleInvalid, Module, Tag).
 
-    % Call the event...
-    case IsValid of
-        true -> Module:event(Tag);
-        false ->
-            if
-                HandleInvalid -> Module:event_invalid(Tag);
-                true          -> ok
-            end
-    end.
+call_postback_event(_Valid=true, _HandleInvalid, Module, Tag) ->
+    Module:event(Tag);
+call_postback_event(_Valid=false, _HandleInvalid=true, Module, Tag) ->
+    Module:event_invalid(Tag);
+call_postback_event(_Valid, _HandleInvalid, _, _) ->
+    ok.
 
 run_crashed_postback_request(Type, Error, Stacktrace) ->
     crash_handler:postback_request(Type, Error, Stacktrace).

@@ -12,6 +12,7 @@ function NitrogenClass(o) {
     this.$event_is_running = false;
     this.$event_success_fun = null;
     this.$event_error_fun = null;
+    this.$event_data_type = "text";
     this.$system_event_queue = new Array();
     this.$system_event_is_running = false;
     this.$system_event_obj = null;
@@ -255,6 +256,7 @@ NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventCo
         error: null
     }, ajaxSettings);
 
+    this.$event_data_type = s.dataType;
     this.$event_success_fun = s.success;
     this.$event_error_fun = s.error;
 
@@ -760,10 +762,10 @@ NitrogenClass.prototype.$autocomplete = function(path, autocompleteOptions, ente
     jQuery.extend(autocompleteOptions, {
         select: function(ev, ui) {
           var item = (ui.item) && '{"id":"'+ui.item.id+'","value":"'+ui.item.value+'"}' || '';
-          n.$queue_event(null, null, selectPostbackInfo, "select_item="+n.$urlencode(item));
+          n.$queue_event(null, null, selectPostbackInfo, {select_item: item});
         },
         source: function(req, res) {
-          n.$queue_event(null, null, enterPostbackInfo, "search_term="+req.term, {
+          n.$queue_event(null, null, enterPostbackInfo, {search_term: req.term}, {
               dataType: 'json',
               success: function(data) {
                  res(data);
@@ -787,7 +789,7 @@ NitrogenClass.prototype.$droppable = function(path, dropOptions, dropPostbackInf
     var n = this;
     dropOptions.drop = function(ev, ui) {
         var dragItem = ui.draggable[0].$drag_tag;
-        n.$queue_event(null, null, dropPostbackInfo, "drag_item=" + dragItem);
+        n.$queue_event(null, null, dropPostbackInfo, {drag_item: dragItem});
     };
     objs(path).each(function(index, el) {
           jQuery(el).droppable(dropOptions);
@@ -812,7 +814,7 @@ NitrogenClass.prototype.$sortblock = function(el, sortOptions, sortPostbackInfo)
             if (sortItems != "") sortItems += ",";
             if (childNode.$sort_tag) sortItems += childNode.$sort_tag;
         }
-        n.$queue_event(null, null, sortPostbackInfo, "sort_items=" + sortItems);
+        n.$queue_event(null, null, sortPostbackInfo, {sort_items: sortItems});
     };
     objs(el).sortable(sortOptions);
 }
@@ -903,7 +905,15 @@ NitrogenClass.prototype.$ws_message = function(data) {
         this.$system_event_success(matches[1]);
     }
     else if(matches = data.match(/^nitrogen_event:([\s\S]*)/)) {
-        this.$event_success(matches[1]);
+        var response_data = null;
+        if(this.$event_data_type == "json") {
+            response_data = eval(matches[1]);
+        }
+        else{
+            response_data=matches[1];
+        }
+        this.$event_data_type = null;
+        this.$event_success(response_data);
     }    
 };
 
