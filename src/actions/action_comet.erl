@@ -107,7 +107,13 @@ flush() ->
             %% Because we're doing websockets, we can bypass the accumulator altogether
             %% and send actions directly to the websocket
             Actions = wf_context:actions(),
-            Pid ! {comet_actions, Actions};
+
+            %% If there are any latent actions from an old comet process that
+            %% was upgraded to a websocket, this will clear the actions and add
+            %% them to the response.
+            AccumulatorActions = get_actions(),
+
+            Pid ! {comet_actions, [AccumulatorActions, Actions]};
         _ ->
             SeriesID = wf_context:series_id(),
             {ok, AccumulatorPid} = get_accumulator_pid(SeriesID),
@@ -322,6 +328,13 @@ get_accumulator_pid(SeriesID) ->
     Key = {async_accumulator, SeriesID},
     {ok, _Pid} = process_registry_handler:get_pid(Key, AccumulatorFun).
 
+get_accumulator_pid_no_start(SeriesID) ->
+    Key = {async_accumulator, SeriesID},
+    case process_registry_handler:get_pid(Key) of
+        {ok, Pid} when is_pid(Pid) -> {ok, Pid};
+        undefined -> undefined
+    end.
+
 % The accumulator_loop keeps track of guardian processes within a pool,
 % and gathers actions from the various AsyncFunctions in order 
 % to send it the page when the actions are requested.
@@ -529,11 +542,22 @@ inner_send(Pool, Scope, Message) ->
 % accumulator, then [] is immediately returned.
 get_actions() ->
     SeriesID = wf_context:series_id(),
-    {ok, AccumulatorPid} = get_accumulator_pid(SeriesID),
+    {ok, Pid} = get_accumulator_pid(SeriesID),
+    get_actions_from_accumulator(Pid).
+
+get_actions_from_accumulator(AccumulatorPid) ->
     AccumulatorPid!{get_actions, self()},
     receive
-        {actions, X} -> X;
-        Other -> ?PRINT({unhandled_event, Other}), []
+        {actions, X} -> X
+    after 100 ->
+        []
+    end.
+
+get_actions_no_start() ->
+    SeriesID = wf_context:series_id(),
+    case get_accumulator_pid_no_start(SeriesID) of
+        {ok, undefined} -> [];
+        {ok, Pid} -> get_actions_from_accumulator(Pid)
     end.
 
 % Get actions from accumulator in a blocking fashion. If there are no actions

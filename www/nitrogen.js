@@ -847,6 +847,12 @@ NitrogenClass.prototype.$from_alien = function(nativeID) {
 NitrogenClass.prototype.$enable_websockets = function() {
     this.$console_log("Websockets Enabled");
     this.$websockets_enabled = true;
+    this.$flush_switchover_comet_actions();
+};
+
+NitrogenClass.prototype.$flush_switchover_comet_actions = function() {
+    var bertified = Bert.encode_to_bytearray(Bert.atom("flush_switchover_comet_actions"));
+    this.$websocket.send(bertified);
 };
 
 NitrogenClass.prototype.$disable_websockets = function() {
@@ -875,7 +881,9 @@ NitrogenClass.prototype.$ws_url = function(url) {
 
 NitrogenClass.prototype.$ws_open = function() {
     this.$send_pagecontext();
-    // On success, will run Nitrogen.$enable_websockets();
+    // On success, will run Nitrogen.$enable_websockets(), but is sent from the
+    // server and executed there. See the file nitrogen.erl the function
+    // nitrogen:ws_message_catched/1.
 };
 
 NitrogenClass.prototype.$send_pagecontext = function() {
@@ -898,6 +906,7 @@ NitrogenClass.prototype.$ws_message = function(data) {
         this.$event_success(matches[1]);
     }    
 };
+
 
 NitrogenClass.prototype.$attempt_websockets = function() {
     var n = this;

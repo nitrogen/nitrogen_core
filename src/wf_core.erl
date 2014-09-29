@@ -63,6 +63,7 @@ run_websocket_crash(Type, Error, Stacktrace) ->
     end.
 
 run_websocket_comet() ->
+    wf_context:type(postback_websocket),
     _ToSend = finish_dynamic_request().
 
 run_websocket(Data) ->
