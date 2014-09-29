@@ -556,7 +556,7 @@ get_actions_from_accumulator(AccumulatorPid) ->
 get_actions_no_start() ->
     SeriesID = wf_context:series_id(),
     case get_accumulator_pid_no_start(SeriesID) of
-        {ok, undefined} -> [];
+        undefined -> [];
         {ok, Pid} -> get_actions_from_accumulator(Pid)
     end.
 
