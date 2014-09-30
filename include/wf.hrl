@@ -782,14 +782,14 @@
 -record(chart_axis, {
         position                :: google_chart_position(),
         labels                  :: undefined | [text()],
-        color=909090            :: color(),
+        color = <<"909090">>    :: color(),
         font_size=10            :: integer()
     }).
 
 -record(chart_data, {
         color                   :: color(),
         legend                  :: text(),
-        values                  :: [text()],
+        values                  :: [text() | integer()],
         min_value=0             :: integer(),
         max_value=100           :: integer(),
         line_width=1            :: integer(),
@@ -798,7 +798,7 @@
     }).
 -record(google_chart,   {?ELEMENT_BASE(element_google_chart),
         type=line               :: google_chart_type(),
-        color="909090"          :: color(),
+        color = <<"909090">>    :: color(),
         font_size=10            :: integer(),
         width=300               :: integer(),
         height=150              :: integer(),
