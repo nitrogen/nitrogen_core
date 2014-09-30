@@ -936,5 +936,5 @@ NitrogenClass.prototype.$attempt_websockets = function() {
 
 var Nitrogen = new NitrogenClass();
 var page = document;
-Nitrogen.$attempt_websockets();
+$(document).ready(Nitrogen.$attempt_websockets);
 Nitrogen.$event_loop();
