@@ -3,6 +3,8 @@
 // Nitrogen object, created from NitrogenClass, that 
 // encapsulates everything in order to prevent collisions.
 
+var nitrogen_jqm_loaded=false;
+
 function NitrogenClass(o) {
     this.$url = document.location.href;
     this.$div = document;
@@ -50,6 +52,7 @@ NitrogenClass.prototype.$set_param = function(key, value) {
 }
 
 NitrogenClass.prototype.$destroy = function() {
+    this.$console_log("Destroying");
     document.comet_started = false;
     this.$going_away = true;
 
@@ -59,7 +62,8 @@ NitrogenClass.prototype.$destroy = function() {
         this.$system_event_obj.abort();
     }
     if(this.$websocket) {
-        this.$websocket.disconnect();
+        this.$console_log("Closing websocket");
+        this.$websocket.close();
     }
     this.$system_event_is_running = false;
 
@@ -781,7 +785,6 @@ NitrogenClass.prototype.$autocomplete = function(path, autocompleteOptions, ente
 NitrogenClass.prototype.$draggable = function(path, dragOptions, dragTag) {
     objs(path).each(function(index, el) {
           el.$drag_tag = dragTag;
-          console.log(dragOptions);
         jQuery(el).draggable(dragOptions);
     });
 }
@@ -935,9 +938,12 @@ NitrogenClass.prototype.$attempt_websockets = function() {
     });
 };
 
-var Nitrogen = new NitrogenClass();
 var page = document;
+
 $(document).ready(function() {
-    Nitrogen.$attempt_websockets();
+    if(!nitrogen_jqm_loaded) {
+        var Nitrogen = new NitrogenClass();
+        Nitrogen.$attempt_websockets();
+        Nitrogen.$event_loop();
+    }
 });
-Nitrogen.$event_loop();
