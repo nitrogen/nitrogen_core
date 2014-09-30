@@ -20,19 +20,14 @@ render_element(Record) ->
     PickledTag = wf:pickle(Record#draggable.tag),   
     GroupClasses = groups_to_classes(Record#draggable.group),
 
-    Handle = case Record#draggable.handle of
-        undefined -> <<"null">>;
-        Other2 -> wf:f(<<".~s">>, [Other2])
-    end,
-
+    Handle = format_handle_opt(Record#draggable.handle),
     Helper = ?WF_IF(Record#draggable.clone, clone, original),
     Revert = json_list_to_binary(Record#draggable.revert),
     Container = json_list_to_binary(Record#draggable.container),
     Distance = json_list_to_binary(Record#draggable.distance),
     OtherOptions = [{json_list_to_binary(K), json_list_to_binary(V)} || {K,V} <- Record#draggable.options], 
 
-    Options = [
-        {handle, Handle},
+    Options = Handle ++ [
         {helper, Helper},
         {revert, Revert},
         {distance, Distance},
@@ -59,6 +54,11 @@ render_element(Record) ->
         data_fields=Record#draggable.data_fields,
         body=Record#draggable.body
     }).
+
+format_handle_opt(undefined) ->
+    [];
+format_handle_opt(Handle) ->
+    [{handle, wf:f(<<".~s">>, [Handle])}].
 
 %% Mochijson encodes lists to actual lists of integers, this encodes lists to binaries
 json_list_to_binary(L) when is_list(L) ->

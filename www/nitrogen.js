@@ -781,6 +781,7 @@ NitrogenClass.prototype.$autocomplete = function(path, autocompleteOptions, ente
 NitrogenClass.prototype.$draggable = function(path, dragOptions, dragTag) {
     objs(path).each(function(index, el) {
           el.$drag_tag = dragTag;
+          console.log(dragOptions);
         jQuery(el).draggable(dragOptions);
     });
 }
@@ -936,5 +937,7 @@ NitrogenClass.prototype.$attempt_websockets = function() {
 
 var Nitrogen = new NitrogenClass();
 var page = document;
-$(document).ready(Nitrogen.$attempt_websockets);
+$(document).ready(function() {
+    Nitrogen.$attempt_websockets();
+});
 Nitrogen.$event_loop();
