@@ -940,9 +940,10 @@ NitrogenClass.prototype.$attempt_websockets = function() {
 
 var page = document;
 
+var Nitrogen = new NitrogenClass();
+
 $(document).ready(function() {
     if(!nitrogen_jqm_loaded) {
-        var Nitrogen = new NitrogenClass();
         Nitrogen.$attempt_websockets();
         Nitrogen.$event_loop();
     }
