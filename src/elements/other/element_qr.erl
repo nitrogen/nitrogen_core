@@ -11,7 +11,7 @@
 ]).
 
 -spec reflect() -> [atom()].
-reflect() -> record_info(fields, flash).
+reflect() -> record_info(fields, qr).
 
 -spec transform_element(#qr{}) -> body().
 transform_element(#qr{data=Empty} = QR) when Empty =:= undefined;

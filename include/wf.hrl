@@ -778,6 +778,13 @@
 -record(grid_16,        ?GRID_ELEMENT(grid, 16)).
 -record(grid_clear,     ?GRID_ELEMENT(clear, undefined)).
 
+-record(progress_bar,   {?ELEMENT_BASE(element_progress_bar),
+        value=undefined         :: integer() | undefined,
+        max=100                 :: integer(),
+        color = <<"909090">>    :: color(),
+        label                   :: undefined | percent | ratio | both | string()
+    }).
+
 %% Google Charts
 -record(chart_axis, {
         position                :: google_chart_position(),

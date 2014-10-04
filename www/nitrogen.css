@@ -204,6 +204,18 @@ div.inplace_textbox .LV_invalid {
 	width:315px !important;
 }
 
+.ui-progressbar {
+	position:relative;
+}		
+
+.progressbar-label {
+	text-align:center;
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+}
+
 /*** jQuery Tabs ***/
 
 /* Move hiddent tabs off the screen to hide them. This provides

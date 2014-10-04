@@ -487,6 +487,8 @@ function obj(path, anchor) {
 }
 
 function objs(path, anchor) {
+    if(typeof path != "string")
+        throw {invalid_path_in_objs: path};
     // Trim the path...
     path = jQuery.trim(path);
 
@@ -712,12 +714,14 @@ NitrogenClass.prototype.$disable_selection = function(element) {
     element.style.cursor = "default";
 }
 
-NitrogenClass.prototype.$set_value = function(anchor, element, value) {
+NitrogenClass.prototype.$set_value = function(anchor, element, value, optional_label) {
+    var n = this;
     if (!element.id) element = objs(element);
     element.each(function(index, el) {
         if (el.value != undefined) el.value = value;
         else if (el.checked != undefined) el.checked = value;
         else if (el.src != undefined) el.src = value;
+        else if($(el).hasClass("ui-progressbar")) n.$set_progress_bar_value(el, value, optional_label);
         else $(el).html(value);
     });
 }
@@ -728,8 +732,10 @@ NitrogenClass.prototype.$get_value = function(anchor, element) {
     if (el.value != undefined) return el.value;
     else if (el.checked != undefined) return el.checked;
     else if (el.src != undefined) return el.src;
+    else if($(el).hasClass("ui-progressbar")) n.$get_progress_bar_value(el);
     else return $(el).html();
 }
+
 
 NitrogenClass.prototype.$normalize_param = function(key, value) {
     // Create the key=value line to add.
@@ -848,9 +854,76 @@ NitrogenClass.prototype.$from_alien = function(nativeID) {
     objs(nativeID).val(input);
 };
 
+/*** PROGRESS BAR ***/
+NitrogenClass.prototype.$init_progress_bar = function(el, value, max, color) {
+    objs(el).progressbar({
+        value: value,
+        max: max
+    });
+    color = this.$normalize_color(color);
+    objs(el).find(".ui-progressbar-value")
+        .css("background", color)
+        .css("border-color", color);
+};
+
+
+
+NitrogenClass.prototype.$normalize_color = function(color) {
+    if(color.match(/^#/)) {
+        return color;
+    }
+    else if(color.match(/^[0-9a-fA-F]{3,6}$/)) {
+        return "#" + color;
+    }
+    else {
+        return color;
+    }
+}
+
+
+NitrogenClass.prototype.$set_progress_bar_value = function(el, value, label) {
+    var newlabel = ""
+    if(typeof el == "object") el = $(el);
+    else el = objs(el);
+
+    if(typeof value=="string") value = parseInt(value);
+
+    el.progressbar("option", "value", value);
+    if(el.hasClass("progressbar-label-string")) {
+        newlabel = label;
+    }
+    else if(el.hasClass("progressbar-label-none")) {
+        newlabel="";
+    }
+    else if(value !== false) {
+        var max = el.progressbar("option","max");
+        var percent_label = Math.floor(value * 100 / max) + "%";
+        var ratio_label = value + "/" + max;
+        if(el.hasClass("progressbar-label-percent")) {
+            newlabel = percent_label;
+        }
+        else if(el.hasClass("progressbar-label-ratio")) {
+            newlabel = ratio_label;
+        }
+        else if(el.hasClass("progressbar-label-both")) {
+            newlabel = percent_label + " (" + ratio_label + ")";
+        }
+    }
+    el.find(".progressbar-label").text(newlabel);
+};
+
+NitrogenClass.prototype.$get_progress_bar_max = function(el) {
+    return objs(el).progressbar("option", "max");
+};
+
+NitrogenClass.prototype.$get_progress_bar_value = function(el) {
+    return objs(el).progressbar("option", "value");
+};
+
 /*** WEBSOCKETS ***/
 
 NitrogenClass.prototype.$enable_websockets = function() {
+
     this.$console_log("Websockets Enabled");
     this.$websockets_enabled = true;
     this.$flush_switchover_comet_actions();
