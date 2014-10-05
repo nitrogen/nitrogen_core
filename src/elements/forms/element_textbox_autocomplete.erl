@@ -65,5 +65,3 @@ change_headers_for_nonwebsocket() ->
             wf_context:type(first_request),
             wf:content_type("application/json")
     end.
-            
-
