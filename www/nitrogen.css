@@ -194,7 +194,41 @@ div.inplace_textbox .LV_invalid {
     /*background: limegreen;*/
 }
 
-/* Recaptcha */
+.upload_overall_progress {
+	height:20px;
+}
+
+.upload_droplist li div.upload_progress {
+	height: 10px;
+	width:50px;
+	margin-left: 10px;
+	display: inline-block;
+}
+
+a.upload_delete_file:visited,
+a.upload_delete_file:link,
+a.upload_delete_file:active {
+	background: #f00;
+	color: #fff;
+	border: 1px solid #f00;
+	border-radius:15px;
+	display:inline-block;
+	padding:1px;
+	line-height:8px;
+	text-align:center;
+	font-size:14px;
+	margin-left:5px;
+	font-weight:bold;
+}
+
+a.upload_delete_file:hover {
+	background: #fff;
+	border: 1px solid #f00;
+	color: #000;
+	text-decoration: none;
+}
+
+/* RECAPTCHA */
 
 .recaptcha * {
 	line-height:1em;

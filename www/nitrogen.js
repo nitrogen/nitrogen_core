@@ -52,7 +52,6 @@ NitrogenClass.prototype.$set_param = function(key, value) {
 }
 
 NitrogenClass.prototype.$destroy = function() {
-    this.$console_log("Destroying");
     document.comet_started = false;
     this.$going_away = true;
 
@@ -62,7 +61,6 @@ NitrogenClass.prototype.$destroy = function() {
         this.$system_event_obj.abort();
     }
     if(this.$websocket) {
-        this.$console_log("Closing websocket");
         this.$websocket.close();
     }
     this.$system_event_is_running = false;
@@ -346,11 +344,9 @@ NitrogenClass.prototype.$system_event_error = function() {
 
 NitrogenClass.prototype.$send_pending_files = function(form,input) {
     var file=null;
-    if(typeof(form.$nitrogen_pending_files)=="object")
-    {
+    if(typeof(form.$nitrogen_pending_files)=="object") {
         // not a typo, doing an assignment here
-        while(file=form.$nitrogen_pending_files.shift())
-        {
+        while(file=form.$nitrogen_pending_files.shift()) {
             file.submit();
         }
     }
@@ -371,15 +367,14 @@ NitrogenClass.prototype.$recalculate_upload_dimensions = function(form) {
 
 NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input,settings) {
     var thisNitro = this;
-    if(typeof(settings)=="undefined")
+    if(typeof(settings) == "undefined")
         settings={};
-    if(typeof(form.$nitrogen_pending_files)=="undefined")
+    if(typeof (form.$nitrogen_pending_files) == "undefined")
         form.$nitrogen_pending_files = [];
 
-    jQuery.getScript("/nitrogen/jquery.fileupload.min.js",function(){
-        var dropzone = jQuery(form).children(".upload_drop");
-    
-        jQuery(input).fileupload({
+    thisNitro.$dependency_register_function("/nitrogen/jquery.fileupload.min.js",function() {
+        var dropzone = $(form).children(".upload_drop");
+        $(input).fileupload({
             dropZone:(settings.droppable ? dropzone : null),
             singleFileUploads:true,
             sequentialUploads:true,
@@ -387,26 +382,33 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input,set
             paramName:"file",
             formData: function() {
                 form.elements["pageContext"].value = thisNitro.$params["pageContext"];
-                var d = jQuery(form).serializeArray();
+                var d = $(form).serializeArray();
                 return d;
             },
-            start: function(e) {
+            start: function(e, data) {
                 form.pageContext.value = thisNitro.$params["pageContext"];
-                jQuery(form).children(".upload_progress").fadeIn().text("Uploading...");
+                if(settings.overall_progress) 
+                    $(form).children(".upload_overall_progress").progressbar({}).slideDown();
             },
             progressall: function(e,data) {
-                var prog = parseInt(data.loaded / data.total * 100,10);
-                // TODO: Convert this to a progress bar
-                // Neede to add #progress{} element to continue with that
-                jQuery(form).children(".upload_progress").text(prog + "% (" + data.loaded + "/" + data.total + " bytes)");
+                if(settings.overall_progress) {
+                    $(form).children(".upload_overall_progress")
+                        .progressbar("option", "value", data.loaded)
+                        .progressbar("option", "max", data.total);
+                    if(data.loaded == data.total) {
+                        $(form).children(".upload_overall_progress").slideUp();
+                    }
+                }
             },
             progress: function(e,data) {
-                // Single file progress
+                var loaded = data.loaded;
+                $.each(data.files, function(i,f) {
+                    $("li[filename=\"" + f.name + "\"] .upload_progress").progressbar("option", "value", loaded);
+                });
             },
             send: function(e,data) {
             },
             stop: function(e,data) {
-                
             },
             always: function(e,data) {
             },
@@ -414,16 +416,46 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input,set
                 Nitrogen.$increment_pending_upload_counter(form,-1);
             },
             add: function(e,data) {
-                jQuery.each(data.files,function(i,f) {
+                if(!settings.multiple) {
+                    if (data.files.length>1) {
+                        alert("Sorry, you can only upload single files with this element");
+                        return;
+                    }
+                    else if(form.$nitrogen_pending_files.length > 0) {
+                        form.$nitrogen_pending_files = [];
+                        $(form).children(".upload_droplist").html("");
+                    }
+                }
+                $.each(data.files,function(i,f) {
                     // Let's add the visual list of pending files
-                    jQuery(form).children(".upload_droplist")
-                        .prepend(jQuery("<li></li>").attr("filename",f.name).text(f.name));
+                    $(form).children(".upload_droplist")
+                        .prepend($("<li></li>").attr("filename",f.name).prepend([
+                            $("<span>").text(f.name + " (" + thisNitro.$format_filesize(f.size) + ")"),
+                            $("<a>")
+                                .attr("href","javascript:;")
+                                .addClass("upload_delete_file")
+                                .bind("click", function() {
+                                    $("li[filename=\"" + f.name + "\"]").slideUp();
+                                    thisNitro.$delete_pending_file(form, f.name);
+                                })
+                                .html("&times;"),
+
+                            $("<div>")
+                                .addClass("upload_progress")
+                                .progressbar({
+                                    max:f.size,
+                                    value:0
+                                }),
+                        ]));
                     Nitrogen.$increment_pending_upload_counter(form,1);
                 });
+
                 if(settings.autoupload)
                     data.submit();
-                else
+                else if(settings.multiple || form.$nitrogen_pending_files.length==0)
                     form.$nitrogen_pending_files.push(data);
+                else
+                    form.$nitrogen_pending_files[0] = data;
             },
             done: function(e,data) {
                 if(typeof data.result == "string") {
@@ -440,11 +472,32 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input,set
                     var Postback = "";
                 }
 
-                jQuery.globalEval(Postback);
+                $.globalEval(Postback);
                 Nitrogen.$increment_pending_upload_counter(form,-1);
             }
         })
     })
+}
+
+NitrogenClass.prototype.$delete_pending_file = function(form, name) {
+    for(var i=0;i<form.$nitrogen_pending_files.length;i++) {
+        for(var j=0;j<form.$nitrogen_pending_files[i].files.length;j++) {
+            if(form.$nitrogen_pending_files[i].files[j].name==name) {
+                form.$nitrogen_pending_files[i].files.splice(j,1);
+                if(form.$nitrogen_pending_files[i].files.length==0) {
+                    form.$nitrogen_pending_files.splice(i, 1);
+                }
+                return;
+            }
+        }
+    }
+}
+
+NitrogenClass.prototype.$format_filesize = function(size) {
+    if(size > 1000000000) return (size/1000000000).toFixed(1) + " GB";
+    else if(size > 1000000) return (size/1000000).toFixed(1) + " MB";
+    else if(size > 1000) return (size/1000).toFixed(1) + " KB";
+    else return size + " B";
 }
 
 NitrogenClass.prototype.$increment_pending_upload_counter = function(form,incrementer) {
@@ -455,14 +508,13 @@ NitrogenClass.prototype.$increment_pending_upload_counter = function(form,increm
     $(form).data("pending_uploads",counter);
     if(counter==0)
     {
-        jQuery(form).children(".upload_progress").fadeOut();
         Nitrogen.$alert_unfinished_files(form);
     }
 }
 
 
 NitrogenClass.prototype.$upload_finished = function(Name) {
-    jQuery(".upload_droplist").children("li[filename=\"" + Name + "\"]")
+    $(".upload_droplist").children("li[filename=\"" + Name + "\"]")
         .css("text-decoration","line-through")
         .addClass("upload_successful")
         .fadeOut();
@@ -629,30 +681,42 @@ NitrogenClass.prototype.$remove = function(anchor, path) {
 // loaded, execute right away. If it's not loaded, start the process of loading
 // it.
 NitrogenClass.prototype.$dependency_register_function = function(dependency, fun) {
-    if(this.$is_dependency_loaded(dependency))
+    if(this.$is_dependency_loaded(dependency)) {
         fun();
-    else
-    {
+    }
+    else {
         this.$load_js_dependency(dependency);
         this.$js_dependencies[dependency].pending_calls.push(fun);
     }
-}
+};
 
 // Load the js file (if it's not already pending)
 NitrogenClass.prototype.$load_js_dependency = function(url) {
+    var n = this;
     // This check will ensure that a js dependency isn't loaded more than once
-    if(!this.$is_dependency_initialized(url))
-    {
-        this.$init_dependency_if_needed(url);
+    if(!n.$is_dependency_initialized(url)) {
+        n.$init_dependency_if_needed(url);
 
         // Request the file, and when it finishes, mark the file is loaded, and
         // execute any pending requests
-        jQuery.getScript(url, function() { 
-            Nitrogen.$js_dependencies[url].loaded=true;
-            Nitrogen.$execute_dependency_scripts(url);
+        $.ajax({
+            url: url,
+            dataType: "script",
+            success: function(data, textStatus, jqxhr) { 
+                    n.$js_dependencies[url].loaded=true;
+                    n.$execute_dependency_scripts(url);
+                },
+            error: function(jqxhr, textStatus, errorThrown) {
+                    n.$console_log({
+                        error_loading_file: url,
+                        error: textStatus,
+                        errorThrown: errorThrown
+                    })
+                }, 
         });
+            
     }
-}
+};
 
 NitrogenClass.prototype.$init_dependency_if_needed = function(dependency) {
     if(this.$js_dependencies[dependency]===undefined)
@@ -660,11 +724,11 @@ NitrogenClass.prototype.$init_dependency_if_needed = function(dependency) {
             loaded: false,
             pending_calls: []
         };
-}
+};
 
 NitrogenClass.prototype.$is_dependency_initialized = function(dependency) {
     return this.$js_dependencies[dependency]!==undefined
-}
+};
 
 NitrogenClass.prototype.$is_dependency_loaded = function(dependency) {
     if(!this.$is_dependency_initialized(dependency))

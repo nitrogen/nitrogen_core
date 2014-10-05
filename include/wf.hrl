@@ -616,7 +616,8 @@
         button_text="Upload"    :: text(),
         droppable=false         :: boolean(),
         droppable_text="Drop Files Here" :: text(),
-        multiple=false          :: boolean()
+        multiple=false          :: boolean(),
+        overall_progress=auto   :: boolean() | undefined | auto
     }).
 -record(wizard, {?ELEMENT_BASE(element_wizard),
         tag                     :: term(),
