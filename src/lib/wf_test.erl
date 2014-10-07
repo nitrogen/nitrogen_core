@@ -34,8 +34,6 @@ summarize_and_continue() ->
     Failed = erlang:get(wf_test_failed),
     Total = Passed + Failed,
     io:format("Module ~p (~p of ~p tests passed)~n", [wf:page_module(), Passed, Total]),
-    wf_test_srv:passed(Passed),
-    wf_test_srv:failed(Failed),
     case wf_test_srv:next_test_path() of
         done -> wf:wire(#alert{text="All Tests Completed"});
         Next -> wf:redirect(Next)
