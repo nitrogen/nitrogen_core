@@ -27,6 +27,11 @@
         {init_request,2}
     ]).
 
+call_main_handler_ws_init() ->
+    case erlang:function_exported(nitrogen_main_handler, ws_init, 0) of
+        true -> nitrogen_main_handler:ws_init();
+        false -> ok
+    end.
 
 %% init_request/2 kept for backwards compatibility, but is no longer needed
 init_request(Bridge, _) ->
@@ -44,6 +49,7 @@ run(Bridge) ->
 
 ws_init(Bridge) ->
     init_request(Bridge),
+    call_main_handler_ws_init(),
     ok.
 
 ws_message({binary, Bin}, _Bridge, _State) ->
