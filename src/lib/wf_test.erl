@@ -109,10 +109,12 @@ internal_fail(Name, Reason) ->
     io:format("...FAILED (~p). Reason: ~p~n", [Name, Reason]).
    
 increment_pass() ->
+    wf_test_srv:passed(1),
     N = erlang:get(wf_test_passed),
     erlang:put(wf_test_passed, N+1).
 
 increment_fail() ->
+    wf_test_srv:failed(1),
     N = erlang:get(wf_test_failed),
     erlang:put(wf_test_failed, N+1).
 
