@@ -52,7 +52,8 @@ start(BrowserExec, TestPaths) ->
 maybe_launch_browser(undefined, _) ->
     ok;
 maybe_launch_browser(BrowserExec, LaunchUrl) ->
-    os:cmd(BrowserExec ++ " " ++ LaunchUrl ++ " &").
+    os:cmd(BrowserExec ++ " " ++ LaunchUrl ++ " &"),
+    ok.
 
 is_trigger_valid(Trigger) ->
     try gen_server:call(?MODULE, {is_trigger_valid, Trigger})
