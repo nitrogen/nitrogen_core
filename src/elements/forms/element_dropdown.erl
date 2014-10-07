@@ -105,7 +105,7 @@ create_options(_,_,[Other | _]) ->
     throw({unknown_option_provided_to_dropdown_element,Other}).
 
 selected_or_not(Selected,X) ->
-    case (Selected =/= undefined andalso wf:to_list(X#option.value) == Selected)
+    case (Selected =/= [] andalso wf:to_list(X#option.value) == Selected)
             orelse X#option.selected == true of
         true -> selected;
         false -> not_selected
