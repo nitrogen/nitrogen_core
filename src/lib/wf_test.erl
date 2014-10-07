@@ -65,6 +65,10 @@ test_auto(Name, Setup, Assertion) ->
 test_auto(Name, Setup, Assertion, Timeout) ->
     test(true, Name, Setup, Assertion, Timeout).
 
+test(AutoPostback, Name, Setup, _Assert=undefined, Timeout) ->
+    test(AutoPostback, Name, Setup, fun() -> true end, Timeout);
+test(AutoPostback, Name, _Setup=undefined, Assertion, Timeout) ->
+    test(AutoPostback, Name, fun() -> ok end, Assertion, Timeout);
 test(AutoPostback, Name, Setup, Assertion, Timeout) when is_function(Setup, 0), is_function(Assertion, 0) ->
     try
         wf:session({assertion, Name}, Assertion),

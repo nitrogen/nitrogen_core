@@ -161,7 +161,12 @@ NitrogenClass.prototype.$validate_and_serialize = function(validationGroup) {
         } else {
             // Skip any unchecked radio boxes.
             if ((this.type == "radio" || this.type=="checkbox") && !this.checked) return;
-            params[n.$make_id(this)] = $(this).val();
+            var val;
+            if (this.type == "select-multiple" && $(this).val()==null)
+                val = [];
+            else
+                val = $(this).val();
+            params[n.$make_id(this)] = val;
         }
     });
     // Return the params if valid. Otherwise, return null.
@@ -264,6 +269,7 @@ NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventCo
 
     if(this.$websockets_enabled) {
         delete params["pageContext"];
+        console.log(params);
         var bertified = Bert.encode_to_bytearray(Bert.tuple(Bert.atom("nitrogen_postback"), params));
         this.$websocket.send(bertified.buffer);
     }else{
