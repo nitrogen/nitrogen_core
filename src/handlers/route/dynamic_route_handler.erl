@@ -59,22 +59,23 @@ route("/") ->
     {list_to_atom(module_name(["index"])), main, []};
 
 route(Path) ->
-    case extension_type(Path) of
-        static ->
-            {static_file, main, Path};
-        {module, EntryFun, ProcessingFun} ->
-            Path1 = string:strip(filename:rootname(Path), both, $/),
-            Tokens = string:tokens(Path1, "/"),
-            % Check for a loaded module. If not found, then try to load it.
-            case try_load_module(EntryFun, ProcessingFun, Tokens) of
-                {Module, EntryPoint, PathInfo} -> 
-                    {Module, EntryPoint, PathInfo};
-                undefined ->
-                    {web_404, main, Path1}
-            end
+    InitialEntryPoint = determine_initial_entry_point(Path),
+    handle_initial_entry_point(Path, InitialEntryPoint).
+
+handle_initial_entry_point(Path, static) ->
+    {static_file, main, Path};
+handle_initial_entry_point(Path, {module, EntryFun, ProcessingFun}) ->
+    Path1 = string:strip(filename:rootname(Path), both, $/),
+    Tokens = string:tokens(Path1, "/"),
+    % Check for a loaded module. If not found, then try to load it.
+    case try_load_module(EntryFun, ProcessingFun, Tokens) of
+        {Module, EntryPoint, PathInfo} -> 
+            {Module, EntryPoint, PathInfo};
+        undefined ->
+            {web_404, main, Path1}
     end.
 
-extension_type(Filename) ->
+determine_initial_entry_point(Filename) ->
     SmartExtensions = wf:config_default(smart_extensions, []),
     Ext = string:strip(filename:extension(Filename), left, $.),
     case lists:keyfind(Ext, 1, SmartExtensions) of
@@ -84,13 +85,12 @@ extension_type(Filename) ->
             {module, EntryFun, undefined};
         {Ext, EntryFun} ->
             {module, EntryFun, undefined};
+        false when Ext==[] ->
+            {module, main, undefined};
         false ->
-            case Ext of
-                [] -> {module, main, undefined};
-                _ -> static
-            end;
+            static;
         Other ->
-            throw({invalid_smart_extension, Other})
+            throw({invalid_smart_extension_definition, Other})
     end.
 
 module_name(Tokens) ->
