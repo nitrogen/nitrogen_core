@@ -25,15 +25,21 @@ start(TestFun) ->
         erlang:put(wf_test_passed, 0),
         erlang:put(wf_test_failed, 0),
         TestFun(),
-        summary()
+        summarize_and_continue()
     end),
     wf:state(test_comet_pid, Pid).
 
-summary() ->
+summarize_and_continue() ->
     Passed = erlang:get(wf_test_passed),
     Failed = erlang:get(wf_test_failed),
     Total = Passed + Failed,
-    io:format("Module ~p (~p of ~p tests passed)~n", [wf:page_module(), Passed, Total]).
+    io:format("Module ~p (~p of ~p tests passed)~n", [wf:page_module(), Passed, Total]),
+    wf_test_srv:passed(Passed),
+    wf_test_srv:failed(Failed),
+    case wf_test_srv:next_test_path() of
+        done -> wf:wire(#alert{text="All Tests Completed"});
+        Next -> wf:redirect(Next)
+    end.
 
 pass(Name) ->
     Pid = wf:state(test_comet_pid),
