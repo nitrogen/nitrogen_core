@@ -269,7 +269,6 @@ NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventCo
 
     if(this.$websockets_enabled) {
         delete params["pageContext"];
-        console.log(params);
         var bertified = Bert.encode_to_bytearray(Bert.tuple(Bert.atom("nitrogen_postback"), params));
         this.$websocket.send(bertified.buffer);
     }else{

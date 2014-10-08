@@ -104,16 +104,19 @@ flush() ->
     maybe_convert_to_websocket_async(),
     case wf_context:async_mode() of
         {websocket, Pid} ->
-            %% Because we're doing websockets, we can bypass the accumulator altogether
-            %% and send actions directly to the websocket
-            Actions = wf_context:actions(),
+            %% Using websockets, we want to ensure the rendering order
+            %% integrity is maintained, so we render the elements here and send
+            %% them as a single binary to the websocket process.
+            {ok, Javascript} = wf_render_actions:render_action_queue(),
+            JSBin = wf:to_binary(Javascript),
 
             %% If there are any latent actions from an old comet process that
             %% was upgraded to a websocket, this will clear the actions and add
-            %% them to the response.
+            %% them to the response. It's also safe to let the websocket
+            %% process render them.
             AccumulatorActions = get_actions(),
 
-            Pid ! {comet_actions, [AccumulatorActions, Actions]};
+            Pid ! {comet_actions, [AccumulatorActions, JSBin]};
         _ ->
             SeriesID = wf_context:series_id(),
             {ok, AccumulatorPid} = get_accumulator_pid(SeriesID),
