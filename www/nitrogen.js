@@ -269,6 +269,7 @@ NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventCo
 
     if(this.$websockets_enabled) {
         delete params["pageContext"];
+        console.log(params);
         var bertified = Bert.encode_to_bytearray(Bert.tuple(Bert.atom("nitrogen_postback"), params));
         this.$websocket.send(bertified.buffer);
     }else{
@@ -792,6 +793,21 @@ NitrogenClass.prototype.$set_value = function(anchor, element, value, optional_l
         else if (el.src != undefined) el.src = value;
         else if($(el).hasClass("ui-progressbar")) n.$set_progress_bar_value(el, value, optional_label);
         else $(el).html(value);
+    });
+}
+
+NitrogenClass.prototype.$set_values = function(anchor, element, values) {
+    var n = this;
+    if(!element.id) element = objs(element);
+    element.each(function(index, el) {
+        console.log(el.type);
+        if (el.type == "select-multiple") {
+            $(el).val(values);
+        }
+        else if (el.type == "checkbox") {
+            var to_check = ($.inArray(el.value, values) != -1);
+            el.checked = to_check;
+        }
     });
 }
 

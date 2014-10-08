@@ -56,6 +56,13 @@ set(Element, Value) ->
 set(Priority, Element, Value) when ?IS_ACTION_PRIORITY(Priority) -> 
     ok = action_set:set(Priority, Element, Value).
 
+set_multiple(Element, Values) ->
+    ok = set_multiple(normal, Element, Values).
+
+set_multiple(Priority, Element, Values) when is_list(Values), ?IS_ACTION_PRIORITY(Priority) ->
+    ok = action_set_multiple:set(Priority, Element, Values).
+      
+
 update(Target, Elements) -> 
     ok = update(normal, Target, Elements).
 

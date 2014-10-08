@@ -55,13 +55,15 @@ set_websocket_params(Params, _Config, State) ->
 get_value(Path, Config, State) ->
     case get_values(Path, Config, State) of
         [] -> undefined;
-        [One] -> wf:to_list(One);
+        [One] -> 
+            wf:to_list(One);
         _Many -> throw({?MODULE, too_many_matches, Path})
     end.
 
 get_values(Path, _Config, #state{request=Request, websocket=Websocket} = _State) ->
     Path1 = normalize_path(Path),
-    refine_params(Path1, Websocket ++ Request).
+    Vs = refine_params(Path1, Websocket ++ Request),
+    Vs.
 
 get_params(_Config, #state{request=Request, websocket=Websocket} = _State) ->
     Params = Websocket ++ Request,
@@ -108,7 +110,29 @@ normalize_path(Path) when ?IS_STRING(Path) ->
     lists:reverse(Tokens1).
 
 normalize_params(Params) ->
-    [{normalize_path(Path), Value} || {Path, Value} <- Params, Path /= undefined, Path /= [], Path =/= <<>>].
+    %% In typical erlang fashion, this list is being built in reverse, and will
+    %% need to be reversed when finished to ensure proper parameter order
+    BackwardNormalizedParams = lists:foldl(fun(Param, Acc) ->
+        normalize_param(Param) ++ Acc
+    end, [], Params),
+    lists:reverse(BackwardNormalizedParams).
+    
+normalize_param({undefined, _}) ->
+    [];
+normalize_param({[], _}) ->
+    [];
+normalize_param({<<>>, _}) ->
+    [];
+normalize_param({Path, Value}) when ?IS_STRING(Value);
+                                    is_binary(Value);
+                                    is_integer(Value);
+                                    is_atom(Value) ->
+    [{normalize_path(Path), Value}];
+normalize_param({Path, Values}) when is_list(Values) ->
+    NPath = normalize_path(Path),
+    %% Because this is running in the middle of a list that's being built in
+    %% reverse, this will have to be built in reverse also.
+    lists:reverse([{NPath, V} || V <- Values]).
 
 %% Most tokens will start with "wfid_". Strip this out.
 strip_wfid(Path) ->

@@ -884,6 +884,9 @@
 -record(set, {?ACTION_BASE(action_set),
         value=""                :: text()
     }).
+-record(set_multiple, {?ACTION_BASE(action_set_multiple),
+        values=[]               :: [text()]
+    }).
 -record(redirect, {?ACTION_BASE(action_redirect),
         url=""                  :: url()
     }).

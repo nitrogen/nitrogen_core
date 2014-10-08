@@ -4,18 +4,16 @@
 % See MIT-LICENSE for licensing information.
 
 -module (action_set).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -export([
 	render_action/1,
 	set/2,
 	set/3
 ]).
 
-render_action(Record) ->
-    Anchor = Record#set.anchor,
-    Target = Record#set.target,
-    Value = wf:js_escape(wf:to_list(Record#set.value)),
-    wf:f("Nitrogen.$set_value('~s', '~s', \"~s\");", [Anchor, Target, Value]).
+render_action(#set{anchor=Anchor, target=Target, value=Value0}) ->
+    Value = wf:js_escape(wf:to_list(Value0)),
+    wf:f(<<"Nitrogen.$set_value('~s', '~s', \"~s\");">>, [Anchor, Target, Value]).
 
 set(Element, Value) ->
 	set(normal, Element, Value).
