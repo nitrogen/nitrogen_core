@@ -73,7 +73,7 @@ test(AutoPostback, Name, Setup, Assertion, Timeout) when is_function(Setup, 0), 
     try
         wf:session({assertion, Name}, Assertion),
         Setup(),
-        ?WF_IF(AutoPostback, wf:wire(#event{type=timer, delay=1, delegate=?MODULE, postback=Name})),
+        ?WF_IF(AutoPostback, wf:wire(#event{delegate=?MODULE, postback=Name})),
         wf:flush(),
         receive
             Name ->
