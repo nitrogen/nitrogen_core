@@ -252,12 +252,16 @@ event(start_async) ->
     end.
 
 maybe_convert_to_websocket_async() ->
-    case wf_context:async_mode() of
-        {websocket, _} -> ok;
-        _ ->
-            case get_websocket_pid() of
-                undefined -> ok;
-                {ok, Pid} -> wf_context:async_mode({websocket, Pid})
+    %% Reconnections happen, and as such, we need to make sure our reconnected websocket is properly updated.
+    case get_websocket_pid_from_accumulator() of
+        undefined ->
+            ok;
+        {ok, Pid} -> 
+            case is_process_alive(Pid) of
+                true -> 
+                    wf_context:async_mode({websocket, Pid});
+                false ->
+                    wf_context:async_mode(comet)
             end
     end.
 
@@ -556,11 +560,13 @@ get_actions_from_accumulator(AccumulatorPid) ->
         []
     end.
 
-get_actions_no_start() ->
+get_actions_and_register_new_websocket_pid(WebsocketPid) ->
     SeriesID = wf_context:series_id(),
     case get_accumulator_pid_no_start(SeriesID) of
         undefined -> [];
-        {ok, Pid} -> get_actions_from_accumulator(Pid)
+        {ok, Pid} ->
+            Pid ! {websocket_pid, WebsocketPid},
+            get_actions_from_accumulator(Pid)
     end.
 
 % Get actions from accumulator in a blocking fashion. If there are no actions
@@ -588,7 +594,16 @@ register_websocket_pid_with_accumulator(WebsocketPid) ->
     {ok, AccumulatorPid} = get_accumulator_pid(SeriesID),
     AccumulatorPid!{websocket_pid, WebsocketPid}.
 
-get_websocket_pid() ->
+register_websocket_pid_with_accumulator_no_start(WebsocketPid) ->
+    SeriesID = wf_conext:series_id(),
+    case get_accumulator_pid_no_start(SeriesID) of
+        {ok, AccumulatorPid} ->
+            AccumulatorPid!{websocket_pid, WebsocketPid};
+        undefined ->
+            ok
+    end.
+
+get_websocket_pid_from_accumulator() ->
     SeriesID = wf_context:series_id(),
     {ok, AccumulatorPid} = get_accumulator_pid(SeriesID),
     AccumulatorPid!{get_websocket_pid, self()},

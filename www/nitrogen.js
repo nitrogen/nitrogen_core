@@ -18,12 +18,14 @@ function NitrogenClass(o) {
     this.$system_event_queue = new Array();
     this.$system_event_is_running = false;
     this.$system_event_obj = null;
+    this.$last_system_event = null;
     this.$going_away = false;
     this.$live_validation_data_field = "LV_live_validation";
     this.$before_postback_list = new Array();
     this.$js_dependencies = new Array();
     this.$websocket = null;
     this.$websockets_enabled = false; // default to off
+    this.$websocket_reconnect_timer = null;
     return this;
 }
 
@@ -89,6 +91,12 @@ NitrogenClass.prototype.$queue_system_event = function(eventContext) {
     });
 }
 
+NitrogenClass.prototype.$requeue_last_system_event = function() {
+    // This event never ran, so we need to put it at the beginning of the queue
+    this.$system_event_queue.unshift(this.$last_system_event);
+    //this.$last_system_event = null;
+}
+
 NitrogenClass.prototype.$event_loop = function() {
     // Create a local copy of this for setTimeout callbacks.
     var this2 = this;
@@ -96,6 +104,7 @@ NitrogenClass.prototype.$event_loop = function() {
     // If no events are running and an event is queued, then fire it.
     if (!this.$system_event_is_running && this.$system_event_queue.length > 0) {
         var o = this.$system_event_queue.shift();
+        this.$last_system_event = o;
         this.$do_system_event(o.eventContext);
     }
 
@@ -269,7 +278,6 @@ NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventCo
 
     if(this.$websockets_enabled) {
         delete params["pageContext"];
-        console.log(params);
         var bertified = Bert.encode_to_bytearray(Bert.tuple(Bert.atom("nitrogen_postback"), params));
         this.$websocket.send(bertified.buffer);
     }else{
@@ -279,6 +287,7 @@ NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventCo
             data: [jQuery.param(params), extraParam || ''].join('&'),
             dataType: s.dataType,
             cache: s.cache,
+            timeout: 20000,
             success: function(data, textStatus) { n.$event_success(data, textStatus) },
             error: function(XHR, textStatus, errorThrown) { n.$event_error(XHR, textStatus, errorThrown) }
         });
@@ -317,14 +326,23 @@ NitrogenClass.prototype.$do_system_event = function(eventContext) {
         n.$websocket.send(bertified.buffer);
     }
     else{
+        var error_fun = function(XHR, textStatus, errorThrow) {
+            if(textStatus == "timeout" || textStatus == "error") {
+                setTimeout(function() {
+                    n.$requeue_last_system_event();
+                }, 5000);
+            }
+            n.$system_event_error();
+        } 
         n.$system_event_obj = $.ajax({
             url: this.$url,
             type:'post',
             data: jQuery.param(params),
             dataType: 'text',
             cache: false,
+            timeout: 20000,
             success: function(data, textStatus) { n.$system_event_success(data) },
-            error: function(XHR, textStatus, errorThrown) { n.$system_event_error() }
+            error: error_fun 
         });                     
     }
 }
@@ -800,7 +818,6 @@ NitrogenClass.prototype.$set_values = function(anchor, element, values) {
     var n = this;
     if(!element.id) element = objs(element);
     element.each(function(index, el) {
-        console.log(el.type);
         if (el.type == "select-multiple") {
             $(el).val(values);
         }
@@ -1008,7 +1025,6 @@ NitrogenClass.prototype.$get_progress_bar_value = function(el) {
 /*** WEBSOCKETS ***/
 
 NitrogenClass.prototype.$enable_websockets = function() {
-
     this.$console_log("Websockets Enabled");
     this.$websockets_enabled = true;
     this.$flush_switchover_comet_actions();
@@ -1020,14 +1036,20 @@ NitrogenClass.prototype.$flush_switchover_comet_actions = function() {
 };
 
 NitrogenClass.prototype.$disable_websockets = function() {
-    this.$console_log("Websockets disabled or disconnected");
-    this.$websockets_enabled = false;
+    var n = this;
+    n.$console_log("Websockets disabled or disconnected");
+    n.$websockets_enabled = false;
+    if(typeof n.$websocket_reconnect_timer != "null") {
+        clearTimeout(n.$websocket_reconnect_timer);
+    }
+    n.$websocket_reconnect_timer = setTimeout(function() { n.$ws_init() }, 5000);
 };
 
 NitrogenClass.prototype.$ws_init = function() {
     try {
         Bert.assoc_array_key_encoding("binary");
         var this2 = this;
+        var e = new Error();
         var ws_url = this.$ws_url(location.href);
         this.$websocket = new WebSocket(ws_url);
         this.$websocket.binaryType="arraybuffer";
@@ -1058,6 +1080,9 @@ NitrogenClass.prototype.$send_pagecontext = function() {
     
 
 NitrogenClass.prototype.$ws_close = function() {
+    if(this.$system_event_is_running) {
+        this.$requeue_last_system_event();
+    }
     this.$disable_websockets();
 };
 

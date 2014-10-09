@@ -67,7 +67,7 @@ ws_message_catched({nitrogen_postback,Msg}) ->
     {reply, {text, [<<"nitrogen_event:">>,Return]}};
 ws_message_catched(flush_switchover_comet_actions) ->
     %% If there are any actions that weren't 
-    case action_comet:get_actions_no_start() of
+    case action_comet:get_actions_and_register_new_websocket_pid(self()) of
         [] -> 
             noreply;
         Actions ->
@@ -77,7 +77,6 @@ ws_message_catched(flush_switchover_comet_actions) ->
     end;
 ws_message_catched({page_context, PageContext}) ->
     wf_core:init_websocket(PageContext),
-    
     {reply, {text, [
         %% init_websocket has changed the async mode to websocket, so
         %% let's tell the browser about our updated async_mode
@@ -87,6 +86,7 @@ ws_message_catched({page_context, PageContext}) ->
     ]}}.
 
 ws_info({comet_actions, Actions} , _Bridge, _State) ->
+    
     wf:wire(page, page, Actions),
     Return = wf_core:run_websocket_comet(),
     {reply, {text, [<<"nitrogen_system_event:">>, Return]}};
