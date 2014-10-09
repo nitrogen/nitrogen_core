@@ -19,5 +19,6 @@ render_element(Record ) ->
         {class, ["nav", Record#nav.class]},
         {title, Record#nav.title},
         {style, Record#nav.style},
+        {role, Record#nav.role},
         {data_fields, Record#nav.data_fields}
     ]).
