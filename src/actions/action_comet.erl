@@ -102,26 +102,29 @@ flush() ->
     %% request, it'll just send the actions to the websocket and the comet
     %% request will die peacefully.
     maybe_convert_to_websocket_async(),
+
+    %% First, let's render actions from the action queue into a binary for easy
+    %% passing around with messages. Doing this step here will ensure the
+    %% integrity of the action queue processing is maintained.
+    {ok, Javascript} = wf_render_actions:render_action_queue(),
+    JSBin = wf:to_binary(Javascript),
+
     case wf_context:async_mode() of
         {websocket, Pid} ->
-            %% Using websockets, we want to ensure the rendering order
-            %% integrity is maintained, so we render the elements here and send
-            %% them as a single binary to the websocket process.
-            {ok, Javascript} = wf_render_actions:render_action_queue(),
-            JSBin = wf:to_binary(Javascript),
-
             %% If there are any latent actions from an old comet process that
             %% was upgraded to a websocket, this will clear the actions and add
             %% them to the response. It's also safe to let the websocket
             %% process render them.
             AccumulatorActions = get_actions(),
 
+            %% And we send both the "old commands" from the accumulator, and
+            %% the new ones we just processed.
             Pid ! {comet_actions, [AccumulatorActions, JSBin]};
         _ ->
             SeriesID = wf_context:series_id(),
             {ok, AccumulatorPid} = get_accumulator_pid(SeriesID),
-            Actions = wf_context:actions(),
-            AccumulatorPid!{add_actions, Actions}
+            %% Now we send that binary to the accumulator to be pulled.
+            AccumulatorPid!{add_actions, JSBin}
     end,
     ok.
 
