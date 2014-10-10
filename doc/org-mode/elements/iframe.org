@@ -1,0 +1,56 @@
+# vim: sw=2 ts=2 ft=org
+
+#+TITLE: Iframe Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Rusty Klophaus (@rustyio)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
+
+* Iframe Element - #iframe {}
+
+   The iframe element produces an HTML iframe. (an HTML =<iframe>= tag).
+
+** Usage
+
+#+BEGIN_SRC erlang
+   #iframe {
+       src = "//www.youtube.com/embed/AAF58aJSr28?rel=0",
+       name = "homeVideo",
+       allowfullscreen = "",
+       html_id = "homeVideo",
+       frameborder = "0"
+   }
+#+END_SRC
+   
+** Attributes
+
+  + src - (/string/) :: Set the HTML =src= attribute of the iframe. This can
+    be either an absolute URL (=http://hostname.com/path/to/src=) or a
+    relative URL (=/path/to/src=).
+
+  + srcdoc - (/string/) :: Set the HTML =srcdoc= attribute of the iframe.
+
+  + height - (/integer/) :: Set the HTML =height= attribute of the iframe.
+
+  + width - (/integer/) :: Set the HTML =width= attribute of the iframe.
+
+  + align - (/Atom, 'left', 'top', 'right', 'middle', or 'bottom'/) :: Set the alignment of an iframe relative to surrounding elements.
+
+  + frameborder - (/integer, 0 or 1/) :: Set the HTML =frameborder= attribute of the iframe.  
+
+  + name - (/string/) :: Set the HTML =name= attribute of the iframe.
+
+  + sandbox - (/string/) :: Set the HTML =sandbox= attribute of the iframe.
+
+  + seamless - (/string/) :: Set the HTML =seamless= attribute of the iframe.
+
+  + allowfullscreen - (/boolean/) :: Set the HTML =allowfullscreen= attribute of the iframe.
+       
+** See Also
+
+   + [[./base.html][base element]]
+
+   + [[http://html5doctor.com/element-index/#iframe][About the iframe Element]]
+
+   + [[http://www.w3.org/html/wg/drafts/html/master/embedded-content.html#the-iframe-element][W3C iframe reference spec]]

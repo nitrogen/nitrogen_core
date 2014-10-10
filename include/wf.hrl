@@ -711,7 +711,18 @@
         display_mode=reveal     :: reveal | overlay | push,
         body=[]                 :: body()
     }).
-
+-record(iframe, {?ELEMENT_BASE(element_iframe),
+        align                   :: text() | atom(),
+        frameborder             :: integer(),
+        height                  :: integer(),
+        name                    :: text(),
+        sandbox                 :: text(),
+        seamless                :: boolean(),
+        src                     :: url(),
+        srcdoc                  :: text(),
+        width                   :: integer(),
+        allowfullscreen         :: boolean()
+    }).
         
 %% HTML5 semantic elements
 -record(section, {?ELEMENT_BASE(element_section),

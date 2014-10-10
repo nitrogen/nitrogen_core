@@ -85,6 +85,7 @@
   + [[./elements/gravatar.org][Gravatar]]
   + [[./elements/recaptcha.org][Recaptcha]]
   + [[./elements/sparkline.org][Sparkline]]
+  + [[./elements/iframe.org][Iframe]]
 
 * See Also
   + [[./paths.org][Nitrogen Element Paths]]
