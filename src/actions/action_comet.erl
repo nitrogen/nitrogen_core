@@ -63,35 +63,24 @@
 %% the pid is killed if the accumulator is never started (meaning never posted back).
 
 %% @doc Convenience method to start a comet process.
+-spec comet(comet_function()) -> {ok, pid()}.
 comet(F) -> 
     comet(F, default).
 
 %% @doc Convenience method to start a comet process.
-comet({Name, F, Msg}, Pool) when is_function(F) ->
-    Pid = spawn_with_context({Name, F, Msg}, page),
-    wf:wire(page, page, #comet { function={Name, F, Msg}, pool=Pool, scope=local }),
-    {ok, Pid};
-comet({Name, F}, Pool) when is_function(F) ->
-    Pid = spawn_with_context({Name, F}, page),
-    wf:wire(page, page, #comet { function={Name, F}, pool=Pool, scope=local }),
-    {ok, Pid};
-comet(F, Pool) ->
-    Pid = spawn_with_context(F,page),
-    wf:wire(page, page, #comet { function=Pid, pool=Pool, scope=local }),
-    {ok, Pid}.
+-spec comet(CometFunction :: comet_function(), Pool :: term()) -> {ok, pid()}.
+comet(CometFunction, Pool) ->
+    comet(CometFunction, Pool, local).
 
 %% @doc Convenience method to start a comet process with global pool.
-comet_global({Name, F, Msg}, Pool) ->
-    Pid = spawn_with_context({Name, F, Msg}, page),
-    wf:wire(page, page, #comet { function={Name, F, Msg}, pool=Pool, scope=global }),
-    {ok, Pid};
-comet_global({Name, F}, Pool) ->
-    Pid = spawn_with_context({Name, F}, page),
-    wf:wire(page, page, #comet { function={Name, F}, pool=Pool, scope=global }),
-    {ok, Pid};
-comet_global(F, Pool) ->
-    Pid = spawn_with_context(F,page),
-    wf:wire(page, page, #comet { function=Pid, pool=Pool, scope=global }),
+-spec comet_global(CometFunction :: comet_function(), Pool :: term()) -> {ok, pid()}.
+comet_global(CometFunction, Pool) ->
+    comet(CometFunction, Pool, global).
+
+-spec comet(CometFunction :: comet_function(), Pool :: term(), Scope :: local | global) -> {ok, pid()}.
+comet(CometFunction, Pool, Scope) ->
+    Pid = spawn_with_context(CometFunction, undefined, page),
+    wf:wire(page, page, #comet { function=Pid, pool=Pool, scope=Scope }),
     {ok, Pid}.
 
 %% @doc Gather all wired actions, and send to the accumulator.
@@ -101,7 +90,7 @@ flush() ->
     %% websockets. Then instead of returning the function calls from the comet
     %% request, it'll just send the actions to the websocket and the comet
     %% request will die peacefully.
-    maybe_convert_to_websocket_async(),
+    determine_async_mode(),
 
     %% First, let's render actions from the action queue into a binary for easy
     %% passing around with messages. Doing this step here will ensure the
@@ -109,24 +98,32 @@ flush() ->
     {ok, Javascript} = wf_render_actions:render_action_queue(),
     JSBin = wf:to_binary(Javascript),
 
-    case wf_context:async_mode() of
-        {websocket, Pid} ->
-            %% If there are any latent actions from an old comet process that
-            %% was upgraded to a websocket, this will clear the actions and add
-            %% them to the response. It's also safe to let the websocket
-            %% process render them.
-            AccumulatorActions = get_actions(),
-
-            %% And we send both the "old commands" from the accumulator, and
-            %% the new ones we just processed.
-            Pid ! {comet_actions, [AccumulatorActions, JSBin]};
-        _ ->
-            SeriesID = wf_context:series_id(),
-            {ok, AccumulatorPid} = get_accumulator_pid(SeriesID),
-            %% Now we send that binary to the accumulator to be pulled.
-            AccumulatorPid!{add_actions, JSBin}
-    end,
+    AsyncMode = wf_context:async_mode(),
+    inner_flush(AsyncMode, JSBin),
     ok.
+
+inner_flush({websocket, Pid}, JSBin) ->
+    flush_websocket(Pid, JSBin);
+
+inner_flush(_, JSBin) ->
+    flush_non_websocket(JSBin).
+
+flush_websocket(Pid, JSBin) ->
+    %% If there are any latent actions from an old comet process that
+    %% was upgraded to a websocket, this will clear the actions and add
+    %% them to the response. It's also safe to let the websocket
+    %% process render them.
+    AccumulatorActions = get_actions(),
+
+    %% And we send both the "old commands" from the accumulator, and
+    %% the new ones we just processed.
+    Pid ! {comet_actions, [AccumulatorActions, JSBin]}.
+
+flush_non_websocket(JSBin) ->
+    SeriesID = wf_context:series_id(),
+    {ok, AccumulatorPid} = get_accumulator_pid(SeriesID),
+    %% Now we send that binary to the accumulator to be pulled.
+    AccumulatorPid!{add_actions, JSBin}.
 
 %% @doc Send a message to all processes in the specified local pool.
 send(Pool, Message) ->
@@ -156,39 +153,25 @@ render_action(Record) ->
 % This event is called to start a Nitrogen async loop.
 % In the process of starting the function, it will create
 % an accumulator and a pool if they don't already exist.
-event({spawn_async_function, Record}) ->
-    % Some values...
+event({spawn_async_function, #comet{pool=Pool,
+                                    scope=Scope,
+                                    function=Function,
+                                    dying_message=DyingMessage,
+                                    reconnect_actions=ReconActions}}) ->
     SeriesID = wf_context:series_id(),
-    Pool = Record#comet.pool,
-    Scope = Record#comet.scope,
 
-    % Get or start the accumulator process, which is used to hold any Nitrogen Actions 
-    % that are generated by async processes.
+    % Get or start the accumulator process, which is used to hold any Nitrogen
+    % Actions that are generated by async processes.
     {ok, AccumulatorPid} = get_accumulator_pid(SeriesID),
 
-    % Get or start the pool process, which is a distributor that sends Erlang messages
-    % to the running async function.
+    % Get or start the pool process, which is a distributor that sends Erlang
+    % messages to the running async function.
     {ok, PoolPid} = get_pool_pid(SeriesID, Pool, Scope), 
 
     % Create a process for the AsyncFunction...
-    FunctionPid = case Record#comet.function of
-        {Name, F, Msg} when is_function(F) ->
-            P = spawn_with_context({Name, F, Msg}, postback),
-            notify_accumulator_checker(P),
-            P;
-        {Name, F} when is_function(F) ->
-            P = spawn_with_context({Name, F}, postback),
-            notify_accumulator_checker(P),
-            P;
-        F when is_function(F) ->
-            spawn_with_context(F, postback);
-        P when is_pid(P) -> 
-            notify_accumulator_checker(P),
-            P
-    end,
+    FunctionPid = create_comet_process(Function, ReconActions),
 
     % Create a process for the AsyncGuardian...
-    DyingMessage = Record#comet.dying_message,
     GuardianFun = fun() ->
         guardian_process(FunctionPid, AccumulatorPid, PoolPid, DyingMessage)
     end,
@@ -200,62 +183,76 @@ event({spawn_async_function, Record}) ->
 
     % Only start the async event loop if it has not already been started...
     Actions = [
-        "if (!document.comet_started) { document.comet_started=true; ", make_async_event(0), " }"
+        <<"if (!document.comet_started) { document.comet_started=true; ">>,
+            make_async_event(0),
+        <<" }">>
     ],
     wf:wire(page, page, Actions);
 
 
-% This clause is the heart of async functions. It
-% is first triggered by the event/1 function above,
-% and then continues to trigger itself in a loop,
-% but in different ways depending on whether the
-% page is doing comet-based or polling-based
-% background updates.
+% This clause is the heart of async functions. It is first triggered by the
+% event/1 function above, and then continues to trigger itself in a loop, but
+% in different ways depending on whether the page is doing comet-based or
+% polling-based background updates.
 %
-% To update the page, the function gathers actions 
-% in the accumulator and wires both the actions and
-% the looping event.
-
-
+% To update the page, the function gathers actions in the accumulator and wires
+% both the actions and the looping event.
 event(start_async) ->
     case effective_async_mode() of
         {websocket, Pid} ->
-            %% Because we're using websocket, we don't have to do as much.
-            %% We can get away with calling an async_event and sending it to
-            %% the browser to serve as a ping and also to make sure the
-            %% connection isn't hung.
-            Event = make_async_event(?TEN_SECONDS),
-            Pid ! {comet_actions, Event},
-            register_websocket_pid_with_accumulator(Pid),
-            set_lease(?COMET_INTERVAL + ?TEN_SECONDS);
+            start_async_websocket(Pid);
         comet ->
-            % Tell the accumulator to stay alive until
-            % we call back, with some padding...
-            set_lease(?COMET_INTERVAL + ?TEN_SECONDS),
-
-            % Start the polling postback...
-            Actions = get_actions_blocking(?COMET_INTERVAL),
-            Event = make_async_event(0),
-            wf:wire(page, page, [Actions, Event]),
-
-            % Renew the lease, because the blocking call
-            % could have used up a significant amount of time.
-            set_lease(?COMET_INTERVAL + ?TEN_SECONDS);
-
-
+            start_async_comet();
         {poll, Interval} ->
-            % Tell the accumulator to stay alive until
-            % we call back, with some padding.
-            set_lease(Interval + ?TEN_SECONDS),
-
-            % Start the polling postback...
-            Actions = get_actions(),
-            Event = make_async_event(Interval),
-            wf:wire(page, page, [Actions, Event])
+            start_async_polling(Interval)
     end.
 
-maybe_convert_to_websocket_async() ->
-    %% Reconnections happen, and as such, we need to make sure our reconnected websocket is properly updated.
+start_async_websocket(Pid) ->
+    %% Because we're using websocket, we don't have to do as much.
+    %% We can get away with calling an async_event and sending it to
+    %% the browser to serve as a ping and also to make sure the
+    %% connection isn't hung.
+    Event = make_async_event(?TEN_SECONDS),
+    Pid ! {comet_actions, Event},
+    register_websocket_pid_with_accumulator(Pid),
+    set_lease(?COMET_INTERVAL + ?TEN_SECONDS).
+
+start_async_comet() ->
+    % Tell the accumulator to stay alive until
+    % we call back, with some padding...
+    set_lease(?COMET_INTERVAL + ?TEN_SECONDS),
+
+    % Start the polling postback...
+    Actions = get_actions_blocking(?COMET_INTERVAL),
+    Event = make_async_event(0),
+    wf:wire(page, page, [Actions, Event]),
+
+    % Renew the lease, because the blocking call
+    % could have used up a significant amount of time.
+    set_lease(?COMET_INTERVAL + ?TEN_SECONDS).
+
+start_async_polling(Interval) ->
+    % Tell the accumulator to stay alive until
+    % we call back, with some padding.
+    set_lease(Interval + ?TEN_SECONDS),
+
+    % Start the polling postback...
+    Actions = get_actions(),
+    Event = make_async_event(Interval),
+    wf:wire(page, page, [Actions, Event]).
+
+create_comet_process(Pid, _) when is_pid(Pid) ->
+    notify_accumulator_checker(Pid),
+    Pid;
+create_comet_process(Function, ReconActions) ->
+    Pid = spawn_with_context(Function, ReconActions, postback),
+    notify_accumulator_checker(Pid),
+    Pid.
+
+
+determine_async_mode() ->
+    %% Reconnections happen, and as such, we need to make sure our reconnected
+    %% websocket is properly updated.
     case get_websocket_pid_from_accumulator() of
         undefined ->
             ok;
@@ -454,47 +451,62 @@ guardian_process(FunctionPid, AccumulatorPid, PoolPid, DyingMessage) ->
 %% is not started until after the comet postback. So we have to run a checker to fix it
 %% postbak means it's spawned from the postback event already along with the accumulator
 %% and everything. So no need to check for it.
-spawn_with_context({Name, Function, Msg}, Mode) ->
-    Context = wf_context:context(),
-    SeriesID = wf_context:series_id(),
-    Key = {SeriesID, Name},
-    {ok, Pid} = process_registry_handler:get_pid(Key, fun() ->
-        wf_context:context(Context),
-        wf_context:clear_action_queue(),
-        case erlang:fun_info(Function, arity) of
-            {arity, 1} -> Function(Mode);
-            {arity, 0} -> Function()
-        end,
-        flush() 
-    end),
-    Pid ! {comet, Mode, Msg},
-    start_accumulator_check_timer(Mode, Pid),
-    Pid;
-spawn_with_context({Name, Function}, Mode) ->
-    Context = wf_context:context(),
-    SeriesID = wf_context:series_id(),
-    Key = {SeriesID, Name},
-    {ok, Pid} = process_registry_handler:get_pid(Key, fun() ->
-        wf_context:context(Context),
-        wf_context:clear_action_queue(),
-        case erlang:fun_info(Function, arity) of
-            {arity, 1} -> Function(Mode);
-            {arity, 0} -> Function()
-        end,
-        flush() 
-    end),
-    start_accumulator_check_timer(Mode, Pid),
-    Pid;
-spawn_with_context(Function,Mode) ->
-    Context = wf_context:context(),
-    Pid = erlang:spawn(fun() -> 
-        wf_context:context(Context),
-        wf_context:clear_action_queue(),
-        Function(),
-        flush() 
-    end),
-    start_accumulator_check_timer(Mode, Pid),
+spawn_with_context(Function, ReconActions, Mode) when is_function(Function) ->
+    spawn_with_context({undefined, Function, undefined}, ReconActions, Mode);
+spawn_with_context({Name, Function}, ReconActions, Mode) ->
+    spawn_with_context({Name, Function, undefined}, ReconActions, Mode);
+spawn_with_context({Name, Function, Msg}, ReconActions, Mode) ->
+    WrappedCometFun = create_wrapped_comet_fun(Function, Mode, ReconActions),
+    Pid = start_comet_process(Name, Msg, WrappedCometFun),
+    notify_accumulator_checker(Pid),
     Pid.
+
+create_wrapped_comet_fun(Function, Mode, ReconActions) ->
+    Context = wf_context:context(),
+    fun() ->
+        wf_context:context(Context),
+        wf_context:clear_action_queue(),
+        ReconTag = wire_reconnection(ReconActions),
+        flush(),
+        run_comet_fun_maybe_with_mode(Function, Mode),
+        wire_cancel_reconnection(ReconTag),
+        flush()
+    end.
+   
+wire_reconnection(undefined) ->
+    undefined;
+wire_reconnection(ReconActions) ->
+    ReconTag = wf:temp_id(),
+    Action = [<<"Nitrogen.$register_system_reconnection_event('">>,ReconTag,<<"', function() {">>, ReconActions, <<"}); ">>],
+    wf:wire(page, page, Action),
+    ReconTag.
+
+wire_cancel_reconnection(undefined) ->
+    ok;
+wire_cancel_reconnection(ReconTag) ->
+    Action = [<<"Nitrogen.$cancel_system_reconnection_event('">>,ReconTag,<<"');">>],
+    wf:defer(page, page, Action).
+
+start_comet_process(undefined, _, WrappedCometFun) ->
+    erlang:spawn(WrappedCometFun);
+start_comet_process(Name, Msg, WrappedCometFun) ->
+    SeriesID = wf_context:series_id(),
+    Key = {SeriesID, Name},
+    {ok, Pid} = process_registry_handler:get_pid(Key, WrappedCometFun),
+    maybe_send_reconnection_message(Pid, Msg),
+    Pid.
+
+run_comet_fun_maybe_with_mode(Function, Mode) ->
+    case erlang:fun_info(Function, arity) of
+        {arity, 1} -> Function(Mode);
+        {arity, 0} -> Function()
+    end.
+
+%% When the accumulator 
+maybe_send_reconnection_message(_Pid, undefined) ->
+    ok;
+maybe_send_reconnection_message(Pid, Msg) ->
+    Pid ! Msg.
 
 start_accumulator_check_timer(page, Pid) ->
     %% This function gets called before we've verified that the browser
@@ -531,9 +543,9 @@ start_accumulator_check_timer(Pid) ->
         receive
             accumulator_started -> ok
         after ?TWENTY_SECONDS + ?TEN_SECONDS ->
-            %% The page never posted back at all (Hey, we gave it 30 seconds), and so the accumulator
-            %% loop doesn't exist for this pid, and so we have nothing
-            %% to check for it. So let's just kill the pid
+            %% The page never posted back at all (Hey, we gave it 30 seconds),
+            %% and so the accumulator loop doesn't exist for this pid, and so
+            %% we have nothing to check for it. So let's just kill the pid
             exit(Pid,accumulator_never_started)
         end
     end,

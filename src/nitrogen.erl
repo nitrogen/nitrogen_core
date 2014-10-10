@@ -67,13 +67,14 @@ ws_message_catched({nitrogen_postback,Msg}) ->
     {reply, {text, [<<"nitrogen_event:">>,Return]}};
 ws_message_catched(flush_switchover_comet_actions) ->
     %% If there are any actions that weren't 
+    ReconnectionRecovery = <<"Nitrogen.$reconnect_system();">>,
     case action_comet:get_actions_and_register_new_websocket_pid(self()) of
         [] -> 
-            noreply;
+            {reply, {text, [<<"nitrogen_system_event:">>, ReconnectionRecovery]}};
         Actions ->
             wf:wire(page, page, Actions),
             Return = wf_core:run_websocket_comet(),
-            {reply, {text, [<<"nitrogen_system_event:">>, Return]}}
+            {reply, {text, [<<"nitrogen_system_event:">>, [ReconnectionRecovery, Return]]}}
     end;
 ws_message_catched({page_context, PageContext}) ->
     wf_core:init_websocket(PageContext),
@@ -86,7 +87,6 @@ ws_message_catched({page_context, PageContext}) ->
     ]}}.
 
 ws_info({comet_actions, Actions} , _Bridge, _State) ->
-    
     wf:wire(page, page, Actions),
     Return = wf_core:run_websocket_comet(),
     {reply, {text, [<<"nitrogen_system_event:">>, Return]}};

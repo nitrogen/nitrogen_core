@@ -865,7 +865,8 @@
         pool=undefined          :: term(),
         scope=local             :: local | global,
         function                :: comet_function(),
-        dying_message           :: term()
+        dying_message           :: term(),
+        reconnect_actions       :: actions()
     }).
 -record(continue, {?ACTION_BASE(action_continue),
         function                :: undefined | fun(),

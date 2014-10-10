@@ -18,6 +18,7 @@ function NitrogenClass(o) {
     this.$system_event_queue = new Array();
     this.$system_event_is_running = false;
     this.$system_event_obj = null;
+    this.$system_reconnection_events = Array();
     this.$last_system_event = null;
     this.$going_away = false;
     this.$live_validation_data_field = "LV_live_validation";
@@ -95,6 +96,25 @@ NitrogenClass.prototype.$requeue_last_system_event = function() {
     // This event never ran, so we need to put it at the beginning of the queue
     this.$system_event_queue.unshift(this.$last_system_event);
     //this.$last_system_event = null;
+}
+
+NitrogenClass.prototype.$register_system_reconnection_event = function(tag, fun) {
+    this.$system_reconnection_events.push({tag:tag, fun:fun});
+}
+
+NitrogenClass.prototype.$cancel_system_reconnection_event = function(tag) {
+    for(var i=0; i<this.$system_reconnection_events.length; i++) {
+        if(this.$system_reconnection_events[i].tag==tag) {
+            this.$system_reconnection_events.splice(i, 1);
+            return;
+        }
+    }
+}           
+
+NitrogenClass.prototype.$reconnect_system = function() {
+    for(var i=0; i<this.$system_reconnection_events.length; i++) {
+        this.$system_reconnection_events[i].fun();
+    }
 }
 
 NitrogenClass.prototype.$event_loop = function() {
@@ -1077,7 +1097,6 @@ NitrogenClass.prototype.$send_pagecontext = function() {
     var bertified = Bert.encode_to_bytearray(Bert.tuple(Bert.atom("page_context"), Bert.binary(pageContext)));
     this.$websocket.send(bertified);
 };
-    
 
 NitrogenClass.prototype.$ws_close = function() {
     if(this.$system_event_is_running) {
