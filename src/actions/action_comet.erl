@@ -138,7 +138,7 @@ send_global(Pool, Message) ->
 render_action(Record) -> 
     % If the pool is undefined, then give it a random value.
     Record1 = case Record#comet.pool == undefined of
-        true -> Record#comet { pool=wf:temp_id() };
+        true -> Record#comet { pool=erlang:make_ref() };
         false -> Record
     end,
 
@@ -580,7 +580,7 @@ get_actions_and_register_new_websocket_pid(WebsocketPid) ->
     case get_accumulator_pid_no_start(SeriesID) of
         undefined -> [];
         {ok, Pid} ->
-            Pid ! {websocket_pid, WebsocketPid},
+            %Pid ! {websocket_pid, WebsocketPid},
             get_actions_from_accumulator(Pid)
     end.
 
@@ -608,15 +608,6 @@ register_websocket_pid_with_accumulator(WebsocketPid) ->
     SeriesID = wf_context:series_id(),
     {ok, AccumulatorPid} = get_accumulator_pid(SeriesID),
     AccumulatorPid!{websocket_pid, WebsocketPid}.
-
-register_websocket_pid_with_accumulator_no_start(WebsocketPid) ->
-    SeriesID = wf_conext:series_id(),
-    case get_accumulator_pid_no_start(SeriesID) of
-        {ok, AccumulatorPid} ->
-            AccumulatorPid!{websocket_pid, WebsocketPid};
-        undefined ->
-            ok
-    end.
 
 get_websocket_pid_from_accumulator() ->
     SeriesID = wf_context:series_id(),

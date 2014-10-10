@@ -27,6 +27,7 @@ function NitrogenClass(o) {
     this.$websocket = null;
     this.$websockets_enabled = false; // default to off
     this.$websocket_reconnect_timer = null;
+    this.$disconnected = false;
     return this;
 }
 
@@ -347,11 +348,6 @@ NitrogenClass.prototype.$do_system_event = function(eventContext) {
     }
     else{
         var error_fun = function(XHR, textStatus, errorThrow) {
-            if(textStatus == "timeout" || textStatus == "error") {
-                setTimeout(function() {
-                    n.$requeue_last_system_event();
-                }, 5000);
-            }
             n.$system_event_error();
         } 
         n.$system_event_obj = $.ajax({
@@ -362,13 +358,17 @@ NitrogenClass.prototype.$do_system_event = function(eventContext) {
             cache: false,
             timeout: 20000,
             success: function(data, textStatus) { n.$system_event_success(data) },
-            error: error_fun 
+            error: function(XHR, textStatus, errorThrown) { n.$system_event_error(XHR, textStatus, errorThrown) }
         });                     
     }
 }
 
 NitrogenClass.prototype.$system_event_success = function(data) {
     var n = this;
+    if(n.$disconnected) {
+        n.$disconnected = false;
+        n.$reconnect_system();
+    }
     n.$system_event_is_running = false;
     n.$system_event_obj = null;
     // A system event shouldn't clobber the pageContext.
@@ -378,7 +378,14 @@ NitrogenClass.prototype.$system_event_success = function(data) {
     n.$set_param("pageContext", pc);
 }
 
-NitrogenClass.prototype.$system_event_error = function() {
+NitrogenClass.prototype.$system_event_error = function(XHR, textStatus, errorThrown) {
+    var n = this;
+    if(textStatus == "timeout" || textStatus == "error") {
+        setTimeout(function() {
+            n.$disconnected = true;
+            n.$requeue_last_system_event();
+        }, 5000);
+    }
     this.$system_event_is_running = false;
     this.$system_event_obj = null;
 }
