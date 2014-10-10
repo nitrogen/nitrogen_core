@@ -20,6 +20,7 @@ render_element(Record) ->
         {class, ["time", Record#time.class]},
         {title, Record#time.title},
         {style, Record#time.style},
+        {role, Record#time.role},
         {data_fields, Record#time.data_fields},
         ?WF_IF(Record#time.datetime, {datetime, Record#time.datetime})
     ]).

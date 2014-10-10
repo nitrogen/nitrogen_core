@@ -25,6 +25,8 @@
 
    + body - (/Nitrogen Elements/) :: The body of the article element.
 
+   + role - (/String/) :: The role of the HTML5 Article element.
+
 ** See Also
 
    + [[./base.html][Base element]]

@@ -32,6 +32,8 @@
    + body - (/Nitrogen element or list of elements./) :: Set the element or
       elements that will be rendered within this panel.
 
+   + role - (/String/) :: The role of the HTML5 Mark element.
+
 ** See Also
 
    + [[./base.html][base element]]

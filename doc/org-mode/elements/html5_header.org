@@ -28,6 +28,8 @@
 
    + body - (/Nitrogen Elements/) :: The body of the HTML5 Header element.
 
+   + role - (/String/) :: The role of the HTML5 Header element.
+
 ** See Also
 
    + [[./base.html][Base element]]

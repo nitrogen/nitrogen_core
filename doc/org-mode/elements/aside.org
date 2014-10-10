@@ -32,6 +32,8 @@
 
    + body - (/Nitrogen Elements/) :: The body of the aside element.
 
+   + role - (/String/) :: The role of the HTML5 Aside element.
+
 ** See Also 
 
    + [[./base.html][Base element]]
