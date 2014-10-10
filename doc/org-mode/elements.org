@@ -38,6 +38,7 @@
   + [[./elements/html5_footer.org][Footer]]
   + [[./elements/aside.org][Aside]]
   + [[./elements/mark.org][Mark]]
+  + [[./elements/main.org][Main]]
   + [[./elements/nav.org][Nav]]
   + [[./elements/section.org][Section]]
   + [[./elements/time.org][Time]]
