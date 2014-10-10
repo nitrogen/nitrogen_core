@@ -731,7 +731,8 @@
         body=""                 :: body()
     }).
 -record(html5_footer, {?ELEMENT_BASE(element_html5_footer),
-        body=""                 :: body()
+        body=""                 :: body(),
+        role=""                 :: text()
     }).
 -record(time, {?ELEMENT_BASE(element_time),
         datetime=""             :: text(),
@@ -743,6 +744,10 @@
         body=""                 :: body(),
         text=""                 :: text(),
         html_encode=true        :: html_encode()
+    }).
+-record(main, {?ELEMENT_BASE(element_main),
+        body=""                 :: body(),
+        role=""                 :: text()
     }).
 
 %% 960.gs Grid

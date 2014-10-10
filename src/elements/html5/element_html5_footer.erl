@@ -34,6 +34,7 @@ render_element(Record ) ->
                 {class, ["html5_footer", Record#html5_footer.class]},
                 {title, Record#html5_footer.title},
                 {style, Record#html5_footer.style},
+                {role, Record#html5_footer.role},
                 {data_fields, Record#html5_footer.data_fields}
             ])
     end.
