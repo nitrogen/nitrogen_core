@@ -8,6 +8,8 @@ var nitrogen_jqm_loaded=false;
 function NitrogenClass(o) {
     this.$url = document.location.href;
     this.$div = document;
+    this.$sleep_autoreconnect_interval = 25000;
+    this.$last_reconnection_interval_time = 0;
     this.$anchor_root_path = document;
     this.$params = new Object();
     this.$event_queue = new Array();
@@ -113,14 +115,41 @@ NitrogenClass.prototype.$cancel_system_reconnection_event = function(tag) {
 }           
 
 NitrogenClass.prototype.$reconnect_system = function() {
-    for(var i=0; i<this.$system_reconnection_events.length; i++) {
-        this.$system_reconnection_events[i].fun();
+    if(this.$disconnected) {
+        //alert("reconnecting");
+        for(var i=0; i<this.$system_reconnection_events.length; i++) {
+            this.$system_reconnection_events[i].fun();
+        }
+        this.$disconnected = false;
+        this.$system_reconnection_events = [];
     }
+}
+
+NitrogenClass.prototype.$start_autoreconnect_loop = function() {
+    this.$last_reconnection_interval_time = new Date().getTime();
+    this.$autoreconnect_loop();
+}
+
+NitrogenClass.prototype.$autoreconnect_loop = function() {
+    var n = this;
+    var now = new Date().getTime();
+    var time_since_last_iteration = now - this.$last_reconnection_interval_time;
+    if(time_since_last_iteration > this.$sleep_autoreconnect_interval) {
+        this.$system_event_queue = [];
+        this.$event_queue = [];
+        this.$system_event_is_running = false;
+        this.$event_is_running = false;
+        this.$disconnected = true;
+        this.$reconnect_system();
+    }
+    this.$last_reconnection_interval_time = now;
+    setTimeout(function() { n.$autoreconnect_loop() }, 5000);
 }
 
 NitrogenClass.prototype.$event_loop = function() {
     // Create a local copy of this for setTimeout callbacks.
     var this2 = this;
+
 
     // If no events are running and an event is queued, then fire it.
     if (!this.$system_event_is_running && this.$system_event_queue.length > 0) {
@@ -347,9 +376,6 @@ NitrogenClass.prototype.$do_system_event = function(eventContext) {
         n.$websocket.send(bertified.buffer);
     }
     else{
-        var error_fun = function(XHR, textStatus, errorThrow) {
-            n.$system_event_error();
-        } 
         n.$system_event_obj = $.ajax({
             url: this.$url,
             type:'post',
@@ -365,10 +391,7 @@ NitrogenClass.prototype.$do_system_event = function(eventContext) {
 
 NitrogenClass.prototype.$system_event_success = function(data) {
     var n = this;
-    if(n.$disconnected) {
-        n.$disconnected = false;
-        n.$reconnect_system();
-    }
+    if(n.$disconnected) n.$reconnect_system();
     n.$system_event_is_running = false;
     n.$system_event_obj = null;
     // A system event shouldn't clobber the pageContext.
@@ -381,8 +404,8 @@ NitrogenClass.prototype.$system_event_success = function(data) {
 NitrogenClass.prototype.$system_event_error = function(XHR, textStatus, errorThrown) {
     var n = this;
     if(textStatus == "timeout" || textStatus == "error") {
+        n.$disconnected = true;
         setTimeout(function() {
-            n.$disconnected = true;
             n.$requeue_last_system_event();
         }, 5000);
     }
@@ -1060,12 +1083,16 @@ NitrogenClass.prototype.$enable_websockets = function() {
 NitrogenClass.prototype.$flush_switchover_comet_actions = function() {
     var bertified = Bert.encode_to_bytearray(Bert.atom("flush_switchover_comet_actions"));
     this.$websocket.send(bertified);
+    // On success, this will run "Nitrogen.$reconnect_system()" (found in
+    // nitrogen:ws_message_catched/1)
 };
 
 NitrogenClass.prototype.$disable_websockets = function() {
     var n = this;
     n.$console_log("Websockets disabled or disconnected");
     n.$websockets_enabled = false;
+    n.$disconnected = true;
+
     if(typeof n.$websocket_reconnect_timer != "null") {
         clearTimeout(n.$websocket_reconnect_timer);
     }
@@ -1155,5 +1182,6 @@ $(document).ready(function() {
     if(!nitrogen_jqm_loaded) {
         Nitrogen.$attempt_websockets();
         Nitrogen.$event_loop();
+        Nitrogen.$start_autoreconnect_loop();
     }
 });
