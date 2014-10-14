@@ -17,9 +17,12 @@ function NitrogenClass(o) {
     this.$event_success_fun = null;
     this.$event_error_fun = null;
     this.$event_data_type = "text";
+    this.$event_obj = null;
+    this.$event_timeout = null;
     this.$system_event_queue = new Array();
     this.$system_event_is_running = false;
     this.$system_event_obj = null;
+    this.$system_event_timeout = null;
     this.$system_reconnection_events = Array();
     this.$last_system_event = null;
     this.$going_away = false;
@@ -28,6 +31,7 @@ function NitrogenClass(o) {
     this.$js_dependencies = new Array();
     this.$websocket = null;
     this.$websockets_enabled = false; // default to off
+    this.$websockets_ever_succeeded = false;
     this.$websocket_reconnect_timer = null;
     this.$disconnected = false;
     return this;
@@ -101,9 +105,50 @@ NitrogenClass.prototype.$requeue_last_system_event = function() {
     //this.$last_system_event = null;
 }
 
+NitrogenClass.prototype.$requeue_last_event = function() {
+    this.$event_queue.unshift(this.$last_event);
+}
+
+NitrogenClass.prototype.$show_disconnected_notice = function() {
+    if($("div.nitrogen_disconnected_bar").length == 0) {
+        var disc_bar = $("<div>")
+            .addClass("nitrogen_disconnected_bar")
+            .html("&#9889; Connection Broken! Attempting to reconnect... &#9889;");
+        $("body").prepend(disc_bar);
+    }
+    $("div.nitrogen_disconnected_bar").slideDown();
+}
+
+NitrogenClass.prototype.$hide_disconnected_notice = function() {
+    $("div.nitrogen_disconnected_bar").slideUp(500, function() {
+        $("div.nitrogen_disconnected_bar").remove()
+    });
+}
+
+NitrogenClass.prototype.$hide_disconnected_notice_worked = function() {
+    $("div.nitrogen_disconnected_bar")
+        .addClass("nitrogen_reconnected_bar")
+        .html("Success!");
+    this.$hide_disconnected_notice();
+}
+
+NitrogenClass.prototype.$is_disconnected = function() {
+    return this.$disconnected;
+};
+
+NitrogenClass.prototype.$set_disconnected = function(disconnected) {
+    this.$disconnected = disconnected;
+    if(disconnected) {
+        this.$show_disconnected_notice();
+    }
+    else {
+        this.$hide_disconnected_notice();
+    }
+};
+
 NitrogenClass.prototype.$register_system_reconnection_event = function(tag, fun) {
     this.$system_reconnection_events.push({tag:tag, fun:fun});
-}
+};
 
 NitrogenClass.prototype.$cancel_system_reconnection_event = function(tag) {
     for(var i=0; i<this.$system_reconnection_events.length; i++) {
@@ -112,55 +157,47 @@ NitrogenClass.prototype.$cancel_system_reconnection_event = function(tag) {
             return;
         }
     }
-}           
+};
 
 NitrogenClass.prototype.$reconnect_system = function() {
-    if(this.$disconnected) {
-        //alert("reconnecting");
+    if(this.$is_disconnected()) {
         for(var i=0; i<this.$system_reconnection_events.length; i++) {
             this.$system_reconnection_events[i].fun();
         }
-        this.$disconnected = false;
+        this.$set_disconnected(false);
         this.$system_reconnection_events = [];
     }
-}
-
-NitrogenClass.prototype.$start_autoreconnect_loop = function() {
-    this.$last_reconnection_interval_time = new Date().getTime();
-    this.$autoreconnect_loop();
-}
-
-NitrogenClass.prototype.$autoreconnect_loop = function() {
-    var n = this;
-    var now = new Date().getTime();
-    var time_since_last_iteration = now - this.$last_reconnection_interval_time;
-    if(time_since_last_iteration > this.$sleep_autoreconnect_interval) {
-        this.$system_event_queue = [];
-        this.$event_queue = [];
-        this.$system_event_is_running = false;
-        this.$event_is_running = false;
-        this.$disconnected = true;
-        this.$reconnect_system();
-    }
-    this.$last_reconnection_interval_time = now;
-    setTimeout(function() { n.$autoreconnect_loop() }, 5000);
 }
 
 NitrogenClass.prototype.$event_loop = function() {
     // Create a local copy of this for setTimeout callbacks.
     var this2 = this;
 
+    var now = new Date().getTime();
+
+    // If a system event has been running for longer than 20 seconds, then something is wrong - kill the event
+    if(this.$system_event_is_running && this.$system_event_obj !== null && now > this.$system_event_started + 20000) {
+        this.$cancel_system_event();
+    }
+
+    // Similarly, if a normal event has been running fir longer than 20 seconds, kill it too
+    if(this.$event_is_running && this.$event_obj !== null && now > this.$event_started + 20000) {
+        this.$cancel_event();
+    }
 
     // If no events are running and an event is queued, then fire it.
     if (!this.$system_event_is_running && this.$system_event_queue.length > 0) {
         var o = this.$system_event_queue.shift();
         this.$last_system_event = o;
+        this.$system_event_started = now;
         this.$do_system_event(o.eventContext);
     }
 
     // If no events are running and an event is queued, then fire it.
     if (!this.$event_is_running && this.$event_queue.length > 0) {
         var o = this.$event_queue.shift();
+        this.$last_event = o;
+        this.$event_started = now;
         this.$do_event(o.validationGroup, o.onInvalid, o.eventContext, o.extraParam, o.ajaxSettings);
     }
 
@@ -199,7 +236,6 @@ NitrogenClass.prototype.$execute_before_postbacks = function() {
         try{
             before_list[i]();
         }catch(ex){
-            Nitrogen.$console_log({before_postback_error: ex});
         }
     }
 }
@@ -303,6 +339,7 @@ NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventCo
     var validationParams = this.$validate_and_serialize(validationGroup);   
     if (validationParams == null) {
         this.$event_is_running = false;
+        this.$event_started = null;
 
         // Since validation failed, call onInvalid callback
         if (onInvalid) {
@@ -331,21 +368,37 @@ NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventCo
         var bertified = Bert.encode_to_bytearray(Bert.tuple(Bert.atom("nitrogen_postback"), params));
         this.$websocket.send(bertified.buffer);
     }else{
-        jQuery.ajax({ 
+        this.$event_obj = jQuery.ajax({ 
             url: this.$url,
             type:'post',
             data: [jQuery.param(params), extraParam || ''].join('&'),
             dataType: s.dataType,
             cache: s.cache,
-            timeout: 20000,
+            timeout: 18000,
             success: function(data, textStatus) { n.$event_success(data, textStatus) },
             error: function(XHR, textStatus, errorThrown) { n.$event_error(XHR, textStatus, errorThrown) }
         });
     }
 }
 
+NitrogenClass.prototype.$cancel_event = function() {
+    if(this.$event_is_running) {
+        if(this.$event_obj !== null) {
+            this.$event_obj.abort();
+            this.$event_obj = null;
+        }
+        this.$event_started = null;
+        this.$set_disconnected(true);
+        this.$event_is_running = false;
+    }
+}
+
 NitrogenClass.prototype.$event_success = function(data, textStatus) {
     this.$event_is_running = false;
+    this.$event_started = null;
+    if(this.$is_disconnected()) {
+        this.$reconnect_system();
+    }
     if(typeof this.$event_success_fun == 'function') {
         this.$event_success_fun(data, textStatus);
     }
@@ -355,6 +408,15 @@ NitrogenClass.prototype.$event_success = function(data, textStatus) {
 }
 
 NitrogenClass.prototype.$event_error = function(XHR, textStatus, errorThrown) {
+    var n = this;
+    this.$event_started = null;
+    if(textStatus == "timeout" || textStatus=="error") {
+        n.$set_disconnected(true);
+        setTimeout(function() {
+            n.$requeue_last_event();
+        }, 5000);
+    }
+        
     this.$event_is_running = false;
     if(typeof this.$event_error_fun == 'function') {
         this.$event_error_fun(XHR, textStatus, errThrown)
@@ -382,18 +444,30 @@ NitrogenClass.prototype.$do_system_event = function(eventContext) {
             data: jQuery.param(params),
             dataType: 'text',
             cache: false,
-            timeout: 20000,
+            timeout: 18000,
             success: function(data, textStatus) { n.$system_event_success(data) },
             error: function(XHR, textStatus, errorThrown) { n.$system_event_error(XHR, textStatus, errorThrown) }
-        });                     
+        });
+    }
+}
+
+NitrogenClass.prototype.$cancel_system_event = function() {
+    if(this.$system_event_is_running) {
+        this.$system_event_obj.abort();
+        this.$system_event_started = null;
+        this.$set_disconnected(true);
+        this.$system_event_is_running = false;
     }
 }
 
 NitrogenClass.prototype.$system_event_success = function(data) {
     var n = this;
-    if(n.$disconnected) n.$reconnect_system();
+    if(n.$is_disconnected()) {
+        n.$reconnect_system();
+    }
     n.$system_event_is_running = false;
     n.$system_event_obj = null;
+    n.$system_event_started = null;
     // A system event shouldn't clobber the pageContext.
     // Easiest to account for it here.
     var pc = n.$params["pageContext"];
@@ -403,8 +477,9 @@ NitrogenClass.prototype.$system_event_success = function(data) {
 
 NitrogenClass.prototype.$system_event_error = function(XHR, textStatus, errorThrown) {
     var n = this;
+    this.$system_event_started = null;
     if(textStatus == "timeout" || textStatus == "error") {
-        n.$disconnected = true;
+        n.$set_disconnected(true);
         setTimeout(function() {
             n.$requeue_last_system_event();
         }, 5000);
@@ -580,8 +655,7 @@ NitrogenClass.prototype.$increment_pending_upload_counter = function(form,increm
         counter=0;
     counter+=incrementer;
     $(form).data("pending_uploads",counter);
-    if(counter==0)
-    {
+    if(counter==0) {
         Nitrogen.$alert_unfinished_files(form);
     }
 }
@@ -596,8 +670,7 @@ NitrogenClass.prototype.$upload_finished = function(Name) {
 
 NitrogenClass.prototype.$alert_unfinished_files = function(form) {
     var files = $(form).find(".upload_droplist li:not(.upload_successful):visible");
-    if(files.length > 0)
-    {
+    if(files.length > 0) {
         $(form).find(".upload_droplist li:not(.upload_successful)").css("color","red").fadeOut("slow");
 
         var filenames = $(files).get().map(function(f) { return $(f).text() }).join("\r\n");
@@ -1077,6 +1150,7 @@ NitrogenClass.prototype.$get_progress_bar_value = function(el) {
 NitrogenClass.prototype.$enable_websockets = function() {
     this.$console_log("Websockets Enabled");
     this.$websockets_enabled = true;
+    this.$websockets_ever_succeeded = true;
     this.$flush_switchover_comet_actions();
 };
 
@@ -1091,12 +1165,23 @@ NitrogenClass.prototype.$disable_websockets = function() {
     var n = this;
     n.$console_log("Websockets disabled or disconnected");
     n.$websockets_enabled = false;
-    n.$disconnected = true;
 
-    if(typeof n.$websocket_reconnect_timer != "null") {
-        clearTimeout(n.$websocket_reconnect_timer);
+    // If websockets had ever succeeded, then disabling websockets is an
+    // indicator that the websockets should try to reconnect and in the
+    // meantime, mark us as disconnected for comet purposes (which will end up
+    // popping up the "You are disconnected" bar).
+    //
+    // If, however, websockets never connected, then it's likely there's a
+    // proxy that's blocking the websockets, so no need to continue to try.
+    // Just never try again.
+    if(n.$websockets_ever_succeeded) {
+        n.$set_disconnected(true);
+
+        if(typeof n.$websocket_reconnect_timer != "null") {
+            clearTimeout(n.$websocket_reconnect_timer);
+        }
+        n.$websocket_reconnect_timer = setTimeout(function() { n.$ws_init() }, 5000);
     }
-    n.$websocket_reconnect_timer = setTimeout(function() { n.$ws_init() }, 5000);
 };
 
 NitrogenClass.prototype.$ws_init = function() {
@@ -1135,6 +1220,9 @@ NitrogenClass.prototype.$send_pagecontext = function() {
 NitrogenClass.prototype.$ws_close = function() {
     if(this.$system_event_is_running) {
         this.$requeue_last_system_event();
+    }
+    if(this.$event_is_running) {
+        this.$requeue_last_event();
     }
     this.$disable_websockets();
 };
@@ -1182,6 +1270,5 @@ $(document).ready(function() {
     if(!nitrogen_jqm_loaded) {
         Nitrogen.$attempt_websockets();
         Nitrogen.$event_loop();
-        Nitrogen.$start_autoreconnect_loop();
     }
 });

@@ -112,6 +112,29 @@ div.inplace_textbox .LV_invalid {
     border: solid 2px #D0D0C0;
 }
 
+/*** Disconnection Bar ***/
+div.nitrogen_disconnected_bar {
+	display:none;
+	position:fixed;
+	top:0;
+	left:0;
+	width:100%;
+	padding:5px 0 5px 0;
+	text-align:center;
+	height:20px;
+	background: #fcc;
+	color: #F00;
+	font-weight:bold;
+	z-index: 10000;
+	border-bottom: 1px solid #f00;
+}
+
+div.nitrogen_reconnected_bar {
+	color:#090;
+	background:#cfc;
+	border-bottom: 1px solid #090;
+}
+
 /*** Lightbox ***/
 
 .lightbox, .lightbox_table, .lightbox_background {

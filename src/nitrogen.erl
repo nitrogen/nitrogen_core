@@ -50,11 +50,9 @@ run(Bridge) ->
 ws_init(Bridge) ->
     init_request(Bridge),
     call_main_handler_ws_init(),
-    wf:info("Connected at: ~p",[self()]),
     ok.
 
 ws_message({text, Other}, _Bridge, _State) ->
-    wf:info("Received unknown message from websocket: ~p",[Other]),
     noreply;
 ws_message({binary, Bin}, _Bridge, _State) ->
     try
@@ -99,7 +97,6 @@ ws_info(Msg, _Bridge, _State) ->
     noreply.
 
 ws_terminate(_Reason, _Bridge, _State) ->
-    wf:info("Disconnected ~p", [self()]),
     ok.
 
 
