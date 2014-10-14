@@ -142,7 +142,7 @@ NitrogenClass.prototype.$set_disconnected = function(disconnected) {
         this.$show_disconnected_notice();
     }
     else {
-        this.$hide_disconnected_notice();
+        this.$hide_disconnected_notice_worked();
     }
 };
 
