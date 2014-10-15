@@ -2,6 +2,8 @@
 -module(wf_test).
 -include("wf.hrl").
 -export([
+    start_all/1,
+
     start/1,
     pass/1,
     fail/2,
@@ -19,6 +21,24 @@
     test_event/1,
     event/1
 ]).
+
+start_all(App) ->
+    timer:sleep(3000),
+    {ok, Browsers} = application:get_env(App, test_browsers),
+    {ok, Tests} = application:get_env(App, tests),
+
+    lists:foreach(fun(Browser) ->
+        error_logger:info_msg("Starting tests with ~s",[Browser]),
+        Pid = wf_test_srv:start(Browser, Tests),
+        error_logger:info_msg("Test Server Pid: ~p:",[Pid]),
+        erlang:monitor(process, Pid),
+        receive
+            {'DOWN', _, process, Pid, _ } ->
+                error_logger:info_msg("Finished tests with ~s~n~n",[Browser])
+        end
+    end, Browsers),
+    init:stop().
+                
 
 start(TestFun) ->
     {ok, Pid} = wf:comet(fun() ->
@@ -108,7 +128,7 @@ internal_pass(Name) ->
 
 internal_fail(Name, Reason) ->
     increment_fail(),
-    io:format("...FAILED (~p). Reason: ~p~n", [Name, Reason]).
+    io:format("...FAILED (~p).~n Reason: ~p~n", [Name, Reason]).
    
 increment_pass() ->
     wf_test_srv:passed(1),
