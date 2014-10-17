@@ -71,8 +71,8 @@ render_element(Record) ->
 				style = ?WF_IF(StartMode==view,"display:none"),
 				body=[
 					#textarea { id=TextBoxID, text=Text },
-					#button { id=OKButtonID, text="OK"},
-					#button { id=CancelButtonID, text="Cancel", click=[
+					#button { id=OKButtonID, class=inplace_ok, text="OK"},
+					#button { id=CancelButtonID, class=inplace_cancel, text="Cancel", click=[
                         #hide{ target=EditPanelID },
                         #show{ target=ViewPanelID },
                         #script{ script=wf:f("obj('~s').value=obj('~s').defaultValue;",[TextBoxID, TextBoxID]) }

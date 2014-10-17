@@ -5,6 +5,7 @@
     start_all/1,
 
     start/1,
+    start_other/2,
     pass/1,
     fail/2,
 
@@ -18,8 +19,13 @@
     
     test/5,
 
+    test_js/2,
+    test_js/4,
+    test_js/5,
+
     test_event/1,
-    event/1
+    event/1,
+    api_event/3
 ]).
 
 start_all(App) ->
@@ -38,7 +44,6 @@ start_all(App) ->
         end
     end, Browsers),
     init:stop().
-                
 
 start(TestFun) ->
     {ok, Pid} = wf:comet(fun() ->
@@ -48,6 +53,11 @@ start(TestFun) ->
         summarize_and_continue()
     end),
     wf:state(test_comet_pid, Pid).
+
+start_other(OtherModule, TestFun) ->
+    wf_context:page_module(OtherModule),
+    start(TestFun),
+    OtherModule:main().
 
 summarize_and_continue() ->
     Passed = erlang:get(wf_test_passed),
@@ -85,6 +95,7 @@ test_auto(Name, Setup, Assertion) ->
 test_auto(Name, Setup, Assertion, Timeout) ->
     test(true, Name, Setup, Assertion, Timeout).
 
+
 test(AutoPostback, Name, Setup, _Assert=undefined, Timeout) ->
     test(AutoPostback, Name, Setup, fun() -> true end, Timeout);
 test(AutoPostback, Name, _Setup=undefined, Assertion, Timeout) ->
@@ -109,18 +120,55 @@ test(AutoPostback, Name, Setup, Assertion, Timeout) when is_function(Setup, 0), 
             internal_fail(Name, {Class, Error, erlang:get_stacktrace()})
     end.
 
-test_event(Name) ->
-    Assert = wf:session({assertion, Name}),
-    try Assert() of
-        true -> pass(Name);
-        Result -> fail(Name, {assert_returned, Result})
+-define(wf_assert(Name, Assertion, Expectation),
+    try Assertion of
+        Expectation -> pass(Name);
+        Other -> fail(Name, [{expected, Expectation}, {returned, Other}])
     catch
         Class:Error ->
             fail(Name, {Class, Error, erlang:get_stacktrace()})
-    end.
+    end).
+
+test_event(Name) ->
+    Assert = wf:session({assertion, Name}),
+    ?wf_assert(Name, Assert(), true).
 
 event(Name) ->
     test_event(Name).
+
+
+test_js(Name, {Setup, JS, Assertion}) ->
+    test_js(Name, Setup, JS, Assertion).
+
+test_js(Name, Setup, JS, Assertion) -> 
+    test_js(Name, Setup, JS, Assertion, 2000).
+
+test_js(Name, _Setup=undefined, JS, Assertion, Timeout) ->
+    test_js(Name, fun() -> ok end, JS, Assertion, Timeout);
+test_js(Name, Setup, JS, _Assertion=undefined, Timeout) ->
+    test_js(Name, Setup, JS, fun(_) -> true end, Timeout);
+test_js(Name, Setup, JS, Assertion, Timeout) ->
+    try
+        wf:wire(#api{name=Name, tag=Assertion, delegate=?MODULE}),
+        Setup(),
+        wf:wire(wf:f("var f=function(){ ~s }; page.~p(f())", [JS, Name])),
+        wf:flush(),
+        receive
+            Name ->
+                internal_pass(Name);
+            {fail, Name, Reason} ->
+                internal_fail(Name, Reason)
+        after
+            Timeout ->
+                internal_fail(Name, {timeout, Timeout})
+         end
+    catch
+        Class:Error ->
+            internal_fail(Name, {Class, Error, erlang:get_stacktrace()})
+    end.
+
+api_event(Name, Assertion, Args) ->
+    ?wf_assert(Name, Assertion(Args), true).
 
 internal_pass(Name) ->
     increment_pass(),
@@ -139,6 +187,5 @@ increment_fail() ->
     wf_test_srv:failed(1),
     N = erlang:get(wf_test_failed),
     erlang:put(wf_test_failed, N+1).
-
 
 

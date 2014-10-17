@@ -17,4 +17,12 @@
 
 -define(wf_test_event(Name),
 	wf_test:event(Name)).
+
+-define(wf_test_js(Name, SetupJSAssertion),
+	wf_test:test_js(Name, SetupJSAssertion)).
+-define(wf_test_js(Name, Setup, JS, Assertion),
+	wf_test:test_js(Name, Setup, JS, Assertion)).
+-define(wf_test_js(Name, Setup, JS, Asertion, Timeout),
+	wf_test:test_js(Name, Setup, JS, Assertion, Timeout)).
+
 -endif.
