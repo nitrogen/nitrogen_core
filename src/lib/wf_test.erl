@@ -28,6 +28,11 @@
     api_event/3
 ]).
 
+-define(OPTS, [
+    {timeout, 2000},
+    {delay, 0}
+]).
+
 start_all(App) ->
     timer:sleep(3000),
     {ok, Browsers} = application:get_env(App, test_browsers),
@@ -81,30 +86,32 @@ test_manual(Name, {Setup, Assertion}) ->
     test_manual(Name, Setup, Assertion).
 
 test_manual(Name, Setup, Assertion) ->
-    test_manual(Name, Setup, Assertion, 2000).
+    test_manual(Name, Setup, Assertion, ?OPTS).
 
-test_manual(Name, Setup, Assertion, Timeout) ->
-    test(false, Name, Setup, Assertion, Timeout).
+test_manual(Name, Setup, Assertion, Options) ->
+    test(false, Name, Setup, Assertion, Options).
 
 test_auto(Name, {Setup, Assertion}) ->
     test_auto(Name, Setup, Assertion).
 
 test_auto(Name, Setup, Assertion) ->
-    test_auto(Name, Setup, Assertion, 2000).
+    test_auto(Name, Setup, Assertion, ?OPTS).
 
-test_auto(Name, Setup, Assertion, Timeout) ->
-    test(true, Name, Setup, Assertion, Timeout).
+test_auto(Name, Setup, Assertion, Options) ->
+    test(true, Name, Setup, Assertion, Options).
 
 
-test(AutoPostback, Name, Setup, _Assert=undefined, Timeout) ->
-    test(AutoPostback, Name, Setup, fun() -> true end, Timeout);
-test(AutoPostback, Name, _Setup=undefined, Assertion, Timeout) ->
-    test(AutoPostback, Name, fun() -> ok end, Assertion, Timeout);
-test(AutoPostback, Name, Setup, Assertion, Timeout) when is_function(Setup, 0), is_function(Assertion, 0) ->
+test(AutoPostback, Name, Setup, _Assert=undefined, Options) ->
+    test(AutoPostback, Name, Setup, fun() -> true end, Options);
+test(AutoPostback, Name, _Setup=undefined, Assertion, Options) ->
+    test(AutoPostback, Name, fun() -> ok end, Assertion, Options);
+test(AutoPostback, Name, Setup, Assertion, Options) when is_function(Setup, 0), is_function(Assertion, 0) ->
     try
+        Timeout = get_option(Options, timeout),
+        Delay = get_option(Options, delay),
         wf:session({assertion, Name}, Assertion),
         Setup(),
-        ?WF_IF(AutoPostback, wf:wire(#event{delegate=?MODULE, postback=Name})),
+        maybe_wire_autopostback(AutoPostback, Name, Delay),
         wf:flush(),
         receive
             Name ->
@@ -119,6 +126,13 @@ test(AutoPostback, Name, Setup, Assertion, Timeout) when is_function(Setup, 0), 
         Class:Error ->
             internal_fail(Name, {Class, Error, erlang:get_stacktrace()})
     end.
+
+maybe_wire_autopostback(false=_AutoPostback, _, _) ->
+    ok;
+maybe_wire_autopostback(true=_AutoPostback, Name, 0=_Delay) ->
+    wf:wire(#event{delegate=?MODULE, postback=Name});
+maybe_wire_autopostback(true=_AutoPostback, Name, Delay) ->
+    wf:wire(#event{delegate=?MODULE, type=timer, delay=Delay, postback=Name}).
 
 -define(wf_assert(Name, Assertion, Expectation),
     try Assertion of
@@ -138,20 +152,24 @@ event(Name) ->
 
 
 test_js(Name, {Setup, JS, Assertion}) ->
-    test_js(Name, Setup, JS, Assertion).
+    test_js(Name, Setup, JS, Assertion);
+test_js(Name, {Setup, JS, Assertion, Options}) ->
+    test_js(Name, Setup, JS, Assertion, Options).
 
 test_js(Name, Setup, JS, Assertion) -> 
-    test_js(Name, Setup, JS, Assertion, 2000).
+    test_js(Name, Setup, JS, Assertion, ?OPTS).
 
-test_js(Name, _Setup=undefined, JS, Assertion, Timeout) ->
-    test_js(Name, fun() -> ok end, JS, Assertion, Timeout);
-test_js(Name, Setup, JS, _Assertion=undefined, Timeout) ->
-    test_js(Name, Setup, JS, fun(_) -> true end, Timeout);
-test_js(Name, Setup, JS, Assertion, Timeout) ->
+test_js(Name, _Setup=undefined, JS, Assertion, Options) ->
+    test_js(Name, fun() -> ok end, JS, Assertion, Options);
+test_js(Name, Setup, JS, _Assertion=undefined, Options) ->
+    test_js(Name, Setup, JS, fun(_) -> true end, Options);
+test_js(Name, Setup, JS, Assertion, Options) ->
     try
+        Delay = get_option(Options, delay),
+        Timeout = get_option(Options, timeout),
         wf:wire(#api{name=Name, tag=Assertion, delegate=?MODULE}),
         Setup(),
-        wf:wire(wf:f("var f=function(){ ~s }; page.~p(f())", [JS, Name])),
+        wire_api_call(JS, Name, Delay),
         wf:flush(),
         receive
             Name ->
@@ -166,6 +184,14 @@ test_js(Name, Setup, JS, Assertion, Timeout) ->
         Class:Error ->
             internal_fail(Name, {Class, Error, erlang:get_stacktrace()})
     end.
+
+wire_api_call(JS, Name, _Delay=0) ->
+    wf:wire(format_api_call(JS, Name));
+wire_api_call(JS, Name, Delay) ->
+    wf:wire(#event{type=timer, delay=Delay, actions=format_api_call(JS, Name)}).
+
+format_api_call(JS, Name) ->
+    wf:f("var f=function(){ ~s }; page.~p(f())", [JS, Name]).
 
 api_event(Name, Assertion, Args) ->
     ?wf_assert(Name, Assertion(Args), true).
@@ -188,4 +214,9 @@ increment_fail() ->
     N = erlang:get(wf_test_failed),
     erlang:put(wf_test_failed, N+1).
 
-
+get_option(Options, Key) ->
+    case proplists:get_value(Key, Options) of
+        undefined ->
+            proplists:get_value(Key, ?OPTS);
+        Val -> Val
+    end.
