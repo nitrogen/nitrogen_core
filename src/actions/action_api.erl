@@ -24,5 +24,5 @@ render_action(Record) ->
 event({api_event, Record}) ->
     Module = wf:coalesce([Record#api.delegate, wf_context:page_module()]),
     Args = wf:q(args),
-    Term = binary_to_term(list_to_binary(Args), [safe]),
+    Term = binary_to_term(list_to_binary(unicode:characters_to_list(list_to_binary(Args))), [safe]),
     Module:api_event(Record#api.name, Record#api.tag, Term).

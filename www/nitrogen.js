@@ -371,7 +371,7 @@ NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventCo
         this.$event_obj = jQuery.ajax({ 
             url: this.$url,
             type:'post',
-            data: [jQuery.param(params), extraParam || ''].join('&'),
+            data: jQuery.param(params),
             dataType: s.dataType,
             cache: s.cache,
             timeout: 18000,
@@ -973,12 +973,15 @@ NitrogenClass.prototype.$normalize_param = function(key, value) {
 
 NitrogenClass.prototype.$encode_arguments_object = function(Obj) {
     if (! Bert) { alert("Bert.js library not included in template.") }
-    var a = new Array();
-    for (var i=0; i<Obj.length; i++) {
-        a.push(Obj[i]);
+    else {
+        Bert.assoc_array_key_encoding("binary");
+        var a = new Array();
+        for (var i=0; i<Obj.length; i++) {
+            a.push(Obj[i]);
+        }
+        var s = Bert.encode(a);
+        return {args: s};
     }
-    var s = Bert.encode(a);
-    return {args: s};
 }
 
 NitrogenClass.prototype.$urlencode = function(str) {
