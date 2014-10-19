@@ -979,7 +979,8 @@ NitrogenClass.prototype.$encode_arguments_object = function(Obj) {
         for (var i=0; i<Obj.length; i++) {
             a.push(Obj[i]);
         }
-        var s = Bert.encode(a);
+        // We want to encode to base64 due to $.param interpreting this as a unicode array.
+        var s = Bert.encode_to_base64(a);
         return {args: s};
     }
 }

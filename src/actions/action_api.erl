@@ -24,5 +24,13 @@ render_action(Record) ->
 event({api_event, Record}) ->
     Module = wf:coalesce([Record#api.delegate, wf_context:page_module()]),
     Args = wf:q(args),
-    Term = binary_to_term(list_to_binary(unicode:characters_to_list(list_to_binary(Args))), [safe]),
+    Term = decode_args(Args),
     Module:api_event(Record#api.name, Record#api.tag, Term).
+
+%% jquery.param wants to treat the encoding as a UTF8 string and doesn't
+%% properly encode the binary data ofa Uint8Array, so we just encode to base64
+%% and play it safe.
+decode_args(Args) ->
+    binary_to_term(base64:decode(Args), [safe]).
+
+            
