@@ -52,7 +52,6 @@ start_all(App) ->
     lists:foreach(fun(Browser) ->
         error_logger:info_msg("Starting tests with ~s",[Browser]),
         Pid = wf_test_srv:start(Browser, Tests),
-        error_logger:info_msg("Test Server Pid: ~p:",[Pid]),
         erlang:monitor(process, Pid),
         receive
             {'DOWN', _, process, Pid, _ } ->
