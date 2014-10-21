@@ -8,6 +8,7 @@
 -export ([
     clean_lower/1,
     to_list/1,
+    to_unicode_list/1,
     to_atom/1,
     to_existing_atom/1,
     to_binary/1,
@@ -40,6 +41,16 @@ to_list(L) when is_list(L) ->
     lists:flatten(SubLists);
 to_list(A) -> inner_to_list(A).
 
+-spec to_unicode_list(term()) -> list().
+to_unicode_list(undefined) -> [];
+to_unicode_list(L) when ?IS_STRING(L) -> unicode:characters_to_list(L);
+to_unicode_list(L) when is_list(L) ->
+    SubLists = [to_unicode_list(X) || X <- L],
+    lists:flatten(SubLists);
+to_unicode_list(B) when is_binary(B) -> unicode:characters_to_list(B);
+to_unicode_list(A) -> inner_to_list(A).
+    
+
 -spec inner_to_list(term()) -> list().
 inner_to_list(A) when is_atom(A) -> atom_to_list(A);
 inner_to_list(B) when is_binary(B) -> binary_to_list(B);
@@ -69,7 +80,7 @@ to_binary(A) when is_atom(A) -> to_binary(atom_to_list(A));
 to_binary(B) when is_binary(B) -> B;
 to_binary(I) when is_integer(I) -> to_binary(integer_to_list(I));
 to_binary(F) when is_float(F) -> to_binary(nitro_mochinum:digits(F));
-to_binary(L) when is_list(L) -> iolist_to_binary(L).
+to_binary(L) when is_list(L) -> list_to_binary(L).
 
 -spec to_integer(term()) -> integer().
 to_integer(A) when is_atom(A) -> to_integer(atom_to_list(A));

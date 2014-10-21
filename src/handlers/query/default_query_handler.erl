@@ -56,7 +56,7 @@ get_value(Path, Config, State) ->
     case get_values(Path, Config, State) of
         [] -> undefined;
         [One] -> 
-            wf:to_list(One);
+            wf:to_unicode_list(One);
         _Many -> throw({?MODULE, too_many_matches, Path})
     end.
 
@@ -70,7 +70,7 @@ get_params(_Config, #state{request=Request, websocket=Websocket} = _State) ->
     F = fun({KeyPartsReversed, Value}) ->
         KeyParts = lists:reverse(KeyPartsReversed),
         Key = string:join(KeyParts, "."),
-        { Key, wf:to_list(Value) }
+        { Key, wf:to_unicode_list(Value) }
     end,
     lists:map(F, Params).
 
@@ -85,7 +85,7 @@ get_params(_Config, #state{request=Request, websocket=Websocket} = _State) ->
 %%   Params = [y, b, c]
 -spec refine_params(NormalizedPath :: list(), Params :: list()) -> Values :: list().
 refine_params([], Params) -> 
-    [wf:to_list(V) || {_, V} <- Params];
+    [wf:to_unicode_list(V) || {_, V} <- Params];
 refine_params([H|T], Params) ->
     F = fun({Path, Value}, Acc) ->
         case split_on(H, Path) of

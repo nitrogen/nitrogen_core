@@ -33,6 +33,17 @@
     {delay, 0}
 ]).
 
+%% NOTEABLE PATTERN: You may notice that instead executing the setup scripts in
+%% the test functions (test_js/X, test/X), we're instead packaging up the
+%% function and sending it off to the browser to be executed in a postback.
+%% This is because comet processes maintain their own pagecontext, and as as
+%% result, any things using the wf:state functions will not be accessible
+%% between comet processes and postback processes.  For now, this is a
+%% side-effect, and is something that I'd like to rectify going forward, but
+%% for now, it's how it is.  This gets around that limitation, allowing us to
+%% use wf:state and anything dependent on it for the setup and assertion
+%% functions.
+
 start_all(App) ->
     timer:sleep(3000),
     {ok, Browsers} = application:get_env(App, test_browsers),
@@ -110,8 +121,11 @@ test(AutoPostback, Name, Setup, Assertion, Options) when is_function(Setup, 0), 
         Timeout = get_option(Options, timeout),
         Delay = get_option(Options, delay),
         wf:session({assertion, Name}, Assertion),
-        Setup(),
-        maybe_wire_autopostback(AutoPostback, Name, Delay),
+        ToExec = fun() ->
+            Setup(),
+            maybe_wire_autopostback(AutoPostback, Name, Delay)
+        end,
+        wf:wire(#event{postback={test_exec, ToExec}, delegate=?MODULE}),
         wf:flush(),
         receive
             Name ->
@@ -147,6 +161,8 @@ test_event(Name) ->
     Assert = wf:session({assertion, Name}),
     ?wf_assert(Name, Assert(), true).
 
+event({test_exec, Fun}) ->
+    Fun();
 event(Name) ->
     test_event(Name).
 
@@ -167,9 +183,12 @@ test_js(Name, Setup, JS, Assertion, Options) ->
     try
         Delay = get_option(Options, delay),
         Timeout = get_option(Options, timeout),
-        wf:wire(#api{name=Name, tag=Assertion, delegate=?MODULE}),
-        Setup(),
-        wire_api_call(JS, Name, Delay),
+        ToExec = fun() ->
+            wf:wire(#api{name=Name, tag=Assertion, delegate=?MODULE}),
+            Setup(),
+            wire_api_call(JS, Name, Delay)
+        end,
+        wf:wire(#event{delegate=?MODULE, postback={test_exec, ToExec}}),
         wf:flush(),
         receive
             Name ->

@@ -137,8 +137,30 @@ BertClass.prototype.encode_inner = function (Obj) {
 };
 
 BertClass.prototype.encode_string = function (Obj) {
+	var hasUnicode = false;	
+	for (i = 0; i < Obj.length && !hasUnicode; i++) {
+		if(Obj.charCodeAt(i) >= 256)
+			hasUnicode = true;
+	}
+	if(hasUnicode){
+		return this.encode_unicode_string(Obj);
+	}else
+	{
+		return this.encode_latin1_string(Obj);
+	}
+};
+
+BertClass.prototype.encode_latin1_string = function(Obj) {
 	return this.STRING + this.int_to_bytes(Obj.length, 2) + Obj;
 };
+
+BertClass.prototype.encode_unicode_string = function(Obj) {
+	var i, s = this.LIST + this.int_to_bytes(Obj.length, 4);
+	for(i = 0; i < Obj.length; i++) {
+		s += this.encode_number(Obj.charCodeAt(i));
+	}
+	return s + this.NIL;
+};	
 
 BertClass.prototype.encode_boolean = function (Obj) {
 	if (Obj) {

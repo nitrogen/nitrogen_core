@@ -4,7 +4,7 @@
 % See MIT-LICENSE for licensing information.
 
 -module (wf_validation).
--include_lib ("wf.hrl").
+-include ("wf.hrl").
 -export ([validate/0]).
 
 validate() ->
