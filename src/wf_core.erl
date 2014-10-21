@@ -27,6 +27,8 @@ run() ->
                 Bridge1:build_response()
         end
     catch
+        exit:normal ->
+            exit(normal);
         Type : Error -> 
             run_crash(Bridge, Type, Error, erlang:get_stacktrace())
     end.
@@ -43,6 +45,8 @@ run_crash(Bridge, Type, Error, Stacktrace) ->
         end,
         finish_dynamic_request()
     catch
+        exit:normal ->
+            exit(normal);
         Type2:Error2 ->
             ?LOG("~p~n", [{error, Type2, Error2, erlang:get_stacktrace()}]),
             Bridge1 = sbw:set_status_code(500, Bridge),
