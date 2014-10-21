@@ -26,8 +26,9 @@ run() ->
                 Bridge1 = Bridge:set_response_data(Message),
                 Bridge1:build_response()
         end
-    catch Type : Error -> 
-        run_crash(Bridge, Type, Error, erlang:get_stacktrace())
+    catch
+        Type : Error -> 
+            run_crash(Bridge, Type, Error, erlang:get_stacktrace())
     end.
 
     
@@ -41,11 +42,12 @@ run_crash(Bridge, Type, Error, Stacktrace) ->
             _                   -> run_crashed_first_request(Type, Error, Stacktrace)
         end,
         finish_dynamic_request()
-    catch Type2:Error2 ->
-        ?LOG("~p~n", [{error, Type2, Error2, erlang:get_stacktrace()}]),
-        Bridge1 = sbw:set_status_code(500, Bridge),
-        Bridge2 = sbw:set_response_data("Internal Server Error", Bridge1),
-        sbw:build_response(Bridge2)
+    catch
+        Type2:Error2 ->
+            ?LOG("~p~n", [{error, Type2, Error2, erlang:get_stacktrace()}]),
+            Bridge1 = sbw:set_status_code(500, Bridge),
+            Bridge2 = sbw:set_response_data("Internal Server Error", Bridge1),
+            sbw:build_response(Bridge2)
     end.
 
 init_websocket(SerializedPageContext) ->
@@ -229,16 +231,18 @@ build_static_file_response(Path) ->
 build_first_response(Html, Script) ->
     % Update the output with any script...
     Html1 = replace_script(Script, Html),
+    Html2 = unicode:characters_to_binary(Html1),
 
     % Update the response bridge and return.
     Bridge = wf_context:bridge(),
-    Bridge1 = sbw:set_response_data(Html1, Bridge),
+    Bridge1 = sbw:set_response_data(Html2, Bridge),
     sbw:build_response(Bridge1).
 
 build_postback_response(Script) ->
     % Update the response bridge and return.
     Bridge = wf_context:bridge(),
-    Bridge1 = sbw:set_response_data(Script, Bridge),
+    Script1 = unicode:characters_to_binary(Script),
+    Bridge1 = sbw:set_response_data(Script1, Bridge),
     sbw:build_response(Bridge1).
 
 replace_script(_,Html) when ?IS_STRING(Html) -> Html;
