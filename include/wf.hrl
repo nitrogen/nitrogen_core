@@ -884,7 +884,7 @@
         function                :: fun() | undefined
     }).
 -record(set, {?ACTION_BASE(action_set),
-        value=""                :: text()
+        value=""                :: text() | integer()
     }).
 -record(set_multiple, {?ACTION_BASE(action_set_multiple),
         values=[]               :: [text()]
