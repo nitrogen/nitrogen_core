@@ -15,6 +15,8 @@
     depickle/2
 ]).
 
+-compile(export_all).
+
 -type pickled() :: binary() | string().
 
 -spec pickle(Data :: term()) -> pickled().
@@ -62,7 +64,8 @@ inner_depickle(PickledData) ->
     Decoded = modified_base64_decode(wf:to_binary(PickledData)),
     <<IV:16/binary,Signature:20/binary,Cipher/binary>> = Decoded,
     Signature = ?WF_HASH(<<Key/binary,Cipher/binary>>),
-    {_Data,_Time} = binary_to_term(?WF_DECRYPT(Key,IV,Cipher)).
+    DecryptedBinary = ?WF_DECRYPT(Key,IV,Cipher),
+    {_Data,_Time} = binary_to_term(DecryptedBinary).
 
 -spec signkey() -> binary().
 signkey() ->

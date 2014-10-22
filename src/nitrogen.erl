@@ -52,7 +52,7 @@ ws_init(Bridge) ->
     call_main_handler_ws_init(),
     ok.
 
-ws_message({text, Other}, _Bridge, _State) ->
+ws_message({text, _Other}, _Bridge, _State) ->
     noreply;
 ws_message({binary, Bin}, _Bridge, _State) ->
     try
