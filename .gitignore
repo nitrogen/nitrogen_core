@@ -4,3 +4,7 @@
 .*.sw?
 crypto_compat.hrl
 .deps_plt
+test/
+.rebar/
+deps/
+*.dump

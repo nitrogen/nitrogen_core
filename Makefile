@@ -16,8 +16,17 @@ docs:
 
 doc: docs
 
-test: compile
+eunit: clean compile
 	./rebar eunit
+
+test: eunit
+	mkdir -p test
+	rm -fr test/browsertest
+	git clone git://github.com/nitrogen/NitrogenProject.com.git test/browsertest
+	mkdir -p test/browsertest/deps
+	ln -s ../../.. test/browsertest/deps/nitrogen_core
+	cd test/browsertest; make test_all TESTLOGDIR="../results.$(shell date +%Y-%m-%d.%H%M%S)"
+
 
 DEPS_PLT=$(CURDIR)/.deps_plt
 DEPS=erts kernel stdlib crypto sasl
