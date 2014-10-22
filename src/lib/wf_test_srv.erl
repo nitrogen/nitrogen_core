@@ -115,7 +115,7 @@ handle_cast(stop, State) ->
 handle_info(timeout, State=#state{test_paths=TestPaths, current_test=Cur}) ->
     Remaining = length(TestPaths),
     wf_test:log("ERROR: Tests Timed Out. Test '~s' never finished. ~p remaining tests!", [Cur, Remaining]),
-    {stop, State}.
+    {stop, timeout, State}.
 
 terminate(_Reason, _State) ->
     ok.
