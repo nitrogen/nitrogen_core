@@ -719,7 +719,8 @@
         body=""                 :: body()
     }).
 -record(nav, {?ELEMENT_BASE(element_nav),
-        body=""                 :: body()
+        body=""                 :: body(),
+        role=""                 :: text()
     }).
 -record(article, {?ELEMENT_BASE(element_article),
         body=""                 :: body()
