@@ -45,7 +45,7 @@ start(TestPaths) ->
 start(BrowserExec, TestPaths) ->
     Trigger = crypto:rand_uniform(1, 1000000000),
     LaunchUrl = wf:f("http://127.0.0.1:8000/wf_test_srv?id=~p", [Trigger]),
-    error_logger:info_msg("Starting Nitrogen Test Server...~nOpen your browser to:~n        ~s~n", [LaunchUrl]),
+    wf_test:log("Starting Nitrogen Test Server...~nOpen your browser to:~n        ~s~n", [LaunchUrl]),
     {ok, Pid} = gen_server:start({local, ?MODULE}, ?MODULE, [Trigger, TestPaths], []),
     maybe_launch_browser(BrowserExec, LaunchUrl),
     Pid.
@@ -80,8 +80,7 @@ print_summary_and_close() ->
     {ok, Summary} = get_summary(),
     Passed = proplists:get_value(passed, Summary),
     Failed = proplists:get_value(failed, Summary),
-    MsgFun = ?WF_IF(Failed > 0, error_msg, info_msg),
-    error_logger:MsgFun("Tests Finished. ~p Passed. ~p Failed.", [Passed, Failed]),
+    wf_test:log("SUMMARY: Tests Finished. ~p Passed. ~p Failed.", [Passed, Failed]),
     stop().
 
 get_summary() ->
@@ -115,7 +114,7 @@ handle_cast(stop, State) ->
 
 handle_info(timeout, State=#state{test_paths=TestPaths, current_test=Cur}) ->
     Remaining = length(TestPaths),
-    error_logger:error_msg("Tests Timed Out. Test '~s' never finished. ~p remaining tests!", [Cur, Remaining]),
+    wf_test:log("ERROR: Tests Timed Out. Test '~s' never finished. ~p remaining tests!", [Cur, Remaining]),
     {stop, State}.
 
 terminate(_Reason, _State) ->

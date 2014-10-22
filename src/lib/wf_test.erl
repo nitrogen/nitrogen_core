@@ -25,7 +25,11 @@
 
     test_event/1,
     event/1,
-    api_event/3
+    api_event/3,
+
+    logfile/0,
+    log/1,
+    log/2
 ]).
 
 -define(OPTS, [
@@ -50,22 +54,23 @@ start_all(App) ->
     {ok, Tests} = application:get_env(App, tests),
 
     lists:foreach(fun(Browser) ->
-        error_logger:info_msg("Starting tests with ~s",[Browser]),
+        wf_test:log("Starting tests with ~s",[Browser]),
         Pid = wf_test_srv:start(Browser, Tests),
         erlang:monitor(process, Pid),
         receive
             {'DOWN', _, process, Pid, _ } ->
-                error_logger:info_msg("Finished tests with ~s~n~n",[Browser])
+                wf_test:log("Finished tests with ~s~n",[Browser])
         end
     end, Browsers),
     init:stop().
 
 start(TestFun) ->
+    Uri = wf:uri(),
     {ok, Pid} = wf:comet(fun() ->
         erlang:put(wf_test_passed, 0),
         erlang:put(wf_test_failed, 0),
         TestFun(),
-        summarize_and_continue()
+        summarize_and_continue(Uri)
     end),
     wf:state(test_comet_pid, Pid).
 
@@ -74,13 +79,13 @@ start_other(OtherModule, TestFun) ->
     start(TestFun),
     OtherModule:main().
 
-summarize_and_continue() ->
+summarize_and_continue(Uri) ->
     Passed = erlang:get(wf_test_passed),
     Failed = erlang:get(wf_test_failed),
     Total = Passed + Failed,
-    io:format("Module ~p (~p of ~p tests passed)~n", [wf:page_module(), Passed, Total]),
+    wf_test:log("Module ~p (~p of ~p tests passed)~n", [Uri, Passed, Total]),
     case wf_test_srv:next_test_path() of
-        done -> wf:wire(#alert{text="All Tests Completed"});
+        done -> ok; 
         Next -> wf:redirect(Next)
     end.
 
@@ -216,11 +221,11 @@ api_event(Name, Assertion, Args) ->
 
 internal_pass(Name) ->
     increment_pass(),
-    io:format("...Passed (~p)~n", [Name]).
+    wf_test:log("...Passed (~p)", [Name]).
 
 internal_fail(Name, Reason) ->
     increment_fail(),
-    io:format("...FAILED (~p).~n Reason: ~p~n", [Name, Reason]).
+    wf_test:log("...FAILED (~p).~n Reason: ~p", [Name, Reason]).
    
 increment_pass() ->
     wf_test_srv:passed(1),
@@ -237,4 +242,23 @@ get_option(Options, Key) ->
         undefined ->
             proplists:get_value(Key, ?OPTS);
         Val -> Val
+    end.
+
+
+logfile() ->
+    case init:get_argument(testlog) of
+        error -> undefined;
+        {ok, [[File]]} -> {ok, File}
+    end.
+
+log(Msg, Args) ->
+    log(wf:f(Msg ++ "~n", Args)).
+
+log(Msg) ->
+    io:format(Msg),
+    case logfile() of
+        undefined -> ok;
+        {ok, File} ->
+            filelib:ensure_dir(File),
+            file:write_file(File, Msg, [append])
     end.
