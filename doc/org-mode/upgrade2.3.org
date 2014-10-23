@@ -112,7 +112,8 @@ $ git pull origin master
 
    Then run =make upgrade=.
 
-   Now we're going to need to download a few files. Feel free to copy and paste the following into your *nix shell:
+   Now we're going to need to download a few files. Feel free to copy and paste
+   the following into your *nix shell:
 
 #+BEGIN_SRC bash
 $ curl https://raw.githubusercontent.com/nitrogen/nitrogen/master/rel/overlay/common/site/src/nitrogen_main_handler.erl -o site/src/nitrogen_main_handler.erl
@@ -120,11 +121,15 @@ $ curl https://raw.githubusercontent.com/nitrogen/nitrogen/master/rel/overlay/co
 $ curl https://raw.githubusercontent.com/nitrogen/nitrogen/master/rel/overlay/common/etc/simple_bridge.config -o etc/simple_bridge.config
 #+END_SRC
 
-   Notice that the second line will actually overwrite the current nitrogen_sup.erl file, so if you have anything customized there, make note of it or make a backup first.
+   Notice that the second line will actually overwrite the current
+   nitrogen_sup.erl file, so if you have anything customized there, make note
+   of it or make a backup first.
 
    Now you'll want to copy any custom handlers and other configs you've
    manually added to =site/src/nitrogen_PLATFORM.erl= into
-   =site/src/nitrogen_main_handler.erl= before the =wf_core:run()= function.
+   =site/src/nitrogen_main_handler.erl= before into the =handlers()= function.
+   This will ensure that your custom handlers get initialized with both
+   standard requests and websocket requests.
 
    So if your =nitrogen_mochiweb.erl= file looked like this:
 
@@ -151,13 +156,24 @@ loop(Req) ->
 -module(nitrogen_main_handler).
    -export([run/0]).
 
+   handlers() ->
+       nitrogen:handler(myapp_security_handler,[]),
+       nitrogen:handler(myapp_route_handler, []),
+
+   ws_init() ->
+      handlers(),
+      ok.
+
    run() ->
        wf:header('cache-control',"no-cache"),
        wf:content_type("text/html; charset=utf-8"),
-       nitrogen:handler(myapp_security_handler,[]),
-       nitrogen:handler(myapp_route_handler, []),
+       handlers(),
        wf_core:run().
 #+END_SRC
+
+   You'll notice above that we don't set the header or content type in the
+   =ws_init()= function. This is because the headers would have already been
+   sent when the websocket connection is established.
 
    Next, we're going to edit =etc/simple_bridge.config= to make sure we're
    binding to the correct IP address and ports and that those settings are all
