@@ -605,6 +605,7 @@ BertClass.prototype._base64_encode = function(data) {
 	//   returns 2: 'YQ=='
 	//   example 3: base64_encode('✓ à la mode');
 	//   returns 3: '4pyTIMOgIGxhIG1vZGU='
+	// This is modified to not encode Unicode, since Bert itself does that for us already.
 
 	var b64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
 	var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
@@ -615,8 +616,6 @@ BertClass.prototype._base64_encode = function(data) {
 	if (!data) {
 		return data;
 	}
-
-	data = unescape(encodeURIComponent(data));
 
 	do {
 		// pack three octets into four hexets

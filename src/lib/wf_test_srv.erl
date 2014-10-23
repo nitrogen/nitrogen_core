@@ -4,7 +4,7 @@
 -behaviour(gen_server).
 -export([main/0]).
 
--define(TIMEOUT, 15000).
+-define(TIMEOUT, 60000).
 
 %% API
 -export([
@@ -39,11 +39,15 @@ main() ->
             wf:redirect(FirstTestPath)
     end.
 
+start(AppName) when is_atom(AppName) ->
+    {ok, TestPaths} = application:get_env(AppName, tests),
+    start(TestPaths);
+
 start(TestPaths) ->
     start(undefined, TestPaths).
 
 start(BrowserExec, TestPaths) ->
-    Trigger = crypto:rand_uniform(1, 1000000000),
+    Trigger = crypto:rand_uniform(1, 10000),
     LaunchUrl = wf:f("http://127.0.0.1:8000/wf_test_srv?id=~p", [Trigger]),
     wf_test:log("Starting Nitrogen Test Server...~nOpen your browser to:~n        ~s~n", [LaunchUrl]),
     {ok, Pid} = gen_server:start({local, ?MODULE}, ?MODULE, [Trigger, TestPaths], []),

@@ -567,7 +567,7 @@ NitrogenClass.prototype.$attach_upload_handle_dragdrop = function(form,input,set
             add: function(e,data) {
                 if(!settings.multiple) {
                     if (data.files.length>1) {
-                        alert("Sorry, you can only upload single files with this element");
+                        window.alert("Sorry, you can only upload single files with this element");
                         return;
                     }
                     else if(form.$nitrogen_pending_files.length > 0) {
@@ -674,7 +674,7 @@ NitrogenClass.prototype.$alert_unfinished_files = function(form) {
         $(form).find(".upload_droplist li:not(.upload_successful)").css("color","red").fadeOut("slow");
 
         var filenames = $(files).get().map(function(f) { return $(f).text() }).join("\r\n");
-        alert("There was an error uploading the following file(s):\r\n" + filenames + "\r\n\r\nThis is likely due to the file(s) being too large or a misconfiguration on the server");
+        window.alert("There was an error uploading the following file(s):\r\n" + filenames + "\r\n\r\nThis is likely due to the file(s) being too large or a misconfiguration on the server");
     }
 } 
 
@@ -972,7 +972,7 @@ NitrogenClass.prototype.$normalize_param = function(key, value) {
 }
 
 NitrogenClass.prototype.$encode_arguments_object = function(Obj) {
-    if (! Bert) { alert("Bert.js library not included in template.") }
+    if (! Bert) { window.alert("Bert.js library not included in template.") }
     else {
         Bert.assoc_array_key_encoding("binary");
         var a = new Array();
