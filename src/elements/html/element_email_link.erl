@@ -4,12 +4,19 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_email_link).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    transform_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, email_link).
 
-render_element(Rec = #email_link{}) -> 
+-spec transform_element(#email_link{}) -> nitrogen_element().
+transform_element(Rec = #email_link{}) -> 
+    Link = wf_utils:copy_fields(Rec, #link{}),
+
     Email = Rec#email_link.email,
     Text = if
         Rec#email_link.text == [] andalso Rec#email_link.body == [] ->
@@ -17,13 +24,8 @@ render_element(Rec = #email_link{}) ->
         true -> Rec#email_link.text
     end,
 
-    #link{
-        id=Rec#email_link.id,
-        class=Rec#email_link.class,
-        title=Rec#email_link.title,
-        text=Text,
-        body=Rec#email_link.body,
+    Link#link{
+        url=[<<"mailto:">>,Email],
         new=false,
-        html_encode=Rec#email_link.html_encode,
-        url=["mailto:",Email]
+        text=Text
     }.

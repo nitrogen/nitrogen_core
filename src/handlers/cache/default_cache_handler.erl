@@ -5,6 +5,7 @@
 
 -module (default_cache_handler).
 -behaviour (cache_handler).
+-include("wf.hrl").
 -export ([
     init/2, 
     finish/2,

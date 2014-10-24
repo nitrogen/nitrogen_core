@@ -1,25 +1,32 @@
 # vim: sw=3 ts=3 ft=org
 
-#+TITLE: Disable Action Element
+#+TITLE: Disable Field Action
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
-#+AUTHOR: Milan Svoboda
+#+AUTHOR: Jesse Gumm (@jessegumm)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][Elements]] | [[file:../actions.org][*Actions*]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][Elements]] | [[file:../actions.org][*Actions*]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
-* Disable Action - #disable{}
+* Disable Field - #enable {}
 
-  Disable the target element.
+	Disable a form field or button. Sets the HTML 'disabled' attribute.
 
 ** Usage
 
 #+BEGIN_SRC erlang
-   wf:wire(myButton, #disable {})
-#+END_SRC
+	wf:wire(myButton, #disable{}).
 
-** Attributes
+	%% or
+
+	wf:disable(myButton).
+#+END_SRC
 
 ** See Also
 
-   + [[./base.html][base element]]
+   + [[./base.html][base action]]
 
+   + [[./enable.html][enable action]]
+
+   + [[./show.html][show action]]
+
+   + [[./hide.html][hide action]]

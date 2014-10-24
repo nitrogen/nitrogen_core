@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Route Handler"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-18 03:24:16 CDT"/>
+<meta name="generated" content="2014-09-15 02:12:41 CDT"/>
 <meta name="author" content="Jesse Gumm (@jessegumm)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -94,7 +94,7 @@
 <div id="content">
 <h1 class="title">Route Handler</h1>
 
-<p><a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html">Elements</a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html"><b>Handlers</b></a> | <a href="../config.html">Configuration Options</a> | <a href="../about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html">Elements</a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html"><b>Handlers</b></a> | <a href="../config.html">Configuration Options</a> | <a href="../plugins.html">Plugins</a> | <a href="../jquery_mobile_integration.html">Mobile</a> | <a href="../troubleshooting.html">Troubleshooting</a> | <a href="../about.html">About</a>
 </p>
 
 
@@ -119,7 +119,7 @@
 </p>
 <p>
   The default route handler (<code>dynamic_route_handler.erl</code>) also attempts to load
-  modules for pages if the modules need to be loaded by the Erlang Virtul
+  modules for pages if the modules need to be loaded by the Erlang Virtual
   Machine.
 </p>
 
@@ -143,7 +143,7 @@
   of the work of the handler is done.  It should read the path from the request
   bridge, and eventually call <code>wf_context:page_module(Module)</code> to tell Nitrogen
   which module should be handling the request, and in most cases, it should
-  also be calling <code>wf_context:path_info(Pathinfo)</code> to set the path<sub>info</sub> so that
+  also be calling <code>wf_context:path_info(Pathinfo)</code> to set the path_info so that
   pages can refer to the path.
 </p>
 <p>
@@ -199,7 +199,7 @@ Here is the complete text of the simple passthrough route handler
     <span class="org-type">finish/2</span>
 ]).
 
-<span class="org-function-name">init</span>(<span class="org-variable-name">Module</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">init</span>(<span class="org-variable-name">Module</span>, <span class="org-variable-name">State</span>) -&gt;
     <span class="org-comment-delimiter">% </span><span class="org-comment">Some values...</span>
     <span class="org-variable-name">RequestBridge</span> = <span class="org-type">wf_context</span>:<span class="org-type">request_bridge</span>(),
     <span class="org-variable-name">Path</span> = <span class="org-variable-name">RequestBridge</span>:<span class="org-type">path</span>(),
@@ -209,7 +209,7 @@ Here is the complete text of the simple passthrough route handler
     <span class="org-type">wf_context</span>:<span class="org-type">path_info</span>(<span class="org-variable-name">Path</span>),
     {ok, <span class="org-variable-name">State</span>}.
 
-<span class="org-function-name">finish</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">finish</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     {ok, <span class="org-variable-name">State</span>}.
 </pre>
 
@@ -224,9 +224,9 @@ Here is the complete text of the simple passthrough route handler
 
 
 <p>
-Here is the complete text of the default route handler for Nitrogen
-(found in handlers/dynamic_route_handler.erl). To help direct, I've kept the
-comments in the code explaining it along the way.
+   Here is the complete text of the default route handler for (as of Nitrogen
+   2.2) (found in handlers/dynamic_route_handler.erl). To help direct, I've
+   kept the comments in the code explaining it along the way.
 </p>
 
 
@@ -255,7 +255,7 @@ comments in the code explaining it along the way.
 <span class="org-comment-delimiter">%% </span><span class="org-comment">If the request path does have an extension, then it is treated like a request</span>
 <span class="org-comment-delimiter">%% </span><span class="org-comment">for a static file. This is delegated back to the HTTP server.</span>
 
-<span class="org-function-name">init</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">init</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     <span class="org-comment-delimiter">% </span><span class="org-comment">Get the path...</span>
     <span class="org-variable-name">RequestBridge</span> = <span class="org-type">wf_context</span>:<span class="org-type">request_bridge</span>(),
     <span class="org-variable-name">Path</span> = <span class="org-variable-name">RequestBridge</span>:<span class="org-type">path</span>(),
@@ -271,7 +271,7 @@ comments in the code explaining it along the way.
 
     {ok, <span class="org-variable-name">State</span>}.
 
-<span class="org-function-name">finish</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">finish</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     {ok, <span class="org-variable-name">State</span>}.
 
 <span class="org-comment-delimiter">%%% </span><span class="org-comment">PRIVATE FUNCTIONS %%%</span>
@@ -361,14 +361,41 @@ comments in the code explaining it along the way.
 </pre>
 
 
-
 </div>
 
 </div>
 
 <div id="outline-container-1-4" class="outline-3">
-<h3 id="sec-1-4"><span class="section-number-3"></span> See Also</h3>
+<h3 id="sec-1-4"><span class="section-number-3"></span> Smart Extensions</h3>
 <div class="outline-text-3" id="text-1-4">
+
+
+<p>
+   As of Nitrogen 2.3, Nitrogen's dynamic route handler supports Smart
+   Extensions.  You can read all about them in the
+   <a href="../smart_extensions.html">Smart Extensions documentation</a>.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-5" class="outline-3">
+<h3 id="sec-1-5"><span class="section-number-3"></span> RESTFul Handler</h3>
+<div class="outline-text-3" id="text-1-5">
+
+
+<p>
+   As of Nitrogen 2.3, the dynamic route handler also supports the use of a
+   RESTful module.  You can read about RESTFul Modules in the
+   <a href="../rest.html">REST API documentation</a>.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-6" class="outline-3">
+<h3 id="sec-1-6"><span class="section-number-3"></span> See Also</h3>
+<div class="outline-text-3" id="text-1-6">
 
 
 <ul>
@@ -386,7 +413,7 @@ comments in the code explaining it along the way.
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-18 03:24:16 CDT</p>
+<p class="date">Date: 2014-09-15 02:12:41 CDT</p>
 <p class="author">Author: Jesse Gumm (@jessegumm)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

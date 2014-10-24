@@ -1,108 +1,106 @@
 % vim: sw=4 ts=4 et ft=erlang
 % Nitrogen Web Framework for Erlang
 % Copyright (c) 2008-2010 Rusty Klophaus
+% Copyright (c) 2013-2014 Jesse Gumm
 % See MIT-LICENSE for licensing information.
 
--module (nitrogen).
--export ([init_request/2, handler/2, run/0, start_link/1, start_link/2,
-         do/1, out/1, do_mochiweb/2]).
+-module(nitrogen).
+-behaviour(simple_bridge_handler).
+-export([
+        init_request/2,
+        init_request/1,
+        handler/2,
+        run/0
+    ]).
 
-init_request(RequestBridge, ResponseBridge) ->
-    wf_context:init_context(RequestBridge, ResponseBridge).
+%% Simple Bridge Callout functions
+-export([
+        run/1,
+        ws_init/1,
+        ws_message/3,
+        ws_info/3,
+        ws_terminate/3
+    ]).
+
+-deprecated([
+        {run,0},
+        {init_request,2}
+    ]).
+
+call_main_handler_ws_init() ->
+    case erlang:function_exported(nitrogen_main_handler, ws_init, 0) of
+        true -> nitrogen_main_handler:ws_init();
+        false -> ok
+    end.
+
+%% init_request/2 kept for backwards compatibility, but is no longer needed
+init_request(Bridge, _) ->
+    init_request(Bridge).
+
+init_request(Bridge) ->
+    wf_context:init_context(Bridge).
 
 handler(Module, Config) ->
     wf_handler:set_handler(Module, Config).
 
+run(Bridge) ->
+    init_request(Bridge),
+    nitrogen_main_handler:run().
+
+ws_init(Bridge) ->
+    init_request(Bridge),
+    call_main_handler_ws_init(),
+    ok.
+
+ws_message({text, _Other}, _Bridge, _State) ->
+    noreply;
+ws_message({binary, Bin}, _Bridge, _State) ->
+    try
+        ws_message_catched(binary_to_term(Bin, [safe]))
+    catch
+        Class:Error ->
+            Stacktrace = erlang:get_stacktrace(),
+            CrashReturn = wf_core:run_websocket_crash(Class, Error, Stacktrace),
+            {reply, {text, [<<"nitrogen_event:">>,CrashReturn]}}
+    end.
+
+ws_message_catched({nitrogen_postback,Msg}) ->
+    Return = wf_core:run_websocket(Msg),
+    {reply, {text, [<<"nitrogen_event:">>,Return]}};
+ws_message_catched(flush_switchover_comet_actions) ->
+    %% If there are any actions that weren't 
+    ReconnectionRecovery = <<"Nitrogen.$reconnect_system();">>,
+    case action_comet:get_actions_and_register_new_websocket_pid(self()) of
+        [] -> 
+            {reply, {text, [<<"nitrogen_system_event:">>, ReconnectionRecovery]}};
+        Actions ->
+            wf:wire(page, page, Actions),
+            Return = wf_core:run_websocket_comet(),
+            {reply, {text, [<<"nitrogen_system_event:">>, [ReconnectionRecovery, Return]]}}
+    end;
+ws_message_catched({page_context, PageContext}) ->
+    wf_core:init_websocket(PageContext),
+    {reply, {text, [
+        %% init_websocket has changed the async mode to websocket, so
+        %% let's tell the browser about our updated async_mode
+        <<"nitrogen_event:">>,
+        wf_core:serialize_context(),
+        <<"Nitrogen.$enable_websockets();">>
+    ]}}.
+
+ws_info({comet_actions, Actions} , _Bridge, _State) ->
+    wf:wire(page, page, Actions),
+    Return = wf_core:run_websocket_comet(),
+    {reply, {text, [<<"nitrogen_system_event:">>, Return]}};
+ws_info(Msg, _Bridge, _State) ->
+    error_logger:warning_msg("Unhandled message to websocket process: ~p~n",[Msg]),
+    noreply.
+
+ws_terminate(_Reason, _Bridge, _State) ->
+    ok.
+
+
+%% Deprecated, kept for backwards compatibility. Use nitrogen:run/1 with simple_bridge
 run() -> 
     wf_core:run().
 
-
-handling_module() ->
-    {ok, Root} = application:get_env(nitrogen_handler_module),
-    Root.
-
-start_link(Mod) ->
-    {ok, App} = application:get_application(),
-    application:set_env(App, nitrogen_handler_module, Mod),
-    start_link(Mod:http_server(), Mod).  % get config data from the .app file
- 
-start_link(inets, Mod) ->
-    {ok, Pid} = 
-        inets:start(httpd, 
-                    [{port,           Mod:serverport()} 
-                     ,{server_name,   Mod:servername()} 
-                     ,{bind_address,  Mod:serverip()} 
-                     ,{server_root,   "."} 
-                     ,{document_root, Mod:docroot()} 
-                     ,{modules,       [?MODULE]} 
-                     ,{mime_types,    [{"css",  "text/css"}, 
-                                       {"js",   "text/javascript"}, 
-                                       {"html", "text/html"}]} 
-                    ]),
-    link(Pid),
-    {ok, Pid};
-
-start_link(mochiweb, Mod) -> 
-    Options = [{port,   Mod:serverport()} 
-               ,{name,  Mod:servername()} 
-               ,{ip,    Mod:serverip()} 
-               ,{loop,  fun(Req) -> do_mochiweb(Req, Mod) end} 
-              ], 
-    {ok, Pid} = mochiweb_http:start(Options), 
-
-    link(Pid), 
-    {ok, Pid}. 
-
-%start_link(yaws, Mod) -> 
-%        SC = #sconf { 
-%                appmods     = [{"/", ?MODULE}], 
-%                docroot     = Mod:docroot(), 
-%                port        = Mod:serverport(), 
-%                servername  = Mod:servername(), 
-%                listen      = Mod:serverip() 
-%        }, 
-%        DefaultGC = yaws_config:make_default_gconf(false, redhot2), 
-%        GC = DefaultGC#gconf { 
-%                logdir = redhot2:log_dir(), 
-%                cache_refresh_secs = 5 
-%        },
-% 
-%        % Following code adopted from yaws:start_embedded/4. 
-%        % This will need to change if Yaws changes!!! 
-%        ok = application:set_env(yaws, embedded, true), 
-%        {ok, Pid} = yaws_sup:start_link(), 
-%        yaws_config:add_yaws_soap_srv(GC), 
-%        SCs = yaws_config:add_yaws_auth([SC]), 
-%        yaws_api:setconf(GC, [SCs]), 
-%        {ok, Pid}. 
-
-% Inets handler
-do(Info) -> 
-    RequestBridge = simple_bridge:make_request(inets_request_bridge, Info), 
-    ResponseBridge = simple_bridge:make_response(inets_response_bridge, Info), 
-    nitrogen:init_request(RequestBridge, ResponseBridge),
-    Mod = handling_module(),
-    Mod:handlers(),
-    nitrogen:run().
-
-% Yaws handler 
-out(Info) -> 
-	throw(Info),
-    RequestBridge = simple_bridge:make_request(yaws_request_bridge, Info), 
-    ResponseBridge = simple_bridge:make_response(yaws_response_bridge, Info), 
-    nitrogen:init_request(RequestBridge, ResponseBridge), 
-    Mod = handling_module(),
-    Mod:handlers(),
-    nitrogen:run().
-
-% Mochiweb handler 
-do_mochiweb(Info, Mod) -> 
-    RequestBridge = 
-        simple_bridge:make_request(mochiweb_request_bridge,
-                                   {Info, Mod:docroot()}), 
-    ResponseBridge = 
-        simple_bridge:make_response(mochiweb_response_bridge,
-                                    {Info, Mod:docroot()}),
-    nitrogen:init_request(RequestBridge, ResponseBridge),
-    Mod:handlers(),
-    nitrogen:run().

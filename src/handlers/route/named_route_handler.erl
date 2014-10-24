@@ -5,7 +5,7 @@
 
 -module (named_route_handler).
 -behaviour (route_handler).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -export ([
     init/2, 
     finish/2
@@ -41,7 +41,7 @@
 init(undefined, State) -> init([], State);
 init(Routes, State) -> 
     % Get the path...
-    RequestBridge = wf_context:request_bridge(),
+    RequestBridge = wf_context:bridge(),
     Path = RequestBridge:path(),
 
     % Match to the longest possible route.

@@ -4,7 +4,7 @@
 #+AUTHOR: Jesse Gumm (@jessegumm)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:./index.org][Getting Started]] | [[file:./api.org][*API*]] | [[file:./elements.org][Elements]] | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | [[file:./handlers.org][Handlers]] | [[file:./config.org][Configuration Options]] | [[file:./about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:./index.org][Getting Started]] | [[file:./api.org][*API*]] | [[file:./elements.org][Elements]] | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | [[file:./handlers.org][Handlers]] | [[file:./config.org][Configuration Options]] | [[file:./plugins.org][Plugins]] | *Mobile* | [[file:./troubleshooting.org][Troubleshooting]] | [[file:./about.org][About]]
 
 * jQuery Mobile Integration
 
@@ -81,6 +81,17 @@ This is demonstrated below:
 ** The Complete Template
 
 To see the completed jQuery mobile template, check out ./site/templates/mobile.html in your Nitrogen installation, or [[https://github.com/nitrogen/nitrogen/blob/master/rel/overlay/common/site/templates/mobile.html][see it on github]].
+
+** Dynamically Adding jQuery Mobile Elements in Postbacks
+
+   When adding or updating jQuery mobile elements in Nitrogen postbacks (through the use of =wf:update=, =wf:replace=, etc), you'll want to wire a command that will tell jQuery to scan the page for elements that need rendering.  To do this, somewhere in your postback, make sure to make the following call:
+
+   : wf:defer("$('#pagediv').trigger('create');")
+
+   This will trigger jQuery mobile to scan the page for changes.  You can see a demo of this on
+   [[http://nitrogenproject.com/demos/mobile_controls2][Demos section of the website]].
+
+   *Note:* This will likely be enhanced so that this is not a required step in the future, but for now, as the Mobile elements are still relatively new, this is a required step.
 
 ** See Also
 

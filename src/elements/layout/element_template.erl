@@ -1,11 +1,14 @@
 % vim: sw=4 ts=4 et ft=erlang
 % Nitrogen Web Framework for Erlang
-% Copyright (c) 2008-2010 Rusty Klophaus
+% Copyright (c) 2008-2013 Rusty Klophaus
 % See MIT-LICENSE for licensing information.
 
 -module (element_template).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
 % TODO - Revisit parsing in the to_module_callback. This
 % will currently fail if we encounter a string like:
@@ -14,13 +17,18 @@
 % "String with ]]] will fail"
 
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, template).
 
+-spec render_element(#template{}) -> body().
 render_element(Record) ->
     % Parse the template file...
 
     File = wf:to_list(Record#template.file),
     Template = get_cached_template(File),
+    
+    % Let's figure out the appropriate module aliases
+    ModuleAliases = get_module_aliases(Record),
 
     % Evaluate the template.
 
@@ -29,7 +37,7 @@ render_element(Record) ->
     %% create the needed Ord-Dict just once instead for every eval call down the chain
     OrdDictBindings = orddict:from_list(Record#template.bindings),
     Fixed_bindings_record = Record#template{bindings=OrdDictBindings},
-    Body = eval(Template, Fixed_bindings_record),
+    Body = eval(Template, Fixed_bindings_record, ModuleAliases),
     Body.
 
 get_cached_template(File) ->
@@ -141,24 +149,24 @@ to_term(X, Bindings) ->
 
 %%% EVALUATE %%%
 
-eval([], _) -> [];
-eval([H|T], Record) when H==script orelse H==mobile_script -> [H|eval(T, Record)];
-eval([H|T], Record) when ?IS_STRING(H) -> [H|eval(T, Record)];
-eval([H|T], Record) -> [replace_callbacks(H, Record)|eval(T, Record)].
+eval([], _, _) -> [];
+eval([H|T], Record, ModuleAliases) when H==script orelse H==mobile_script ->
+    [H|eval(T, Record, ModuleAliases)];
+eval([H|T], Record, ModuleAliases) when ?IS_STRING(H) ->
+    [H|eval(T, Record, ModuleAliases)];
+eval([H|T], Record, ModuleAliases) ->
+    [replace_callbacks(H, Record, ModuleAliases) | eval(T, Record, ModuleAliases)].
 
 % Turn callbacks into a reference to #function_el {}.
-replace_callbacks(CallbackTuples, Record) ->
+replace_callbacks(CallbackTuples, Record, ModuleAliases) ->
     Bindings = Record#template.bindings,
-    Functions = [convert_callback_tuple_to_function(M, F, ArgString, Bindings) || {M, F, ArgString} <- CallbackTuples],
+    Functions = [convert_callback_tuple_to_function(M, F, ArgString, Bindings, ModuleAliases) || {M, F, ArgString} <- CallbackTuples],
     #function_el { anchor=page, function=Functions }.
 
-convert_callback_tuple_to_function(Module, Function, ArgString, Bindings) ->
-    % De-reference to page module...
-    Module1 = case Module of
-        page -> wf_context:page_module();
-        _ -> Module
-    end,
-	
+
+convert_callback_tuple_to_function(Module, Function, ArgString, Bindings, ModuleAliases) ->
+    % De-reference to page module and custom module aliases...
+    Module1 = get_module_from_alias(Module, ModuleAliases),
     _F = fun() ->
         % Convert args to term...
         Args = to_term("[" ++ ArgString ++ "].", Bindings),
@@ -171,3 +179,19 @@ convert_callback_tuple_to_function(Module, Function, ArgString, Bindings) ->
             false -> undefined
         end
     end.
+
+get_module_aliases(Record) ->
+    lists:append([
+        Record#template.module_aliases,
+        wf:config_default(module_aliases, []),
+        [{page, wf_context:page_module()}]
+    ]).
+
+get_module_from_alias(Module, ModuleAliases) ->
+    case lists:keyfind(Module, 1, ModuleAliases) of
+        {Module, AliasedModule} ->
+            AliasedModule;
+        false ->
+            Module
+    end.
+

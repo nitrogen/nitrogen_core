@@ -4,34 +4,147 @@
 % See MIT-LICENSE for licensing information.
 
 -module (wf_context).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+
+-export([
+        bridge/0,
+        bridge/1,
+
+        socket/0,
+
+        path/0,
+        protocol/0,
+        uri/0,
+        url/0,
+
+        peer_ip/0,
+        peer_ip/1,
+        peer_ip/2,
+
+        request_method/0,
+        request_body/0,
+        status_code/0,
+        status_code/1,
+
+        content_type/1,
+        download_as/1,
+        headers/0,
+        header/1,
+        header/2,
+
+        cookies/0,
+        cookie/1,
+        cookie_default/2,
+
+        cookie/2,
+        cookie/4,
+        delete_cookie/1,
+
+        anchor/1,
+        anchor/0,
+
+        data/0,
+        data/1,
+        clear_data/0,
+
+        add_action/2,
+        actions/0,
+        next_action/0,
+        action_queue/0,
+        action_queue/1,
+        clear_action_queue/0,
+        new_action_queue/0,
+
+        page_context/0,
+        page_context/1,
+       
+        entry_point/0,
+        entry_point/1,
+
+        series_id/0,
+        series_id/1,
+
+        page_module/0,
+        page_module/1,
+
+        path_info/0,
+        path_info/1,
+
+        async_mode/0,
+        async_mode/1,
+
+        event_context/0,
+        event_context/1,
+
+        type/0,
+        type/1,
+
+        event_module/0,
+        event_module/1,
+
+        event_tag/0,
+        event_tag/1,
+
+        event_validation_group/0,
+        event_validation_group/1,
+        event_handle_invalid/0,
+        event_handle_invalid/1,
+
+        handlers/0,
+        handlers/1,
+        handler/1,
+        restore_handler/1,
+
+        init_context/1,
+        make_handler/2,
+
+        context/0,
+        context/1
+    ]).
+
+%% Exports for backwards compatibility
+-export([
+        request_bridge/0,
+        request_bridge/1,
+        response_bridge/0,
+        response_bridge/1
+    ]).
+
+-define(BRIDGE, (bridge())).
 
 %%% REQUEST AND RESPONSE BRIDGE %%%
 
-request_bridge() ->
-    Context = context(),
-    Context#context.request_bridge.
+bridge() ->
+    Context=context(),
+    Context#context.bridge.
 
-request_bridge(RequestBridge) ->
+bridge(Bridge) ->
     Context = context(),
-    Context#context { request_bridge = RequestBridge }.
-
-response_bridge() ->
-    Context = context(),
-    Context#context.response_bridge.
-
-response_bridge(ResponseBridge) ->
-    Context = context(),
-    context(Context#context { response_bridge = ResponseBridge }).
+    context(Context#context{bridge=Bridge}).
 
 socket() ->
-    Req = wf_context:request_bridge(), 
-    Req:socket().
+    ?BRIDGE:socket().
+
+path() ->
+    Req = request_bridge(),
+    Req:path().
+
+protocol() ->
+    Req = request_bridge(),
+    Req:protocol().
+
+uri() ->
+    Req = request_bridge(),
+    Req:uri().
+
+url() ->
+    Protocol = wf:to_list(protocol()),
+    Host = header(host),
+    Uri = uri(),
+    Protocol ++ "://" ++ Host ++ Uri.
 
 peer_ip() ->
-    Req = request_bridge(),
-    Req:peer_ip().
+    ?BRIDGE:peer_ip().
 
 peer_ip(Proxies) ->
     peer_ip(Proxies,x_forwarded_for).
@@ -40,53 +153,70 @@ peer_ip(Proxies,ForwardedHeader) ->
     ConnIP = peer_ip(),
     case header(ForwardedHeader) of
         undefined -> ConnIP;
-        ForwardedIP ->
-            case lists:member(ConnIP,Proxies) of
+        RawForwardedIP ->
+            ForwardedIP = wf_convert:parse_ip(RawForwardedIP),
+            DoesIPMatch = fun(Proxy) ->
+                wf_convert:parse_ip(Proxy) =:= ConnIP
+            end,
+            case lists:any(DoesIPMatch,Proxies) of
                 true -> ForwardedIP;
                 false -> ConnIP
             end
     end.
 
+request_method() ->
+    case ?BRIDGE:request_method() of
+        'GET'       -> get;
+        get         -> get;
+        'POST'      -> post;
+        post        -> post;
+        'DELETE'    -> delete;
+        delete      -> delete;
+        'PUT'       -> put;
+        put         -> put;
+        'TRACE'     -> trace;
+        trace       -> trace;
+        'HEAD'      -> head;
+        head        -> head;
+        'CONNECT'   -> connect;
+        connect     -> connect;
+        'OPTIONS'   -> options;
+        options     -> options;
+        Other -> list_to_existing_atom(string:to_lower(wf:to_list(Other)))
+    end.
+
 request_body() ->
-    Req = request_bridge(),
-    Req:request_body().
+    ?BRIDGE:request_body().
 
 status_code() ->
-    Req = request_bridge(),
-    Req:status_code().
+    ?BRIDGE:status_code().
 
 status_code(StatusCode) ->
-    Res = response_bridge(),
-    response_bridge(Res:status_code(StatusCode)),
+    bridge(?BRIDGE:set_status_code(StatusCode)),
     ok.
 
 content_type(ContentType) ->
-    Res = response_bridge(),
-    response_bridge(Res:header("Content-Type", ContentType)),
-    ok.
+    header("Content-Type", ContentType).
+
+download_as(Filename0) ->
+    Filename = wf_convert:url_encode(Filename0),
+    header("Content-Disposition", "attachment; filename=\"" ++ Filename ++ "\"").
 
 headers() ->
-    Req = request_bridge(),
-    Req:headers().
+    ?BRIDGE:headers().
 
 header(Header) ->
-    Req = request_bridge(),
-    Req:header(Header).
+    ?BRIDGE:header(Header).
 
 header(Header, Value) ->
-    Res = response_bridge(),
-    response_bridge(Res:header(Header, Value)),
+    bridge(?BRIDGE:set_header(Header, Value)),
     ok.
 
 cookies() ->
-    Req = request_bridge(),
-    Req:cookies().
+    ?BRIDGE:cookies().
 
-cookie(Cookie) when is_atom(Cookie) ->
-    cookie(atom_to_list(Cookie));
 cookie(Cookie) ->
-    Req = request_bridge(),
-    Req:cookie(Cookie).
+    ?BRIDGE:cookie(Cookie).
 
 cookie_default(Cookie,DefaultValue) ->
     case cookie(Cookie) of
@@ -95,13 +225,10 @@ cookie_default(Cookie,DefaultValue) ->
     end.
 
 cookie(Cookie, Value) ->
-    Res = response_bridge(),
-    response_bridge(Res:cookie(Cookie, Value)),
-    ok.
+    bridge(?BRIDGE:set_cookie(Cookie, Value)).
 
 cookie(Cookie, Value, Path, MinutesToLive) ->
-    Res = response_bridge(),
-    response_bridge(Res:cookie(Cookie, Value, Path, MinutesToLive)),
+    bridge(?BRIDGE:cookie(Cookie, Value, Path, MinutesToLive)),
     ok.
 
 delete_cookie(Cookie) ->
@@ -130,25 +257,42 @@ clear_data() ->
     Context = context(),
     context(Context#context { data = [] }).
 
-
-add_action(Action) ->
-    Context = context(),
-    Actions = Context#context.queued_actions,
-    context(Context#context { queued_actions=[Action|Actions] }).
+-spec add_action(Priority :: wire_priority(), Action :: actions()) -> ok.
+add_action(Priority, Action) when ?IS_ACTION_PRIORITY(Priority) ->
+    ActionQueue = action_queue(),
+    NewActionQueue = wf_action_queue:in(Priority, Action, ActionQueue),
+    action_queue(NewActionQueue).
 
 actions() ->
-    Context = context(),
-    Actions = Context#context.queued_actions,
-    lists:reverse(Actions).
+    ActionQueue = action_queue(),
+    Actions = wf_action_queue:all(ActionQueue),
+    clear_action_queue(),
+    Actions.
 
-actions(Actions) ->
-    Context = context(),
-    context(Context#context { queued_actions = lists:reverse(Actions) }).
+-spec next_action() -> {ok, actions()} | empty.
+next_action() ->
+	ActionQueue = action_queue(),
+	case wf_action_queue:out(ActionQueue) of
+		{ok, Action, NewActionQueue} ->
+            action_queue(NewActionQueue),
+            {ok, Action};
+		{error, empty} ->
+            empty
+	end.
 
-clear_actions() ->
-    Context = context(),
-    context(Context#context { queued_actions=[] }).
+action_queue() ->
+	Context = context(),
+	Context#context.action_queue.
 
+action_queue(ActionQueue) ->
+    Context = context(),
+    context(Context#context { action_queue = ActionQueue }).
+
+clear_action_queue() ->
+    action_queue(new_action_queue()).
+
+new_action_queue() ->
+    wf_action_queue:new().
 
 %%% PAGE CONTEXT %%%
 
@@ -174,7 +318,15 @@ page_module() ->
 
 page_module(Module) ->
     Page = page_context(),
-    page_context(Page#page_context { module = Module }).
+     page_context(Page#page_context { module = Module }).
+
+entry_point() ->
+    Page = page_context(),
+    Page#page_context.entry_point.
+
+entry_point(EntryPoint) ->
+    Page = page_context(),
+    page_context(Page#page_context { entry_point = EntryPoint}).
 
 path_info() -> 
     Page = page_context(),
@@ -187,6 +339,7 @@ path_info(PathInfo) ->
 async_mode() ->
     Page = page_context(),
     Page#page_context.async_mode.
+
 
 async_mode(AsyncMode) ->
     Page = page_context(),
@@ -203,12 +356,11 @@ event_context(EventContext) ->
     Context = context(),
     context(Context#context { event_context = EventContext }).
 
-
 type() ->
     Context = context(),
     Context#context.type.
 
-type(Type) -> % either first_request, postback_request, or static_file
+type(Type) -> % either first_request, postback_request, postback_websocket, or static_file
     Context = context(),
     context(Context#context { type = Type }).
 
@@ -236,6 +388,14 @@ event_validation_group(ValidationGroup) ->
     Event = event_context(),
     event_context(Event#event_context { validation_group = ValidationGroup }).
 
+event_handle_invalid() ->
+    Event = event_context(),
+    Event#event_context.handle_invalid.
+
+event_handle_invalid(HandleInvalid) ->
+    Event = event_context(),
+    event_context(Event#event_context { handle_invalid = HandleInvalid }).
+
 %%% HANDLERS %%%
 
 handlers() ->
@@ -246,15 +406,42 @@ handlers(Handlers) ->
     Context = context(),
     context(Context#context { handler_list = Handlers }).
 
+handler(HandlerName) ->
+    Handlers = handlers(),
+    case lists:keyfind(HandlerName, #handler_context.name, Handlers) of
+        false -> undefined;
+        HandlerContext -> HandlerContext
+    end.
+
+restore_handler(NewHandler) ->
+    Handlers = handlers(),
+    NewHandlers = [maybe_restore_handler(H, NewHandler) || H <- Handlers],
+    handlers(NewHandlers).
+
+maybe_restore_handler(Orig = #handler_context{name=Name}, New = #handler_context{name=Name}) ->
+    New#handler_context{config=Orig#handler_context.config};
+maybe_restore_handler(Orig, _New) ->
+    Orig.
+
+%% MAYBE DO THIS?
+%%serializable_handlers() ->
+%%    [H || H <- handlers(), is_handler_serializable(H)].
+%%
+%%is_handler_serializable(#handler_context{module=Module}) ->
+%%    case erlang:function_exported(Module, is_serializable, 0) of
+%%        true -> Module:is_serializable();
+%%        false -> true
+%%    end.
+
 %%% CONTEXT CONSTRUCTION %%%
 
-init_context(RequestBridge, ResponseBridge) ->
+init_context(Bridge) ->
     % Create the new context using the default handlers.
     Context = #context {
-        request_bridge = RequestBridge,
-        response_bridge = ResponseBridge,
+        bridge = Bridge,
         page_context = #page_context { series_id = wf:temp_id() },
         event_context = #event_context {},
+        action_queue = new_action_queue(),		
         handler_list = [
             % Core handlers...
             make_handler(config_handler, default_config_handler), 
@@ -262,6 +449,7 @@ init_context(RequestBridge, ResponseBridge) ->
             make_handler(process_registry_handler, nprocreg_registry_handler),
             make_handler(cache_handler, default_cache_handler), 
             make_handler(query_handler, default_query_handler),
+            make_handler(crash_handler, default_crash_handler),
 
             % Stateful handlers...
             make_handler(session_handler, simple_session_handler), 
@@ -289,3 +477,19 @@ make_handler(Name, Module) ->
 % code much cleaner. Trust me.
 context() -> get(context).
 context(Context) -> put(context, Context).
+
+
+%% Kept for backwards compatibility with nitrogen 2.2 and below (and
+%% simple_bridge 1.x)
+request_bridge() ->
+    bridge().
+
+request_bridge(Bridge) ->
+    bridge(Bridge).
+
+response_bridge() ->
+    bridge().
+
+response_bridge(Bridge) ->
+    bridge(Bridge).
+

@@ -5,23 +5,36 @@
 
 -module (element_file).
 -include_lib ("wf.hrl").
--compile(export_all).
+-export([
+    reflect/0,
+    transform_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, file).
 
-render_element(Record) -> 
+-spec transform_element(nitrogen_element()) -> nitrogen_element() | binary() | string().
+transform_element(Record) -> 
     FilePath = Record#file.file,
+    Encode = Record#file.html_encode,
     FileContents = case file:read_file(FilePath) of
         {ok, B} -> 
-            B;
+            wf:html_encode(B, Encode);
         _ -> 
             ?LOG("Error reading file: ~s~n", [FilePath]),
             wf:f("File not found: ~s.", [FilePath])
     end,
 
-    Panel = #panel {
-        html_id=Record#file.html_id,
-        body=FileContents
-    },
-
-    element_panel:render_element(Panel).
+    case Record#file.include_panel of
+        false ->
+            FileContents;
+        true ->
+            #panel {
+                id=Record#file.id,
+                class=Record#file.class,
+                title=Record#file.title,
+                html_id=Record#file.html_id,
+                data_fields=Record#file.data_fields,
+                body=FileContents
+            }
+    end.

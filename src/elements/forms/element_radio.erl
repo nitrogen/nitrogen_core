@@ -4,11 +4,16 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_radio).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, radio).
 
+-spec render_element(#radio{}) -> body().
 render_element(Record) -> 
     ID = Record#radio.id,
     Anchor = case Record#radio.anchor of
@@ -22,10 +27,19 @@ render_element(Record) ->
 
     case Record#radio.postback of
         undefined -> ignore;
-        Postback -> wf:wire(Anchor, #event { type=change, postback=Postback, validation_group=ID, delegate=Record#radio.delegate })
+        Postback -> wf:wire(Anchor, #event {
+                    type=change,
+                    postback=Postback,
+                    validation_group=ID,
+                    handle_invalid=Record#radio.handle_invalid,
+                    on_invalid=Record#radio.on_invalid,
+                    delegate=Record#radio.delegate })
     end,
 
+    action_event:maybe_wire_next(Record#radio.anchor, Record#radio.next),
+
     Content = wf:html_encode(Record#radio.text, Record#radio.html_encode),
+    Body = Record#radio.body,
 
     [
         %% Checkbox...
@@ -43,12 +57,14 @@ render_element(Record) ->
             {name, wf:coalesce([Record#radio.html_name,Record#radio.name])},
             {type, radio},
             {class, [radio, Record#radio.class]},
+            {title, Record#radio.title},
             {style, Record#radio.style},
+            {data_fields, Record#radio.data_fields},
             {CheckedOrNot, true}
         ]),
 
         %% Label for Radio...
-        wf_tags:emit_tag(label, Content, [
+        wf_tags:emit_tag(label, [Body, Content], [
             {for, Anchor}
         ])
     ].

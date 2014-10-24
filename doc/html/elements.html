@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Nitrogen 2.x Documentation"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-31 21:51:02 CDT"/>
+<meta name="generated" content="2014-09-15 02:12:44 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -94,7 +94,7 @@
 <div id="content">
 <h1 class="title">Nitrogen 2.x Documentation</h1>
 
-<p><a href="./index.html">Getting Started</a> | <a href="./api.html">API</a> | <b>Elements</b> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./config.html">Configuration Options</a> | <a href="./about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="./index.html">Getting Started</a> | <a href="./api.html">API</a> | <b>Elements</b> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./config.html">Configuration Options</a> | <a href="./plugins.html">Plugins</a> | <a href="./jquery_mobile_integration.html">Mobile</a> | <a href="./troubleshooting.html">Troubleshooting</a> | <a href="./about.html">About</a>
 <div class=headline>Nitrogen Elements</div>
 
 </p>
@@ -105,11 +105,12 @@
 <li><a href="#sec-1">1 Base Element</a></li>
 <li><a href="#sec-2">2 Layout</a></li>
 <li><a href="#sec-3">3 HTML</a></li>
-<li><a href="#sec-4">4 Form</a></li>
-<li><a href="#sec-5">5 Mobile Elements</a></li>
-<li><a href="#sec-6">6 RESTful Elements</a></li>
-<li><a href="#sec-7">7 Other</a></li>
-<li><a href="#sec-8">8 See Also</a></li>
+<li><a href="#sec-4">4 HTML5 Semantic Elements</a></li>
+<li><a href="#sec-5">5 Form</a></li>
+<li><a href="#sec-6">6 Mobile Elements</a></li>
+<li><a href="#sec-7">7 RESTful Elements</a></li>
+<li><a href="#sec-8">8 Other</a></li>
+<li><a href="#sec-9">9 See Also</a></li>
 </ul>
 </div>
 </div>
@@ -136,6 +137,8 @@
 </li>
 <li><a href="./elements/panel.html">Panel</a>
 </li>
+<li><a href="./elements/sync_panel">Sync Panel</a>
+</li>
 <li><a href="./elements/span.html">Span</a>
 </li>
 <li><a href="./elements/fieldset.html">Fieldset</a>
@@ -151,6 +154,8 @@
 <li><a href="./elements/value.html">Value</a>
 </li>
 <li><a href="./elements/list.html">Lists</a> | <a href="./elements/listitem.html">List Items</a>
+</li>
+<li><a href="./elements/radio.html">Radio Buttons</a> | <a href="./elements/radiogroup.html">Radio Group</a>
 </li>
 </ul>
 
@@ -172,7 +177,7 @@
 </li>
 <li><a href="./elements/image.html">Image</a>
 </li>
-<li><a href="./elements/link.html">Link</a>
+<li><a href="./elements/link.html">Link</a> | <a href="./elements/email_link.html">Email Link</a>
 </li>
 <li><a href="./elements/literal.html">Literal</a>
 </li>
@@ -186,13 +191,45 @@
 </div>
 
 <div id="outline-container-4" class="outline-2">
-<h2 id="sec-4"><span class="section-number-2">4</span> Form</h2>
+<h2 id="sec-4"><span class="section-number-2">4</span> HTML5 Semantic Elements</h2>
 <div class="outline-text-2" id="text-4">
+
+<ul>
+<li><a href="./elements/article.html">Article</a>
+</li>
+<li><a href="./elements/html5_header.html">Header</a>
+</li>
+<li><a href="./elements/html5_footer.html">Footer</a>
+</li>
+<li><a href="./elements/aside.html">Aside</a>
+</li>
+<li><a href="./elements/mark.html">Mark</a>
+</li>
+<li><a href="./elements/nav.html">Nav</a>
+</li>
+<li><a href="./elements/section.html">Section</a>
+</li>
+<li><a href="./elements/time.html">Time</a>
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Form</h2>
+<div class="outline-text-2" id="text-5">
 
 <ul>
 <li><a href="./elements/button.html">Button</a>
 </li>
 <li><a href="./elements/textbox.html">Textbox</a>
+</li>
+<li><a href="./elements/textbox_autocomplete.html">Textbox Autocomplete</a>
+</li>
+<li><a href="./elements/datepicker_textbox.html">Datepicker Textbox</a>
 </li>
 <li><a href="./elements/textarea.html">Textarea</a>
 </li>
@@ -219,22 +256,24 @@
 
 </div>
 
-<div id="outline-container-5" class="outline-2">
-<h2 id="sec-5"><span class="section-number-2">5</span> Mobile Elements</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> Mobile Elements</h2>
+<div class="outline-text-2" id="text-6">
 
 <ul>
 <li><a href="./elements/jquery_mobile.html">jQuery Mobile Elements</a>
 </li>
-<li><a href="./elements/mobile_list.html">Mobile List</a> | <a href="./elements/mobile_list_item.html">Mobile List Item</a> | <a href="./elements/mobile_list_divider.html">Mobile List Divider</a>
+<li><a href="./elements/mobile_list.html">Mobile List</a> | <a href="./elements/mobile_listitem.html">Mobile List Item</a> | <a href="./elements/mobile_list_divider.html">Mobile List Divider</a>
 </li>
-<li><a href="./elements/mobile_slider.html">Mobile Slider</a>
+<li><a href="./elements/mobile_toggle.html">Mobile Toggle</a>
 </li>
 <li><a href="./elements/mobile_collapsible.html">Mobile Collapsible</a>
 </li>
 <li><a href="./elements/mobile_collapsible_set.html">Mobile Collapsible Set</a>
 </li>
 <li><a href="./elements/mobile_grid.html">Mobile Grid</a> | <a href="./elements/mobile_grid_block.html">Mobile Grid Block</a>
+</li>
+<li><a href="./elements/mobile_panel.html">Mobile Panel</a>
 </li>
 </ul>
 
@@ -243,9 +282,9 @@
 
 </div>
 
-<div id="outline-container-6" class="outline-2">
-<h2 id="sec-6"><span class="section-number-2">6</span> RESTful Elements</h2>
-<div class="outline-text-2" id="text-6">
+<div id="outline-container-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> RESTful Elements</h2>
+<div class="outline-text-2" id="text-7">
 
 <ul>
 <li><a href="./elements/restful_overview.html">RESTful Overview</a>
@@ -265,9 +304,9 @@
 
 </div>
 
-<div id="outline-container-7" class="outline-2">
-<h2 id="sec-7"><span class="section-number-2">7</span> Other</h2>
-<div class="outline-text-2" id="text-7">
+<div id="outline-container-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> Other</h2>
+<div class="outline-text-2" id="text-8">
 
 <ul>
 <li><a href="./elements/bind.html">Bind</a>
@@ -288,6 +327,8 @@
 </li>
 <li><a href="./elements/recaptcha.html">Recaptcha</a>
 </li>
+<li><a href="./elements/sparkline.html">Sparkline</a>
+</li>
 </ul>
 
 
@@ -295,9 +336,9 @@
 
 </div>
 
-<div id="outline-container-8" class="outline-2">
-<h2 id="sec-8"><span class="section-number-2">8</span> See Also</h2>
-<div class="outline-text-2" id="text-8">
+<div id="outline-container-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> See Also</h2>
+<div class="outline-text-2" id="text-9">
 
 <ul>
 <li><a href="./paths.html">Nitrogen Element Paths</a>
@@ -312,7 +353,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-31 21:51:02 CDT</p>
+<p class="date">Date: 2014-09-15 02:12:44 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

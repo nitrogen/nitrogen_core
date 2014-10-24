@@ -1,12 +1,13 @@
 # vim: sw=3 ts=3 ft=org
-#+TITLE: restful_reset Element
+#+TITLE: restful reset Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Steffen Panning
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
 * RESTful Reset Element #restful\_reset{}
+
   The restful\_reset element produces an input field of type reset
   When clicked, the restful\_reset element resets the surrounding form.
 
@@ -47,3 +48,5 @@
    + [[./restful_submit.org][RESTful Submit]]
 
    + [[./restful_upload.org][RESTful Upload]]
+
+   + [[http://nitrogenproject.com/demos/restful][RESTful Forms Demo]]

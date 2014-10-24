@@ -4,7 +4,7 @@
 #+AUTHOR: Rusty Klophaus (@rustyio)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:./index.org][Getting Started]] | [[file:./api.org][API]] | *Elements* | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | [[file:./handlers.org][Handlers]] | [[file:./config.org][Configuration Options]] | [[file:./about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:./index.org][Getting Started]] | [[file:./api.org][API]] | *Elements* | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | [[file:./handlers.org][Handlers]] | [[file:./config.org][Configuration Options]] | [[file:./plugins.org][Plugins]] | [[file:./jquery_mobile_integration.org][Mobile]] | [[file:./troubleshooting.org][Troubleshooting]] | [[file:./about.org][About]]
 #+HTML: <div class=headline>Nitrogen Elements</div>
 
 * Base Element
@@ -12,6 +12,7 @@
 * Layout
   + [[./elements/template.org][Template]]
   + [[./elements/panel.org][Panel]]
+  + [[./elements/sync_panel][Sync Panel]]
   + [[./elements/span.org][Span]]
   + [[./elements/fieldset.org][Fieldset]]
   + [[./elements/table.org][Table]] | [[./elements/tablerow.org][Row]] | [[./elements/tablecell.org][Cell]] | [[./elements/tableheader.org][Header Cell]]
@@ -20,19 +21,32 @@
   + [[./elements/label.org][Label]]
   + [[./elements/value.org][Value]]
   + [[./elements/list.org][Lists]] | [[./elements/listitem.org][List Items]]
+  + [[./elements/radio.org][Radio Buttons]] | [[./elements/radiogroup.org][Radio Group]]
 
 * HTML
   + [[./elements/h1.org][Heading 1]] | [[./elements/h2.org][Heading 2]] | [[./elements/h3.org][Heading 3]] | [[./elements/h4.org][Heading 4]]
   + [[./elements/p.org][Paragraph]]
   + [[./elements/br.org][Break]]
   + [[./elements/image.org][Image]]
-  + [[./elements/link.org][Link]]
+  + [[./elements/link.org][Link]] | [[./elements/email_link.org][Email Link]]
   + [[./elements/literal.org][Literal]]
   + [[./elements/hr.org][Horizontal Rule]]
+
+* HTML5 Semantic Elements
+  + [[./elements/article.org][Article]]
+  + [[./elements/html5_header.org][Header]]
+  + [[./elements/html5_footer.org][Footer]]
+  + [[./elements/aside.org][Aside]]
+  + [[./elements/mark.org][Mark]]
+  + [[./elements/nav.org][Nav]]
+  + [[./elements/section.org][Section]]
+  + [[./elements/time.org][Time]]
 
 * Form
   + [[./elements/button.org][Button]]
   + [[./elements/textbox.org][Textbox]]
+  + [[./elements/textbox_autocomplete.org][Textbox Autocomplete]]
+  + [[./elements/datepicker_textbox.org][Datepicker Textbox]]
   + [[./elements/textarea.org][Textarea]]
   + [[./elements/checkbox.org][Checkbox]]
   + [[./elements/dropdown.org][Dropdown]] | [[./elements/option.org][Dropdown Option]]
@@ -45,11 +59,12 @@
 
 * Mobile Elements
   + [[./elements/jquery_mobile.org][jQuery Mobile Elements]]
-  + [[./elements/mobile_list.org][Mobile List]] | [[./elements/mobile_list_item.org][Mobile List Item]] | [[./elements/mobile_list_divider.org][Mobile List Divider]]
-  + [[./elements/mobile_slider.org][Mobile Slider]]
+  + [[./elements/mobile_list.org][Mobile List]] | [[./elements/mobile_listitem.org][Mobile List Item]] | [[./elements/mobile_list_divider.org][Mobile List Divider]]
+  + [[./elements/mobile_toggle.org][Mobile Toggle]]
   + [[./elements/mobile_collapsible.org][Mobile Collapsible]]
   + [[./elements/mobile_collapsible_set.org][Mobile Collapsible Set]]
   + [[./elements/mobile_grid.org][Mobile Grid]] | [[./elements/mobile_grid_block.org][Mobile Grid Block]]
+  + [[./elements/mobile_panel.org][Mobile Panel]]
 
 * RESTful Elements
   + [[./elements/restful_overview.org][RESTful Overview]]
@@ -68,6 +83,7 @@
   + [[./elements/sortitem.org][Sort Item]]
   + [[./elements/gravatar.org][Gravatar]]
   + [[./elements/recaptcha.org][Recaptcha]]
+  + [[./elements/sparkline.org][Sparkline]]
 
 * See Also
   + [[./paths.org][Nitrogen Element Paths]]

@@ -5,7 +5,7 @@
 
 -module (passthrough_route_handler).
 -behaviour (route_handler).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -export ([
     init/2, 
     finish/2
@@ -13,7 +13,7 @@
 
 init(Module, State) -> 
     % Some values...
-    RequestBridge = wf_context:request_bridge(),
+    RequestBridge = wf_context:bridge(),
     Path = RequestBridge:path(),
 
     % Update the page_context with the path and module.

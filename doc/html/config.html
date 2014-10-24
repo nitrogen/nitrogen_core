@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
 <meta name="title" content="Configuration Options"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-18 03:26:03 CDT"/>
+<meta name="generated" content="2014-09-15 02:13:10 CDT"/>
 <meta name="author" content="Jesse Gumm (@jessegumm)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -94,7 +94,7 @@
 <div id="content">
 <h1 class="title">Configuration Options</h1>
 
-<p><a href="./index.html">Getting Started</a> | <a href="./api.html">API</a> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <b>Configuration Options</b> | <a href="./about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="./index.html">Getting Started</a> | <a href="./api.html">API</a> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <b>Configuration Options</b> | <a href="./plugins.html">Plugins</a> | <a href="./jquery_mobile_integration.html">Mobile</a> | <a href="./troubleshooting.html">Troubleshooting</a> | <a href="./about.html">About</a>
 </p>
 
 
@@ -176,15 +176,11 @@
 ## Tweak GC to run more often
 -env ERL_FULLSWEEP_AFTER 10
 
-## If you run the sync application, this will switch it to
-## nitrogen_mode for proper include file detection
--sync sync_mode nitrogen
-
 ## Include .beam files for site.
 -pa ./site/ebin
 
-## Include .beam files for dependencies.
--pa ./deps/*/ebin
+## Include libraries and rebar dependency paths
+-env ERL_LIBS ./lib
 
 ## Run code at startup.
 -eval <span class="org-string">"application:start(nitrogen)"</span>
@@ -234,6 +230,11 @@
       route all Nitrogen web requests to modules that all share the same prefix. For
       example, if <code>module_prefix</code> was set to "abc", then a request for /mypage would
       be directed to the module "abc_mypage".
+
+</dd>
+<dt><code>module_aliases</code> - (<i>proplist</i>)</dt><dd>This provides the template system with
+      a default list of module aliases to use within Nitrogen templates. (See
+      the <a href="./elements/template.html">Template Element</a> for more details).
 </dd>
 </dl>
 
@@ -257,8 +258,97 @@
 </div>
 
 <div id="outline-container-2-3" class="outline-3">
-<h3 id="sec-2-3"><span class="section-number-3"></span> Notable mention: rebar.config</h3>
+<h3 id="sec-2-3"><span class="section-number-3"></span> plugins.config</h3>
 <div class="outline-text-3" id="text-2-3">
+
+
+<p>
+   The Nitrogen plugin system is capable of automatically including plugin
+   header files, along with importing static web resources (javascript files,
+   images, etc).  This can be done, and can be configured to work with just
+   about <b>any</b> Nitrogen configuration, including non-standard configurations,
+   such as manually importing Nitrogen as a dependency.
+</p>
+<p>
+   The plugins.config file contains information for how Nitrogen will import
+   plugins.
+</p>
+<p>
+   It's a standard Erlang config file that takes three arguments.
+</p>
+<dl>
+<dt><code>plugins_hrl</code> - (<i>path string</i>)</dt><dd>Tell the Nitrogen plugin importer where
+     to put the generated plugins.hrl file for the purposes of including plugin
+     elements into your application. (default: ="./site/include/plugins.hrl"=)
+
+</dd>
+<dt><code>static_dir</code> - (<i>path string</i>)</dt><dd>Tell the plugin system where you wish to
+     put your plugins' static resources. (default: ="./site/static/plugins"=)
+
+</dd>
+<dt><code>copy_mode</code> - (<i>copy|link</i>)</dt><dd>Tell the plugins system how to include any
+     static resources.  <code>copy</code> will copy the entire contents of your plugins'
+     static directories, while <code>link</code> will merely create a symlink. If you work
+     primarily with Linux or OSX, you can probably get away with using <code>link</code>,
+     while if you use Windows, you should stick with <code>copy</code>. (default: <code>copy</code>).
+</dd>
+</dl>
+
+
+<p>
+Here's the complete text of the default plugins.config:
+</p>
+
+
+
+<pre class="src src-erlang"><span class="org-comment-delimiter">%% </span><span class="org-comment">vim: ts=2 sw=2 et ft=erlang</span>
+<span class="org-comment-delimiter">%% </span><span class="org-comment">Nitrogen Plugin Installer Configuration</span>
+<span class="org-comment-delimiter">%%</span>
+<span class="org-comment-delimiter">%% </span><span class="org-comment">This will tell the plugin-installer script where to put Nitrogen plugin</span>
+<span class="org-comment-delimiter">%% </span><span class="org-comment">information it finds.</span>
+<span class="org-comment-delimiter">%%</span>
+
+<span class="org-comment-delimiter">%% </span><span class="org-comment">plugins_hrl tells the Nitrogen plugin installer where to put the .hrl file</span>
+<span class="org-comment-delimiter">%% </span><span class="org-comment">containing links to all your plugins' respective header files.</span>
+<span class="org-comment-delimiter">%% </span><span class="org-comment">The default is "./site/include/plugins.hrl".</span>
+{plugins_hrl, <span class="org-string">"./site/include/plugins.hrl"</span>}.
+
+<span class="org-comment-delimiter">%% </span><span class="org-comment">static_dir tells the Nitrogen plugin installer where to copy your plugins'</span>
+<span class="org-comment-delimiter">%% </span><span class="org-comment">static resources (images, js, etc).</span>
+<span class="org-comment-delimiter">%% </span><span class="org-comment">The default is "./site/static/plugins"</span>
+{static_dir, <span class="org-string">"./site/static/plugins"</span>}.
+
+<span class="org-comment-delimiter">%% </span><span class="org-comment">copy_mode determines if static resources are copied or merely symlinked.</span>
+<span class="org-comment-delimiter">%% </span><span class="org-comment">Keep in mind, symlinks do not work on Windows, so "copy" is the default.</span>
+<span class="org-comment-delimiter">%% </span><span class="org-comment">Valid values are the atoms 'copy' or 'link'</span>
+<span class="org-comment-delimiter">%% </span><span class="org-comment">Default: copy</span>
+{copy_mode, copy}.
+</pre>
+
+
+
+</div>
+
+<div id="outline-container-2-3-1" class="outline-4">
+<h4 id="sec-2-3-1"><span class="section-number-4"></span> More about Plugins</h4>
+<div class="outline-text-4" id="text-2-3-1">
+
+
+<p>
+    The plugin system has its own complete documentation along with a sample
+    plugin stub for creating your own plugins.
+</p>
+<p>
+    We strongly advise reading the <a href="./plugins.html">Plugin Documentation</a>.
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3"></span> Notable mention: rebar.config</h3>
+<div class="outline-text-3" id="text-2-4">
 
 
 <p>
@@ -525,7 +615,7 @@ sudo setcap cap_net_bind_service+ep ./erts-5.9.2/bin/beam.smp
 
 
 <p>
-  Note that basically all it does it tell <code>inets</code> to load the inets<sub>httpd</sub>.erlenv
+  Note that basically all it does it tell <code>inets</code> to load the inets_httpd.erlenv
   proplist file, using the <code>proplist_file</code> option.
 </p>
 </div>
@@ -810,8 +900,20 @@ sudo setcap cap_net_bind_service+ep ./erts-5.9.2/bin/beam.smp
 </div>
 
 <div id="outline-container-4-1" class="outline-3">
-<h3 id="sec-4-1"><span class="section-number-3"></span> nginx - A lightweight reverse proxy</h3>
+<h3 id="sec-4-1"><span class="section-number-3"></span> Smart Extensions</h3>
 <div class="outline-text-3" id="text-4-1">
+
+
+<p>
+   See <a href="./smart_extension.html">Smart Extensions Documentation</a>
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-4-2" class="outline-3">
+<h3 id="sec-4-2"><span class="section-number-3"></span> nginx - A lightweight reverse proxy</h3>
+<div class="outline-text-3" id="text-4-2">
 
 
 <p>
@@ -825,9 +927,9 @@ sudo setcap cap_net_bind_service+ep ./erts-5.9.2/bin/beam.smp
 
 </div>
 
-<div id="outline-container-4-1-1" class="outline-5">
-<h5 id="sec-4-1-1"><span class="section-number-5"></span> /etc/nginx/nginx.conf</h5>
-<div class="outline-text-5" id="text-4-1-1">
+<div id="outline-container-4-2-1" class="outline-5">
+<h5 id="sec-4-2-1"><span class="section-number-5"></span> /etc/nginx/nginx.conf</h5>
+<div class="outline-text-5" id="text-4-2-1">
 
 
 
@@ -872,9 +974,9 @@ http {
 
 </div>
 
-<div id="outline-container-4-1-2" class="outline-5">
-<h5 id="sec-4-1-2"><span class="section-number-5"></span> Non-SSL Sample: /etc/nginx/sites-enabled/my_site</h5>
-<div class="outline-text-5" id="text-4-1-2">
+<div id="outline-container-4-2-2" class="outline-5">
+<h5 id="sec-4-2-2"><span class="section-number-5"></span> Non-SSL Sample: /etc/nginx/sites-enabled/my_site</h5>
+<div class="outline-text-5" id="text-4-2-2">
 
 
 
@@ -895,9 +997,9 @@ http {
 
 </div>
 
-<div id="outline-container-4-1-3" class="outline-5">
-<h5 id="sec-4-1-3"><span class="section-number-5"></span> SSL-Only Sample: /etc/nginx/sites/enabled/my_secure_site</h5>
-<div class="outline-text-5" id="text-4-1-3">
+<div id="outline-container-4-2-3" class="outline-5">
+<h5 id="sec-4-2-3"><span class="section-number-5"></span> SSL-Only Sample: /etc/nginx/sites/enabled/my_secure_site</h5>
+<div class="outline-text-5" id="text-4-2-3">
 
 
 <p>
@@ -943,7 +1045,7 @@ server {
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-18 03:26:03 CDT</p>
+<p class="date">Date: 2014-09-15 02:13:10 CDT</p>
 <p class="author">Author: Jesse Gumm (@jessegumm)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

@@ -4,7 +4,7 @@
 % See MIT-LICENSE for licensing information.
 
 -module (wf_validation).
--include_lib ("wf.hrl").
+-include ("wf.hrl").
 -export ([validate/0]).
 
 validate() ->
@@ -25,12 +25,15 @@ validate() ->
             false ->
                 Function = Record#custom.function,
                 Text = Record#custom.text,
-                Value = wf:q(TargetPath),
+                Value = case wf:qs(TargetPath) of
+                    [V | _] -> V;
+                    [] -> undefined
+                end,
                 case Function(Record#custom.tag, Value) of
                     true -> 
                         FailedPaths;
                     false ->
-                        wf:wire(TargetPath, #validation_error { text=Text }),
+                        wf:wire(TargetPath, #validation_error { text=Text, attach_to=Record#custom.attach_to }),
                         [TargetPath|FailedPaths]
                 end
         end

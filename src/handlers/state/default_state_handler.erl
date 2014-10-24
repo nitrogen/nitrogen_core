@@ -5,9 +5,14 @@
 
 -module (default_state_handler).
 -behaviour (state_handler).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -export ([
-    init/2, finish/2, get_state/4, set_state/4, clear/3, clear_all/2
+    init/2,
+    finish/2,
+    get_state/4,
+    set_state/4,
+    clear/3,
+    clear_all/2
 ]).
 
 init(_Config, State) -> 

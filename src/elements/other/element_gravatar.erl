@@ -1,15 +1,22 @@
 % vim: sw=4 ts=4 et ft=erlang
 -module (element_gravatar).
--compile(export_all).
--include_lib ("wf.hrl").
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, gravatar).
 
+-spec render_element(#gravatar{}) -> body().
 render_element(Record) -> 
     Image = #image {
         html_id=Record#gravatar.html_id,
         id=Record#gravatar.id,
+        title=Record#gravatar.title,
         anchor=Record#gravatar.anchor,
+        data_fields=Record#gravatar.data_fields,
         image = gravatar_icon(Record)
     },
     element_image:render_element(Image).

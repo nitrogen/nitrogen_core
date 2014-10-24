@@ -5,7 +5,7 @@
 #+AUTHOR: Rusty Klophaus (@rustyio)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][Elements]] | [[file:../actions.org][Actions]] | [[file:../validators.org][*Validators*]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][Elements]] | [[file:../actions.org][Actions]] | [[file:../validators.org][*Validators*]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
 * Custom Client-Side Validator - #js\_custom {}
 
@@ -16,6 +16,17 @@
   See [[http://livevalidation.com/documentation#ValidateCustom][Live Validation's Validate Custom]] for more information about the
   validation function and args.
 
+** Security Note
+
+	Note that because this is a purely Javascript-based validation, that you
+	can't trust this validator in the same way you can trust that the
+	server-side validators will ensure that a value is valid prior to postback.
+	You will still likely have to verify your values server-side to protect
+	against tampering.
+
+	This validator is provided more to give faster response to your users, since
+	Javascript doesn't have to communicate with the server to validate. It
+	usually goes together with the =#custom= server-side validator.
 
 ** Usage
 
@@ -23,7 +34,20 @@
    % Wire the validator against the 'my_validator' Javascript
    % function, passing in some args...
    wf:wire(ButtonID, TextBoxID, #validate { validators=[
-     #js_custom { text="Validation failed.", function=my_validator, args="{ amount: 5 }" }
+     #js_custom {
+       text="Validation failed.",
+       function=my_validator,
+       args="{ amount: 5 }"
+     }
+   ]})
+#+END_SRC
+
+#+BEGIN_SRC erlang
+   wf:wire(ButtonID, TextBoxID, #validate { validators=[
+     #js_custom {
+       text="Validation failed.",
+       function="function(value, args) { return value == 'the only correct answer'} ",
+       when_empty=true }
    ]})
 #+END_SRC
 
@@ -31,6 +55,23 @@
 
    + text - (/string/) :: The text to display if validation fails.
 
-   + function - (/atom or string/) :: The name of a a Javascript function that returns true if the value is valid, false if invalid.<br>function(Value, Args) -> 'true' or 'false'
+   + function - (/atom or string/) :: The name of a Javascript function of an
+     anonymous javascript function that returns true if the value is valid, false
+     if invalid.
+     function(Value, Args) -> 'true' or 'false'
 
-   + args - (/JSON String/) :: Extra arguments passed to the custom validation function.
+   + args - (/JSON String/) :: Extra arguments passed to the custom validation
+     function.
+   
+   + when_empty - (/boolean/) :: Run the validator even if the specified
+     field's value is empty. By default, the custom validator doesn't apply if
+     the field is empty, since you would normally use a separate =#is_required=
+     for that. (default: =false=)
+
+** See Also
+
+	+ [[./custom.org][Custom Action (server side)]]
+
+	+ [[../actions/validate.org][Validate Action]]
+
+	+ [[http://nitrogenproject.com/demos/validation][Validation Demos]]

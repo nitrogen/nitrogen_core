@@ -4,25 +4,41 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_link).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, link).
 
+-spec render_element(#link{}) -> body().
 render_element(Record) -> 
     ID = Record#link.id,
     Anchor = Record#link.anchor,
     case Record#link.postback of
         undefined -> ignore;
-        Postback -> wf:wire(Anchor, #event { type=click, postback=Postback, validation_group=ID, delegate=Record#link.delegate })
+        Postback -> wf:wire(Anchor, #event {
+                    type=click,
+                    postback=Postback,
+                    validation_group=ID,
+                    handle_invalid=Record#link.handle_invalid,
+                    on_invalid=Record#link.on_invalid,
+                    delegate=Record#link.delegate })
     end,
+
+	case Record#link.click of
+		undefined -> ignore;
+		ClickActions -> wf:wire(Anchor, #event { type=click, actions=ClickActions })
+	end,
 
     Body = [
         wf:html_encode(Record#link.text, Record#link.html_encode),
         Record#link.body
     ],
 
-    Target = target(Record#link.new),
+    Target = ?WF_IF(Record#link.new,<<"_blank">>,""),
 
     %% Basically, the default for mobile_target is to say nothing and let
     %% jquery mobile use its default setting. Anything other than a boolean
@@ -40,13 +56,6 @@ render_element(Record) ->
         {title, wf:html_encode(Record#link.title, Record#link.html_encode)},
         {data_fields, DataFields2}
     ]).
-
-target(New) ->
-    case New of
-        false -> "";
-        true -> "_blank";
-        _ -> ""
-    end.
 
 add_field(true,ToAdd,DataFields) -> [ToAdd | DataFields];
 add_field(_,_,DataFields) -> DataFields.

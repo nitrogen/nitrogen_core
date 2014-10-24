@@ -4,11 +4,16 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_lightbox).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, lightbox).
 
+-spec render_element(#lightbox{}) -> body().
 render_element(Record) -> 
     Panel = #panel {
         html_id=Record#lightbox.html_id,
@@ -16,6 +21,8 @@ render_element(Record) ->
         anchor=Record#lightbox.anchor,
         class=[lightbox, Record#lightbox.class],
         style=wf:to_list(Record#lightbox.style),
+        title=Record#lightbox.title,
+        data_fields=Record#lightbox.data_fields,
         body=[
             #panel { 			
                 class=lightbox_background

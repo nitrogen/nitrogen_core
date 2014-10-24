@@ -4,11 +4,20 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_flash).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+	reflect/0,
+	render_element/1,
+	render/0,
+	add_flash/1,
+	add_flash/2,
+	render_flash/2
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, flash).
 
+-spec render_element(#flash{}) -> body().
 render_element(_Record) -> 
     Terms = #panel { 
         id=flash,
@@ -18,45 +27,39 @@ render_element(_Record) ->
     Terms.
 
 % render/0 - Convenience methods to place the flash element on a page from a template.
+-spec render() -> #flash{}.
 render() -> #flash{}.
 
-update() ->
-    % TODO - Stifle flash when we are redirecting.
-    HasFlash = wf:state(has_flash),
-    case HasFlash of
-        true -> 
-            {ok, Flashes} = get_flashes(),
-            wf:insert_bottom(flash, Flashes);
-        _ -> ignore
-    end.
-
-add_flash(Term) ->
+-spec add_flash(term()) -> ok.
+ add_flash(Term) ->
     FlashID = wf:temp_id(),
     add_flash(FlashID, Term).
 
-add_flash(FlashID, Elements) ->
-    Flashes = case wf:session(flashes) of
-        undefined -> [];
-        X -> X
-    end,
-    wf:session(flashes, [{FlashID, Elements}|Flashes]).
+-spec add_flash(id(), term()) -> ok.
+add_flash(FlashID, Term) ->
+	Elements = render_flash(FlashID, Term),
+	wf:insert_bottom(defer, flash, Elements).
 
-get_flashes() -> 
-    % Create terms for an individual flash...
-    F = fun({FlashID, Elements}) ->
-        InnerPanel = #panel { class=flash, actions=#show { target=FlashID, effect=blind, speed=400 }, body=[
-            #link { class=flash_close_button, text="Close", actions=#event { type=click, target=FlashID, actions=#hide { effect=blind, speed=400 } } },
-            #panel { class=flash_content, body=Elements }
-        ]},
-        #panel { id=FlashID, style="display: none;", body=InnerPanel}
-    end,
-
-    % Get flashes, and clear session...
-    Flashes = case wf:session(flashes, []) of 
-        undefined -> [];
-        Other -> Other
-    end,	
-
-    % Return list of terms...
-    Flashes1 = [F(X) || X <- lists:reverse(Flashes)],
-    {ok, Flashes1}.
+-spec render_flash(id(), term()) -> nitrogen_element().
+render_flash(FlashID, Term) ->
+	#panel{
+		id=FlashID,
+		style="display: none;",
+		body=[
+			#panel{
+				class=flash,
+				actions=#show{target=FlashID, effect=blind, speed=400},
+				body=[
+					#link{
+						class=flash_close_button,
+						text="Close",
+						actions=
+							#event{type=click, target=FlashID, actions=
+								#hide{effect=blind, speed=400}
+							}
+					},
+					#panel{class=flash_content, body=Term }
+				]
+			}
+		]
+	}.

@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Datepicker Textbox Element</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="Datepicker Textbox Element"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2014-09-15 02:13:06 CDT"/>
+<meta name="author" content="Rusty Klophaus (@rustyio)"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">Datepicker Textbox Element</h1>
+
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html"><b>Elements</b></a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../plugins.html">Plugins</a> | <a href="../jquery_mobile_integration.html">Mobile</a> | <a href="../troubleshooting.html">Troubleshooting</a> | <a href="../about.html">About</a>
+</p>
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Datepicker Textbox Element - #datepicker_textbox {}</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Datepicker Textbox Element - #datepicker_textbox {}</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+  The datepicker textbox element produces an HTML textbox that automatically
+  pops up a <a href="http://jqueryui.com/datepicker/">jQuery UI Datepicker</a> when the
+  control takes the focus.
+</p>
+
+</div>
+
+<div id="outline-container-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3"></span> Usage</h3>
+<div class="outline-text-3" id="text-1-1">
+
+
+
+
+
+<pre class="src src-erlang">#<span class="org-type">datepicker_textbox</span>{
+   id=date1,
+   text=<span class="org-string">"5/25/2013"</span>,
+   options=[
+      {dateFormat, <span class="org-string">"mm/dd/yy"</span>},
+      {showButtonPanel, true}
+   ]
+}
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3"></span> Attributes</h3>
+<div class="outline-text-3" id="text-1-2">
+
+
+<dl>
+<dt>text - (<i>string</i>)</dt><dd>Set the textbox's contents.
+
+</dd>
+<dt>html_encode - (<i>boolean</i>)</dt><dd>Set to true to safely html-encode the text.
+
+</dd>
+<dt>options - (<i>list of {Key,Value} properties</i>)</dt><dd>Set the jQuery UI options. You can view the full
+      list of options at the official <a href="http://api.jqueryui.com/datepicker/">jQuery UI Datepicker API Documentation</a>.
+      Here are a few common options:
+
+<dl>
+<dt>formatDate - (<i>format string</i>)</dt><dd>Change the format of the displayed
+         date (e.g.: ="yy-mm-dd"=, ="mm/dd/yy"= ).
+
+</dd>
+<dt>showOtherMonths - (<i>boolean</i>)</dt><dd>Set to true to allow the datepicker to
+         show the previous and next month's last and first days in the otherwise
+         blank spaces.
+
+</dd>
+<dt>selectOtherMonths - (<i>boolean</i>)</dt><dd>If <code>showOtherMonths</code> is true, then
+         clicking those leading and trailing dates will also put the date in the
+         textbox.
+
+</dd>
+<dt>numberOfMonths - (<i>integer</i>)</dt><dd>Display the specified number of months
+         in the calendar popup rather than just a single month.
+
+</dd>
+<dt>changeMonth - (<i>boolean</i>)</dt><dd>Put a "Month" dropdown box in the calendar
+         popup
+
+</dd>
+<dt>changeYear - (<i>boolean</i>)</dt><dd>Put a "Year" dropdown box in the calendar
+         popup
+
+</dd>
+<dt>showButtonPanel - (<i>boolean</i>)</dt><dd>Put a button panel below the calendar
+         popup which includes a "Today" button, and a "Close" button (the text of
+         which <a href="http://api.jqueryui.com/datepicker/#option-showButtonPanel">can be customized</a>.
+
+</dd>
+</dl>
+
+</dd>
+<dt>disabled - (<i>boolean</i>)</dt><dd>Set to true to disable this textbox in the
+      browser (sets the HTML <code>disabled</code> property, effectly greying out the
+      element). Can be dynamically re-enabled with <code>wf:enable(ElementID)</code> or
+      <code>wf:wire(ElementID, #enable{})</code> (Default: <code>false</code>)
+
+</dd>
+<dt>readonly - (<i>boolean</i>)</dt><dd>Set to true to make this element readonly in the
+      browser. Can be toggled with <code>wf:wire(ElementID, #make_writable{})</code> and
+      <code>wf:wire(ElementID, #make_readonly{})</code>.
+
+</dd>
+<dt>placeholder - (<i>string</i>)</dt><dd>Sets the placeholder text (text that will be
+      in the textbox until the user focuses in the textbox). This uses the
+      HTML5 placeholder attribute, which is only supported in newer browsers.
+      To add support for older-browsers, you will need to link a placeholder
+      script in your template. You can do this by adding the following to your
+      template inside the <code>&lt;head&gt;</code> section after loading jQuery. 
+</dd>
+</dl>
+
+
+
+
+
+<pre class="src src-html">&lt;<span class="org-function-name">script</span> <span class="org-variable-name">src</span>='/nitrogen/jquery.placeholder.js' <span class="org-variable-name">type</span>='text/javascript'&gt;&lt;/<span class="org-function-name">script</span>&gt;
+</pre>
+
+
+<dl>
+<dt>next - (<i>atom</i>)</dt><dd>If set with a valid control ID, pressing the enter key
+      in the textbox will automatically move focus to the specified control.
+
+</dd>
+<dt>postback - (<i>Erlang term</i>)</dt><dd>If set, pressing the enter key in the
+      textbox will automatically initiate a Nitrogen postback with the supplied
+      term.
+
+</dd>
+<dt>html_name - (<i>string</i>)</dt><dd>The name attribute of the textbox.
+</dd>
+</dl>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3"></span> See Also</h3>
+<div class="outline-text-3" id="text-1-3">
+
+
+<ul>
+<li><a href="./base.html">base element</a>
+
+</li>
+<li><a href="./button.html">button element</a>
+
+</li>
+<li><a href="./password.html">password element</a>
+
+</li>
+<li><a href="./textarea.html">textarea element</a>
+
+</li>
+<li><a href="./checkbox.html">checkbox element</a>
+
+</li>
+<li><a href="./dropdown.html">dropdown element</a>
+
+</li>
+<li><a href="./option.html">option element</a>
+
+</li>
+<li><a href="http://nitrogenproject.com/demos/simplecontrols">Simple Controls Demos</a>
+</li>
+</ul>
+
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2014-09-15 02:13:06 CDT</p>
+<p class="author">Author: Rusty Klophaus (@rustyio)</p>
+<p class="creator">Org version 7.8.02 with Emacs version 23</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div><h2>Comments</h2>
+<b>Note:</b><!-- Disqus does not currently support Erlang for its syntax highlighting, so t-->To specify <!--Erlang--> code blocks, just use the generic code block syntax: <pre><b>&lt;pre&gt;&lt;code&gt;your code here&lt;/code&gt;&lt;/pre&gt;</b></pre>
+<br />
+<br />
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	var disqus_shortname = 'nitrogenproject'; // required: replace example with your forum shortname
+	var disqus_identifier = 'html/elements/datepicker_textbox.html'; //This will be replaced with the path part of the url
+
+	/* * * DON'T EDIT BELOW THIS LINE * * */
+	(function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</body>
+</html>

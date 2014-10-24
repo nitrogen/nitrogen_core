@@ -1,10 +1,15 @@
 % vim: sw=4 ts=4 et ft=erlang
 -module (element_grid).
--compile(export_all).
--include_lib("wf.hrl").
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, grid).
 
+-spec render_element(nitrogen_element()) -> body().
 render_element(#grid_clear {}) ->
     "<div class='clear'></div>\n";
 render_element(Record0)  ->
@@ -14,6 +19,7 @@ render_element(Record0)  ->
     element_panel:render_element(#panel {
         html_id=Record#grid.html_id,
         class=to_classes(Record),
+        data_fields=Record#grid.data_fields,
         body=case Record#grid.type of
             clear ->
                 Body;
@@ -30,11 +36,13 @@ render_element(Record0)  ->
         end
     }).
 
+-spec to_grid_record(X :: nitrogen_element()) -> #grid{}.
 to_grid_record(X) -> 
     setelement(1, X, grid).
 
 %% - Add omega to last grid element.
 %% - Add a clear statement at end of body.
+-spec rewrite_body(Body :: body()) -> body().
 rewrite_body(Body) ->
     case is_grid_body(Body) of
         true -> 
@@ -50,8 +58,9 @@ rewrite_body(Body) ->
     end.
 
 %% Will append a grid_clear element if the last element isn't already a grid_clear{}
+-spec append_clear_if_necessary(body()) -> body().
 append_clear_if_necessary(Body) ->
-    {L2, Last} = lists:split(length(Body) - 1, Body),
+    {BodyMinusLast, Last} = lists:split(length(Body) - 1, Body),
     case Last of
         [#grid_clear{}] -> 
             %% The last element is already grid_clear, so we'll just trust the body to be just fine,
@@ -61,10 +70,13 @@ append_clear_if_necessary(Body) ->
             Body;
         _ -> 
             Last1 = to_grid_record(hd(Last)),
-            L2 ++ [Last1#grid { omega = true }, #grid_clear {}]
+            OmegaLast = Last1#grid{omega=true},
+            Clear = #grid_clear{}, 
+            [BodyMinusLast,OmegaLast,Clear]
     end.
 
 %% Return true if all elements are grid elements.
+-spec is_grid_body(body()) -> boolean().
 is_grid_body(Body) ->
     F = fun(X) ->
         is_tuple(X) andalso size(X) > 3 andalso element(3, X) == ?MODULE
@@ -74,6 +86,7 @@ is_grid_body(Body) ->
 
 %% Given a grid record, create the list of 960.gs classes to position
 %% this grid.
+-spec to_classes(#grid{}) -> [class()].
 to_classes(Record) ->
     C = case Record#grid.type of
         clear -> 

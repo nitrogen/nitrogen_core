@@ -1,11 +1,14 @@
 COMPILING THE NITROGEN DOCUMENTATION
 
 
-compiling the documentation uses Org-mode for Emacs and a simple Perl script for adding Disqus comments.
+Compiling the documentation uses Org-mode for Emacs and a simple Perl script
+for adding Disqus comments.
 
-Editing the HTML is not recommended, as the org-mode compiler just overwrites all HTML anyway. Instead, edit the org-mode files found in doc/org-mode.
+Editing the HTML is not recommended, as the org-mode compiler just overwrites
+all HTML anyway. Instead, edit the org-mode files found in doc/org-mode.
 
-Make sure you have emacs installed, with htmlize (version 1.34 or later), erlang-mode, and org-mode installed.
+Make sure you have emacs installed, with htmlize (version 1.34 or later),
+erlang-mode, and org-mode installed.
 
 On Ubuntu, these packages can all be installed with:
 
@@ -17,4 +20,5 @@ Then you can compile the docs from the command line with
 $ make docs
 
 
-Also worth noting is that the Disqus comment injection script expects perl to be in the PATH
+Also worth noting is that the Disqus comment injection script expects perl to
+be in the PATH

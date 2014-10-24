@@ -4,17 +4,23 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_sortblock).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1,
+    event/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, sortblock).
 
+-spec render_element(#sortblock{}) -> body().
 render_element(Record) -> 
     % Get properties...
     Anchor = Record#sortblock.anchor,
     Tag = Record#sortblock.tag,
     Delegate = Record#sortblock.delegate,
-    PostbackInfo = wf_event:serialize_event_context({Delegate, Tag}, Anchor, undefined, ?MODULE),
+    PostbackInfo = wf_event:serialize_event_context({Delegate, Tag}, Anchor, undefined, false, ?MODULE),
     Handle = case Record#sortblock.handle of
         undefined -> "null";
         Other -> wf:f("'.~s'", [Other])
@@ -35,10 +41,13 @@ render_element(Record) ->
         id=Record#sortblock.id,
         anchor=Record#sortblock.anchor,
         class=[sortblock, GroupClasses|Record#sortblock.class],
+        title=Record#sortblock.title,
         style=Record#sortblock.style,
-        body=Record#sortblock.items
+        body=Record#sortblock.items,
+        data_fields=Record#sortblock.data_fields
     }).
 
+-spec event(any()) -> any().
 event({Delegate, BlockTag}) ->
     SortItems = wf:q(sort_items),
     SortTags = [wf:depickle(X) || X <- string:tokens(SortItems, ",")],

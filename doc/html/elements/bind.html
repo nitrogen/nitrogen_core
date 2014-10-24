@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Bind Element Element"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-18 03:25:55 CDT"/>
+<meta name="generated" content="2014-09-15 02:13:07 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -94,7 +94,7 @@
 <div id="content">
 <h1 class="title">Bind Element Element</h1>
 
-<p><a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html"><b>Elements</b></a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html"><b>Elements</b></a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../plugins.html">Plugins</a> | <a href="../jquery_mobile_integration.html">Mobile</a> | <a href="../troubleshooting.html">Troubleshooting</a> | <a href="../about.html">About</a>
 </p>
 
 
@@ -113,38 +113,38 @@
 
 
 <p>
-  The bind element allows you to easily display lists of data on a Nitrogen page. When you declare
-  the bind element, you define a set of 'data', a 'body' containing one or more elements, and a 'map'
-  that tells the bind element how to map a data row into the body.
+  The bind element allows you to easily display lists of data on a Nitrogen
+  page. When you declare the bind element, you define a set of 'data', a 'body'
+  containing one or more elements, and a 'map' that tells the bind element how
+  to map a data row into the body.
 </p>
 <p>
-  A map item is an atom of the form element_id@attribute. The element_id must correspond to the id of
-  an element in the 'body', and the attribute must be an attribute found on that element. You can bind to
-  any attribute within an element.
+  A map item is an atom of the form <code>element_id@attribute</code>. The <code>element_id</code>
+  must correspond to the id of an element in the 'body', and the attribute must
+  be an attribute found on that element. You can bind to any attribute within
+  an element.
 </p>
 <p>
-  In addition, you can specify a 'transform' function to manipulate the data at bind time and add
-  additional bindings dynamically.
+  In addition, you can specify a 'transform' function to manipulate the data at
+  bind time and add additional bindings dynamically.
 </p>
 <p>
-  The 'data' attribute and the 'map' attribute must follow the same basic structure. This can mean one of three things:
+  The 'data' attribute and the 'map' attribute must follow the same basic
+  structure. This can mean one of three things:
 </p>
 <dl>
-<dt>Simple List</dt><dd>If the data is a simple list, then each row must
-                     be of the same length, and the map must also be
-                     the same length as a data row.
+<dt>Simple List</dt><dd>If the data is a simple list, then each row must be of the
+     same length, and the map must also be the same length as a data row.
 
 </dd>
-<dt>Value Pair</dt><dd>If the data is in the form of a key/value pair, then
-                  each row must be a list of {key, value} tuples, and
-                  the map must also be a list of {key, value} tuples.
-                  The tuples can be in any order, and there can be
-                  extra tuples or missing tuples with no ill effects.
+<dt>Value Pair</dt><dd>If the data is in the form of a key/value pair, then each row
+     must be a list of {key, value} tuples, and the map must also be a list of
+     {key, value} tuples.  The tuples can be in any order, and there can be extra
+     tuples or missing tuples with no ill effects.
 
 </dd>
-<dt>Records</dt><dd>If the data is in the form of a record, then each row
-               must be the same type of record, and the map must be a
-               record.  
+<dt>Records</dt><dd>If the data is in the form of a record, then each row must be
+     the same type of record, and the map must be a record.  
 </dd>
 </dl>
 
@@ -195,14 +195,16 @@
 
 </dd>
 <dt>transform - (<i>Function(DataRow, Acc) -&gt; {DataRow1, Acc1, ExtraBindings}</i>)</dt><dd>
-<p>
-        A transform function that is run on the data before binding. DataRow contains 
-        one row of data. Acc contains the accumulator set by the 'acc' attribute. 
-        The function can return a modified datarow, an updated accumulator, 
-        and a list of extra bindings to apply. The extra bindings must be of the
-        form {element<sub>id</sub>@attr, value}.
-</p>
 </dd>
+</dl>
+
+<p>   A transform function that is run on the data before binding. DataRow contains 
+   one row of data. Acc contains the accumulator set by the 'acc' attribute. 
+   The function can return a modified datarow, an updated accumulator, 
+   and a list of extra bindings to apply. The extra bindings must be of the
+   form <code>{element_id@attr, value}</code>.
+</p>
+<dl>
 <dt>acc - (<i>Erlang term</i>)</dt><dd>The initial accumulator to pass in to the transform function.
 
 </dd>
@@ -213,13 +215,31 @@
 </dd>
 </dl>
 
+
+</div>
+
+</div>
+
+<div id="outline-container-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3"></span> See Also</h3>
+<div class="outline-text-3" id="text-1-3">
+
+
+<ul>
+<li><a href="./base.html">base element</a>
+
+</li>
+<li><a href="http://nitrogenproject.com/demos">Data Binding Section of the Demos page</a>
+</li>
+</ul>
+
 </div>
 </div>
 </div>
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-18 03:25:55 CDT</p>
+<p class="date">Date: 2014-09-15 02:13:07 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

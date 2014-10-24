@@ -3,14 +3,22 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_nav).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, nav).
 
-render_element(Record) ->
+-spec render_element(#nav{}) -> body().
+render_element(Record ) ->
     wf_tags:emit_tag(nav, Record#nav.body, [
         {id, Record#nav.html_id},
         {class, ["nav", Record#nav.class]},
-        {style, Record#nav.style}
+        {title, Record#nav.title},
+        {style, Record#nav.style},
+        {role, Record#nav.role},
+        {data_fields, Record#nav.data_fields}
     ]).

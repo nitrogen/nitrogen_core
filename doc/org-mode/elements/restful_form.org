@@ -1,10 +1,10 @@
 # vim: ts=3 sw=3 et ft=org
-#+TITLE: restful_form Element
+#+TITLE: restful\_form Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Steffen Panning
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
 * RESTful Form Element - #restful\_form {}
 
@@ -26,11 +26,17 @@
 
 ** Attributes
 
-   + method - (/string/) :: Set the request-method (typically 'post' or 'get')
+   + method - (/string or atom/) :: Set the HTTP request-method (typically
+                            =post= or =get=).
 
    + action - (/string/) :: Set the target-url of the form submit. If
                             left blank, the same page module is used as
                             target.
+
+   + target - (/string or atom/) :: Set the HTML =target= attribute, which can
+                             be used for redirecting the form submission to a 
+                             new window, or to a frame. If left blank, will
+                             just target the current window.
 
    + enctype - (/string/) :: Sets the encoding for the form transmission.
 
@@ -60,4 +66,6 @@
    + [[./restful_reset.org][RESTful Reset]]
 
    + [[./restful_upload.org][RESTful Upload]]
+
+   + [[http://nitrogenproject.com/demos/restful][RESTful Forms Demo]]
 

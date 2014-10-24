@@ -4,20 +4,20 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_range).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, range).
 
+-spec render_element(#range{}) -> body().
 render_element(Record) -> 
     ID = Record#range.id,
     Anchor = Record#range.anchor,
-    case Record#range.next of
-        undefined -> ignore;
-        Next -> 
-            Next1 = wf_render_actions:normalize_path(Next),
-            wf:wire(Anchor, #event { type=enterkey, actions=wf:f("Nitrogen.$go_next('~s');", [Next1]) })
-    end,
+    action_event:maybe_wire_next(Anchor, Record#range.next),
 
     case Record#range.postback of
         undefined -> ignore;
@@ -27,6 +27,7 @@ render_element(Record) ->
     wf_tags:emit_tag(input, [
         {type, range}, 
         {class, [range, Record#range.class]},
+        {title, Record#range.title},
         {min, Record#range.min},
         {max, Record#range.max},
         {step, Record#range.step},

@@ -1,0 +1,44 @@
+# vim: sw=3 ts=3 et ft=org
+
+#+TITLE: Confirm Save Validator Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Jesse Gumm (@jessegumm)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][Elements]] | [[file:../actions.org][Actions]] | [[file:../validators.org][*Validators*]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
+
+* Confirm Same Validator - #confirm\_same {}
+
+  A general validator to verify that two fields have the same value. This could
+  be used for validating "confirm email" or "confirm username" type fields.
+
+** Usage
+
+#+BEGIN_SRC erlang
+   wf:wire(button, email, #validate { validators=[
+     #confirm_same { text="Emails do not match", confirm_id=confirm_email }
+   ]}),
+   
+   #label{text="Email Address"},
+   #textbox{id=email},
+
+   #label{text="Confirm Email"},
+   #textbox{id=confirm_email},
+
+   #button{id=button, text="Confirms"}
+#+END_SRC
+
+** Attributes
+
+   + text - (/string/) :: The text to display if validation fails.
+
+   + confirm\_id - (/atom/) :: Specify the Nitrogen Element ID of the field
+      against which you wish to confirm.
+
+** See Also
+
+   + [[./confirm_password.org][Confirm Password Validator]]
+
+   + [[../actions/validate.org][Validate Action]]
+
+   + [[http://nitrogenproject.com/demos/validation][Validation Demos]]

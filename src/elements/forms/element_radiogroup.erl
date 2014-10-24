@@ -4,11 +4,16 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_radiogroup).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, radiogroup).
 
+-spec render_element(#radiogroup{}) -> body().
 render_element(Record) -> 
     % Set the group to the current HtmlID...
     Anchor = Record#radiogroup.anchor,
@@ -19,7 +24,9 @@ render_element(Record) ->
         id=Record#radiogroup.id,
         anchor=Record#radiogroup.anchor,
         class=[radiogroup, Record#radiogroup.class],
+        title=Record#radiogroup.title,
         style=Record#radiogroup.style,
+        data_fields=Record#radiogroup.data_fields,
         body=Body
     }).
 

@@ -4,9 +4,9 @@
 #+AUTHOR: Jesse Gumm (@jessegumm)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
-* Mobile Grid Block Element - #mobile_grid_block {}
+* Mobile Grid Block Element - #mobile\_grid\_block {}
 
 This element produces a block element for a container [[./mobile_grid.html][Mobile Grid]] Element.
 
@@ -14,8 +14,8 @@ This element produces a block element for a container [[./mobile_grid.html][Mobi
 
 #+BEGIN_SRC erlang
    #mobile_grid { 
-      columns=2
-      body=[
+      columns=2,
+      block=[
          #mobile_grid_block{ text="Row 1, Cell 1" },
          #mobile_grid_block{ text="Row 1, Cell 2" },
          #mobile_grid_block{ text="Row 2, Cell 1" },
@@ -33,7 +33,7 @@ This element produces a block element for a container [[./mobile_grid.html][Mobi
 
    + text - (/string/) :: Set to the text of the block, instead of specifying Nitrogen elements.
 
-   + html\_encode - (/boolean|whites|encoding fun/) :: Set to true to have the text safely html_encoded (default: 'true'). Set to 'whites' to also encode whitespace. Set to a function with arity 1 to have the contents encoded using that function.
+   + html\_encode - (/boolean|whites|encoding fun/) :: Set to true to have the text safely html encoded (default: 'true'). Set to 'whites' to also encode whitespace. Set to a function with arity 1 to have the contents encoded using that function.
    
 ** See Also
 

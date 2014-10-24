@@ -6,7 +6,7 @@
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL:
 
-#+TEXT: [[file:./index.org][Getting Started]] | *API* | [[file:./elements.org][Elements]] | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | [[file:./handlers.org][Handlers]] | [[file:./config.org][Configuration Options]] | [[file:./about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:./index.org][Getting Started]] | *API* | [[file:./elements.org][Elements]] | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | [[file:./handlers.org][Handlers]] | [[file:./config.org][Configuration Options]] | [[file:./plugins.org][Plugins]] | [[file:./jquery_mobile_integration.org][Mobile]] | [[file:./troubleshooting.org][Troubleshooting]] | [[file:./about.org][About]]
 #+HTML: <div class=headline>Nitrogen API</div>
 
 * Index
@@ -32,29 +32,57 @@
   TargetID can refer to the name of an element, or it can be a JQuery
   selector path. See [[./paths.org][Element Paths]] for more information.
 
-** wf:set(TargetID,Value) -> ok
-   Update a form element (textbox, dropdown, checkbox, etc) to set text value of TargetID. Can also be used to set the =src= attribute of an image tag.
+  For every one of these functions which offer a =Priority= argument,
+  =Priority= can be either the atom =eager=, =normal=, or =defer=. =eager= will
+  always execute before =normal=, which will always execute before =defer=.
+
+  Any wiring which does not explicitly specify a priority will wire at =normal=
+  priority.
+
+** wf:set(TargetID, Value) -> ok
+** wf:set(Priority, TargetID, Value) -> ok
+   Update a form element (textbox, dropdown, checkbox, etc) to set text value
+   of TargetID. Can also be used to set the =src= attribute of an image tag.
    
+** wf:enable(Target) -> ok
+** wf:enable(Priority, Target) -> ok
+   Enables the target form field or button.
+
+** wf:disable(Target) ->
+** wf:disable(Priority, Target) ->
+   Disables the target form field or button.
+
 ** wf:update(TargetID, Elements) -> ok
+** wf:update(Priority, TargetID, Elements) -> ok
    Update the contents of TargetID with a new set of Nitrogen Elements.
 
 ** wf:replace(TargetID, Elements) -> ok
+** wf:replace(Priority, TargetID, Elements) -> ok
    Replace TargetID with a new set of Nitrogen Elements.
 
 ** wf:remove(TargetID) -> ok
+** wf:remove(Priority, TargetID) -> ok
    Remove TargetID from the DOM.
    
 ** wf:insert\_top(TargetID, Elements) -> ok
-   Insert Nitrogen Elements at the top of TargetID (within the contents of TargetID), shifting the existing contents downward.
+** wf:insert\_top(Priority, TargetID, Elements) -> ok
+   Insert Nitrogen Elements at the top of TargetID (within the contents of
+   TargetID), shifting the existing contents downward.
    
 ** wf:insert\_bottom(TargetID, Elements) -> ok
-   Insert Nitrogen Elements at the bottom of the TargetID (within the contents of TargetID), below the existing contents.
+** wf:insert\_bottom(Priority, TargetID, Elements) -> ok
+   Insert Nitrogen Elements at the bottom of the TargetID (within the contents
+   of TargetID), below the existing contents.
 
 ** wf:insert\_before(TargetID, Elements) -> ok
-   Insert Nitrogen Elements before TargetID in the DOM, shifting the existing contents downward.
+** wf:insert\_before(Priority, TargetID, Elements) -> ok
+   Insert Nitrogen Elements before TargetID in the DOM, shifting the existing
+   contents downward.
    
 ** wf:insert\_after(TargetID, Elements) -> ok
-   Insert Nitrogen Elements after TargetID in the DOM, below the existing contents.
+** wf:insert\_after(Priority, TargetID, Elements) -> ok
+   Insert Nitrogen Elements after TargetID in the DOM, below the existing
+   contents.
 
 ** wf:flash(Elements) -> ok
    Insert the Nitrogen Elements as a new flash message.
@@ -62,10 +90,13 @@
 * Convenience Functions
 # <<2>>
 
-** wf:f(Format, Data) -> String
+** wf:f(Format, Data) -> String or Binary
 
    Convenience function to format a string similar to
    io\_lib:format(Format, Data). Returns a flattened list.
+
+   Note, if =Format= is a binary, the return type will be a binary, and if
+   =Format= is a string, the return type will be a string.
    
 ** wf:coalesce([List]) -> Item
 
@@ -85,6 +116,12 @@
 
    Convert the supplied term into an Atom, if possible. Useful for
    turning Integers, Binaries, and Strings into Atoms.
+
+** wf:to\_existing\_atom(Term) -> Atom
+
+   Convert the supplied term to an Atom that already exists in the Erlang VM.
+   Same as =wf:to_atom/1= but safer when in doubt. (see
+   [[http://www.erlang.org/doc/efficiency_guide/advanced.html][the advanced section of the Erlang docs pertaining to atoms]]).
 
 ** wf:to\_binary(Term) -> Binary
 
@@ -111,6 +148,10 @@
 
    URL decode the supplied String, converting a percent-encoded String into a normal String.
 
+** wf:to\_qs(PropList) -> EncodedQueryString
+
+   Encode a PropList (a list of ={Key, Value}= tuples) into a URL-encoded query string (returned as an IOList).
+
 ** wf:hex\_encode(String) -> EncodedString.
   
    Hex-encode the supplied String.
@@ -128,6 +169,14 @@
 ** wf:js\_escape(String) -> EscapedString
 
    Convert a String to a JS-safe string by adding backslashes to quotes and newlines.
+
+** wf:json\_encode(Data) -> JsonEncodedString
+
+   Convert a data structure (Proplist, list, etc) to a JSON encoded string.
+
+** wf:json\_decode(JsonEncodedString) ->
+
+   Convert a JSON-encoded string back to an Erlang data structure.
 
 ** wf:join([Terms],Delimiter) -> [Terms]
 
@@ -172,10 +221,24 @@
    wf:wire(ButtonID, PanelID, #event { type=click, actions=#hide {} })
 #+END_SRC
 
+** wf:eager(Actions) -> ok
+** wf:eager(TargetID, Actions) -> ok
+** wf:eager(TriggerID, TargetID, Actions) -> ok
+
+   Wire actions to the page, however, execute the actions before any
+   normal or deferred priority wired actions.
+
+** wf:defer(Actions) -> ok
+** wf:defer(TargetID, Actions) -> ok
+** wf:defer(TriggerID, TargetID, Actions) -> ok
+
+   Wire actions to the page, however, execute these actions after any
+   normal or eager priority wired actions.
+
 ** wf:continue(Tag, Function, IntervalInMS, TimeoutInMS) -> ok
 
    Spawn the provided function (arity 0) and tell the browser to poll for the results at the specified interval, with a timeout setting.
-   See [[http://nitrogenproject.com/web/samples/continuations][continuations example]] for usage.
+   so See [[http://nitrogenproject.com/demos/continuations][continuations example]] for usage.
 
 * Asynchronous Page Updates (Comet, Continuations)
 # <<4>>
@@ -206,7 +269,7 @@
 ** wf:flush() -> ok
 
    Normally, the results of a comet function are sent to the browser when the function exits.
-   comet\_flush/0 pushes results to the browser immediately, useful for a looping comet function.
+   =flush/0= pushes results to the browser immediately, useful for a looping comet function.
 
 ** wf:async\_mode()
 
@@ -240,19 +303,28 @@
 * Redirect
 # <<5>>
 
-** wf:redirect(Url) -> ok
-   Redirect to the provided URL.
+** wf:redirect(URL) -> ok
+   Redirect to the provided =URL=.
    
-** wf:redirect\_to\_login(Url) -> ok
+** wf:redirect\_to\_login(URL) -> ok
 
-   Redirect to the provided URL, attaching a token on the end. The receiving page can call
-   =wf:redirect\_from\_login(DefaultUrl)= to send the user back to the current page.
-   
-** wf:redirect\_from\_login(DefaultUrl) -> ok
+  See Below.
 
-   Redirect the user back to a page that called =wf:redirect\_to\_login(Url)=. If
-   the user came to the page for some other reason, then the user is redirected to the
-   provided DefaultUrl.
+** wf:redirect\_to\_login(URL, PostLoginURL)= -> ok
+
+   Redirect to the provided URL, attaching a token on the end. The receiving
+   page can subsequently call =wf:redirect\_from\_login(DefaultURL)= to send
+   the user to =PostLoginURL=.
+
+   If =PostLoginURL= is not provided, it will default to the current page's
+   URL.
+
+** wf:redirect\_from\_login(DefaultURL) -> ok
+
+   Redirect the user back to a page that called =wf:redirect_to_login(URL)= or
+   to the =PostLoginURL= provided to =wf:redirect_to_login(URL, PostLoginURL)=
+   If the user came to the page for some other reason, then the user is
+   redirected to the provided =DefaultURL=.
 
 * Session State
 # <<6>>
@@ -268,11 +340,13 @@
    Retrieve the session value stored under a specific key. If not
    found, return the supplied default value.
    
-** wf:session(Key, Value) -> ok
+** wf:session(Key, Value) -> OldValue
    
    Store a session variable for the current user. Key and Value can be any Erlang term.
-   For example, store a count:
-   =wf:session(count, Count)=
+   For example, store a count: =wf:session(count, Count)=
+
+   Returns the previous value associated with Key.
+
    
 ** wf:clear\_session() -> ok
 
@@ -329,17 +403,17 @@
 * Web Request and Response
 # <<9>>
 
-** wf:q(AtomKey) -> String
+** wf:q(AtomKey) -> String | undefined
 
-   Get all query string and POST values for the provided key. If more
-   than one AtomKey matches, then this will throw an error, use
-   =wf:qs(AtomKey)= instead.
+   Get all query string and POST values for the provided key. If more than one
+   AtomKey matches, then this will throw an error, use =wf:qs(AtomKey)=
+   instead. Returns the atom =undefined= if there's no matching value.
 
    *Mnemonic:* Think =q= as "Query".
 
 ** wf:mq(ListOfAtomKeys) -> [ListOfStrings]
 
-   Get the list of query string and POST values for the provided keys, and 
+   Get the list of query string and POST values for the provided keys, and
    return the list of values for the keys. Syntactical sugar equivilant of:
 
 #+BEGIN_SRC erlang
@@ -423,16 +497,69 @@ Example:
    used to return text images or other files to the browser, rather than returning 
    HTML.
 
+** wf:download\_as(Filename) -> ok
+
+   Set the HTTP Content-Disposition header in such a way that the browser will
+   treat the page as a download with the specified =Filename=.
+
+** wf:request\_method() -> atom()
+
+   Return the HTTP request method used (=POST=, =GET=, =PUT=, etc), as a
+   lower-case atom (example: =post=, =get=, and =put=).
+
+** wf:url() -> String
+
+   Return the complete requested URL for the page. For exaple, if the request
+   is for =http://myapp.com/some/file?some_qs=, the return is
+   ="http://myapp.com/some/file?some_qs".
+
+** wf:uri() -> String
+
+   Return the complete requested URI for the page. Note, this does not include
+   the protocol (http/https) or the hostname. For example, if the request is for
+   =http://myapp.com/some/file?some_qs=, the return is ="/some/file?some_qs"=).
+
+** wf:path() -> String
+
+   Return the string of the requested path.  This excludes any query_string
+   information. For example, if the request is for
+   =http://myapp.com/some/file?some_qs= the return value is ="/some/file"=
+
 ** wf:path\_info() -> String
 
-   Return the path info for the requested page. In other words, if the module
-   web\_my\_page is requsted with the path "/web/my/page/some/extra/stuff then
-   wf:get\_path\_info() would return "some/extra/stuff".
+   Return only the path info for the requested page module. In other words, if
+   the module web\_my\_page is requsted with the path
+   ="/web/my/page/some/extra/stuff= then =wf:path_info()= would return
+   ="some/extra/stuff"=.
    
 ** wf:page\_module() -> Atom
 
-   Return the requested page module. Useful information to know when writing a custom
-   element or action.
+   Return the requested page module. Useful information to know when writing a
+   custom element or action.
+
+** wf:protocol() -> http | https
+
+   Return whether the request to the server is made by HTTP or HTTPS. Note,
+   that if the request is made behind a proxy, this will only return whether
+   the request from the proxy to the server is in HTTP or HTTPS, so the
+   protocol seen by Nitrogen might not be the same protocol used by the client.
+
+** wf:peer\_ip() -> IPAddress (4-tuple or 8-tuple)
+
+
+   Return the IP address of the client. Note that Erlang IP Addresses are
+   4-tuples (IPv4) or 8-tuples (IPv6). For example: ={127,0,0,}= or
+   ={8193,3512,51966,47806,0,0,0,1}=
+
+** wf:peer\_ip(ListOfProxies) -> IPAddress (4-tuple or 8-tuple)
+
+   Shortcut method for =wf:peer_ip(ListOfProxies, x_forwarded_for)=
+
+** wf:peer\_ip(ListOfProxies, ForwardedHeader) -> IPAddress (4-tuple or 8-tuple)
+
+   This will compare the peer\_ip address against the provided list of proxies,
+   and if any of them match the connected IP, then return the IP address from
+   the =ForwardedHeader=.
 
 * Cookies
 # <<10>>
@@ -482,7 +609,7 @@ Example:
 ** wf:header(StringKey, HeaderValue) -> ok
 
    Set an HTTP header during the next response.
-   
+
 * Serialization
 # <<12>>
    
@@ -518,14 +645,17 @@ Example:
 
    Log a warning message.
   
-
 ** wf:error(String)
 
    Log an error message.
 
 ** wf:error(Format, Args)
 
-   Log an error message.
+   Log and error message.
+
+** wf:console\_log(Terms)
+
+   Send a =console.log()= to the browser with =Terms= as the value. (See [[file:./actions/console_log.org][Console Log Action]])
 
 * Configuration
 # <<14>>
@@ -534,7 +664,7 @@ Example:
    
    Get the Nitrogen configuration setting under the specified Key.
 
-** wf:config(Key, DefaultValue) -> Term
+** wf:config\_default(Key, DefaultValue) -> Term
 
    Get the Nitrogen configuration setting under the specified Key. If
    not set, then return DefaultValue.

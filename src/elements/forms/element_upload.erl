@@ -3,45 +3,63 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_upload).
--include_lib ("wf.hrl").
--include_lib ("simple_bridge.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1,
+    event/1
+]).
 
 %% #upload allows a user to upload a file.
 %% 
-%% How it works:
-%% - This element creates an <input type=file ...> HTML element on the page, wrapped
-%%   in a <form>, with all of the required parameters necessary to fake the system
-%%   into believing it is a real postback call. 
+%% How it works: - This element creates an <input type=file ...> HTML element
+%% on the page, wrapped in a <form>, with all of the required parameters
+%% necessary to fake the system into believing it is a real postback call. 
 %%
 %% - When the user clicks the upload button, first the 'upload_started' event
-%%   gets fired, calling start_upload_event(Tag) on the Module or Page.
+%% gets fired, calling start_upload_event(Tag) on the Module or Page.
 %%
-%% - Then, the browser begins uploading the file to the server. The multipart file
-%%   is parsed in SimpleBridge.
+%% - Then, the browser begins uploading the file to the server. The multipart
+%% file is parsed in SimpleBridge.
 %%
-%% - Finally, once the upload is complete, control is passed on to Nitrogen, which reads 
-%%   the parameters sent over in the first step and calls the 'upload_finished' event in
-%%   this module.
+%% - Finally, once the upload is complete, control is passed on to Nitrogen,
+%% which reads the parameters sent over in the first step and calls the
+%% 'upload_finished' event in this module.
 %%
-%% - The 'upload_finished' emits Javascript that causes *another* postback, this time
-%%   to the 'upload_event' event in this module, which then calls 
-%%   Module:finish_upload_event(Tag, OriginalName, TempFile, Node).
-%%   The reason we do this extra postback is because the upload itself happens in a form
-%%   separate from the main Nitrogen page (otherwise the main Nitrogen page would need to 
-%%   refresh) so this is our way of getting the main page to see the event.
+%% - The 'upload_finished' emits Javascript that causes *another* postback,
+%% this time to the 'upload_event' event in this module, which then calls
+%% Module:finish_upload_event(Tag, OriginalName, TempFile, Node).  The reason
+%% we do this extra postback is because the upload itself happens in a form
+%% separate from the main Nitrogen page (otherwise the main Nitrogen page would
+%% need to refresh) so this is our way of getting the main page to see the
+%% event.
 
-
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, upload).
 
-render_element(Record) ->
-    Anchor = Record#upload.anchor,
-	Multiple = Record#upload.multiple,
-    Droppable = Record#upload.droppable,
-    DroppableText = Record#upload.droppable_text,
-    FileInputText = Record#upload.file_text,
-    ShowButton = Record#upload.show_button,
-    ButtonText = Record#upload.button_text,
+-spec overall_progress(OverallProgress :: boolean() | undefined | auto,
+                       Multiple :: boolean()) -> boolean().
+overall_progress(OverallProgress, _Multiple) when is_boolean(OverallProgress) ->
+    OverallProgress;
+overall_progress(undefined, Multiple) ->
+    Multiple;
+overall_progress(auto, Multiple) ->
+    Multiple.
+
+-spec render_element(#upload{}) -> body().
+render_element(Record = #upload{
+        id=ID,
+        class=Class,
+        anchor=Anchor,
+        multiple=Multiple,
+        overall_progress=OverallProgress0,
+        droppable=Droppable,
+        droppable_text=DroppableText,
+        file_text=FileInputText,
+        show_button=ShowButton,
+        button_text=ButtonText,
+        data_fields=DataFields}) ->
+    
     StartedTag = {upload_started, Record},
     FinishedTag = {upload_finished, Record}, 
     FormID = wf:temp_id(),
@@ -50,33 +68,55 @@ render_element(Record) ->
     DropID = wf:temp_id(),
     DropListingID = wf:temp_id(),
     FileInputID = wf:temp_id(),
-    FakeFileInputID = wf:temp_id(),
 
 	Param = [
 		{droppable,Droppable},
-		{autoupload,not(ShowButton)}
+		{autoupload,not(ShowButton)},
+        {multiple, Multiple},
+        {overall_progress, overall_progress(OverallProgress0, Multiple)}
 	],
 
 	JSONParam = nitro_mochijson2:encode({struct,Param}),
 	SubmitJS = wf:f("Nitrogen.$send_pending_files(jQuery('#~s').get(0),jQuery('#~s').get(0));",[FormID,FileInputID]),
     UploadJS = wf:f("Nitrogen.$attach_upload_handle_dragdrop(jQuery('#~s').get(0),jQuery('#~s').get(0),~s);", [FormID,FileInputID,JSONParam]),
 
-    PostbackInfo = wf_event:serialize_event_context(FinishedTag, Record#upload.id, undefined, ?MODULE),
+    PostbackInfo = wf_event:serialize_event_context(FinishedTag, ID, undefined, false, ?MODULE),
 
     % Create a postback that is called when the user first starts the upload...
-    wf:wire(Anchor, #event { show_if=(not ShowButton), type=change, delegate=?MODULE, postback=StartedTag }),
-    wf:wire(ButtonID, #event { show_if=ShowButton, type=click, delegate=?MODULE, postback=StartedTag }),
-
-    % If the button is invisible, then start uploading when the user selects a file.
-    %wf:wire(Anchor, #event { show_if=(not ShowButton), type=change, actions=SubmitJS }),
-    wf:wire(ButtonID, #event { show_if=ShowButton, type=click, actions=SubmitJS }),
+    case ShowButton of
+        true ->
+            wf:wire(ButtonID, #event {type=click, delegate=?MODULE, postback=StartedTag }),
+            wf:wire(ButtonID, #event {type=click, actions=SubmitJS });
+        false ->
+            % If the button is invisible, then start uploading when the user selects a file.
+            wf:wire(Anchor, #event {type=change, delegate=?MODULE, postback=StartedTag })
+    end,
 
     wf:wire(UploadJS),
 
-    % Set the dimensions of the file input element the same as
-    % faked file input button has.
-    wf:wire(wf:f("jQuery('#~s').width(jQuery('#~s').width()); jQuery('#~s').height(jQuery('#~s').height());",
-        [FileInputID, FakeFileInputID, FileInputID, FakeFileInputID])),
+    %% Two things:
+    %% 1) This will resize elements only when they are visible, otherwise the
+    %% "Select File" button gets resized to almost invisible.
+    %% 2) This object must be prefixed with 'form' since ID and Anchor could be
+    %% the same, and we need to differentiate for the form.
+    %% (It's a little hacky)
+    wf:defer(wf:f("Nitrogen.$recalculate_upload_dimensions($('form~s'));", [ID])),
+
+    WrapperContent = [
+        wf_tags:emit_tag(input, [
+            {type, button},
+            {class, ['upload-button']},
+            {value, FileInputText}
+        ]),
+        wf_tags:emit_tag(input, [
+            {name, file},
+            {data_fields, DataFields},
+            {class, [no_postback, 'upload-input', FileInputID|Anchor]},
+            {id, FileInputID},
+            {type, file},
+            ?WF_IF(Multiple,multiple,[])
+        ])
+    ],
 
     % Render the controls and hidden iframe...
     FormContent = [
@@ -97,44 +137,17 @@ render_element(Record) ->
             ]
         },
         #panel{
-            %show_if=Droppable,
-            class=upload_progress,
-            body=""
+            style="display:none",
+            class=upload_overall_progress
         },
         #list{
-            show_if=Droppable,
             id=DropListingID,
             class=upload_droplist
         },
 
-%%  ORIGINAL!
-%%        wf_tags:emit_tag(input, [
-%%            {name, file},
-%%            {multiple,Multiple},
-%%            {class, [no_postback,FileInputID|Anchor]},
-%%            {id, FileInputID},
-%%            {type, file}
-%%        ]),	
-        #panel{
-            style="position: relative;",
-            body=[
-                wf_tags:emit_tag(input, [
-                    {type, button},
-                    {style, "margin: 2px; border: 2px outset rgb(221, 221, 221); padding: 1px 6px; position: absolute; top: 0px; left: 0px; z-index: 1;"},
-                    {value, FileInputText},
-                    {id, FakeFileInputID}
-                ]),
-
-                wf_tags:emit_tag(input, [
-                    {name, file},
-                    {multiple, Multiple},
-                    {class, [no_postback, FileInputID|Anchor]},
-                    {id, FileInputID},
-                    {type, file},
-                    {style, "margin: 2px; border: 2px outset rgb(221, 221, 221); padding: 1px 6px; opacity: 0; filter:alpha(opacity: 0); position: relative; z-index: 2;"}
-                ])
-            ]
-        },
+        wf_tags:emit_tag('div', WrapperContent, [
+            {class, 'upload-content'}
+        ]),
 
         wf_tags:emit_tag(input, [
             {name, eventContext},
@@ -165,12 +178,13 @@ render_element(Record) ->
             {name, upload}, 
             {method, 'POST'},
             {enctype, "multipart/form-data"},
-            {class, no_postback},
+            {class, [no_postback, Class]},
             {target, IFrameID}
         ])
     ].
 
 
+-spec event(any()) -> any().
 % This event is fired when the user first clicks the upload button.
 event({upload_started, Record}) ->
     Module = wf:coalesce([Record#upload.delegate, wf:page_module()]),
@@ -182,20 +196,23 @@ event({upload_started, Record}) ->
 % is trigger a postback that happens inside of Nitrogen. 
 event({upload_finished, Record}) ->
     wf_context:type(first_request),
-    Req = wf_context:request_bridge(),
+    Req = wf_context:bridge(),
 
     % % Create the postback...
     {Filename,NewTag} = case Req:post_files() of
         [] -> 
             {undefined,{upload_event, Record, undefined, undefined, undefined}};
-        [#uploaded_file { original_name=OriginalName, temp_file=TempFile }|_] ->
+        [UploadedFile | _] ->
+            OriginalName = UploadedFile:original_name(),
+            TempFile = UploadedFile:temp_file(),
             {OriginalName,{upload_event, Record, OriginalName, TempFile, node()}}
     end,
 
     % Make the tag...
     Anchor = wf_context:anchor(),
     ValidationGroup = wf_context:event_validation_group(),
-    Postback = wf_event:generate_postback_script(NewTag, Anchor, ValidationGroup, ?MODULE, undefined),
+    HandleInvalid = wf_context:event_handle_invalid(),
+    Postback = wf_event:generate_postback_script(NewTag, Anchor, ValidationGroup, HandleInvalid, undefined, ?MODULE, undefined),
 
     % Set the response...
     wf_context:data([

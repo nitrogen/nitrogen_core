@@ -5,7 +5,10 @@
 
 -module (element_restful_form).
 -include_lib ("wf.hrl").
--export([reflect/0, render_element/1]).
+-export([
+    reflect/0,
+    render_element/1
+]).
 
 -define(IS_FORM(Tag), ( Tag == element_dropdown        orelse
                         Tag == element_hidden          orelse
@@ -18,20 +21,25 @@
                         Tag == element_textbox         orelse
                         Tag == element_checkbox)).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, restful_form).
 
+-spec render_element(#restful_form{}) -> body().
 render_element(Record) ->
     Body= [
-           #hidden{id=restful_method, text=Record#restful_form.method}|
-           Record#restful_form.body
-          ],
+        #hidden{id=restful_method, text=Record#restful_form.method}|
+        Record#restful_form.body
+    ],
     WithName = inject_name(Record#restful_form{body=Body}),
     wf_tags:emit_tag(form, WithName#restful_form.body, [
         wf_tags:html_name(WithName#restful_form.id,
                           WithName#restful_form.html_name),
+        {class, WithName#restful_form.class},
         {action, WithName#restful_form.action},
         {method, WithName#restful_form.method},
-        {enctype, WithName#restful_form.enctype}
+        {enctype, WithName#restful_form.enctype},
+        {target, WithName#restful_form.target},
+        {data_fields, WithName#restful_form.data_fields}
     ]).
 
 %%internal

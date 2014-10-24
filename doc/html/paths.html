@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Nitrogen 2.x Documentation"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-31 21:50:56 CDT"/>
+<meta name="generated" content="2014-09-15 02:12:38 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -94,7 +94,7 @@
 <div id="content">
 <h1 class="title">Nitrogen 2.x Documentation</h1>
 
-<p><a href="./index.html">Getting Started</a> | <b>API</b> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./config.html">Configuration Options</a> | <a href="./about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="./index.html">Getting Started</a> | <b>API</b> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./config.html">Configuration Options</a> | <a href="./plugins.html">Plugins</a> | <a href="./jquery_mobile_integration.html">Mobile</a> | <a href="./troubleshooting.html">Troubleshooting</a> | <a href="./about.html">About</a>
 </p>
 
 
@@ -207,10 +207,10 @@
 <li>The string "\#\#" is replaced with ".wfid_". This allows you to
       specify Nitrogen elementIDs in a string selector. For example
       "\#\#myelementid &gt; .someclass" will be rewritten to
-      ".wfid<sub>myelementid</sub> &gt; .someclass". This is done because Nitrogen
+      ".wfid_myelementid &gt; .someclass". This is done because Nitrogen
       uses classes to tag your elements with their ID, so an element
       with ID of 'myelementid' will be tagged with a class called
-      '.wfid<sub>myelementid'</sub>.
+      '.wfid_myelementid'.
 
 </li>
 <li>If the string "me" is found surrounded by non-word characters,
@@ -227,8 +227,8 @@
 </li>
 <li>If a string is found containing only words separated by periods
       (for example, "element1.element2"), then it is assumed to be a
-      nested series of elements, and is converted to ".wfid<sub>element1</sub>
-      .wfid<sub>element2</sub>". This will match all Nitrogen elements named
+      nested series of elements, and is converted to ".wfid_element1
+      .wfid_element2". This will match all Nitrogen elements named
       'element2' underneath any Nitrogen elements named 'element1'.
 
 </li>
@@ -283,7 +283,7 @@
 
 <p>   A shortcut for referring to a Nitrogen element when you specify a
    string path. Because of the way Nitrogen uses class names to tag
-   elements, this is the same as specifying ".wfid<sub>element</sub>".
+   elements, this is the same as specifying ".wfid_element".
 </p>
 </div>
 </div>
@@ -838,7 +838,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-31 21:50:56 CDT</p>
+<p class="date">Date: 2014-09-15 02:12:38 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

@@ -5,11 +5,12 @@
 #+AUTHOR: Rusty Klophaus (@rustyio)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][Elements]] | [[file:../actions.org][Actions]] | [[file:../validators.org][*Validators*]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][Elements]] | [[file:../actions.org][Actions]] | [[file:../validators.org][*Validators*]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
 * Custom Server-Side Validator - #custom {}
 
-  Attach a custom validator, written in Erlang, to an element. The validator will be executed on the server during a postback.
+  Attach a custom validator, written in Erlang, to an element. The validator
+  will be executed on the server during a postback.
 
 ** Usage
 
@@ -19,12 +20,15 @@
    F = fun(Tag, Value) ->
      case Tag of
        upper -> string:to_upper(Value) == Value;
-       lower -> string:to_upper(Value) == Value
+       lower -> string:to_lower(Value) == Value
      end
    end,
 	
    % Wire the validator in upper case mode...
    wf:wire(ButtonID, TextBoxID, #validate { validators=[
+     %% If we wanted to validate lowercase, we could change
+     %% tag to 'lower' and it would execute the 'lower' clause
+     %% in the case statement above.
      #custom { text="Must be uppercase", function=F, tag=upper }
    ]})
 #+END_SRC
@@ -33,6 +37,16 @@
 
    + text - (/string/) :: The text to display if validation fails.
 
-   + function - (/fun/) :: An Erlang function that returns true if the value is valid, false if invalid. <br>fun(Tag, Value) -> 'true' or 'false'
+	+ function - (/fun/) :: An Erlang function that returns true if the value is
+		valid, false if invalid. (=fun(Tag, Value) -> true | false=)
 
-   + tag - (/Erlang term/) :: Tag value is passed into the custom validation function.
+	+ tag - (/Erlang term/) :: Tag value is passed into the custom validation
+		function.
+
+** See Also
+
+	+ [[./js_custom.org][JS Custom Action (client side)]]
+
+	+ [[../actions/validate.org][Validate Action]]
+
+	+ [[http://nitrogenproject.com/demos/validation][Validation Demos]]

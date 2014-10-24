@@ -4,32 +4,27 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_image).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, image).
 
+-spec render_element(#image{}) -> body().
 render_element(Record) ->
     Attributes = [
         {id, Record#image.html_id},
         {class, [image, Record#image.class]},
+        {title, Record#image.title},
         {style, Record#image.style},
-        {src, Record#image.image}
+        {data_fields, Record#image.data_fields},
+        {height, Record#image.height},
+        {width, Record#image.width},
+        {alt, Record#image.alt},
+        {src, wf:to_binary(Record#image.image)}
     ],
 
-    WidthAtts = case Record#image.width of
-      undefined -> Attributes;
-      Width -> [{width, Width}|Attributes]
-    end,
-
-    HeightAtts = case Record#image.height of
-      undefined -> WidthAtts;
-      Height -> [{height, Height}|WidthAtts]
-    end,
-
-    FinalAttributes = case Record#image.alt of
-      undefined -> HeightAtts;
-      ImageAlt -> [{alt, ImageAlt}|HeightAtts]
-    end,
-
-    wf_tags:emit_tag(img, FinalAttributes).
+    wf_tags:emit_tag(img, Attributes).

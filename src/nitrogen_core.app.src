@@ -1,6 +1,6 @@
 {application, nitrogen_core, [
     {description,  "Nitrogen Web Framework Core Library"},
-    {vsn,          "2.1.1-pre"},
+    {vsn,          "2.3.0-beta2"},
     {applications, [kernel, stdlib, sasl]},
     {registered,   []}
 ]}.

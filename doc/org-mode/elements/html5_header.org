@@ -1,0 +1,41 @@
+# vim: sw=3 ts=3 ft=org et
+
+#+TITLE: HTML5 Header Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Jesse Gumm (@jessegumm)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
+
+* HTML5 Header Element - #html5\_header {}
+
+  Produces the HTML5 Header element.
+
+** Usage
+
+#+BEGIN_SRC erlang
+   #article { body=[
+      #html5_header{ body=[
+         #h1{ text="My Article Title"},
+         #time{ pubdate="2013-08-27"}
+      ]},
+      "Here is some article content",
+      #html5_footer{ body="Some footer content"}
+   ]}.
+#+END_SRC
+
+** Attributes
+
+   + body - (/Nitrogen Elements/) :: The body of the HTML5 Header element.
+
+** See Also
+
+   + [[./base.html][Base element]]
+
+   + [[./article.html][Article element]]
+   
+   + [[./html5_footer.html][HTML5 Footer element]]
+
+   + [[./panel.html][Panel element]]
+
+   + [[http://html5doctor.com/the-header-element/][About the Header Element]]

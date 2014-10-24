@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Nitrogen Plugins</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="Nitrogen Plugins"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2014-09-15 02:12:38 CDT"/>
+<meta name="author" content="Jesse Gumm (@jessegumm)"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<LINK href="stylesheet.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">Nitrogen Plugins</h1>
+
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="./index.html">Getting Started</a> | <a href="./api.html">API</a> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./config.html">Configuration Options</a> | <b>Plugins</b> | <a href="./jquery_mobile_integration.html">Mobile</a> | <a href="./troubleshooting.html">Troubleshooting</a> | <a href="./about.html">About</a>
+<div class=headline>Nitrogen Plugins</div>
+
+</p>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Plugins Overview</a></li>
+<li><a href="#sec-2">2 Adding a plugin to your app</a></li>
+<li><a href="#sec-3">3 Finding plugins to include in your app</a></li>
+<li><a href="#sec-4">4 Creating your own plugins</a></li>
+<li><a href="#sec-5">5 Adding plugin support to an older version of Nitrogen</a></li>
+<li><a href="#sec-6">6 See Also</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Plugins Overview</h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+  Nitrogen 2.2.0 introduced a plugin system for including Nitrogen elements,
+  actions, validators, modules, handlers, and static resources from external
+  sources (typically as rebar dependencies).
+</p>
+<p>
+  Generally speaking, this provides for a simpler way of handling additional
+  modularity, by creating custom reusable elements that can be shared between
+  applications and/or other programmers.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Adding a plugin to your app</h2>
+<div class="outline-text-2" id="text-2">
+
+
+<p>
+  The simplest way to include a plugin in your app is to include it as a rebar
+  dependency. In the <code>deps</code> section of your rebar.config file, add something
+  like the following:
+</p>
+
+
+
+<pre class="src src-erlang">{my_plugin, <span class="org-string">".*"</span>, {git, <span class="org-string">"git://github.com/user/my_plugin.git"</span>, {branch, master}}},
+</pre>
+
+
+<p>
+  Then run `make` in your application. It will download the plugin, add to your
+  plugins.hrl file a reference to any include files (.hrl files), copy any
+  static resources into your application's directory structure, and finally
+  recompile everything.
+</p>
+
+</div>
+
+<div id="outline-container-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3"></span> What happens when you add a plugin to your app</h3>
+<div class="outline-text-3" id="text-2-1">
+
+
+<p>
+   The Nitrogen Plugin installer does a handful of things to your Application
+   directory structure.  Any static resources are automatically copied into a
+   <code>site/static/plugins/&lt;pluginname&gt;</code> directory.  Any Erlang includes (.hrl
+   files) are added as <code>-include</code> calls to the <code>site/include/plugins.hrl</code> file.
+   And, of course, being an Erlang dependency, the source code for the plugin
+   will be automatically loaded.
+</p>
+<p>
+   The directories above can all be customized with the plugins.config file
+   found in the root of your Nitrogen release (see the "plugins.config" section
+   of <a href="./config.html">Configuration Options</a> for how to customize your
+   plugin configuration.
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Finding plugins to include in your app</h2>
+<div class="outline-text-2" id="text-3">
+
+
+<p>
+  Currently, the list of available plugins are found on our
+  <a href="https://github.com/nitrogen/nitrogen/wiki/Nitrogen-Plugins">Plugins Wiki Page</a>
+  on GitHub.
+</p>
+<p>
+  If you've created your own plugins, feel free to include it in that list.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Creating your own plugins</h2>
+<div class="outline-text-2" id="text-4">
+
+
+
+</div>
+
+<div id="outline-container-4-1" class="outline-3">
+<h3 id="sec-4-1"><span class="section-number-3"></span> Sample Nitrogen Plugin</h3>
+<div class="outline-text-3" id="text-4-1">
+
+
+<p>
+  The simplest way to create your own plugin is to start with the
+  <a href="https://github.com/nitrogen/sample_nitrogen_plugin">Sample Nitrogen Plugin</a>
+  and expand on it to make your own plugin.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-4-2" class="outline-3">
+<h3 id="sec-4-2"><span class="section-number-3"></span> Creating your plugin from scratch</h3>
+<div class="outline-text-3" id="text-4-2">
+
+
+<p>
+   Creating a reusable plugin from scratch is a relatively simple task, and it
+   requires following the following steps:
+</p>
+<ol>
+<li>A Nitrogen plugin must be a valid Erlang application, that is, it has
+      either a .app file in the ebin directory, or a .app.src file in the src
+      directory.
+
+</li>
+<li>In order for Nitrogen to determine that an application is indeed a
+      Nitrogen plugin, the root of your plugin must contain the file
+      <code>nitrogen.plugin</code>. This file can be blank.
+
+</li>
+<li>Place any static resources (javascript, CSS, images, etc) in the
+      <code>priv/static</code> directory of your plugin.
+
+</li>
+<li>Place any templates in the <code>priv/templates</code> directory of your plugin.
+
+</li>
+<li>Place any necessary Erlang header files (e.g. if this plugin contains
+      custom elements or actions) in a directory in the root of the plugin
+      and call it <code>include</code>.
+
+</li>
+<li>Finally, place your plugin's Erlang source code in the <code>src</code> directory.
+</li>
+</ol>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Adding plugin support to an older version of Nitrogen</h2>
+<div class="outline-text-2" id="text-5">
+
+
+<p>
+  What if you have a version of Nitrogen pre-2.2.0, but you still want to add
+  support to your Nitrogen app?
+</p>
+<p>
+  There's actually no <b>technical</b> reason you can't do that.  In fact, the core
+  of the plugin system is a single script, executed sometime after dependencies
+  are fetched and before compilation.
+</p>
+<p>
+  That script is called
+  <a href="https://raw.github.com/nitrogen/nitrogen/master/rel/overlay/common/do-plugins.escript">do-plugins.escript</a>
+  and it can be found in the main Nitrogen repo. The easiest way, then to add
+  the plugin system to your app is to do the following in the root of your app:
+</p>
+
+
+
+<pre class="src src-bash">wget https://raw.github.com/nitrogen/nitrogen/master/rel/overlay/common/do-plugins.escript
+chmod 755 do-plugins.escript
+</pre>
+
+
+<p>
+  Then simply modify your Makefile so that <code>./do-plugins.escript</code> is executed
+  before <code>./rebar compile</code>
+</p>
+<p>
+  For a good practical example of this, check out the standard
+  <a href="https://github.com/nitrogen/nitrogen/blob/master/rel/overlay/common/Makefile#L20">Makefile</a>
+  that comes with a Nitrogen install.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> See Also</h2>
+<div class="outline-text-2" id="text-6">
+
+
+<ul>
+<li><a href="./config.html">Configuration Options</a>
+
+</li>
+<li><a href="https://github.com/choptastic/sample_nitrogen_plugin">Sample Nitrogen Plugin</a>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2014-09-15 02:12:38 CDT</p>
+<p class="author">Author: Jesse Gumm (@jessegumm)</p>
+<p class="creator">Org version 7.8.02 with Emacs version 23</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div><h2>Comments</h2>
+<b>Note:</b><!-- Disqus does not currently support Erlang for its syntax highlighting, so t-->To specify <!--Erlang--> code blocks, just use the generic code block syntax: <pre><b>&lt;pre&gt;&lt;code&gt;your code here&lt;/code&gt;&lt;/pre&gt;</b></pre>
+<br />
+<br />
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+	var disqus_shortname = 'nitrogenproject'; // required: replace example with your forum shortname
+	var disqus_identifier = 'html/plugins.html'; //This will be replaced with the path part of the url
+
+	/* * * DON'T EDIT BELOW THIS LINE * * */
+	(function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</body>
+</html>

@@ -1,0 +1,34 @@
+# vim: sw=3 ts=3 et ft=org
+
+#+TITLE: File Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Jesse Gumm (@jessegumm)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
+
+* File Element - #file{}
+
+  Loads the content of the specified file and displays it in the browser.
+
+** Usage
+
+#+BEGIN_SRC erlang
+   #file { file="/path/to/some/file" }
+#+END_SRC
+
+** Attributes
+
+   + file - (/string/) :: Path to the file to load
+
+   + include\_panel - (/boolean/) :: If =true=, the file contents will be wrapped
+      in a Nitrogen =#panel{}= element (which is an HTML =<div>=). If =false=, the
+      file contents will merely be sent directly, without any wrapper.
+
+   + html\_encode - (/boolean/) :: Tells whether to safely HTML encode the
+      contents of the file or not before presenting.
+
+
+** See Also
+
+   + [[./base.html][base element]]

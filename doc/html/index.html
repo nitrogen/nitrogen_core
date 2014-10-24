@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Getting Started with Nitrogen"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-18 03:24:05 CDT"/>
+<meta name="generated" content="2014-09-15 02:12:38 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -94,7 +94,7 @@
 <div id="content">
 <h1 class="title">Getting Started with Nitrogen</h1>
 
-<p><b>Getting Started</b> | <a href="./api.html">API</a> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./config.html">Configuration Options</a> | <a href="./about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <b>Getting Started</b> | <a href="./api.html">API</a> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./config.html">Configuration Options</a> | <a href="./plugins.html">Plugins</a> | <a href="./jquery_mobile_integration.html">Mobile</a> | <a href="./troubleshooting.html">Troubleshooting</a> | <a href="./about.html">About</a>
 </p>
 
 
@@ -108,12 +108,16 @@
 <li><a href="#sec-1">1 Common Questions</a></li>
 <li><a href="#sec-2">2 Is there a Nitrogen Tutorial?</a></li>
 <li><a href="#sec-3">3 How do I create a new Nitrogen application?</a></li>
-<li><a href="#sec-4">4 How do I start/stop/manage Nitrogen?</a></li>
-<li><a href="#sec-5">5 How do I change configuration settings?</a></li>
-<li><a href="#sec-6">6 Where is the code for my website?</a></li>
-<li><a href="#sec-7">7 How do I compile my code?</a></li>
-<li><a href="#sec-8">8 How do I create new pages, custom elements, or custom actions?</a></li>
-<li><a href="#sec-9">9 How do I upgrade to a new version of Nitrogen?</a></li>
+<li><a href="#sec-4">4 How do I add Nitrogen into an existing Erlang application?</a></li>
+<li><a href="#sec-5">5 How do I start/stop/manage Nitrogen?</a></li>
+<li><a href="#sec-6">6 How do I change configuration settings?</a></li>
+<li><a href="#sec-7">7 Where is the code for my website?</a></li>
+<li><a href="#sec-8">8 How do I compile my code?</a></li>
+<li><a href="#sec-9">9 How do I create new pages, custom elements, or custom actions?</a></li>
+<li><a href="#sec-10">10 How do I make a mobile version?</a></li>
+<li><a href="#sec-11">11 How do I work with Nitrogen Plugins?</a></li>
+<li><a href="#sec-12">12 How do I upgrade to a new version of Nitrogen?</a></li>
+<li><a href="#sec-13">13 What do I do if I run into errors? How do I troubleshoot?</a></li>
 </ul>
 </div>
 </div>
@@ -128,17 +132,25 @@
 </li>
 <li><a href="#sec-3">How do I create a new Nitrogen application?</a>
 </li>
-<li><a href="#sec-4">How do I start and stop my application?</a>
+<li><a href="#sec-4">How do I add Nitrogen to an existing Erlang application?</a>
 </li>
-<li><a href="#sec-5">How do I change configuration settings?</a>
+<li><a href="#sec-5">How do I start and stop my application?</a>
 </li>
-<li><a href="#sec-6">Where is the code for my website?</a>
+<li><a href="#sec-6">How do I change configuration settings?</a>
 </li>
-<li><a href="#sec-7">How do I compile my code?</a>
+<li><a href="#sec-7">Where is the code for my website?</a>
 </li>
-<li><a href="#sec-8">How do I create new pages, custom elements, or custom actions?</a>
+<li><a href="#sec-8">How do I compile my code?</a>
 </li>
-<li><a href="#sec-9">How do I upgrade to a new version of Nitrogen?</a>
+<li><a href="#sec-9">How do I create new pages, custom elements, or custom actions?</a>
+</li>
+<li><a href="#sec-10">How do I make a mobile version?</a>
+</li>
+<li><a href="#sec-11">How do I work with Nitrogen Plugins?</a>
+</li>
+<li><a href="#sec-12">How do I upgrade to a new version of Nitrogen?</a>
+</li>
+<li><a href="#sec-13">What do I do if I run into errors? How do I troubleshoot?</a>
 </li>
 </ul>
 
@@ -161,21 +173,23 @@
 </div>
 
 <div id="outline-container-3" class="outline-2">
-<h2 id="sec-3"><a name="1" id="1"></a><span class="section-number-2">3</span> How do I create a new Nitrogen application?</h2>
+<h2 id="sec-3"><a name="100" id="100"></a><span class="section-number-2">3</span> How do I create a new Nitrogen application?</h2>
 <div class="outline-text-2" id="text-3">
 
 
 <p>
-  First, check the <a href="http://nitrogenproject.com/downloads">Downloads</a> page to see if a pre-built package
-  exists for your OS/architecture. If it does, then just download the
-  package, unzip, and you are ready to start coding. (You don't even
-  need to have Erlang installed, the Nitrogen binaries come with it
+  Note: If you want to add Nitrogen to an existing application, see <a href="#sec-4">this question</a>
+</p>
+<p>
+  First, check the <a href="http://nitrogenproject.com/downloads">Downloads</a> page to
+  see if a pre-built package exists for your OS/architecture. If it does, then
+  just download the package, unzip, and you are ready to start coding. (You
+  don't even need to have Erlang installed, the Nitrogen binaries come with it
   pre-packaged.)
 </p>
 <p>
-  If you don't see a package that will run on your computer, or you
-  want to try running from the latest code in source control, then
-  follow the steps below:
+  If you don't see a package that will run on your computer, or you want to try
+  running from the latest code in source control, then follow the steps below:
 </p>
 <p>
   Pull the latest source code from GitHub:
@@ -195,11 +209,11 @@ make rel_inets
 
 <p>
   This creates a completely self-contained starter application under
-  <code>./rel/nitrogen</code> that runs on Inets, Erlang's built in HTTP
-  server. "Self-contained" here means that the <code>./rel/nitrogen</code>
-  directory contains everything you need to develop and run nitrogen,
-  including the Erlang VM. To create a <code>.tar.gz</code> version of this
-  code, exactly like you would find on the <a href="http://nitrogenproject.com/downloads">Downloads</a> page, run:
+  <code>../myapp</code> that runs on Inets, Erlang's built in HTTP server.
+  "Self-contained" here means that the <code>../myapp</code> directory contains
+  everything you need to develop and run nitrogen, including the Erlang VM. To
+  create a <code>.tar.gz</code> version of this code, exactly like you would find on the
+  <a href="http://nitrogenproject.com/downloads">Downloads</a> page, run:
 </p>
 <pre class="example">
 make package_inets
@@ -207,27 +221,108 @@ make package_inets
 
 
 <p>
-  You can also run Nitrogen with Mochiweb, Yaws, Cowboy, or Webmachine. Run one of the following make commands:
+  You can also run Nitrogen with Mochiweb, Yaws, Cowboy, or Webmachine. Run one
+  of the following make commands:
 </p>
 <pre class="example">
-make rel_mochiweb
-make rel_yaws
 make rel_cowboy
+make rel_mochiweb
 make rel_webmachine
+make rel_yaws
 </pre>
 
 
 <p>
-  <b>Note</b>: There are special instructions for Windows users who wish to compile on Windows. Read about 
+  <b>FreeBSD</b>: Compiling on FreeBSD requires using <code>gmake</code> instead of <code>make</code>,
+  otherwise the steps are the same
+</p>
+<p>
+  <b>Microsoft Windows</b>: There are special instructions for Windows users who
+  wish to compile on Windows. Read about
   <a href="https://github.com/nitrogen/nitrogen/blob/master/rel/overlay/win/README.md">Compiling Nitrogen on Windows</a>
+</p>
+<p> 
+  There are also "slim release" versions that can be built. These take
+  advantage of a new feature introduced in Erlang's R15B02 release, which
+  packages up an application, but does not include a full Erlang distribution
+  (instead, it assumes the target system has Erlang installed already).
+</p>
+<p>
+  You can create these "slim releases" by typing:
+</p>
+<pre class="example">
+make slim_cowboy
+make slim_inets
+make slim_mochiweb
+make slim_webmachine
+make slim_yaws
+</pre>
+
+
+<p>
+  All of the above commands can be provided with PREFIX or PROJECT variables to
+  change the destination of the project, and the project directory name and
+  node name. Note: it does not currently change the actual name of the Erlang
+  application (the Application will still be called "nitrogen").
+</p>
+<p>
+  For example:
+</p>
+<pre class="example">
+make slim_yaws PROJECT=my_awesome_yaws_app PREFIX=~/my_web_apps
+</pre>
+
+
+<p>
+  Will create a <code>my_web_apps/my_awesome_yaws_app</code> directory in your home
+  directory.
 </p>
 </div>
 
 </div>
 
 <div id="outline-container-4" class="outline-2">
-<h2 id="sec-4"><a name="2" id="2"></a><span class="section-number-2">4</span> How do I start/stop/manage Nitrogen?</h2>
+<h2 id="sec-4"><a name="200" id="200"></a><span class="section-number-2">4</span> How do I add Nitrogen into an existing Erlang application?</h2>
 <div class="outline-text-2" id="text-4">
+
+
+<p>
+  As of 2.2.0, adding Nitrogen to an existing Erlang application is simple.
+</p>
+<p>
+  Clone Nitrogen somewhere on your machine:
+</p>
+<pre class="example">
+git clone git://github.com/nitrogen/nitrogen.git
+</pre>
+
+
+<p>
+  Then, from the root of your application's directory, run the <code>embed</code> script
+  from the Nitrogen repo:
+</p>
+<pre class="example">
+/path/to/nitrogen/embed
+</pre>
+
+
+<p>
+  <i>Note: You must run this from your *application's* directory, *not* from the   Nitrogen directory.</i>
+</p>
+<p>
+  <i>Note 2: This assumes your system has Perl installed</i>
+</p>
+<p>
+  You can read the full writeup in
+  <a href="http://sigma-star.com/blog/post/embedding-nitrogen">in this blog post</a>.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5"><a name="300" id="300"></a><span class="section-number-2">5</span> How do I start/stop/manage Nitrogen?</h2>
+<div class="outline-text-2" id="text-5">
 
 
 <p>
@@ -266,21 +361,21 @@ bin/nitrogen stop
 
 </div>
 
-<div id="outline-container-5" class="outline-2">
-<h2 id="sec-5"><a name="3" id="3"></a><span class="section-number-2">5</span> How do I change configuration settings?</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6"><a name="400" id="400"></a><span class="section-number-2">6</span> How do I change configuration settings?</h2>
+<div class="outline-text-2" id="text-6">
 
 
 <p>
-  Read all about the <a href="#file.-config.org">configuration options</a>.
+  Read all about the <a href="./config.html">configuration options</a>.
 </p>
 </div>
 
 </div>
 
-<div id="outline-container-6" class="outline-2">
-<h2 id="sec-6"><a name="4" id="4"></a><span class="section-number-2">6</span> Where is the code for my website?</h2>
-<div class="outline-text-2" id="text-6">
+<div id="outline-container-7" class="outline-2">
+<h2 id="sec-7"><a name="500" id="500"></a><span class="section-number-2">7</span> Where is the code for my website?</h2>
+<div class="outline-text-2" id="text-7">
 
 
 <p>
@@ -305,15 +400,18 @@ bin/nitrogen stop
 
 
 <p>
-  It is currently recommended to play the <code>site/</code> directory under source control.
+  <b>If you're using a full release</b>, it's recommended to put the <code>site/</code> directory under source control.
+</p>
+<p>
+  <b>If you're using a slim release</b>, you can put the entire application under source control.
 </p>
 </div>
 
 </div>
 
-<div id="outline-container-7" class="outline-2">
-<h2 id="sec-7"><a name="5" id="5"></a><span class="section-number-2">7</span> How do I compile my code?</h2>
-<div class="outline-text-2" id="text-7">
+<div id="outline-container-8" class="outline-2">
+<h2 id="sec-8"><a name="600" id="600"></a><span class="section-number-2">8</span> How do I compile my code?</h2>
+<div class="outline-text-2" id="text-8">
 
 
 <p>
@@ -339,11 +437,12 @@ bin/nitrogen stop
     <code>sync:go().</code> command.
 </p>
 </li>
-<li>If <b>Nitrogen is stopped</b> then run <code>make compile</code>
+<li>If <b>Nitrogen is stopped</b> then run <code>make</code>
 
 <p>
-    This calls <code>erl -make</code>, causing your application to be compiled
-    based on the provided Emakefile.
+    This calls <code>./rebar get-deps</code> to retrieve dependencies,
+    <code>./do-plugins.escript</code> to process any plugins, and finally
+    <code>./rebar compile</code>.
 </p></li>
 </ul>
 
@@ -352,9 +451,9 @@ bin/nitrogen stop
 
 </div>
 
-<div id="outline-container-8" class="outline-2">
-<h2 id="sec-8"><a name="6" id="6"></a><span class="section-number-2">8</span> How do I create new pages, custom elements, or custom actions?</h2>
-<div class="outline-text-2" id="text-8">
+<div id="outline-container-9" class="outline-2">
+<h2 id="sec-9"><a name="700" id="700"></a><span class="section-number-2">9</span> How do I create new pages, custom elements, or custom actions?</h2>
+<div class="outline-text-2" id="text-9">
 
 
 <p>
@@ -399,62 +498,128 @@ bin/nitrogen stop
 
 </div>
 
-<div id="outline-container-9" class="outline-2">
-<h2 id="sec-9"><a name="7" id="7"></a><span class="section-number-2">9</span> How do I upgrade to a new version of Nitrogen?</h2>
-<div class="outline-text-2" id="text-9">
+<div id="outline-container-10" class="outline-2">
+<h2 id="sec-10"><a name="800" id="800"></a><span class="section-number-2">10</span> How do I make a mobile version?</h2>
+<div class="outline-text-2" id="text-10">
 
 
 <p>
-  If you're running a a version of Nitrogen 2.1.0 and above:
+  You can read all about how to make mobile-enabled sites with Nitrogen by
+  reading our
+  <a href="http://nitrogenproject.com/doc/jquery_mobile_integration.html">Mobile Integration Guide</a>
 </p>
-<ul>
-<li>Run
+</div>
 
+</div>
+
+<div id="outline-container-11" class="outline-2">
+<h2 id="sec-11"><a name="900" id="900"></a><span class="section-number-2">11</span> How do I work with Nitrogen Plugins?</h2>
+<div class="outline-text-2" id="text-11">
+
+
+<p>
+  Adding Plugins to a Nitrogen app is as simple as adding them as rebar dependencies.
+</p>
+
+
+
+<pre class="src src-erlang">{my_plugin, {git, <span class="org-string">"git://github.com/some_user/my_plugin.git"</span>, {branch, master}}}
+</pre>
+
+
+<p>
+  Then running:
+</p>
+<pre class="example">
+make
+</pre>
+
+
+<p>
+  You can read more detail about the Nitrogen plugin system its own section
+  here <a href="./plugins.html">in the documentation</a>.
+</p>
+<p>
+  You can also play with creating your own Nitrogen plugins by checking out and
+  modifying our
+  <a href="https://github.com/nitrogen/sample_nitrogen_plugin">Sample Nitrogen Plugin</a>
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-12" class="outline-2">
+<h2 id="sec-12"><a name="1000" id="1000"></a><span class="section-number-2">12</span> How do I upgrade to a new version of Nitrogen?</h2>
+<div class="outline-text-2" id="text-12">
+
+
+<p>
+  <b>If you're running a a version of Nitrogen 2.1.0 and above:</b>
+</p>
+<p>
+    Edit your rebar.config file and make sure dependencies are pointing at the
+    desired tags or at <code>{branch, master}</code> to get the latest git <code>HEAD</code>, then
+    run:
+</p>
 <pre class="example">
 make upgrade
 </pre>
 
 
 <p>
-    This will upgrade to the latest version of Nitrogen and it's dependencies. It will <b>not</b>
-    upgrade to the latest Erlang Runtime System. If you wish to upgrade your version of ERTS,
-    You'll want to follow the directions below for upgrading from pre-2.1 to 2.1+.    
+    This will upgrade to the latest version of Nitrogen and it's dependencies.
+    It will <b>not</b> upgrade to the latest Erlang Runtime System. If you wish to
+    upgrade your version of ERTS, You'll want to follow the directions below for
+    upgrading from pre-2.1 to 2.1+.
+</p>
+<p>
+    <b>Note:</b> If you've run <code>make upgrade</code> and nothing seems to have worked,
+    please check out the relevant question in the
+    <a href="./troubleshooting.html">Troubleshooting</a> guide.
+</p>
+<p>
+  <b>If you're running a version of Nitrogen pre 2.1 and want to upgrade to 2.1.0 and above:</b>
+</p>
+<ul>
+<li>Build or download the new Nitrogen environment for your architecture and
+    preferred web server. Unzip to a new directory.
+
+</li>
+<li>Copy your existing <code>./etc</code> directory to the new build. This retains your
+    configuration settings.
+
+</li>
+<li>Copy your existing <code>./site</code> directory to the new build, <b>except</b> for the
+    files in <code>./site/static/nitrogen</code>. You will want to use the new version of
+    any files in <code>./site/static/nitrogen</code>.
+
+<p>
+    This will update the Erlang version, the dependencies files, and
+    all of the Javascript used by Nitrogen. 
+</p>
+<p>    
+    You will also need to update your code if there are any API level changes.
 </p></li>
 </ul>
 
 
-<p>
-  If you're running a version of Nitrogen pre 2.1 and want to upgrade to 2.1.0 and above:
-</p>
-<ul>
-<li>Build or download the new Nitrogen environment for your
-    architecture and preferred web server. Unzip to a new directory.
-
-</li>
-<li>Copy your existing <code>./etc</code> directory to the new build. This
-    retains your configuration settings.
-
-</li>
-<li>Copy your existing <code>./site</code> directory to the new build, <b>except</b> for
-    the files in <code>./site/static/nitrogen</code>. You will want to use the
-    new version of any files in <code>./site/static/nitrogen</code>.
-</li>
-</ul>
-
-
-<p>
-  This will update the Erlang version, the dependencies files, and
-  all of the Javascript used by Nitrogen. 
-</p>
-<p>    
-  You will also need to update your code if there are any API level changes.
-</p>
 </div>
+
+</div>
+
+<div id="outline-container-13" class="outline-2">
+<h2 id="sec-13"><a name="1100" id="1100"></a><span class="section-number-2">13</span> What do I do if I run into errors? How do I troubleshoot?</h2>
+<div class="outline-text-2" id="text-13">
+
+
+<p>
+  See our <a href="./troubleshooting.html">Troubleshooting Guide</a>
+</p></div>
 </div>
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-18 03:24:05 CDT</p>
+<p class="date">Date: 2014-09-15 02:12:38 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

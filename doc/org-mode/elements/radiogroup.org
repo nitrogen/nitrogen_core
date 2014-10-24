@@ -4,9 +4,9 @@
 #+AUTHOR: Rusty Klophaus (@rustyio)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
-* Radio Group Element - #radio_group {}
+* Radio Group Element - #radio\_group {}
 
   The radio group element automatically groups it's radio button members into the same radio button group by applying the same HTML =name= to each radio contained within.
 
@@ -24,7 +24,11 @@ Note: Currently, this will not do a "deep dive" for the radio buttons, but assum
 
 ** Attributes
 
-   + body - (/string/) :: The contents of the radio group.  Recommended to be a list of radio buttons, but it will not search the contents of child elements containing their own =body= attributes. So be aware. It's recommended to just be a list of =#radio{}= elements, separated by =#br{}= or =#p{}= elements.
+   + body - (/string/) :: The contents of the radio group.  Recommended to be a
+      list of radio buttons, but it will not search the contents of child elements
+      containing their own =body= attributes. So be aware. It's recommended to
+      just be a list of =#radio{}= elements, separated by =#br{}= or =#p{}=
+      elements.
 
 ** See Also
 
@@ -46,5 +50,8 @@ Note: Currently, this will not do a "deep dive" for the radio buttons, but assum
 
    + [[./option.html][Dropdown Option]]
 
-   + [[../restful_overfiew.html][RESTful element overview]]
+   + [[./restful_overview.html][RESTful element overview]]
 
+   + [[http://nitrogenproject.com/demos/simplecontrols][Simple Controls Demos]]
+
+   + [[http://nitrogenproject.com/demos/radio][Radio Buttons Demo]]

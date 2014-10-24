@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Nitrogen 2.x Documentation"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-31 21:51:19 CDT"/>
+<meta name="generated" content="2014-09-15 02:13:12 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -94,7 +94,7 @@
 <div id="content">
 <h1 class="title">Nitrogen 2.x Documentation</h1>
 
-<p><a href="./index.html">Getting Started</a> | <a href="./api.html">API</a> | <a href="./elements.html">Elements</a> | <b>Actions</b> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./config.html">Configuration Options</a> | <a href="./about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="./index.html">Getting Started</a> | <a href="./api.html">API</a> | <a href="./elements.html">Elements</a> | <b>Actions</b> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./config.html">Configuration Options</a> | <a href="./plugins.html">Plugins</a> | <a href="./jquery_mobile_integration.html">Mobile</a> | <a href="./troubleshooting.html">Troubleshooting</a> | <a href="./about.html">About</a>
 </p>
 
 
@@ -108,7 +108,7 @@
 <li><a href="#sec-1">1 Base Action</a></li>
 <li><a href="#sec-2">2 Page Manipulation</a></li>
 <li><a href="#sec-3">3 Effects</a></li>
-<li><a href="#sec-4">4 Feedback</a></li>
+<li><a href="#sec-4">4 Feedback and Debugging</a></li>
 <li><a href="#sec-5">5 See Also</a></li>
 </ul>
 </div>
@@ -135,6 +135,9 @@
 <ul>
 <li><a href="./actions/event.html">Event</a>
 </li>
+<li><a href="./actions/update.html">Update</a> (includes Update, Replace, Insert Top,
+    Insert Bottom, Insert Before, Insert, After, and Remove)
+</li>
 <li><a href="./actions/script.html">Script</a>
 </li>
 <li><a href="./actions/validate.html">Validate</a>
@@ -155,29 +158,23 @@
 <div class="outline-text-2" id="text-3">
 
 <ul>
-<li><a href="./actions/show.html">Show</a>
+<li><a href="./actions/show.html">Show</a> | <a href="./actions/hide.html">Hide</a>
 </li>
-<li><a href="./actions/hide.html">Hide</a>
+<li><a href="./actions/appear.html">Appear</a> | <a href="./actions/fade.html">Fade</a>
 </li>
-<li><a href="./actions/appear.html">Appear</a>
-</li>
-<li><a href="./actions/fade.html">Fade</a>
-</li>
-<li><a href="./actions/slide_down.html">Slide Down</a>
-</li>
-<li><a href="./actions/slide_up.html">Slide Up</a>
-</li>
-<li><a href="./actions/animate.html">Animate</a>
+<li><a href="./actions/slide_down.html">Slide Down</a> | <a href="./actions/slide_up.html">Slide Up</a>
 </li>
 <li><a href="./actions/toggle.html">Toggle</a>
 </li>
+<li><a href="./actions/animate.html">Animate</a>
+</li>
 <li><a href="./actions/effect.html">Effect</a>
 </li>
-<li><a href="./actions/add_class.html">Add Class</a>
+<li><a href="./actions/add_class.html">Add Class</a> | <a href="./actions/remove_class.html">Remove Class</a>
 </li>
-<li><a href="./actions/remove_class.html">Remove Class</a>
+<li><a href="./actions/disable.html">Disable</a> | <a href="./actions/enable.html">Enable</a>
 </li>
-<li><a href="./actions/disable.html">Disable</a>
+<li><a href="./actions/make_readonly.html">Make Readonly</a> | <a href="./actions/make_writable.html">Make Writable</a>
 </li>
 </ul>
 
@@ -187,7 +184,7 @@
 </div>
 
 <div id="outline-container-4" class="outline-2">
-<h2 id="sec-4"><span class="section-number-2">4</span> Feedback</h2>
+<h2 id="sec-4"><span class="section-number-2">4</span> Feedback and Debugging</h2>
 <div class="outline-text-2" id="text-4">
 
 <ul>
@@ -195,9 +192,10 @@
 </li>
 <li><a href="./actions/confirm.html">Confirm</a>
 </li>
-<li><a href="./actions/other.html">Other</a>
+<li><a href="./actions/console_log.html">Browser Console Log</a>
 </li>
 </ul>
+
 
 </div>
 
@@ -217,7 +215,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-31 21:51:19 CDT</p>
+<p class="date">Date: 2014-09-15 02:13:12 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

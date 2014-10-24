@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Link Element Element"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-18 03:25:13 CDT"/>
+<meta name="generated" content="2014-09-15 02:12:59 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -94,7 +94,7 @@
 <div id="content">
 <h1 class="title">Link Element Element</h1>
 
-<p><a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html"><b>Elements</b></a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html"><b>Elements</b></a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../plugins.html">Plugins</a> | <a href="../jquery_mobile_integration.html">Mobile</a> | <a href="../troubleshooting.html">Troubleshooting</a> | <a href="../about.html">About</a>
 </p>
 
 <div id="table-of-contents">
@@ -154,25 +154,45 @@
 <dt>text - (<i>string</i>)</dt><dd>The text to display.
 
 </dd>
-<dt>body - (<i>Nitrogen elements</i>)</dt><dd>Instead of text, specify one or more Nitrogen elements (such as an #image) to wrap in a link.
+<dt>body - (<i>Nitrogen elements</i>)</dt><dd>Instead of text, specify one or more
+     Nitrogen elements (such as an #image) to wrap in a link.
 
 </dd>
-<dt>html_encode - (<i>boolean</i>)</dt><dd>Set to true to safely html-encode the link's title.
+<dt>html_encode - (<i>boolean</i>)</dt><dd>Set to true to safely html-encode the link's
+     title.
 
 </dd>
-<dt>url - (<i>string</i>)</dt><dd>If set, clicking on the link will navigate to this URL.
+<dt>url - (<i>string</i>)</dt><dd>If set, clicking on the link will navigate to this
+     URL.
 
 </dd>
 <dt>new - (<i>boolean</i>)</dt><dd>Set to true to make link open in a new window.
 
 </dd>
-<dt>postback - (<i>Erlang term</i>)</dt><dd>If set, clicking on the link will cause a Nitrogen postback with the supplied term.
+<dt>click - (<i>Action</i> or <i>List of Actions</i>)</dt><dd>Wires the selected actons to
+     the \"click\" events.  Due to the commonality of binding actions to the
+     click event, this is merely a shortcut for 
+
+
+
+
+<pre class="src src-ERLANG">#link{ text=<span class="org-string">"Do Something"</span>, actions=[
+   #event{type=click,actions=ListOfActions}
+]}
+</pre>
+
 
 </dd>
-<dt>mobile<sub>target</sub> - (<i>Boolean</i>)</dt><dd>If set to false, this will work with jQuery Mobile to ensure that it skips using jQuery Mobile's automatic page transition loading system.
+<dt>postback - (<i>Erlang term</i>)</dt><dd>If set, clicking on the link will cause a
+     Nitrogen postback with the supplied term.
 
 </dd>
-<dt>mobile<sub>dialog</sub> - (<i>Boolean</i>)</dt><dd>If set to true, this will work with jQuery mobile to load the target URL in a <a href="http://jquerymobile.com/demos/1.1.1/docs/pages/page-dialogs.html">jQuery Mobile Dialog</a>.
+<dt>mobile_target - (<i>Boolean</i>)</dt><dd>If set to false, this will work with
+     jQuery Mobile to ensure that it skips using jQuery Mobile's automatic page
+     transition loading system.
+
+</dd>
+<dt>mobile_dialog - (<i>Boolean</i>)</dt><dd>If set to true, this will work with jQuery mobile to load the target URL in a <a href="http://jquerymobile.com/demos/1.1.1/docs/pages/page-dialogs.html">jQuery Mobile Dialog</a>.
 </dd>
 </dl>
 
@@ -203,7 +223,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-18 03:25:13 CDT</p>
+<p class="date">Date: 2014-09-15 02:12:59 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

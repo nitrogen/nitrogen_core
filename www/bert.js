@@ -76,6 +76,21 @@ BertClass.prototype.encode = function (Obj) {
 	return this.BERT_START + this.encode_inner(Obj);
 };
 
+BertClass.prototype.encode_to_bytearray = function (Obj) {
+	var temp = this.encode(Obj);
+	var templen = temp.length;
+	var bytearray = new Uint8Array(templen);
+	for (var i=0;i<templen;i++) {
+		bytearray[i] = temp.charCodeAt(i);
+	}
+	return bytearray;
+}
+
+BertClass.prototype.encode_to_base64 = function(Obj) {
+	var temp = this.encode(Obj);
+	return this.base64_encode(temp);
+}
+
 BertClass.prototype.decode = function (S) {
 	if (S[0] !== this.BERT_START) {
 		throw ("Not a valid BERT.");
@@ -99,6 +114,19 @@ BertClass.prototype.tuple = function () {
 	return new BertTuple(arguments);
 };
 
+// Default encoding to use atom (for backwards compatibility purposes)
+BertClass.prototype.key_encoding = BertClass.prototype.atom;
+
+// encoding_type should be "atom" or "binary"
+// "atom" might be unsafe due to the atom table
+BertClass.prototype.assoc_array_key_encoding = function(EncodingType) {
+	if (EncodingType == "atom") {
+		this.key_encoding = this.atom;
+	}
+	else if (EncodingType == "binary") {
+		this.key_encoding = this.binary;
+	}
+}
 
 
 // - ENCODING -
@@ -109,8 +137,30 @@ BertClass.prototype.encode_inner = function (Obj) {
 };
 
 BertClass.prototype.encode_string = function (Obj) {
+	var hasUnicode = false;	
+	for (i = 0; i < Obj.length && !hasUnicode; i++) {
+		if(Obj.charCodeAt(i) >= 256)
+			hasUnicode = true;
+	}
+	if(hasUnicode){
+		return this.encode_unicode_string(Obj);
+	}else
+	{
+		return this.encode_latin1_string(Obj);
+	}
+};
+
+BertClass.prototype.encode_latin1_string = function(Obj) {
 	return this.STRING + this.int_to_bytes(Obj.length, 2) + Obj;
 };
+
+BertClass.prototype.encode_unicode_string = function(Obj) {
+	var i, s = this.LIST + this.int_to_bytes(Obj.length, 4);
+	for(i = 0; i < Obj.length; i++) {
+		s += this.encode_number(Obj.charCodeAt(i));
+	}
+	return s + this.NIL;
+};	
 
 BertClass.prototype.encode_boolean = function (Obj) {
 	if (Obj) {
@@ -212,7 +262,7 @@ BertClass.prototype.encode_associative_array = function (Obj) {
 	var key, Arr = [];
 	for (key in Obj) {
 		if (Obj.hasOwnProperty(key)) {
-			Arr.push(this.tuple(this.atom(key), Obj[key]));
+			Arr.push(this.tuple(this.key_encoding(key), Obj[key]));
 		}
 	}
 	return this.encode_array(Arr);
@@ -485,6 +535,7 @@ BertClass.prototype.pp_term = function (Obj) {
 	return Obj.toString();
 };
 
+
 // Show off the different type of encodings we
 // can handle.
 BertClass.prototype.test_encode = function () {
@@ -527,6 +578,68 @@ BertClass.prototype.test_decode = function () {
 	TestTerm4 = this.bytes_to_string([131, 106]);
 	alert(this.pp_term(this.decode(TestTerm4)));
 };
+
+
+// BASE64 ENCODING
+
+BertClass.prototype.base64_encode = function(txt) {
+	if (typeof(btoa) === 'function') {
+		return btoa(txt);
+	} else {
+		return this._base64_encode(txt);
+	}
+}
+
+BertClass.prototype._base64_encode = function(data) {
+	//  discuss at: http://phpjs.org/functions/base64_encode/
+	// original by: Tyler Akins (http://rumkin.com)
+	// improved by: Bayron Guevara
+	// improved by: Thunder.m
+	// improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+	// improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+	// improved by: Rafał Kukawski (http://kukawski.pl)
+	// bugfixed by: Pellentesque Malesuada
+	//   example 1: base64_encode('Kevin van Zonneveld');
+	//   returns 1: 'S2V2aW4gdmFuIFpvbm5ldmVsZA=='
+	//   example 2: base64_encode('a');
+	//   returns 2: 'YQ=='
+	//   example 3: base64_encode('✓ à la mode');
+	//   returns 3: '4pyTIMOgIGxhIG1vZGU='
+	// This is modified to not encode Unicode, since Bert itself does that for us already.
+
+	var b64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+	var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
+		ac = 0,
+		enc = '',
+		tmp_arr = [];
+
+	if (!data) {
+		return data;
+	}
+
+	do {
+		// pack three octets into four hexets
+		o1 = data.charCodeAt(i++);
+		o2 = data.charCodeAt(i++);
+		o3 = data.charCodeAt(i++);
+
+		bits = o1 << 16 | o2 << 8 | o3;
+
+		h1 = bits >> 18 & 0x3f;
+		h2 = bits >> 12 & 0x3f;
+		h3 = bits >> 6 & 0x3f;
+		h4 = bits & 0x3f;
+
+		// use hexets to index into b64, and append result to encoded string
+		tmp_arr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
+	} while (i < data.length);
+
+	enc = tmp_arr.join('');
+
+	var r = data.length % 3;
+
+	return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
+}
 
 var Bert = new BertClass();
 

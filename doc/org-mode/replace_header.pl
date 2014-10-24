@@ -3,7 +3,7 @@
 # Usage: ./replace_header.pl [HeaderSource] [Files to update]
 # Example: ./replace_header.pl headers/elements_header.org.src elements/*.org
 
-if($#ARGV < 2) {
+if($#ARGV < 1) {
 	die "Usage: ./replace_header.pl [HeaderSourceFile] [Target1, Target2, ... ]\n";
 }
 

@@ -4,11 +4,16 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_label).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, label).
 
+-spec render_element(#label{}) -> body().
 render_element(Record) -> 
     Body = [
         wf:html_encode(Record#label.text, Record#label.html_encode),
@@ -16,7 +21,9 @@ render_element(Record) ->
     ],
     wf_tags:emit_tag(label, Body, [
         {id, Record#label.html_id},
-        {class, [label, Record#label.class]},
+        {class, [nitrogen_label, Record#label.class]},
+        {title, Record#label.title},
         {style, Record#label.style},
-        {for, Record#label.for}
+        {for, Record#label.for},
+        {data_fields, Record#label.data_fields}
     ]).

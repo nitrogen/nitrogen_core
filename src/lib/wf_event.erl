@@ -4,12 +4,14 @@
 % See MIT-LICENSE for licensing information.
 
 -module (wf_event).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -export ([
+    update_context_with_websocket_event/1,
     update_context_with_event/0,
-    generate_postback_script/5,
-    generate_system_postback_script/4,
-    serialize_event_context/4
+    update_context_with_event/1,
+    generate_postback_script/7,
+    generate_system_postback_script/5,
+    serialize_event_context/5
 ]).
 
 % This module looks at the incoming request for 'eventContext' and 'pageContext' params. 
@@ -19,11 +21,21 @@
 % If not found, then it creates #event_context and #page_context records with
 % values for a first request.
 
-
 update_context_with_event() ->
-    SerializedEvent = wf:q(eventContext),
-    Event = wf_pickle:depickle(SerializedEvent),
+    update_context_with_event(wf:q(eventContext)).
 
+update_context_with_websocket_event([]) ->
+    wf_context:type(postback_websocket),
+    ok;
+update_context_with_websocket_event(Data) ->
+    {_, SerializedEvent} = lists:keyfind(<<"eventContext">>, 1, Data),
+    update_context_with_event(SerializedEvent),
+    postback_request = wf_context:type(),
+    wf_context:type(postback_websocket),
+    ok.
+
+update_context_with_event(SerializedEvent) ->
+    Event = wf_pickle:depickle(SerializedEvent),
     % Update the Context...
     PageModule = wf_context:page_module(),
     IsPostback = is_record(Event, event_context),
@@ -47,28 +59,39 @@ update_context_for_first_request() ->
 update_context_for_postback_request(Event) ->
     Anchor = Event#event_context.anchor,
     ValidationGroup = Event#event_context.validation_group,
+    HandleInvalid = Event#event_context.handle_invalid,
     wf_context:type(postback_request),
     wf_context:event_context(Event),
     wf_context:anchor(Anchor),
     wf_context:event_validation_group(ValidationGroup),
+    wf_context:event_handle_invalid(HandleInvalid),
     ok.
 
-generate_postback_script(undefined, _Anchor, _ValidationGroup, _Delegate, _ExtraParam) -> [];
-generate_postback_script(Postback, Anchor, ValidationGroup, Delegate, ExtraParam) ->
-    PickledPostbackInfo = serialize_event_context(Postback, Anchor, ValidationGroup, Delegate),
-    wf:f("Nitrogen.$queue_event('~s', '~s', ~s);", [ValidationGroup, PickledPostbackInfo, ExtraParam]).
+generate_postback_script(undefined, _Anchor, _ValidationGroup, _HandleInvalid, _OnInvalid, _Delegate, _ExtraParam) -> [];
+generate_postback_script(Postback, Anchor, ValidationGroup, HandleInvalid, OnInvalid, Delegate, ExtraParam) ->
+    PickledPostbackInfo = serialize_event_context(Postback, Anchor, ValidationGroup, HandleInvalid, Delegate),
+    OnInvalidScript = case OnInvalid of
+        undefined -> "null";
+        _         -> ["function(){", OnInvalid, "}"]
+    end,
+    [
+        wf:f("Nitrogen.$queue_event('~s', ", [ValidationGroup]),
+        OnInvalidScript,
+        wf:f(", '~s', ~s);", [PickledPostbackInfo, ExtraParam])
+    ].
 
-generate_system_postback_script(undefined, _Anchor, _ValidationGroup, _Delegate) -> [];
-generate_system_postback_script(Postback, Anchor, ValidationGroup, Delegate) ->
-    PickledPostbackInfo = serialize_event_context(Postback, Anchor, ValidationGroup, Delegate),
+generate_system_postback_script(undefined, _Anchor, _ValidationGroup, _HandleInvalid, _Delegate) -> [];
+generate_system_postback_script(Postback, Anchor, ValidationGroup, HandleInvalid, Delegate) ->
+    PickledPostbackInfo = serialize_event_context(Postback, Anchor, ValidationGroup, HandleInvalid, Delegate),
     wf:f("Nitrogen.$queue_system_event('~s');", [PickledPostbackInfo]).
 
-serialize_event_context(Tag, Anchor, ValidationGroup, Delegate) ->
+serialize_event_context(Tag, Anchor, ValidationGroup, HandleInvalid, Delegate) ->
     PageModule = wf_context:page_module(),
     EventModule = wf:coalesce([Delegate, PageModule]),
     Event = #event_context {
         module = EventModule,
         tag = Tag,
+        handle_invalid = HandleInvalid,
         anchor = Anchor,
         validation_group = ValidationGroup
     },

@@ -4,7 +4,7 @@
 % See MIT-LICENSE for licensing information.
 
 -module (wf).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -compile (export_all).
 
 %%% EXPOSE WIRE, UPDATE, FLASH %%%
@@ -17,26 +17,105 @@ wire(Target, Actions) ->
 wire(Trigger, Target, Actions) -> 
     ok = action_wire:wire(Trigger, Target, Actions).
 
+defer(Actions) ->
+    ok = defer(undefined, undefined, Actions).
+
+defer(Target, Actions) ->
+    ok = defer(Target, Target, Actions).
+
+defer(Trigger, Target, Actions) ->
+    ok = action_wire:defer(Trigger, Target, Actions).
+
+eager(Actions) ->
+    ok = eager(undefined, undefined, Actions).
+
+eager(Target, Actions) ->
+    ok = eager(Target, Target, Actions).
+
+eager(Trigger, Target, Actions) ->
+    ok = action_wire:eager(Trigger, Target, Actions).
+
+priority_wire(Priority, Actions) ->
+    ok = priority_wire(Priority, undefined, undefined, Actions).
+
+priority_wire(Priority, Target, Actions) ->
+    ok = priority_wire(Priority, Target, Target, Actions).
+
+priority_wire(eager, Trigger, Target, Actions) ->
+    ok = wf:eager(Trigger, Target, Actions);
+
+priority_wire(normal, Trigger, Target, Actions) ->
+    ok = wf:wire(Trigger, Target, Actions);
+
+priority_wire(defer, Trigger, Target, Actions) ->
+    ok = wf:defer(Trigger, Target, Actions).
+
+set(Element, Value) -> 
+    ok = set(normal, Element, Value).
+
+set(Priority, Element, Value) when ?IS_ACTION_PRIORITY(Priority) -> 
+    ok = action_set:set(Priority, Element, Value).
+
+set_multiple(Element, Values) ->
+    ok = set_multiple(normal, Element, Values).
+
+set_multiple(Priority, Element, Values) when is_list(Values), ?IS_ACTION_PRIORITY(Priority) ->
+    ok = action_set_multiple:set(Priority, Element, Values).
+      
+
 update(Target, Elements) -> 
-    ok = action_update:update(Target, Elements).
+    ok = update(normal, Target, Elements).
+
+update(Priority, Target, Elements) when ?IS_ACTION_PRIORITY(Priority) ->
+    ok = action_update:update(Priority, Target, Elements).
 
 replace(Target, Elements) ->
-    ok = action_update:replace(Target, Elements).
+    ok = replace(normal, Target, Elements).
+
+replace(Priority, Target, Elements) when ?IS_ACTION_PRIORITY(Priority) ->
+    ok = action_update:replace(Priority, Target, Elements).
 
 insert_top(Target, Elements) -> 
-    ok = action_update:insert_top(Target, Elements).
+    ok = insert_top(normal, Target, Elements).
+
+insert_top(Priority, Target, Elements) when ?IS_ACTION_PRIORITY(Priority) -> 
+    ok = action_update:insert_top(Priority, Target, Elements).
 
 insert_bottom(Target, Elements) -> 
-    ok = action_update:insert_bottom(Target, Elements).
+    ok = insert_bottom(normal, Target, Elements).
+
+insert_bottom(Priority, Target, Elements) when ?IS_ACTION_PRIORITY(Priority) ->
+    ok = action_update:insert_bottom(Priority, Target, Elements).
 
 insert_before(Target, Elements) ->
-    ok = action_update:insert_before(Target, Elements).
+    ok = insert_before(normal, Target, Elements).
+
+insert_before(Priority, Target, Elements) when ?IS_ACTION_PRIORITY(Priority) ->
+    ok = action_update:insert_before(Priority, Target, Elements).
 
 insert_after(Target, Elements) ->
-    ok = action_update:insert_after(Target, Elements).
+    ok = insert_after(normal, Target, Elements).
+
+insert_after(Priority, Target, Elements) when ?IS_ACTION_PRIORITY(Priority) ->
+    ok = action_update:insert_after(Priority, Target, Elements).
 
 remove(Target) ->
-    ok = action_update:remove(Target).
+    ok = remove(normal, Target).
+
+remove(Priority, Target) when ?IS_ACTION_PRIORITY(Priority) ->
+    ok = action_update:remove(Priority, Target).
+
+disable(Target) ->
+    ok = disable(normal, Target).
+
+disable(Priority, Target) when ?IS_ACTION_PRIORITY(Priority) ->
+    ok = action_disable:disable(Priority, Target).
+ 
+enable(Target) ->
+    ok = enable(normal, Target).
+
+enable(Priority, Target) when ?IS_ACTION_PRIORITY(Priority) ->
+    ok = action_enable:enable(Priority, Target).
 
 flash(Elements) ->
     element_flash:add_flash(Elements).
@@ -62,6 +141,9 @@ redirect(Url) ->
 redirect_to_login(LoginUrl) -> 
     action_redirect:redirect_to_login(LoginUrl).
 
+redirect_to_login(LoginUrl, PostLoginUrl) ->
+    action_redirect:redirect_to_login(LoginUrl, PostLoginUrl).
+
 redirect_from_login(DefaultUrl) -> 
     action_redirect:redirect_from_login(DefaultUrl).
 
@@ -81,8 +163,14 @@ depickle(SerializedData, TTLSeconds) ->
 to_list(T) -> 
     _String = wf_convert:to_list(T).
 
+to_unicode_list(T) ->
+    _String = wf_convert:to_unicode_list(T).
+
 to_atom(T) -> 
     _Atom = wf_convert:to_atom(T).
+
+to_existing_atom(T) ->
+    _Atom = wf_convert:to_existing_atom(T).
 
 to_binary(T) -> 
     _Binary = wf_convert:to_binary(T).
@@ -102,6 +190,9 @@ html_encode(S) ->
 html_encode(S, Encode) -> 
     _String = wf_convert:html_encode(S, Encode).
 
+html_decode(S) ->
+    _String = wf_convert:html_decode(S).
+
 url_encode(S) ->
     _String = wf_convert:url_encode(S).
 
@@ -117,22 +208,27 @@ hex_decode(S) ->
 js_escape(String) -> 
     _String = wf_convert:js_escape(String).
 
+json_encode(Data) ->
+    _String = wf_convert:json_encode(Data).
+
+json_decode(Json) ->
+    _Data = wf_convert:json_decode(Json).
+
+to_qs(List) ->
+    _Iolist = wf_convert:to_qs(List).
+
 join(List,Delimiter) ->
     _Result = wf_convert:join(List,Delimiter).
 
 %%% EXPOSE WF_BIND %%%
 % TODO
-set(Element, Value) -> 
-    ok = action_set:set(Element, Value).
 
 % bind(BindingTuple, Record) -> wf_bind:bind(BindingTuple, Record).
 % reverse_bind(BindingTuple) -> wf_bind:reverse_bind(BindingTuple).
 % reverse_bind(BindingTuple, Record) -> wf_bind:reverse_bind(BindingTuple, Record).
 
-
-
 %%% OTHER %%%
-% TODO
+
 logout() -> clear_user(), clear_roles(), clear_state(), clear_session().
 
 to_js_id(Path) -> 
@@ -151,8 +247,17 @@ normalize_id(Path) ->
 page_module() -> 
     wf_context:page_module().
 
+path() ->
+    wf_context:path().
+
 path_info() ->
     wf_context:path_info().
+
+uri() ->
+    wf_context:uri().
+
+url() ->
+    wf_context:url().
 
 status_code() -> 
     ok = wf_context:status_code().
@@ -162,6 +267,9 @@ status_code(StatusCode) ->
 
 content_type(ContentType) ->
     ok = wf_context:content_type(ContentType).
+
+download_as(Filename) ->
+    wf_context:download_as(Filename).
 
 headers() -> 
     wf_context:headers().
@@ -202,6 +310,9 @@ peer_ip(Proxies) ->
 peer_ip(Proxies,ForwardedHeader) ->
     wf_context:peer_ip(Proxies,ForwardedHeader).
 
+request_method() ->
+    wf_context:request_method().
+
 request_body() ->
     wf_context:request_body().
 
@@ -224,16 +335,6 @@ q_pl(KeyList) when is_list(KeyList) ->
 
 qs_pl(KeyList) when is_list(KeyList) ->
     [{K,qs(K)} || K <- KeyList].
-
-%qs_pls(KeyList) when is_list(KeyList) ->
-%   Temp = mqs(KeyList),
-%   Vals = length(hd(Temp)),
-%   PL = 
-        
-%hd_all(Lists) ->
-%   Hds = [hd(L) || L <- Lists],
-%   Tls = [tl(L) || L <- Lists],
-%   {Hds,Tls}.
         
 params() ->
     query_handler:get_params().
@@ -258,7 +359,12 @@ error(String, Args) ->
 error(String) -> 
     ok = log_handler:error(String).
 
+%% console_log is not part of the log handler, but  relevant
+console_log(String) ->
+    action_console_log:console_log(String).
 
+console_log(Priority, String) ->
+    action_console_log:console_log(Priority, String).
 
 %%% EXPOSE SESSION_HANDLER %%% 
 session(Key) -> 

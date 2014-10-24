@@ -5,8 +5,11 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_mobile_grid).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
 reflect() -> record_info(fields, mobile_grid).
 
@@ -31,7 +34,7 @@ format_blocks([],_,_) ->
 format_blocks([Block | Blocks],CurColumn,MaxColumns)
         when    Block#mobile_grid_block.new_row==true
         orelse  CurColumn > MaxColumns ->
-    format_blocks([Block | Blocks],1,MaxColumns);
+    format_blocks([Block#mobile_grid_block{new_row=false} | Blocks],1,MaxColumns);
 
 %% This will iterate through each block, and assign the proper grid block class
 %% to it, based on its location

@@ -4,11 +4,16 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_spinner).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, spinner).
 
+-spec render_element(#spinner{}) -> body().
 render_element(Record) ->
     wf:wire(Record#spinner.html_id,
             #script{script=["objs('me').hide()",
@@ -19,7 +24,9 @@ render_element(Record) ->
         id=Record#spinner.id,
         anchor=Record#spinner.anchor,
         class=[spinner, Record#spinner.class],
+        title=Record#spinner.title,
         style=Record#spinner.style,
+        data_fields=Record#spinner.data_fields,
         body=#image { image=Record#spinner.image }
     },
     element_panel:render_element(Terms).

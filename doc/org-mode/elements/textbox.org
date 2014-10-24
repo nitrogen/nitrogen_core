@@ -4,7 +4,7 @@
 #+AUTHOR: Rusty Klophaus (@rustyio)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
 * Textbox Element - #textbox {}
 
@@ -22,6 +22,21 @@
 
    + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
 
+   + max\_length - (/integer/) :: Specify the maximum number of characters that
+      can be typed by the user.
+
+   + size - (/integer/) :: Specify the width of the textbox in characters. The
+      HTML Default is =20=. Keep in mind, CSS Rules will override this setting.
+
+   + disabled - (/boolean/) :: Set to true to disable this textbox in the
+      browser (sets the HTML =disabled= property, effectly greying out the
+      element). Can be dynamically re-enabled with =wf:enable(ElementID)= or
+      =wf:wire(ElementID, #enable{})= (Default: =false=)
+
+   + readonly - (/boolean/) :: Set to true to make this element readonly in the
+      browser. Can be toggled with =wf:wire(ElementID, #make_writable{})= and
+      =wf:wire(ElementID, #make_readonly{})=.
+
    + placeholder - (/string/) :: Sets the placeholder text (text that will be
       in the textbox until the user focuses in the textbox). This uses the
       HTML5 placeholder attribute, which is only supported in newer browsers.
@@ -32,6 +47,15 @@
 #+BEGIN_SRC html
    <script src='/nitrogen/jquery.placeholder.js' type='text/javascript'></script>
 #+END_SRC
+
+   + type - (/atom|string/) :: Sets the input box "type" attribute. This is
+      especially useful for taking advantage of the newer HTML5 values for
+      this. It can be any of the following: =search=, =email=, =range=, =url=,
+      =tel=, =number=, =date=, =month=, =week=, =time=, =datetime=,
+      =datetime-local=, =color=, as well as the original HTML attributes,
+      =text=, =button=, =submit=, =image=, and =hidden=.  (Default: =text=)
+
+      [[http://html5doctor.com/html5-forms-input-types/][About HTML5 Input Types]]
 
    + next - (/atom/) :: 
       If set with a valid control ID, pressing the enter key in the 
@@ -61,4 +85,5 @@
 
    + [[https://github.com/mathiasbynens/jquery-placeholder][jQuery Placeholder Readme]]
 
+	+ [[http://nitrogenproject.com/demos/simplecontrols][Simple Controls Demos]]
  

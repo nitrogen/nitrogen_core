@@ -1,14 +1,14 @@
-# vim: ft=org sw=3 ts=3 et
+# vim: ft=org sw=2 ts=2 et
 #+TITLE: Mobile Collapsible Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Jesse Gumm (@jessegumm)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
-* Mobile Collapsible Element - #mobile_collapsible {}
+* Mobile Collapsible Element - #mobile\_collapsible {}
 
-This element produces a [[http://jquerymobile.com/test/docs/content/content-collapsible.html][jQuery Mobile Collapsible Content]] Element
+This element produces a [[http://api.jquerymobile.com/collapsible/][jQuery Mobile Collapsible Content]] Element
 
 ** Usage
 
@@ -28,19 +28,25 @@ This element produces a [[http://jquerymobile.com/test/docs/content/content-coll
 
 ** Attributes
    
-   + header_text - (/string/) :: The header text of the collapsible.  This is the text that will be clicked on to expand or collapse the content
+   + header\_text - (/string/) :: The header text of the collapsible.  This is
+     the text that will be clicked on to expand or collapse the content
 
-   + content_text - (/string/) :: The text content of the element.
+   + content\_text - (/string/) :: The text content of the element.
 
-   + content_body - (/Nitrogen element or list of elements/) :: Set the element(s) that will be rendered within this panel.
+   + content\_body - (/Nitrogen element or list of elements/) :: Set the
+     element(s) that will be rendered within this panel.
 
-   + header_theme - (/atom/) :: Set the jQuery Mobile swatch letter for the header.
+   + header\_theme - (/atom/) :: Set the jQuery Mobile swatch letter for the
+     header.
 
-   + content_theme - (/atom/) :: Set the jQuery Mobile swatch letter for the content.
+   + content\_theme - (/atom/) :: Set the jQuery Mobile swatch letter for the
+     content.
    
-   + collapsed - (/boolean/) :: Set to true to have the element start collapsed, false to start open. (default 'true')
+   + collapsed - (/boolean/) :: Set to true to have the element start
+     collapsed, false to start open. (default 'true')
 
-   + mini - (/boolean/) :: Set to true to render the collapsible in a smaller, more compact form.
+   + mini - (/boolean/) :: Set to true to render the collapsible in a smaller,
+     more compact form.
 
 ** See Also
 
@@ -48,6 +54,8 @@ This element produces a [[http://jquerymobile.com/test/docs/content/content-coll
 
    + [[./base.html][base element]]
 
-   + [[./mobile_collapsible_set.html][mobile collapsible set element]]
+   + [[./mobile_collapsible_set.html][mobile\ collapsible\ set element]]
 
    + [[./panel.html][panel element]]
+
+   + [[http://nitrogenproject.com/demos/mobile_collapsibles][Mobile Collapsible Demos]]

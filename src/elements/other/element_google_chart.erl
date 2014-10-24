@@ -4,15 +4,19 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_google_chart).
--compile(export_all).
--include_lib ("wf.hrl").
--include_lib ("google_chart.hrl").
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, google_chart).
 
+-spec render_element(#google_chart{}) -> body().
 render_element(Record) -> 
     % Path...
-    Path = "http://chart.apis.google.com/chart?",
+    Path = "//chart.googleapis.com/chart?",
 
     % Chart Type...
     Type = [
@@ -25,8 +29,7 @@ render_element(Record) ->
             grouped_horizontal_bar -> "bhg";
             grouped_vertical_bar -> "bvg";
             pie -> "p";
-            pie3d -> "p3";
-            OtherType -> erlang:error({unknown_chart_type, OtherType})
+            pie3d -> "p3"
         end
     ],
 
@@ -124,6 +127,7 @@ render_element(Record) ->
         anchor=Record#google_chart.anchor,
         class=[google_chart, Record#google_chart.class],
         style = Record#google_chart.style,
+        data_fields = Record#google_chart.data_fields,
         image = lists:flatten([Path, Type, Title, TitleStyle, Size, Grid, BGColors, LegendLocation, BarSize, Axes, Data])
     },
     element_image:render_element(Image).

@@ -5,7 +5,7 @@
 #+AUTHOR: Rusty Klophaus (@rustyio)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
 * Sort Block Element - #sortblock {}
 
@@ -33,6 +33,10 @@
 
    + handle - (/atom or string/) :: A CSS class that will be used as the drag handle for #sortitems.
 
+	+ placeholder - (/atom or string/) :: The class of the placeholder when an item is dragged away
+
+	+ force\_placeholder\_size - (/boolean/) :: Force the placeholder to be the same size as the moved sortblock item
+
 ** Callbacks
 
 *** sort\_event(BlockTag, ListOfItemTags)
@@ -43,4 +47,6 @@ Called when the user sorts elements. BlockTag is the tag associated with this so
 
    + [[./sortitem.html][sortitem element]]
 
- 
+	+ [[http://nitrogenproject.com/demos/sorting1][Sorting Demo]]
+
+	+ [[http://nitrogenproject.com/demos/sorting2][Nested Sorting Demo]]

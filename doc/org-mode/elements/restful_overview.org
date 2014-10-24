@@ -4,7 +4,7 @@
 #+AUTHOR: Steffen Panning
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 #+HTML: <div class=headline>Nitrogen Restful Elements</div>
 
 * Overview
@@ -13,6 +13,10 @@
   depend on AJAX/Javascript. This is sometimes useful, for example if you
   want to provide a fallback option when a client does not support
   javascript or sits behind a firewall that filters active content.
+
+* Demo
+
+  Check out the [[http://nitrogenproject.com/demos/restful][RESTful Forms Demo]]
   
 * How it works
 

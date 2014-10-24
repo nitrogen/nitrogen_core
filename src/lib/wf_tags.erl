@@ -20,8 +20,10 @@
     TagName =/= 'a' andalso
     TagName =/= 'ul' andalso
     TagName =/= 'ol' andalso
-	TagName =/= 'select' andalso
-	TagName =/= 'script' andalso
+    TagName =/= 'select' andalso
+    TagName =/= 'script' andalso
+    TagName =/= 'legend' andalso
+    TagName =/= 'fieldset' andalso
     TagName =/= 'iframe')).
 
 -export ([emit_tag/2, emit_tag/3, html_name/2]).
@@ -75,15 +77,30 @@ emit_tag(TagName, Content, Props) ->
 write_props(Props) ->
     lists:map(fun display_property/1, Props).
 
-display_property({Prop}) when is_atom(Prop) ->
-    [" ", atom_to_list(Prop)];
+display_property(undefined) ->
+    [];
+
+display_property([]) ->
+    [];
+
+display_property({Prop}) ->
+    display_property(Prop);
+
+display_property(Prop) when is_atom(Prop) ->
+    display_property(wf:to_binary(Prop));
+
+display_property(Prop) when is_binary(Prop) ->
+    [" ", Prop];
+
+display_property(Prop) when ?IS_STRING(Prop) ->
+    [" ", Prop];
 
 %% Data fields are special in HTML5.
 %% In this case, the DataTags value is expected to be a
 %% proplist of [{field,Value}]. Emitted will be data-field="value".
 %% "data-" gets prefixed on the fieldnames.
 display_property({data_fields,DataTags}) ->
-	[" ",data_tags(DataTags)];
+    [" ",data_tags(DataTags)];
 
 display_property({Prop, V}) when is_atom(Prop) ->
     display_property({atom_to_list(Prop), V});
@@ -91,27 +108,36 @@ display_property({Prop, V}) when is_atom(Prop) ->
 %% Most HTML tags don't care about a property with an empty string as its value
 %% Except for the "value" tag on <option> and other form tags.
 %% In this case, we emit the 'value' propery even if it's an empty value.
-display_property({Prop, []}) when Prop =/= "value" -> "";    
+display_property({Prop, []}) when Prop =/= "value" ->
+    [];
+
+display_property({Prop, undefined}) when Prop =/= "value" ->
+    [];    
 
 display_property({Prop, Value}) when is_integer(Value); is_atom(Value); is_float(Value) ->
     [" ", Prop, "=\"", wf:to_list(Value), "\""];
 
-display_property({Prop, Value}) when is_binary(Value); ?IS_STRING(Value) ->
-    [" ", Prop, "=\"", Value, "\""];
-
-display_property({Prop, Values}) ->
+%% 'class' is a special kind of field, which will be reformatted to handle
+display_property({"class", Values}) ->
     StrValues = wf:to_string_list(Values),
     StrValues1 = string:strip(string:join(StrValues, " ")),
-    StrValues2 = case Prop of
-        "class" -> wf_utils:replace(StrValues1, ".", "");
-        _ -> StrValues1
-    end,
-    [" ", Prop, "=\"", StrValues2, "\""].
+    StrValues2 = wf_utils:replace(StrValues1, ".", ""),
+    [" class=\"", StrValues2, "\""];
+
+display_property({Prop, Value}) ->
+    [" ", Prop, "=\"", Value, "\""].
+
+
 
 %% 
 data_tags(Data) ->
-	[display_property({data_tag(FieldName),Value}) || {FieldName,Value} <- Data].
+    [display_property(data_tag(Datum)) || Datum <- Data].
 
-data_tag(FieldName) ->
-	DataField = wf:to_binary(FieldName),
-	<<"data-",DataField/binary>>.
+data_tag({FieldName,Value}) ->
+    DataField = wf:to_binary(FieldName),
+    {<<"data-",DataField/binary>>,Value};
+data_tag({FieldName}) ->
+    DataField = wf:to_binary(FieldName),
+    {<<"data-",DataField/binary>>};
+data_tag(FieldName) when is_atom(FieldName) ->
+    data_tag({FieldName}).

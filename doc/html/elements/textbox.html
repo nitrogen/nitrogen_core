@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Textbox Element Element"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-18 03:24:31 CDT"/>
+<meta name="generated" content="2014-09-15 02:12:46 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -94,7 +94,7 @@
 <div id="content">
 <h1 class="title">Textbox Element Element</h1>
 
-<p><a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html"><b>Elements</b></a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html"><b>Elements</b></a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../plugins.html">Plugins</a> | <a href="../jquery_mobile_integration.html">Mobile</a> | <a href="../troubleshooting.html">Troubleshooting</a> | <a href="../about.html">About</a>
 </p>
 
 <div id="table-of-contents">
@@ -145,6 +145,25 @@
 <dt>html_encode - (<i>boolean</i>)</dt><dd>Set to true to safely html-encode the text.
 
 </dd>
+<dt>max_length - (<i>integer</i>)</dt><dd>Specify the maximum number of characters that
+      can be typed by the user.
+
+</dd>
+<dt>size - (<i>integer</i>)</dt><dd>Specify the width of the textbox in characters. The
+      HTML Default is <code>20</code>. Keep in mind, CSS Rules will override this setting.
+
+</dd>
+<dt>disabled - (<i>boolean</i>)</dt><dd>Set to true to disable this textbox in the
+      browser (sets the HTML <code>disabled</code> property, effectly greying out the
+      element). Can be dynamically re-enabled with <code>wf:enable(ElementID)</code> or
+      <code>wf:wire(ElementID, #enable{})</code> (Default: <code>false</code>)
+
+</dd>
+<dt>readonly - (<i>boolean</i>)</dt><dd>Set to true to make this element readonly in the
+      browser. Can be toggled with <code>wf:wire(ElementID, #make_writable{})</code> and
+      <code>wf:wire(ElementID, #make_readonly{})</code>.
+
+</dd>
 <dt>placeholder - (<i>string</i>)</dt><dd>Sets the placeholder text (text that will be
       in the textbox until the user focuses in the textbox). This uses the
       HTML5 placeholder attribute, which is only supported in newer browsers.
@@ -163,6 +182,17 @@
 
 
 <dl>
+<dt>type - (<i>atom|string</i>)</dt><dd>Sets the input box "type" attribute. This is
+      especially useful for taking advantage of the newer HTML5 values for
+      this. It can be any of the following: <code>search</code>, <code>email</code>, <code>range</code>, <code>url</code>,
+      <code>tel</code>, <code>number</code>, <code>date</code>, <code>month</code>, <code>week</code>, <code>time</code>, <code>datetime</code>,
+      <code>datetime-local</code>, <code>color</code>, as well as the original HTML attributes,
+      <code>text</code>, <code>button</code>, <code>submit</code>, <code>image</code>, and <code>hidden</code>.  (Default: <code>text</code>)
+
+<p>
+      <a href="http://html5doctor.com/html5-forms-input-types/">About HTML5 Input Types</a>
+</p>
+</dd>
 <dt>next - (<i>atom</i>)</dt><dd>
 <p>
       If set with a valid control ID, pressing the enter key in the 
@@ -212,9 +242,14 @@
 
 </li>
 <li><a href="https://github.com/mathiasbynens/jquery-placeholder">jQuery Placeholder Readme</a>
+
+<ul>
+<li><a href="http://nitrogenproject.com/demos/simplecontrols">Simple Controls Demos</a>
 </li>
 </ul>
 
+</li>
+</ul>
 
 
 </div>
@@ -223,7 +258,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-18 03:24:31 CDT</p>
+<p class="date">Date: 2014-09-15 02:12:46 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

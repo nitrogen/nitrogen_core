@@ -4,11 +4,16 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_listitem).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, listitem).
 
+-spec render_element(#listitem{}) -> body().
 render_element(Record) -> 
     Body = [
         wf:html_encode(Record#listitem.text, Record#listitem.html_encode),
@@ -18,6 +23,7 @@ render_element(Record) ->
     wf_tags:emit_tag(li, Body, [
         {id, Record#listitem.html_id},
         {class, [listitem, Record#listitem.class]},
+        {title, Record#listitem.title},
         {role, Record#listitem.role},
         {style, Record#listitem.style},
         {data_fields, Record#listitem.data_fields}

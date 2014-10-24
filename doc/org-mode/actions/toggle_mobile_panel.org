@@ -1,0 +1,33 @@
+# vim: sw=3 ts=3 ft=org
+
+#+TITLE: Toggle Mobile Panel Action Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Jesse Gumm (@jessegumm)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][Elements]] | [[file:../actions.org][*Actions*]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
+
+* Toggle Mobile Panel Action - #toggle\_mobile\_panel {}
+
+  This action will toggle a [[../elements/mobile_panel.org][Mobile Panel]]
+  (collapsible mobile side menu typicaly of mobile applications).
+
+** Usage
+
+#+BEGIN_SRC erlang
+   wf:wire(close_button, panel_id, #toggle_mobile_panel{}).
+
+	%% OR %%
+
+	wf:wire(close_button, #toggle_mobile_panel{ target=panel_id}).
+#+END_SRC
+
+** See Also
+
+   + [[./base.html][base element]]
+
+	+ [[../elements/mobile_panel.org][Mobile Panel Element]]
+
+	+ [[/demos/mobile_panel][Mobile Panel Demonstration]]
+
+	+ [[./toggle.org][Toggle Action]] (non-mobile version)

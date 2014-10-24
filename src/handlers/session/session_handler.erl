@@ -11,8 +11,8 @@
 % how Nitrogen manages session values.
 
 -module (session_handler).
+-include("wf.hrl").
 -export ([
-    behaviour_info/1, 
     get_value/1, 
     get_value/2, 
     set_value/2, 
@@ -20,16 +20,23 @@
     session_id/0
 ]).
 
-% Example Session Handler Interface
-behaviour_info(callbacks) -> [
-    {init, 2},      
-    {finish, 2},
-    {get_value, 4},       
-    {set_value, 4},
-    {clear_all, 2},
-    {session_id, 2}
-];
-behaviour_info(_) -> undefined.
+-callback init(         handler_config(),
+                        handler_state()) -> {ok, handler_state()}.
+-callback finish(       handler_config(),
+                        handler_state()) -> {ok, handler_state()}.
+-callback get_value(    Key :: term(),
+                        DefaultValue :: term(),
+                        handler_config(),
+                        handler_state()) -> {ok, Value :: term(), handler_state()}.
+-callback set_value(    Key :: term(),
+                        Value :: term(),
+                        handler_config(),
+                        handler_state()) -> {ok, OldValue :: term(), handler_state()}.
+-callback clear_all(    handler_config(),
+                        handler_state()) -> {ok, handler_state()}.
+-callback session_id(   handler_config(),
+                        handler_state()) -> {ok, Sessionid:: term(), handler_state()}.
+
 
 % get(Key, DefaultValue, State, Key, DefaultValue) -> {ok, Value, NewState}.
 % Retrieve a value from the storage area.

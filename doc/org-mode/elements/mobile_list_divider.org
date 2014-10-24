@@ -4,9 +4,9 @@
 #+AUTHOR: Jesse Gumm (@jessegumm)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
-* Mobile List Divider Element - #mobile_list_divider {}
+* Mobile List Divider Element - #mobile\_list\_divider {}
 
 This element produces a [[http://jquerymobile.com/test/docs/lists/lists-divider.html][jQuery Mobile List Divider]] for jQuery Mobile Listviews.
 
@@ -34,3 +34,5 @@ This element produces a [[http://jquerymobile.com/test/docs/lists/lists-divider.
    + [[./mobile_listitem.html][mobile listitem element]]
 
    + [[./list.html][list element]]
+
+   + [[http://nitrogenproject.com/demos/mobile_list][Mobile List Demos]]

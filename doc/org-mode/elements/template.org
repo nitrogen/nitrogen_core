@@ -1,11 +1,11 @@
-# vim: sw=3 ts=3 ft=org
+# vim: et sw=3 ts=3 ft=org
 
 #+TITLE: Template Element Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Rusty Klophaus (@rustyio)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
 * Template Element - #template {}
 
@@ -13,13 +13,23 @@
   The template element allows you to specify html chrome for your page (header, footer, columns, etc.)
   while using a special placeholder syntax to call back to your page or any Erlang module.
 
-  To specify a placeholder in the html template file, use the form =[[[Module:Function(Args)]]]=. 
-  Module can be any module, or can be the atom 'page' to refer to the currently Nitrogen page. 
+  To specify a placeholder in the html template file, use the form:
+  
+#+BEGIN_SRC erlang
+  [[[Module:Function(Args)]]]
+#+END_SRC
+
+  Module can be any module, or can be the atom 'page' to refer to the0 currently Nitrogen page. 
   The function must return either one or more Nitrogen elements, an Erlang string, or 
   an Erlang binary.
 
-  If the args are variables such as MyArg1 (as opposed to a static value such as 5), then the template element
-  will look in its bindings property for a matching element.
+  If the args are identifed like Erlang variables (capitalized first letter)
+  such as MyArg1 (as opposed to a static value such as 5), then the template
+  element will look in its bindings property for a matching element.
+
+  It's also possible to specify alias module references to other modules. For example,
+  the default module alias is actually =[{page, wf:page_module()}]=, which basically means
+  "If you encounter page:function(Args), replace =page= with the current page's module." 
 
 ** Usage
 
@@ -33,13 +43,15 @@
 ** Attributes
 
    + file - (/String/) :: Path to an html template file, relative
-        to the directory from which Erlang was started.
+      to the directory from which Erlang was started.
 
    + bindings - (/Bindings, as expected by erl\_eval/) :: A list of
-        variable bindings to be used for arguments specified in the
-        template.
+      variable bindings to be used for arguments specified in the
+      template. Example: =[{'MyArg1', "Hello"}, {'MyArg2', "World"}]=
 
-	Example value: =[{'MyArg1', "Hello"}, {'MyArg2', "World"}]=
+   + module\_aliases - (/proplist of {alias, actual\_module} pairs/) :: When 
+      =alias= is encountered as the module of a Module:Function(Args) call,
+      replace =alias= with =actual_module=.
 
 ** See Also
 

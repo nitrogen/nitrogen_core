@@ -1,26 +1,37 @@
-# vim: sw=3 ts=3 ft=org
+# vim: sw=2 ts=2 ft=org
 
 #+TITLE: Base Action Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Rusty Klophaus (@rustyio)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][Elements]] | [[file:../actions.org][*Actions*]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][Elements]] | [[file:../actions.org][*Actions*]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
 * Base Action
 
-  In object-oriented parlance, all Nitrogen actions are subclasses
-  of the base actions. This means that all Nitrogen elements can
-  use the attributes listed below.
+  In object-oriented parlance, all Nitrogen actions are subclasses of the base
+  actions. This means that all Nitrogen elements can use the attributes listed
+  below.
 
 ** Attributes
 
-   + module - (/atom/) :: The module containing the logic for this action. Set automatically.
+  + module - (/atom/) :: The module containing the logic for this action. Set 
+    automatically.
 
-   + trigger - (/atom/) :: The id of the Nitrogen element that will trigger this action. Set automatically.
+  + trigger - (/atom/) :: The id of the Nitrogen element that will trigger
+    this action. Set automatically.
 
-   + target - (/atom/) :: The id of the Nitrogen element to be referenced by obj('me'). Set automatically.
+  + target - (/atom/) :: The id of the Nitrogen element to be referenced by
+    =obj('me')=. Set automatically.
 
-   + actions - (/list af actions/) :: A list of actions grouped within this action.
+  + actions - (/list af actions/) :: A list of actions grouped within this
+    action.
 
-   + show\_if - (/boolean/) :: If set to true, this action will be rendered. Otherwise, it will not.
+  + show\_if - (/boolean/) :: If set to true, this action will be rendered.
+    Otherwise, it will not.
+
+  + dependency\_js - (/URL string/) :: If this attribute is set, before this
+    script is run, the specified URL script will be downloaded and executed.
+    This is useful when an action or element will not function without first
+    downloading a necessary jQuery plugin or otherwise to the page, but it saves
+    in bandwidth since it doesn't download the dependency until it's needed.

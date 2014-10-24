@@ -4,7 +4,7 @@
 % See MIT-LICENSE for licensing information.
 
 -module (default_config_handler).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -behaviour (config_handler).
 -export ([
     init/2, 

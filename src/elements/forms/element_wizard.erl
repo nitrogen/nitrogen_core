@@ -1,19 +1,24 @@
 % vim: sw=4 ts=4 et ft=erlang
 % Nitrogen Web Framework for Erlang
-% Copyright (c) 2008-2009 Rusty Klophaus
+% Copyright (c) 2008-2013 Rusty Klophaus/Jesse Gumm
 % See MIT-LICENSE for licensing information.
 
 -module (element_wizard).
--include ("wf.hrl").
--compile(export_all).
-
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1,
+    event/1,
+    next_button_ids/2
+]).
+        
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, wizard).
 
+-spec render_element(#wizard{}) -> body().
 render_element(Record = #wizard{}) -> 
 	% Set up callbacks...
 	Tag = Record#wizard.tag,
-
-	%ControlID = wf:temp_id(),
 
 	% Set up steps...
 	wf:assert(Record#wizard.id /= undefined, wizard_needs_a_proper_name),
@@ -35,11 +40,11 @@ render_element(Record = #wizard{}) ->
 		IsLast = (N == StepCount),
 
 		ButtonRow = fun(TopOrBot) ->
-			#panel{class=[wizard_buttons,combine(TopOrBot,wizard_buttons)],body=[
+			#panel{class=[wizard_buttons,wf:to_list([TopOrBot,wizard_buttons])],body=[
 				#singlerow{cells=[
 					#tablecell{class=wizard_buttons_back,body=[
 						#button{
-							id=combine(TopOrBot,back,N),
+							id=button_id(TopOrBot,back,N),
 							show_if=(not IsFirst),
 							text=Record#wizard.back,
 							postback={back, N, StepIDs},
@@ -48,14 +53,14 @@ render_element(Record = #wizard{}) ->
 					]},
 					#tablecell{class=wizard_buttons_next,body=[
 						#button{
-							id=combine(TopOrBot,next,N), 
+							id=button_id(TopOrBot,next,N), 
 							show_if=(not IsLast), 
 							text=Record#wizard.next, 
 							postback={next, N, StepIDs}, 
 							delegate=?MODULE 
 						},
 						#button{
-							id=combine(TopOrBot,finish,N), 
+							id=button_id(TopOrBot,finish,N), 
 							show_if=IsLast, 
 							text=Record#wizard.finish, 
 							postback={finish, Tag}, 
@@ -69,14 +74,10 @@ render_element(Record = #wizard{}) ->
 		#panel { id=StepID, style="display: none;", body=[
 			#panel{class=wizard_title,body=[
 				#span{class=wizard_title_text,text=StepTitle},
-				#span{class=wizard_progress,show_if=Record#wizard.show_progress,text=[
-					"(",
-					Record#wizard.progress_step,
-					wf:to_list(N),
-					Record#wizard.progress_of,
-					wf:to_list(StepCount),
-					")"
-				]}
+                ?WF_IF(Record#wizard.show_progress, #span{
+                    class=wizard_progress,
+                    text=wf:f(Record#wizard.progress_text,[N, StepCount])
+                })
 			]},
 			ButtonRow(top),
 			#panel { class=wizard_body, body=StepBody },
@@ -87,6 +88,7 @@ render_element(Record = #wizard{}) ->
 	% Combine the steps.
 	Terms = #panel {
 		class=[wizard,Record#wizard.class],
+        data_fields=Record#wizard.data_fields,
 		body=[F(X) || X <- StepSeq] 
 	},
 	
@@ -96,6 +98,7 @@ render_element(Record = #wizard{}) ->
 	% Render.
 	Terms.
 	
+-spec event(term()) -> ok.
 event({back, N, StepIDs}) -> 
 	wf:wire(lists:nth(N, StepIDs), #hide {}),
 	wf:wire(lists:nth(N - 1, StepIDs), #show {}),
@@ -109,12 +112,17 @@ event({next, N, StepIDs}) ->
 event({finish, Tag}) -> 
 	Delegate = wf:page_module(),
 	Delegate:wizard_event(Tag),
-	ok;
-	
-event(_) -> ok.
+	ok.
 
-combine(A, B) ->
-	wf:to_atom(wf:to_list(A) ++ "_" ++ wf:to_list(B)).
+-spec next_button_ids(Step :: integer(), NumSteps :: integer()) -> [id()].
+next_button_ids(Step, NumSteps) ->
+    NextOrFinish = ?WF_IF(Step==NumSteps,finish,next),
+    [
+        button_id(top, NextOrFinish, Step),
+        button_id(bottom, NextOrFinish, Step)
+    ].
 
-combine(A, B, Step) ->
-	wf:to_atom(wf:to_list(A) ++ "_" ++ wf:to_list(B) ++ "_" ++ wf:to_list(Step)).
+-spec button_id(TB :: top|bottom, BNF :: back|next|finish, Step :: integer()) -> id().
+button_id(TB, BNF, Step) ->
+    wf:to_atom(wf:to_list([TB,"_",BNF,"_",Step])).
+

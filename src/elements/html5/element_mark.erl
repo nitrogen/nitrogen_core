@@ -3,14 +3,22 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_mark).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, mark).
 
-render_element(Record) ->
-    wf_tags:emit_tag(mark, Record#mark.body, [
+-spec render_element(#mark{}) -> body().
+render_element(Record = #mark{}) ->
+    Text = wf_convert:html_encode(Record#mark.text, Record#mark.html_encode),
+    wf_tags:emit_tag(mark, [Text, Record#mark.body], [
         {id, Record#mark.html_id},
         {class, ["mark", Record#mark.class]},
-        {style, Record#mark.style}
+        {title, Record#mark.title},
+        {style, Record#mark.style},
+        {data_fields, Record#mark.data_fields}
     ]).

@@ -1,10 +1,10 @@
-# vim: sw=3 ts=3 ft=org
-#+TITLE: restful_submit Element
+# vim: sw=2 ts=2 ft=org
+#+TITLE: restful submit Element
 #+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
 #+AUTHOR: Steffen Panning
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
 * RESTful Submit Element #restful\_submit{}
   The restful\_submit element produces an input field of type submit.
@@ -18,11 +18,16 @@
 
 ** Attributes
 
-   + text - (/string/) :: The button's title.
+  + text - (/string/) :: The button's text.
 
-   + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
+  + body - (/Nitrogen element or list of elements/) :: Instead of using text
+    for the button label, this will allow you to embed HTML and Nitrogen
+    elements inside the button.
 
-   + html\_name - (/string/) :: the name attribute of the restful\_submit element 
+  + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
+
+  + html\_name - (/string/) :: the name attribute of the restful\_submit
+    element 
 
 ** See Also
 
@@ -47,3 +52,5 @@
    + [[./restful_reset.org][RESTful Reset]]
 
    + [[./restful_upload.org][RESTful Upload]]
+
+   + [[http://nitrogenproject.com/demos/restful][RESTful Forms Demo]]

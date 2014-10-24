@@ -4,18 +4,18 @@
 #+AUTHOR: Rusty Klophaus (@rustyio)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
-* In-Place Textarea Element - #inplace_textarea {}
+* In-Place Textarea Element - #inplace\_textarea {}
 
-  The inplace\_textarea element creates a textarea that the user can
-  edit in place.
+  The inplace\_textarea element creates a textarea that the user can edit in
+  place.
 
-  The user clicks on the label, and it is replaced with a textarea, an OK button, and a
-  Cancel button. 
+  The user clicks on the label, and it is replaced with a textarea, an OK
+  button, and a Cancel button. 
 
-  If the user clicks OK, a callback is issued to the delegate module
-  so that it can save the new text.
+  If the user clicks OK, a callback is issued to the delegate module so that it
+  can save the new text.
 
 ** Usage
 
@@ -29,28 +29,27 @@
 
    + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
 
-   + start\_mode - (/Atom, 'edit' or 'view'/) :: Set whether the textarea should start in edit mode or view mode.
+   + start\_mode - (/Atom, 'edit' or 'view'/) :: Set whether the textarea
+      should start in edit mode or view mode.
 
-   + validators - (/Validator, or list of validators./) :: Validators to apply to the textarea.
+   + validators - (/Validator, or list of validators./) :: Validators to apply
+      to the textarea.
 
    + tag - (/Erlang term/) :: See the delegate attribute for details.
 
 ** Callbacks
 
-*** inplace\_textarea_event(Tag, Value)
+   + inplace\_textarea\_event(Tag, Value) :: Called when the user presses the
+      OK button. Tag is specified in the 'tag' attribute, above.  Value is the
+      current value of the textarea. This callback function should process the
+      value as necessary, and must return either the value itself, or a new value
+      that will be sent back to the page and set as the value of the textarea.
 
-    Called when the user presses the OK button. Tag is specified in
-    the 'tag' attribute, above.  Value is the current value of the
-    textarea. This callback function should process the value as
-    necessary, and must return either the value itself, or a new value
-    that will be sent back to the page and set as the value of the
-    textarea.
-
-** See Also
+** See Also 
 
    + [[./base.html][base element]]
 
-   + [[./inplace_textbox.html][inplace_textbox element]]
+   + [[./inplace_textbox.html][inplace\_textbox element]]
 
    + [[./inplace.html][inplace element]]
 

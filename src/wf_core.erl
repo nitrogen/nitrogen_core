@@ -1,8 +1,13 @@
 % vim: sw=4 ts=4 et
 -module (wf_core).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -export ([
-    run/0
+    run/0,
+    init_websocket/1,
+    run_websocket/1,
+    run_websocket_comet/0,
+    run_websocket_crash/3,
+    serialize_context/0
 ]).
 
 % nitrogen_core - 
@@ -12,36 +17,71 @@
 % Erlang Web, ErlyWeb, etc.
 
 run() ->
-    Request = wf_context:request_bridge(),
-    Response = wf_context:response_bridge(),
+    Bridge = wf_context:bridge(),
     try 
-        case Request:error() of
+        case Bridge:error() of
             none -> run_catched();
             Other -> 
                 Message = wf:f("Errors: ~p~n", [Other]),
-                Response1 = Response:data(Message),
-                Response1:build_response()
+                Bridge1 = Bridge:set_response_data(Message),
+                Bridge1:build_response()
         end
-    catch Type : Error -> 
-        ?LOG("~p~n", [{error, Type, Error, erlang:get_stacktrace()}]),
-        ErrResponse = Response:status_code(500),
-        ErrResponse1 = ErrResponse:data("Internal Server Error"),
-        ErrResponse1:build_response()
+    catch
+        exit:normal ->
+            exit(normal);
+        Type : Error -> 
+            run_crash(Bridge, Type, Error, erlang:get_stacktrace())
     end.
 
+    
+
+run_crash(Bridge, Type, Error, Stacktrace) ->
+    try
+        case wf_context:type() of
+            first_request       -> run_crashed_first_request(Type, Error, Stacktrace);
+            static_file         -> run_crashed_first_request(Type, Error, Stacktrace);
+            postback_request    -> run_crashed_postback_request(Type, Error, Stacktrace);
+            _                   -> run_crashed_first_request(Type, Error, Stacktrace)
+        end,
+        finish_dynamic_request()
+    catch
+        exit:normal ->
+            exit(normal);
+        Type2:Error2 ->
+            ?LOG("~p~n", [{error, Type2, Error2, erlang:get_stacktrace()}]),
+            Bridge1 = sbw:set_status_code(500, Bridge),
+            Bridge2 = sbw:set_response_data("Internal Server Error", Bridge1),
+            sbw:build_response(Bridge2)
+    end.
+
+init_websocket(SerializedPageContext) ->
+    deserialize_websocket_context(SerializedPageContext),
+    wf_context:async_mode({websocket, self()}),
+    call_init_on_handlers().
+
+run_websocket_crash(Type, Error, Stacktrace) ->
+    try
+        crash_handler:postback_request(Type, Error, Stacktrace),
+        run_websocket_comet()
+    catch Type2:Error2 ->
+        ?LOG("~p~n", [{error_in_crash_handler, Type2, Error2, erlang:get_stacktrace()}]),
+        "Nitrogen.$console_log('crash_handler crashed in websocket');"
+    end.
+
+run_websocket_comet() ->
+    wf_context:type(postback_websocket),
+    _ToSend = finish_websocket_request().
+
+run_websocket(Data) ->
+    wf_event:update_context_with_websocket_event(Data),
+    query_handler:set_websocket_params(Data),
+    run_postback_request(),
+    _ToSend = finish_websocket_request().
+
 run_catched() ->
-    % Get the handlers from querystring, if they exist...
-    deserialize_context(),
-
-    % Initialize all handlers...
+    deserialize_request_context(),
     call_init_on_handlers(),
-
-    % Deserialize the event if available...
-    wf_event:update_context_with_event(),
-
-    % TODO - Check for access
-
-    % Call the module...
+    wf_event:update_context_with_event(wf:q(eventContext)),
     case wf_context:type() of
         first_request    -> 
             run_first_request(), 
@@ -54,41 +94,34 @@ run_catched() ->
     end.
 
 finish_dynamic_request() ->
-    % Get elements and actions...
     Elements = wf_context:data(),
     wf_context:clear_data(),
+    {ok, Html} = wf_render_elements:render_elements(Elements),
+	{ok, Javascript} = wf_render_actions:render_action_queue(),
 
-    Actions = wf_context:actions(),
-    wf_context:clear_actions(),
-
-    % Render...
-    {ok, Html1, Javascript1} = wf_render:render(Elements, Actions, undefined, undefined, undefined),
-
-    % Update flash and render
-    % Has to be here because has_flash state is not set before render
-    element_flash:update(),	
-    ActionsFlash = wf_context:actions(),
-    wf_context:clear_actions(),
-    {ok, Html2, Javascript2} = wf_render:render([], ActionsFlash, undefined, undefined, undefined),
-
-%%	%% Like the flash stuff, we have to load the deferred actions last, since
-	%% in an offensively non-functional way, some elements and actions will be
-	%% deferred when rendered above
-%%	ActionsDeferred = wf_context:deferred(),
-%%	wf_contxt:clear_deferred(),
-%%	{ok, _, Javascript3} = wf_render:render([], ActionsDeferred, undefined, undefined, undefined),
-
-
-    % Call finish on all handlers.
     call_finish_on_handlers(),
 
-    % Create Javascript to set the state...
     StateScript = serialize_context(),
-    JavascriptFinal = [StateScript, Javascript1 ++ Javascript2],
+    JavascriptFinal = [StateScript, Javascript],
+
     case wf_context:type() of
-        first_request       -> build_first_response(Html1 ++ Html2, JavascriptFinal);
-        postback_request    -> build_postback_response(JavascriptFinal)
+        first_request       -> build_first_response(Html, JavascriptFinal);
+        postback_request    -> build_postback_response(JavascriptFinal);
+        _                   -> build_first_response(Html, JavascriptFinal)
     end.
+
+finish_websocket_request() ->
+    ContextData = wf_context:data(),
+    wf_context:clear_data(),
+    finish_websocket_request(ContextData).
+
+finish_websocket_request(Empty)
+        when Empty==undefined; Empty==[]; Empty == <<>> ->
+    {ok, Javascript} = wf_render_actions:render_action_queue(),
+    StateScript = serialize_context(),
+    [StateScript, Javascript];
+finish_websocket_request(Data) ->
+    Data.
 
 finish_static_request() ->
     Path = wf_context:path_info(),
@@ -104,45 +137,34 @@ serialize_context() ->
     Page = wf_context:page_context(),
 
     % Get handler context, but don't serialize the config.
-    Handlers = [X#handler_context { config=undefined } || X <- wf_context:handlers()],
-    SerializedContextState = wf_pickle:pickle([Page, Handlers]),
+    StateHandler = wf_context:handler(state_handler),
+    SerializedContextState = wf_pickle:pickle([Page, StateHandler]),
     wf:f("Nitrogen.$set_param('pageContext', '~s');~n", [SerializedContextState]).
 
-% deserialize_context_state/1 -
+deserialize_request_context() ->
+    Bridge = wf_context:bridge(),
+    SerializedPageContext = sbw:post_param(<<"pageContext">>, Bridge),
+    deserialize_context(SerializedPageContext).
+
+deserialize_websocket_context(SerializedPageContext) ->
+    deserialize_context(SerializedPageContext).
+
+
+% deserialize_context/1 -
 % Updates the context with values that were stored
 % in the browser by serialize_context_state/1.
-deserialize_context() ->
-    RequestBridge = wf_context:request_bridge(),	
-    Params = RequestBridge:post_params(),
-
-    % Save the old handles...
-    OldHandlers = wf_context:handlers(),
+deserialize_context(SerializedPageContext) ->
+    OldStateHandler = wf_context:handler(state_handler),
 
     % Deserialize page_context and handler_list if available...
-    SerializedPageContext = proplists:get_value("pageContext", Params),
-    [Page, Handlers] = case SerializedPageContext of
-        undefined -> [wf_context:page_context(), wf_context:handlers()];
+    [PageContext, NewStateHandler] = case SerializedPageContext of
+        undefined -> [wf_context:page_context(), OldStateHandler];
         Other -> wf_pickle:depickle(Other)
     end,
 
-    % Config is not serialized, so copy config from old handler list to new
-    % handler list.
-    Handlers1 = copy_handler_config(OldHandlers, Handlers),
-
-    % Create a new context...
-    wf_context:page_context(Page),
-    wf_context:handlers(Handlers1),
-
-    % Return the new context...
+    wf_context:page_context(PageContext),
+    wf_context:restore_handler(NewStateHandler),
     ok.
-
-copy_handler_config([], []) -> [];
-copy_handler_config([H1|T1], [H2|T2]) when H1#handler_context.name == H2#handler_context.name ->
-    [H2#handler_context { config=H1#handler_context.config }|copy_handler_config(T1, T2)];
-copy_handler_config(L1, L2) -> 
-    ?PRINT(L1),
-    ?PRINT(L2),
-    throw({?MODULE, handler_list_has_changed}).
 
 %%% SET UP AND TEAR DOWN HANDLERS %%%
 
@@ -169,56 +191,68 @@ call_finish_on_handlers() ->
 %%% FIRST REQUEST %%%
 
 run_first_request() ->
-    % Some values...
     Module = wf_context:event_module(),
     {module, Module} = code:ensure_loaded(Module),
-    Data = Module:main(),
+    EntryPoint = wf_context:entry_point(),
+    Data = run_entry_point(Module, EntryPoint),
     wf_context:data(Data).
 
+run_entry_point(_Module, Fun) when is_function(Fun, 0) ->
+    Fun();
+run_entry_point(Module, Fun) when is_atom(Fun) ->
+    Module:Fun().
+
+run_crashed_first_request(Type, Error, Stacktrace) ->
+    Data = crash_handler:first_request(Type, Error, Stacktrace),
+    wf_context:data(Data).
 
 %%% POSTBACK REQUEST %%%
 
 run_postback_request() ->
-    % Some values...
     Module = wf_context:event_module(),
     Tag = wf_context:event_tag(),
-
-    % Validate...
+    HandleInvalid = wf_context:event_handle_invalid(),
     {ok, IsValid} = wf_validation:validate(),
+    call_postback_event(IsValid, HandleInvalid, Module, Tag).
 
-    % Call the event...
-    case IsValid of
-        true -> Module:event(Tag);
-        false -> ok
-    end.
+call_postback_event(_Valid=true, _HandleInvalid, Module, Tag) ->
+    Module:event(Tag);
+call_postback_event(_Valid=false, _HandleInvalid=true, Module, Tag) ->
+    Module:event_invalid(Tag);
+call_postback_event(_Valid, _HandleInvalid, _, _) ->
+    ok.
+
+run_crashed_postback_request(Type, Error, Stacktrace) ->
+    crash_handler:postback_request(Type, Error, Stacktrace).
 
 %%% BUILD THE RESPONSE %%%
 
 build_static_file_response(Path) ->
-    Response = wf_context:response_bridge(),
-    Response1 = Response:file(Path),
-    Response1:build_response().
+    Bridge = wf_context:bridge(),
+    Bridge1 = sbw:set_response_file(Path, Bridge),
+    sbw:build_response(Bridge1).
 
 build_first_response(Html, Script) ->
     % Update the output with any script...
     Html1 = replace_script(Script, Html),
+    Html2 = unicode:characters_to_binary(Html1),
 
     % Update the response bridge and return.
-    Response = wf_context:response_bridge(),
-    Response1 = Response:data(Html1),
-    Response1:build_response().
+    Bridge = wf_context:bridge(),
+    Bridge1 = sbw:set_response_data(Html2, Bridge),
+    sbw:build_response(Bridge1).
 
 build_postback_response(Script) ->
     % Update the response bridge and return.
-    Response = wf_context:response_bridge(),
-    % TODO - does this need to be flattened?
-    Response1 = Response:data(lists:flatten(Script)),
-    Response1:build_response().
+    Bridge = wf_context:bridge(),
+    Script1 = unicode:characters_to_binary(Script),
+    Bridge1 = sbw:set_response_data(Script1, Bridge),
+    sbw:build_response(Bridge1).
 
 replace_script(_,Html) when ?IS_STRING(Html) -> Html;
 replace_script(Script, [script|T]) -> [Script|T];
 %% For the mobile_script, it's necessary that it's inside the data-role attr,
 %% and therefore must be escaped before it can be sent to the browser
-replace_script(Script, [mobile_script|T]) -> [wf:html_encode(lists:flatten(Script))|T];
+replace_script(Script, [mobile_script|T]) -> [wf:html_encode(Script)|T];
 replace_script(Script, [H|T]) -> [replace_script(Script, H)|replace_script(Script, T)];
 replace_script(_, Other) -> Other.

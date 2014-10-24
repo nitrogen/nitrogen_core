@@ -1,6 +1,6 @@
 % vim: sw=4 ts=4 et ft=erlang
 % Nitrogen Web Framework for Erlang
-% Copyright (c) 2008-2010 Rusty Klophaus
+% Copyright (c) 2008-2013 Rusty Klophaus
 % See MIT-LICENSE for licensing information.
 
 -module (wf_utils).
@@ -16,7 +16,10 @@
     get_elementbase/1, get_actionbase/1, get_validatorbase/1, replace_with_base/2,
     indexof/2,
     replace_field/4,
-    get_field/3
+    get_field/3,
+    copy_fields/2,
+    is_iolist_empty/1,
+    has_behaviour/2
 ]).
 
 -define(COPY_TO_BASERECORD(Name, Size, Record),
@@ -25,7 +28,10 @@
 %%% FORMAT %%%
 
 f(S) -> f(S, []).
-f(S, Args) -> lists:flatten(io_lib:format(S, Args)).
+f(S, Args) when is_binary(S) ->
+	iolist_to_binary(io_lib:format(S, Args));
+f(S, Args) when is_list(S) ->
+	lists:flatten(io_lib:format(S,Args)).
 
 
 %%% IDS %%%
@@ -119,6 +125,53 @@ replace_with_base(Base, Record) ->
     RecordEnd = lists:sublist(tuple_to_list(Record), Start, Len),
     list_to_tuple([RecordType] ++ BaseMiddle ++ RecordEnd).
 
+%%% COPY ELEMENT FIELDS %%%
+
+-spec copy_fields(tuple(), tuple()) -> tuple().
+%% @doc Copies any fields from FromElement to ToElement if the record
+%% fields have EXACTLY the same name.
+copy_fields(FromElement, ToElement) ->
+    FromModule = element(3,FromElement),
+    ToModule = element(3,ToElement),
+    FromFieldList = FromModule:reflect(),
+    ToFieldList = ToModule:reflect(),
+
+    %% get tail because reflect() doesn't include first element (record tag)
+    FromValueList = tl(tuple_to_list(FromElement)), 
+
+    lists:foldl(fun({Field, Value}, NewElement) ->
+        case indexof(Field, ToFieldList) of
+            undefined -> NewElement;
+            Index ->
+                setelement(Index, NewElement, Value)
+        end
+
+    %% Here we use tl(tl( to ignore the first 2 fields from reflect()
+    end, ToElement, tl(tl(lists:zip(FromFieldList,FromValueList)))).
+
+%%% EMPTY LIST/BINARY CHECK
+
+-spec is_iolist_empty(iolist()) -> boolean().
+%% @doc Without flattening the whole list, this will check to make sure there
+%% exists *something* other than empty lists or binaries of length 0. It takes
+%% a list, binary, or iolist and returns true if iolist_to_binary would end up
+%% returning <<>>, but it does so by short circuiting as soon as it encounters
+%% non-empty token (atom, character, tuple, etc).
+is_iolist_empty([]) ->
+    true;
+is_iolist_empty(<<>>) ->
+    true;
+is_iolist_empty([[]|T]) ->
+    is_iolist_empty(T);
+is_iolist_empty([<<>>|T]) ->
+    is_iolist_empty(T);
+is_iolist_empty([ListH | T]) when is_list(ListH) ->
+    case is_iolist_empty(ListH) of
+        true -> is_iolist_empty(T);
+        false -> false
+    end;
+is_iolist_empty(_) -> false.
+
 %%% DEBUG %%%
 
 debug() ->
@@ -155,3 +208,16 @@ get_field(Key, Fields, Rec) ->
 		undefined -> undefined;
 		N -> element(N, Rec)
 	end.
+
+%% HAS BEHAVIOUR
+
+has_behaviour(Module, Behaviour) ->
+    try
+        Attributes = Module:module_info(attributes),
+        {behaviour, Behaviours} = lists:keyfind(behaviour, 1, Attributes),
+        lists:member(Behaviour, Behaviours)
+    catch
+        _:_ -> false
+    end.
+
+

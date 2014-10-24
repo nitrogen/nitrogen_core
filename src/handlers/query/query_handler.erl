@@ -4,17 +4,37 @@
 % See MIT-LICENSE for licensing information.
 
 -module (query_handler).
+-include("wf.hrl").
 -export ([
-    behaviour_info/1,
     get_value/1,
     get_values/1,
-    get_params/0
+    get_params/0,
+    set_websocket_params/1
 ]).
 
 
+-callback init(         handler_config(),
+                        handler_state()) -> {ok, handler_state()}.
+-callback finish(       handler_config(),
+                        handler_state()) -> {ok, handler_state()}.
+-callback set_websocket_params(Params :: proplist(),
+                        handler_config(),
+                        handler_state()) -> {ok, handler_state()}.
+-callback get_value(    Path :: string() | atom(),
+                        handler_config(),
+                        handler_state()) -> Value :: string() | binary().
+-callback get_values(   Path :: string() | atom(),
+                        handler_config(),
+                        handler_state()) -> [Value :: string()].
+-callback get_params(   handler_config(),
+                        handler_state()) -> [{Key :: string(), Value :: string()}].
+
+set_websocket_params(Params) ->
+    ok = wf_handler:call(query_handler, set_websocket_params, [Params]).
+
 % get_value(Path, State) -> Value.  Given a path, return the parameter
 % value, undefined, or throw an exception if there are too many
-% matches.
+% matches. 
 get_value(Path) ->
     _Value = wf_handler:call_readonly(query_handler, get_value, [Path]).
 
@@ -25,13 +45,3 @@ get_values(Path) ->
 
 get_params() ->
     wf_handler:call_readonly(query_handler, get_params, []).
-
-behaviour_info(callbacks) -> [
-    {init, 2},      
-    {finish, 2},
-    {get_value, 3},
-    {get_values, 3},
-	{get_params, 2}
-];
-
-behaviour_info(_) -> undefined.

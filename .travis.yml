@@ -1,0 +1,14 @@
+language: erlang
+script: "make travis"
+otp_release:
+  - R16B02
+  - R16B01
+  - R16B
+  - R15B03
+  - R15B02
+  - R15B01
+  - R15B
+before_script:
+  - sudo service postgresql stop
+  - sudo service mysql stop
+  - sudo service memcached stop

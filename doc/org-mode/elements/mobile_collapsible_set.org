@@ -4,11 +4,15 @@
 #+AUTHOR: Jesse Gumm (@jessegumm)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
-* Mobile Collapsible Element - #mobile_collapsible {}
+* Mobile Collapsible Set Element - #mobile\_collapsible\_set {}
 
-This element produces a [[http://jquerymobile.com/test/docs/content/content-collapsible.html][jQuery Mobile Collapsible Content]] Element
+  This element produces a
+  [[http://api.jquerymobile.com/collapsible-set/][Mobile Collapsible Set]]
+  Element, which groups together =#collapsible= elements into a single unified
+  structure.  The resulting collapsibles will then close any open collapsibles
+  when another within the same group is opened.
 
 ** Usage
 
@@ -25,9 +29,9 @@ This element produces a [[http://jquerymobile.com/test/docs/content/content-coll
 
 ** Attributes
    
-   + header_theme - (/atom/) :: Set the jQuery Mobile swatch letter for the contained #collapsible{} elements' header.
+   + header\_theme - (/atom/) :: Set the jQuery Mobile swatch letter for the contained #collapsible{} elements' header.
 
-   + content_theme - (/atom/) :: Set the jQuery Mobile swatch letter for the contained #collapsible{} elements' content.
+   + content\_theme - (/atom/) :: Set the jQuery Mobile swatch letter for the contained #collapsible{} elements' content.
    
    + mini - (/boolean/) :: Set to true to render the contained #collapsible{} elements in a smaller, more compact form.
 
@@ -37,4 +41,6 @@ This element produces a [[http://jquerymobile.com/test/docs/content/content-coll
 
    + [[./base.html][base element]]
 
-   + [[./mobile_collapsible.html][mobile collapsible element]]
+   + [[./mobile_collapsible.html][mobile\_collapsible element]]
+
+   + [[http://nitrogenproject.com/demos/mobile_collapsibles][Mobile Collapsible Demos]]

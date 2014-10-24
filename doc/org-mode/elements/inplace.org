@@ -5,7 +5,7 @@
 #+AUTHOR: Milan Svoboda
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
 * General In-Place Element - #inplace {}
 
@@ -46,19 +46,16 @@
 
 ** Callbacks
 
-*** inplace\_event(Tag, Value)
-
-    Called when the user presses the OK button. Tag is specified in
-    the 'tag' attribute, above.  Value is the current value of the
-    textbox. This callback function should process the value as
-    necessary, and must return either the value itself, or a new value
-    that will be sent back to the page and set as the value of the
-    textbox.
+ + inplace\_event(Tag, Value) :: Called when the user presses the OK button.
+	Tag is specified in the 'tag' attribute, above.  Value is the current value
+	of the textbox. This callback function should process the value as
+	necessary, and must return either the value itself, or a new value that will
+	be sent back to the page and set as the value of the textbox.
 
 ** See Also
 
    + [[./base.html][base element]]
 
-   + [[./inplace_textarea.html][inplace_textarea element]]
+   + [[./inplace_textarea.html][inplace\_textarea element]]
 
-   + [[./inplace_textbox.html][inplace_textbox element]]
+   + [[./inplace_textbox.html][inplace\_textbox element]]

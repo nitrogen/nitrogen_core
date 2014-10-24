@@ -4,13 +4,27 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_inplace).
--include_lib("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1,
+    event/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, inplace).
 
-render_element(#inplace{text=Text, tag=Tag, delegate=Delegate, edit=Edit,
-		view=View, class=Class, style=Style, start_mode=StartMode}) ->
+-spec render_element(#inplace{}) -> body().
+render_element(#inplace{
+        text=Text,
+        tag=Tag,
+        delegate=Delegate,
+        edit=Edit,
+		view=View,
+        class=Class,
+        style=Style,
+        start_mode=StartMode,
+        data_fields=DataFields}) ->
 
 	OKButtonID = wf:temp_id(),
 	CancelButtonID = wf:temp_id(),
@@ -80,22 +94,22 @@ render_element(#inplace{text=Text, tag=Tag, delegate=Delegate, edit=Edit,
 
 	% Create the main panel...
 
-	#panel { class=[inplace, Class], style=Style, body=[
-			#panel { id=ViewPanelID, class="view", body=[ View3 ], actions = [
-					#event { type=click, actions=[
-							#hide { target=ViewPanelID },
-							#show { target=EditPanelID },
-							#script { script = wf:f("objs('~s').focus(); objs('~s').select();", [EditID, EditID]) }
-						]}
-				]},
-			#panel { id=EditPanelID, class="edit", body=[
-					Edit3,
-					#button { id=OKButtonID, text="OK", delegate=?MODULE, postback=OKPostback },
-					#button { id=CancelButtonID, text="Cancel", actions = [CancelEvent#event{ type=click }] }
-				]}
-		]
-	}.
+    #panel { class=[inplace, Class], data_fields=DataFields, style=Style, body=[
+        #panel { id=ViewPanelID, class="view", body=[ View3 ], actions = [
+            #event { type=click, actions=[
+                #hide { target=ViewPanelID },
+                #show { target=EditPanelID },
+                #script { script = wf:f("objs('~s').focus(); objs('~s').select();", [EditID, EditID]) }
+            ]}
+        ]},
+        #panel { id=EditPanelID, class="edit", body=[
+            Edit3,
+            #button { id=OKButtonID, text="OK", delegate=?MODULE, postback=OKPostback },
+            #button { id=CancelButtonID, text="Cancel", actions = [CancelEvent#event{ type=click }] }
+        ]}
+    ]}.
 
+-spec event(any()) -> ok.
 event({ok, Delegate, {ViewPanelID, ViewID, EditPanelID, EditID}, Tag}) ->
 	Module = wf:coalesce([Delegate, wf:page_module()]),
 	Value = Module:inplace_event(Tag, string:strip(wf:q(EditID))),

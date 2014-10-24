@@ -4,13 +4,9 @@
 % See MIT-LICENSE for licensing information.
 
 -module (security_handler).
--export ([
-    behaviour_info/1
-]).
+-include("wf.hrl").
 
-behaviour_info(callbacks) -> [
-    {init, 2},      
-    {finish, 2}
-];
-
-behaviour_info(_) -> undefined.
+-callback init(         handler_config(),
+                        handler_state()) -> {ok, handler_state()}.
+-callback finish(       handler_config(),
+                        handler_state()) -> {ok, handler_state()}.

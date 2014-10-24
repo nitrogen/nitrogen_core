@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Custom Server-Side Validator Element"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-18 03:23:22 CDT"/>
+<meta name="generated" content="2014-09-15 02:12:26 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -94,7 +94,7 @@
 <div id="content">
 <h1 class="title">Custom Server-Side Validator Element</h1>
 
-<p><a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html">Elements</a> | <a href="../actions.html">Actions</a> | <a href="../validators.html"><b>Validators</b></a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html">Elements</a> | <a href="../actions.html">Actions</a> | <a href="../validators.html"><b>Validators</b></a> | <a href="../handlers.html">Handlers</a> | <a href="../config.html">Configuration Options</a> | <a href="../plugins.html">Plugins</a> | <a href="../jquery_mobile_integration.html">Mobile</a> | <a href="../troubleshooting.html">Troubleshooting</a> | <a href="../about.html">About</a>
 </p>
 
 
@@ -113,7 +113,8 @@
 
 
 <p>
-  Attach a custom validator, written in Erlang, to an element. The validator will be executed on the server during a postback.
+  Attach a custom validator, written in Erlang, to an element. The validator
+  will be executed on the server during a postback.
 </p>
 
 </div>
@@ -131,12 +132,15 @@
 <span class="org-variable-name">F</span> = <span class="org-keyword">fun</span>(<span class="org-variable-name">Tag</span>, <span class="org-variable-name">Value</span>) -&gt;
   <span class="org-keyword">case</span> <span class="org-variable-name">Tag</span> <span class="org-keyword">of</span>
     upper -&gt;<span class="org-function-name"> </span><span class="org-type">string</span>:<span class="org-type">to_upper</span>(<span class="org-variable-name">Value</span>) == <span class="org-variable-name">Value</span>;
-    lower -&gt;<span class="org-function-name"> </span><span class="org-type">string</span>:<span class="org-type">to_upper</span>(<span class="org-variable-name">Value</span>) == <span class="org-variable-name">Value</span>
+    lower -&gt;<span class="org-function-name"> </span><span class="org-type">string</span>:<span class="org-type">to_lower</span>(<span class="org-variable-name">Value</span>) == <span class="org-variable-name">Value</span>
   <span class="org-keyword">end</span>
 <span class="org-keyword">end</span>,
 
 <span class="org-comment-delimiter">% </span><span class="org-comment">Wire the validator in upper case mode...</span>
 <span class="org-type">wf</span>:<span class="org-type">wire</span>(<span class="org-variable-name">ButtonID</span>, <span class="org-variable-name">TextBoxID</span>, #<span class="org-type">validate</span> { validators=[
+  <span class="org-comment-delimiter">%% </span><span class="org-comment">If we wanted to validate lowercase, we could change</span>
+  <span class="org-comment-delimiter">%% </span><span class="org-comment">tag to 'lower' and it would execute the 'lower' clause</span>
+  <span class="org-comment-delimiter">%% </span><span class="org-comment">in the case statement above.</span>
   #<span class="org-type">custom</span> { text=<span class="org-string">"Must be uppercase"</span>, function=<span class="org-variable-name">F</span>, tag=upper }
 ]})
 </pre>
@@ -154,13 +158,39 @@
 <dl>
 <dt>text - (<i>string</i>)</dt><dd>The text to display if validation fails.
 
-</dd>
-<dt>function - (<i>fun</i>)</dt><dd>An Erlang function that returns true if the value is valid, false if invalid. &lt;br&gt;fun(Tag, Value) -&gt; 'true' or 'false'
+<dl>
+<dt>function - (<i>fun</i>)</dt><dd>An Erlang function that returns true if the value is
+                valid, false if invalid. (<code>fun(Tag, Value) -&gt; true | false</code>)
 
 </dd>
-<dt>tag - (<i>Erlang term</i>)</dt><dd>Tag value is passed into the custom validation function.
+<dt>tag - (<i>Erlang term</i>)</dt><dd>Tag value is passed into the custom validation
+                function.
 </dd>
 </dl>
+
+</dd>
+</dl>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3"></span> See Also</h3>
+<div class="outline-text-3" id="text-1-3">
+
+
+<ul>
+<li><a href="./js_custom.html">JS Custom Action (client side)</a>
+
+</li>
+<li><a href="../actions/validate.html">Validate Action</a>
+
+</li>
+<li><a href="http://nitrogenproject.com/demos/validation">Validation Demos</a>
+</li>
+</ul>
 
 </div>
 </div>
@@ -168,7 +198,7 @@
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-18 03:23:22 CDT</p>
+<p class="date">Date: 2014-09-15 02:12:26 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

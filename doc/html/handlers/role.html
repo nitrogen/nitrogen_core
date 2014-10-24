@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Role Handler"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2012-10-18 03:24:18 CDT"/>
+<meta name="generated" content="2014-09-15 02:12:42 CDT"/>
 <meta name="author" content="Jesse Gumm (@jessegumm)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -94,7 +94,7 @@
 <div id="content">
 <h1 class="title">Role Handler</h1>
 
-<p><a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html">Elements</a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html"><b>Handlers</b></a> | <a href="../config.html">Configuration Options</a> | <a href="../about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="../index.html">Getting Started</a> | <a href="../api.html">API</a> | <a href="../elements.html">Elements</a> | <a href="../actions.html">Actions</a> | <a href="../validators.html">Validators</a> | <a href="../handlers.html"><b>Handlers</b></a> | <a href="../config.html">Configuration Options</a> | <a href="../plugins.html">Plugins</a> | <a href="../jquery_mobile_integration.html">Mobile</a> | <a href="../troubleshooting.html">Troubleshooting</a> | <a href="../about.html">About</a>
 </p>
 
 
@@ -238,7 +238,7 @@
 </div>
 
 <div id="outline-container-1-1-6" class="outline-5">
-<h5 id="sec-1-1-6"><span class="section-number-5"></span> = clear<sub>all</sub>(Config, State)=</h5>
+<h5 id="sec-1-1-6"><span class="section-number-5"></span> = clear_all(Config, State)=</h5>
 <div class="outline-text-5" id="text-1-1-6">
 
 
@@ -279,17 +279,17 @@ Here is the complete text of the default role handler
 ]).
 <span class="org-preprocessor">-define</span>(<span class="org-variable-name">KEY</span>, {default_role_handler, roles}).
 
-<span class="org-function-name">init</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">init</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     {ok, <span class="org-variable-name">State</span>}.
 
-<span class="org-function-name">finish</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">finish</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     {ok, <span class="org-variable-name">State</span>}.
 
-<span class="org-function-name">get_has_role</span>(<span class="org-variable-name">Role</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">_State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">get_has_role</span>(<span class="org-variable-name">Role</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">_State</span>) -&gt;
     <span class="org-variable-name">Roles</span> = <span class="org-type">wf</span>:<span class="org-type">session_default</span>(?<span class="org-constant">KEY</span>, []),
     <span class="org-type">lists</span>:<span class="org-type">member</span>(<span class="org-variable-name">Role</span>, <span class="org-variable-name">Roles</span>).
 
-<span class="org-function-name">set_has_role</span>(<span class="org-variable-name">Role</span>, <span class="org-variable-name">IsInRole</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">set_has_role</span>(<span class="org-variable-name">Role</span>, <span class="org-variable-name">IsInRole</span>, <span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     <span class="org-variable-name">Roles</span> = <span class="org-type">wf</span>:<span class="org-type">session_default</span>(?<span class="org-constant">KEY</span>, []),
     <span class="org-variable-name">Roles1</span> = <span class="org-variable-name">Roles</span> -- [<span class="org-variable-name">Role</span>],
     <span class="org-keyword">case</span> <span class="org-variable-name">IsInRole</span> <span class="org-keyword">of</span>
@@ -298,10 +298,10 @@ Here is the complete text of the default role handler
     <span class="org-keyword">end</span>,
     {ok, <span class="org-variable-name">State</span>}.
 
-<span class="org-function-name">get_roles</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">_State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">get_roles</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">_State</span>) -&gt;
     <span class="org-type">wf</span>:<span class="org-type">session_default</span>(?<span class="org-constant">KEY</span>, []).
 
-<span class="org-function-name">clear_all</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
+<span class="org-erlang-font-lock-exported-function-name">clear_all</span>(<span class="org-variable-name">_Config</span>, <span class="org-variable-name">State</span>) -&gt;
     <span class="org-type">wf</span>:<span class="org-type">session</span>(?<span class="org-constant">KEY</span>, []),
     {ok, <span class="org-variable-name">State</span>}.
 
@@ -332,7 +332,7 @@ Here is the complete text of the default role handler
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2012-10-18 03:24:18 CDT</p>
+<p class="date">Date: 2014-09-15 02:12:42 CDT</p>
 <p class="author">Author: Jesse Gumm (@jessegumm)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

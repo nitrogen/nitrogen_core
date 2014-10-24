@@ -1,0 +1,41 @@
+# vim: sw=3 ts=3 ft=org et
+
+#+TITLE: Aside Element
+#+STYLE: <LINK href='../stylesheet.css' rel='stylesheet' type='text/css' />
+#+AUTHOR: Jesse Gumm (@jessegumm)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
+
+* Aside Element - #aside {}
+
+  Produces the HTML5 Aside element. The aside element can be used as a
+  container of information that's not necessarily part of the content, but is
+  related to the content, like a glossary of terms, or a list of relevant
+  items. We recommend reading the "About the Aside HTML Element" to understand
+  its semantics properly.
+
+** Usage
+
+#+BEGIN_SRC erlang
+   #article { body=[
+      "Here is some article content",
+      #aside{body=[
+         GlossaryOfTerms,
+         #br{},
+         RelatedArticles
+      ]}
+   ]}.
+#+END_SRC
+
+** Attributes
+
+   + body - (/Nitrogen Elements/) :: The body of the aside element.
+
+** See Also 
+
+   + [[./base.html][Base element]]
+
+   + [[./article.org][Article element]]
+   
+   + [[http://html5doctor.com/aside-revisited/][About the Aside HTML Element]]

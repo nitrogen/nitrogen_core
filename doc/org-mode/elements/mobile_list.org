@@ -4,9 +4,9 @@
 #+AUTHOR: Jesse Gumm (@jessegumm)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
-* Mobile List Element - #mobile_list {}
+* Mobile List Element - #mobile\_list {}
 
 This element produces a wrapper for [[http://jquerymobile.com/test/docs/lists/docs-lists.html][jQuery Mobile Listviews]].
 
@@ -27,7 +27,7 @@ This element produces a wrapper for [[http://jquerymobile.com/test/docs/lists/do
  
    + inset - (/boolean/) :: Whether or not to render the list inset or outset.
 
-   + body - (/string/) :: The body of the list element, generally containing only #mobile_list{} elements.
+   + body - (/string/) :: The body of the list element, generally containing only =#mobile_list{}= elements.
 
 ** See Also
 
@@ -38,3 +38,5 @@ This element produces a wrapper for [[http://jquerymobile.com/test/docs/lists/do
    + [[./mobile_listitem.html][label element]]
 
    + [[./list.html][list element]]
+
+   + [[http://nitrogenproject.com/demos/mobile_list][Mobile List Demos]]

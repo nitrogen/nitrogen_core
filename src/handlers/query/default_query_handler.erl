@@ -10,19 +10,28 @@
 
 -module (default_query_handler).
 -behaviour (query_handler).
--include_lib ("wf.hrl").
+-include ("wf.hrl").
 -export ([
     init/2, 
     finish/2,
+    set_websocket_params/3,
     get_value/3,
     get_values/3,
     get_params/2
 ]).
 
+-record(state, {request=[], websocket=[]}).
+
+%% TODO: It's worth considering reworking this page to use simple_bridge for
+%% all the query and post parameter evaluation, rather than reproducing a
+%% sub-set of the functionality here. This, however, does more than the
+%% typicaly query-string evaluation, as the normalized paths include all
+%% possible element ids.  Something to consider.
+
 init(_Config, _State) -> 
     % Get query params and post params
     % from the request bridge...
-    RequestBridge = wf_context:request_bridge(),
+    RequestBridge = wf_context:bridge(),
     QueryParams = RequestBridge:query_params(),
     PostParams = RequestBridge:post_params(),
 
@@ -30,32 +39,38 @@ init(_Config, _State) ->
     Params = QueryParams ++ PostParams,
 
     % Pre-normalize the parameters.
-    Params1 = [{normalize_path(Path), Value} || {Path, Value} <- Params, Path /= undefined, Path /= []],
-    {ok, Params1}.
+    Params1 = normalize_params(Params),
+    {ok, #state{request=Params1}}.
 
 finish(_Config, _State) -> 
     % Clear out the state.
     {ok, []}.
 
+set_websocket_params(Params, _Config, State) ->
+    Params1 = normalize_params(Params),
+    State1 = State#state{websocket=Params1},
+    {ok, State1}.
+
 %% Given a path, return the value that matches the path.
 get_value(Path, Config, State) ->
     case get_values(Path, Config, State) of
         [] -> undefined;
-        [One] -> One;
+        [One] -> 
+            wf:to_unicode_list(One);
         _Many -> throw({?MODULE, too_many_matches, Path})
     end.
 
-get_values(Path, _Config, State) ->
-    Params = State,
+get_values(Path, _Config, #state{request=Request, websocket=Websocket} = _State) ->
     Path1 = normalize_path(Path),
-    refine_params(Path1, Params).    
+    Vs = refine_params(Path1, Websocket ++ Request),
+    Vs.
 
-get_params(_Config, State) ->
-    Params = State,
+get_params(_Config, #state{request=Request, websocket=Websocket} = _State) ->
+    Params = Websocket ++ Request,
     F = fun({KeyPartsReversed, Value}) ->
         KeyParts = lists:reverse(KeyPartsReversed),
         Key = string:join(KeyParts, "."),
-        { Key, Value }
+        { Key, wf:to_unicode_list(Value) }
     end,
     lists:map(F, Params).
 
@@ -68,8 +83,9 @@ get_params(_Config, State) ->
 %% Then after the first round of refine_params/2 we would have:
 %%   Path   = [b, c]
 %%   Params = [y, b, c]
+-spec refine_params(NormalizedPath :: list(), Params :: list()) -> Values :: list().
 refine_params([], Params) -> 
-    [V || {_, V} <- Params];
+    [wf:to_unicode_list(V) || {_, V} <- Params];
 refine_params([H|T], Params) ->
     F = fun({Path, Value}, Acc) ->
         case split_on(H, Path) of
@@ -84,13 +100,39 @@ split_on(_,  []) -> false;
 split_on(El, [El|T]) -> {ok, T};
 split_on(El, [_|T]) -> split_on(El, T).
 
+normalize_path(Path) when is_binary(Path) ->
+    normalize_path(binary_to_list(Path));
 normalize_path(Path) when is_atom(Path) ->
     normalize_path(atom_to_list(Path));
-
 normalize_path(Path) when ?IS_STRING(Path) ->
     Tokens = string:tokens(Path, "."),
-    Tokens1 = [strip_wfid(X) || X <- Tokens],
+    Tokens1 = [strip_array_brackets(strip_wfid(X)) || X <- Tokens],
     lists:reverse(Tokens1).
+
+normalize_params(Params) ->
+    %% In typical erlang fashion, this list is being built in reverse, and will
+    %% need to be reversed when finished to ensure proper parameter order
+    BackwardNormalizedParams = lists:foldl(fun(Param, Acc) ->
+        normalize_param(Param) ++ Acc
+    end, [], Params),
+    lists:reverse(BackwardNormalizedParams).
+    
+normalize_param({undefined, _}) ->
+    [];
+normalize_param({[], _}) ->
+    [];
+normalize_param({<<>>, _}) ->
+    [];
+normalize_param({Path, Value}) when ?IS_STRING(Value);
+                                    is_binary(Value);
+                                    is_integer(Value);
+                                    is_atom(Value) ->
+    [{normalize_path(Path), Value}];
+normalize_param({Path, Values}) when is_list(Values) ->
+    NPath = normalize_path(Path),
+    %% Because this is running in the middle of a list that's being built in
+    %% reverse, this will have to be built in reverse also.
+    lists:reverse([{NPath, V} || V <- Values]).
 
 %% Most tokens will start with "wfid_". Strip this out.
 strip_wfid(Path) ->
@@ -99,4 +141,12 @@ strip_wfid(Path) ->
         S -> S
     end.
 
+%% For multiselect elements, jquery appends [] to the element name if element's
+%% data is an array We strip it out, since Nitrogen doesn't care if it's an
+%% array or not, it just uses each key individually
+strip_array_brackets(Path) ->
+    case lists:reverse(Path) of
+        [ $], $[ | Rest ] -> lists:reverse(Rest);
+        _ -> Path
+    end.
 

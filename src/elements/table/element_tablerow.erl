@@ -4,15 +4,22 @@
 % See MIT-LICENSE for licensing information.
 
 -module (element_tablerow).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([
+    reflect/0,
+    render_element/1
+]).
 
+-spec reflect() -> [atom()].
 reflect() -> record_info(fields, tablerow).
 
+-spec render_element(#tablerow{}) -> body().
 render_element(Record) -> 
     Cells = Record#tablerow.cells,
     wf_tags:emit_tag(tr, Cells, [
         {id, Record#tablerow.html_id},
         {class, [tablerow, Record#tablerow.class]},
-        {style, Record#tablerow.style}
+        {title, Record#tablerow.title},
+        {style, Record#tablerow.style},
+        {data_fields, Record#tablerow.data_fields}
     ]).

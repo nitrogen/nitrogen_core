@@ -4,7 +4,7 @@
 #+AUTHOR: Rusty Klophaus (@rustyio)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+EMAIL: 
-#+TEXT: [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../about.org][About]]
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:../index.org][Getting Started]] | [[file:../api.org][API]] | [[file:../elements.org][*Elements*]] | [[file:../actions.org][Actions]] | [[file:../validators.org][Validators]] | [[file:../handlers.org][Handlers]] | [[file:../config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:../jquery_mobile_integration.org][Mobile]] | [[file:../troubleshooting.org][Troubleshooting]] | [[file:../about.org][About]]
 
 * Radio Element - #radio {}
 
@@ -22,6 +22,8 @@
 
 ** Attributes
 
+   + body - (/Nitrogen element or list of Nitrogen Elements/) :: Radio button label either in HTML or Nitrogen elements.
+
    + text - (/string/) :: The radio button's label.
 
    + html\_encode - (/boolean/) :: Set to true to safely html-encode the text label.
@@ -32,11 +34,11 @@
 
    + checked - (/boolean/) :: True if the radio button should be checked.
 
-   + name - (/string/) :: The name attribute of the checkbox. If this is not contained within a =#radiogroup{}= element, then =name= must be specified, as =name= determines the "group" of the radio buttons (that is, when one member of a radio group is selected, the others are unselected).
+   + name - (/string/) :: The name attribute of the radio button. If this is not contained within a =#radiogroup{}= element, then =name= must be specified, as =name= determines the "group" of the radio buttons (that is, when one member of a radio group is selected, the others are unselected).
 
    + html\_name - (/string/) :: The name attribute of the checkbox. ( This does essentially the same thing as the =name= attribute, but is semantically different for use with the RESTful elements, as all RESTful elements shre the =html_name= attributes. If you're not sure, just use =name=)
 
-** See Also
+** See Also 
 
    + [[./base.html][base]]
 
@@ -58,3 +60,6 @@
 
    + [[../restful_overfiew.html][RESTful element overview]]
 
+	+ [[http://nitrogenproject.com/demos/simplecontrols][Simple Controls Demos]]
+
+   + [[http://nitrogenproject.com/demos/radio][Radio Buttons Demo]]

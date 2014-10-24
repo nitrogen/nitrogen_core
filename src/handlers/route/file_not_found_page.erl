@@ -1,6 +1,6 @@
 % vim: sw=4 ts=4 et ft=erlang
 -module (file_not_found_page).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -export ([main/0]).
 
 main() ->
