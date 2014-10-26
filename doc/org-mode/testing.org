@@ -1,0 +1,83 @@
+# vim: ts=2 sw=2 et ft=org
+#+STYLE: <LINK href="stylesheet.css" rel="stylesheet" type="text/css" />
+#+TITLE: Automated Testing with Nitrogenb
+#+AUTHOR: Jesse Gumm (@jessegumm)
+#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EMAIL: 
+
+#+TEXT: [[http://nitrogenproject.com][Home]] | [[file:./index.org][Getting Started]] | [[file:./api.org][API]] | [[file:./elements.org][Elements]] | [[file:./actions.org][Actions]] | [[file:./validators.org][Validators]] | [[file:./handlers.org][Handlers]] | [[file:./config.org][Configuration Options]] | [[file:../plugins.org][Plugins]] | [[file:./jquery_mobile_integration.org][Mobile]] | [[file:./troubleshooting.org][Troubleshooting]] | [[file:./about.org][About]]
+#+HTML: <div class=headline>Automated Testing with Nitrogen</div>
+
+* Overview 
+
+  Nitrogen has a simple unit testing framework which runs on the server and in
+  the browser, and can be used for testing the functionality of your
+  application, ensuring that objects render properly in the browser, and that
+  actions are wired in the browser appropriately.
+
+  This means that currently, you need to be able to run it on a machine with a
+  browser in it, or there is an option to initiate a test from an external
+  browser.
+
+** The testing system consists of three layers:
+
+*** 1. Individual Tests
+
+    Each individual test is initiated by a call to one of the =?wf_test= macros
+    and is used to test some simple cause and effect.
+
+    There are a few different ways to initiate a test:
+
+    + =?wf_test_auto(TestName, SetupFun, AssertionFun)= :: This is the most
+      basic form of test. The test system will call =SetupFun()=, and what that
+      completes, will automatically initiate a postback that will call
+      =AssertionFun()=.  AssertionFun is expected to return =true=. Anything else
+      will result in the test failing.
+
+      An example that tests that a value was properly set in the browser might be:
+
+      #+BEGIN_SRC erlang
+      tests() ->
+        SetupFun = fun() -> wf:set(my_textbox, "Value") end,
+        AssertionFun = fun() -> wf:q(my_textbox) == "Value" end,
+        ?wf_test_manual(set_textbox, SetupFun, AssertionFun).
+      #+END_SRC
+
+      If something is broken for some reason, (most common would be a typo in
+      the name of the element), then =wf:q(my_textbox)= would not return the
+      expected value, and the test would fail.
+
+    + =?wf_test_manual(TestName, SetupFun, AssertionFun)= :: This is very
+      similar to the =?wf_test_auto= test, except that the postback is not
+      automatically executed.  Instead, you need to tell the test how to initiate
+      the postback.  The easiest way would be with the =#event{}= or =#click{}=
+      actions.
+
+      An example of this might be to ensure that the expected postback is assigned to a button:
+
+      #+BEGIN_SRC erlang
+      tests() ->
+        SetupFun = fun() -> wf:wire(my_button, #click{}) end,
+        AssertionFun = undefined,
+        ?wf_test_manual(button_works, SetupFun, AssertionFun)
+      #+END_SRC
+
+      And in the =event/1= function that =my_button= posts back to, you would add:
+
+      #+BEGIN_SRC erlang
+        ?wf_test_event(button_works)
+      #+END_SRC
+
+      Note that this is safe to include in your normal posbacks, since if the
+      test is not running, this call will not do anything.
+
+
+  2. Test Pages - which consist of a series of individual tests executed in
+     order, and
+  3. Chain of pages, each of which runs some tests, and when the tests
+     complete, redirect to the next page.
+
+
+
+** See Also
+
