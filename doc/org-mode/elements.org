@@ -38,6 +38,7 @@
   + [[./elements/html5_footer.org][Footer]]
   + [[./elements/aside.org][Aside]]
   + [[./elements/mark.org][Mark]]
+  + [[./elements/main.org][Main]]
   + [[./elements/nav.org][Nav]]
   + [[./elements/section.org][Section]]
   + [[./elements/time.org][Time]]
@@ -84,6 +85,7 @@
   + [[./elements/gravatar.org][Gravatar]]
   + [[./elements/recaptcha.org][Recaptcha]]
   + [[./elements/sparkline.org][Sparkline]]
+  + [[./elements/iframe.org][Iframe]]
 
 * See Also
   + [[./paths.org][Nitrogen Element Paths]]

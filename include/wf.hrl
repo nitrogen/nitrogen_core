@@ -712,38 +712,60 @@
         display_mode=reveal     :: reveal | overlay | push,
         body=[]                 :: body()
     }).
-
+-record(iframe, {?ELEMENT_BASE(element_iframe),
+        align                   :: text() | atom(),
+        frameborder             :: integer(),
+        height                  :: integer(),
+        name                    :: text(),
+        sandbox                 :: text(),
+        seamless                :: boolean(),
+        src                     :: url(),
+        srcdoc                  :: text(),
+        width                   :: integer(),
+        allowfullscreen         :: boolean()
+    }).
         
 %% HTML5 semantic elements
 -record(section, {?ELEMENT_BASE(element_section),
-        body=""                 :: body()
+        body=""                 :: body(),
+        role=""                 :: text()
     }).
 -record(nav, {?ELEMENT_BASE(element_nav),
         body=""                 :: body(),
         role=""                 :: text()
     }).
 -record(article, {?ELEMENT_BASE(element_article),
-        body=""                 :: body()
+        body=""                 :: body(),
+        role=""                 :: text()
     }).
 -record(aside, {?ELEMENT_BASE(element_aside),
-        body=""                 :: body()
+        body=""                 :: body(),
+        role=""                 :: text()
     }).
 -record(html5_header, {?ELEMENT_BASE(element_html5_header),
-        body=""                 :: body()
+        body=""                 :: body(),
+        role=""                 :: text()
     }).
 -record(html5_footer, {?ELEMENT_BASE(element_html5_footer),
-        body=""                 :: body()
+        body=""                 :: body(),
+        role=""                 :: text()
     }).
 -record(time, {?ELEMENT_BASE(element_time),
         datetime=""             :: text(),
         body=""                 :: body(),
         text=""                 :: text(),
-        html_encode=true        :: html_encode()
+        html_encode=true        :: html_encode(),
+        role=""                 :: text()
     }).
 -record(mark, {?ELEMENT_BASE(element_mark),
         body=""                 :: body(),
         text=""                 :: text(),
-        html_encode=true        :: html_encode()
+        html_encode=true        :: html_encode(),
+        role=""                 :: text()
+    }).
+-record(main, {?ELEMENT_BASE(element_main),
+        body=""                 :: body(),
+        role=""                 :: text()
     }).
 
 %% 960.gs Grid

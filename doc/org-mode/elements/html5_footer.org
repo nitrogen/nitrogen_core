@@ -28,12 +28,14 @@
 
    + body - (/Nitrogen Elements/) :: The body of the HTML5 Footer element.
 
+   + role - (/String/) :: The role of the HTML5 Footer element.
+
 ** See Also
 
    + [[./base.html][Base element]]
 
    + [[./article.org][Article element]]
-   
+
    + [[./html5_header.org][HTML5 Header element]]
 
    + [[./panel.org][Panel element]]

@@ -20,5 +20,6 @@ render_element(Record = #mark{}) ->
         {class, ["mark", Record#mark.class]},
         {title, Record#mark.title},
         {style, Record#mark.style},
+        {role, Record#mark.role},
         {data_fields, Record#mark.data_fields}
     ]).
