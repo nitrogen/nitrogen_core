@@ -71,10 +71,60 @@
       Note that this is safe to include in your normal posbacks, since if the
       test is not running, this call will not do anything.
 
+    + =?wf_test_js(TestName, SetupFun, JS, AssertionFun)= :: This test method
+      allows you to collect arbitrary javascript properties (like if you want to
+      verify that an element on the page has a certain height, or maybe that some
+      global javascript variable has been set to a specific value).  The
+      arguments are *very* similar, except for a few changes.
 
-  2. Test Pages - which consist of a series of individual tests executed in
+      + =SetupFun= is exactly the same as in =?wf_test_manual= in that you do
+        not need to execute a postback in it.
+      + =JS= is a Javascript string that returns a value (the last call should
+        be actuall have a =return= statement, as it's executed inside a javascript
+        function). This value will be passed to the =AssertionFun= function.
+      + =AssertionFun= is expected to be a function of arity 1, with the only
+        argument being a list containing the return value(s) from =JS=.
+
+      Here's an example to illustrate the usage.  Here we will add a =#panel=
+      (which is just an HTML =div=), then verify that its width is greater than
+      zero:
+
+      #+BEGIN_SRC erlang
+        SetupFun = fun() -> wf:insert_top(my_wrapper, #panel{id=my_new_panel, text="Hi Mom!"} end,
+        JS = "return objs('my_wrapper').width()",
+        AssertFun = fun([Width]) -> is_integer(Width) andalso Width > 0 end,
+        ?wf_test_js(element_added, SetupFun, JS, AssertFun).
+      #+END_SRC
+
+**** Options
+
+     There is an optional last argument that can be passed to each of these
+     macros: A proplist containing options for =delay= and =timeout=
+
+     + =delay= (=integer()=) :: The number of milliseconds to wait before
+       executing the =JS= term (if using =?wf_test_js=) or to wait before
+       executing the postback (if using =?wf_test_auto= or =?wf_test_manual=).
+       This would be used to allow a test to /process/ before executing (say, an
+       image may need to be downloaded, or some jquery-ui scripts will need to be
+       run, or we need to wait for another postback to happen before getting the
+       data).  This gives your script time to run before checking the value.
+
+     + =timeout= (=integer()=) :: The number of milliseconds the testing system
+       is willing to wait for the test to complete before timing out.  This might
+       be tripped if something is taking much longer than expected, or if
+       javascript crashes and stops processing postbacks, or something else
+       crashes.  It will just mean that the =?wf_test_event= macro was ultimately
+       never called (which is done automatically if you're using =?wf_test_auto=
+       or =?wf_test_js=).
+
+*** 2. Test Pages
+   
+   - which consist of a series of individual tests executed in
      order, and
-  3. Chain of pages, each of which runs some tests, and when the tests
+
+*** 3. Chain of pages
+    
+    , each of which runs some tests, and when the tests
      complete, redirect to the next page.
 
 
