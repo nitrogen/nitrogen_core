@@ -55,6 +55,8 @@
 
    + body - (/Nitrogen Elements/) :: The body of the time element.
 
+   + role - (/String/) :: The role of the HTML5 Time element.
+
 ** Other Information
 
    If you need to do date-time conversion, including dealing with timezones, we

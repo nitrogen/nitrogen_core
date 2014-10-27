@@ -19,5 +19,6 @@ render_element(Record) ->
         {class, ["aside", Record#aside.class]},
         {title, Record#aside.title},
         {style, Record#aside.style},
+        {role, Record#aside.role},
         {data_fields, Record#aside.data_fields}
     ]).
