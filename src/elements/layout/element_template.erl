@@ -27,8 +27,6 @@ render_element(Record) ->
     File = wf:to_list(Record#template.file),
     Template = get_cached_template(File),
 
-    io:format("Template: ~p",[Template]),
-    
     % Let's figure out the appropriate module aliases
     ModuleAliases = get_module_aliases(Record),
 
@@ -150,7 +148,6 @@ peel([H|T], Delim, Acc) -> peel(T, Delim, [H|Acc]).
 eval([], _, _) -> [];
 eval([H|T], Record, ModuleAliases) when H==script;
                                         H==mobile_script;
-                                        ?IS_STRING(H);
                                         is_binary(H) ->
     [H|eval(T, Record, ModuleAliases)];
 eval([H|T], Record, ModuleAliases) ->
