@@ -26,6 +26,8 @@ render_element(Record) ->
 
     File = wf:to_list(Record#template.file),
     Template = get_cached_template(File),
+
+    io:format("Template: ~p",[Template]),
     
     % Let's figure out the appropriate module aliases
     ModuleAliases = get_module_aliases(Record),
@@ -105,12 +107,16 @@ parse_template1(B) ->
 
 %% parse/2 - Given a binary and a callback, look through the binary
 %% for strings of the form [[[module]]] or [[[module:function(args)]]]
-parse(B, Callback) -> parse(B, Callback, []).
-parse(<<>>, _Callback, Acc) -> [lists:reverse(Acc)];
+parse(B, Callback) ->
+    parse(B, Callback, <<>>).
+
+parse(<<>>, _Callback, Acc) -> 
+    [Acc];
 parse(<<"[[[", Rest/binary>>, Callback, Acc) ->
     { Token, Rest1 } = get_token(Rest, <<>>),
-    [lists:reverse(Acc), Callback(Token)|parse(Rest1, Callback, [])];
-parse(<<C, Rest/binary>>, Callback, Acc) -> parse(Rest, Callback, [C|Acc]).
+    [Acc, Callback(Token) | parse(Rest1, Callback, <<>>)];
+parse(<<C, Rest/binary>>, Callback, Acc) -> 
+    parse(Rest, Callback, <<Acc/binary,C>>).
 
 get_token(<<"]]]", Rest/binary>>, Acc) -> { Acc, Rest };
 get_token(<<H, Rest/binary>>, Acc) -> get_token(Rest, <<Acc/binary, H>>).
@@ -138,21 +144,14 @@ peel([], _Delim, Acc) -> {lists:reverse(Acc), []};
 peel([Delim|T], Delim, Acc) -> {lists:reverse(Acc), T};
 peel([H|T], Delim, Acc) -> peel(T, Delim, [H|Acc]).
 
-to_term(X, Bindings) ->
-    S = wf:to_list(X),
-    {ok, Tokens, 1} = erl_scan:string(S),
-    {ok, Exprs} = erl_parse:parse_exprs(Tokens),
-    {value, Value, _} = erl_eval:exprs(Exprs, Bindings),
-    Value.
-
-
 
 %%% EVALUATE %%%
 
 eval([], _, _) -> [];
-eval([H|T], Record, ModuleAliases) when H==script orelse H==mobile_script ->
-    [H|eval(T, Record, ModuleAliases)];
-eval([H|T], Record, ModuleAliases) when ?IS_STRING(H) ->
+eval([H|T], Record, ModuleAliases) when H==script;
+                                        H==mobile_script;
+                                        ?IS_STRING(H);
+                                        is_binary(H) ->
     [H|eval(T, Record, ModuleAliases)];
 eval([H|T], Record, ModuleAliases) ->
     [replace_callbacks(H, Record, ModuleAliases) | eval(T, Record, ModuleAliases)].
@@ -179,6 +178,15 @@ convert_callback_tuple_to_function(Module, Function, ArgString, Bindings, Module
             false -> undefined
         end
     end.
+
+to_term(X, Bindings) ->
+    S = wf:to_list(X),
+    {ok, Tokens, 1} = erl_scan:string(S),
+    {ok, Exprs} = erl_parse:parse_exprs(Tokens),
+    {value, Value, _} = erl_eval:exprs(Exprs, Bindings),
+    Value.
+
+
 
 get_module_aliases(Record) ->
     lists:append([
