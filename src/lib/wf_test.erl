@@ -98,7 +98,9 @@ fail(Name, Reason) ->
     Pid ! {fail, Name, Reason}.
 
 test_manual(Name, {Setup, Assertion}) ->
-    test_manual(Name, Setup, Assertion).
+    test_manual(Name, Setup, Assertion);
+test_manual(Name, {Setup, Assertion, Options}) ->
+    test_manual(Name, Setup, Assertion, Options).
 
 test_manual(Name, Setup, Assertion) ->
     test_manual(Name, Setup, Assertion, ?OPTS).
@@ -107,7 +109,9 @@ test_manual(Name, Setup, Assertion, Options) ->
     test(false, Name, Setup, Assertion, Options).
 
 test_auto(Name, {Setup, Assertion}) ->
-    test_auto(Name, Setup, Assertion).
+    test_auto(Name, Setup, Assertion);
+test_auto(Name, {Setup, Assertion, Options}) ->
+    test_auto(Name, Setup, Assertion, Options).
 
 test_auto(Name, Setup, Assertion) ->
     test_auto(Name, Setup, Assertion, ?OPTS).
@@ -162,8 +166,11 @@ maybe_wire_autopostback(true=_AutoPostback, Name, Delay) ->
     end).
 
 test_event(Name) ->
-    Assert = wf:session({assertion, Name}),
-    ?wf_assert(Name, Assert(), true).
+    case wf:session({assertion, Name}) of
+        undefined -> ok;
+        Assert ->
+            ?wf_assert(Name, Assert(), true)
+    end.
 
 event({test_exec, Fun}) ->
     Fun();
