@@ -124,6 +124,7 @@ normalize_param({[], _}) ->
 normalize_param({<<>>, _}) ->
     [];
 normalize_param({Path, Value}) when ?IS_STRING(Value);
+                                    Value =:= [];
                                     is_binary(Value);
                                     is_integer(Value);
                                     is_atom(Value) ->

@@ -261,6 +261,8 @@ NitrogenClass.prototype.$validate_and_serialize = function(validationGroup) {
                 val = [];
             else
                 val = $(this).val();
+            if(val == null)
+                val = "";
             params[n.$make_id(this)] = val;
         }
     });
