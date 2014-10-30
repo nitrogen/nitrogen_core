@@ -34,6 +34,8 @@ function NitrogenClass(o) {
     this.$websockets_ever_succeeded = false;
     this.$websocket_reconnect_timer = null;
     this.$disconnected = false;
+    this.$allow_redirect = true;
+    this.$redirect_prompt = "Are you sure you want to leave?"
     return this;
 }
 
@@ -110,13 +112,15 @@ NitrogenClass.prototype.$requeue_last_event = function() {
 }
 
 NitrogenClass.prototype.$show_disconnected_notice = function() {
-    if($("div.nitrogen_disconnected_bar").length == 0) {
-        var disc_bar = $("<div>")
-            .addClass("nitrogen_disconnected_bar")
-            .html("&#9889; Connection Broken! Attempting to reconnect... &#9889;");
-        $("body").prepend(disc_bar);
+    if(!this.$going_away) {
+        if($("div.nitrogen_disconnected_bar").length == 0) {
+            var disc_bar = $("<div>")
+                .addClass("nitrogen_disconnected_bar")
+                .html("&#9889; Connection Broken! Attempting to reconnect... &#9889;");
+            $("body").prepend(disc_bar);
+        }
+        $("div.nitrogen_disconnected_bar").slideDown();
     }
-    $("div.nitrogen_disconnected_bar").slideDown();
 }
 
 NitrogenClass.prototype.$hide_disconnected_notice = function() {
@@ -1267,6 +1271,15 @@ NitrogenClass.prototype.$attempt_websockets = function() {
 var page = document;
 
 var Nitrogen = new NitrogenClass();
+
+// Prevent the red "connection broken" bar from showing when navigating away.
+$(window).on("beforeunload", function() {
+    if(!Nitrogen.$allow_redirect) {
+        return Nitrogen.$redirect_prompt;
+    }
+    Nitrogen.$going_away = true;
+    return;
+});
 
 $(document).ready(function() {
     if(!nitrogen_jqm_loaded) {
