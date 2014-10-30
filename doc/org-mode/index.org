@@ -195,8 +195,8 @@
 # <<700>>
 
   Nitrogen 2.0+ includes a developer tool to help you get started with a
-  bare-bones page, element, or action. This tool uses the files found
-  in =./site/.prototypes= as templates. If you wish, you can edit files in this
+  bare-bones page, element, or action. This tool uses the files found in
+  =./site/.prototypes= as templates. If you wish, you can edit files in this
   directory to make them more suitable for your application.
 
   + To create a new page at http://localhost/user/login, run:
@@ -245,11 +245,16 @@
 * How do I upgrade to a new version of Nitrogen?
 # <<1000>>
 
-  *If you're running a a version of Nitrogen 2.1.0 and above:*
+  *Upgrading to 2.3*
+    
+    Following the instructions for upgrading to 2.2.2 will work except that
+  websockets won't be available. For a more complete upgrade guide, see the
+  [[file:./upgrade2.3.org][See the 2.3 upgrading guide]]
+
+  *Upgrading from 2.1 to any version up to 2.2.2*
 
     Edit your rebar.config file and make sure dependencies are pointing at the
-    desired tags or at ={branch, master}= to get the latest git =HEAD=, then
-    run:
+    desired tag (ex: ={tag, "v2.2.2"}=) then run:
 
     : make upgrade
 
