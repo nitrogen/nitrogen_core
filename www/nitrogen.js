@@ -256,13 +256,9 @@ NitrogenClass.prototype.$validate_and_serialize = function(validationGroup) {
         } else {
             // Skip any unchecked radio boxes.
             if ((this.type == "radio" || this.type=="checkbox") && !this.checked) return;
-            var val;
-            if (this.type == "select-multiple" && $(this).val()==null)
-                val = [];
-            else
-                val = $(this).val();
-            if(val == null)
-                val = "";
+            if (this.type == "select-multiple" && $(this).val()==null) return;
+            var val = $(this).val();
+            if(val == null) val = "";
             params[n.$make_id(this)] = val;
         }
     });
