@@ -185,7 +185,7 @@ And that's it.
 
 ** See Also
 
-  + [[handlers/route.org][Route Handler Docs]]
+  + [[../handlers/route.org][Route Handler Docs]]
 
   + [[http://nitrogenproject.com/demos/smart_extension][Smart Extension Demo]]
 

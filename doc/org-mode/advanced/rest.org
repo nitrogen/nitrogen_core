@@ -53,6 +53,6 @@
 
 ** See Also
 
-  + [[handlers/route.org][Route Handler Docs]]
+  + [[../handlers/route.org][Route Handler Docs]]
 
   + [[http://nitrogenproject.com/demos/rest_handler][REST Handler Demo]]
