@@ -1,6 +1,7 @@
 % vim: ts=4 sw=4 et
 % Nitrogen Web Framework for Erlang
 % Copyright (c) 2008-2010 Rusty Klophaus
+% Copyright (c) 2014 Jesse Gumm
 % See MIT-LICENSE for licensing information.
 
 -module (element_dropdown).
@@ -62,51 +63,53 @@ wire_postback(Dropdown) ->
 format_options(Dropdown) when Dropdown#dropdown.options==undefined ->
     "";
 format_options(#dropdown{options=Opts, value=Value, html_encode=HtmlEncode}) ->
-    create_options(wf:to_list(Value), HtmlEncode, Opts).
+    create_options(wf:to_binary(Value), HtmlEncode, Opts).
 
 create_options(_,_,[]) ->
     [];
-
 create_options(Selected,HtmlEncode, [{Value, Text} | Rest]) ->
-    Option = #option{text=Text, value=Value},
-    create_options(Selected,HtmlEncode,[Option|Rest]);
-create_options(Selected,HtmlEncode,
-        [#option_group{text=Text,options=Options,disabled=Disabled,show_if=true} | Rest]) ->
-
-    OptionTags = create_options(Selected,HtmlEncode,Options),
-
-    LabelProp = [{label,wf:html_encode(Text)}],
-    DisabledProp = case Disabled of
-        true -> [{disabled,disabled}];
-        false -> []
-    end,
-
-    Props = LabelProp ++ DisabledProp,
-
-    [wf_tags:emit_tag(optgroup, OptionTags, Props) | create_options(Selected,HtmlEncode,Rest)];
-
+    [create_option_from_tuple(Selected, HtmlEncode, {Value, Text}) | create_options(Selected, HtmlEncode, Rest)];
+create_options(Selected,HtmlEncode, [OG = #option_group{show_if=true} | Rest]) ->
+    [create_option_group(Selected, HtmlEncode, OG) | create_options(Selected, HtmlEncode, Rest)];
 create_options(Selected,HtmlEncode,[#option_group{show_if=false} | Rest]) ->
     create_options(Selected,HtmlEncode,Rest);
 create_options(Selected,HtmlEncode,[X=#option{show_if=true} | Rest]) ->
-
-    SelectedOrNot = selected_or_not(Selected,X),
-    Content = wf:html_encode(X#option.text, HtmlEncode),
-
-    Props = [
-        {SelectedOrNot},
-        ?WF_IF(X#option.disabled, disabled, undefined),
-        ?WF_IF(X#option.value=:=undefined,[],{value, wf:html_encode(X#option.value,HtmlEncode)})
-    ],
-
-    [wf_tags:emit_tag(option, Content, Props) | create_options(Selected,HtmlEncode,Rest)];
+    [create_option_full(Selected, HtmlEncode, X) | create_options(Selected,HtmlEncode,Rest)];
 create_options(Selected,HtmlEncode,[#option{show_if=false} | Rest]) ->
     create_options(Selected,HtmlEncode,Rest);
 create_options(_,_,[Other | _]) ->
     throw({unknown_option_provided_to_dropdown_element,Other}).
 
-selected_or_not(Selected,X) ->
-    case (Selected =/= [] andalso wf:to_list(X#option.value) == Selected)
-            orelse X#option.selected == true of
-        true -> selected;
-        false -> not_selected
-    end.
+create_option_group(Selected, HtmlEncode, #option_group{text=Text, options=Options, disabled=Disabled}) ->
+    OptionTags = create_options(Selected, HtmlEncode, Options),
+    LabelProp = {label, wf:html_encode(Text, HtmlEncode)},
+    DisabledProp = ?WF_IF(Disabled, disabled, undefined),
+    Props = [
+        LabelProp,
+        DisabledProp
+    ],
+    wf_tags:emit_tag(optgroup, OptionTags, Props).
+
+create_option_from_tuple(Selected, HtmlEncode, {Value, Text}) ->
+    Option = #option{text=Text, value=Value},
+    create_option_full(Selected, HtmlEncode, Option).
+
+create_option_full(Selected, HtmlEncode, Opt = #option{text=Text, value=Value, disabled=Disabled}) ->
+    Content = wf:html_encode(Text, HtmlEncode),
+    SelectedProp = ?WF_IF(is_selected(Selected, Opt), selected, undefined),
+    DisabledProp = ?WF_IF(Disabled, disabled, undefined),
+    ValueProp = ?WF_IF(Value =:= undefined, [], {value, wf:html_encode(Value, HtmlEncode)}),
+    Props = [
+        SelectedProp,
+        DisabledProp,
+        ValueProp
+    ],
+    wf_tags:emit_tag(option, Content, Props).
+
+-spec is_selected(Selected :: binary(), X :: #option{}) -> boolean().
+is_selected(_Selected, #option{selected=true}) ->
+    true;
+is_selected(Selected, _X) when Selected =:= <<>> ->
+    false;
+is_selected(Selected, #option{value=Value}) ->
+    wf:to_binary(Value) =:= Selected.
