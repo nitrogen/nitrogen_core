@@ -22,15 +22,15 @@ render_action(Record) ->
     end,
 
     Script = case Record#jquery_effect.type of
-        'show' when Effect==none -> ["show(", Actions, ");"];
-        'hide' when Effect==none -> ["hide(", Actions, ");"];
+        'show' when Effect==none -> [".hide().show(", Actions, ");"];
+        'hide' when Effect==none -> [".show().hide(", Actions, ");"];
         'toggle' when Effect==none -> ["toggle(", Actions, ");"];
-        'appear' -> [wf:f("fadeIn(~p, ", [Speed]), Actions, ");"];
-        'fade'   -> [wf:f("fadeOut(~p, ", [Speed]), Actions, ");"];
-        'slideup'-> [wf:f("slideUp(~p, ",[Speed]), Actions, ");"];
-        'slidedown'    -> [wf:f("slideDown(~p, ",[Speed]), Actions, ");"];
-        'show'   -> [wf:f("show('~s', ~s, ~p, ", [Effect, Options, Speed]), Actions, ");"];
-        'hide'   -> [wf:f("hide('~s', ~s, ~p, ", [Effect, Options, Speed]), Actions, ");"];
+        'appear' -> [wf:f("hide().fadeIn(~p, ", [Speed]), Actions, ");"];
+        'fade'   -> [wf:f("show().fadeOut(~p, ", [Speed]), Actions, ");"];
+        'slideup'-> [wf:f("show().slideUp(~p, ",[Speed]), Actions, ");"];
+        'slidedown' -> [wf:f("hide().slideDown(~p, ",[Speed]), Actions, ");"];
+        'show'   -> [wf:f("hide().show('~s', ~s, ~p, ", [Effect, Options, Speed]), Actions, ");"];
+        'hide'   -> [wf:f("show().hide('~s', ~s, ~p, ", [Effect, Options, Speed]), Actions, ");"];
         'effect' -> [wf:f("effect('~s', ~s, ~p, ", [Effect, Options, Speed]), Actions, ");"];
         'toggle' -> [wf:f("toggle('~s', ~s, ~p, ", [Effect, Options, Speed]), Actions, ");"];
         'add_class'    -> [wf:f("addClass('~s', ~p, ", [Class, Speed]), Actions, ");"];
