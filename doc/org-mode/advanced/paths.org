@@ -66,9 +66,9 @@
    2. If the selector is "page", then a reference to the DOM document
       is returned.
 
-   3. The string "\#\#" is replaced with ".wfid\_". This allows you to
+   3. The string "##" is replaced with ".wfid\_". This allows you to
       specify Nitrogen elementIDs in a string selector. For example
-      "\#\#myelementid > .someclass" will be rewritten to
+      "##myelementid > .someclass" will be rewritten to
       ".wfid\_myelementid > .someclass". This is done because Nitrogen
       uses classes to tag your elements with their ID, so an element
       with ID of 'myelementid' will be tagged with a class called
