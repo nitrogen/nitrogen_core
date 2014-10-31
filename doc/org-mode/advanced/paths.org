@@ -1,5 +1,5 @@
 # vim: ts=2 sw=2 et ft=org
-#+STYLE: <LINK href="stylesheet.css" rel="stylesheet" type="text/css" />
+#+STYLE: <LINK href="../stylesheet.css" rel="stylesheet" type="text/css" />
 #+TITLE: Nitrogen 2.x Documentation
 #+AUTHOR: Rusty Klophaus (@rustyio)
 #+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
