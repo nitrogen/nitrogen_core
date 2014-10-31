@@ -29,14 +29,14 @@
 ]}
 #+END_SRC
     
-  + EXTENSION :: is the string extension of the file
+  + =EXTENSION= :: is the string extension of the file
     (="json"=, ="csv"=, etc).
 
-  + ENTRY_FUNCTION :: is the function in our page module that
+  + =ENTRY_FUNCTION= :: is the function in our page module that
     is called. For Nitrogen's built-in JSON smart extension, you might call
     it =json_main=). This is expected to be an atom.
 
-  + PROCESSING_FUNCTION :: identifies the module and function
+  + =PROCESSING_FUNCTION= :: identifies the module and function
     of a pre and post- processing function. It can either be the atom
     =undefined=, in which case no pre or post processing will be done.  If,
     however it's a two-tuple consisting of ={Module, Function}=, it will call
@@ -107,7 +107,7 @@ my_entry() ->
 #+END_SRC
 
   This is the simplest kind of smart extension.  Simply put, if it sees a
-  =".my_ext"= as the extension, it would use =my_entry()= as the entry point
+  =.my_ext= as the extension, it would use =my_entry()= as the entry point
   in your module, and be done with it. There would be no pre- or
   post-processing performed with it - whatever is returned by the function
   would be sent to the browser.
@@ -123,7 +123,7 @@ my_entry() ->
    So the specs would be something like this:
 
    + Request: =/download/mydata.textlist=
-   + Which downloads a file to the filesystem called ="legacy.txt"=
+   + Which downloads a file to the filesystem called "legacy.txt"
    + And which looks like this:
 #+BEGIN_SRC txt
 WORD
@@ -185,7 +185,7 @@ And that's it.
 
 ** See Also
 
-  + [[../handlers/route.org][Route Handler Docs]]
+  + [[file:../handlers/route.org][Route Handler Docs]]
 
   + [[http://nitrogenproject.com/demos/smart_extension][Smart Extension Demo]]
 
