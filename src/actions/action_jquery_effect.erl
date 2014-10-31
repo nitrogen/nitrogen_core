@@ -22,8 +22,8 @@ render_action(Record) ->
     end,
 
     Script = case Record#jquery_effect.type of
-        'show' when Effect==none -> [".hide().show(", Actions, ");"];
-        'hide' when Effect==none -> [".show().hide(", Actions, ");"];
+        'show' when Effect==none -> ["show(", Actions, ");"];
+        'hide' when Effect==none -> ["hide(", Actions, ");"];
         'toggle' when Effect==none -> ["toggle(", Actions, ");"];
         'appear' -> [wf:f("hide().fadeIn(~p, ", [Speed]), Actions, ");"];
         'fade'   -> [wf:f("show().fadeOut(~p, ", [Speed]), Actions, ");"];
