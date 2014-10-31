@@ -30,7 +30,7 @@
 #+END_SRC
     
   + =EXTENSION= :: is the string extension of the file
-    (="json"=, ="csv"=, etc).
+    ("json", "csv", etc).
 
   + =ENTRY_FUNCTION= :: is the function in our page module that
     is called. For Nitrogen's built-in JSON smart extension, you might call
