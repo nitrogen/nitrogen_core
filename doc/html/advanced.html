@@ -3,12 +3,12 @@
                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>REST Module</title>
+<title>Nitrogen 2.x Documentation</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
-<meta name="title" content="REST Module"/>
+<meta name="title" content="Nitrogen 2.x Documentation"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2014-09-15 02:12:37 CDT"/>
-<meta name="author" content="Jesse Gumm (@jessegumm)"/>
+<meta name="generated" content="2014-10-31 00:54:47 CDT"/>
+<meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
 <style type="text/css">
@@ -92,128 +92,66 @@
 </div>
 
 <div id="content">
-<h1 class="title">REST Module</h1>
+<h1 class="title">Nitrogen 2.x Documentation</h1>
 
-<p><a href="http://nitrogenproject.com">Home</a> | <a href="./index.html">Getting Started</a> | <a href="./api.html">API</a> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | *<a href="./handlers.html">Handlers</a>* | <a href="./config.html">Configuration Options</a> | <a href="./plugins.html">Plugins</a> | <a href="./jquery_mobile_integration.html">Mobile</a> | <a href="./troubleshooting.html">Troubleshooting</a> | <a href="./about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <a href="./index.html">Getting Started</a> | <a href="./api.html">API</a> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./config.html">Configuration Options</a> | <b>Advanced Guides</b> | <a href="./troubleshooting.html">Troubleshooting</a> | <a href="./about.html">About</a>
 </p>
 
 
-<div class=headline>REST Module</div>
+<div class=headline>Advanced Nitrogen Guides and Tools</div>
 
 
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1 Overview</a></li>
+<li><a href="#sec-1">1 Advanced Guides and Tools</a></li>
 </ul>
 </div>
 </div>
 
 <div id="outline-container-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> Overview</h2>
+<h2 id="sec-1"><span class="section-number-2">1</span> Advanced Guides and Tools</h2>
 <div class="outline-text-2" id="text-1">
 
 
-<p>
-  Nitrogen's default route handler gives you an easy way to add a no-nonsense
-  RESTful handler to a page module. If you need to add a simple a RESTful
-  interface without wanting to deal with Webmachine or Cowboy's restful
-  handlers, and just use straight up Nitrogen, you can do this trivially.
-</p>
-<p>
-  Simply stated, if you add <code>-behaviour(nitrogen_rest).</code> to a module, instead
-  of looking for a <code>main()</code> function as the entry point, it will instead expect
-  an entry point based on the HTTP request method used.  So a <code>GET</code> request
-  will look for a <code>get()</code> function, and so on.
-</p>
-<p>
-  Each Entry Point function expects a single argument, <code>PathInfo</code>, which is
-  exactly yhe same information that would be retrieved from calling
-  <code>wf:path_info()</code>.
-</p>
-
-</div>
-
-<div id="outline-container-1-1" class="outline-3">
-<h3 id="sec-1-1"><span class="section-number-3"></span> Request Methods Module Entry Points</h3>
-<div class="outline-text-3" id="text-1-1">
-
-
-<p>
-   Commonly used Request methods and their corresponding entry points
-</p>
 <dl>
-<dt><code>GET</code></dt><dd><code>get(PathInfo)</code>
+<dt><a href="./advanced/jquery_mobile_integration.html">jQuery Mobile Integration</a></dt><dd>Nitrogen's Mobile elements and how to use them.
+
 </dd>
-<dt><code>POST</code></dt><dd><code>post(PathInfo)</code>
+<dt><a href="./advanced/paths.html">Nitrogen Paths</a></dt><dd>Understanding Nitrogen's
+    element selectors for wiring, querying, CSS, and jQuery selectors.
+
 </dd>
-<dt><code>PUT</code></dt><dd><code>put(PathInfo)</code>
+<dt><a href="./advanced/rest.html">Making a REST Handler</a></dt><dd>With Nitrogen, you
+    can build a simple REST handler module. Here is everything you need to know
+    about it.
+
 </dd>
-<dt><code>DELETE</code></dt><dd><code>delete(PathInfo)</code>
+<dt><a href="./advanced/smart_extensions.html">Smart Extensions</a></dt><dd>Smart
+    extensions allow you to create alternate entry points into page modules based
+    on the extension of the request. This is useful for adding things like .json
+    handlers, or .csv, or whatever.
+
+</dd>
+<dt><a href="./advanced/testing.html">Automated Testing</a></dt><dd>Nitrogen has a
+    built-in testing system for testing your application both on the client and
+    server, as well as the interaction between the two.
+
+</dd>
+<dt><a href="./advanced/plugins.html">Plugin System</a></dt><dd>Nitrogen is easily
+    extendable with plugins. This is a guide for both adding plugins, and also
+    creating your own.
 </dd>
 </dl>
 
-
-<p>   
-   Less commonly used Request methods:
-</p>
-<dl>
-<dt><code>CONNECT</code></dt><dd><code>connect(PathInfo)</code>
-</dd>
-<dt><code>TRACE</code></dt><dd><code>trace(PathInfo)</code>
-</dd>
-<dt><code>OPTIONS</code></dt><dd><code>options(PathInfo)</code>
-</dd>
-</dl>
-
-
-<p>
-   (You might notice the pattern here: the HTTP status code is made lower-case
-   and converted to an atom, and that is the function called.
-</p>
-</div>
-
-</div>
-
-<div id="outline-container-1-2" class="outline-3">
-<h3 id="sec-1-2"><span class="section-number-3"></span> Return values of entry points</h3>
-<div class="outline-text-3" id="text-1-2">
-
-
-<p>
-   All the above functions are expected to return either a <code>Body</code>, which can be
-   a typical Nitrogen body (with Nitrogen elements), or a 2-tuple,
-   <code>{StatusCode, Body}</code>, where StatusCode is the HTTP status code of the
-   return. If only a <code>Body</code> is returned, the <code>StatusCode</code> is the standard 200
-   status code.
-</p>
-
-</div>
-
-</div>
-
-<div id="outline-container-1-3" class="outline-3">
-<h3 id="sec-1-3"><span class="section-number-3"></span> See Also</h3>
-<div class="outline-text-3" id="text-1-3">
-
-
-<ul>
-<li><a href="#handlers-route.org">Route Handler Docs</a>
-
-</li>
-<li><a href="http://nitrogenproject.com/demos/rest_handler">REST Handler Demo</a>
-</li>
-</ul>
-
-</div>
 </div>
 </div>
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2014-09-15 02:12:37 CDT</p>
-<p class="author">Author: Jesse Gumm (@jessegumm)</p>
+<p class="date">Date: 2014-10-31 00:54:47 CDT</p>
+<p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
 
@@ -225,7 +163,7 @@
 <script type="text/javascript">
 	/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
 	var disqus_shortname = 'nitrogenproject'; // required: replace example with your forum shortname
-	var disqus_identifier = 'html/rest.html'; //This will be replaced with the path part of the url
+	var disqus_identifier = 'html/advanced.html'; //This will be replaced with the path part of the url
 
 	/* * * DON'T EDIT BELOW THIS LINE * * */
 	(function() {

@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Getting Started with Nitrogen"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2014-09-15 02:12:38 CDT"/>
+<meta name="generated" content="2014-10-31 00:54:12 CDT"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -94,7 +94,7 @@
 <div id="content">
 <h1 class="title">Getting Started with Nitrogen</h1>
 
-<p><a href="http://nitrogenproject.com">Home</a> | <b>Getting Started</b> | <a href="./api.html">API</a> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./config.html">Configuration Options</a> | <a href="./plugins.html">Plugins</a> | <a href="./jquery_mobile_integration.html">Mobile</a> | <a href="./troubleshooting.html">Troubleshooting</a> | <a href="./about.html">About</a>
+<p><a href="http://nitrogenproject.com">Home</a> | <b>Getting Started</b> | <a href="./api.html">API</a> | <a href="./elements.html">Elements</a> | <a href="./actions.html">Actions</a> | <a href="./validators.html">Validators</a> | <a href="./handlers.html">Handlers</a> | <a href="./config.html">Configuration Options</a> | <a href="./advanced.html">Advanced Guides</a> | <a href="./troubleshooting.html">Troubleshooting</a> | <a href="./about.html">About</a>
 </p>
 
 
@@ -458,8 +458,8 @@ bin/nitrogen stop
 
 <p>
   Nitrogen 2.0+ includes a developer tool to help you get started with a
-  bare-bones page, element, or action. This tool uses the files found
-  in <code>./site/.prototypes</code> as templates. If you wish, you can edit files in this
+  bare-bones page, element, or action. This tool uses the files found in
+  <code>./site/.prototypes</code> as templates. If you wish, you can edit files in this
   directory to make them more suitable for your application.
 </p>
 <ul>
@@ -554,12 +554,19 @@ make
 
 
 <p>
-  <b>If you're running a a version of Nitrogen 2.1.0 and above:</b>
+  <b>Upgrading to 2.3</b>
+</p>
+<p>    
+    Following the instructions for upgrading to 2.2.2 will work except that
+  websockets won't be available. For a more complete upgrade guide, see the
+  <a href="./upgrade2.3.html">See the 2.3 upgrading guide</a>
+</p>
+<p>
+  <b>Upgrading from 2.1 to any version up to 2.2.2</b>
 </p>
 <p>
     Edit your rebar.config file and make sure dependencies are pointing at the
-    desired tags or at <code>{branch, master}</code> to get the latest git <code>HEAD</code>, then
-    run:
+    desired tag (ex: <code>{tag, "v2.2.2"}</code>) then run:
 </p>
 <pre class="example">
 make upgrade
@@ -619,7 +626,7 @@ make upgrade
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2014-09-15 02:12:38 CDT</p>
+<p class="date">Date: 2014-10-31 00:54:12 CDT</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>

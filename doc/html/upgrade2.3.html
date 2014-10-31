@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Upgrading to Nitrogen 2.3"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2014-09-15 02:12:28 CDT"/>
+<meta name="generated" content="2014-10-31 00:54:04 CDT"/>
 <meta name="author" content="Jesse Gumm (@jessegumm)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -282,7 +282,8 @@ $ git pull origin master
    Then run <code>make upgrade</code>.
 </p>
 <p>
-   Now we're going to need to download a few files. Feel free to copy and paste the following into your *nix shell:
+   Now we're going to need to download a few files. Feel free to copy and paste
+   the following into your *nix shell:
 </p>
 
 
@@ -294,12 +295,16 @@ $ curl https://raw.githubusercontent.com/nitrogen/nitrogen/master/rel/overlay/co
 
 
 <p>
-   Notice that the second line will actually overwrite the current nitrogen<sub>sup</sub>.erl file, so if you have anything customized there, make note of it or make a backup first.
+   Notice that the second line will actually overwrite the current
+   nitrogen<sub>sup</sub>.erl file, so if you have anything customized there, make note
+   of it or make a backup first.
 </p>
 <p>
    Now you'll want to copy any custom handlers and other configs you've
    manually added to <code>site/src/nitrogen_PLATFORM.erl</code> into
-   <code>site/src/nitrogen_main_handler.erl</code> before the <code>wf_core:run()</code> function.
+   <code>site/src/nitrogen_main_handler.erl</code> before into the <code>handlers()</code> function.
+   This will ensure that your custom handlers get initialized with both
+   standard requests and websocket requests.
 </p>
 <p>
    So if your <code>nitrogen_mochiweb.erl</code> file looked like this:
@@ -333,15 +338,27 @@ $ curl https://raw.githubusercontent.com/nitrogen/nitrogen/master/rel/overlay/co
 <pre class="src src-erlang"><span class="org-preprocessor">-module</span>(nitrogen_main_handler).
    -<span class="org-type">export</span>([<span class="org-type">run/0</span>]).
 
+   <span class="org-type">handlers</span>() -&gt;
+       <span class="org-type">nitrogen</span>:<span class="org-type">handler</span>(myapp_security_handler,[]),
+       <span class="org-type">nitrogen</span>:<span class="org-type">handler</span>(myapp_route_handler, []),
+
+   <span class="org-type">ws_init</span>() -&gt;
+      <span class="org-type">handlers</span>(),
+      ok.
+
    <span class="org-type">run</span>() -&gt;
        <span class="org-type">wf</span>:<span class="org-type">header</span>(<span class="org-string">'cache-control'</span>,<span class="org-string">"no-cache"</span>),
        <span class="org-type">wf</span>:<span class="org-type">content_type</span>(<span class="org-string">"text/html; charset=utf-8"</span>),
-       <span class="org-type">nitrogen</span>:<span class="org-type">handler</span>(myapp_security_handler,[]),
-       <span class="org-type">nitrogen</span>:<span class="org-type">handler</span>(myapp_route_handler, []),
+       <span class="org-type">handlers</span>(),
        <span class="org-type">wf_core</span>:<span class="org-type">run</span>().
 </pre>
 
 
+<p>
+   You'll notice above that we don't set the header or content type in the
+   <code>ws_init()</code> function. This is because the headers would have already been
+   sent when the websocket connection is established.
+</p>
 <p>
    Next, we're going to edit <code>etc/simple_bridge.config</code> to make sure we're
    binding to the correct IP address and ports and that those settings are all
@@ -379,7 +396,7 @@ $ curl https://raw.githubusercontent.com/nitrogen/nitrogen/master/rel/overlay/co
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2014-09-15 02:12:28 CDT</p>
+<p class="date">Date: 2014-10-31 00:54:04 CDT</p>
 <p class="author">Author: Jesse Gumm (@jessegumm)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
