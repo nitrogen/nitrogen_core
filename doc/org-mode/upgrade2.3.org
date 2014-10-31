@@ -122,7 +122,7 @@ $ curl https://raw.githubusercontent.com/nitrogen/nitrogen/master/rel/overlay/co
 #+END_SRC
 
    Notice that the second line will actually overwrite the current
-   nitrogen_sup.erl file, so if you have anything customized there, make note
+   =nitrogen_sup.erl= file, so if you have anything customized there, make note
    of it or make a backup first.
 
    Now you'll want to copy any custom handlers and other configs you've
