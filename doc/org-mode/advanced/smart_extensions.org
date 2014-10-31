@@ -57,7 +57,7 @@
   Then add a =json_main()= function to your page module, which
   returns an Erlang proplist. The proplist will automatically be
   converted to a JSON string and the MIME-type will be set to
-  ="application/json"=.
+  "application/json".
 
   Here's an example of a =json_main()= function in action.
 
