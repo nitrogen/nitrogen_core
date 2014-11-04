@@ -991,6 +991,26 @@ NitrogenClass.prototype.$urlencode = function(str) {
     return escape(str).replace(/\+/g,'%2B').replace(/%20/g, '+').replace(/\*/g, '%2A').replace(/\//g, '%2F').replace(/@/g, '%40');
 }
 
+
+NitrogenClass.prototype.$set_cookie = function(cookie, value, path, minutes_to_live) {
+    var expires;
+    if (minutes_to_live) {
+        var date = new Date();
+        var milliseconds = minutes_to_live * 60 * 1000;
+        date.setTime(date.getTime() + milliseconds);
+        expires = "; expires=" + date.toUTCString();
+    }
+    else {
+        expires = "";
+    }
+
+    document.cookie = [
+        encodeURIComponent(cookie), "=", encodeURIComponent(value),
+        expires,
+        "; path=",path
+    ].join("");
+}   
+
 /*** DATE PICKER ***/
 
 NitrogenClass.prototype.$datepicker = function(pickerObj, pickerOptions) {
@@ -1096,7 +1116,6 @@ NitrogenClass.prototype.$init_progress_bar = function(el, value, max, color) {
         .css("background", color)
         .css("border-color", color);
 };
-
 
 
 NitrogenClass.prototype.$normalize_color = function(color) {

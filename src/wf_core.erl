@@ -235,7 +235,7 @@ build_static_file_response(Path) ->
 build_first_response(Html, Script) ->
     % Update the output with any script...
     Html1 = replace_script(Script, Html),
-    Html2 = unicode:characters_to_binary(Html1),
+    Html2 = encode(Html1),
 
     % Update the response bridge and return.
     Bridge = wf_context:bridge(),
@@ -245,6 +245,7 @@ build_first_response(Html, Script) ->
 build_postback_response(Script) ->
     % Update the response bridge and return.
     Bridge = wf_context:bridge(),
+    %% Encoding for a postback request will be utf8
     Script1 = unicode:characters_to_binary(Script),
     Bridge1 = sbw:set_response_data(Script1, Bridge),
     sbw:build_response(Bridge1).
@@ -256,3 +257,53 @@ replace_script(Script, [script|T]) -> [Script|T];
 replace_script(Script, [mobile_script|T]) -> [wf:html_encode(Script)|T];
 replace_script(Script, [H|T]) -> [replace_script(Script, H)|replace_script(Script, T)];
 replace_script(_, Other) -> Other.
+
+encode(Text) ->
+    Encoding = wf_context:encoding(), 
+    encode(Encoding, Text).
+
+-spec encode(encoding(), iolist()) -> iolist().
+encode(none, Body) ->
+    Body;
+encode(unicode, Body) ->
+    case unicode:characters_to_binary(Body) of
+        {error, Encoded, Rest} ->
+            wf:warning("Unable to encode Unicode: ~p", [Rest]),
+            [Encoded, Rest];
+        {incomplete, Encoded, Rest} ->
+            wf:warning("Incomplete Unicode: ~p", [Rest]),
+            [Encoded, Rest];
+        Binary when is_binary(Binary) ->
+            Binary
+    end;
+encode({Mod, Fun}, Body) ->
+    Mod:Fun(Body);
+encode(Fun, Body) when is_function(Fun, 1) ->
+    Fun(Body);
+encode(auto, Body) ->
+    Encoding = case config_encoding() of
+        undefined ->
+            ContentType = wf_context:content_type(),
+            encoding_by_content_type(wf:to_binary(ContentType));
+        Other ->
+            Other
+    end,
+    encode(Encoding, Body).
+
+config_encoding() ->
+    wf:config_default(default_encoding, undefined).
+
+%% Please note that this is naive, in that it doesn't even check content-type
+%% for charset. This is done for speed (to avoid running a regex on each
+%% request).
+encoding_by_content_type(<<"text/",_/binary>>) ->
+    unicode;
+encoding_by_content_type(<<"application/javascript">>) ->
+    unicode;
+encoding_by_content_type(<<"application/json">>) ->
+    unicode;
+encoding_by_content_type(<<"application/csv">>) ->
+    unicode;
+encoding_by_content_type(_) ->
+    none.
+

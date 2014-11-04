@@ -40,7 +40,7 @@
 -type comet_name()          :: term().
 -type comet_restart_msg()   :: term().
 -type comet_function()      :: pid() | function() 
-                                | {comet_name(), function()} 
+                                | {comet_name(), function()}
                                 | {comet_name(), function(), comet_restart_msg()}.
 -type handler_config()      :: any().
 -type handler_state()       :: any().
@@ -50,7 +50,10 @@
                                 | grouped_vertical_bar | pie | pie3d.
 -type color()               :: string() | binary() | atom().
 -type google_chart_position()      :: top | left | bottom | right.
-
+-type module_function()     :: {atom(), atom()}.
+-type encoding_function()   :: module_function() | fun((iolist()) -> iolist()).
+-type encoding()            :: none | unicode | auto | encoding_function().
+-type context_type()        :: first_request | postback_request | static_file | websocket_postback.
 %%% CONTEXT %%%
 
 % Page Request Information.
@@ -89,17 +92,17 @@
 
 -record(context, {
     % Transient Information
-    type,                % Either first_request, postback_request, or static_file
-    bridge,              % Holds the simple_bridge object
-    anchor=undefined,    % Holds the unique ID of the current anchor element.
-    data=[],             % Holds whatever the page_module:main/1 method returns: HTML, Elements, Binary, etc..
-    action_queue=undefined, %% Holds the reference to the action priority queue
-
+    type                    :: context_type(),
+    bridge                  :: simple_bridge:bridge(),
+    anchor=undefined        :: id(), 
+    data=[]                 :: iolist(),
+    encoding=auto           :: encoding(),
+    action_queue=undefined  :: wf_action_queue:action_queue() | undefined,
     % These are all serialized, sent to the browser
     % and de-serialized on each request.
-    page_context,
-    event_context,
-    handler_list
+    page_context            :: undefined | #page_context{},
+    event_context           :: undefined | #event_context{},
+    handler_list            :: undefined | list()
 }).
 
 %%% LOGGING %%%
@@ -1020,6 +1023,12 @@
 -record(enable, {?ACTION_BASE(action_enable)}).
 -record(make_readonly, {?ACTION_BASE(action_make_readonly)}).
 -record(make_writable, {?ACTION_BASE(action_make_writable)}).
+-record(set_cookie, {?ACTION_BASE(action_set_cookie),
+        cookie                  :: atom() | text(),
+        value=""                :: atom() | text(),
+        path="/"                :: text(),
+        minutes_to_live=20      :: integer()
+    }).
 
 %%% Validators %%%
 %%% %% TODO: Switch this from is_action to is_validator once deferred is implemented

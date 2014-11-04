@@ -4,7 +4,7 @@
 % See MIT-LICENSE for licensing information.
 
 -module (wf_utils).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -export ([
     f/1, f/2,
     guid/0, short_guid/0,
@@ -219,5 +219,3 @@ has_behaviour(Module, Behaviour) ->
     catch
         _:_ -> false
     end.
-
-

@@ -281,22 +281,22 @@ header(Header, Value) ->
     ok = wf_context:header(Header, Value).
 
 cookies() ->
-    wf_context:cookies().
+    wf_cookies:cookies().
 
 cookie(Cookie) ->
-    wf_context:cookie(Cookie).
+    wf_cookies:get_cookie(Cookie).
 
 cookie_default(Cookie,DefaultValue) ->
-    wf_context:cookie_default(Cookie,DefaultValue).
+    wf_cookies:get_cookie(Cookie,DefaultValue).
 
 cookie(Cookie, Value) ->
-    ok = wf_context:cookie(Cookie, Value).
+    ok = wf_cookies:set_cookie(Cookie, Value).
 
 cookie(Cookie, Value, Path, MinutesToLive) ->
-    ok = wf_context:cookie(Cookie, Value, Path, MinutesToLive).
+    ok = wf_cookies:set_cookie(Cookie, Value, Path, MinutesToLive).
 
 delete_cookie(Cookie) ->
-    ok = wf_context:delete_cookie(Cookie).
+    ok = wf_cookies:delete_cookie(Cookie).
 
 socket() ->
     wf_context:socket().

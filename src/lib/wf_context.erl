@@ -27,18 +27,13 @@
         status_code/1,
 
         content_type/1,
+        content_type/0,
+        encoding/0,
+        encoding/1,
         download_as/1,
         headers/0,
         header/1,
         header/2,
-
-        cookies/0,
-        cookie/1,
-        cookie_default/2,
-
-        cookie/2,
-        cookie/4,
-        delete_cookie/1,
 
         anchor/1,
         anchor/0,
@@ -198,6 +193,12 @@ status_code(StatusCode) ->
 content_type(ContentType) ->
     header("Content-Type", ContentType).
 
+content_type() ->
+    case ?BRIDGE:get_response_header("Content-Type") of
+        undefined -> "text/html";
+        ContentType -> ContentType
+    end.
+
 download_as(Filename0) ->
     Filename = wf_convert:url_encode(Filename0),
     header("Content-Disposition", "attachment; filename=\"" ++ Filename ++ "\"").
@@ -212,27 +213,14 @@ header(Header, Value) ->
     bridge(?BRIDGE:set_header(Header, Value)),
     ok.
 
-cookies() ->
-    ?BRIDGE:cookies().
+-spec encoding(Encoding :: encoding()) -> ok.
+encoding(Encoding) ->
+    Context = context(),
+    context(Context#context { encoding=Encoding }).
 
-cookie(Cookie) ->
-    ?BRIDGE:cookie(Cookie).
-
-cookie_default(Cookie,DefaultValue) ->
-    case cookie(Cookie) of
-        undefined -> DefaultValue;
-        Value -> Value
-    end.
-
-cookie(Cookie, Value) ->
-    bridge(?BRIDGE:set_cookie(Cookie, Value)).
-
-cookie(Cookie, Value, Path, MinutesToLive) ->
-    bridge(?BRIDGE:cookie(Cookie, Value, Path, MinutesToLive)),
-    ok.
-
-delete_cookie(Cookie) ->
-    cookie(Cookie,"","/",0).
+encoding() ->
+    Context = context(),
+    Context#context.encoding.
 
 
 %%% TRANSIENT CONTEXT %%%
@@ -339,7 +327,6 @@ path_info(PathInfo) ->
 async_mode() ->
     Page = page_context(),
     Page#page_context.async_mode.
-
 
 async_mode(AsyncMode) ->
     Page = page_context(),
