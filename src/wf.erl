@@ -268,6 +268,12 @@ status_code(StatusCode) ->
 content_type(ContentType) ->
     ok = wf_context:content_type(ContentType).
 
+encoding() ->
+    wf_context:encoding().
+
+encoding(Encoding) ->
+    wf_context:encoding(Encoding).
+
 download_as(Filename) ->
     wf_context:download_as(Filename).
 

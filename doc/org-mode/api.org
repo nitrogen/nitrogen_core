@@ -488,6 +488,30 @@ Example:
    this during the page's initial request will be different than calling it within
    a postback event.
 
+** wf:encoding(Encoding) -> ok
+   Set the encoding to be applied just before sending to the client.  Valid
+   values are:
+   + none :: No encoding. Send the response as an iolist of bytes. This is what
+     you would want to use if you were returning binary data (like if you were
+     generating an image file on the fly).
+   + unicode :: This runs the return value through Erlang's
+     =unicocde:characters_to_binary/1= before sending to the client.
+   + Function/1 :: Run the response through this particular function before
+     sending, such as if you have a custom encoding you wish to use.
+   + {Module, Function} :: Run this through =Module:Function/1=. This is merely
+     an alternative to the previous option, but one that is configuration-file
+     friendly.
+   + auto (*Default*) :: Reads the specified response header to attempt to
+     determine which encoding should be provided.  It's *quite* naive, however,
+     in the name of speed.  If the header starts with "text/" or is set to
+     "application/json" or "application/javascript", it will use =unicode=,
+     otherwise, it will use =none=.  For example, if your page you had set
+     =wf:content_type("image/png")=, it Encoding would apply as =none=.
+
+** wf:encoding() -> Encoding
+   Return the current encoding that will be applied to the response. It's worth
+   noting that this will return =auto= if it's currently set to such.
+
 ** wf:status\_code(IntegerCode) -> ok
    Set the HTTP response code. Default is 200.
    
