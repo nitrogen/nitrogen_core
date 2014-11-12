@@ -403,6 +403,7 @@
 
 -record(checkbox, {?ELEMENT_BASE(element_checkbox),
         text=""                 :: text(),
+        label_position='after'  :: 'after' | before | none,
         html_encode=true        :: html_encode(),
         checked=false           :: boolean(),
         value="on"              :: text(),
