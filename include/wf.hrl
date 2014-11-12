@@ -53,7 +53,7 @@
 -type module_function()     :: {atom(), atom()}.
 -type encoding_function()   :: module_function() | fun((iolist()) -> iolist()).
 -type encoding()            :: none | unicode | auto | encoding_function().
--type context_type()        :: first_request | postback_request | static_file | websocket_postback.
+-type context_type()        :: first_request | postback_request | static_file | postback_websocket.
 %%% CONTEXT %%%
 
 % Page Request Information.
