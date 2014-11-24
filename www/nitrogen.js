@@ -111,28 +111,39 @@ NitrogenClass.prototype.$requeue_last_event = function() {
     this.$event_queue.unshift(this.$last_event);
 }
 
+//notice_type == error|warning|ok
+NitrogenClass.prototype.$show_notice_bar = function(notice_type, msg) {
+    var add_class = "nitrogen_notice_" + notice_type + "_bar";
+    if($("div.nitrogen_notice_bar").length == 0) {
+        var disc_bar = $("<div>")
+            .addClass("nitrogen_notice_bar");
+        $("body").prepend(disc_bar);
+    }
+    $("div.nitrogen_notice_bar")
+        .addClass(add_class)
+        .html(msg)
+        .slideDown();
+}
+
+NitrogenClass.prototype.$hide_notice_bar = function() {
+    $("div.nitrogen_notice_bar").slideUp(500, function() {
+        $("div.nitrogen_notice_bar").remove()
+    });
+}
+
 NitrogenClass.prototype.$show_disconnected_notice = function() {
     if(!this.$going_away) {
-        if($("div.nitrogen_disconnected_bar").length == 0) {
-            var disc_bar = $("<div>")
-                .addClass("nitrogen_disconnected_bar")
-                .html("&#9889; Connection Broken! Attempting to reconnect... &#9889;");
-            $("body").prepend(disc_bar);
-        }
-        $("div.nitrogen_disconnected_bar").slideDown();
+        var msg = "&#9889; Connection Broken! Attempting to reconnect... &#9889;";
+        this.$show_error_bar("error", msg);
     }
 }
 
 NitrogenClass.prototype.$hide_disconnected_notice = function() {
-    $("div.nitrogen_disconnected_bar").slideUp(500, function() {
-        $("div.nitrogen_disconnected_bar").remove()
-    });
+    this.$hide_notice_bar();
 }
 
 NitrogenClass.prototype.$hide_disconnected_notice_worked = function() {
-    $("div.nitrogen_disconnected_bar")
-        .addClass("nitrogen_reconnected_bar")
-        .html("Success!");
+    this.$show_notice_bar("ok", "Reconnected!");
     this.$hide_disconnected_notice();
 }
 

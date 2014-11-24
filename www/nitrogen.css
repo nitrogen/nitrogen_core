@@ -113,7 +113,7 @@ div.inplace_textbox .LV_invalid {
 }
 
 /*** Disconnection Bar ***/
-div.nitrogen_disconnected_bar {
+div.nitrogen_notice_bar {
 	display:none;
 	position:fixed;
 	top:0;
@@ -122,14 +122,26 @@ div.nitrogen_disconnected_bar {
 	padding:5px 0 5px 0;
 	text-align:center;
 	height:20px;
-	background: #fcc;
-	color: #F00;
+	background: #ddd;
+	color: #222;
 	font-weight:bold;
 	z-index: 10000;
+	border-bottom: 1px solid #000;
+}
+
+div.nitrogen_notice_warning_bar {
+	background: #ff0;
+	color: #000
+	border-bottom: 1px solid #000;
+}
+
+div.nitrogen_notice_error_bar {
+	background: #fcc;
+	color: #F00;
 	border-bottom: 1px solid #f00;
 }
 
-div.nitrogen_reconnected_bar {
+div.nitrogen_notice_ok_bar {
 	color:#090;
 	background:#cfc;
 	border-bottom: 1px solid #090;
