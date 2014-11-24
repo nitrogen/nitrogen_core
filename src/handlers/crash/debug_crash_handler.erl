@@ -18,9 +18,11 @@ finish(_Config, State) ->
 first_request(Type, Error, Stacktrace, _Config, _State) ->
     ?LOG("~p~n", [{error, Type, Error, Stacktrace}]),
     wf:status_code(500),
+    %% We use raw HTML here instead of Nitrogen elements in case the error is
+    %% internal to nitrogen (like if the element rendering system is broken).
     [
-        #h3{body = <<"&#9888; There was an error processing this page &#9888;</h2>">>},
-        #pre{text=format_error(Type, Error, Stacktrace)}
+        <<"<h2>&#9888; There was an error processing this page &#9888;</h2>">>,
+        <<"<code><pre>">>,format_error(Type, Error, Stacktrace),<<"</pre></code>">>
     ].
 
 postback_request(Type, Error, Stacktrace, _Config, _State) ->
