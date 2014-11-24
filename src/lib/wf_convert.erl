@@ -82,6 +82,16 @@ to_binary(I) when is_integer(I) -> to_binary(integer_to_list(I));
 to_binary(F) when is_float(F) -> to_binary(nitro_mochinum:digits(F));
 to_binary(L) when is_list(L) -> list_to_binary(L).
 
+-spec to_unicode_binary(term()) -> binary().
+to_unicode_binary(V) when is_atom(V);
+                          is_integer(V);
+                          is_float(V) ->
+    to_binary(V);
+to_unicode_binary(V) when is_binary(V);
+                          is_list(V) ->
+    unicode:characters_to_binary(V).
+
+
 -spec to_integer(term()) -> integer().
 to_integer(A) when is_atom(A) -> to_integer(atom_to_list(A));
 to_integer(B) when is_binary(B) -> to_integer(binary_to_list(B));
@@ -226,7 +236,7 @@ url_decode(S) -> unquote(S).
 %% @doc Builds a safely-encoded querystring out of a proplist.
 %% Example: build_qs([{a, something}, {b, 123}]),
 %% Returns: "a=something&b=123" 
-to_qs(undefined) -> []; 
+to_qs(undefined) -> [];  
 to_qs([]) -> [];
 to_qs([{Key, Val}]) ->
     [url_encode(Key),"=",url_encode(Val)];
@@ -237,8 +247,8 @@ to_qs([{Key, Val} | Rest]) ->
 
 js_escape(undefined) -> [];
 js_escape(Value) when is_atom(Value) -> js_escape(atom_to_list(Value));
-js_escape(Value) when is_list(Value) -> binary_to_list(js_escape(unicode:characters_to_binary(Value)));
-js_escape(Value) -> js_escape(Value, <<>>).
+js_escape(Value) when is_list(Value) -> to_unicode_list(js_escape(to_unicode_binary(Value)));
+js_escape(Value) when is_binary(Value) -> js_escape(Value, <<>>).
 js_escape(<<"\\", Rest/binary>>, Acc) -> js_escape(Rest, <<Acc/binary, "\\\\">>);
 js_escape(<<"\r", Rest/binary>>, Acc) -> js_escape(Rest, <<Acc/binary, "\\r">>);
 js_escape(<<"\n", Rest/binary>>, Acc) -> js_escape(Rest, <<Acc/binary, "\\n">>);
@@ -248,7 +258,6 @@ js_escape(<<"<script", Rest/binary>>, Acc) -> js_escape(Rest, <<Acc/binary, "<sc
 js_escape(<<"script>", Rest/binary>>, Acc) -> js_escape(Rest, <<Acc/binary, "scr\" + \"ipt>">>);
 js_escape(<<C, Rest/binary>>, Acc) -> js_escape(Rest, <<Acc/binary, C>>);
 js_escape(<<>>, Acc) -> Acc.
-
 
 %%% JOIN %%%
 -spec join([term()], term()) -> [term()].

@@ -175,6 +175,9 @@ to_existing_atom(T) ->
 to_binary(T) -> 
     _Binary = wf_convert:to_binary(T).
 
+to_unicode_binary(T) ->
+    _Binary = wf_convert:to_unicode_binary(T).
+
 to_integer(T) -> 
     _Integer = wf_convert:to_integer(T).
 
