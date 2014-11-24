@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="title" content="Nitrogen 2.x Documentation"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2014-10-31 00:54:46 CDT"/>
+<meta name="generated" content="2014-11-12 19:51:17 CST"/>
 <meta name="author" content="Rusty Klophaus (@rustyio)"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -1407,8 +1407,54 @@ Example:
 </div>
 
 <div id="outline-container-10-8" class="outline-3">
-<h3 id="sec-10-8"><span class="section-number-3"></span> wf:status_code(IntegerCode) -&gt; ok</h3>
+<h3 id="sec-10-8"><span class="section-number-3"></span> wf:encoding(Encoding) -&gt; ok</h3>
 <div class="outline-text-3" id="text-10-8">
+
+<p>   Set the encoding to be applied just before sending to the client.  Valid
+   values are:
+</p><dl>
+<dt>none</dt><dd>No encoding. Send the response as an iolist of bytes. This is what
+     you would want to use if you were returning binary data (like if you were
+     generating an image file on the fly).
+</dd>
+<dt>unicode</dt><dd>This runs the return value through Erlang's
+     <code>unicocde:characters_to_binary/1</code> before sending to the client.
+</dd>
+<dt>Function/1</dt><dd>Run the response through this particular function before
+     sending, such as if you have a custom encoding you wish to use.
+</dd>
+<dt>{Module, Function}</dt><dd>Run this through <code>Module:Function/1</code>. This is merely
+     an alternative to the previous option, but one that is configuration-file
+     friendly.
+</dd>
+<dt>auto (<b>Default</b>)</dt><dd>Reads the specified response header to attempt to
+     determine which encoding should be provided.  It's <b>quite</b> naive, however,
+     in the name of speed.  If the header starts with "text/" or is set to
+     "application/json" or "application/javascript", it will use <code>unicode</code>,
+     otherwise, it will use <code>none</code>.  For example, if your page you had set
+     <code>wf:content_type("image/png")</code>, it Encoding would apply as <code>none</code>.
+</dd>
+</dl>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-10-9" class="outline-3">
+<h3 id="sec-10-9"><span class="section-number-3"></span> wf:encoding() -&gt; Encoding</h3>
+<div class="outline-text-3" id="text-10-9">
+
+<p>   Return the current encoding that will be applied to the response. It's worth
+   noting that this will return <code>auto</code> if it's currently set to such.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-10-10" class="outline-3">
+<h3 id="sec-10-10"><span class="section-number-3"></span> wf:status_code(IntegerCode) -&gt; ok</h3>
+<div class="outline-text-3" id="text-10-10">
 
 <p>   Set the HTTP response code. Default is 200.
 </p>
@@ -1416,9 +1462,9 @@ Example:
 
 </div>
 
-<div id="outline-container-10-9" class="outline-3">
-<h3 id="sec-10-9"><span class="section-number-3"></span> wf:content_type(ContentType) -&gt; ok</h3>
-<div class="outline-text-3" id="text-10-9">
+<div id="outline-container-10-11" class="outline-3">
+<h3 id="sec-10-11"><span class="section-number-3"></span> wf:content_type(ContentType) -&gt; ok</h3>
+<div class="outline-text-3" id="text-10-11">
 
 
 <p>
@@ -1430,9 +1476,9 @@ Example:
 
 </div>
 
-<div id="outline-container-10-10" class="outline-3">
-<h3 id="sec-10-10"><span class="section-number-3"></span> wf:download_as(Filename) -&gt; ok</h3>
-<div class="outline-text-3" id="text-10-10">
+<div id="outline-container-10-12" class="outline-3">
+<h3 id="sec-10-12"><span class="section-number-3"></span> wf:download_as(Filename) -&gt; ok</h3>
+<div class="outline-text-3" id="text-10-12">
 
 
 <p>
@@ -1443,9 +1489,9 @@ Example:
 
 </div>
 
-<div id="outline-container-10-11" class="outline-3">
-<h3 id="sec-10-11"><span class="section-number-3"></span> wf:request_method() -&gt; atom()</h3>
-<div class="outline-text-3" id="text-10-11">
+<div id="outline-container-10-13" class="outline-3">
+<h3 id="sec-10-13"><span class="section-number-3"></span> wf:request_method() -&gt; atom()</h3>
+<div class="outline-text-3" id="text-10-13">
 
 
 <p>
@@ -1456,9 +1502,9 @@ Example:
 
 </div>
 
-<div id="outline-container-10-12" class="outline-3">
-<h3 id="sec-10-12"><span class="section-number-3"></span> wf:url() -&gt; String</h3>
-<div class="outline-text-3" id="text-10-12">
+<div id="outline-container-10-14" class="outline-3">
+<h3 id="sec-10-14"><span class="section-number-3"></span> wf:url() -&gt; String</h3>
+<div class="outline-text-3" id="text-10-14">
 
 
 <p>
@@ -1470,9 +1516,9 @@ Example:
 
 </div>
 
-<div id="outline-container-10-13" class="outline-3">
-<h3 id="sec-10-13"><span class="section-number-3"></span> wf:uri() -&gt; String</h3>
-<div class="outline-text-3" id="text-10-13">
+<div id="outline-container-10-15" class="outline-3">
+<h3 id="sec-10-15"><span class="section-number-3"></span> wf:uri() -&gt; String</h3>
+<div class="outline-text-3" id="text-10-15">
 
 
 <p>
@@ -1484,9 +1530,9 @@ Example:
 
 </div>
 
-<div id="outline-container-10-14" class="outline-3">
-<h3 id="sec-10-14"><span class="section-number-3"></span> wf:path() -&gt; String</h3>
-<div class="outline-text-3" id="text-10-14">
+<div id="outline-container-10-16" class="outline-3">
+<h3 id="sec-10-16"><span class="section-number-3"></span> wf:path() -&gt; String</h3>
+<div class="outline-text-3" id="text-10-16">
 
 
 <p>
@@ -1498,9 +1544,9 @@ Example:
 
 </div>
 
-<div id="outline-container-10-15" class="outline-3">
-<h3 id="sec-10-15"><span class="section-number-3"></span> wf:path_info() -&gt; String</h3>
-<div class="outline-text-3" id="text-10-15">
+<div id="outline-container-10-17" class="outline-3">
+<h3 id="sec-10-17"><span class="section-number-3"></span> wf:path_info() -&gt; String</h3>
+<div class="outline-text-3" id="text-10-17">
 
 
 <p>
@@ -1513,9 +1559,9 @@ Example:
 
 </div>
 
-<div id="outline-container-10-16" class="outline-3">
-<h3 id="sec-10-16"><span class="section-number-3"></span> wf:page_module() -&gt; Atom</h3>
-<div class="outline-text-3" id="text-10-16">
+<div id="outline-container-10-18" class="outline-3">
+<h3 id="sec-10-18"><span class="section-number-3"></span> wf:page_module() -&gt; Atom</h3>
+<div class="outline-text-3" id="text-10-18">
 
 
 <p>
@@ -1526,9 +1572,9 @@ Example:
 
 </div>
 
-<div id="outline-container-10-17" class="outline-3">
-<h3 id="sec-10-17"><span class="section-number-3"></span> wf:protocol() -&gt; http | https</h3>
-<div class="outline-text-3" id="text-10-17">
+<div id="outline-container-10-19" class="outline-3">
+<h3 id="sec-10-19"><span class="section-number-3"></span> wf:protocol() -&gt; http | https</h3>
+<div class="outline-text-3" id="text-10-19">
 
 
 <p>
@@ -1541,9 +1587,9 @@ Example:
 
 </div>
 
-<div id="outline-container-10-18" class="outline-3">
-<h3 id="sec-10-18"><span class="section-number-3"></span> wf:peer_ip() -&gt; IPAddress (4-tuple or 8-tuple)</h3>
-<div class="outline-text-3" id="text-10-18">
+<div id="outline-container-10-20" class="outline-3">
+<h3 id="sec-10-20"><span class="section-number-3"></span> wf:peer_ip() -&gt; IPAddress (4-tuple or 8-tuple)</h3>
+<div class="outline-text-3" id="text-10-20">
 
 
 
@@ -1556,9 +1602,9 @@ Example:
 
 </div>
 
-<div id="outline-container-10-19" class="outline-3">
-<h3 id="sec-10-19"><span class="section-number-3"></span> wf:peer_ip(ListOfProxies) -&gt; IPAddress (4-tuple or 8-tuple)</h3>
-<div class="outline-text-3" id="text-10-19">
+<div id="outline-container-10-21" class="outline-3">
+<h3 id="sec-10-21"><span class="section-number-3"></span> wf:peer_ip(ListOfProxies) -&gt; IPAddress (4-tuple or 8-tuple)</h3>
+<div class="outline-text-3" id="text-10-21">
 
 
 <p>
@@ -1568,9 +1614,9 @@ Example:
 
 </div>
 
-<div id="outline-container-10-20" class="outline-3">
-<h3 id="sec-10-20"><span class="section-number-3"></span> wf:peer_ip(ListOfProxies, ForwardedHeader) -&gt; IPAddress (4-tuple or 8-tuple)</h3>
-<div class="outline-text-3" id="text-10-20">
+<div id="outline-container-10-22" class="outline-3">
+<h3 id="sec-10-22"><span class="section-number-3"></span> wf:peer_ip(ListOfProxies, ForwardedHeader) -&gt; IPAddress (4-tuple or 8-tuple)</h3>
+<div class="outline-text-3" id="text-10-22">
 
 
 <p>
@@ -1897,7 +1943,7 @@ Example:
 </div>
 
 <div id="postamble">
-<p class="date">Date: 2014-10-31 00:54:46 CDT</p>
+<p class="date">Date: 2014-11-12 19:51:17 CST</p>
 <p class="author">Author: Rusty Klophaus (@rustyio)</p>
 <p class="creator">Org version 7.8.02 with Emacs version 23</p>
 <a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
