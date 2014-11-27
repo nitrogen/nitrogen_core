@@ -39,7 +39,24 @@ function NitrogenClass(o) {
     return this;
 }
 
+
+/*** EVAL CONTROL ***/
+
+// Control the evaulation yourself. If you'd rather capture the responses on
+// your own and evaulate them at your control, you would rebind Nitrogen.$eval.
+// After loading nitrogen.js, add:
+// 
+//   <script>
+//     NitrogenClass.prototype.$eval = function(data) {
+//       ... do your own evaluation ...
+//     }
+//   </script>
+NitrogenClass.prototype.$eval = function(data) {
+    return eval(data);
+}
+
 /*** PRIVATE METHODS ***/
+
 
 NitrogenClass.prototype.$path_alias = function(path) {
     if (path === 'page') {
@@ -419,7 +436,7 @@ NitrogenClass.prototype.$event_success = function(data, textStatus) {
         this.$event_success_fun(data, textStatus);
     }
     else{
-        eval(data);
+        this.$eval(data);
     }
 }
 
@@ -487,7 +504,7 @@ NitrogenClass.prototype.$system_event_success = function(data) {
     // A system event shouldn't clobber the pageContext.
     // Easiest to account for it here.
     var pc = n.$params["pageContext"];
-    eval(data);
+    n.$eval(data);
     n.$set_param("pageContext", pc);
 }
 
@@ -1274,6 +1291,10 @@ NitrogenClass.prototype.$ws_message = function(data) {
     else if(matches = data.match(/^nitrogen_event:([\s\S]*)/)) {
         var response_data = null;
         if(this.$event_data_type == "json") {
+            // while other evals() are replaced with Nitrogen.$eval(), this is
+            // not necessary here, since we actually *want* the json to be
+            // evaluated, which is then passed to $event_success() to acually
+            // be eval()'d
             response_data = eval(matches[1]);
         }
         else{
