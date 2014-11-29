@@ -29,7 +29,7 @@ render_action(Record) ->
 
     case Record#is_required.unless_has_value of
         [] ->
-            Script = wf:f("v.add(Validate.Presence, { failureMessage: \"~s\" });", [Text]),
+            Script = wf:f(<<"v.add(Validate.Presence, { failureMessage: \"~ts\" });">>, [Text]),
             [CustomValidator, Script];
         Otherfields ->
             JSValidatorFun = build_js_function(Otherfields),
@@ -45,7 +45,7 @@ render_action(Record) ->
     end.
 
 build_js_function(OtherFields) ->
-    FieldChecks = [wf:f("(obj('~s').value != '')", [F]) || F <- OtherFields],
+    FieldChecks = [wf:f(<<"(obj('~s').value != '')">>, [F]) || F <- OtherFields],
     OredFieldChecks = wf:join(FieldChecks, " || "),
     [
         "function(value, args) {",
@@ -61,7 +61,6 @@ validate(#is_required{unless_has_value=Otherfields}, "") when Otherfields =/= []
     % evaluate them
     lists:any(fun(Field) ->
         Val = wf:q(Field),
-        io:format("~p=~p~n", [Field, Val]),
         Val =/= undefined andalso Val =/= ""
     end, Otherfields);
 validate(_, "") ->

@@ -12,6 +12,7 @@
     to_atom/1,
     to_existing_atom/1,
     to_binary/1,
+    to_unicode_binary/1,
     to_integer/1,
     to_string_list/1,
     to_qs/1,

@@ -13,7 +13,7 @@
 
 render_action(#set{anchor=Anchor, target=Target, value=Value0}) ->
     Value = wf:js_escape(wf:to_list(Value0)),
-    wf:f(<<"Nitrogen.$set_value('~s', '~s', \"~s\");">>, [Anchor, Target, Value]).
+    wf:f(<<"Nitrogen.$set_value('~s', '~s', \"~ts\");">>, [Anchor, Target, Value]).
 
 set(Element, Value) ->
 	set(normal, Element, Value).

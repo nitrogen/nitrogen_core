@@ -4,21 +4,23 @@
 % See MIT-LICENSE for licensing information.
 
 -module (action_validation_error).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([render_action/1]).
 
 render_action(Record) -> 
     TargetPath = Record#validation_error.target,
-    InsertAfterNode = case Record#validation_error.attach_to of
-        undefined -> "";
-        Node -> wf:f(", insertAfterWhatNode : obj(\"~s\")", [Node])
-    end,
+    InsertAfterNode = insert_after_node(Record#validation_error.attach_to),
     Text = wf:js_escape(Record#validation_error.text),
     [
-		%% Is this going to be a problem with memory leaks? I'm not sure.
-        wf:f("var v = new LiveValidation(obj('~s'), { onlyOnSubmit: true ~s});", [TargetPath, InsertAfterNode]),
-        wf:f("v.add(Validate.Custom, { against: Nitrogen.$return_false, failureMessage: \"~s\", displayMessageWhenEmpty: true });", [Text]),
-        "v.validate();"
+        %% Is this going to be a problem with memory leaks in the browser? I'm
+        %% not sure. I'm not too worried about it though, since I'd like to
+        %% replace LiveValidation altogether.
+        wf:f(<<"var v = new LiveValidation(obj('~ts'), { onlyOnSubmit: true ~s});">>, [TargetPath, InsertAfterNode]),
+        wf:f(<<"v.add(Validate.Custom, { against: Nitrogen.$return_false, failureMessage: \"~ts\", displayMessageWhenEmpty: true });">>, [Text]),
+        <<"v.validate();">>
     ].
 
-
+insert_after_node(undefined) ->
+    "";
+insert_after_node(Node) ->
+    wf:f(<<", insertAfterWhatNode : obj(\"~s\")">>, [Node]).

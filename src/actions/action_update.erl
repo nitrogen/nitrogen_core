@@ -37,7 +37,7 @@ render_action(#update{type=Type, anchor=Anchor, target=Target, elements=Elements
 	{ok, Html} = wf_render_elements:render_elements(Elements),
 
     % Turn the HTML into a Javascript statement that will update the right element.
-    wf:f(<<"Nitrogen.$~s(\"~s\", \"~s\", \"~s\");">>,
+    wf:f(<<"Nitrogen.$~s(\"~s\", \"~s\", \"~ts\");">>,
         [Type, Anchor, Target, wf:js_escape(Html)]);
 
 %% Handle other actions (insert_before, insert_after, etc)

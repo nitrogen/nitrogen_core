@@ -29,9 +29,9 @@
 
 f(S) -> f(S, []).
 f(S, Args) when is_binary(S) ->
-	iolist_to_binary(io_lib:format(S, Args));
+	wf:to_unicode_binary(io_lib:format(S, Args));
 f(S, Args) when is_list(S) ->
-	lists:flatten(io_lib:format(S,Args)).
+    wf:to_unicode_list(io_lib:format(S,Args)).
 
 
 %%% IDS %%%
