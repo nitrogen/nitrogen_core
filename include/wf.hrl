@@ -959,7 +959,7 @@
         delegate                :: module()
     }).
 -record(console_log, {?ACTION_BASE(action_console_log),
-        text=""                 :: text()
+        text=""                 :: any()
     }).
 -record(script, {?ACTION_BASE(action_script),
         script                  :: text()

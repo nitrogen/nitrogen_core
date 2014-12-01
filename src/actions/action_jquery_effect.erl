@@ -10,6 +10,7 @@
     options_to_js/1
 ]).
 
+-spec render_action(#jquery_effect{}) -> body().
 render_action(Record) ->
     Target = Record#jquery_effect.target,
     Effect = Record#jquery_effect.effect,
@@ -42,10 +43,8 @@ render_action(Record) ->
     end,
     [wf:f("objs('~s').", [Target]), Script].
 
-
-%% Options is a list of {Key,Value} tuples	
+-spec options_to_js(Options :: proplist()) -> binary().
 options_to_js(Options) ->
-    wf:console_log(Options),
     F = fun({Key, Value}) ->
         if 
             Value =:= true; Value =:= false ->

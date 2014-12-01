@@ -4,7 +4,7 @@
 % See MIT-LICENSE for licensing information.
 
 -module (action_console_log).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -export([
 	render_action/1,
     console_log/1,
