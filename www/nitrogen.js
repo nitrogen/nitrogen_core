@@ -244,7 +244,7 @@ NitrogenClass.prototype.$hide_notice_bar = function() {
 NitrogenClass.prototype.$show_disconnected_notice = function() {
     if(!this.$going_away) {
         var msg = "&#9889; Connection Broken! Attempting to reconnect... &#9889;";
-        this.$show_error_bar("error", msg);
+        this.$show_notice_bar("error", msg);
     }
 }
 
