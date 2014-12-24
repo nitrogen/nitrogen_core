@@ -12,4 +12,4 @@ render_action(Record) ->
     Function = Record#js_custom.function,
     Args = Record#js_custom.args,
     WhenEmpty = Record#js_custom.when_empty,
-    wf:f("v.add(Validate.Custom, { against: ~s, args: ~s, failureMessage: \"~s\", displayMessageWhenEmpty: ~s });", [Function, Args, Text, WhenEmpty]).
+    wf:f("v.add(Validate.Custom, { against: ~s, args: ~ts, failureMessage: \"~ts\", displayMessageWhenEmpty: ~ts });", [Function, Args, Text, WhenEmpty]).
