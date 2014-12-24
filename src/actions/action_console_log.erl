@@ -13,9 +13,9 @@
 
 -spec render_action(Record :: tuple()) -> binary().
 render_action(#console_log{text=Text}) ->
-    Text2 = ?WF_IF(?IS_STRING(Text) orelse is_binary(Text),Text,wf:f("~p",[Text])),
+    Text2 = ?WF_IF(?IS_STRING(Text) orelse is_binary(Text),Text,wf:f("~ts",[Text])),
     JsText = wf:js_escape(wf:to_list(Text2)),
-    wf:f(<<"Nitrogen.$console_log(\"~s\");">>, [JsText]).
+    wf:f(<<"Nitrogen.$console_log(\"~ts\");">>, [JsText]).
 
 -spec console_log(Value :: string() | any()) -> ok.
 console_log(Value) ->

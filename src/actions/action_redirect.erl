@@ -16,12 +16,12 @@
 -spec render_action(#redirect{}) -> text().
 render_action(Record) ->
     DestinationUrl = Record#redirect.url,
-    wf:f("window.location=\"~s\";", [wf:js_escape(DestinationUrl)]).
+    wf:f("window.location=\"~ts\";", [wf:js_escape(DestinationUrl)]).
 
 -spec redirect(url()) -> html().
 redirect(Url) -> 
     wf:wire(#redirect { url=Url }),
-    wf:f("<script>window.location=\"~s\";</script>", [wf:js_escape(Url)]).
+    wf:f("<script>window.location=\"~ts\";</script>", [wf:js_escape(Url)]).
 
 -spec redirect_to_login(url(), url()) -> html().
 redirect_to_login(LoginUrl, PostLoginUrl) ->

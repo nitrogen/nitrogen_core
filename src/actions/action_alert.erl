@@ -8,4 +8,4 @@
 -compile(export_all).
 
 render_action(Record) -> 
-    wf:f("window.alert(\"~s\");", [wf:js_escape(Record#alert.text)]).	
+    wf:f("window.alert(\"~ts\");", [wf:js_escape(Record#alert.text)]).	

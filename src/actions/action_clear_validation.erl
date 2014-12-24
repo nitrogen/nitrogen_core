@@ -41,19 +41,19 @@ clear_specific_validators(Trigger, Target) ->
 	Validators = get_validators(),
 	FilteredValidators = [X || X={ValGroup, ValPath, _} <- Validators, not(ValGroup==Trigger andalso ValPath==Target)],
 	set_validators(FilteredValidators),
-	wf:f("Nitrogen.$destroy_specific_validation('~s','~s')",[Trigger, Target]).
+	wf:f("Nitrogen.$destroy_specific_validation('~ts','~ts')",[Trigger, Target]).
 
 clear_target_validators(Target) ->
 	Validators = get_validators(),
 	FilteredValidators = [X || X={_, ValPath, _} <- Validators, ValPath =/= Target],
 	set_validators(FilteredValidators),
-	wf:f("Nitrogen.$destroy_target_validation('~s')",[Target]).
+	wf:f("Nitrogen.$destroy_target_validation('~ts')",[Target]).
 	
 clear_trigger_validators(Trigger) ->
 	Validators = get_validators(),
 	FilteredValidators = [X || X={ValGroup, _, _} <- Validators, ValGroup =/= Trigger],
 	set_validators(FilteredValidators),
-	wf:f("Nitrogen.$destroy_validation_group('~s')",[Trigger]).
+	wf:f("Nitrogen.$destroy_validation_group('~ts')",[Trigger]).
 
 
 get_validators() ->
