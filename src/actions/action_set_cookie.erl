@@ -7,4 +7,4 @@ render_action(#set_cookie{cookie=Cookie0, value=Value0, path=Path0, minutes_to_l
 	Value = wf:js_escape(Value0),
 	Path = wf:js_escape(Path0),
 	Mins = wf:to_list(Mins0),
-	wf:f(<<"Nitrogen.$set_cookie('~s','~s','~s','~s');">>,[Cookie, Value, Path, Mins]).
+	wf:f(<<"Nitrogen.$set_cookie('~ts','~ts','~ts','~ts');">>,[Cookie, Value, Path, Mins]).
