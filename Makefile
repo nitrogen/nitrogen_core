@@ -1,3 +1,5 @@
+.PHONY: test docs doc
+
 all: compile
 
 compile:
@@ -19,9 +21,10 @@ doc: docs
 eunit: clean compile
 	./rebar eunit
 
-test: eunit
+test:
 	mkdir -p test
 	rm -fr test/browsertest
+	$(MAKE) eunit
 	git clone git://github.com/nitrogen/NitrogenProject.com.git test/browsertest
 	mkdir -p test/browsertest/deps
 	ln -s ../../.. test/browsertest/deps/nitrogen_core
