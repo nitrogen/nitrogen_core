@@ -33,7 +33,8 @@ set_cookie(Cookie, Value, Path, MinutesToLive) ->
 
 set_cookie(postback_websocket, Cookie, Value, Path, MinutesToLive) ->
 	%% Websocket connections have already send the headers and can't set the
-	%% cookies in a frame, so we need to set these cookies with javascript
+	%% cookies as a "frame header" (such a thing doesn't exist), so we need to
+	%% set these cookies with javascript
 	set_websocket_cookie(Cookie, Value, Path, MinutesToLive);
 set_cookie(_Type, Cookie, Value, Path, MinutesToLive) ->
 	set_bridge_cookie(Cookie, Value, Path, MinutesToLive).
