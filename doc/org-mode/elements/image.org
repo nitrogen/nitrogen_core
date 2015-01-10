@@ -70,7 +70,7 @@
    With this said, using the standard configuration, an image requesting a
    relative path like ="/images/user_profiles/profilepic12345.png"= will
    actually serve the image from your Nitrogen installation from
-   ="site/static/images/user_profiles/12345.png"=
+   ="site/static/images/user_profiles/profilepic12345.png"=
 
    To customize this for your own application, in Nitrogen 2.3, you can
    edit the =static_paths= option in =etc/simple_bridge.config=, and prior to

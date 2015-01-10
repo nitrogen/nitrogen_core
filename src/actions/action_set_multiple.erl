@@ -13,13 +13,13 @@
 
 render_action(#set_multiple{anchor=Anchor, target=Target, values=Values0}) ->
     Values = format_values(Values0),
-    wf:f(<<"Nitrogen.$set_values('~s', '~s', [~s]);">>, [Anchor, Target, Values]).
+    wf:f(<<"Nitrogen.$set_values('~s', '~s', [~ts]);">>, [Anchor, Target, Values]).
 
 format_values(Vs) ->
     wf:join([format_value(V) || V <- Vs], <<", ">>).
 
 format_value(V) ->
-    wf:f("'~s'", [wf:js_escape(wf:to_list(V))]).
+    wf:f("'~ts'", [wf:js_escape(wf:to_list(V))]).
 
 set(Element, Values) when is_list(Values) ->
 	set(normal, Element, Values).

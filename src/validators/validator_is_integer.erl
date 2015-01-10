@@ -27,7 +27,7 @@ render_action(Record) ->
         attach_to=Record#is_integer.attach_to
     },
 
-    Script = wf:f("v.add(Validate.Numericality, { notAnIntegerMessage: \"~s\", onlyInteger: true });", [Text]),
+    Script = wf:f("v.add(Validate.Numericality, { notAnIntegerMessage: \"~ts\", onlyInteger: true });", [Text]),
     [CustomValidatorAction, Script].
 
 validate(Value, Min, Max) ->
