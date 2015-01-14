@@ -130,8 +130,13 @@
   + Stefan Zegenhagen
   + Mehmet Emin Tok
   + Stuart Thackray
+  + @fooflare
+  + Alex Popov (@seidlitz)
+  + Aaron Frantisak
+  + Lloyd R. Prentice.
+  + Cameron Frederick (@cammcad)
    
-  Roughly sorted by date of contribution. Send your twitter handles to [[http://twitter.com][@jessegumm]]
+  Roughly sorted by date of contribution. Send your twitter handles to [[http://twitter.com/jessegumm][@jessegumm]]
 
 * Documentation
 
