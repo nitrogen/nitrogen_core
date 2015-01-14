@@ -22,7 +22,7 @@
 
    + html\_encode - (/boolean/) :: Set to true to safely html-encode the text.
 
-   + max\_length - (/integer/) :: Specify the maximum number of characters that
+   + maxlength - (/integer/) :: Specify the maximum number of characters that
       can be typed by the user.
 
    + size - (/integer/) :: Specify the width of the textbox in characters. The
