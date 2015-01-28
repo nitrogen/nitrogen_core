@@ -282,7 +282,7 @@ NitrogenClass.prototype.$validate_and_serialize = function(validationGroup) {
         n = this;
 
     this.$execute_before_postbacks();
-
+    
     jQuery(":input").not(".no_postback").each(function(i) {
         var LV = Nitrogen.$get_validation(this);
         if (LV && LV.group == validationGroup && !LV.validate()) {
@@ -361,6 +361,13 @@ NitrogenClass.prototype.$make_id = function(element) {
 
 /*** AJAX METHODS ***/
 
+NitrogenClass.prototype.$show_spinner = function() {
+    $("div.spinner").show();
+}
+
+NitrogenClass.prototype.$hide_spinner = function() {
+    $("div.spinner").hide();
+}
 
 NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventContext, extraParam, ajaxSettings) {
     var n = this;
@@ -369,7 +376,9 @@ NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventCo
     this.$event_is_running = true;
 
     // Run validation...
+    this.$show_spinner();
     var validationParams = this.$validate_and_serialize(validationGroup);   
+    this.$hide_spinner();
     if (validationParams == null) {
         this.$event_is_running = false;
         this.$event_started = null;
@@ -395,6 +404,8 @@ NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventCo
     this.$event_data_type = s.dataType;
     this.$event_success_fun = s.success;
     this.$event_error_fun = s.error;
+    
+    this.$show_spinner();
 
     if(this.$websockets_enabled) {
         delete params["pageContext"];
@@ -423,12 +434,14 @@ NitrogenClass.prototype.$cancel_event = function() {
         this.$event_started = null;
         this.$set_disconnected(true);
         this.$event_is_running = false;
+        this.$hide_spinner();
     }
 }
 
 NitrogenClass.prototype.$event_success = function(data, textStatus) {
     this.$event_is_running = false;
     this.$event_started = null;
+    this.$hide_spinner();
     if(this.$is_disconnected()) {
         this.$reconnect_system();
     }
@@ -443,6 +456,7 @@ NitrogenClass.prototype.$event_success = function(data, textStatus) {
 NitrogenClass.prototype.$event_error = function(XHR, textStatus, errorThrown) {
     var n = this;
     this.$event_started = null;
+    this.$hide_spinner();
     if(textStatus == "timeout" || textStatus=="error") {
         n.$set_disconnected(true);
         setTimeout(function() {
