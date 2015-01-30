@@ -1,5 +1,8 @@
 COMPILING THE NITROGEN DOCUMENTATION
 
+(Note: There is *something* up with Ubuntu 14.04's Emacs packages that are
+causing problems with compiling the docs. For now, Ubuntu 12.04 is known to
+work, and so is recommended for compiling the docs).
 
 Compiling the documentation uses Org-mode for Emacs and a simple Perl script
 for adding Disqus comments.
