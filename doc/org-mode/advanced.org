@@ -31,3 +31,10 @@
   + [[file:./advanced/plugins.org][Plugin System]] :: Nitrogen is easily
     extendable with plugins. This is a guide for both adding plugins, and also
     creating your own.
+
+  + [[http://sigma-star.com/blog/post/embedding-nitrogen][Embedding Nitrogen into an existing application]] (external) :: If you
+    have an existing Erlang application, this guide will walk you through
+    adding a web-based front-end to it using Nitrogen's =embed= script.
+
+  + [[http://cstar.io/2014/07/02/nitrogen-on-heroku.html][Deploying Nitrogen on Heroku]] (external) :: A step-by-step
+    guide to making your Nitrogen app Heroku-ready.
