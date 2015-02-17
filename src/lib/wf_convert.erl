@@ -382,7 +382,8 @@ parse_ip(IP = {_,_,_,_,_,_,_,_}) ->
 parse_ip(Binary) when is_binary(Binary) ->
     parse_ip(binary_to_list(Binary));
 parse_ip(String) ->
-    inet_parse:address(String).
+    {ok, IP} = inet_parse:address(String),
+    IP.
 
 -include_lib("eunit/include/eunit.hrl").
 
