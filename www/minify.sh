@@ -1,5 +1,9 @@
 #!/bin/sh
 
+## On ubuntu/debian machines, the package to install is called yui-compressor:
+##   $ sudo apt-get install yui-compressor
+## 
+
 min="yui-compressor"
 
 $min -o bert.min.js bert.js
