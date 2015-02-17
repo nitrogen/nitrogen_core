@@ -26,6 +26,7 @@ function NitrogenClass(o) {
     this.$system_reconnection_events = Array();
     this.$last_system_event = null;
     this.$going_away = false;
+    this.$maybe_going_away = false;
     this.$live_validation_data_field = "LV_live_validation";
     this.$before_postback_list = new Array();
     this.$js_dependencies = new Array();
@@ -242,7 +243,7 @@ NitrogenClass.prototype.$hide_notice_bar = function() {
 }
 
 NitrogenClass.prototype.$show_disconnected_notice = function() {
-    if(!this.$going_away) {
+    if(!this.$going_away && !this.$maybe_going_away) {
         var msg = "&#9889; Connection Broken! Attempting to reconnect... &#9889;";
         this.$show_notice_bar("error", msg);
     }
@@ -253,8 +254,10 @@ NitrogenClass.prototype.$hide_disconnected_notice = function() {
 }
 
 NitrogenClass.prototype.$hide_disconnected_notice_worked = function() {
-    this.$show_notice_bar("ok", "Reconnected!");
-    this.$hide_disconnected_notice();
+    if($("div.nitrogen_notice_bar").is(":visible")) {
+        this.$show_notice_bar("ok", "Reconnected!");
+        this.$hide_disconnected_notice();
+    }
 }
 
 
@@ -461,7 +464,7 @@ NitrogenClass.prototype.$event_error = function(XHR, textStatus, errorThrown) {
         n.$set_disconnected(true);
         setTimeout(function() {
             n.$requeue_last_event();
-        }, 5000);
+        }, 500);
     }
         
     this.$event_is_running = false;
@@ -1340,12 +1343,17 @@ var page = document;
 
 var Nitrogen = new NitrogenClass();
 
-// Prevent the red "connection broken" bar from showing when navigating away.
+
 $(window).on("beforeunload", function() {
+    // Give a "redirect prompt" if presented to prevent such.
     if(!Nitrogen.$allow_redirect) {
         return Nitrogen.$redirect_prompt;
     }
-    Nitrogen.$going_away = true;
+    // Prevent the red "connection broken" bar from showing when navigating away.
+    Nitrogen.$maybe_going_away = true;
+    setTimeout(function() {
+        Nitrogen.$maybe_going_away = false;
+    },1000);
     return;
 });
 
