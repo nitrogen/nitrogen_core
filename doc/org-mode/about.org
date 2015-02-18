@@ -136,6 +136,7 @@
   + Lloyd R. Prentice.
   + Cameron Frederick (@cammcad)
   + Xue Hongwei
+  + Steve Vinoski (@stevevinoski)
    
   Roughly sorted by date of contribution. Send your twitter handles to [[http://twitter.com/jessegumm][@jessegumm]]
 
