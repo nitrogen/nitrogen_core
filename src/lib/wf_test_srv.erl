@@ -10,6 +10,7 @@
 -export([
     start/1,
     start/2,
+    start/3,
     passed/1,
     failed/1,
     next_test_path/0,
@@ -41,14 +42,23 @@ main() ->
 
 start(AppName) when is_atom(AppName) ->
     {ok, TestPaths} = application:get_env(AppName, tests),
-    start(TestPaths);
-
-start(TestPaths) ->
-    start(undefined, TestPaths).
+    %% when we remove support for R15, we can change this to get_env/3
+    Opts = case application:get_env(AppName, test_options) of
+        undefined -> [];
+        {ok, Op} -> Op
+    end,
+    start(undefined, TestPaths, Opts).
 
 start(BrowserExec, TestPaths) ->
+    start(BrowserExec, TestPaths, []).
+
+start(BrowserExec, TestPaths, Opts) ->
+    BaseUrl = case proplists:get_value(base_url, Opts) of
+        undefined -> "http://127.0.0.1:8000";
+        Base -> Base
+    end,
     Trigger = crypto:rand_uniform(1, 10000),
-    LaunchUrl = wf:f("http://127.0.0.1:8000/wf_test_srv?id=~p", [Trigger]),
+    LaunchUrl = wf:f(BaseUrl ++ "/wf_test_srv?id=~p", [Trigger]),
     wf_test:log("Starting Nitrogen Test Server...~nOpen your browser to:~n        ~s~n", [LaunchUrl]),
     {ok, Pid} = gen_server:start({local, ?MODULE}, ?MODULE, [Trigger, TestPaths], []),
     maybe_launch_browser(BrowserExec, LaunchUrl),
