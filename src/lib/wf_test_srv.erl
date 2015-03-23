@@ -13,6 +13,7 @@
     start/3,
     passed/1,
     failed/1,
+    set_autoadvance/1,
     next_test_path/0,
     get_summary/0,
     stop/0
@@ -28,7 +29,7 @@
     code_change/3
 ]).
 
--record(state, {trigger, test_paths=[], current_test, passed=0, failed=0}).
+-record(state, {trigger, autoadvance=true, test_paths=[], current_test, passed=0, failed=0}).
 
 main() ->
     Trigger = wf:to_integer(wf:q(id)),
@@ -81,10 +82,16 @@ passed(Num) ->
 failed(Num) ->
     gen_server:cast(?MODULE, {failed, Num}).
 
+set_autoadvance(TF) when is_boolean(TF) ->
+    gen_server:cast(?MODULE, {set_autoadvance, TF}).
+
 next_test_path() ->
     case gen_server:call(?MODULE, next_test_path) of
         {ok, Next} ->
             Next;
+        autoadvance_disabled ->
+            %% autoadvance is disabled
+            autoadvance_disabled;
         undefined ->
             print_summary_and_close(),
             done
@@ -109,6 +116,8 @@ init([Trigger, TestPaths]) ->
 handle_call({is_trigger_valid, ProvidedTrigger}, _From, State=#state{trigger=Trigger}) ->
     Reply = ProvidedTrigger == Trigger,
     {reply, Reply, State, ?TIMEOUT};
+handle_call(next_test_path, _From, State=#state{autoadvance=false}) ->
+    {reply, autoadvance_disabled, State};
 handle_call(next_test_path, _From, State=#state{test_paths=[Next | Rest]}) ->
     Reply = {ok, Next},
     {reply, Reply, State#state{test_paths=Rest, current_test=Next}, ?TIMEOUT};
@@ -119,6 +128,8 @@ handle_call(summary, _From, State=#state{passed=Passed, failed=Failed}) ->
     Reply = {ok, [{passed, Passed}, {failed, Failed}]},
     {reply, Reply, State, ?TIMEOUT}.
 
+handle_cast({set_autoadvance, TF}, State) ->
+    {noreply, State#state{autoadvance=TF}};
 handle_cast({passed, Num}, State=#state{passed=Cur}) ->
     {noreply, State#state{passed=Cur+Num}, ?TIMEOUT};
 handle_cast({failed, Num}, State=#state{failed=Cur}) ->

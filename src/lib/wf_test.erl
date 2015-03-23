@@ -9,6 +9,9 @@
     pass/1,
     fail/2,
 
+    enable_autoadvance/0,
+    disable_autoadvance/0,
+
     test_manual/2,
     test_manual/3,
     test_manual/4,
@@ -52,10 +55,14 @@ start_all(App) ->
     timer:sleep(3000),
     {ok, Browsers} = application:get_env(App, test_browsers),
     {ok, Tests} = application:get_env(App, tests),
+    Opts = case application:get_env(App, test_options) of
+        undefined -> [];
+        {ok, O} -> O
+    end,
 
     lists:foreach(fun(Browser) ->
         wf_test:log("Starting tests with ~s",[Browser]),
-        Pid = wf_test_srv:start(Browser, Tests),
+        Pid = wf_test_srv:start(Browser, Tests, Opts),
         erlang:monitor(process, Pid),
         receive
             {'DOWN', _, process, Pid, _ } ->
@@ -86,8 +93,11 @@ summarize_and_continue(Uri) ->
     wf_test:log("Module ~p (~p of ~p tests passed)~n", [Uri, Passed, Total]),
     case wf_test_srv:next_test_path() of
         done -> ok; 
+        autoadvance_disabled -> ok;
         Next -> wf:redirect(Next)
     end.
+
+
 
 pass(Name) ->
     Pid = wf:state(test_comet_pid),
@@ -96,6 +106,12 @@ pass(Name) ->
 fail(Name, Reason) ->
     Pid = wf:state(test_comet_pid),
     Pid ! {fail, Name, Reason}.
+
+enable_autoadvance() ->
+    wf_test_srv:set_autoadvance(true).
+
+disable_autoadvance() ->
+    wf_test_srv:set_autoadvance(false).
 
 test_manual(Name, {Setup, Assertion}) ->
     test_manual(Name, Setup, Assertion);
