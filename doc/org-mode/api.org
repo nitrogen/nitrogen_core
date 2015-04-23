@@ -430,7 +430,7 @@
 
 Example:
 #+BEGIN_SRC erlang
-  wf:qs_pl([favorite_robot,favorite_dinosaur,favorite_hobbit])
+  wf:q_pl([favorite_robot,favorite_dinosaur,favorite_hobbit])
 #+END_SRC
 
   Returns something like:
