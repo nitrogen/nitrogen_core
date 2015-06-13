@@ -16,6 +16,7 @@
     to_integer/1,
     to_string_list/1,
     to_qs/1,
+    parse_qs/1,
     encode/2, decode/2,
     html_encode/1, html_encode/2,
     html_decode/1,
@@ -243,6 +244,16 @@ to_qs([{Key, Val}]) ->
     [url_encode(Key),"=",url_encode(Val)];
 to_qs([{Key, Val} | Rest]) ->
     [url_encode(Key),"=",url_encode(Val),"&" | to_qs(Rest)].
+
+-spec parse_qs(string() | binary()) -> proplist().
+%% @doc Will if the argument passed is a string, it will return a proplist of
+%% strings. If the argument is a binary, it will return a proplist of binaries.
+parse_qs(Bin) when is_binary(Bin) ->
+    PL = parse_qs(binary_to_list(Bin)),
+    [{list_to_binary(K), list_to_binary(V)} || {K,V} <- PL];
+parse_qs([]) -> [];
+parse_qs(S) ->
+    httpd:parse_query(S).
 
 %%% ESCAPE JAVASCRIPT %%%
 
