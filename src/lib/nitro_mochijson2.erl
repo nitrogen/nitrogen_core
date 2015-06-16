@@ -695,7 +695,7 @@ encoder_utf8_test() ->
         encode(<<1,"\321\202\320\265\321\201\321\202">>),
 
     %% raw utf8 output (optional)
-    Enc = nitro_mochijson2:encoder([{utf8, true}]),
+    Enc = ?MODULE:encoder([{utf8, true}]),
     [34,"\\u0001",[209,130],[208,181],[209,129],[209,130],34] =
         Enc(<<1,"\321\202\320\265\321\201\321\202">>).
 

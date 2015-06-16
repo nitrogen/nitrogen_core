@@ -360,7 +360,8 @@ qs_revdecode([C | Rest], Acc) ->
 json_encode(Data) ->
     nitro_mochijson2:encode(add_json_struct(Data)).
 
-json_decode(Json) ->
+json_decode(Json0) ->
+    Json = unicode:characters_to_binary(Json0),
     try strip_json_struct(nitro_mochijson2:decode(Json))
     catch _:_ -> undefined
     end.
