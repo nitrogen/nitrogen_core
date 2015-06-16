@@ -220,6 +220,9 @@ json_decode(Json) ->
 to_qs(List) ->
     _Iolist = wf_convert:to_qs(List).
 
+parse_qs(String) ->
+    _Proplist = wf_convert:parse_qs(String).
+
 join(List,Delimiter) ->
     _Result = wf_convert:join(List,Delimiter).
 
