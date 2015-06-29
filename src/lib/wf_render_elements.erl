@@ -15,41 +15,30 @@
 % Puts any new actions into the current context.
 -spec render_elements(Elements :: body()) -> {ok, html()}.
 render_elements(Elements) ->
-    {ok, _HtmlAcc} = render_elements(Elements, []).
+    {ok, inner_render_elements(Elements)}.
 
-% render_elements(Elements, HtmlAcc) -> {ok, Html}.
--spec render_elements(Elements :: body(), HtmlAcc :: html()) -> {ok, html()}.
-render_elements(S, HtmlAcc) when S == undefined orelse S == []  ->
-    {ok, HtmlAcc};
-
-render_elements(S, HtmlAcc) when is_integer(S) orelse is_binary(S) orelse ?IS_STRING(S) ->
-    {ok, [S|HtmlAcc]};
-
-render_elements(Elements, HtmlAcc) when is_list(Elements) ->
-    F = fun(X, {ok, HAcc}) ->
-        render_elements(X, HAcc)
-    end,
-    {ok, Html} = lists:foldl(F, {ok, []}, Elements),
-    HtmlAcc1 = [lists:reverse(Html)|HtmlAcc],
-    {ok, HtmlAcc1};
-
-render_elements(Element, HtmlAcc) when is_tuple(Element) ->
-    {ok, Html} = render_element(Element),
-    HtmlAcc1 = [Html|HtmlAcc],
-    {ok, HtmlAcc1};
-
-render_elements(mobile_script, HtmlAcc) ->
-    HtmlAcc1 = [mobile_script|HtmlAcc],
-    {ok, HtmlAcc1};
-
-render_elements(script, HtmlAcc) ->
-    HtmlAcc1 = [script|HtmlAcc],
-    {ok, HtmlAcc1};
-
-render_elements(Atom, HtmlAcc) when is_atom(Atom) ->
-    render_elements(wf:to_binary(Atom), HtmlAcc);
-
-render_elements(Unknown, _HtmlAcc) ->
+-spec inner_render_elements(E :: body()) -> html().
+% @doc ire = inner_render_elements
+inner_render_elements(undefined) ->
+    [];
+inner_render_elements([]) ->
+    [];
+inner_render_elements(<<>>) ->
+    <<>>;
+inner_render_elements(E)
+    when is_integer(E); is_binary(E); ?IS_STRING(E)->
+    E;
+inner_render_elements([E|Es]) ->
+    [inner_render_elements(E) | inner_render_elements(Es)];
+inner_render_elements(E) when is_tuple(E) ->
+    render_element(E);
+inner_render_elements(mobile_script) ->
+    mobile_script;
+inner_render_elements(script) ->
+    script;
+inner_render_elements(Atom) when is_atom(Atom) ->
+    list_to_binary(Atom);
+inner_render_elements(Unknown) ->
     throw({unanticipated_case_in_render_elements, Unknown}).
 
 % This is a Nitrogen element, so render it.
@@ -66,7 +55,7 @@ render_element(Element) when is_tuple(Element) ->
 
     case Base#elementbase.show_if of
         false ->
-            {ok, []};
+            [];
         true ->
             Module = Base#elementbase.module, 
             {module, Module} = code:ensure_loaded(Module),
@@ -77,7 +66,7 @@ render_element(Element) when is_tuple(Element) ->
                     %% the pre-rendering that goes on with each element. This
                     %% should be used for custom elements that are simply
                     %% defined in terms of other Nitrogen elements.
-                    {ok, _Html} = call_element_render(transform_element, Module, Element);
+                    _Html = call_element_render(transform_element, Module, Element);
 
                 false ->
                     % If no ID is defined, then use the same
@@ -112,11 +101,11 @@ render_element(Element) when is_tuple(Element) ->
                     wf:wire(Base1#elementbase.actions),
 
                     % Render the element...
-                    {ok, Html} = call_element_render(render_element, Module, Element1),
+                    Html = call_element_render(render_element, Module, Element1),
 
                     % Reset the anchor (likely changed during the inner render)...
                     wf_context:anchor(Anchor),
-                    {ok, Html}
+                    Html
             end
     end.
 
@@ -125,10 +114,10 @@ render_element(Element) when is_tuple(Element) ->
 % HTML.
 -spec call_element_render(RenderOrTransform :: render_element | transform_element,
                           Module :: module(),
-                          Element :: nitrogen_element() ) -> {ok, html()}.
+                          Element :: nitrogen_element() ) -> html().
 call_element_render(RenderOrTransform, Module, Element) ->
     NewElements = Module:RenderOrTransform(Element),
-    {ok, _Html} = render_elements(NewElements, []).
+    inner_render_elements(NewElements).
 
 -spec normalize_id(list()) -> string().
 normalize_id(ID) -> 
