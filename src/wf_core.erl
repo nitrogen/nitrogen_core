@@ -173,8 +173,8 @@ deserialize_context(SerializedPageContext) ->
 % is important, as some handlers may depend on others being initialize. For example, 
 % the session handler may use the cookie handler to get or set the session cookie.
 call_init_on_handlers() ->
-    Handlers = wf_context:handlers(),
-    [wf_handler:call(X#handler_context.name, init) || X <- Handlers],
+    Handlers = [wf_handler:init(X) || X <- wf_context:handlers()],
+    wf_context:handlers(Handlers),
     ok.
 
 % finish_handlers/1 - 
@@ -183,8 +183,8 @@ call_init_on_handlers() ->
 % the 'render' handler should go last to make sure that it captures all changes
 % put in place by the other handlers.
 call_finish_on_handlers() ->
-    Handlers = wf_context:handlers(),
-    [wf_handler:call(X#handler_context.name, finish) || X <- Handlers],
+    Handlers = [wf_handler:finish(X) || X <- wf_context:handlers()],
+    wf_context:handlers(Handlers),
     ok.	
 
 

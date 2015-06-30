@@ -97,6 +97,8 @@
         context/1
     ]).
 
+-export([increment/1]).
+
 %% Exports for backwards compatibility
 -export([
         request_bridge/0,
@@ -465,6 +467,12 @@ make_handler(Name, Module) ->
 context() -> get(context).
 context(Context) -> put(context, Context).
 
+%% for debugging. Remove when ready
+increment(Key) ->
+    case get(Key) of
+        undefined -> put(Key, 1);
+        V -> io:format("~p=~p~n",[Key, V+1]), put(Key, V+1)
+    end.
 
 %% Kept for backwards compatibility with nitrogen 2.2 and below (and
 %% simple_bridge 1.x)

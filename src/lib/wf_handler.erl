@@ -1,7 +1,9 @@
 % vim: sw=4 ts=4 et ft=erlang
 -module (wf_handler).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -export ([
+    init/1,
+    finish/1,
     call/2, 
     call/3,
     call_readonly/2, 
@@ -9,6 +11,21 @@
     set_handler/2
 ]).
 
+
+%% Because the handlers are all initialized and finished at the beginning and
+%% end of requests together, rather than getting and setting each handler
+%% individually from and to the process dictionary, we get them all in bulk,
+%% then set them all in bulk in wf_core. So here we're just going to return the
+%% raw handler context to be stored with the rest of the handler contexts.
+-spec init(#handler_context{}) -> #handler_context{}.
+init(H = #handler_context{module=Module, config=Config, state=State}) ->
+    {ok, NewState} = Module:init(Config, State),
+    H#handler_context{state=NewState}.
+
+-spec finish(#handler_context{}) -> #handler_context{}.
+finish(H = #handler_context{module=Module, config=Config, state=State}) ->
+    {ok, NewState} = Module:finish(Config, State),
+    H#handler_context{state=NewState}.
 
 % Helper function to call a function within a handler.
 % Returns ok or {ok, Value}.
@@ -80,6 +97,7 @@ get_handler(Name) ->
 
 
 update_handler_state(Name, State) ->
+    wf_context:increment(update_handler_state),
     Handlers = wf_context:handlers(),
     OldHandler = lists:keyfind(Name, 2, Handlers),
     NewHandler = OldHandler#handler_context { state=State },
