@@ -69,14 +69,16 @@ inner_depickle(PickledData) ->
 
 -spec signkey() -> binary().
 signkey() ->
-    case config_handler:get_value(signkey) of
-        undefined ->
-            erlang:md5(wf:to_list(erlang:get_cookie()));
-        Key when byte_size(Key)==16 -> 
-            Key;
-        Key ->
-            erlang:md5(wf:to_list(Key))
-    end.
+    simple_cache:get(nitrogen, 1000, signkey, fun() ->
+        case config_handler:get_value(signkey) of
+            undefined ->
+                erlang:md5(wf:to_list(erlang:get_cookie()));
+            Key when byte_size(Key)==16 -> 
+                Key;
+            Key ->
+                erlang:md5(wf:to_list(Key))
+        end
+    end).
 
 -spec modified_base64_encode(binary()) -> binary().
 % @doc Replace '+' and '/' with '-' and '_', respectively.  Strip '='.
