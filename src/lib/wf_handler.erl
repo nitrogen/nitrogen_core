@@ -64,7 +64,7 @@ call_readonly(Name, FunctionName, Args) ->
     erlang:apply(Module, FunctionName, Args ++ [Config, State]).
 
 set_handler(Module, Config) ->
-    {module, Module} = code:ensure_loaded(Module),
+    {module, Module} = wf_utils:ensure_loaded(Module),
 
     % Get the module's behavior...
     L = Module:module_info(attributes),

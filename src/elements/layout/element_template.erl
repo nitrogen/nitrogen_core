@@ -157,7 +157,7 @@ convert_callback_tuple_to_function(Module, Function, ArgString, Bindings, Module
 
         % If the function in exported, then call it.
         % Otherwise return undefined...
-        {module, Module1} = code:ensure_loaded(Module1),
+        {module, Module1} = wf_utils:ensure_loaded(Module1),
         case erlang:function_exported(Module1, Function, length(Args)) of
             true -> _Elements = erlang:apply(Module1, Function, Args);
             false -> undefined

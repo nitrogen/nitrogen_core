@@ -192,7 +192,7 @@ call_finish_on_handlers() ->
 
 run_first_request() ->
     Module = wf_context:event_module(),
-    {module, Module} = code:ensure_loaded(Module),
+    {module, Module} = wf_utils:ensure_loaded(Module),
     EntryPoint = wf_context:entry_point(),
     Data = run_entry_point(Module, EntryPoint),
     wf_context:data(Data).

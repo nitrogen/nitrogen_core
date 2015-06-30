@@ -19,7 +19,8 @@
     get_field/3,
     copy_fields/2,
     is_iolist_empty/1,
-    has_behaviour/2
+    has_behaviour/2,
+    ensure_loaded/1
 ]).
 
 -define(COPY_TO_BASERECORD(Name, Size, Record),
@@ -219,3 +220,6 @@ has_behaviour(Module, Behaviour) ->
     catch
         _:_ -> false
     end.
+
+ensure_loaded(Module) ->
+    simple_cache:get(nitrogen, 1000, {ensure_loaded, Module}, fun() -> code:ensure_loaded(Module) end).

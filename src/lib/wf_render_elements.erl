@@ -58,7 +58,7 @@ render_element(Element) when is_tuple(Element) ->
             [];
         true ->
             Module = Base#elementbase.module, 
-            {module, Module} = code:ensure_loaded(Module),
+            {module, Module} = wf_utils:ensure_loaded(Module),
             case erlang:function_exported(Module,transform_element,1) of
                 true ->
                     %% Module:transform_element is a special shortcut mechanism

@@ -159,7 +159,7 @@ generate_anchor_script(Anchor, Target) ->
                          Trigger:: id(),
                          Target :: id()) -> script().
 call_action_render(Module, Action, Anchor, Trigger, Target) ->
-    case code:ensure_loaded(Module) of
+    case wf_utils:ensure_loaded(Module) of
         {module, Module} -> ok;
         {error, Error} -> throw({error_loading_action_module, Module, {error, Error}})
     end,
