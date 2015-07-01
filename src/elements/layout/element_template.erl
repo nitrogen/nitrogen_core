@@ -46,22 +46,26 @@ render_element(Record) ->
 get_cached_template(File) ->
     FileAtom = list_to_atom("template_file_" ++ File),
    
-    case is_time_to_recache(File) of
+    case is_time_to_recache(File, FileAtom) of
         true ->
             wf:info("Recaching Template~n"),
             %% Recache the template...
             Template = parse_template(File),
-            nitro_mochiglobal:put(FileAtom, Template),
-            simple_cache:set(nitrogen, infinity, {template_loaded, File}, true),
+            simple_cache:set(nitrogen, infinity, {template, FileAtom}, Template),
+            simple_cache:set(nitrogen, infinity, {template_loaded, FileAtom}, true),
             Template;
         false ->
             %% Load template from cache...
-            nitro_mochiglobal:get(FileAtom)
+            simple_cache:get(nitrogen, infinity, {template, FileAtom}, fun() ->
+                %% Load the mochiglobal value for easier migration of a live system.
+                %% In a few versions, we can just get rid of nitro_mochiglobal altogether.
+                nitro_mochiglobal:get(FileAtom)
+            end)
     end.
 
-is_time_to_recache(File) ->
-    IsLoaded = simple_cache:get(nitrogen, infinity, {template_loaded, File}, fun() -> false end),
-    LastModified = simple_cache:get(nitrogen, 1000, {template_last_modified, File}, fun() ->
+is_time_to_recache(File, FileAtom) ->
+    IsLoaded = simple_cache:get(nitrogen, infinity, {template_loaded, FileAtom}, fun() -> false end),
+    LastModified = simple_cache:get(nitrogen, 1000, {template_last_modified, FileAtom}, fun() ->
         filelib:last_modified(File)
     end),
     not(IsLoaded) orelse LastModified > {date(), time()}.
