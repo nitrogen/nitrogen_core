@@ -1,6 +1,7 @@
 % vim: sw=4 ts=4 et ft=erlang
 % Nitrogen Web Framework for Erlang
 % Copyright (c) 2008-2013 Rusty Klophaus
+% Copyright (c) 2014-2015 Jesse Gumm
 % See MIT-LICENSE for licensing information.
 
 -module (element_template).
@@ -35,9 +36,9 @@ render_element(Record) ->
 
     % Evaluate the template.
 
-    %% erl_eval:exprs/2 expects Bindings to be an orddict, but Nitrogen 
-    %% does not have this requirement, so let's fix that.
-    %% create the needed Ord-Dict just once instead for every eval call down the chain
+    %% erl_eval:exprs/2 expects Bindings to be an orddict, but Nitrogen does
+    %% not have this requirement, so let's fix that.  create the needed
+    %% Ord-Dict just once instead for every eval call down the chain
     OrdDictBindings = orddict:from_list(Record#template.bindings),
     Fixed_bindings_record = Record#template{bindings=OrdDictBindings},
     Body = eval(Template, Fixed_bindings_record, ModuleAliases),
@@ -51,21 +52,22 @@ get_cached_template(File) ->
             wf:info("Recaching Template~n"),
             %% Recache the template...
             Template = parse_template(File),
-            simple_cache:set(nitrogen, infinity, {template, FileAtom}, Template),
-            simple_cache:set(nitrogen, infinity, {template_loaded, FileAtom}, true),
+            wf:set_cache({template, FileAtom}, Template),
+            wf:set_cache({template_loaded, FileAtom}, true),
             Template;
         false ->
             %% Load template from cache...
-            simple_cache:get(nitrogen, infinity, {template, FileAtom}, fun() ->
-                %% Load the mochiglobal value for easier migration of a live system.
-                %% In a few versions, we can just get rid of nitro_mochiglobal altogether.
+            wf:cache({template, FileAtom}, fun() ->
+                %% Load the mochiglobal value for easier migration of a live
+                %% system.  In a few versions, we can just get rid of
+                %% nitro_mochiglobal altogether.
                 nitro_mochiglobal:get(FileAtom)
             end)
     end.
 
 is_time_to_recache(File, FileAtom) ->
-    IsLoaded = simple_cache:get(nitrogen, infinity, {template_loaded, FileAtom}, fun() -> false end),
-    LastModified = simple_cache:get(nitrogen, 1000, {template_last_modified, FileAtom}, fun() ->
+    IsLoaded = wf:cache({template_loaded, FileAtom}, fun() -> false end),
+    LastModified = wf:cache({template_last_modified, FileAtom}, 1000, fun() ->
         filelib:last_modified(File)
     end),
     not(IsLoaded) orelse LastModified > {date(), time()}.

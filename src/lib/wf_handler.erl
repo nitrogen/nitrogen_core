@@ -64,7 +64,7 @@ call_readonly(Name, FunctionName, Args) ->
     erlang:apply(Module, FunctionName, Args ++ [Config, State]).
 
 set_handler(Module, Config) ->
-    {module, Module} = wf_utils:ensure_loaded(Module),
+    {module, Module} = code:ensure_loaded(Module),
 
     % Get the module's behavior...
     L = Module:module_info(attributes),
@@ -88,8 +88,8 @@ set_handler(Name, Module, Config) ->
 % Look up a handler in a context. Return {ok, HandlerModule, State}
 get_handler(Name) -> 
     Handlers = wf_context:handlers(),
-    case lists:keysearch(Name, 2, Handlers) of
-        {value, Handler} when is_record(Handler, handler_context) -> 
+    case lists:keyfind(Name, 2, Handlers) of
+        Handler when is_record(Handler, handler_context) -> 
             Handler;
         false -> 
             throw({handler_not_found_in_context, Name, Handlers})
@@ -97,7 +97,6 @@ get_handler(Name) ->
 
 
 update_handler_state(Name, State) ->
-    wf_context:increment(update_handler_state),
     Handlers = wf_context:handlers(),
     OldHandler = lists:keyfind(Name, 2, Handlers),
     NewHandler = OldHandler#handler_context { state=State },

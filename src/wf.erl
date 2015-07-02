@@ -394,7 +394,29 @@ clear_session() ->
 session_id() ->
     session_handler:session_id().
 
+%%% EXPOSE CACHE_HANDLER %%%
 
+cache(Key) ->
+    cache(Key, fun() -> undefined end).
+
+cache(Key, Fun) ->
+    cache(Key, infinity, Fun).
+
+cache(Key, TTL, Fun) ->
+    {ok, Value} = cache_handler:get_cached(Key, Fun, TTL),
+    Value.
+
+set_cache(Key, Value) ->
+    set_cache(Key, infinity, Value).
+
+set_cache(Key, TTL, Value) ->
+    cache_handler:set_cached(Key, Value, TTL).
+
+clear_cache(Key) ->
+    ok = cache_handler:clear(Key).
+
+clear_all_cache() ->
+    ok = cache_handler:clear_all().
 
 %%% EXPOSE IDENTITY_HANDLER %%%
 user() -> 

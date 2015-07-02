@@ -178,7 +178,7 @@ is_iolist_empty(_) -> false.
 debug() ->
     % Get all web and wf modules.
     F = fun(X) ->
-        {value, {source, Path}} = lists:keysearch(source, 1, X:module_info(compile)), Path
+        {source, Path} = lists:keyfind(source, 1, X:module_info(compile)), Path
     end,
 
     L =  [list_to_binary(atom_to_list(X)) || X <- erlang:loaded()],
@@ -222,4 +222,4 @@ has_behaviour(Module, Behaviour) ->
     end.
 
 ensure_loaded(Module) ->
-    simple_cache:get(nitrogen, 1000, {ensure_loaded, Module}, fun() -> code:ensure_loaded(Module) end).
+    wf:cache({ensure_loaded, Module}, 1000, fun() -> code:ensure_loaded(Module) end).

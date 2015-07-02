@@ -3,13 +3,11 @@
 % Copyright (c) 2008-2010 Rusty Klophaus
 % See MIT-LICENSE for licensing information.
 
-%% NOTE: DUE TO THE FACT THAT THIS IS NOT YET IMPLEMENTED IN ANY KIND OF REAL
-%% FORM, THIS API IS SUBJECT TO CHANGE (AND VERY LIKELY WILL IN NITROGEN 2.3)
-
 -module (cache_handler).
 -include("wf.hrl").
 -export ([
     get_cached/3,
+    set_cached/3,
     clear/1,
     clear_all/0
 ]).
@@ -20,9 +18,14 @@
                         State :: term()) -> {ok, State :: term() }.
 -callback get_cached(   Key :: term(),
                         Function :: fun(),
-                        TTL :: infinity | undefined | integer(),
+                        TTL :: infinity | integer(),
                         Config :: term(),
                         State :: term()) -> {ok, Value :: any(), State :: term()}.
+-callback set_cached(   Key :: term(),
+                        Value :: term(),
+                        TTL :: infinity | integer(),
+                        Config :: term(),
+                        State :: term()) -> {ok, State :: term()}.
 -callback clear(        Key :: term(),
                         Config :: term(),
                         State :: term()) -> {ok, State :: term()}.
@@ -38,6 +41,12 @@
                  TTL :: integer() | undefined | infinity) -> {ok, term()}.
 get_cached(Key, Function, TTL) ->  
     {ok, _Value} = wf_handler:call(cache_handler, get_cached, [Key, Function, TTL]).
+
+% @doc set_cached(Key, Value, TTL, State) -> {ok, NewState}
+% Set the cached value directly without checking if it currently exists. If a
+% value already exists for that key, it is replaced.
+set_cached(Key, Value, TTL ) ->
+    ok = wf_handler:call(cache_handler, set_cached, [Key, Value, TTL]).
 
 % @doc Remove a value from cache.
 -spec clear(Key :: any()) -> ok.
