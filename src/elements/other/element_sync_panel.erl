@@ -5,7 +5,9 @@
     reflect/0,
     render_element/1,
     refresh/1,
-    refresh/2
+    refresh/2,
+    event/1,
+    update/3
 ]).
 
 -define(STATE_KEY, sync_panel_body_trigger).
@@ -67,7 +69,13 @@ update(Targetid, Triggers, BodyFun) ->
                     wf:flush();
                 false ->
                     do_nothing
-            end
+            end;
+        not_alive ->
+            exit(normal);
+        {'JOIN', _} ->
+            do_nothing;
+        {'LEAVE', _} ->
+            do_nothing
 %%        %% Sending Body to all clients?
 %%        %% Let's disable for now. Needs more thought.
 %%        {body, T, Body} ->
@@ -77,5 +85,13 @@ update(Targetid, Triggers, BodyFun) ->
 %%                false ->
 %%                    do_nothing
 %%            end
+    after 20000 ->
+        %% The comet process will continue to live for as long as the comet pool exists. 
+        {ok, TRef} = timer:send_after(20000, self(), not_alive),
+        wf:wire(#event{delegate=?MODULE, postback={still_alive, TRef}}),
+        wf:flush()
     end,
-    update(Targetid, Triggers, BodyFun).
+    ?MODULE:update(Targetid, Triggers, BodyFun).
+
+event({still_alive, TRef}) ->
+    timer:cancel(TRef).
