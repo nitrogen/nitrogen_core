@@ -50,7 +50,7 @@ get_cached_template(File) ->
     CacheTime = nitro_mochiglobal:get(CacheTimeAtom),
 
     %% Check for recache if one second has passed since last cache time...
-    ReCache = case (CacheTime == undefined) orelse (timer:now_diff(now(), CacheTime) > (1000 * 1000)) of
+    ReCache = case (CacheTime == undefined) orelse (timer:now_diff(os:timestamp(), CacheTime) > (1000 * 1000)) of
         true ->
             %% Recache if the file has been modified. Otherwise, reset
             %% the CacheTime timer...
@@ -58,7 +58,7 @@ get_cached_template(File) ->
                 true ->
                     true;
                 false ->
-                    nitro_mochiglobal:put(CacheTimeAtom, now()),
+                    nitro_mochiglobal:put(CacheTimeAtom, os:timestamp()),
                     false
             end;
         false ->
@@ -71,7 +71,7 @@ get_cached_template(File) ->
             Template = parse_template(File),
             nitro_mochiglobal:put(FileAtom, Template),
             nitro_mochiglobal:put(LastModAtom, filelib:last_modified(File)),
-            nitro_mochiglobal:put(CacheTimeAtom, now()),
+            nitro_mochiglobal:put(CacheTimeAtom, os:timestamp()),
             Template;
         false ->
             %% Load template from cache...
