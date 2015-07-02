@@ -55,38 +55,39 @@ ws_init(Bridge) ->
 ws_message({text, _Other}, _Bridge, _State) ->
     noreply;
 ws_message({binary, Bin}, _Bridge, _State) ->
-    try
+    Reply = try
         ws_message_catched(binary_to_term(Bin, [safe]))
     catch
         Class:Error ->
             Stacktrace = erlang:get_stacktrace(),
             CrashReturn = wf_core:run_websocket_crash(Class, Error, Stacktrace),
-            {reply, {text, [<<"nitrogen_event:">>,CrashReturn]}}
-    end.
+            [<<"nitrogen_event:">>,CrashReturn]
+    end,
+    {reply, {text, Reply}}.
 
 ws_message_catched({nitrogen_postback,Msg}) ->
     Return = wf_core:run_websocket(Msg),
-    {reply, {text, [<<"nitrogen_event:">>,Return]}};
+    [<<"nitrogen_event:">>,Return];
 ws_message_catched(flush_switchover_comet_actions) ->
     %% If there are any actions that weren't 
     ReconnectionRecovery = <<"Nitrogen.$reconnect_system();">>,
     case action_comet:get_actions_and_register_new_websocket_pid(self()) of
         [] -> 
-            {reply, {text, [<<"nitrogen_system_event:">>, ReconnectionRecovery]}};
+            [<<"nitrogen_system_event:">>, ReconnectionRecovery];
         Actions ->
             wf:wire(page, page, Actions),
             Return = wf_core:run_websocket_comet(),
-            {reply, {text, [<<"nitrogen_system_event:">>, [ReconnectionRecovery, Return]]}}
+            [<<"nitrogen_system_event:">>, [ReconnectionRecovery, Return]]
     end;
 ws_message_catched({page_context, PageContext}) ->
     wf_core:init_websocket(PageContext),
-    {reply, {text, [
+    [
         %% init_websocket has changed the async mode to websocket, so
         %% let's tell the browser about our updated async_mode
         <<"nitrogen_event:">>,
         wf_core:serialize_context(),
         <<"Nitrogen.$enable_websockets();">>
-    ]}}.
+    ].
 
 ws_info({comet_actions, Actions} , _Bridge, _State) ->
     wf:wire(page, page, Actions),
