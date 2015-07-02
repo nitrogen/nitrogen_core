@@ -11,7 +11,6 @@
 
 -module (simple_session_handler).
 -include("wf.hrl").
--handler_level(application).
 -behaviour (session_handler).
 -export ([
     init/2, 

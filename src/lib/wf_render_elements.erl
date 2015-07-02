@@ -37,7 +37,7 @@ inner_render_elements(mobile_script) ->
 inner_render_elements(script) ->
     script;
 inner_render_elements(Atom) when is_atom(Atom) ->
-    list_to_binary(Atom);
+    wf:to_binary(Atom);
 inner_render_elements(Unknown) ->
     throw({unanticipated_case_in_render_elements, Unknown}).
 
