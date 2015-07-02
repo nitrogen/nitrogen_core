@@ -76,7 +76,8 @@ run_websocket(Data) ->
     wf_event:update_context_with_websocket_event(Data),
     query_handler:set_websocket_params(Data),
     run_postback_request(),
-    _ToSend = finish_websocket_request().
+    ToSend = finish_websocket_request(),
+    wf:to_unicode_binary(ToSend).
 
 run_catched() ->
     deserialize_request_context(),
