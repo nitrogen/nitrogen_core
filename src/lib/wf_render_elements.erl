@@ -28,8 +28,8 @@ inner_render_elements(<<>>) ->
 inner_render_elements(E)
     when is_integer(E); is_binary(E); ?IS_STRING(E)->
     E;
-inner_render_elements([E|Es]) ->
-    [inner_render_elements(E) | inner_render_elements(Es)];
+inner_render_elements(Es) when is_list(Es) ->
+    [inner_render_elements(E) || E <- Es];
 inner_render_elements(E) when is_tuple(E) ->
     render_element(E);
 inner_render_elements(mobile_script) ->
@@ -37,7 +37,7 @@ inner_render_elements(mobile_script) ->
 inner_render_elements(script) ->
     script;
 inner_render_elements(Atom) when is_atom(Atom) ->
-    list_to_binary(Atom);
+    wf:to_binary(Atom);
 inner_render_elements(Unknown) ->
     throw({unanticipated_case_in_render_elements, Unknown}).
 

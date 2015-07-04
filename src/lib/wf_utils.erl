@@ -39,7 +39,7 @@ f(S, Args) when is_list(S) ->
 
 % guid/0 - Return a guid like object.
 guid() ->
-    MD5 = erlang:md5(term_to_binary({node(), now(), make_ref()})),
+    MD5 = erlang:md5(term_to_binary({node(), os:timestamp(), make_ref()})),
     MD5List = lists:nthtail(8, binary_to_list(MD5)),
     F = fun(N) -> wf:f("~2.16.0B", [N]) end,
     L = [F(N) || N <- MD5List],
@@ -47,7 +47,7 @@ guid() ->
 
 % short_guid/0 - Return a shorter guid like object.
 short_guid() ->
-    MD5 = erlang:md5(term_to_binary({node(), now(), make_ref()})),
+    MD5 = erlang:md5(term_to_binary({node(), os:timestamp(), make_ref()})),
     MD5List = lists:nthtail(14, binary_to_list(MD5)),
     F = fun(N) -> wf:f("~2.16.0B", [N]) end,
     L = [F(N) || N <- MD5List],

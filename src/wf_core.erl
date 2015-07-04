@@ -70,13 +70,13 @@ run_websocket_crash(Type, Error, Stacktrace) ->
 
 run_websocket_comet() ->
     wf_context:type(postback_websocket),
-    _ToSend = finish_websocket_request().
+    _ToSend = wf:to_unicode_binary(finish_websocket_request()).
 
 run_websocket(Data) ->
     wf_event:update_context_with_websocket_event(Data),
     query_handler:set_websocket_params(Data),
     run_postback_request(),
-    _ToSend = finish_websocket_request().
+    _ToSend = wf:to_unicode_binary(finish_websocket_request()).
 
 run_catched() ->
     deserialize_request_context(),

@@ -10,7 +10,7 @@
 % Someone please make it better! - Rusty
 
 -module (simple_session_handler).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -behaviour (session_handler).
 -export ([
     init/2, 
@@ -110,5 +110,5 @@ session_loop(Session, Timeout) ->
     end.
 
 new_state() ->
-    Unique = erlang:md5(term_to_binary({now(), erlang:make_ref()})),
+    Unique = erlang:md5(term_to_binary({os:timestamp(), erlang:make_ref()})),
     #state { unique=Unique }.
