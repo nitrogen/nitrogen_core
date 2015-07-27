@@ -3,6 +3,7 @@
 *~
 .*.sw?
 crypto_compat.hrl
+compat.hrl
 .deps_plt
 test/
 .rebar/

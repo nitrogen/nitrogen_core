@@ -1,7 +1,7 @@
 % vim: sw=4 ts=4 et ft=erlang
 -ifndef(wf_inc).
 -define(wf_inc, ok).
--include("crypto_compat.hrl").
+-include("compat.hrl").
 -include("wf_test.hrl").
 
 

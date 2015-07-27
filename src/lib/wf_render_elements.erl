@@ -69,11 +69,27 @@ render_element(Element) when is_tuple(Element) ->
                     _Html = call_element_render(transform_element, Module, Element);
 
                 false ->
+                    % TODO: Revisit generating an ID for each element, instead
+                    % generating the ID only if an element has actions.
+                    % Otherwise, if an element needs an ID for something
+                    % special (like how the #button element needs an anchor to
+                    % wire the postback to and for validation stuff), let the
+                    % element_render function take care of that itself.
+                    %
+                    % This change will provide a handful of performance
+                    % improvements:
+                    %   + Removes having to call temp_id() for every element
+                    %   + Removes having to call normalize_id() possibly twice
+                    %     for each element
+                    %   + Lightens the page size since every element won't have
+                    %     an unnecessary 'tempABCXYZ' class.
+
+
                     % If no ID is defined, then use the same
                     % temp_id() for both the HtmlID and TempID.
                     % Otherwise, create a new TempID. Update the class
                     % with either one or both.
-
+    
                     % Get the anchor, or create a new one if it's not defined...
                     Anchor = case Base#elementbase.anchor of
                         undefined -> normalize_id(temp_id());
@@ -129,5 +145,8 @@ normalize_id(ID) ->
 
 -spec temp_id() -> string().
 temp_id() ->
-    {_, _, C} = now(), 
-    "temp" ++ integer_to_list(C).
+    Num = ?WF_UNIQUE,  %% For Erlang 18+, is erlang:unique_integer,
+                       %% For Erlang <18, is parts of erlang:now()
+                       %% see compat.escript, and include/compat.hrl for the
+                       %% definition.
+    "temp" ++ integer_to_list(Num).

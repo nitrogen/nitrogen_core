@@ -4,20 +4,23 @@
 main([]) ->
     crypto:start(),
 
-	Filename = "include/crypto_compat.hrl",
-	io:format("Generating crypto compatibility...\n"),
+	Filename = "include/compat.hrl",
+	io:format("Generating compatibility macros...\n"),
 	Encrypt = encrypt(),
 	Decrypt = decrypt(),
 	Hash = hash(),
+    Unique = unique(),
 
-	io:format("...Using: ~p~n",[Encrypt]),
-	io:format("...Using: ~p~n",[Decrypt]),
-	io:format("...Using: ~p~n",[Hash]),
+	io:format("...?WF_ENCRYPT will use: ~p~n",[Encrypt]),
+	io:format("...?WF_DECRYPT will use: ~p~n",[Decrypt]),
+	io:format("...?WF_HASH will use:    ~p~n",[Hash]),
+    io:format("...?WF_UNIQUE will use:  ~p~n",[Unique]),
 
 	Contents = [
 		"-define(WF_ENCRYPT(Key, IV, Data), ",Encrypt,").\n",
 		"-define(WF_DECRYPT(Key, IV, Data), ",Decrypt,").\n",
-		"-define(WF_HASH(Data), ",Hash,").\n"
+		"-define(WF_HASH(Data), ",Hash,").\n",
+        "-define(WF_UNIQUE, ",Unique,").\n"
 	],
 
     ContentsBin = iolist_to_binary(Contents),
@@ -46,7 +49,6 @@ decrypt() ->
 			"crypto:aes_cbc_128_decrypt(Key, IV, Data)"
 	end.
 
-
 hash() ->
 	case erlang:function_exported(crypto, hash, 2) of
 		true ->
@@ -54,3 +56,11 @@ hash() ->
 		false ->
 			"crypto:sha(Data)"
 	end.
+
+unique() ->
+    case erlang:function_exported(erlang, unique_integer, 1) of
+        true ->
+            "erlang:unique_integer([positive])";
+        false ->
+            "begin {_,S,US}=erlang:now(), S*1000,+US end"
+    end.
