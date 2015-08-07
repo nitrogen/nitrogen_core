@@ -512,7 +512,7 @@ spawn_with_context({Name, Function}, ReconActions, Mode) ->
 spawn_with_context({Name, Function, Msg}, ReconActions, Mode) ->
     WrappedCometFun = create_wrapped_comet_fun(Function, Mode, ReconActions),
     Pid = start_comet_process(Name, Msg, WrappedCometFun),
-    notify_accumulator_checker(Pid),
+    start_accumulator_check_timer(Mode, Pid),
     Pid.
 
 create_wrapped_comet_fun(Function, Mode, ReconActions) ->
