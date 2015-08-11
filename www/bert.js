@@ -137,18 +137,20 @@ BertClass.prototype.encode_inner = function (Obj) {
 };
 
 BertClass.prototype.encode_string = function (Obj) {
-	var hasUnicode = false;	
-	for (i = 0; i < Obj.length && !hasUnicode; i++) {
-		if(Obj.charCodeAt(i) >= 256)
-			hasUnicode = true;
-	}
-	if(hasUnicode){
+	if(Obj.length > 65535 || this.string_has_unicode(Obj)) {
 		return this.encode_unicode_string(Obj);
-	}else
-	{
+	}else{
 		return this.encode_latin1_string(Obj);
 	}
 };
+
+BertClass.prototype.string_has_unicode = function(Str) {
+	for (i = 0; i < Str.length; i++) {
+		if(Str.charCodeAt(i) >= 256)
+				return true;
+	}
+	return false;
+}
 
 BertClass.prototype.encode_latin1_string = function(Obj) {
 	return this.STRING + this.int_to_bytes(Obj.length, 2) + Obj;
@@ -436,7 +438,7 @@ BertClass.prototype.int_to_bytes = function (Int, Length) {
 		Int = Math.floor(Int / 256);
 	}
 	if (Int > 0) {
-		throw ("Argument out of range: " + OriginalInt);
+		throw ("Argument out of range: " + OriginalInt + " (Max Allowable Length: " + Length + ")");
 	}
 	return s;
 };
