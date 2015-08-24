@@ -335,6 +335,8 @@ quote_plus(Int) when is_integer(Int) ->
     quote_plus(integer_to_list(Int));
 quote_plus(Bin) when is_binary(Bin) ->
     quote_plus(binary_to_list(Bin));
+quote_plus(Float) when is_float(Float) ->
+    quote_plus(mochinum:digits(Float));
 quote_plus(String) ->
     quote_plus(String, []).
 
@@ -377,6 +379,8 @@ json_decode(Json0) ->
     catch _:_ -> undefined
     end.
 
+strip_json_struct([{struct, List} | Rest]) ->
+    [List | strip_json_struct(Rest) ];
 strip_json_struct({struct, List}) ->
     [{K, strip_json_struct(V)} || {K, V} <- List];
 strip_json_struct(Other) ->
