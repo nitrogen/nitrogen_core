@@ -8,7 +8,8 @@
 -include("wf.hrl").
 -export([
     reflect/0,
-    render_element/1
+    render_element/1,
+    passthrough/1
 ]).
 
 %% Check the last modified time for templates every one second.
@@ -153,7 +154,12 @@ replace_callbacks(CallbackTuples, Record, ModuleAliases) ->
     Functions = [convert_callback_tuple_to_function(M, F, ArgString, Bindings, ModuleAliases) || {M, F, ArgString} <- CallbackTuples],
     #function_el { anchor=page, function=Functions }.
 
-
+convert_callback_tuple_to_function(Module, _Function='', _ArgString=[], Bindings, ModuleAliases) ->
+    %% This is a special condition, where the callout is just [[[Variable]]].
+    %% The parser extracted the Module as the only term, and the rest was
+    %% ignored, so treat it as a simple Binding binding Lookup:
+    convert_callback_tuple_to_function('element_template', 'passthrough', wf:to_list(Module), Bindings, ModuleAliases);
+    
 convert_callback_tuple_to_function(Module, Function, ArgString, Bindings, ModuleAliases) ->
     % De-reference to page module and custom module aliases...
     Module1 = get_module_from_alias(Module, ModuleAliases),
@@ -163,12 +169,24 @@ convert_callback_tuple_to_function(Module, Function, ArgString, Bindings, Module
 
         % If the function in exported, then call it.
         % Otherwise return undefined...
-        {module, Module1} = wf_utils:ensure_loaded(Module1),
-        case erlang:function_exported(Module1, Function, length(Args)) of
-            true -> _Elements = erlang:apply(Module1, Function, Args);
-            false -> undefined
+        case wf_utils:ensure_loaded(Module1) of
+            {error, nofile} ->
+                throw({unable_to_load_module, [
+                    {original_module, Module},
+                    {actual_module, Module1},
+                    {function, Function},
+                    {arg_string, ArgString}
+                ]});
+            {module, Module1} ->
+                case erlang:function_exported(Module1, Function, length(Args)) of
+                    true -> _Elements = erlang:apply(Module1, Function, Args);
+                    false -> undefined
+                end
         end
     end.
+
+passthrough(Var) ->
+    Var.
 
 to_term(X, Bindings) ->
     S = wf:to_list(X),
