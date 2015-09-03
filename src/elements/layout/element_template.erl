@@ -53,8 +53,8 @@ get_cached_template(File) ->
             wf:info("Recaching Template~n"),
             %% Recache the template...
             Template = parse_template(File),
+            wf:set_cache({tempate_last_recached, FileAtom}, {date(), time()}),
             wf:set_cache({template, FileAtom}, Template),
-            wf:set_cache({template_loaded, FileAtom}, true),
             Template;
         false ->
             %% Load template from cache...
@@ -66,12 +66,27 @@ get_cached_template(File) ->
             end)
     end.
 
+
+%% FIX THIS LOGIC!
 is_time_to_recache(File, FileAtom) ->
-    IsLoaded = wf:cache({template_loaded, FileAtom}, fun() -> false end),
-    LastModified = wf:cache({template_last_modified, FileAtom}, 1000, fun() ->
-        filelib:last_modified(File)
-    end),
-    not(IsLoaded) orelse LastModified > {date(), time()}.
+    %% First we check the last time the template was recached/recompiled. This
+    %% will be used to compare against the time the file was updated on the
+    %% filesystem. When it's first loaded, it'll be recorded as a "Never" tuple
+    %% ({0,0,0}, {0,0,0}}) to ensure that all future dates tuples are greater
+    %% than it.
+    Never = fun() -> {{0,0,0}, {0,0,0}} end,
+    LastRecached = wf:cache({tempate_last_recached, FileAtom}, infinity, Never),
+
+    %% Now we load the file's last modified time from the filesystem, and cache
+    %% that result for one second. That way we're not hammering the filesystem
+    %% over and over for the same file.
+    GetLastModified = fun() -> filelib:last_modified(File) end,
+    LastModified = wf:cache({template_last_modified, FileAtom}, 1000, GetLastModified),
+
+    %error_logger:info_msg("Last Mod: ~p", [LastModified]),
+    %% Finally if the file's last modification date is after the last time it
+    %% was recached, we need to recache it.
+    LastModified > LastRecached.
             
 parse_template(File) ->
     % TODO - Templateroot
