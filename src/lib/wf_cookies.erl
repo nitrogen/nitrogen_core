@@ -48,4 +48,4 @@ set_bridge_cookie(Cookie, Value, Path, MinutesToLive) ->
 	wf_context:bridge(NewBridge).
 
 delete_cookie(Cookie) ->
-	set_cookie(Cookie, "", "/", -1).
+	set_cookie(Cookie, "", "/", 0).
