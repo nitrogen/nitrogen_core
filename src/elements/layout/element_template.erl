@@ -66,8 +66,6 @@ get_cached_template(File) ->
             end)
     end.
 
-
-%% FIX THIS LOGIC!
 is_time_to_recache(File, FileAtom) ->
     %% First we check the last time the template was recached/recompiled. This
     %% will be used to compare against the time the file was updated on the
