@@ -12,9 +12,6 @@
     passthrough/1
 ]).
 
-%% Check the last modified time for templates every one second.
--define(RECACHE_CHECK_INTERVAL, 1000000).
-
 % TODO - Revisit parsing in the to_module_callback. This
 % will currently fail if we encounter a string like:
 % "String with ) will fail"
