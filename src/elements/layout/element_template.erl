@@ -81,7 +81,6 @@ is_time_to_recache(File, FileAtom) ->
     GetLastModified = fun() -> filelib:last_modified(File) end,
     LastModified = wf:cache({template_last_modified, FileAtom}, 1000, GetLastModified),
 
-    %error_logger:info_msg("Last Mod: ~p", [LastModified]),
     %% Finally if the file's last modification date is after the last time it
     %% was recached, we need to recache it.
     LastModified > LastRecached.
