@@ -8,7 +8,8 @@
 -include("wf.hrl").
 -export([
     reflect/0,
-    render_element/1
+    render_element/1,
+    passthrough/1
 ]).
 
 %% Check the last modified time for templates every one second.
@@ -52,8 +53,8 @@ get_cached_template(File) ->
             wf:info("Recaching Template~n"),
             %% Recache the template...
             Template = parse_template(File),
+            wf:set_cache({tempate_last_recached, FileAtom}, {date(), time()}),
             wf:set_cache({template, FileAtom}, Template),
-            wf:set_cache({template_loaded, FileAtom}, true),
             Template;
         false ->
             %% Load template from cache...
@@ -65,12 +66,27 @@ get_cached_template(File) ->
             end)
     end.
 
+
+%% FIX THIS LOGIC!
 is_time_to_recache(File, FileAtom) ->
-    IsLoaded = wf:cache({template_loaded, FileAtom}, fun() -> false end),
-    LastModified = wf:cache({template_last_modified, FileAtom}, 1000, fun() ->
-        filelib:last_modified(File)
-    end),
-    not(IsLoaded) orelse LastModified > {date(), time()}.
+    %% First we check the last time the template was recached/recompiled. This
+    %% will be used to compare against the time the file was updated on the
+    %% filesystem. When it's first loaded, it'll be recorded as a "Never" tuple
+    %% ({0,0,0}, {0,0,0}}) to ensure that all future dates tuples are greater
+    %% than it.
+    Never = fun() -> {{0,0,0}, {0,0,0}} end,
+    LastRecached = wf:cache({tempate_last_recached, FileAtom}, infinity, Never),
+
+    %% Now we load the file's last modified time from the filesystem, and cache
+    %% that result for one second. That way we're not hammering the filesystem
+    %% over and over for the same file.
+    GetLastModified = fun() -> filelib:last_modified(File) end,
+    LastModified = wf:cache({template_last_modified, FileAtom}, 1000, GetLastModified),
+
+    %error_logger:info_msg("Last Mod: ~p", [LastModified]),
+    %% Finally if the file's last modification date is after the last time it
+    %% was recached, we need to recache it.
+    LastModified > LastRecached.
             
 parse_template(File) ->
     % TODO - Templateroot
@@ -153,7 +169,12 @@ replace_callbacks(CallbackTuples, Record, ModuleAliases) ->
     Functions = [convert_callback_tuple_to_function(M, F, ArgString, Bindings, ModuleAliases) || {M, F, ArgString} <- CallbackTuples],
     #function_el { anchor=page, function=Functions }.
 
-
+convert_callback_tuple_to_function(Module, _Function='', _ArgString=[], Bindings, ModuleAliases) ->
+    %% This is a special condition, where the callout is just [[[Variable]]].
+    %% The parser extracted the Module as the only term, and the rest was
+    %% ignored, so treat it as a simple Binding binding Lookup:
+    convert_callback_tuple_to_function('element_template', 'passthrough', wf:to_list(Module), Bindings, ModuleAliases);
+    
 convert_callback_tuple_to_function(Module, Function, ArgString, Bindings, ModuleAliases) ->
     % De-reference to page module and custom module aliases...
     Module1 = get_module_from_alias(Module, ModuleAliases),
@@ -163,12 +184,24 @@ convert_callback_tuple_to_function(Module, Function, ArgString, Bindings, Module
 
         % If the function in exported, then call it.
         % Otherwise return undefined...
-        {module, Module1} = wf_utils:ensure_loaded(Module1),
-        case erlang:function_exported(Module1, Function, length(Args)) of
-            true -> _Elements = erlang:apply(Module1, Function, Args);
-            false -> undefined
+        case wf_utils:ensure_loaded(Module1) of
+            {error, nofile} ->
+                throw({unable_to_load_module, [
+                    {original_module, Module},
+                    {actual_module, Module1},
+                    {function, Function},
+                    {arg_string, ArgString}
+                ]});
+            {module, Module1} ->
+                case erlang:function_exported(Module1, Function, length(Args)) of
+                    true -> _Elements = erlang:apply(Module1, Function, Args);
+                    false -> undefined
+                end
         end
     end.
+
+passthrough(Var) ->
+    Var.
 
 to_term(X, Bindings) ->
     S = wf:to_list(X),
