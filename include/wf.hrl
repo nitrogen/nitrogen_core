@@ -248,6 +248,7 @@
 -record(link, {?ELEMENT_BASE(element_link),
         text=""                 :: text(),
         body=""                 :: body(),
+        image=undefined         :: undefined | url(),
         new=false               :: boolean(),
         html_encode=true        :: html_encode(),
         mobile_target=false     :: boolean(),

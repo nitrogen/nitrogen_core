@@ -34,6 +34,7 @@ render_element(Record) ->
 	end,
 
     Body = [
+        ?WF_IF(Record#link.image, #image{image=Record#link.image}),
         wf:html_encode(Record#link.text, Record#link.html_encode),
         Record#link.body
     ],
