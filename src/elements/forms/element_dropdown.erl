@@ -109,6 +109,8 @@ create_option_full(Selected, HtmlEncode, Opt = #option{text=Text, value=Value, d
 -spec is_selected(Selected :: binary(), X :: #option{}) -> boolean().
 is_selected(_Selected, #option{selected=true}) ->
     true;
+is_selected(_, #option{selected = false}) ->
+    false;
 is_selected(Selected, _X) when Selected =:= <<>> ->
     false;
 is_selected(Selected, #option{value=Value}) ->
