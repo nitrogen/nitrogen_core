@@ -114,22 +114,12 @@ create_option_full(Selected, HtmlEncode, Opt = #option{text=Text, value=Value, d
 
 -spec is_selected(DropDownValue :: binary()|undefined, X :: #option{}) -> boolean().
 is_selected(_DropDownValue, #option{selected=true})  ->
-    %% If the #option is specified to be true, then it must be selected,
-    %% regardless of the #dropdown element's value.
+    %% If the #option.selected=true, then short-circuit and return true.
     true;
-is_selected(_DropDownValue, #option{selected=false}) ->
-    %% Same as above, if selected = false, then it must not be selected.
-    false;
-is_selected(undefined, #option{}) ->
-    %% If the #option{} has not specified true or false, and the value
-    %% attribute of the #dropdown element is 'undefined', then we don't select
-    %% anything.
-    false;
-is_selected(_DropDownValue, #option{value=undefined}) ->
-    %% Similarly, if the provided #option.value attribute is 'undefined',
-    %% then regardless of the #dropdown's Value, it will not be selected.
-    %% This prevents such errors as the #option.value=undefined and
-    %% Value=<<"undefined">> improperly
+is_selected(DropDownValue, #option{selected=OptSelected, value=OptValue})
+        when OptSelected=:=false;
+             OptValue=:=undefined;
+             DropDownValue=:=undefined ->
     false;
 is_selected(DropDownValue, #option{value=OptValue}) ->
     %% Finally, if none of the above short-circuits trip, then we can convert
