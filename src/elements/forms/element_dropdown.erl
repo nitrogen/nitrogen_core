@@ -96,7 +96,7 @@ create_option_from_tuple(Selected, HtmlEncode, {Value, Text}) ->
 
 create_option_full(Selected, HtmlEncode, Opt = #option{text=Text, value=Value, disabled=Disabled}) ->
     Content = wf:html_encode(Text, HtmlEncode),
-    SelectedProp = ?WF_IF(is_selected(Selected, Opt), selected, <<"undefined">>),
+    SelectedProp = ?WF_IF(is_selected(Selected, Opt), selected, undefined),
     DisabledProp = ?WF_IF(Disabled, disabled, undefined),
     ValueProp = ?WF_IF(Value =:= undefined, [], {value, wf:html_encode(Value, HtmlEncode)}),
     Props = [
