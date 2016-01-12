@@ -62,8 +62,14 @@ wire_postback(Dropdown) ->
 
 format_options(Dropdown) when Dropdown#dropdown.options==undefined ->
     "";
-format_options(#dropdown{options=Opts, value=Value, html_encode=HtmlEncode}) ->
-    create_options(wf:to_binary(Value), HtmlEncode, Opts).
+format_options(#dropdown{options=Opts, value=Value0, html_encode=HtmlEncode}) ->
+    Value = binary_or_undefined(Value0),
+    create_options(Value, HtmlEncode, Opts).
+
+binary_or_undefined(undefined) ->
+    undefined;
+binary_or_undefined(V) ->
+    wf:to_binary(V).
 
 create_options(_,_,[]) ->
     [];
@@ -106,10 +112,27 @@ create_option_full(Selected, HtmlEncode, Opt = #option{text=Text, value=Value, d
     ],
     wf_tags:emit_tag(option, Content, Props).
 
--spec is_selected(Selected :: binary(), X :: #option{}) -> boolean().
-is_selected(_Selected, #option{selected=true}) ->
+-spec is_selected(DropDownValue :: binary()|undefined, X :: #option{}) -> boolean().
+is_selected(_DropDownValue, #option{selected=true})  ->
+    %% If the #option is specified to be true, then it must be selected,
+    %% regardless of the #dropdown element's value.
     true;
-is_selected(Selected, _X) when Selected =:= <<"undefined">> ->
+is_selected(_DropDownValue, #option{selected=false}) ->
+    %% Same as above, if selected = false, then it must not be selected.
     false;
-is_selected(Selected, #option{value=Value}) ->
-    wf:to_binary(Value) =:= Selected.
+is_selected(undefined, #option{}) ->
+    %% If the #option{} has not specified true or false, and the value
+    %% attribute of the #dropdown element is 'undefined', then we don't select
+    %% anything.
+    false;
+is_selected(_DropDownValue, #option{value=undefined}) ->
+    %% Similarly, if the provided #option.value attribute is 'undefined',
+    %% then regardless of the #dropdown's Value, it will not be selected.
+    %% This prevents such errors as the #option.value=undefined and
+    %% Value=<<"undefined">> improperly
+    false;
+is_selected(DropDownValue, #option{value=OptValue}) ->
+    %% Finally, if none of the above short-circuits trip, then we can convert
+    %% #option.value to binary and compare directly. If they match, then it's
+    %% selected.
+    wf:to_binary(OptValue) =:= DropDownValue.

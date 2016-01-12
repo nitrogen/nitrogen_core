@@ -373,7 +373,7 @@
 -record(option, {
         text=""                 :: text(),
         value=undefined         :: text() | atom() | undefined,
-        selected=false          :: boolean(),
+        selected                :: boolean() | undefined,
         show_if=true            :: boolean(),
         disabled=false          :: boolean()
     }).
