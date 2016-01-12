@@ -96,7 +96,7 @@ create_option_from_tuple(Selected, HtmlEncode, {Value, Text}) ->
 
 create_option_full(Selected, HtmlEncode, Opt = #option{text=Text, value=Value, disabled=Disabled}) ->
     Content = wf:html_encode(Text, HtmlEncode),
-    SelectedProp = ?WF_IF(is_selected(Selected, Opt), selected, undefined),
+    SelectedProp = ?WF_IF(is_selected(Selected, Opt), selected, <<"undefined">>),
     DisabledProp = ?WF_IF(Disabled, disabled, undefined),
     ValueProp = ?WF_IF(Value =:= undefined, [], {value, wf:html_encode(Value, HtmlEncode)}),
     Props = [
@@ -109,9 +109,7 @@ create_option_full(Selected, HtmlEncode, Opt = #option{text=Text, value=Value, d
 -spec is_selected(Selected :: binary(), X :: #option{}) -> boolean().
 is_selected(_Selected, #option{selected=true}) ->
     true;
-is_selected(_, #option{selected = false}) ->
-    false;
-is_selected(Selected, _X) when Selected =:= <<>> ->
+is_selected(Selected, _X) when Selected =:= <<"undefined">> ->
     false;
 is_selected(Selected, #option{value=Value}) ->
     wf:to_binary(Value) =:= Selected.
