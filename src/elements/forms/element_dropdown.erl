@@ -126,3 +126,13 @@ is_selected(DropDownValue, #option{value=OptValue}) ->
     %% #option.value to binary and compare directly. If they match, then it's
     %% selected.
     wf:to_binary(OptValue) =:= DropDownValue.
+
+-include_lib("eunit/include/eunit.hrl").
+
+html_encode_test() ->
+    ?assertEqual(true, is_selected(<<"anything">>, #option{selected=true})),
+    ?assertEqual(false, is_selected(<<"anything">>, #option{selected=false})),
+    ?assertEqual(true, is_selected(<<"apple">>, #option{value=apple})),
+    ?assertEqual(false, is_selected(<<"other_thing">>, #option{value=apple})),
+    ?assertEqual(true, is_selected(<<"apple">>, #option{value=apple, selected=true})),
+    ?assertEqual(false, is_selected(<<"apple">>, #option{value=apple, selected=false})).
