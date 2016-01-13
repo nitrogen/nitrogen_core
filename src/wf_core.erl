@@ -96,7 +96,7 @@ run_catched() ->
 finish_dynamic_request() ->
     Elements = wf_context:data(),
     wf_context:clear_data(),
-    {ok, Html} = wf_render_elements:render_elements(Elements),
+    {ok, Html} = maybe_render_elements(Elements),
 	{ok, Javascript} = wf_render_actions:render_action_queue(),
 
     call_finish_on_handlers(),
@@ -109,6 +109,18 @@ finish_dynamic_request() ->
         postback_request    -> build_postback_response(JavascriptFinal);
         _                   -> build_first_response(Html, JavascriptFinal)
     end.
+
+maybe_render_elements(Elements = {file, _Filename}) ->
+    %% This will pass the {file,_} return to simple_bridge to serve a file
+    %% directly
+    {ok, Elements};
+maybe_render_elements(Elements = {stream, Size, Fun}) when is_integer(Size), is_function(Fun) ->
+    %% This is used for passing a {stream, Size, StreamFun} function to
+    %% simple_bridge (currently only works with cowboy)
+    {ok, Elements};
+maybe_render_elements(Elements) ->
+    {ok, _Html} = wf_render_elements:render_elements(Elements).
+
 
 finish_websocket_request() ->
     ContextData = wf_context:data(),

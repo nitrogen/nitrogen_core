@@ -295,9 +295,19 @@ NitrogenClass.prototype.$validate_and_serialize = function(validationGroup) {
             // Skip any unchecked radio boxes.
             if ((this.type == "radio" || this.type=="checkbox") && !this.checked) return;
             if (this.type == "select-multiple" && $(this).val()==null) return;
+            
+            // Skip elements that aren't nitrogen elements (they won't have a
+            // properly named Nitrogen 'id')
+            var id = n.$make_id(this);
+            if(id == "") return;
+
+            // It's a good element. Let's get the value, and return convert to
+            // an empty string if it's null
             var val = $(this).val();
             if(val == null) val = "";
-            params[n.$make_id(this)] = val;
+        
+            // Add to the parameter list to send to the server
+            params[id] = val;
         }
     });
     // Return the params if valid. Otherwise, return null.

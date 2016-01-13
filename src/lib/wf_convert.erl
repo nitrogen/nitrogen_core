@@ -379,13 +379,15 @@ json_decode(Json0) ->
     catch _:_ -> undefined
     end.
 
-strip_json_struct([{struct, List} | Rest]) ->
-    [List | strip_json_struct(Rest) ];
 strip_json_struct({struct, List}) ->
-    [{K, strip_json_struct(V)} || {K, V} <- List];
+	strip_json_struct(List);
+strip_json_struct({Key, Value}) ->
+	{Key, strip_json_struct(Value)};
+strip_json_struct([H | T]) ->
+	[strip_json_struct(H) | strip_json_struct(T)];
 strip_json_struct(Other) ->
-    Other.
-    
+	Other.
+
 add_json_struct(Struct=[{_,_}|_]) ->
     {struct, [{K, add_json_struct(V)} || {K, V} <- Struct]};
 add_json_struct(Other) ->

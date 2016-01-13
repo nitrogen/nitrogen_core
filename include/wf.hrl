@@ -53,6 +53,8 @@
 -type module_function()     :: {atom(), atom()}.
 -type encoding_function()   :: module_function() | fun((iolist()) -> iolist()).
 -type encoding()            :: none | unicode | auto | encoding_function().
+-type context_data()        :: iolist() | {file, Filename :: path()}
+                                | {stream, Size :: integer(), fun()}.
 -type context_type()        :: first_request | postback_request | static_file | postback_websocket.
 %%% CONTEXT %%%
 
@@ -95,7 +97,7 @@
     type                    :: context_type(),
     bridge                  :: simple_bridge:bridge(),
     anchor=undefined        :: id(), 
-    data=[]                 :: iolist(),
+    data=[]                 :: context_data(),
     encoding=auto           :: encoding(),
     action_queue=undefined  :: wf_action_queue:action_queue() | undefined,
     % These are all serialized, sent to the browser
@@ -248,6 +250,7 @@
 -record(link, {?ELEMENT_BASE(element_link),
         text=""                 :: text(),
         body=""                 :: body(),
+        image=undefined         :: undefined | url(),
         new=false               :: boolean(),
         html_encode=true        :: html_encode(),
         mobile_target=false     :: boolean(),
@@ -372,7 +375,7 @@
 -record(option, {
         text=""                 :: text(),
         value=undefined         :: text() | atom() | undefined,
-        selected=false          :: boolean(),
+        selected                :: boolean() | undefined,
         show_if=true            :: boolean(),
         disabled=false          :: boolean()
     }).

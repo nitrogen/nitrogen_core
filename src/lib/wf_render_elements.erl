@@ -18,7 +18,6 @@ render_elements(Elements) ->
     {ok, inner_render_elements(Elements)}.
 
 -spec inner_render_elements(E :: body()) -> html().
-% @doc ire = inner_render_elements
 inner_render_elements(undefined) ->
     [];
 inner_render_elements([]) ->
@@ -42,91 +41,95 @@ inner_render_elements(Unknown) ->
     throw({unanticipated_case_in_render_elements, Unknown}).
 
 % This is a Nitrogen element, so render it.
--spec render_element(nitrogen_element()) -> {ok, html()}.
+-spec render_element(nitrogen_element()) -> html().
 render_element(Element) when is_tuple(Element) ->
     % Get the element's backing module...
     Base = wf_utils:get_elementbase(Element),
+    verify_and_render(Base, Element).
 
-    % Verify that this is an element...
-    case Base#elementbase.is_element of
-        is_element -> ok;
-        _ -> throw({not_an_element, Element})
-    end,
+verify_and_render(Base = #elementbase{is_element=is_element}, Element) ->
+    inner_render_element(Base, Element);
+verify_and_render(_, Element) ->
+    throw({not_an_element, Element}).
 
-    case Base#elementbase.show_if of
-        false ->
-            [];
+-spec inner_render_element(#elementbase{}, nitrogen_element()) -> html().
+inner_render_element(#elementbase{show_if=false}, _Element) ->
+    [];
+inner_render_element(Base = #elementbase{show_if=true}, Element) ->
+    Module = Base#elementbase.module, 
+    {module, Module} = code:ensure_loaded(Module),
+    prepare_and_render_or_transform(Module, Base, Element).
+
+-spec prepare_and_render_or_transform(Module :: atom(), #elementbase{}, nitrogen_element()) -> html().
+prepare_and_render_or_transform(Module, Base, Element) ->
+    case erlang:function_exported(Module,transform_element,1) of
         true ->
-            Module = Base#elementbase.module, 
-            {module, Module} = wf_utils:ensure_loaded(Module),
-            case erlang:function_exported(Module,transform_element,1) of
-                true ->
-                    %% Module:transform_element is a special shortcut mechanism
-                    %% of rendering elements without any of the overhead of
-                    %% the pre-rendering that goes on with each element. This
-                    %% should be used for custom elements that are simply
-                    %% defined in terms of other Nitrogen elements.
-                    _Html = call_element_render(transform_element, Module, Element);
-
-                false ->
-                    % TODO: Revisit generating an ID for each element, instead
-                    % generating the ID only if an element has actions.
-                    % Otherwise, if an element needs an ID for something
-                    % special (like how the #button element needs an anchor to
-                    % wire the postback to and for validation stuff), let the
-                    % element_render function take care of that itself.
-                    %
-                    % This change will provide a handful of performance
-                    % improvements:
-                    %   + Removes having to call temp_id() for every element
-                    %   + Removes having to call normalize_id() possibly twice
-                    %     for each element
-                    %   + Lightens the page size since every element won't have
-                    %     an unnecessary 'tempABCXYZ' class.
-
-
-                    % If no ID is defined, then use the same
-                    % temp_id() for both the HtmlID and TempID.
-                    % Otherwise, create a new TempID. Update the class
-                    % with either one or both.
-    
-                    % Get the anchor, or create a new one if it's not defined...
-                    Anchor = case Base#elementbase.anchor of
-                        undefined -> normalize_id(temp_id());
-                        Other1 -> normalize_id(Other1)
-                    end,
-
-                    % Get the ID, or use the anchor if it's not defined...
-                    ID = case Base#elementbase.id of
-                        undefined -> Anchor;
-                        Other2 -> normalize_id(Other2)
-                    end,
-                    
-                    % Update the class...
-                    Class = case Anchor == ID of
-                        true  -> [ID, Base#elementbase.class];
-                        false -> [ID, Anchor, Base#elementbase.class]
-                    end,
-
-                    % Update the base element with the new id and class...
-                    Base1 = Base#elementbase { id=ID, anchor=Anchor, class=Class },
-                    Element1 = wf_utils:replace_with_base(Base1, Element),
-
-                    % Wire the actions...           
-                    wf_context:anchor(Anchor),
-                    wf:wire(Base1#elementbase.actions),
-
-                    % Render the element...
-                    Html = call_element_render(render_element, Module, Element1),
-
-                    % Reset the anchor (likely changed during the inner render)...
-                    wf_context:anchor(Anchor),
-                    Html
-            end
+            %% Module:transform_element is a special shortcut mechanism
+            %% of rendering elements without any of the overhead of
+            %% the pre-rendering that goes on with each element. This
+            %% should be used for custom elements that are simply
+            %% defined in terms of other Nitrogen elements.
+            _Html = call_element_render(transform_element, Module, Element);
+        false ->
+            prepare_and_render(Module, Base, Element)
     end.
 
-% call_element_render(RenderOrTransform, Module, Element) -> {ok, Html}.
-% Calls the render_element/3 function of an element to turn an element record into
+-spec prepare_and_render(Module :: atom(), #elementbase{}, nitrogen_element()) -> html().
+prepare_and_render(Module, Base, Element) ->
+    % TODO: Revisit generating an ID for each element, instead
+    % generating the ID only if an element has actions.
+    % Otherwise, if an element needs an ID for something
+    % special (like how the #button element needs an anchor to
+    % wire the postback to and for validation stuff), let the
+    % element_render function take care of that itself.
+    %
+    % This change will provide a handful of performance
+    % improvements:
+    %   + Removes having to call temp_id() for every element
+    %   + Removes having to call normalize_id() possibly twice
+    %     for each element
+    %   + Lightens the page size since every element won't have
+    %     an unnecessary 'tempABCXYZ' class.
+        
+    % Get the anchor, ID, and Class, or create a new ones if not defined...
+    Anchor = extract_anchor(Base),
+    ID = extract_id(Base, Anchor),
+    Class = extract_class(Base, Anchor, ID),
+
+    % Update the base element with the new id and class...
+    Base1 = Base#elementbase { id=ID, anchor=Anchor, class=Class },
+    Element1 = wf_utils:replace_with_base(Base1, Element),
+
+    % Wire the actions...           
+    wf_context:anchor(Anchor),
+    wf:wire(Base1#elementbase.actions),
+
+    % Render the element...
+    Html = call_element_render(render_element, Module, Element1),
+
+    % Reset the anchor (likely changed during the inner render)...
+    wf_context:anchor(Anchor),
+    Html.
+
+extract_anchor(#elementbase{anchor=undefined}) ->
+    normalize_id(temp_id());
+extract_anchor(#elementbase{anchor=Anchor}) ->
+    normalize_id(Anchor).
+
+% Get the ID, or use the anchor if it's not defined...
+extract_id(#elementbase{id=undefined}, Anchor) ->
+    Anchor;
+extract_id(#elementbase{id=ID}, _Anchor) ->
+    normalize_id(ID).
+
+extract_class(#elementbase{class=Class}, ID, Anchor) when ID==Anchor ->
+    [ID, Class];
+extract_class(#elementbase{class=Class}, ID, Anchor) ->
+    [ID, Anchor, Class].
+
+
+% call_element_render(RenderOrTransform, Module, Element) -> {ok, Html}.  Calls
+% the render_element/3 function of an element to turn an element record into
 % HTML.
 -spec call_element_render(RenderOrTransform :: render_element | transform_element,
                           Module :: module(),
