@@ -27,6 +27,9 @@
     be either an absolute URL (=http://hostname.com/path/to/image.png=) or a
     relative URL (=/path/to/image=).
 
+	+ alt - (/string/) :: Set he Alt-text (that is, the =alt= attribute of the
+	  image tag).
+
 ** To change the path of an image in a postback
 
 	 + =wf:set(my_image, "/path/to/new/image.png")= - will change the =image=
