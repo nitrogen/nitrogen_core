@@ -33,6 +33,15 @@
    + body - (/Nitrogen elements/) :: Instead of text, specify one or more
      Nitrogen elements (such as an #image) to wrap in a link.
 
+   + image - (/string/) :: The path to an image to display as the body. Largely
+     a shortcut for making icon links.  Serves as a shortcut for the following:
+
+     #+BEGIN_SRC ERLANG
+         #link{url="/edit" body=[
+             #image{image="/path/to/some/image.gif"}
+         ]}
+     #+END_SRC
+
    + html\_encode - (/boolean/) :: Set to true to safely html-encode the link's
      title.
 
