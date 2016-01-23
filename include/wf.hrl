@@ -499,6 +499,12 @@
         width                   :: integer(),
         height                  :: integer()
     }).
+-record(youtube, {?ELEMENT_BASE(element_youtube),
+        width=560               :: integer() | text(),
+        height=315              :: integer() | text(),
+        key=""                  :: text() | url(),
+        allowfullscreen=true    :: boolean()
+    }).
 -record(lightbox, {?ELEMENT_BASE(element_lightbox),
         body=[]                 :: body()
     }).
