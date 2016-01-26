@@ -930,6 +930,10 @@
 -record(function, {?ACTION_BASE(action_function),
         function                :: fun() | undefined
     }).
+-record(js_fun, {?ACTION_BASE(action_js_fun),
+        function                :: atom() | text(),
+        args=[]                 :: [text()]
+    }).
 -record(set, {?ACTION_BASE(action_set),
         value=""                :: text() | integer()
     }).
