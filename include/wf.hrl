@@ -499,6 +499,24 @@
         width                   :: integer(),
         height                  :: integer()
     }).
+-record(video, {?ELEMENT_BASE(element_video),
+        url=""                  :: url(),
+        poster_url=""           :: url(),
+        width=560               :: integer(),
+        height=315              :: integer(),
+        preload=metadata        :: auto | metadata | none,
+        loop=false              :: boolean(),
+        muted=false             :: boolean(),
+        autoplay=false          :: boolean(),
+        controls=false          :: boolean(),
+        body_no_support="Your browser does not support the video tag" :: body()
+    }).
+-record(youtube, {?ELEMENT_BASE(element_youtube),
+        width=560               :: integer(),
+        height=315              :: integer(),
+        key=""                  :: text(),
+        allowfullscreen=true    :: boolean()
+    }).
 -record(lightbox, {?ELEMENT_BASE(element_lightbox),
         body=[]                 :: body()
     }).
@@ -911,6 +929,10 @@
     }).
 -record(function, {?ACTION_BASE(action_function),
         function                :: fun() | undefined
+    }).
+-record(js_fun, {?ACTION_BASE(action_js_fun),
+        function                :: atom() | text(),
+        args=[]                 :: [text()]
     }).
 -record(set, {?ACTION_BASE(action_set),
         value=""                :: text() | integer()
