@@ -347,7 +347,15 @@ q_pl(KeyList) when is_list(KeyList) ->
 
 qs_pl(KeyList) when is_list(KeyList) ->
     [{K,qs(K)} || K <- KeyList].
-        
+
+q_map(KeyList) when is_list(KeyList) ->
+    PL = q_pl(KeyList),
+    maps:from_list(PL).
+
+qs_map(KeyList) when is_list(KeyList) ->
+    PL = qs_pl(KeyList),
+    maps:from_list(PL0).
+
 params() ->
     query_handler:get_params().
 
