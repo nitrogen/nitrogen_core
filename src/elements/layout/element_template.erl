@@ -47,7 +47,7 @@ get_cached_template(File) ->
    
     case is_time_to_recache(File, FileAtom) of
         true ->
-            wf:info("Recaching Template~n"),
+            wf:info("Recaching Template: ~s",[File]),
             %% Recache the template...
             Template = parse_template(File),
             wf:set_cache({tempate_last_recached, FileAtom}, {date(), time()}),
