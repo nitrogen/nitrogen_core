@@ -250,8 +250,8 @@ normalize_id(Path) ->
 
 %%% EXPOSE REQUEST INFORMATION %%%
 
-is_request() ->
-    wf_context:is_request().
+in_request() ->
+    wf_context:in_request().
 
 page_module() -> 
     wf_context:page_module().

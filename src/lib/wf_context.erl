@@ -10,7 +10,7 @@
         bridge/0,
         bridge/1,
 
-        is_request/0,
+        in_request/0,
         socket/0,
 
         path/0,
@@ -120,7 +120,7 @@ bridge(Bridge) ->
     Context = context(),
     context(Context#context{bridge=Bridge}).
 
-is_request() ->
+in_request() ->
     %% If we have a context set and it is a #context{} tuple, then we are in a
     %% request.
     is_record(context, context()).
