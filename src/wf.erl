@@ -181,6 +181,9 @@ to_unicode_binary(T) ->
 to_integer(T) -> 
     _Integer = wf_convert:to_integer(T).
 
+to_float(T) ->
+    _Float = wf_convert:to_float(T).
+
 to_string_list(Term) ->
     _StringList = wf_convert:to_string_list(Term).
 
