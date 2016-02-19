@@ -1073,6 +1073,11 @@
         max                     :: undefined | integer(),
         allow_blank=false       :: boolean()
     }).
+-record(is_number, {?VALIDATOR_BASE(validator_is_number),
+        min                     :: undefined | integer(),
+        max                     :: undefined | integer(),
+        allow_blank=false       :: boolean()
+    }).
 -record(min_length, {?VALIDATOR_BASE(validator_min_length),
         length                  :: undefined | integer()
     }).
