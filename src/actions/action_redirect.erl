@@ -14,19 +14,23 @@
     ]).
 
 -spec render_action(#redirect{}) -> text().
-render_action(Record) ->
-    DestinationUrl = Record#redirect.url,
-    RedirectUrl = case Record#redirect.login of
-                      false -> DestinationUrl;
-                      true -> login_redirect_url(DestinationUrl);
-                      Url -> login_redirect_url(DestinationUrl, Url)
-                  end,
+render_action(#redirect{url=Url, login=Login}) ->
+    RedirectUrl = redirect_url(Login, Url),
     wf:f("window.location=\"~ts\";", [wf:js_escape(RedirectUrl)]).
 
 -spec redirect(url()) -> html().
 redirect(Url) -> 
     wf:wire(#redirect { url=Url }),
     wf:f("<script>window.location=\"~ts\";</script>", [wf:js_escape(Url)]).
+
+-spec redirect_url(Login :: boolean() | url(), Url :: url()) -> url().
+redirect_url(_Login=false, Url) ->
+    Url;
+redirect_url(_Login=true, Url) ->
+    login_redirect_url(Url);
+redirect_url(Login, Url) when is_list(Login); is_binary(Login)  ->
+    %% In this situation, `Login` is the URL To redirect to after successful login.
+    login_redirect_url(Url, Login).
 
 -spec login_redirect_url(url()) -> url().
 login_redirect_url(LoginUrl) ->
