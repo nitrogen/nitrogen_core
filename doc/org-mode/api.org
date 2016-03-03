@@ -180,7 +180,9 @@
 
 ** wf:join([Terms],Delimiter) -> [Terms]
 
-   Because Erlang doesn't provide a means to join a list in a non-string fashion, this will join the =Terms= on the delimiter, regardless of the type of =Delimiter=.
+   Because Erlang doesn't provide a means to
+   [[http://erlang.org/pipermail/erlang-questions/2016-March/088097.html][join (or intersperse) a list]] in a non-string fashion, this will join the
+   =Terms= on the delimiter, regardless of the type of =Delimiter=.
 
 #+BEGIN_SRC erlang
    wf:join([Line1,Line2,Line2],#br{}).
