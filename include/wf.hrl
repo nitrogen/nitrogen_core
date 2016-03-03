@@ -380,7 +380,7 @@
         disabled=false          :: boolean()
     }).
 
--type short_option()        :: {text(), text()}.
+-type short_option()        :: {text(), text()} | text().
 -record(option_group, {
         text=""                 :: text(),
         options=[]              :: [#option{} | short_option()],
@@ -1071,7 +1071,13 @@
 -record(is_email, {?VALIDATOR_BASE(validator_is_email)}).
 -record(is_integer, {?VALIDATOR_BASE(validator_is_integer),
         min                     :: undefined | integer(),
-        max                     :: undefined | integer()
+        max                     :: undefined | integer(),
+        allow_blank=false       :: boolean()
+    }).
+-record(is_number, {?VALIDATOR_BASE(validator_is_number),
+        min                     :: undefined | integer(),
+        max                     :: undefined | integer(),
+        allow_blank=false       :: boolean()
     }).
 -record(min_length, {?VALIDATOR_BASE(validator_min_length),
         length                  :: undefined | integer()

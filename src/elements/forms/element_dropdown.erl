@@ -83,6 +83,8 @@ create_options(Selected,HtmlEncode,[X=#option{show_if=true} | Rest]) ->
     [create_option_full(Selected, HtmlEncode, X) | create_options(Selected,HtmlEncode,Rest)];
 create_options(Selected,HtmlEncode,[#option{show_if=false} | Rest]) ->
     create_options(Selected,HtmlEncode,Rest);
+create_options(Selected,HtmlEncode,[Other | Rest]) when ?IS_STRING(Other); is_binary(Other); is_integer(Other); is_atom(Other) ->
+    [create_option_simple(Selected, HtmlEncode, Other) | create_options(Selected,HtmlEncode, Rest)];
 create_options(_,_,[Other | _]) ->
     throw({unknown_option_provided_to_dropdown_element,Other}).
 
@@ -95,6 +97,9 @@ create_option_group(Selected, HtmlEncode, #option_group{text=Text, options=Optio
         DisabledProp
     ],
     wf_tags:emit_tag(optgroup, OptionTags, Props).
+
+create_option_simple(Selected, HtmlEncode, Value) ->
+    create_option_from_tuple(Selected, HtmlEncode, {Value, Value}).
 
 create_option_from_tuple(Selected, HtmlEncode, {Value, Text}) ->
     Option = #option{text=Text, value=Value},

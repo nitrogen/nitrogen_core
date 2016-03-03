@@ -23,7 +23,7 @@
 
    + text - (/string/) :: The text to display if validation fails.
 
-	+ unless\_has\_value - (/element id or list of element ids/) :: Don't fail
+   + unless\_has\_value - (/element id or list of element ids/) :: Don't fail
      this validation as long as the specified elements have values. This can be
      used for creating validators like "Please enter either a firstname or a
      company name."

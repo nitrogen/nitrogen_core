@@ -1,21 +1,22 @@
 % vim: sw=4 ts=4 et ft=erlang
 % Nitrogen Web Framework for Erlang
-% Copyright (c) 2008-2013 Rusty Klophaus
+% Copyright (c) 2008-2013, Rusty Klophaus
+% Copyright (c) 2016 Jesse Gumm
 % See MIT-LICENSE for licensing information.
 
--module (validator_is_integer).
+-module (validator_is_number).
 -include("wf.hrl").
 -export([
     render_action/1
 ]).
 
 render_action(Record) ->
-    TriggerPath = Record#is_integer.trigger,
-    TargetPath = Record#is_integer.target,
-    Text = wf:js_escape(Record#is_integer.text),
-    Min = Record#is_integer.min,
-    Max = Record#is_integer.max,
-    AllowBlank = Record#is_integer.allow_blank,
+    TriggerPath = Record#is_number.trigger,
+    TargetPath = Record#is_number.target,
+    Text = wf:js_escape(Record#is_number.text),
+    Min = Record#is_number.min,
+    Max = Record#is_number.max,
+    AllowBlank = Record#is_number.allow_blank,
 
     ValidationFun = fun(_, Value) -> validate(AllowBlank, Value, Min, Max) end,
 
@@ -25,17 +26,17 @@ render_action(Record) ->
         function=ValidationFun,
         text = Text,
         tag=Record,
-        attach_to=Record#is_integer.attach_to
+        attach_to=Record#is_number.attach_to
     },
 
-    Script = wf:f("v.add(Validate.Numericality, { notAnIntegerMessage: \"~ts\", onlyInteger: true });", [Text]),
+    Script = wf:f("v.add(Validate.Numericality, { notANumberMessage: \"~ts\", onlyInteger: false });", [Text]),
     [CustomValidatorAction, Script].
 
 validate(_AllowBlank=true, "", _Min, _Max) ->
     true;
 validate(_AllowBlank, Value, Min, Max) ->
     try
-        validate_range(wf:to_integer(Value), Min, Max)
+        validate_range(wf:to_float(Value), Min, Max)
     catch 
         _ : _ -> false
     end.
