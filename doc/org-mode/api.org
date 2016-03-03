@@ -403,6 +403,15 @@
 * Web Request and Response
 # <<9>>
 
+** wf:in_request() -> boolean()
+   
+   Checks if the current running process is actually inside a Nitrogen request,
+   that is to say, that it has a Nitrogen-initialized context.  Returns =true=
+   if the current process is a Nitrogen request, and =false= otherwise.
+
+   This will return =true= in initial requests, postback requests, and comet
+   processes.
+
 ** wf:q(AtomKey) -> String | undefined
 
    Get all query string and POST values for the provided key. If more than one
