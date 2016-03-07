@@ -653,7 +653,10 @@
         back="Back"             :: text(),
         finish="Finish"         :: text(),
         show_progress=true      :: boolean(),
-        progress_text="(Step ~p of ~p)" :: text()
+        progress_text="(Step ~p of ~p)" :: text(),
+        next_class=""           :: text() | [text()],
+        back_class=""           :: text() | [text()],
+        finish_class=""         :: text() | [text()]
     }).
 -record(sparkline, {?ELEMENT_BASE(element_sparkline),
         type=line               :: line | bar | tristate | bullet | discrete | pie | box,

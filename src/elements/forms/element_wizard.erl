@@ -1,6 +1,7 @@
 % vim: sw=4 ts=4 et ft=erlang
 % Nitrogen Web Framework for Erlang
-% Copyright (c) 2008-2013 Rusty Klophaus/Jesse Gumm
+% Copyright (c) 2008-2011 Rusty Klophaus
+% Copyright (c) 2013-2016 Jesse Gumm
 % See MIT-LICENSE for licensing information.
 
 -module (element_wizard).
@@ -16,10 +17,7 @@
 reflect() -> record_info(fields, wizard).
 
 -spec render_element(#wizard{}) -> body().
-render_element(Record = #wizard{}) -> 
-	% Set up callbacks...
-	Tag = Record#wizard.tag,
-
+render_element(Record = #wizard{tag=Tag, next_class=NextClass, back_class=BackClass, finish_class=FinishClass}) -> 
 	% Set up steps...
 	wf:assert(Record#wizard.id /= undefined, wizard_needs_a_proper_name),
 	wf:assert(is_list(Record#wizard.steps), wizard_steps_must_be_a_list),
@@ -27,7 +25,7 @@ render_element(Record = #wizard{}) ->
 	StepCount = length(Record#wizard.steps),
 	StepSeq = lists:seq(1, StepCount),
 	StepIDs = [wf:to_atom("step" ++ integer_to_list(X)) || X <- StepSeq],
-	
+
 	% Function to create an individual step.
 	F = fun(N) ->
 		StepID = lists:nth(N, StepIDs),
@@ -48,7 +46,8 @@ render_element(Record = #wizard{}) ->
 							show_if=(not IsFirst),
 							text=Record#wizard.back,
 							postback={back, N, StepIDs},
-							delegate=?MODULE
+							delegate=?MODULE,
+                            class=BackClass
 						}
 					]},
 					#tablecell{class=wizard_buttons_next,body=[
@@ -57,14 +56,16 @@ render_element(Record = #wizard{}) ->
 							show_if=(not IsLast), 
 							text=Record#wizard.next, 
 							postback={next, N, StepIDs}, 
-							delegate=?MODULE 
+							delegate=?MODULE,
+                            class=NextClass
 						},
 						#button{
 							id=button_id(TopOrBot,finish,N), 
 							show_if=IsLast, 
 							text=Record#wizard.finish, 
 							postback={finish, Tag}, 
-							delegate=?MODULE 
+							delegate=?MODULE,
+                            class=FinishClass
 						} 
 					]}
 				]}
