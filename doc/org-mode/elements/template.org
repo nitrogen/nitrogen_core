@@ -19,17 +19,18 @@
   [[[Module:Function(Args)]]]
 #+END_SRC
 
-  Module can be any module, or can be the atom 'page' to refer to the0 currently Nitrogen page. 
-  The function must return either one or more Nitrogen elements, an Erlang string, or 
-  an Erlang binary.
+  Module can be any module, or can be the atom 'page' to refer to the current
+  Nitrogen pagemodule.  The function must return either one or more Nitrogen
+  elements, an Erlang string, or an Erlang binary.
 
   If the args are identifed like Erlang variables (capitalized first letter)
   such as MyArg1 (as opposed to a static value such as 5), then the template
   element will look in its bindings property for a matching element.
 
-  It's also possible to specify alias module references to other modules. For example,
-  the default module alias is actually =[{page, wf:page_module()}]=, which basically means
-  "If you encounter page:function(Args), replace =page= with the current page's module." 
+  It's also possible to specify alias module references to other modules. For
+  example, the default module alias is actually =[{page, wf:page_module()}]=,
+  which basically means "If you encounter page:function(Args), replace =page=
+  with the current page's module." 
 
 ** Usage
 

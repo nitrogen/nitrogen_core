@@ -944,7 +944,8 @@
         values=[]               :: [text()]
     }).
 -record(redirect, {?ACTION_BASE(action_redirect),
-        url=""                  :: url()
+        url=""                  :: url(),
+        login=false             :: boolean() | url()
     }).
 -record(event, {?ACTION_BASE(action_event),
         type=default            :: atom(),
