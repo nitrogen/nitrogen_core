@@ -82,6 +82,8 @@ In all of the handler behavior functions are found two particular variables:
       siblings, =wf:qs=, =wf:mq=, etc), functions retrieve their values from the
       POST, GET, or other methods.
 #  + [[./handlers/mail][Mail Handler]] - Controls how nitrogen will send email
+#  + [[./handlers/cache.org][Cache Handler]] - Controls the server-side caching
+#      interface used with =wf:cache/[1-3]=. (not currently implemenented)
 
 *** Stateful Handlers
   + [[./handlers/session.org][Session Handler]] - Controls how session
