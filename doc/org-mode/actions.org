@@ -12,6 +12,7 @@
   + [[./actions/base.org][Base Action]] - All actions contain these attributes.
 
 * Page Manipulation
+  + [[./actions/redirect.org][Redirect]]
   + [[./actions/event.org][Event]]
   + [[./actions/update.org][Update]] (includes Update, Replace, Insert Top,
     Insert Bottom, Insert Before, Insert, After, and Remove)
