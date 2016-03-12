@@ -10,7 +10,7 @@
 % Someone please make it better! - Rusty
 
 -module (simple_session_handler).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -behaviour (session_handler).
 -export ([
     init/2, 
@@ -103,7 +103,10 @@ session_loop(Session, Timeout) ->
 
         {clear_all, Pid, Ref} ->
             Pid!{ok, Ref},
-            session_loop([], Timeout)	
+            session_loop([], Timeout);
+
+        keepalive ->
+            session_loop(Session, Timeout)
 
     after TimeoutMS -> 
         exit(timed_out)
