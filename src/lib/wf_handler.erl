@@ -11,21 +11,15 @@
     set_handler/2
 ]).
 
-
-%% Because the handlers are all initialized and finished at the beginning and
-%% end of requests together, rather than getting and setting each handler
-%% individually from and to the process dictionary, we get them all in bulk,
-%% then set them all in bulk in wf_core. So here we're just going to return the
-%% raw handler context to be stored with the rest of the handler contexts.
--spec init(#handler_context{}) -> #handler_context{}.
+-spec init(#handler_context{}) -> ok.
 init(H = #handler_context{module=Module, config=Config, state=State}) ->
     {ok, NewState} = Module:init(Config, State),
-    H#handler_context{state=NewState}.
+    NewH = H#handler_context{state=NewState},
+    append_handler_state(NewH).
 
--spec finish(#handler_context{}) -> #handler_context{}.
-finish(H = #handler_context{module=Module, config=Config, state=State}) ->
-    {ok, NewState} = Module:finish(Config, State),
-    H#handler_context{state=NewState}.
+-spec finish(#handler_context{}) -> ok.
+finish(H = #handler_context{}) ->
+    call(H, finish, []).
 
 % Helper function to call a function within a handler.
 % Returns ok or {ok, Value}.
@@ -33,25 +27,28 @@ call(Name, FunctionName) -> call(Name, FunctionName, []).
 
 % Helper function to call a function within a handler.
 % Returns ok or {ok, Value}.
-call(Name, FunctionName, Args) ->
+call(Name, FunctionName, Args) when is_atom(Name) ->
     % Get the handler and state from the context. Then, call
     % the function, passing in the Args and State.
-    #handler_context { module=Module, config=Config, state=State } = get_handler(Name),
+    Handler = get_handler(Name),
+    call(Handler, FunctionName, Args);
+
+call(#handler_context{ name=Name, module=Module, config=Config, state=State }, FunctionName, Args) ->
     Result = erlang:apply(Module, FunctionName, Args ++ [Config, State]),
 
     % Result will be {ok, State}, {ok, Value1, State}, or {ok, Value1, Value2, State}.
     % Update the context with the new state.
     case Result of
         {ok, NewState} -> 
-            update_handler_state(Name, NewState),
+            update_handler_state(Name, State, NewState),
             ok;
 
         {ok, Value, NewState} ->
-            update_handler_state(Name, NewState),
+            update_handler_state(Name, State, NewState),
             {ok, Value};
 
         {ok, Value1, Value2, NewState} ->
-            update_handler_state(Name, NewState),
+            update_handler_state(Name, State, NewState),
             {ok, Value1, Value2}
     end.
 
@@ -95,10 +92,15 @@ get_handler(Name) ->
             throw({handler_not_found_in_context, Name, Handlers})
     end.
 
-
-update_handler_state(Name, State) ->
+update_handler_state(_Name, OrigState, OrigState) ->
+    ok;
+update_handler_state(Name, _OrigState, State) ->
     Handlers = wf_context:handlers(),
     OldHandler = lists:keyfind(Name, 2, Handlers),
     NewHandler = OldHandler#handler_context { state=State },
     NewHandlers = lists:keyreplace(Name, 2, Handlers, NewHandler),
     wf_context:handlers(NewHandlers).
+
+append_handler_state(State) ->
+    Handlers = wf_context:handlers(),
+    wf_context:handlers(Handlers ++ [State]).

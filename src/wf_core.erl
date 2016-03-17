@@ -184,19 +184,23 @@ deserialize_context(SerializedPageContext) ->
 % Handlers are initialized in the order that they exist in #context.handlers. The order
 % is important, as some handlers may depend on others being initialize. For example, 
 % the session handler may use the cookie handler to get or set the session cookie.
+% TODO: Re-evaluate handlers into some form of middleware layer or something.
+% Allowing us to pass handler contexts from one handler to another and limit
+% the number of process dict sets and gets
 call_init_on_handlers() ->
-    Handlers = [wf_handler:init(X) || X <- wf_context:handlers()],
-    wf_context:handlers(Handlers),
+    %% Get initial handlers
+    Handlers = wf_context:handlers(),
+    %% Clear Handler list, to re-initiate in order
+    wf_context:handlers([]),
+    %% Re-initiate handlers in order, appending them back to the handler list as we go
+    [wf_handler:init(X) || X <- Handlers],
     ok.
 
 % finish_handlers/1 - 
 % Handlers are finished in the order that they exist in #context.handlers. The order
-% is important, as some handlers should finish after others. At the very least,
-% the 'render' handler should go last to make sure that it captures all changes
-% put in place by the other handlers.
+% is important, as some handlers should finish after others.
 call_finish_on_handlers() ->
-    Handlers = [wf_handler:finish(X) || X <- wf_context:handlers()],
-    wf_context:handlers(Handlers),
+    [wf_handler:finish(X) || X <- wf_context:handlers()],
     ok.	
 
 
