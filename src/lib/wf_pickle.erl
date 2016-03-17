@@ -1,6 +1,7 @@
 % vim: sw=4 ts=4 et ft=erlang
 % Nitrogen Web Framework for Erlang
 % Copyright (c) 2008-2013 Rusty Klophaus
+% Copyright (c) 2013-2016 Jesse Gumm
 % See MIT-LICENSE for licensing information.
 % This is heavily inspired by the n2o_secret pickler located at:
 % https://github.com/5HT/n2o/blob/master/src/handlers/n2o_secret.erl
@@ -69,7 +70,10 @@ inner_depickle(PickledData) ->
 
 -spec signkey() -> binary().
 signkey() ->
-    simple_cache:get(nitrogen, 1000, signkey, fun() ->
+    %% Commented out because if the cache handler is actually initialized in
+    %% the right order, we don't need to call simple_cache directly.
+    %simple_cache:get(nitrogen, 1000, signkey, fun() ->
+    wf:cache(signkey, 1000, fun() ->
         case config_handler:get_value(signkey) of
             undefined ->
                 erlang:md5(wf:to_list(erlang:get_cookie()));

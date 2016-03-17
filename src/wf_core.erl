@@ -164,19 +164,25 @@ deserialize_websocket_context(SerializedPageContext) ->
 
 % deserialize_context/1 -
 % Updates the context with values that were stored
-% in the browser by serialize_context_state/1.
+% in the browser by serialize_context/1.
+deserialize_context(undefined) ->
+    %% If the serialized page context is undefined, don't do anything.
+    ok;
 deserialize_context(SerializedPageContext) ->
-    OldStateHandler = wf_context:handler(state_handler),
-
     % Deserialize page_context and handler_list if available...
-    [PageContext, NewStateHandler] = case SerializedPageContext of
-        undefined -> [wf_context:page_context(), OldStateHandler];
-        Other -> wf_pickle:depickle(Other)
-    end,
+    case wf_pickle:depickle(SerializedPageContext) of
+        [PageContext, NewStateHandler] ->
+            wf_context:page_context(PageContext),
+            wf_context:restore_handler(NewStateHandler),
+            ok;
+        undefined ->
+            exit({failure_to_deserialize_page_context, [
+                {serialized_page_context, SerializedPageContext},
+                {suggestion, "The most common cause of this is that "
+                             "simple_cache is not started. Try running: "
+                             "application:start(simple_cache)."}]})
+    end.
 
-    wf_context:page_context(PageContext),
-    wf_context:restore_handler(NewStateHandler),
-    ok.
 
 %%% SET UP AND TEAR DOWN HANDLERS %%%
 
