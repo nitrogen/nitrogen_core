@@ -166,6 +166,14 @@ Open http://localhost:8000 in your Browser
         ]}
     ]}
     #+END_SRC
+*** Vim Nitrogen Script
+
+    If you use Vim instead of Emacs, run =make install-vim-script= to get the
+    above indentation.  You want your Nitrogen files to include the vim modeline:
+
+    #+BEGIN_SRC erlang
+    %% vim: ft=nitrogen
+    #+END_SRC
 
 * PART 2 AGENDA
 ** Nitrogen Pages

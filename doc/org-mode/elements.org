@@ -84,6 +84,8 @@
   + [[./elements/sortitem.org][Sort Item]]
   + [[./elements/gravatar.org][Gravatar]]
   + [[./elements/recaptcha.org][Recaptcha]]
+  + [[./elements/video.org][Video]]
+  + [[./elements/youtube.org][Youtube]]
   + [[./elements/sparkline.org][Sparkline]]
   + [[./elements/iframe.org][Iframe]]
 
