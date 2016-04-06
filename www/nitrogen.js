@@ -293,8 +293,9 @@ NitrogenClass.prototype.$validate_and_serialize = function(validationGroup) {
             is_valid = false;
         } else {
             // Skip any unchecked radio boxes.
-            if ((this.type == "radio" || this.type=="checkbox") && !this.checked) return;
-            if (this.type == "select-multiple" && $(this).val()==null) return;
+            if ((this.type=="radio" || this.type=="checkbox") && !this.checked) return;
+            if (this.type=="select-multiple" && $(this).val()==null) return;
+            if (this.type=='button' || this.type=='submit') return;
             
             // Skip elements that aren't nitrogen elements (they won't have a
             // properly named Nitrogen 'id')
