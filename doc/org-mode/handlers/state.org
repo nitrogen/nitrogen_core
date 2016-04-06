@@ -102,7 +102,6 @@ clear(Key, _Config, State) ->
 
 clear_all(Config, _State) ->
     init(Config, []).
-~
 #+END_SRC
 
 
