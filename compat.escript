@@ -62,5 +62,5 @@ unique() ->
         true ->
             "erlang:unique_integer([positive])";
         false ->
-            "begin {_,S,US}=erlang:now(), S*1000,+US end"
+            "begin {_,S,US}=erlang:now(), S*1000000+US end"
     end.
