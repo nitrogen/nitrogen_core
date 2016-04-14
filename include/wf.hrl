@@ -413,6 +413,7 @@
         next                    :: id(),
         postback                :: term(),
         handle_invalid=false    :: boolean(),
+        disabled=false          :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module(),
         html_name               :: html_name()
