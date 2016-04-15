@@ -246,7 +246,7 @@
 ** wf:comet(Function) -> {ok, Pid}
 
    Spawn a comet function, and tell the browser to open a COMET request to receive the results in real time.
-   See [[http://nitrogenproject.com/web/samples/comet1][example 1]], [[http://nitrogenproject.com/web/samples/comet2][example 2]], and [[http://nitrogenproject.com/web/samples/comet3][example 3]] for usage.
+   See [[http://nitrogenproject.com/demos/comet1][example 1]], [[http://nitrogenproject.com/demos/comet2][example 2]], and [[http://nitrogenproject.com/demos/comet3][example 3]] for usage.
 
 ** wf:comet(Function, LocalPool) -> {ok, Pid}
 
@@ -293,12 +293,12 @@
 ** wf:continue(Tag, Function) -> ok
 
    Spawn the provided function (arity 0) and tell the browser to poll for the results.
-   See [[http://nitrogenproject.com/web/samples/continuations][continuations example]] for usage.
+   See [[http://nitrogenproject.com/demos/continuations][continuations example]] for usage.
    
 ** wf:continue(Tag, Function, Interval) -> ok
 
    Spawn the provided function (arity 0) and tell the browser to poll for the results at the specified interval.
-   See [[http://nitrogenproject.com/web/samples/continuations][continuations example]] for usage.
+   See [[http://nitrogenproject.com/demos/continuations][continuations example]] for usage.
 
 * Redirect
 # <<5>>
