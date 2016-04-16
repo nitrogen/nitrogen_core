@@ -561,6 +561,15 @@ Example:
    Return the requested page module. Useful information to know when writing a
    custom element or action.
 
+** wf:page\_module(Module) -> ok
+
+   Changes the current page module for the rendering engine. This will likely
+   only need to be set when you need to set an otherwise valid page that
+   happens to be to, for some reason, need to return a specific error. For
+   example, maybe you have a =view_profile= module that expects a =userid= on
+   the query-string, but the provided =userid= is invalid, so you want the page
+   to throw a 404 instead.
+
 ** wf:protocol() -> http | https
 
    Return whether the request to the server is made by HTTP or HTTPS. Note,

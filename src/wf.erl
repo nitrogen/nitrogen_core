@@ -253,6 +253,9 @@ normalize_id(Path) ->
 page_module() -> 
     wf_context:page_module().
 
+page_module(Mod) ->
+    wf_context:page_module(Mod).
+
 path() ->
     wf_context:path().
 
