@@ -37,6 +37,6 @@
 
    + [[./base.html][base element]]
 
-	+ [[/demos/sparkline][Sparkline Demonstration]]
+	+ [[http://nitrogenproject.com/demos/sparkline][Sparkline Demonstration]]
 
  	+ [[http://omnipotent.net/jquery.sparkline][Official Sparkline Documentation]]
