@@ -50,7 +50,7 @@
    ]}
 #+END_SRC
 
-  + enter_clicks - (/List of Element IDs/) :: Wires to the provided ElementIDs
+  + enter\_clicks - (/List of Element IDs/) :: Wires to the provided ElementIDs
     a =#click{}= event on the provided button if the user presses the "Enter"
     key when any of the provided =ElementIDs= have the focus. To see a working
     example, see the [[http://nitrogenproject.com/demos/security][Security Demo]]
