@@ -34,7 +34,7 @@ pickle(Data) ->
 depickle(PickledData) ->
     depickle(PickledData, infinity).
 
--spec depickle(PickledData :: pickled(), TTLSeconds :: infinity | integer()) -> undefined | term().
+-spec depickle(PickledData :: pickled(), TTLSeconds :: infinity | integer() | float()) -> undefined | term().
 depickle(PickledData, TTLSeconds) ->
     try
         {Data, PickledTime} = inner_depickle(PickledData),
@@ -48,14 +48,14 @@ depickle(PickledData, TTLSeconds) ->
 
 %% PRIVATE FUNCTIONS
 
--spec verify_depickle_time(PickledTime :: erlang:timestamp(), TTLSeconds :: infinity | integer()) -> boolean().
+-spec verify_depickle_time(PickledTime :: erlang:timestamp(), TTLSeconds :: infinity | integer() | float()) -> boolean().
 verify_depickle_time(_PickledTime, infinity) ->
     %% Short circuit, even though any number always evaluated to less than infinity,
     %% But this means we don't have to call os:timestamp(), and do the timer comparison
     %% Minor performance improvement.
     true;
 verify_depickle_time(PickledTime, TTLSeconds) ->
-    AgeInSeconds = timer:now_diff(os:timestamp(), PickledTime) / 1024 / 1024,
+    AgeInSeconds = timer:now_diff(os:timestamp(), PickledTime) / 1000000,
     AgeInSeconds < TTLSeconds.
 
 -spec inner_depickle(PickledData :: pickled()) -> {term(), erlang:timestamp()}.
