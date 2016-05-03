@@ -647,7 +647,7 @@ Example:
 # <<12>>
    
 ** wf:pickle(Term) -> PickledBinary
-   Serialize a term into a web-safe hex string, with checksumming. (Not encrypted!)
+   Serialize a term into a web-safe, checksummed, and AES-encrypted hex string.
    
 ** wf:depickle(PickledBinary) -> Term
    Turn a pickled binary back into the original term.
