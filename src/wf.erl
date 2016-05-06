@@ -307,6 +307,10 @@ cookie_default(Cookie,DefaultValue) ->
 cookie(Cookie, Value) ->
     ok = wf_cookies:set_cookie(Cookie, Value).
 
+cookie(Cookie, Value, Options) ->
+    ok = wf_cookies:set_cookie(Cookie, Value, Options).
+
+%% Deprecated
 cookie(Cookie, Value, Path, MinutesToLive) ->
     ok = wf_cookies:set_cookie(Cookie, Value, Path, MinutesToLive).
 

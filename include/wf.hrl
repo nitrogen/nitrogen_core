@@ -1033,7 +1033,10 @@
         cookie                  :: atom() | text(),
         value=""                :: atom() | text(),
         path="/"                :: text(),
-        minutes_to_live=20      :: integer()
+        domain=undefined        :: undefined | text(),
+        minutes_to_live=20      :: integer(),
+        secure=false            :: boolean(),
+        http_only=false         :: boolean()
     }).
 
 %%% Validators %%%
