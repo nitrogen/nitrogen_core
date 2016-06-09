@@ -259,6 +259,9 @@ in_request() ->
 page_module() -> 
     wf_context:page_module().
 
+page_module(Mod) ->
+    wf_context:page_module(Mod).
+
 path() ->
     wf_context:path().
 
@@ -310,6 +313,10 @@ cookie_default(Cookie,DefaultValue) ->
 cookie(Cookie, Value) ->
     ok = wf_cookies:set_cookie(Cookie, Value).
 
+cookie(Cookie, Value, Options) ->
+    ok = wf_cookies:set_cookie(Cookie, Value, Options).
+
+%% Deprecated
 cookie(Cookie, Value, Path, MinutesToLive) ->
     ok = wf_cookies:set_cookie(Cookie, Value, Path, MinutesToLive).
 

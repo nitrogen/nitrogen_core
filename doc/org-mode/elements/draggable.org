@@ -67,6 +67,6 @@
 
   + [[./droppable.html][Droppable Element]]
 
-  + [[/demos/dragdrop][Drag and Drop Demo]]
+  + [[http://nitrogenproject.com/demos/dragdrop][Drag and Drop Demo]]
 
   + [[http://api.jqueryui.com/draggable/][jQuery Draggable Documentation]]

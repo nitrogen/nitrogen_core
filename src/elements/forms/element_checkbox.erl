@@ -43,7 +43,6 @@ position_label('before', Text, Checkbox) ->
     [Checkbox, Text].
 
 render_checkbox_tag(Anchor, Record) ->
-    CheckedAttr = checked_attribute(Record#checkbox.checked),
     wf_tags:emit_tag(input, [
         {name, Record#checkbox.html_name},
         {id,   Anchor},
@@ -52,17 +51,13 @@ render_checkbox_tag(Anchor, Record) ->
         {title, Record#checkbox.title},
         {style, Record#checkbox.style},
         {value, Record#checkbox.value},
-        CheckedAttr,
+        ?WF_IF(Record#checkbox.checked, checked),
+        ?WF_IF(Record#checkbox.disabled, disabled),
         {data_fields, Record#checkbox.data_fields}
     ]).
 
 format_anchor(Anchor) ->
     string:strip(Anchor, left, $.).
-
-checked_attribute(true) ->
-    {checked, checked};
-checked_attribute(false) ->
-    undefined.
 
 maybe_wire_postback(_Anchor, #checkbox{postback=undefined}) ->
     ok;

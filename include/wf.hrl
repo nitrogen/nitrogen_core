@@ -413,6 +413,7 @@
         next                    :: id(),
         postback                :: term(),
         handle_invalid=false    :: boolean(),
+        disabled=false          :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module(),
         html_name               :: html_name()
@@ -1057,7 +1058,10 @@
         cookie                  :: atom() | text(),
         value=""                :: atom() | text(),
         path="/"                :: text(),
-        minutes_to_live=20      :: integer()
+        domain=undefined        :: undefined | text(),
+        minutes_to_live=20      :: integer(),
+        secure=false            :: boolean(),
+        http_only=false         :: boolean()
     }).
 
 %%% Validators %%%

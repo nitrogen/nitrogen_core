@@ -248,7 +248,7 @@
 ** wf:comet(Function) -> {ok, Pid}
 
    Spawn a comet function, and tell the browser to open a COMET request to receive the results in real time.
-   See [[http://nitrogenproject.com/web/samples/comet1][example 1]], [[http://nitrogenproject.com/web/samples/comet2][example 2]], and [[http://nitrogenproject.com/web/samples/comet3][example 3]] for usage.
+   See [[http://nitrogenproject.com/demos/comet1][example 1]], [[http://nitrogenproject.com/demos/comet2][example 2]], and [[http://nitrogenproject.com/demos/comet3][example 3]] for usage.
 
 ** wf:comet(Function, LocalPool) -> {ok, Pid}
 
@@ -295,12 +295,12 @@
 ** wf:continue(Tag, Function) -> ok
 
    Spawn the provided function (arity 0) and tell the browser to poll for the results.
-   See [[http://nitrogenproject.com/web/samples/continuations][continuations example]] for usage.
+   See [[http://nitrogenproject.com/demos/continuations][continuations example]] for usage.
    
 ** wf:continue(Tag, Function, Interval) -> ok
 
    Spawn the provided function (arity 0) and tell the browser to poll for the results at the specified interval.
-   See [[http://nitrogenproject.com/web/samples/continuations][continuations example]] for usage.
+   See [[http://nitrogenproject.com/demos/continuations][continuations example]] for usage.
 
 * Redirect
 # <<5>>
@@ -572,6 +572,15 @@ Example:
    Return the requested page module. Useful information to know when writing a
    custom element or action.
 
+** wf:page\_module(Module) -> ok
+
+   Changes the current page module for the rendering engine. This will likely
+   only need to be set when you need to set an otherwise valid page that
+   happens to be to, for some reason, need to return a specific error. For
+   example, maybe you have a =view_profile= module that expects a =userid= on
+   the query-string, but the provided =userid= is invalid, so you want the page
+   to throw a 404 instead.
+
 ** wf:protocol() -> http | https
 
    Return whether the request to the server is made by HTTP or HTTPS. Note,
@@ -649,7 +658,7 @@ Example:
 # <<12>>
    
 ** wf:pickle(Term) -> PickledBinary
-   Serialize a term into a web-safe hex string, with checksumming. (Not encrypted!)
+   Serialize a term into a web-safe, checksummed, and AES-encrypted hex string.
    
 ** wf:depickle(PickledBinary) -> Term
    Turn a pickled binary back into the original term.
