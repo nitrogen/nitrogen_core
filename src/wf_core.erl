@@ -48,7 +48,9 @@ run_crash(Bridge, Type, Error, Stacktrace) ->
         exit:normal ->
             exit(normal);
         Type2:Error2 ->
-            ?LOG("~p~n", [{error, Type2, Error2, erlang:get_stacktrace()}]),
+            ?LOG("Crash Handler Crashed:~n~p~n~nOriginal Crash:~n~p~n", [
+                {Type2, Error2, erlang:get_stacktrace()},
+                {Type, Error, Stacktrace}]),
             Bridge1 = sbw:set_status_code(500, Bridge),
             Bridge2 = sbw:set_response_data("Internal Server Error", Bridge1),
             sbw:build_response(Bridge2)

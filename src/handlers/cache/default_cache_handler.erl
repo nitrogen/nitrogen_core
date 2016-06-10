@@ -21,7 +21,11 @@
 
 init(Config, State) ->
     CacheName = cache_name(Config),
-    maybe_add_cache(CacheName),
+    try maybe_add_cache(CacheName)
+    catch error:undef ->
+        wf:error("simple_cache not found in the system. You should add it as a dependency to your rebar.config like this:~n    ~p~n", [{simple_cache, "", {git, "git://github.com/nitrogen/simple_cache", {branch, master}}}]),
+        throw({simple_cache_not_found, "See message above"})
+    end,
     {ok, State}.
 
 maybe_add_cache(CacheName) ->
