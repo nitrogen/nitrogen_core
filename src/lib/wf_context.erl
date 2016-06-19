@@ -123,7 +123,7 @@ bridge(Bridge) ->
 in_request() ->
     %% If we have a context set and it is a #context{} tuple, then we are in a
     %% request.
-    is_record(context, context()).
+    is_record(context(), context).
 
  socket() ->
     ?BRIDGE:socket().
