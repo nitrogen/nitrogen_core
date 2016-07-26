@@ -174,7 +174,7 @@ convert_callback_tuple_to_function(Module, Function, ArgString, Bindings, Module
     Module1 = get_module_from_alias(Module, ModuleAliases),
     _F = fun() ->
         % Convert args to term...
-        Args = to_term("[" ++ ArgString ++ "].", Bindings),
+        Args = to_term(ArgString, Bindings),
 
         % If the function in exported, then call it.
         % Otherwise return undefined...
@@ -197,7 +197,10 @@ convert_callback_tuple_to_function(Module, Function, ArgString, Bindings, Module
 passthrough(Var) ->
     Var.
 
-to_term(X, Bindings) ->
+to_term([], _) ->
+    [];
+to_term(ArgString, Bindings) ->
+    X = "[" ++ ArgString ++ "].",
     S = wf:to_list(X),
     {ok, Tokens, 1} = erl_scan:string(S),
     {ok, Exprs} = erl_parse:parse_exprs(Tokens),
