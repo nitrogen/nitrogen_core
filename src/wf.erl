@@ -249,6 +249,9 @@ temp_id() ->
 normalize_id(Path) ->
     _String = wf_render_elements:normalize_id(Path).
 
+render_isolated(Elements) ->
+    {ok, _Html, _Actions} = wf_render_elements:render_and_trap_actions(Elements).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% EXPOSE REQUEST INFORMATION %%%

@@ -121,6 +121,9 @@ maybe_render_elements(Elements = {stream, Size, Fun}) when is_integer(Size), is_
     %% simple_bridge (currently only works with cowboy)
     {ok, Elements};
 maybe_render_elements(Elements) ->
+    %{Time, {ok, Html}} = timer:tc(wf_render_elements, render_elements, [Elements]),
+    %io:format("Render Time: ~p~n",[Time]),
+    %{ok, Html}.
     {ok, _Html} = wf_render_elements:render_elements(Elements).
 
 
