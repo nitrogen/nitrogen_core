@@ -199,12 +199,32 @@ ihe(Other, _ET)                         -> Other.
 html_decode(B) when is_binary(B) -> html_decode(binary_to_list(B));
 html_decode([]) -> [];
 html_decode("&amp;" ++ T) -> [$&|html_decode(T)];
-html_decode("&#39;" ++ T) -> [$'|html_decode(T)];
 html_decode("&quot;" ++ T) -> [$"|html_decode(T)];
 html_decode("&gt;" ++ T) -> [$>|html_decode(T)];
 html_decode("&lt;" ++ T) -> [$<|html_decode(T)];
 html_decode("&nbsp;" ++ T) -> [$\s|html_decode(T)];
+html_decode([$&, $#, Num | T]) when Num >= $0, Num =< $9 ->
+    {CharString,Rest} = html_numeric_decode([Num|T], T, [Num]),
+    CharString ++ html_decode(Rest);
 html_decode([H|T]) -> [H|html_decode(T)].
+
+html_numeric_decode(Orig, [H|T],Acc) when H >= $0, H =< $9 ->
+    %% It's still a number, so we're growing with it.
+    html_numeric_decode(Orig, T,[H|Acc]);
+html_numeric_decode(Orig, [H|T],Acc) when H =:= $; ->
+    Num = list_to_integer(lists:reverse(Acc)),
+
+    case unicode:characters_to_list([Num]) of
+        %% the number code doesn't translate to %% valid unicode codepoint, so we just
+        %% return the html code that triggered the numeric decode and the
+        %% original rest ofthe string, and continue
+        {error, _, _} -> {"&#", Orig}; 
+        CharString -> {CharString, T}
+    end;
+html_numeric_decode(Orig, _, _) ->
+    %% if we encounter *anything else*, then it's not a valid thing, and we
+    %% just return the original string with the char code being "&#" since that's the trigger
+    {"&#", Orig}.
 
 %%% HEX ENCODE and HEX DECODE
 
