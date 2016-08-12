@@ -483,6 +483,12 @@ html_encode_test() ->
     ?assertEqual(<<"A{}">>,iolist_to_binary(html_encode(["A",{}]))),
     ?assertEqual(<<"A{b,c,d}">>, iolist_to_binary(html_encode(["A",{b,c,d}]))),
     ?assertEqual(<<"{a}">>, iolist_to_binary(html_encode({a}))),
+
+    % Decode
+    
+    ?assertEqual("'", html_decode(html_encode("'"))),
+    ?assertEqual("ドラゴンは私になります", html_decode(html_encode("ドラゴンは私になります"))),
+
     ok.
 
 to_qs_test() ->
