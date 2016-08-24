@@ -7,9 +7,24 @@
 -include("wf.hrl").
 -export ([
     render_elements/1,
+    render_and_trap_actions/1,
     temp_id/0,
     normalize_id/1
 ]).
+
+-spec render_and_trap_actions(Elements :: body() | fun()) -> {ok, Html :: binary(), Actions :: binary()}.
+render_and_trap_actions(Elements) ->
+    ?WF_IF(not(wf:in_request()), wf_context:init_context(undefined)),
+    OldActionQueue = wf_context:action_queue(),
+    wf_context:clear_action_queue(),
+    {ok, Html} = case is_function(Elements) of
+        true -> render_elements(Elements());
+        false -> render_elements(Elements)
+    end,
+    {ok, JS} = wf_render_actions:render_action_queue(),
+    wf_context:action_queue(OldActionQueue),
+    {ok, wf:to_unicode_binary(Html), wf:to_unicode_binary(JS)}.
+
 
 % Render elements and return the HTML that was produced.
 % Puts any new actions into the current context.
@@ -20,13 +35,6 @@ render_elements(Elements) ->
 -spec inner_render_elements(E :: body()) -> html().
 inner_render_elements(undefined) ->
     [];
-inner_render_elements([]) ->
-    [];
-inner_render_elements(<<>>) ->
-    <<>>;
-inner_render_elements(E)
-    when is_integer(E); is_binary(E); ?IS_STRING(E)->
-    E;
 inner_render_elements(Es) when is_list(Es) ->
     [inner_render_elements(E) || E <- Es];
 inner_render_elements(E) when is_tuple(E) ->
@@ -37,6 +45,9 @@ inner_render_elements(script) ->
     script;
 inner_render_elements(Atom) when is_atom(Atom) ->
     wf:to_binary(Atom);
+inner_render_elements(E)
+    when is_integer(E); is_binary(E); ?IS_STRING(E)->
+    E;
 inner_render_elements(Unknown) ->
     throw({unanticipated_case_in_render_elements, Unknown}).
 
@@ -135,7 +146,9 @@ extract_class(#elementbase{class=Class}, ID, Anchor) ->
                           Module :: module(),
                           Element :: nitrogen_element() ) -> html().
 call_element_render(RenderOrTransform, Module, Element) ->
+    %{Time, NewElements} = timer:tc(Module, RenderOrTransform, [Element]),
     NewElements = Module:RenderOrTransform(Element),
+    %io:format("Time to render: ~p: ~p~n",[element(1, Element), Time]),
     inner_render_elements(NewElements).
 
 -spec normalize_id(list()) -> string().
