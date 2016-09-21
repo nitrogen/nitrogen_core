@@ -331,7 +331,7 @@ NitrogenClass.prototype.$get_validation = function(element) {
 // TODO: This needs to be made smarter. Right now, I'm pretty sure elements have
 // single validation groups, while it should be a list of groups that get validated
 NitrogenClass.prototype.$destroy_specific_validation = function(trigger, target) {
-    var v = NitrogenClass.$get_validation(target);
+    var v = Nitrogen.$get_validation(target);
     if(v.group==trigger)
         Nitrogen.$destroy_target_validation(element);
 }
