@@ -333,7 +333,7 @@ NitrogenClass.prototype.$get_validation = function(element) {
 NitrogenClass.prototype.$destroy_specific_validation = function(trigger, target) {
     var v = Nitrogen.$get_validation(target);
     if(v.group==trigger)
-        Nitrogen.$destroy_target_validation(element);
+        Nitrogen.$destroy_target_validation(target);
 }
 
 NitrogenClass.prototype.$destroy_target_validation = function(element) {
