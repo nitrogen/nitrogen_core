@@ -1081,7 +1081,8 @@ NitrogenClass.prototype.$autocomplete = function(path, autocompleteOptions, ente
     var n = this;
     jQuery.extend(autocompleteOptions, {
         select: function(ev, ui) {
-          var item = (ui.item) && '{"id":"'+ui.item.id+'","value":"'+ui.item.value+'"}' || '';
+          var val = ui.item.value.replace(/"/g,'\\"');
+          var item = (ui.item) && '{"id":"'+ui.item.id+'","value":"'+val+'"}' || '';
           n.$queue_event(null, null, selectPostbackInfo, {select_item: item});
         },
         source: function(req, res) {

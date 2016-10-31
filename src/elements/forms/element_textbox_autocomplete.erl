@@ -46,7 +46,8 @@ render_element(Record) ->
 
 -spec event(any()) -> any().
 event({autocomplete_select_event, Delegate, SelectTag})->
-    SelectItem = wf:json_decode(wf:q(select_item)),
+    RawItem = wf:q(select_item),
+    SelectItem = wf:json_decode(RawItem),
     Module = wf:coalesce([Delegate, wf:page_module()]),
     Module:autocomplete_select_event(SelectItem, SelectTag);
 
