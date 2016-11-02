@@ -563,7 +563,7 @@
 -record(bind, {?ELEMENT_BASE(element_bind),
         data=[]                 :: list(),
         map=[]                  :: list() | tuple(),
-        transform               :: fun(),
+        transform               :: fun() | undefined,
         acc=[]                  :: term(),
         body=[]                 :: body(),
         empty_body=[]           :: body()
