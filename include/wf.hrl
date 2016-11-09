@@ -135,9 +135,12 @@
 %%% TERNARY IF AND VARIATIONS %%%
 -define(WF_IF(Term,IfTrue,IfFalse),
     fun() ->
+        %% This is wrapped in a fun to contain the leaky-case expression. It
+        %% allows for nesting ?WF_IF calls. Though it obviously does incur the
+        %% minor overhead of creating an anonymous function then executing it.
         case Term of
             %% We use the long "WF_IF_VALUE" variable to prevent the likelyhood
-            %% of ambiguity in a function. This will throw some matching or
+            %% of a variable naming clash. This will throw some matching or
             %% "shadowing" errors if, in a function, you define a variable
             %% called "WF_IF_VALUE" before calling ?WF_IF. Given that this is
             %% unlikely to happen, this is an acceptable compromise.
