@@ -178,6 +178,7 @@ div.nitrogen_notice_ok_bar {
     vertical-align:center;
     width:300px;
     background:#ffc;
+	color: #000;
     border:2px dashed #000;
     font-size:18pt;
     border-radius:15px;
