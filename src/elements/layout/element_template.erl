@@ -80,6 +80,7 @@ is_time_to_recache(File, FileAtom) ->
 
     %% Finally if the file's last modification date is after the last time it
     %% was recached, we need to recache it.
+    ?WF_IF(LastModified==0,wf:warning("File appears to be deleted or has no modified time: ~s",[File])),
     LastModified > LastRecached.
             
 parse_template(File) ->
