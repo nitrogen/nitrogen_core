@@ -24,6 +24,12 @@
     TagName =/= 'script' andalso
     TagName =/= 'legend' andalso
     TagName =/= 'fieldset' andalso
+    TagName =/= 'h1' andalso
+    TagName =/= 'h2' andalso
+    TagName =/= 'h3' andalso
+    TagName =/= 'h4' andalso
+    TagName =/= 'h5' andalso
+    TagName =/= 'h6' andalso
     TagName =/= 'iframe')).
 
 -export ([emit_tag/2, emit_tag/3, html_name/2]).
