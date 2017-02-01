@@ -644,6 +644,7 @@
         show_button=true        :: boolean(),
         file_text="Select file" :: text(),
         button_text="Upload"    :: text(),
+        button_class=""         :: class() | [class()],
         droppable=false         :: boolean(),
         droppable_text="Drop Files Here" :: text(),
         multiple=false          :: boolean(),
