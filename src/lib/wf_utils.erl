@@ -169,7 +169,7 @@ fast_copy_fields(FromElement, ToElement) ->
     %% Convert from tuple to a list
     AllFields = tuple_to_list(FromElement),
     %% and extract only the truncated number of fields (ignoring record tag and callback module - elements 1 and 3 respectively)
-    [_, Type, _ | TruncFields] = lists:sublist(FinalSize, AllFields),
+    [_, Type, _ | TruncFields] = lists:sublist(AllFields, FinalSize),
     %% replace tag and module in field list
     NewList = [Tag, Type, Mod | TruncFields],
     %% and convert to completed tuple
