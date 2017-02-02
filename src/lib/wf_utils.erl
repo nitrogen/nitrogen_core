@@ -156,10 +156,25 @@ copy_fields(FromElement, ToElement) ->
 %% that the element that's being copied was extended using ?WF_EXTEND (which
 %% uses the `rekt` parsetransform).
 %% It just uses replace_with_base to copy all fields from FromElement to ToElement, 
-fast_copy_fields(FromElement, ToElement) ->
+fast_copy_fields(FromElement, ToElement) when tuple_size(FromElement) =< tuple_size(ToElement) ->
     Mod2 = element(3, ToElement),
     New = replace_with_base(FromElement, ToElement),
-    setelement(3, Mod2, New).
+    setelement(3, Mod2, New);
+fast_copy_fields(FromElement, ToElement) ->
+    %% Get record tag and callback module
+    Tag = element(1, ToElement),
+    Mod = element(3, ToElement),
+    %% Get size of target tuple
+    FinalSize = tuple_size(ToElement),
+    %% Convert from tuple to a list
+    AllFields = tuple_to_list(FromElement),
+    %% and extract only the truncated number of fields (ignoring record tag and callback module - elements 1 and 3 respectively)
+    [_, Type, _ | TruncFields] = lists:sublist(FinalSize, AllFields),
+    %% replace tag and module in field list
+    NewList = [Tag, Type, Mod | TruncFields],
+    %% and convert to completed tuple
+    list_to_tuple(NewList).
+
 
 %%% EMPTY LIST/BINARY CHECK
 
