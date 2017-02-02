@@ -159,7 +159,7 @@ copy_fields(FromElement, ToElement) ->
 fast_copy_fields(FromElement, ToElement) when tuple_size(FromElement) =< tuple_size(ToElement) ->
     Mod2 = element(3, ToElement),
     New = replace_with_base(FromElement, ToElement),
-    setelement(3, Mod2, New);
+    setelement(3, New, Mod2);
 fast_copy_fields(FromElement, ToElement) ->
     %% Get record tag and callback module
     Tag = element(1, ToElement),
