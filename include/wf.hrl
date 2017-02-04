@@ -7,7 +7,7 @@
 %% This is the parse_transform to allow extending fields
 -compile({parse_transform, rekt}).
 
--define(WF_EXTEND(OrigRec, NewRec, Module, Fields), -extend({OrigRec, NewRec, [{module, Module, "atom()"} | Fields]})).
+-define(WF_EXTEND(OrigRec, NewRec, Module, Fields), -extend({OrigRec, NewRec, [{module, Module} | Fields]})).
 
 
 %%% TYPES FOR DIALYZER %%%
