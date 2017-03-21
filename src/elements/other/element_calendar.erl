@@ -26,7 +26,7 @@ transform_element(_Rec = #calendar{id=Id0, delegate=Delegate0, actions=Actions,
     Id = ?WF_IF(Id0==undefined, wf:temp_id(), Id0),
     DateTimes = [qdate:to_date(D) || D <- qdate:range_days(1, Start, End)],
     Days = [Date || {Date, _Time} <- DateTimes],
-    Items = load_items(Delegate, CalTag, M, Y),
+    Items = load_items(Delegate, CalTag, Y, M),
     #panel{id=Id, class=[calendar, Class], style=Style, actions=Actions, html_id=Htmlid, data_fields=Data, body=[
         #table{rows=[
             #tablerow{cells=[
