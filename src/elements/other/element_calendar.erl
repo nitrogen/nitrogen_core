@@ -24,11 +24,17 @@ transform_element(_Rec = #calendar{id=Id0, delegate=Delegate0, actions=Actions,
     %% end at the end of the week for the last week of the month (so end on Saturday)
     End = qdate:end_week(7, qdate:end_month(FirstDay)),
     Id = ?WF_IF(Id0==undefined, wf:temp_id(), Id0),
-    Days = [qdate:to_date(D) || D <- qdate:range_days(Start, End)],
+    DateTimes = [qdate:to_date(D) || D <- qdate:range_days(1, Start, End)],
+    Days = [Date || {Date, _Time} <- DateTimes],
     Items = load_items(Delegate, CalTag, M, Y),
     #panel{id=Id, class=[calendar, Class], style=Style, actions=Actions, html_id=Htmlid, data_fields=Data, body=[
         #table{rows=[
             #tablerow{cells=[
+                #tableheader{colspan=7, body=[
+                    #h3{style="text-align:center", text=qdate:to_string("F Y", FirstDay)}
+                ]}
+            ]},
+            #tablerow{class=calendar_day_header, cells=[
                 #tableheader{text="Sunday"},
                 #tableheader{text="Monday"},
                 #tableheader{text="Tuesday"},
@@ -71,8 +77,12 @@ draw_day(Delegate, CalTag, Items, Date = {_, _, D}) ->
     end,
 
     #tablecell{body=[
-        #span{class=calendar_day, text=D},
-        Body2
+        #panel{class=calendar_day_wrapper, body=[
+            #panel{class=calendar_day, text=D},
+            #panel{class=calendar_day_body, body=[
+                Body2
+            ]}
+        ]}
     ]}.
 
 has_invalid_drop(Items) ->
@@ -122,7 +132,7 @@ extract_item_date(#calendar_item{date=Date}) ->
 extract_item_date(#calendar_invalid_drop{date=Date}) ->
     Date.
 
-drop_event(ItemTag, CalTag) ->
+drop_event(ItemTag, #drop_tag{calendar_tag=CalTag, delegate=Delegate, date=Date}) ->
     ok.
 
 event(_) ->

@@ -297,3 +297,34 @@ a.upload_delete_file:hover {
     left:-10000px;
 }
 
+
+.calendar_day_header th {
+	width: 14%;
+	text-align:center;
+}
+
+.calendar > table > tbody > tr > th,
+.calendar > table > tbody > tr > td {
+	border: 1px solid #999;
+	padding:0;
+}
+
+.calendar_day_body {
+}
+
+.calendar_day_wrapper {
+	position:relative;
+	min-height:100px;
+	padding:4px;
+}
+
+.calendar_day {
+	position:absolute;
+	width: 100%;
+	left:0;
+	top:0;
+	text-align:left;
+	background: rgba(128, 128, 128, 0.1);
+	padding:4px;
+}
+
