@@ -110,7 +110,7 @@ draw_item_body(I) ->
 
 get_date_items(_, undefined) -> [];
 get_date_items(Day, Items) ->
-    case dict:fetch(Day, Items) of
+    case dict:find(Day, Items) of
         {ok, Is} -> Is;
         error -> []
     end.

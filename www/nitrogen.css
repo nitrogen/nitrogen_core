@@ -310,6 +310,7 @@ a.upload_delete_file:hover {
 }
 
 .calendar_day_body {
+	min-height:100px;
 }
 
 .calendar_day_wrapper {
