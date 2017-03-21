@@ -330,3 +330,7 @@ a.upload_delete_file:hover {
 	padding:4px;
 }
 
+.calendar_today {
+	background: rgba(0, 255, 0, 0.1);
+}
+

@@ -27,6 +27,7 @@ transform_element(_Rec = #calendar{id=Id0, delegate=Delegate0, actions=Actions,
     DateTimes = [qdate:to_date(D) || D <- qdate:range_days(1, Start, End)],
     Days = [Date || {Date, _Time} <- DateTimes],
     Items = load_items(Delegate, CalTag, Y, M),
+    {Today, _} = qdate:to_date(os:timestamp()),
     #panel{id=Id, class=[calendar, Class], style=Style, actions=Actions, html_id=Htmlid, data_fields=Data, body=[
         #table{rows=[
             #tablerow{cells=[
@@ -43,28 +44,31 @@ transform_element(_Rec = #calendar{id=Id0, delegate=Delegate0, actions=Actions,
                 #tableheader{text="Friday"},
                 #tableheader{text="Saturday"}
             ]},
-            draw_weeks(Delegate, CalTag, Items, Days)
+            draw_weeks(Today, Delegate, CalTag, Items, Days)
         ]}
     ]}.
 
 
-draw_weeks(_, _, _, []) ->
+
+draw_weeks(_, _, _, _, []) ->
     [];
-draw_weeks(Delegate, CalTag, Items, [D1,D2,D3,D4,D5,D6,D7 | Rest]) ->
+%% We're garuanteed that the "Days" list is a multiple of 7, because we're always getting the Sunday through Saturday, padding at the front and back as necessary
+draw_weeks(Today, Delegate, CalTag, Items, [D1,D2,D3,D4,D5,D6,D7 | Rest]) ->
     [
-        draw_days(Delegate, CalTag, Items, [D1,D2,D3,D4,D5,D6,D7]),
-        draw_weeks(Delegate, CalTag, Items, Rest)
+        draw_days(Today, Delegate, CalTag, Items, [D1,D2,D3,D4,D5,D6,D7]),
+        draw_weeks(Today, Delegate, CalTag, Items, Rest)
     ].
 
-draw_days(Delegate, CalTag, Items, Days) ->
+draw_days(Today, Delegate, CalTag, Items, Days) ->
     #tablerow{cells=[
-        [draw_day(Delegate, CalTag, Items, D) || D <- Days]
+        [draw_day(Today, Delegate, CalTag, Items, D) || D <- Days]
     ]}.
 
-draw_day(Delegate, CalTag, Items, Date = {_, _, D}) ->
+draw_day(Today, Delegate, CalTag, Items, Date = {_, _, D}) ->
     DayItems = get_date_items(Date, Items),
     IsInvalidDrop = has_invalid_drop(DayItems),
     Body = draw_items(DayItems),
+    CellClass = ?WF_IF(Today==Date, calendar_today, ""),
     Body2 = case IsInvalidDrop of
         true -> Body;
         false ->
@@ -76,7 +80,7 @@ draw_day(Delegate, CalTag, Items, Date = {_, _, D}) ->
             #droppable{class=calendar_drop, delegate=?MODULE, tag=DropTag, body=Body}
     end,
 
-    #tablecell{body=[
+    #tablecell{class=CellClass, body=[
         #panel{class=calendar_day_wrapper, body=[
             #panel{class=calendar_day, text=D},
             #panel{class=calendar_day_body, body=[
