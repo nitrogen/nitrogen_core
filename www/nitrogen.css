@@ -16,19 +16,23 @@ label.nitrogen_label {
 
 /*** INPLACE EDITING ***/
 
+div.inplace_textarea div.view,
 div.inplace_textbox div.view {
     cursor: pointer;
 }
 
+div.inplace_textarea .label,
 div.inplace_textbox .label {
     display: inline;
 }
 
+div.inplace_textarea .instructions, 
 div.inplace_textbox .instructions {
     padding-left: 12px;
     font-size: 0.8em;
 }
 
+div.inplace_textarea .LV_invalid,
 div.inplace_textbox .LV_invalid {
     position: relative;
     margin-right: 7px;
