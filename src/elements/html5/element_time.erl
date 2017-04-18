@@ -15,7 +15,8 @@ reflect() -> record_info(fields, time).
 -spec render_element(#time{}) -> body().
 render_element(Record) ->
     Text = wf:html_encode(Record#time.text, Record#time.html_encode),
-    wf_tags:emit_tag(time, [Text, Record#time.body], [
+    wf_tags:emit_tag(input, [Text, Record#time.body], [
+        {type, time},
         {id, Record#time.html_id},
         {class, ["time", Record#time.class]},
         {title, Record#time.title},
