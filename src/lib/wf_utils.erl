@@ -239,13 +239,23 @@ get_field(Key, Fields, Rec) ->
 %% HAS BEHAVIOUR
 
 has_behaviour(Module, Behaviour) ->
-    try
-        Attributes = Module:module_info(attributes),
-        {behaviour, Behaviours} = lists:keyfind(behaviour, 1, Attributes),
-        lists:member(Behaviour, Behaviours)
-    catch
-        _:_ -> false
-    end.
+    Behaviours = get_behaviours(Module),
+    lists:member(Behaviour, Behaviours).
+
+%% Modules can have more than one behaviour, and it's perfectly legit to use
+%% -behaviour or -behavior (US Spelling), which Erlang trreats them as different
+%% module attributes.  This makes it tolerant of both types.
+get_behaviours(Module) ->
+    Attributes = try Module:module_info(attributes)
+                 catch error:undef -> []
+                 end,
+    lists:foldl(fun(Att, Acc) ->
+        case Att of
+            {behavior, [B]} -> [B | Acc];
+            {behaviour, [B]} -> [B | Acc];
+            _ -> Acc
+        end
+    end, [], Attributes).
 
 ensure_loaded(Module) ->
     wf:cache({ensure_loaded, Module}, 1000, fun() -> code:ensure_loaded(Module) end).
