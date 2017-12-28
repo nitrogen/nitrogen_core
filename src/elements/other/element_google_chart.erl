@@ -137,8 +137,8 @@ process_axis(N, Axis) ->
         top -> "t";
         right -> "r";
         bottom -> "x";
-        left -> "y";
-        OtherPosition -> erlang:error({unknown_axis_position, OtherPosition})
+        left -> "y"
+        %OtherPosition -> erlang:error({unknown_axis_position, OtherPosition})
     end,
     StringLabels = [wf:to_list(X) || X <- Axis#chart_axis.labels],
     Labels = integer_to_list(N) ++ ":|" ++ string:join(StringLabels, "|"),

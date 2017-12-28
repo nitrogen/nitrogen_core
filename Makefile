@@ -1,6 +1,9 @@
 .PHONY: test docs doc
 
-all: compile
+all: deps compile
+
+deps:
+	./rebar get-deps
 
 compile:
 	./rebar compile
@@ -64,6 +67,7 @@ R16B02: dialyzer
 R16B03-1: dialyzer
 17: dialyzer
 18: dialyzer
+19: dialyzer
 
 vim:
 	utils/vim-headers/add_vim.sh

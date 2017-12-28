@@ -58,6 +58,7 @@ render_element(Record = #upload{
         file_text=FileInputText,
         show_button=ShowButton,
         button_text=ButtonText,
+        button_class=ButtonClass,
         data_fields=DataFields}) ->
     
     StartedTag = {upload_started, Record},
@@ -169,7 +170,7 @@ render_element(Record = #upload{
             {value, ""}
         ]),
 
-        #button { id=ButtonID, show_if=ShowButton, text=ButtonText }
+        #button { id=ButtonID, show_if=ShowButton, text=ButtonText, class=ButtonClass}
     ],
 
     [

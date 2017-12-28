@@ -28,7 +28,11 @@ render_action(Record) ->
         attach_to=Record#is_integer.attach_to
     },
 
-    Script = wf:f("v.add(Validate.Numericality, { notAnIntegerMessage: \"~ts\", onlyInteger: true });", [Text]),
+    %% A little silly that we have to set both notAnInteger and notANumber
+    %% message, but apparently if it's not a number, Livevalidation shows "Not a
+    %% Number" before it checks if it's an integer.  This is an easy fix, but I
+    %% want to replace livevalidation completely
+    Script = wf:f("v.add(Validate.Numericality, { notAnIntegerMessage: \"~ts\", notANumberMessage: \"~ts\", onlyInteger: true });", [Text, Text]),
     [CustomValidatorAction, Script].
 
 validate(_AllowBlank=true, "", _Min, _Max) ->

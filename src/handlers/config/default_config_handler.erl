@@ -28,10 +28,18 @@ get_value(Key, DefaultValue, Config, State) ->
             throw({nitrogen_error, too_many_matching_values, Key, Values})
     end.
 
-get_values(Key, DefaultValue, _Config, _State) -> 
-    case application:get_env(nitrogen, Key) of
+get_values(Key, DefaultValue, Config, State) ->
+    %% By default, use nitrogen_core as the app (for Nitrogen 2.4+), however,
+    %% for backwards compatibility, also check for the nitrogen app.
+    Apps = [nitrogen_core, nitrogen],
+    get_values(Apps, Key, DefaultValue, Config, State).
+
+get_values([], _Key, DefaultValue, _Config, _State) ->
+    DefaultValue;
+get_values([App|Apps], Key, DefaultValue, _Config, _State) ->
+    case application:get_env(App, Key) of
         {ok, Value} -> 
             [Value];
         undefined ->
-            DefaultValue
+            get_values(Apps, Key, DefaultValue, _Config, _State)
     end.

@@ -26,7 +26,7 @@ pickle(Data) ->
     Padding = size(Message) rem 16,
     Bits = (16-Padding)*8,
     Key = signkey(),
-    IV = crypto:rand_bytes(16),
+    IV = crypto:strong_rand_bytes(16),
     Cipher = ?WF_ENCRYPT(Key,IV,<<Message/binary,0:Bits>>),
     Signature = ?WF_HASH(<<Key/binary,Cipher/binary>>),
     modified_base64_encode(<<IV/binary,Signature/binary,Cipher/binary>>).

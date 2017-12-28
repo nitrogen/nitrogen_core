@@ -4,8 +4,8 @@
 % See MIT-LICENSE for licensing information.
 
 -module (action_fade).
--include_lib ("wf.hrl").
--compile(export_all).
+-include("wf.hrl").
+-export([render_action/1]).
 
 render_action(Record) ->
     #jquery_effect {

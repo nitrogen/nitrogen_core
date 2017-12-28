@@ -1,7 +1,11 @@
 language: erlang
 script: "make travis"
 otp_release:
-  - 18.2
+  - 19.2
+  - 19.1
+  - 19.0
+  - 18.3
+  - 18.2.1
   - 18.1
   - 18.0
   - 17.5
