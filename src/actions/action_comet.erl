@@ -682,10 +682,10 @@ get_actions_blocking(Timeout) ->
         {actions, X} -> erlang:cancel_timer(TimerRef), X;           
         Other -> ?PRINT({unhandled_event, Other}), []
     after HardTimeout ->
-        ?PRINT({no_comet_actions_checking_pid, AccumulatorPid}),
+        %?PRINT({no_comet_actions_checking_pid, AccumulatorPid}),
         case erlang:is_process_alive(AccumulatorPid) of
             true ->
-                ?PRINT({is_alive_relooping}),
+                %?PRINT({is_alive_relooping}),
                 erlang:cancel_timer(TimerRef),
                 get_actions_blocking(Timeout);
             false ->
