@@ -80,13 +80,21 @@ render_action(#event {
             ];
 
         % Run some other Javascript event (click, mouseover, mouseout, etc.)
-        _ ->
+        _ when Delay == 0 ->
             [
                 wf:f("Nitrogen.$observe_event('~s', '~s', '~s', function anonymous(event) {", [Anchor, Trigger, Type]), 
                 AnchorScript, PostbackScript, WireAction, 
                 "});"
+            ];
+				_ ->
+            [
+                wf:f(
+                	"Nitrogen.$observe_event('~s', '~s', '~s', function anonymous(event) {setTimeout(function(){ ",
+                	[Anchor, Trigger, Type]), 
+                AnchorScript, PostbackScript, WireAction, 
+                wf:f("}, ~p)", [Delay]),
+                "});"
             ]
-
     end,
     Script.
 
