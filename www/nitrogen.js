@@ -869,7 +869,9 @@ NitrogenClass.prototype.$insert_after = function(anchor, path, html) {
 }
 
 NitrogenClass.prototype.$remove = function(anchor, path) {
-    objs(path, anchor).remove();
+    var x = objs(path, anchor).remove();
+    $(x).next('.LV_validation_message').remove();
+    x.remove();
 }
 
 

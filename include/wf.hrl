@@ -947,6 +947,11 @@
         function                :: atom() | text(),
         args=[]                 :: [text()]
     }).
+-record(if_value, {?ACTION_BASE(action_if_value),
+        value                   :: atom() | text(),
+        map                     :: undefined | [{atom() | text(), actions()}],
+        else=[]                 :: actions()
+    }).
 -record(set, {?ACTION_BASE(action_set),
         value=""                :: text() | integer()
     }).
