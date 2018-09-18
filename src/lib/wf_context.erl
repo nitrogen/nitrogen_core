@@ -468,7 +468,6 @@ init_context(Bridge) ->
             make_handler(security_handler, default_security_handler)
         ]
     },
-    %io:format("init_context(~p / ~p): ~p~n",[self(),Bridge,Context]),
     context(Context).
 
 make_handler(Name, Module) -> 
@@ -483,10 +482,8 @@ make_handler(Name, Module) ->
 % Yes, the context is stored in the process dictionary. It makes the Nitrogen 
 % code much cleaner. Trust me.
 context() -> 
-    %io:format("~n~nGET wf_context:context()[~p]: ~p",[self(),get(context)]),
     get(context).
 context(Context) -> 
-    %io:format("~n~nPUT wf_context:context(~p)[~p]",[self(),Context]),
     put(context, Context).
 
 %% for debugging. Remove when ready
