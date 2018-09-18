@@ -125,20 +125,20 @@ in_request() ->
     %% request.
     is_record(context(), context).
 
- socket() ->
-    ?BRIDGE:socket().
+socket() ->
+    sbw:socket(?BRIDGE).
 
 path() ->
     Req = request_bridge(),
-    Req:path().
+    sbw:path(Req).
 
 protocol() ->
     Req = request_bridge(),
-    Req:protocol().
+    sbw:protocol(Req).
 
 uri() ->
     Req = request_bridge(),
-    Req:uri().
+    sbw:uri(Req).
 
 url() ->
     Protocol = wf:to_list(protocol()),
@@ -147,7 +147,7 @@ url() ->
     Protocol ++ "://" ++ Host ++ Uri.
 
 peer_ip() ->
-    ?BRIDGE:peer_ip().
+    sbw:peer_ip(?BRIDGE).
 
 peer_ip(Proxies) ->
     peer_ip(Proxies,x_forwarded_for).
@@ -168,7 +168,7 @@ peer_ip(Proxies,ForwardedHeader) ->
     end.
 
 request_method() ->
-    case ?BRIDGE:request_method() of
+    case sbw:request_method(?BRIDGE) of
         'GET'       -> get;
         get         -> get;
         'POST'      -> post;
@@ -189,20 +189,20 @@ request_method() ->
     end.
 
 request_body() ->
-    ?BRIDGE:request_body().
+    sbw:request_body(?BRIDGE).
 
 status_code() ->
-    ?BRIDGE:status_code().
+    sbw:status_code(?BRIDGE).
 
 status_code(StatusCode) ->
-    bridge(?BRIDGE:set_status_code(StatusCode)),
+    bridge(sbw:set_status_code(StatusCode,?BRIDGE)),
     ok.
 
 content_type(ContentType) ->
     header("Content-Type", ContentType).
 
 content_type() ->
-    case ?BRIDGE:get_response_header("Content-Type") of
+    case sbw:get_response_header("Content-Type",?BRIDGE) of
         undefined -> "text/html";
         ContentType -> ContentType
     end.
@@ -212,13 +212,13 @@ download_as(Filename0) ->
     header("Content-Disposition", "attachment; filename=\"" ++ Filename ++ "\"").
 
 headers() ->
-    ?BRIDGE:headers().
+    sbw:headers(?BRIDGE).
 
 header(Header) ->
-    ?BRIDGE:header(Header).
+    sbw:header(Header,?BRIDGE).
 
 header(Header, Value) ->
-    bridge(?BRIDGE:set_header(Header, Value)),
+    bridge(sbw:set_header(Header, Value,?BRIDGE)),
     ok.
 
 -spec encoding(Encoding :: encoding()) -> ok.
@@ -457,6 +457,7 @@ init_context(Bridge) ->
             make_handler(security_handler, default_security_handler)
         ]
     },
+    %io:format("init_context(~p / ~p): ~p~n",[self(),Bridge,Context]),
     context(Context).
 
 make_handler(Name, Module) -> 
@@ -470,8 +471,12 @@ make_handler(Name, Module) ->
 %%% GET AND SET CONTEXT %%%
 % Yes, the context is stored in the process dictionary. It makes the Nitrogen 
 % code much cleaner. Trust me.
-context() -> get(context).
-context(Context) -> put(context, Context).
+context() -> 
+    %io:format("~n~nGET wf_context:context()[~p]: ~p",[self(),get(context)]),
+    get(context).
+context(Context) -> 
+    %io:format("~n~nPUT wf_context:context(~p)[~p]",[self(),Context]),
+    put(context, Context).
 
 %% for debugging. Remove when ready
 increment(Key) ->
