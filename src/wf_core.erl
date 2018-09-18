@@ -18,20 +18,22 @@
 
 run() ->
     Bridge = wf_context:bridge(),
-    try 
-        case Bridge:error() of
-            none -> run_catched();
-            Other -> 
-                Message = wf:f("Errors: ~p~n", [Other]),
-                Bridge1 = Bridge:set_response_data(Message),
-                Bridge1:build_response()
-        end
-    catch
-        exit:normal ->
-            exit(normal);
-        Type : Error -> 
-            run_crash(Bridge, Type, Error, erlang:get_stacktrace())
-    end.
+    %io:format("wf_core:run(): ~p~n",[Bridge]),
+    run_catched().
+    %% try 
+    %%     case Bridge:error() of
+    %%         none -> run_catched();
+    %%         Other -> 
+    %%             Message = wf:f("Errors: ~p~n", [Other]),
+    %%             Bridge1 = Bridge:set_response_data(Message),
+    %%             Bridge1:build_response()
+    %%     end
+    %% catch
+    %%     exit:normal ->
+    %%         exit(normal);
+    %%     Type : Error -> 
+    %%         run_crash(Bridge, Type, Error, erlang:get_stacktrace())
+    %% end.
 
     
 
@@ -57,8 +59,11 @@ run_crash(Bridge, Type, Error, Stacktrace) ->
     end.
 
 init_websocket(SerializedPageContext) ->
+    %io:format("init_websocket(~p)~n",[SerializedPageContext]),
     deserialize_websocket_context(SerializedPageContext),
+    %io:format("deserialize_websocket_context~n",[]),
     wf_context:async_mode({websocket, self()}),
+    %io:format("wf_context:async_mode~n",[]),
     call_init_on_handlers().
 
 run_websocket_crash(Type, Error, Stacktrace) ->
@@ -156,6 +161,7 @@ serialize_context() ->
     % Get handler context, but don't serialize the config.
     StateHandler = wf_context:handler(state_handler),
     SerializedContextState = wf_pickle:pickle([Page, StateHandler]),
+    %io:format("serialize_context(): ~nPage: ~p~nStateHandler: ~p~nSerializedContextState: ~s~n",[Page,StateHandler,SerializedContextState]),
     wf:f("Nitrogen.$set_param('pageContext', '~s');~n", [SerializedContextState]).
 
 deserialize_request_context() ->
@@ -174,11 +180,17 @@ deserialize_context(undefined) ->
     %% If the serialized page context is undefined, don't do anything.
     ok;
 deserialize_context(SerializedPageContext) ->
+    %io:format("deserialize_context(~p)~n",[SerializedPageContext]),
     % Deserialize page_context and handler_list if available...
+    %io:format("~nwf_pickle:depickle0(~s): ~n~n",[SerializedPageContext]),
     case wf_pickle:depickle(SerializedPageContext) of
         [PageContext, NewStateHandler] ->
+	    %io:format("~n~nwf_pickle:depickle2-> ~p / ~p~n~n",[PageContext, NewStateHandler]),
+	    %io:format("~n~nwf_context:context()-> ~p~n~n",[wf_context:context()]),
             wf_context:page_context(PageContext),
+	    %io:format("~n~nwf_pickle:depickle3~n~n",[]),
             wf_context:restore_handler(NewStateHandler),
+	    %io:format("~n~nwf_pickle:depickle4~n~n",[]),
             ok;
         undefined ->
             exit({failure_to_deserialize_page_context, [
@@ -201,6 +213,7 @@ deserialize_context(SerializedPageContext) ->
 call_init_on_handlers() ->
     %% Get initial handlers
     Handlers = wf_context:handlers(),
+    %io:format("call_init_on_handlers(): ~p~n",[Handlers]),
     %% Clear Handler list, to re-initiate in order
     wf_context:handlers([]),
     %% Re-initiate handlers in order, appending them back to the handler list as we go
