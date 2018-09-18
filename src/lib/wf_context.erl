@@ -126,19 +126,20 @@ in_request() ->
     is_record(context(), context).
 
 socket() ->
-    sbw:socket(?BRIDGE).
+    Req = request_bridge(),
+    apply(element(1,Req),socket,Req).
 
 path() ->
     Req = request_bridge(),
-    sbw:path(Req).
+    apply(element(1,Req),path,Req).
 
 protocol() ->
     Req = request_bridge(),
-    sbw:protocol(Req).
+    apply(element(1,Req),protocol,Req).
 
 uri() ->
     Req = request_bridge(),
-    sbw:uri(Req).
+    apply(element(1,Req),uri,Req).
 
 url() ->
     Protocol = wf:to_list(protocol()),
@@ -147,7 +148,9 @@ url() ->
     Protocol ++ "://" ++ Host ++ Uri.
 
 peer_ip() ->
-    sbw:peer_ip(?BRIDGE).
+    Req = request_bridge(),
+    apply(element(1,Req),peer_ip,Req).
+
 
 peer_ip(Proxies) ->
     peer_ip(Proxies,x_forwarded_for).
@@ -168,7 +171,8 @@ peer_ip(Proxies,ForwardedHeader) ->
     end.
 
 request_method() ->
-    case sbw:request_method(?BRIDGE) of
+    Req = request_bridge(),
+    case apply(element(1,Req),request_method,Req) of
         'GET'       -> get;
         get         -> get;
         'POST'      -> post;
@@ -189,20 +193,24 @@ request_method() ->
     end.
 
 request_body() ->
-    sbw:request_body(?BRIDGE).
+    Req = request_bridge(),
+    apply(element(1,Req),request_body,Req).
 
 status_code() ->
-    sbw:status_code(?BRIDGE).
+    Req = request_bridge(),
+    apply(element(1,Req),status_code,Req).
 
 status_code(StatusCode) ->
-    bridge(sbw:set_status_code(StatusCode,?BRIDGE)),
+    Req = request_bridge(),
+    bridge(apply(element(1,Req),set_status_code,[StatusCode,Req])),
     ok.
 
 content_type(ContentType) ->
     header("Content-Type", ContentType).
 
 content_type() ->
-    case sbw:get_response_header("Content-Type",?BRIDGE) of
+    Req = request_bridge(),
+    case apply(element(1,Req),get_response_header,["Content-Type",Req]) of
         undefined -> "text/html";
         ContentType -> ContentType
     end.
@@ -212,13 +220,16 @@ download_as(Filename0) ->
     header("Content-Disposition", "attachment; filename=\"" ++ Filename ++ "\"").
 
 headers() ->
-    sbw:headers(?BRIDGE).
+    Req = request_bridge(),
+    apply(element(1,Req),headers,Req).
 
 header(Header) ->
-    sbw:header(Header,?BRIDGE).
+    Req = request_bridge(),
+    apply(element(1,Req),header,[Header,Req]).
 
 header(Header, Value) ->
-    bridge(sbw:set_header(Header, Value,?BRIDGE)),
+    Req = request_bridge(),
+    bridge(apply(element(1,Req),set_header,[Header, Value,Req])),
     ok.
 
 -spec encoding(Encoding :: encoding()) -> ok.
@@ -498,4 +509,3 @@ response_bridge() ->
 
 response_bridge(Bridge) ->
     bridge(Bridge).
-
