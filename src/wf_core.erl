@@ -19,7 +19,7 @@
 run() ->
     Bridge = wf_context:bridge(),
     try 
-        case Bridge:error() of
+        case Bridge:error(Bridge) of
             none -> run_catched();
             Other -> 
                 Message = wf:f("Errors: ~p~n", [Other]),
@@ -333,4 +333,3 @@ encoding_by_content_type(<<"application/csv">>) ->
     unicode;
 encoding_by_content_type(_) ->
     none.
-
