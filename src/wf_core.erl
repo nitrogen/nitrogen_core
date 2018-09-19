@@ -19,7 +19,7 @@
 run() ->
     Bridge = wf_context:bridge(),
     try 
-        case Bridge:error(Bridge) of
+        case apply(element(1,Bridge),error,Bridge) of
             none -> run_catched();
             Other -> 
                 Message = wf:f("Errors: ~p~n", [Other]),
