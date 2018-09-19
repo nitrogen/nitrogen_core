@@ -23,8 +23,8 @@ run() ->
             none -> run_catched();
             Other -> 
                 Message = wf:f("Errors: ~p~n", [Other]),
-                Bridge1 = Bridge:set_response_data(Message),
-                Bridge1:build_response()
+                Bridge1 = apply(element(1,Bridge),set_response_data,Message), 
+		apply(element(1,Bridge1),set_response_data,[])
         end
     catch
         exit:normal ->
