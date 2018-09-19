@@ -127,19 +127,19 @@ in_request() ->
 
 socket() ->
     Req = request_bridge(),
-    apply(element(1,Req),socket,Req).
+    apply(element(1,Req),socket,[Req]).
 
 path() ->
     Req = request_bridge(),
-    apply(element(1,Req),path,Req).
+    apply(element(1,Req),path,[Req]).
 
 protocol() ->
     Req = request_bridge(),
-    apply(element(1,Req),protocol,Req).
+    apply(element(1,Req),protocol,[Req]).
 
 uri() ->
     Req = request_bridge(),
-    apply(element(1,Req),uri,Req).
+    apply(element(1,Req),uri,[Req]).
 
 url() ->
     Protocol = wf:to_list(protocol()),
@@ -149,7 +149,7 @@ url() ->
 
 peer_ip() ->
     Req = request_bridge(),
-    apply(element(1,Req),peer_ip,Req).
+    apply(element(1,Req),peer_ip,[Req]).
 
 
 peer_ip(Proxies) ->
@@ -172,7 +172,7 @@ peer_ip(Proxies,ForwardedHeader) ->
 
 request_method() ->
     Req = request_bridge(),
-    case apply(element(1,Req),request_method,Req) of
+    case apply(element(1,Req),request_method,[Req]) of
         'GET'       -> get;
         get         -> get;
         'POST'      -> post;
@@ -194,11 +194,11 @@ request_method() ->
 
 request_body() ->
     Req = request_bridge(),
-    apply(element(1,Req),request_body,Req).
+    apply(element(1,Req),request_body,[Req]).
 
 status_code() ->
     Req = request_bridge(),
-    apply(element(1,Req),status_code,Req).
+    apply(element(1,Req),status_code,[Req]).
 
 status_code(StatusCode) ->
     Req = request_bridge(),
@@ -221,7 +221,7 @@ download_as(Filename0) ->
 
 headers() ->
     Req = request_bridge(),
-    apply(element(1,Req),headers,Req).
+    apply(element(1,Req),headers,[Req]).
 
 header(Header) ->
     Req = request_bridge(),
