@@ -317,8 +317,7 @@
         on_invalid              :: undefined | actions(),
         delegate                :: module(),
         html_name               :: html_name(),
-        type=text               :: string() | atom(),
-        autocomplete="on"       :: string() | atom()
+        type=text               :: string() | atom()
     }).
 -record(datepicker_textbox, {?ELEMENT_BASE(element_datepicker_textbox),
         text=""                 :: text(),
