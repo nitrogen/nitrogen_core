@@ -317,7 +317,8 @@
         on_invalid              :: undefined | actions(),
         delegate                :: module(),
         html_name               :: html_name(),
-        type=text               :: string() | atom()
+        type=text               :: string() | atom(),
+	autocomplete="off"      :: string() | atom()
     }).
 -record(datepicker_textbox, {?ELEMENT_BASE(element_datepicker_textbox),
         text=""                 :: text(),
@@ -946,11 +947,6 @@
 -record(js_fun, {?ACTION_BASE(action_js_fun),
         function                :: atom() | text(),
         args=[]                 :: [text()]
-    }).
--record(if_value, {?ACTION_BASE(action_if_value),
-        value                   :: atom() | text(),
-        map                     :: undefined | [{atom() | text(), actions()}],
-        else=[]                 :: actions()
     }).
 -record(set, {?ACTION_BASE(action_set),
         value=""                :: text() | integer()
