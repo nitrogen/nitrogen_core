@@ -31,6 +31,7 @@ render_element(Record) ->
     Attributes = [
         {id, Record#textbox.html_id},
         {type, Record#textbox.type}, 
+	{autocomplete,Record#textbox.autocomplete},
         {class, [textbox, Record#textbox.class]},
         {title, Record#textbox.title},
         {maxlength, Record#textbox.maxlength},
