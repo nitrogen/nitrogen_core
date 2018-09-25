@@ -58,7 +58,7 @@ start(BrowserExec, TestPaths, Opts) ->
         undefined -> "http://127.0.0.1:8000";
         Base -> Base
     end,
-    Trigger = crypto:rand_uniform(1, 10000),
+    Trigger = rand:uniform(10000),
     LaunchUrl = wf:f(BaseUrl ++ "/wf_test_srv?id=~p", [Trigger]),
     wf_test:log("Starting Nitrogen Test Server...~nOpen your browser to:~n        ~s~n", [LaunchUrl]),
     {ok, Pid} = gen_server:start({local, ?MODULE}, ?MODULE, [Trigger, TestPaths], []),
