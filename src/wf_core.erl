@@ -19,12 +19,12 @@
 run() ->
     Bridge = wf_context:bridge(),
     try 
-        case apply(element(1,Bridge),error,[Bridge]) of
+        case sbw:error(Bridge) of
             none -> run_catched();
             Other -> 
                 Message = wf:f("Errors: ~p~n", [Other]),
-                Bridge1 = apply(element(1,Bridge),set_response_data,[Message]), 
-		apply(element(1,Bridge1),set_response_data,[])
+                Bridge1 = sbw:set_response_data(Message, Bridge),
+                sbw:build_response(Bridge1)
         end
     catch
         exit:normal ->

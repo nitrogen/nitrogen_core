@@ -3,6 +3,7 @@
 -define(wf_inc, ok).
 -include("compat.hrl").
 -include("wf_test.hrl").
+-compile(nowarn_export_all).
 
 %% This is the parse_transform to allow extending fields
 -compile({parse_transform, rekt}).

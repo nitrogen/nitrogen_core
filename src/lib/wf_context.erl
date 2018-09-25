@@ -108,7 +108,10 @@
         response_bridge/1
     ]).
 
--define(BRIDGE, (bridge())).
+%% This particular macro is really no longer needed the way it was when we were
+%% using tuple calls, but I like the way the macros are highlighted when
+%% a call uses ?BRIDGE, so I'm keeping it that way.
+-define(BRIDGE, bridge()).
 
 %%% REQUEST AND RESPONSE BRIDGE %%%
 
@@ -126,20 +129,16 @@ in_request() ->
     is_record(context(), context).
 
 socket() ->
-    Req = request_bridge(),
-    apply(element(1,Req),socket,[Req]).
+    sbw:socket(?BRIDGE).
 
 path() ->
-    Req = request_bridge(),
-    apply(element(1,Req),path,[Req]).
+    sbw:path(?BRIDGE).
 
 protocol() ->
-    Req = request_bridge(),
-    apply(element(1,Req),protocol,[Req]).
+    sbw:protocol(?BRIDGE).
 
 uri() ->
-    Req = request_bridge(),
-    apply(element(1,Req),uri,[Req]).
+    sbw:uri(?BRIDGE).
 
 url() ->
     Protocol = wf:to_list(protocol()),
@@ -148,8 +147,7 @@ url() ->
     Protocol ++ "://" ++ Host ++ Uri.
 
 peer_ip() ->
-    Req = request_bridge(),
-    apply(element(1,Req),peer_ip,[Req]).
+    sbw:peer_ip(?BRIDGE).
 
 
 peer_ip(Proxies) ->
@@ -171,8 +169,7 @@ peer_ip(Proxies,ForwardedHeader) ->
     end.
 
 request_method() ->
-    Req = request_bridge(),
-    case apply(element(1,Req),request_method,[Req]) of
+    case sbw:request_method(?BRIDGE) of
         'GET'       -> get;
         get         -> get;
         'POST'      -> post;
@@ -193,24 +190,21 @@ request_method() ->
     end.
 
 request_body() ->
-    Req = request_bridge(),
-    apply(element(1,Req),request_body,[Req]).
+    sbw:request_body(?BRIDGE).
 
 status_code() ->
-    Req = request_bridge(),
-    apply(element(1,Req),status_code,[Req]).
+    sbw:status_code(?BRIDGE).
 
 status_code(StatusCode) ->
-    Req = request_bridge(),
-    bridge(apply(element(1,Req),set_status_code,[StatusCode,Req])),
+    Bridge2 = sbw:set_status_code(StatusCode,?BRIDGE),
+    bridge(Bridge2),
     ok.
 
 content_type(ContentType) ->
     header("Content-Type", ContentType).
 
 content_type() ->
-    Req = request_bridge(),
-    case apply(element(1,Req),get_response_header,["Content-Type",Req]) of
+    case sbw:get_response_header(<<"content-type">>,?BRIDGE) of
         undefined -> "text/html";
         ContentType -> ContentType
     end.
@@ -220,16 +214,14 @@ download_as(Filename0) ->
     header("Content-Disposition", "attachment; filename=\"" ++ Filename ++ "\"").
 
 headers() ->
-    Req = request_bridge(),
-    apply(element(1,Req),headers,[Req]).
+    sbw:headers(?BRIDGE).
 
 header(Header) ->
-    Req = request_bridge(),
-    apply(element(1,Req),header,[Header,Req]).
+    sbw:header(Header, ?BRIDGE).
 
 header(Header, Value) ->
-    Req = request_bridge(),
-    bridge(apply(element(1,Req),set_header,[Header, Value,Req])),
+    Bridge2 = sbw:set_header(Header, Value, ?BRIDGE),
+    bridge(Bridge2),
     ok.
 
 -spec encoding(Encoding :: encoding()) -> ok.
