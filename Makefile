@@ -68,6 +68,8 @@ R16B03-1: dialyzer
 17: dialyzer
 18: dialyzer
 19: dialyzer
+20: dialyzer
+21: dialyzer
 
 vim:
 	utils/vim-headers/add_vim.sh
