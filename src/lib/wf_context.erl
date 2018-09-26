@@ -193,7 +193,7 @@ request_body() ->
     sbw:request_body(?BRIDGE).
 
 status_code() ->
-    sbw:status_code(?BRIDGE).
+    sbw:get_status_code(?BRIDGE).
 
 status_code(StatusCode) ->
     Bridge2 = sbw:set_status_code(StatusCode,?BRIDGE),
