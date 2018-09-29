@@ -3,6 +3,7 @@
 
 main([]) ->
     crypto:start(),
+    code:ensure_loaded(rand),
 
 	Filename = "include/compat.hrl",
 	io:format("Generating compatibility macros...\n"),
