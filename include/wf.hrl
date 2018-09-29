@@ -679,7 +679,7 @@
         captcha_opts=[]         :: proplist(),
         button_id               :: id(),
         button_label="Check!"   :: text(),
-        button_class            :: text(),
+        button_class            :: class(),
         delegate                :: module(),
         tag                     :: term(),
         fail_body="Please try again!" :: body(),
