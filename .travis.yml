@@ -6,6 +6,7 @@ otp_release:
   - 19.2
   - 18.3
   - 17.5
+  - 17.0
 before_script:
   - sudo service postgresql stop
   - sudo service mysql stop
