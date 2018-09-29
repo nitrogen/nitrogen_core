@@ -462,10 +462,10 @@
     }).
 -record(restful_form, {?ELEMENT_BASE(element_restful_form),
         method="POST"           :: string() | atom(),
-        action                  :: url(),
+        action                  :: url() | undefined,
         html_name               :: html_name(),
         target                  :: string() | atom(),
-        enctype                 :: text(),
+        enctype                 :: text() | undefined,
         body=[]                 :: body()
       }).
 -record(restful_submit, {?ELEMENT_BASE(element_restful_submit),
