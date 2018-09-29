@@ -51,7 +51,7 @@ rand_uniform_1() ->
 rand_uniform_2() ->
     case erlang:function_exported(rand, uniform, 1) of
         true ->
-            "(rand:uniform(1, Max-Min+1)+Min-1)";
+            "(rand:uniform(Max-Min+1)+Min-1)";
         false ->
             "crypto:rand_uniform(Min, Max)"
     end.
