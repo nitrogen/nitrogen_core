@@ -384,13 +384,13 @@
 
 -record(option, {
         text=""                 :: text(),
-        value=undefined         :: text() | atom() | undefined,
+        value=undefined         :: text() | atom() | integer(),
         selected                :: boolean() | undefined,
         show_if=true            :: boolean(),
         disabled=false          :: boolean()
     }).
 
--type short_option()        :: {text(), text()} | text().
+-type short_option()        :: {text() | atom() | integer(), text()} | text().
 -record(option_group, {
         text=""                 :: text(),
         options=[]              :: [#option{} | short_option()],
