@@ -754,15 +754,15 @@
     }).
 -record(iframe, {?ELEMENT_BASE(element_iframe),
         align                   :: text() | atom(),
-        frameborder             :: integer(),
+        frameborder             :: integer() | undefined,
         height                  :: integer(),
-        name                    :: text(),
-        sandbox                 :: text(),
-        seamless                :: boolean(),
+        name=""                 :: text(),
+        sandbox=""              :: text(),
+        seamless                :: atom() | text(),
         src                     :: url(),
-        srcdoc                  :: text(),
+        srcdoc=""               :: text(),
         width                   :: integer(),
-        allowfullscreen         :: boolean()
+        allowfullscreen=true    :: boolean()
     }).
         
 %% HTML5 semantic elements
