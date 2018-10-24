@@ -41,8 +41,8 @@
 init(undefined, State) -> init([], State);
 init(Routes, State) -> 
     % Get the path...
-    RequestBridge = wf_context:bridge(),
-    Path = RequestBridge:path(),
+    Bridge = wf_context:bridge(),
+    Path = sbw:path(Bridge),
 
     % Match to the longest possible route.
     {Module, PathInfo} = route(Path, Routes),
