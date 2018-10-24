@@ -101,7 +101,7 @@
 -record(context, {
     % Transient Information
     type                    :: context_type(),
-    bridge                  :: simple_bridge:bridge(),
+    bridge                  :: undefined | simple_bridge:bridge(), %% will only be undefined when "not in a request"
     anchor=undefined        :: id(), 
     data=[]                 :: context_data(),
     encoding=auto           :: encoding(),
