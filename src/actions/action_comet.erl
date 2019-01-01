@@ -84,6 +84,15 @@ comet(CometFunction, Pool, Scope) ->
     wf:wire(page, page, #comet { function=Pid, pool=Pool, scope=Scope }),
     {ok, Pid}.
 
+status(Pid) ->
+    {dictionary, PD} = erlang:process_info(Pid, dictionary), 
+    Context = proplists:get_value(context, PD),
+    PC = Context#context.page_context,
+    Seriesid = PC#page_context.series_id,
+    ?PRINT({seriesid, Seriesid}),
+    {ok, AccPid} = get_accumulator_pid_no_start(Seriesid),
+    AccPid ! info.
+
 %% @doc Gather all wired actions, and send to the accumulator.
 flush() ->
     %% If we've managed to establish a websocket connection after the comet
@@ -443,8 +452,14 @@ accumulator_loop(Guardians, Actions, Waiting, TimerRef, WebsocketPid, ProcessTag
                 false ->
                     % Guardian_process will detect that we've died and update
                     % the pool.
+                    maybe_kill_waiting(Waiting),
                     erlang:exit({accumulator_loop, exiting_lease_expired})
             end;
+        info ->
+            Status = [{guardians, Guardians}, {actions, Actions}, {timer_ref, TimerRef}, {websocket_pid, WebsocketPid}, {process_tags, ProcessTags}],
+            ?PRINT({accumulator_status, Status}),
+            accumulator_loop(Guardians, Actions, Waiting, TimerRef, WebsocketPid, ProcessTags);
+
         Other ->
             ?PRINT({accumulator_loop, unhandled_event, Other}),
             accumulator_loop(Guardians, Actions, Waiting, TimerRef, WebsocketPid, ProcessTags)
@@ -453,10 +468,18 @@ accumulator_loop(Guardians, Actions, Waiting, TimerRef, WebsocketPid, ProcessTag
         %% If we have no TimerRef, then the browser never performed
         %% the callback, so kill this process after 20 seconds.
         case TimerRef == undefined of
-            true  -> erlang:exit({accumulator_loop, timeout});
+            true  ->
+                maybe_kill_waiting(Waiting),
+                erlang:exit({accumulator_loop, timeout});
             false -> accumulator_loop(Guardians, Actions, Waiting, TimerRef, WebsocketPid, ProcessTags)
         end
     end.
+
+maybe_kill_waiting(Pid) when is_pid(Pid) ->
+    Pid ! killed_when_accumulator_died;
+maybe_kill_waiting(_) ->
+    ok.
+
 
 % The guardian process monitors the running AsyncFunction and
 % the running Accumulator. If either one dies, then send 
@@ -652,11 +675,24 @@ get_actions_blocking(Timeout) ->
     {ok, AccumulatorPid} = get_accumulator_pid(SeriesID),
     AccumulatorNode = node(AccumulatorPid),
     TimerRef = rpc:call(AccumulatorNode, erlang, send_after, [Timeout, AccumulatorPid, {add_actions, []}]),
+    HardTimeout = Timeout + 10000,
 
     AccumulatorPid!{get_actions_blocking, self()},
     receive 
         {actions, X} -> erlang:cancel_timer(TimerRef), X;           
         Other -> ?PRINT({unhandled_event, Other}), []
+    after HardTimeout ->
+        %?PRINT({no_comet_actions_checking_pid, AccumulatorPid}),
+        case erlang:is_process_alive(AccumulatorPid) of
+            true ->
+                %?PRINT({is_alive_relooping}),
+                erlang:cancel_timer(TimerRef),
+                get_actions_blocking(Timeout);
+            false ->
+                erlang:cancel_timer(TimerRef),
+                ?PRINT({accumulator_is_dead,AccumulatorPid}),
+                []
+         end
     end.
 
 set_lease(LengthInMS) ->
