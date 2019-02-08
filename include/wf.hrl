@@ -60,7 +60,8 @@
 -type encoding_function()   :: module_function() | fun((iolist()) -> iolist()).
 -type encoding()            :: none | unicode | auto | encoding_function().
 -type context_data()        :: iolist() | {file, Filename :: path()}
-                                | {stream, Size :: integer(), fun()}.
+                                | {stream, Size :: integer(), fun()}
+                                | {sendfile, integer(), Size :: integer(), Path :: any()}.
 -type context_type()        :: first_request | postback_request | static_file | postback_websocket | undefined.
 %%% CONTEXT %%%
 
