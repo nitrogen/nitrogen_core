@@ -6916,7 +6916,7 @@ $.widget( "ui.autocomplete", {
 
 		this.element
 			.addClass( "ui-autocomplete-input" )
-			.attr( "autocomplete", "off" );
+			.attr( "autocomplete", "jquery-nope" );
 
 		this._on( this.element, {
 			keydown: function( event ) {
