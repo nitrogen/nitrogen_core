@@ -20,9 +20,7 @@ render_element(Record) ->
 
     NameFun = set_name_fun(Anchor),
 
-    {Time, Body} = timer:tc(fun() ->
-        wf_render_elements:recurse_body(NameFun, Record#radiogroup.body)
-    end),
+    Body = wf_render_elements:recurse_body(NameFun, Record#radiogroup.body),
 
     % Render the record...
     element_panel:render_element(#panel {
