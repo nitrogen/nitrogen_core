@@ -9,7 +9,8 @@
     render_elements/1,
     render_and_trap_actions/1,
     temp_id/0,
-    normalize_id/1
+    normalize_id/1,
+    recurse_body/2
 ]).
 
 -spec render_and_trap_actions(Elements :: body() | fun()) -> {ok, Html :: binary(), Actions :: binary()}.
@@ -166,3 +167,32 @@ temp_id() ->
                        %% see compat.escript, and include/compat.hrl for the
                        %% definition.
     "temp" ++ integer_to_list(Num).
+
+
+recurse_body(Fun, List) when is_list(List) ->
+    [recurse_body(Fun, X) || X <- List];
+recurse_body(Fun, Rec0) when is_tuple(Rec0), element(2, Rec0)==is_element ->
+    try
+        Rec = Fun(Rec0),
+        Mod = element(3, Rec),
+        Fields = Mod:reflect(),
+        case lists:member(body, Fields) of
+            true ->
+                Idx = wf_utils:indexof(body, Fields),
+                Body = element(Idx, Rec),
+                Body2 = recurse_body(Fun, Body),
+                setelement(Idx, Rec, Body2);
+            false ->
+                Rec
+        end
+    catch E:T ->
+        error_logger:warning_msg("Error trying to apply function to an element tuple: ~p~nError: ~p: ~p.~nStacktrace: ~p",[Rec0, E, T, erlang:get_stacktrace()]),
+        Rec0
+    end;
+recurse_body(_Fun, X) ->
+    X.
+
+            
+
+    
+    
