@@ -59,6 +59,7 @@ render_element(Record) ->
             {class, [radio, Record#radio.class]},
             {title, Record#radio.title},
             {style, Record#radio.style},
+            ?WF_IF(Record#radio.disabled, disabled),
             {data_fields, Record#radio.data_fields},
             {CheckedOrNot, true}
         ]),

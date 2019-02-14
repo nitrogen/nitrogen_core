@@ -444,7 +444,8 @@
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module(),
-        html_name               :: html_name()
+        html_name               :: html_name(),
+        disabled=false          :: boolean()
     }).
 -record(password, {?ELEMENT_BASE(element_password),
         text=""                 :: text(),
