@@ -259,19 +259,23 @@ LiveValidation.prototype = {
   getElementType: function(){
     var nn = this.element.nodeName.toUpperCase();
 
+	 console.log(nn);
     // NITROGEN	
 	// Modification to check for radiogroup selection
 	if($(this.element).hasClass("radiogroup"))
 		var nt = "RADIOGROUP";
 	else
+	  {
+	    console.log(this);
 		var nt = this.element.type.toUpperCase();
+	  }
 
     switch(true){
       case (nn == 'TEXTAREA'):
         return LiveValidation.TEXTAREA;
       case (nn == 'INPUT' && nt == 'TEXT'):
         return LiveValidation.TEXT;
-      case (nn == 'INPUT' && (nt == 'EMAIL' || nt == 'URL' || nt == 'TEL' || nt == 'NUMBER' || nt == 'RANGE')):
+      case (nn == 'INPUT' && (nt == 'EMAIL' || nt == 'URL' || nt == 'TEL' || nt == 'NUMBER' || nt == 'RANGE' || nt == 'HIDDEN')):
         return LiveValidation.TEXT;
       case (nn == 'INPUT' && nt == 'PASSWORD'):
         return LiveValidation.PASSWORD;
