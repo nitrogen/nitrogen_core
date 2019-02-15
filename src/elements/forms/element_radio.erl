@@ -68,6 +68,7 @@ render_element(Record) ->
         %% Label for Radio...
         wf_tags:emit_tag(label, [Body, Content], [
             {for, Anchor},
-            {class, [radio_label, LabelDisabledClass]}
+            {class, [radio_label, LabelDisabledClass]},
+            {title, Record#radio.title}
         ])
     ].
