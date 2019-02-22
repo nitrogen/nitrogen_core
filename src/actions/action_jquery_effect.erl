@@ -25,23 +25,52 @@ render_action(Record) ->
             ["function() {", Actions1, "}"]
     end,
 
+%    Obj = wf:f("objs('~s')",[Target]),
+
     Script = case Record#jquery_effect.type of
-        'show' when Effect==none -> ["show(", Actions, ");"];
-        'hide' when Effect==none -> ["hide(", Actions, ");"];
-        'toggle' when Effect==none -> ["toggle(", Actions, ");"];
-        'appear' -> [wf:f("hide().fadeIn(~p, ", [Speed]), Actions, ");"];
-        'fade'   -> [wf:f("show().fadeOut(~p, ", [Speed]), Actions, ");"];
-        'slideup'-> [wf:f("show().slideUp(~p, ",[Speed]), Actions, ");"];
-        'slidedown' -> [wf:f("hide().slideDown(~p, ",[Speed]), Actions, ");"];
-        'show'   -> [wf:f("hide().show('~s', ~s, ~p, ", [Effect, Options, Speed]), Actions, ");"];
-        'hide'   -> [wf:f("show().hide('~s', ~s, ~p, ", [Effect, Options, Speed]), Actions, ");"];
-        'effect' -> [wf:f("effect('~s', ~s, ~p, ", [Effect, Options, Speed]), Actions, ");"];
-        'toggle' -> [wf:f("toggle('~s', ~s, ~p, ", [Effect, Options, Speed]), Actions, ");"];
-        'add_class'    -> [wf:f("addClass('~s', ~p, ", [Class, Speed]), Actions, ");"];
-        'remove_class' -> [wf:f("removeClass('~s', ~p, ", [Class, Speed]), Actions, ");"];
-        'animate' -> [wf:f("animate(~s, ~p, '~s', ", [Options, Speed, Easing]), Actions, ");"]
+        'show' when Effect==none ->
+            if_visible(Actions, ["$(this).show(", Actions, ");"]);
+        'hide' when Effect==none ->
+            if_visible(["$(this).hide(", Actions, ");"], Actions);
+        'toggle' when Effect==none ->
+            ["toggle(", Actions, ");"];
+        'appear' ->
+            if_visible(Actions, [wf:f("$(this).fadeIn(~p, ", [Speed]), Actions, ");"]);
+        'fade'   ->
+            if_visible([wf:f("$(this).fadeOut(~p, ", [Speed]), Actions, ");"], Actions);
+        'slideup'->
+            if_visible([wf:f("$(this).slideUp(~p, ",[Speed]), Actions, ");"], Actions);
+        'slidedown' ->
+            if_visible(Actions, [wf:f("$(this).slideDown(~p, ",[Speed]), Actions, ");"]);
+        'show' ->
+            if_visible(Actions, [wf:f("$(this).show('~s', ~s, ~p, ", [Effect, Options, Speed]), Actions, ");"]);
+        'hide' ->
+            if_visible([wf:f("$(this).hide('~s', ~s, ~p, ", [Effect, Options, Speed]), Actions, ");"], Actions);
+        'effect' ->
+            [wf:f("effect('~s', ~s, ~p, ", [Effect, Options, Speed]), Actions, ");"];
+        'toggle' ->
+            [wf:f("toggle('~s', ~s, ~p, ", [Effect, Options, Speed]), Actions, ");"];
+        'add_class'    ->
+            [wf:f("addClass('~s', ~p, ", [Class, Speed]), Actions, ");"];
+        'remove_class' ->
+            [wf:f("removeClass('~s', ~p, ", [Class, Speed]), Actions, ");"];
+        'animate' ->
+            [wf:f("animate(~s, ~p, '~s', ", [Options, Speed, Easing]), Actions, ");"]
     end,
     [wf:f("objs('~s').", [Target]), Script].
+
+
+if_visible(IfVisible, IfInvisible) ->
+    [
+        "each(function(){
+            if($(this).is(':visible')) {",
+                IfVisible,
+            "} else {",
+                IfInvisible,
+            "}
+        })"
+    ].
+
 
 -spec options_to_js(Options :: proplist()) -> binary().
 options_to_js(Options) ->
