@@ -25,7 +25,11 @@ render_action(Record) ->
             ["function() {", Actions1, "}"]
     end,
 
-%    Obj = wf:f("objs('~s')",[Target]),
+    %% For the show or hide type effects, we want the followup action triggers
+    %% to happen even if the element doesn't have to animate.  For example, if
+    %% we choose to "slideUp", we want to to do the followup actions even if the
+    %% element is already hidden.
+    %% This "is_visible" function does this logic for us.
 
     Script = case Record#jquery_effect.type of
         'show' when Effect==none ->
