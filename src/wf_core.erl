@@ -112,6 +112,9 @@ finish_dynamic_request() ->
         _                   -> build_first_response(Html, JavascriptFinal)
     end.
 
+maybe_render_elements(Elements = {sendfile, 0, _Size, _FullPath}) ->
+    %% cowboy_simple_bridge can handle sending files directly
+    {ok, Elements};
 maybe_render_elements(Elements = {file, _Filename}) ->
     %% This will pass the {file,_} return to simple_bridge to serve a file
     %% directly

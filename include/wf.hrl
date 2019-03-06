@@ -60,7 +60,8 @@
 -type encoding_function()   :: module_function() | fun((iolist()) -> iolist()).
 -type encoding()            :: none | unicode | auto | encoding_function().
 -type context_data()        :: iolist() | {file, Filename :: path()}
-                                | {stream, Size :: integer(), fun()}.
+                                | {stream, Size :: integer(), fun()}
+                                | {sendfile, integer(), Size :: integer(), Path :: any()}.
 -type context_type()        :: first_request | postback_request | static_file | postback_websocket | undefined.
 %%% CONTEXT %%%
 
@@ -443,7 +444,8 @@
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module(),
-        html_name               :: html_name()
+        html_name               :: html_name(),
+        disabled=false          :: boolean()
     }).
 -record(password, {?ELEMENT_BASE(element_password),
         text=""                 :: text(),

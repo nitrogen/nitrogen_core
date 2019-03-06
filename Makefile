@@ -21,8 +21,9 @@ docs:
 
 doc: docs
 
-eunit: clean compile
+eunit: clean deps compile
 	./rebar eunit
+	rm -fr deps
 
 test:
 	mkdir -p test

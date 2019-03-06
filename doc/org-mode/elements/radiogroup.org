@@ -10,7 +10,7 @@
 
   The radio group element automatically groups it's radio button members into the same radio button group by applying the same HTML =name= to each radio contained within.
 
-Note: Currently, this will not do a "deep dive" for the radio buttons, but assumes a flattened list containing the radio buttons.
+Note: As of Nitrogen 2.4, this will do a "deep dive" in the body elements.
 
 ** Usage
 
@@ -24,11 +24,7 @@ Note: Currently, this will not do a "deep dive" for the radio buttons, but assum
 
 ** Attributes
 
-   + body - (/string/) :: The contents of the radio group.  Recommended to be a
-      list of radio buttons, but it will not search the contents of child elements
-      containing their own =body= attributes. So be aware. It's recommended to
-      just be a list of =#radio{}= elements, separated by =#br{}= or =#p{}=
-      elements.
+   + body - (/string/) :: The contents of the radio group. =#radio= elements contained within will be found and have the HTML =name= attributes set appropriately.
 
 ** See Also
 
