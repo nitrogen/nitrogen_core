@@ -108,7 +108,10 @@
         response_bridge/1
     ]).
 
--define(BRIDGE, (bridge())).
+%% This particular macro is really no longer needed the way it was when we were
+%% using tuple calls, but I like the way the macros are highlighted when
+%% a call uses ?BRIDGE, so I'm keeping it that way.
+-define(BRIDGE, bridge()).
 
 %%% REQUEST AND RESPONSE BRIDGE %%%
 
@@ -125,20 +128,17 @@ in_request() ->
     %% request.
     is_record(context(), context).
 
- socket() ->
-    ?BRIDGE:socket().
+socket() ->
+    sbw:socket(?BRIDGE).
 
 path() ->
-    Req = request_bridge(),
-    Req:path().
+    sbw:path(?BRIDGE).
 
 protocol() ->
-    Req = request_bridge(),
-    Req:protocol().
+    sbw:protocol(?BRIDGE).
 
 uri() ->
-    Req = request_bridge(),
-    Req:uri().
+    sbw:uri(?BRIDGE).
 
 url() ->
     Protocol = wf:to_list(protocol()),
@@ -147,7 +147,8 @@ url() ->
     Protocol ++ "://" ++ Host ++ Uri.
 
 peer_ip() ->
-    ?BRIDGE:peer_ip().
+    sbw:peer_ip(?BRIDGE).
+
 
 peer_ip(Proxies) ->
     peer_ip(Proxies,x_forwarded_for).
@@ -168,7 +169,7 @@ peer_ip(Proxies,ForwardedHeader) ->
     end.
 
 request_method() ->
-    case ?BRIDGE:request_method() of
+    case sbw:request_method(?BRIDGE) of
         'GET'       -> get;
         get         -> get;
         'POST'      -> post;
@@ -189,20 +190,21 @@ request_method() ->
     end.
 
 request_body() ->
-    ?BRIDGE:request_body().
+    sbw:request_body(?BRIDGE).
 
 status_code() ->
-    ?BRIDGE:status_code().
+    sbw:get_status_code(?BRIDGE).
 
 status_code(StatusCode) ->
-    bridge(?BRIDGE:set_status_code(StatusCode)),
+    Bridge2 = sbw:set_status_code(StatusCode,?BRIDGE),
+    bridge(Bridge2),
     ok.
 
 content_type(ContentType) ->
     header("Content-Type", ContentType).
 
 content_type() ->
-    case ?BRIDGE:get_response_header("Content-Type") of
+    case sbw:get_response_header(<<"content-type">>,?BRIDGE) of
         undefined -> "text/html";
         ContentType -> ContentType
     end.
@@ -212,13 +214,14 @@ download_as(Filename0) ->
     header("Content-Disposition", "attachment; filename=\"" ++ Filename ++ "\"").
 
 headers() ->
-    ?BRIDGE:headers().
+    sbw:headers(?BRIDGE).
 
 header(Header) ->
-    ?BRIDGE:header(Header).
+    sbw:header(Header, ?BRIDGE).
 
 header(Header, Value) ->
-    bridge(?BRIDGE:set_header(Header, Value)),
+    Bridge2 = sbw:set_header(Header, Value, ?BRIDGE),
+    bridge(Bridge2),
     ok.
 
 -spec encoding(Encoding :: encoding()) -> ok.
@@ -470,8 +473,10 @@ make_handler(Name, Module) ->
 %%% GET AND SET CONTEXT %%%
 % Yes, the context is stored in the process dictionary. It makes the Nitrogen 
 % code much cleaner. Trust me.
-context() -> get(context).
-context(Context) -> put(context, Context).
+context() -> 
+    get(context).
+context(Context) -> 
+    put(context, Context).
 
 %% for debugging. Remove when ready
 increment(Key) ->
@@ -493,4 +498,3 @@ response_bridge() ->
 
 response_bridge(Bridge) ->
     bridge(Bridge).
-

@@ -19,12 +19,12 @@
 run() ->
     Bridge = wf_context:bridge(),
     try 
-        case Bridge:error() of
+        case sbw:error(Bridge) of
             none -> run_catched();
             Other -> 
                 Message = wf:f("Errors: ~p~n", [Other]),
-                Bridge1 = Bridge:set_response_data(Message),
-                Bridge1:build_response()
+                Bridge1 = sbw:set_response_data(Message, Bridge),
+                sbw:build_response(Bridge1)
         end
     catch
         exit:normal ->
@@ -112,6 +112,9 @@ finish_dynamic_request() ->
         _                   -> build_first_response(Html, JavascriptFinal)
     end.
 
+maybe_render_elements(Elements = {sendfile, 0, _Size, _FullPath}) ->
+    %% cowboy_simple_bridge can handle sending files directly
+    {ok, Elements};
 maybe_render_elements(Elements = {file, _Filename}) ->
     %% This will pass the {file,_} return to simple_bridge to serve a file
     %% directly
@@ -333,4 +336,3 @@ encoding_by_content_type(<<"application/csv">>) ->
     unicode;
 encoding_by_content_type(_) ->
     none.
-

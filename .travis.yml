@@ -1,21 +1,12 @@
 language: erlang
 script: "make travis"
 otp_release:
+  - 21.0
+  - 20.0
   - 19.2
-  - 19.1
-  - 19.0
   - 18.3
-  - 18.2.1
-  - 18.1
-  - 18.0
   - 17.5
-  - 17.4
-  - 17.1 
   - 17.0
-  - R16B03-1
-  - R16B
-  - R15B03
-  - R15B
 before_script:
   - sudo service postgresql stop
   - sudo service mysql stop

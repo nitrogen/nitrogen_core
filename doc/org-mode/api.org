@@ -302,6 +302,44 @@
    Spawn the provided function (arity 0) and tell the browser to poll for the results at the specified interval.
    See [[http://nitrogenproject.com/demos/continuations][continuations example]] for usage.
 
+* Comet notes
+
+  The comets functionality considers some internal messages other than the ones
+  delivered by wf:send/2 and wf:send_global/2. These messages are:
+
+  #+BEGIN_SRC erlang
+'INIT'
+            The init message is sent to the first process in a comet pool.
+
+{'JOIN', PID}
+	This message is sent to already existing comets when a new process joins to the pool
+
+{'LEAVE', PID}
+	This message is triggered when certain comet process terminates and it is delivered to
+	all other processes in the pool
+  #+END_SRC
+
+  Optionally you can detect when the user leaves the page with a comet by trapping its exit signal.
+
+  #+BEGIN_SRC erlang
+
+comet_function() ->
+
+  process_flag(trap_exit, true),
+
+  receive
+
+    {'EXIT', _, Message} -> 
+
+                ?PRINT(Message),
+
+                io:format("The user has left the page.~n")
+
+  end.
+
+  #+END_SRC
+
+
 * Redirect
 # <<5>>
 
@@ -327,6 +365,7 @@
    to the =PostLoginURL= provided to =wf:redirect_to_login(URL, PostLoginURL)=
    If the user came to the page for some other reason, then the user is
    redirected to the provided =DefaultURL=.
+
 
 * Session State
 # <<6>>

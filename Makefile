@@ -1,4 +1,4 @@
-.PHONY: test docs doc
+.PHONY: test docs doc deps
 
 all: deps compile
 
@@ -21,8 +21,9 @@ docs:
 
 doc: docs
 
-eunit: clean compile
+eunit: clean deps compile
 	./rebar eunit
+	rm -fr deps
 
 test:
 	mkdir -p test
@@ -46,9 +47,6 @@ $(DEPS_PLT):
 dialyzer: dialyzer-deps-compile $(DEPS_PLT)
 	@(dialyzer --fullpath --plt $(DEPS_PLT) -Wrace_conditions -r ./ebin)
 
-dialyzer-no-race: dialyzer-deps-compile $(DEPS_PLT)
-	@(dialyzer --fullpath --plt $(DEPS_PLT) -r ./ebin)
-
 # TRAVIS-CI STUFF
 
 ERLANG_VERSION_CHECK := erl -eval "io:format(\"~s\",[erlang:system_info(otp_release)]), halt()."  -noshell
@@ -57,17 +55,11 @@ ERLANG_VERSION = $(shell $(ERLANG_VERSION_CHECK))
 # This is primarily for Travis build testing, as each build instruction will overwrite the previous
 travis: eunit $(ERLANG_VERSION)
 
-R15B: dialyzer
-R15B01: dialyzer
-R15B02: dialyzer-no-race
-R15B03: dialyzer
-R16B: dialyzer
-R16B01: dialyzer
-R16B02: dialyzer
-R16B03-1: dialyzer
 17: dialyzer
 18: dialyzer
 19: dialyzer
+20: dialyzer
+21: dialyzer
 
 vim:
 	utils/vim-headers/add_vim.sh

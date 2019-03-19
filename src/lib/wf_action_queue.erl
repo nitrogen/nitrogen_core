@@ -16,6 +16,8 @@
 -type action_queue()    :: #wf_action_queue{}.
 -type out_reply()       :: {error, empty} | {ok, actions(), action_queue()}.
 
+-export_type([action_queue/0]).
+
 -spec new() -> action_queue().
 new() ->
     blank_state().

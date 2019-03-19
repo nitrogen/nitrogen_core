@@ -46,13 +46,29 @@ to_list(A) -> inner_to_list(A).
 
 -spec to_unicode_list(term()) -> list().
 to_unicode_list(undefined) -> [];
-to_unicode_list(L) when ?IS_STRING(L) -> unicode:characters_to_list(L);
+to_unicode_list(L) when ?IS_STRING(L) -> characters_to_list(L);
 to_unicode_list(L) when is_list(L) ->
     SubLists = [to_unicode_list(X) || X <- L],
     lists:flatten(SubLists);
 to_unicode_list(B) when is_binary(B) -> unicode:characters_to_list(B);
 to_unicode_list(A) -> inner_to_list(A).
     
+characters_to_list(L) ->
+    case unicode:characters_to_list(L) of
+        {error, _, _} ->
+            %% Failed because text includes UTF-16 characters.
+	        characters_to_list(L, <<>>);
+	    Result ->
+	        Result
+    end.
+
+%% Convert UTF-16 characters to unicode list.
+characters_to_list([], Acc) ->
+    unicode:characters_to_list(Acc, utf16);
+characters_to_list([Value|Rest], Acc) ->
+    V1 = Value div 256,
+    V2 = Value rem 256,
+    characters_to_list(Rest, <<Acc/binary, V1, V2>>).
 
 -spec inner_to_list(term()) -> list().
 inner_to_list(A) when is_atom(A) -> atom_to_list(A);

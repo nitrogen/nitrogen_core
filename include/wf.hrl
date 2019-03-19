@@ -3,6 +3,7 @@
 -define(wf_inc, ok).
 -include("compat.hrl").
 -include("wf_test.hrl").
+-compile(nowarn_export_all).
 
 %% This is the parse_transform to allow extending fields
 -compile({parse_transform, rekt}).
@@ -59,7 +60,8 @@
 -type encoding_function()   :: module_function() | fun((iolist()) -> iolist()).
 -type encoding()            :: none | unicode | auto | encoding_function().
 -type context_data()        :: iolist() | {file, Filename :: path()}
-                                | {stream, Size :: integer(), fun()}.
+                                | {stream, Size :: integer(), fun()}
+                                | {sendfile, integer(), Size :: integer(), Path :: any()}.
 -type context_type()        :: first_request | postback_request | static_file | postback_websocket | undefined.
 %%% CONTEXT %%%
 
@@ -100,7 +102,7 @@
 -record(context, {
     % Transient Information
     type                    :: context_type(),
-    bridge                  :: simple_bridge:bridge(),
+    bridge                  :: undefined | simple_bridge:bridge(), %% will only be undefined when "not in a request"
     anchor=undefined        :: id(), 
     data=[]                 :: context_data(),
     encoding=auto           :: encoding(),
@@ -317,7 +319,8 @@
         on_invalid              :: undefined | actions(),
         delegate                :: module(),
         html_name               :: html_name(),
-        type=text               :: string() | atom()
+        type=text               :: string() | atom(),
+	autocomplete="off"      :: string() | atom()
     }).
 -record(datepicker_textbox, {?ELEMENT_BASE(element_datepicker_textbox),
         text=""                 :: text(),
@@ -382,13 +385,13 @@
 
 -record(option, {
         text=""                 :: text(),
-        value=undefined         :: text() | atom() | undefined,
+        value=undefined         :: text() | atom() | integer(),
         selected                :: boolean() | undefined,
         show_if=true            :: boolean(),
         disabled=false          :: boolean()
     }).
 
--type short_option()        :: {text(), text()} | text().
+-type short_option()        :: {text() | atom() | integer(), text()} | text().
 -record(option_group, {
         text=""                 :: text(),
         options=[]              :: [#option{} | short_option()],
@@ -441,7 +444,8 @@
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module(),
-        html_name               :: html_name()
+        html_name               :: html_name(),
+        disabled=false          :: boolean()
     }).
 -record(password, {?ELEMENT_BASE(element_password),
         text=""                 :: text(),
@@ -460,10 +464,10 @@
     }).
 -record(restful_form, {?ELEMENT_BASE(element_restful_form),
         method="POST"           :: string() | atom(),
-        action                  :: url(),
+        action                  :: url() | undefined,
         html_name               :: html_name(),
         target                  :: string() | atom(),
-        enctype                 :: text(),
+        enctype                 :: text() | undefined,
         body=[]                 :: body()
       }).
 -record(restful_submit, {?ELEMENT_BASE(element_restful_submit),
@@ -677,7 +681,7 @@
         captcha_opts=[]         :: proplist(),
         button_id               :: id(),
         button_label="Check!"   :: text(),
-        button_class            :: text(),
+        button_class            :: class(),
         delegate                :: module(),
         tag                     :: term(),
         fail_body="Please try again!" :: body(),
@@ -752,15 +756,15 @@
     }).
 -record(iframe, {?ELEMENT_BASE(element_iframe),
         align                   :: text() | atom(),
-        frameborder             :: integer(),
+        frameborder             :: integer() | undefined,
         height                  :: integer(),
-        name                    :: text(),
-        sandbox                 :: text(),
-        seamless                :: boolean(),
+        name=""                 :: text(),
+        sandbox=""              :: text(),
+        seamless                :: atom() | text(),
         src                     :: url(),
-        srcdoc                  :: text(),
+        srcdoc=""               :: text(),
         width                   :: integer(),
-        allowfullscreen         :: boolean()
+        allowfullscreen=true    :: boolean()
     }).
         
 %% HTML5 semantic elements
@@ -1115,6 +1119,11 @@
         function                :: atom() | script(),
         args="{}"               :: text(),
         when_empty=false        :: boolean()
+    }).
+-record(if_value, {?ACTION_BASE(action_if_value),
+        value                   :: atom() | text(),
+        map                     :: undefined | [{atom() | text(), actions()}],
+        else=[]                 :: actions()
     }).
 
 -endif.

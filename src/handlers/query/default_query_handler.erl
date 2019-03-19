@@ -31,9 +31,9 @@
 init(_Config, _State) -> 
     % Get query params and post params
     % from the request bridge...
-    RequestBridge = wf_context:bridge(),
-    QueryParams = RequestBridge:query_params(),
-    PostParams = RequestBridge:post_params(),
+    Bridge = wf_context:bridge(),
+    QueryParams = sbw:query_params(Bridge),
+    PostParams = sbw:post_params(Bridge),
 
     % Load into state...
     Params = QueryParams ++ PostParams,
