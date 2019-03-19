@@ -138,10 +138,9 @@ command(["plugin", Name]) ->
             file:write_file(Demo, template(TemplateDemo, Name)),
 
             io:format("Plugin created in ~s (demo page in ~s)\n\n", [Dir, Demo]),
-            io:format([
-                "Don't forget to: \n\n",
-                "1) initialize your newly created plugin with version control (hg or git)\n",
-                "2) clone your plugin outside this nitrogen release and update the 'deps' section in your rebar.config. For example:\n\n"]),
+            io:format("Don't forget to: \n\n"),
+            io:format("1) initialize your newly created plugin with version control (hg or git)\n"),
+            io:format("2) clone your plugin outside this nitrogen release and update the 'deps' section in your rebar.config. For example:\n\n"),
             io:format(
                 "   {~s, \".*\", {hg, \"https://bitbucket.org/user/my_plugin\", default}}\n\n",
                 [Name]),
