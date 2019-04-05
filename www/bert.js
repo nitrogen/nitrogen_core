@@ -173,6 +173,10 @@ BertClass.prototype.encode_boolean = function (Obj) {
 	}
 };
 
+BertClass.prototype.encode_undefined = function (Obj) {
+	return this.encode_inner(this.atom("undefined"));
+}
+
 BertClass.prototype.encode_number = function (Obj) {
 	var s, isInteger = (Obj % 1 === 0);
 
