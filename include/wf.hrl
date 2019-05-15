@@ -961,6 +961,18 @@
         url=""                  :: url(),
         login=false             :: boolean() | url()
     }).
+-record(open_window, {?ACTION_BASE(action_open_window),
+        url=""                  :: url(),
+        height                  :: integer() | undefined,
+        width                   :: integer() | undefined,
+        left                    :: integer() | undefined,
+        top                     :: integer() | undefined,
+        menubar=true            :: boolean(),
+        statusbar=true          :: boolean(),
+        titlebar=true           :: boolean(),
+        name='_blank'           :: '_blank' | '_parent' | '_self' | '_top' | text(),
+        options=[]
+    }).
 -record(event, {?ACTION_BASE(action_event),
         type=default            :: atom(),
         keycode=undefined       :: integer() | undefined,
