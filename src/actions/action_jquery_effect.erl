@@ -72,7 +72,7 @@ if_visible(IfVisible, IfInvisible) ->
             "} else {",
                 IfInvisible,
             "}
-        })"
+        });"
     ].
 
 
