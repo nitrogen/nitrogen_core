@@ -36,7 +36,7 @@ render_action(#open_window{
     
     Opts = make_opts(FullOpts),
 
-    wf:f("window.open(\"~ts~\", \"~ts\", \"~ts\")", [Url, Name, Opts]).
+    wf:f("window.open(\"~ts\", \"~ts\", \"~ts\")", [Url, wf:to_list(Name), Opts]).
 
 -spec open_window(Url :: url(), Name :: text(), Options :: list()) -> ok.
 open_window(Url, Name, Options) ->
@@ -52,8 +52,10 @@ make_opts(Opts0) ->
 
 make_opts_([]) ->
     [];
+make_opts_([{_, ""} | Opts]) ->
+    make_opts_(Opts);
 make_opts_([{_, undefined} | Opts]) ->
-    make_opts(Opts);
+    make_opts_(Opts);
 make_opts_([{Opt, Val} | Opts]) ->
     NewOpt = wf:f("~ts=~ts", [Opt, Val]),
-    [NewOpt | make_opts(Opts)].
+    [NewOpt | make_opts_(Opts)].
