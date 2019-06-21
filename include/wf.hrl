@@ -320,7 +320,7 @@
         delegate                :: module(),
         html_name               :: html_name(),
         type=text               :: string() | atom(),
-	autocomplete="off"      :: string() | atom()
+        autocomplete="off"      :: string() | atom()
     }).
 -record(datepicker_textbox, {?ELEMENT_BASE(element_datepicker_textbox),
         text=""                 :: text(),
@@ -337,6 +337,15 @@
         validators=[]           :: validators(),
         options = [{dateFormat, "yy-mm-dd"}]    :: proplist()
     }).
+-record(date_dropdown, {?ELEMENT_BASE(element_date_dropdown),
+        value=""                :: text() | erlang:date() | {erlang:date(),erlang:time()},
+        format=iso              :: ymd | iso | mdy | usa | dmy,
+        min_year=undefined      :: undefined | integer(),
+        max_year=undefined      :: undefined | integer(),
+        month_names=true        :: boolean(),
+        month_fun={element_date_dropdown, months} :: {module(), atom()} | fun(),
+        wrapperid=undefined     :: id()
+}).
 -record(textbox_autocomplete, {?ELEMENT_BASE(element_textbox_autocomplete),
         tag                     :: term(),
         text=""                 :: text(),
@@ -1020,6 +1029,12 @@
         script                  :: text()
     }).
 -record(disable_selection, {?ACTION_BASE(action_disable_selection)}).
+-record(disable_option, {?ACTION_BASE(action_toggle_option),
+        value                   :: atom() | string() | binary() | integer()
+}).
+-record(enable_option, {?ACTION_BASE(action_toggle_option),
+        value                   :: atom() | string() | binary() | integer()
+}).
 -record(jquery_effect, {?ACTION_BASE(action_jquery_effect),
         type                    :: atom() | string() | binary(),
         effect                  :: atom() | string() | binary(),
