@@ -29,7 +29,7 @@ render_action(#open_window{
         {left, Left},
         {top, Top},
         {menubar, yesno(Menubar)},
-        {statusbar, yesno(Statusbar)},
+        {status, yesno(Statusbar)},
         {titlebar, yesno(Titlebar)}
         | OtherOptions
     ],
