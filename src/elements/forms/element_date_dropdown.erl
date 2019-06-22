@@ -76,22 +76,26 @@ event({update, Yid, Mid, Did, ValTempid}) ->
     D = wf:to_integer(D0),
     NumDays = calendar:last_day_of_the_month(Y, M),
     ChoppingBlock = [29,30,31],
-    lists:foreach(fun
-        (Day) when Day =< NumDays ->
-            wf:wire(#enable_option{target=Did, value=Day});
-        (Day) ->
-            wf:wire(#disable_option{target=Did, value=Day})
+    lists:foreach(fun(Day) ->
+        wf:wire(#remove_option{target=Did, value=Day}),
+        ?WF_IF(Day =< NumDays, wf:wire(#add_option{target=Did, option={Day, Day}}))
     end, ChoppingBlock),
     IsValid = calendar:valid_date({Y,M,D}),
     case IsValid of
         true -> 
+            wf:set(Did, D),
             wf:set(ValTempid, date_to_string({Y,M,D}));
         false ->
             wf:set(ValTempid, "")
     end.
 
 date_to_string({Y,M,D}) ->
-    wf:to_list(Y) ++ "-" ++ wf:to_list(M) ++ "-" ++ wf:to_list(D).
+    wf:to_list(Y) ++ "-" ++ format_m_or_d(M) ++ "-" ++ format_m_or_d(D).
+
+format_m_or_d(X) when X =< 9 ->
+    "0" ++ wf:to_list(X);
+format_m_or_d(X) ->
+    wf:to_list(X).
     
 handle_min(undefined) ->
     {Y, _, _} = erlang:date(),

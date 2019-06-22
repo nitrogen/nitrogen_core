@@ -8,7 +8,8 @@
 -include("wf.hrl").
 -export([
     reflect/0,
-    render_element/1
+    render_element/1,
+    create_option/1
 ]).
 
 -define(DEFAULT_MULTISELECT_SIZE, 5).
@@ -70,6 +71,10 @@ binary_or_undefined(undefined) ->
     undefined;
 binary_or_undefined(V) ->
     wf:to_binary(V).
+
+
+create_option(Option) ->
+    create_options(undefined, true, [Option]).
 
 create_options(_,_,[]) ->
     [];

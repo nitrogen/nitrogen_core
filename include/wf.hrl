@@ -1035,6 +1035,13 @@
 -record(enable_option, {?ACTION_BASE(action_toggle_option),
         value                   :: atom() | string() | binary() | integer()
 }).
+-record(add_option, {?ACTION_BASE(action_add_option),
+        option                  :: #option{} | short_option(),
+        location=bottom         :: top | bottom
+}).
+-record(remove_option, {?ACTION_BASE(action_remove_option),
+        value                   :: atom() | string() | binary() | integer()
+}).
 -record(jquery_effect, {?ACTION_BASE(action_jquery_effect),
         type                    :: atom() | string() | binary(),
         effect                  :: atom() | string() | binary(),
