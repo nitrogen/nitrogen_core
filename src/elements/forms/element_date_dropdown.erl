@@ -31,17 +31,22 @@ transform_element(Record) ->
     Style = Record#date_dropdown.style,
     Actions = Record#date_dropdown.actions,
 
-    {Y,M,D} = to_date(Record#date_dropdown.value),
+    AllowBlank = Record#date_dropdown.allow_blank,
+    {Y,M,D} = to_date(AllowBlank, Record#date_dropdown.value),
     MinYear = handle_min(Record#date_dropdown.min_year),
     MaxYear = handle_max(Record#date_dropdown.max_year),
     Format = Record#date_dropdown.format,
-    MonthOpts = month_opts(Record),
+    MonthOpts0 = month_opts(Record),
     Years = lists:seq(MaxYear, MinYear, -1),
-    YearOpts = num_opts(Years),
+    YearOpts0 = num_opts(Years),
     Days = lists:seq(1,31),
-    DayOpts = num_opts(Days),
+    DayOpts0 = num_opts(Days),
     %#span{id=Wrapperid, body=[
     Hidden = #hidden{id=Id, class=ValTempClass, text=date_to_string({Y,M,D})},
+
+    MonthOpts = maybe_add_blank(AllowBlank, MonthOpts0),
+    DayOpts = maybe_add_blank(AllowBlank, DayOpts0),
+    YearOpts = maybe_add_blank(AllowBlank, YearOpts0),
 
     Postback = build_postback(Yid, Mid, Did, ValTempid),
 
@@ -53,6 +58,11 @@ transform_element(Record) ->
         Hidden,
         build_format(Format, YDD, MDD, DDD)
     ]}.
+
+maybe_add_blank(false, Opts) ->
+    Opts;
+maybe_add_blank(true, Opts) ->
+    [{"", ""} | Opts].
 
 build_postback(Yid, Mid, Did, ValTempid) ->
     {update, Yid, Mid, Did, ValTempid}.
@@ -68,19 +78,27 @@ build_format(iso, Y, M, D) ->
 build_format(usa, Y, M, D) ->
     build_format(mdy, Y, M, D).
 
+blank_or_int(X) ->
+    try wf:to_integer(X)
+    catch _:_ -> ""
+    end.
 
 event({update, Yid, Mid, Did, ValTempid}) ->
     [Y0,M0,D0] = wf:mq([Yid, Mid, Did]),
-    Y = wf:to_integer(Y0),
-    M = wf:to_integer(M0),
-    D = wf:to_integer(D0),
-    NumDays = calendar:last_day_of_the_month(Y, M),
+    Y = blank_or_int(Y0),
+    M = blank_or_int(M0),
+    D = blank_or_int(D0),
+    NumDays = try calendar:last_day_of_the_month(Y, M)
+              catch _:_ -> 31
+              end,
     ChoppingBlock = [29,30,31],
     lists:foreach(fun(Day) ->
         wf:wire(#remove_option{target=Did, value=Day}),
         ?WF_IF(Day =< NumDays, wf:wire(#add_option{target=Did, option={Day, Day}}))
     end, ChoppingBlock),
-    IsValid = calendar:valid_date({Y,M,D}),
+    IsValid = try calendar:valid_date({Y,M,D})
+              catch _:_ -> false
+              end,
     case IsValid of
         true -> 
             wf:set(Did, D),
@@ -89,7 +107,10 @@ event({update, Yid, Mid, Did, ValTempid}) ->
             wf:set(ValTempid, "")
     end.
 
+date_to_string({"", "", ""}) ->
+    "";
 date_to_string({Y,M,D}) ->
+    wf:info("Date: ~p",[{Y,M,D}]),
     wf:to_list(Y) ++ "-" ++ format_m_or_d(M) ++ "-" ++ format_m_or_d(D).
 
 format_m_or_d(X) when X =< 9 ->
@@ -109,20 +130,24 @@ handle_max(undefined) ->
 handle_max(Y) ->
     Y.
 
-to_date(undefined) ->
+to_date(true=_AllowBlank, Blank) when Blank==undefined; Blank=="" ->
+    {"", "", ""};
+to_date(false=_AllowBlank, Blank) when Blank==undefined; Blank=="" ->
     erlang:date();
-to_date("") ->
-    erlang:date();
-to_date({Y,M,D}) ->
+to_date(_, {Y,M,D}) ->
     {Y,M,D};
-to_date({{Y,M,D},{_,_,_}}) ->
+to_date(_, {{Y,M,D},{_,_,_}}) ->
     {Y,M,D};
-to_date(RawVal) ->
+to_date(AllowBlank, RawVal) ->
     %% We're going to be really forgiving of bad date values, so we trap it in
     %% a try/catch block
     try qdate:to_date(RawVal) of
         {Date, _Time} -> Date
-    catch _:_ -> erlang:date()
+    catch _:_ ->
+        case AllowBlank of
+            true -> {"", "", ""};
+            false -> erlang:date()
+        end
     end.
 
 num_opts(Nums) ->

@@ -343,7 +343,8 @@
         max_year=undefined      :: undefined | integer(),
         month_names=true        :: boolean(),
         month_fun={element_date_dropdown, months} :: {module(), atom()} | fun(),
-        wrapperid=undefined     :: id()
+        wrapperid=undefined     :: id(),
+        allow_blank=false	:: boolean()
 }).
 -record(textbox_autocomplete, {?ELEMENT_BASE(element_textbox_autocomplete),
         tag                     :: term(),

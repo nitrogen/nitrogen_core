@@ -419,6 +419,8 @@ qs_revdecode([C | Rest], Acc) ->
     qs_revdecode(Rest, [C | Acc]).
 
 
+json_encode(Data) when is_map(Data) ->
+    json_encode(maps:to_list(Data));
 json_encode(Data) ->
     nitro_mochijson2:encode(add_json_struct(Data)).
 
