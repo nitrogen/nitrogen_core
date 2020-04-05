@@ -63,6 +63,9 @@
                                 | {stream, Size :: integer(), fun()}
                                 | {sendfile, integer(), Size :: integer(), Path :: any()}.
 -type context_type()        :: first_request | postback_request | static_file | postback_websocket | undefined.
+-type mermaid_code()        :: binary() | string() | iolist().
+-type mermaid_diagram()     :: flowchart | sequence | gantt.
+-type mermaid_diagram_options(Diagram)      :: {Diagram, proplist()}.
 %%% CONTEXT %%%
 
 % Page Request Information.
@@ -901,6 +904,12 @@
 -record(qr, {?ELEMENT_BASE(element_qr),
         data=undefined          :: any(),
         size=200                :: integer()
+    }).
+
+-record(mermaid, {?ELEMENT_BASE(element_mermaid),
+        code=[]                 :: mermaid_code(),
+        options=[]              :: proplist(),
+        diagram_options=undefined      :: undefined | mermaid_diagram_options(mermaid_diagram())
     }).
 
 %%% Actions %%%
