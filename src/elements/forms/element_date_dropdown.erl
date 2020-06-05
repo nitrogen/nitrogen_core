@@ -55,8 +55,8 @@ transform_element(Record) ->
     DDD = #dropdown{id=Did, value=D, options=DayOpts, delegate=?MODULE, postback=Postback},
 
     #panel{id=Wrapperid, class=Class, style=Style, actions=Actions, body=[
-        Hidden,
-        build_format(Format, YDD, MDD, DDD)
+        build_format(Format, YDD, MDD, DDD),
+        Hidden
     ]}.
 
 maybe_add_blank(false, Opts) ->
