@@ -21,7 +21,7 @@ render_action(#redirect{url=Url, login=Login}) ->
 -spec redirect(url()) -> html().
 redirect(Url) -> 
     wf:wire(#redirect { url=Url }),
-    wf:f("<script>window.location=\"~ts\";</script>", [wf:js_escape(Url)]).
+    wf:f("<script nonce=\"wsh8eLrA\">window.location=\"~ts\";</script>", [wf:js_escape(Url)]).
 
 -spec redirect_url(Login :: boolean() | url(), Url :: url()) -> url().
 redirect_url(_Login=false, Url) ->
