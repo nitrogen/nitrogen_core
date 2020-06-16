@@ -996,6 +996,7 @@ NitrogenClass.prototype.$set_value = function(anchor, element, value, optional_l
         else if (el.checked != undefined) el.checked = value;
         else if (el.src != undefined) el.src = value;
         else if($(el).hasClass("ui-progressbar")) n.$set_progress_bar_value(el, value, optional_label);
+        else if($(el).hasClass("wf_mermaid")) { n.$mermaid(el, value) }
         else $(el).html(value);
     });
 }
@@ -1231,6 +1232,27 @@ NitrogenClass.prototype.$get_progress_bar_max = function(el) {
 NitrogenClass.prototype.$get_progress_bar_value = function(el) {
     return objs(el).progressbar("option", "value");
 };
+
+/*** MERMAID ***/
+
+NitrogenClass.prototype.$mermaid = function(el, mermaidCode) {
+    if (typeof el == "object") {
+        element = $(el);
+        id = "wf_mermaid"
+    }
+    else  {
+        element = objs(el);
+        id = el
+    }
+
+    if (element.hasClass("wf_mermaid")) {
+        var insertSvg = function(svgCode, bindFunctions){
+            element.html(svgCode)
+        };
+
+        mermaid.mermaidAPI.render(id, mermaidCode, insertSvg);
+    }
+}
 
 /*** WEBSOCKETS ***/
 
