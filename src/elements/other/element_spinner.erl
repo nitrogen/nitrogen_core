@@ -19,7 +19,7 @@ render_element(Record) ->
         html_id=Record#spinner.html_id,
         id=Record#spinner.id,
         anchor=Record#spinner.anchor,
-        class=[spinner, Record#spinner.class],
+        class=[nitrogen_spinner, Record#spinner.class],
         title=Record#spinner.title,
         style=["display:none;",Record#spinner.style],
         data_fields=Record#spinner.data_fields,
