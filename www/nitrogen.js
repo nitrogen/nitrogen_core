@@ -376,11 +376,11 @@ NitrogenClass.prototype.$make_id = function(element) {
 /*** AJAX METHODS ***/
 
 NitrogenClass.prototype.$show_spinner = function() {
-    $("div.spinner").show();
+    $("div.nitrogen_spinner").show();
 }
 
 NitrogenClass.prototype.$hide_spinner = function() {
-    $("div.spinner").hide();
+    $("div.nitrogen_spinner").hide();
 }
 
 NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventContext, extraParam, ajaxSettings) {
