@@ -38,7 +38,7 @@ render_element(Record) ->
     action_event:maybe_wire_next(Anchor, Record#button.next),
     wire_enter_clicks(Anchor, Record#button.enter_clicks),
 
-    Text = wf:html_encode(Record#button.text, Record#button.html_encode), 
+    Text = wf:html_encode(Record#button.text, Record#button.html_encode),
     Image = format_image(Record#button.image),
     Body = case {Image,Record#button.body} of
         {[], []} -> [];
@@ -47,7 +47,7 @@ render_element(Record) ->
 
     UniversalAttributes = [
         {id, Record#button.html_id},
-        {class, [button, Record#button.class]},
+        {class, [Record#button.class]},
         {title, Record#button.title},
         {style, Record#button.style},
         {data_fields, Record#button.data_fields},
