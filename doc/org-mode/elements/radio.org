@@ -30,6 +30,8 @@
 
    + value - (/string/) :: The value to be submitted for this radio button in postbacks if it is selected.
 
+   + label\_class - (\atom, string or list of atoms and strings\) :: A class applied to the connected =<label>= element if =text= or =body= are provided.
+
    + postback - (/Erlang term/) :: If set, clicking on the checkbox will initiate a Nitrogen postback with the supplied term.
 
    + checked - (/boolean/) :: True if the radio button should be checked.

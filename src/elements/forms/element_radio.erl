@@ -41,6 +41,7 @@ render_element(Record) ->
     Content = wf:html_encode(Record#radio.text, Record#radio.html_encode),
     Body = Record#radio.body,
     LabelDisabledClass = ?WF_IF(Record#radio.disabled, disabled),
+    LabelClass = wf:coalesce([Record#radio.label_class, ""]),
 
     [
         %% Checkbox...
@@ -68,7 +69,7 @@ render_element(Record) ->
         %% Label for Radio...
         wf_tags:emit_tag(label, [Body, Content], [
             {for, Anchor},
-            {class, [radio_label, LabelDisabledClass]},
+            {class, [radio_label, LabelDisabledClass, LabelClass]},
             {title, Record#radio.title}
         ])
     ].

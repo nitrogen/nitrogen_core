@@ -450,6 +450,7 @@
         text=""                 :: text(),
         html_encode=true        :: html_encode(),
         value                   :: text(),
+        label_class             :: class() | [class()],
         next                    :: id(),
         name                    :: html_name(),
         checked=false           :: boolean(),
