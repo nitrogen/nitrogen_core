@@ -287,6 +287,10 @@
         text=""                 :: text(),
         html_encode=true        :: html_encode()
     }).
+-record(delayfill, {?ELEMENT_BASE(delayed_body), 
+        body_fun=fun(_) -> [] end, :: fun(),
+        tag=undefined           :: term()
+    }).
 -record(button, {?ELEMENT_BASE(element_button),
         text=""                 :: text(),
         body=""                 :: body(),
