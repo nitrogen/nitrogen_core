@@ -287,9 +287,11 @@
         text=""                 :: text(),
         html_encode=true        :: html_encode()
     }).
--record(delayfill, {?ELEMENT_BASE(delayed_body), 
-        body_fun=fun(_) -> [] end, :: fun(),
-        tag=undefined           :: term()
+-record(delay_body, {?ELEMENT_BASE(element_delay_body), 
+        delegate                :: module(),
+        tag=undefined           :: term(),
+        placeholder             :: body(),
+        delay=0                 :: integer()  %% milliseconds to wait to populate
     }).
 -record(button, {?ELEMENT_BASE(element_button),
         text=""                 :: text(),
