@@ -21,7 +21,7 @@ transform_element(#delay_body{delegate=Delegate, tag=Tag, delay=Delay, placehold
     #span{id=ID, body=Placeholder}.
 
 queue_delayed_body(Delegate, ID, Tag, Delay) ->
-    ?PRINT(status(Delay)),
+    %?PRINT(status(Delay)),
     add_to_queue(Delegate, ID, Tag, Delay),
     maybe_wire_postback(Delay).
 
@@ -35,17 +35,17 @@ add_to_queue(Delegate, ID, Tag, Delay) ->
     Key = tag_key(Delay),
     Queue = wf:state_default(Key, queue:new()),
     NewQ = queue:in({ID, Delegate, Tag}, Queue),
-    ?PRINT(NewQ),
+    %?PRINT(NewQ),
     wf:state(Key, NewQ).
 
-status(Delay) ->
-    {wf:state(wire_key(Delay)), wf:state(tag_key(Delay))}.
+%status(Delay) ->
+%    {wf:state(wire_key(Delay)), wf:state(tag_key(Delay))}.
 
 maybe_wire_postback(Delay) ->
     Key = wire_key(Delay),
     case wf:state_default(Key, false) of
         true ->
-            wf:info("we've already wired ~p, so skipping",[Delay]),
+            %wf:info("we've already wired ~p, so skipping",[Delay]),
             do_nothing;
         _ -> 
             wf:state(Key, true),
@@ -61,7 +61,7 @@ reset_tag_key(Delay) ->
     wf:state(Key, queue:new()).
 
 event({do_delay_actions, Delay}) ->
-    wf:info("Doing Delay Actions: ~p"),
+    %wf:info("Doing Delay Actions: ~p"),
     reset_wire_key(Delay), % we reset this in case we have to queue another action with the same timeout with a later postback
     TagKey = tag_key(Delay),
     NewQ = queue:new(),
@@ -71,5 +71,5 @@ event({do_delay_actions, Delay}) ->
         Body = Delegate:delay_body_event(Tag),
         wf:replace(ID, Body)
     end, Tags),
-    reset_tag_key(Delay),
-    ?PRINT(status(Delay)).
+    reset_tag_key(Delay).
+    %?PRINT(status(Delay)).
