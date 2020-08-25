@@ -24,7 +24,7 @@ render_action(Record)  ->
 
 -spec validate(any(), iolist()) -> boolean().
 validate(_, Value) ->
-    case re:run(wf:to_list(Value), "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+") of
+    case re:run(wf:to_list(Value), "^[a-zA-Z0-9\._%+-]+@[a-zA-Z0-9\.-]+\.[a-zA-Z]+$", [unicode]) of
         {match, _} -> true;
         _ -> false
     end.
