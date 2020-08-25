@@ -110,7 +110,6 @@ event({update, Yid, Mid, Did, ValTempid}) ->
 date_to_string({"", "", ""}) ->
     "";
 date_to_string({Y,M,D}) ->
-    wf:info("Date: ~p",[{Y,M,D}]),
     wf:to_list(Y) ++ "-" ++ format_m_or_d(M) ++ "-" ++ format_m_or_d(D).
 
 format_m_or_d(X) when X =< 9 ->
