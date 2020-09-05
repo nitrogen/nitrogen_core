@@ -13,6 +13,9 @@ main([]) ->
     Unique = unique(),
     RandUniform1 = rand_uniform_1(),
     RandUniform2 = rand_uniform_2(),
+    {Info1, Info2} = logger(info),
+    {Warning1, Warning2} = logger(warning),
+    {Error1, Error2} = logger(error),
 
 	io:format("...?WF_ENCRYPT will use: ~p~n",[Encrypt]),
 	io:format("...?WF_DECRYPT will use: ~p~n",[Decrypt]),
@@ -20,6 +23,9 @@ main([]) ->
     io:format("...?WF_UNIQUE will use:  ~p~n",[Unique]),
     io:format("...?WF_RAND_UNIFORM/1 will use: ~p~n",[RandUniform1]),
     io:format("...?WF_RAND_UNIFORM/2 will use: ~p~n",[RandUniform2]),
+    io:format("...?WF_INFO/[1-2] will use: ~p~n",[{Info1, Info2}]),
+    io:format("...?WF_WARNING/[1-2] will use: ~p~n",[{Warning1, Warning2}]),
+    io:format("...?WF_ERROR/[1-2] will use: ~p~n",[{Error1, Error2}]),
 
 
 	Contents = [
@@ -28,7 +34,13 @@ main([]) ->
 		"-define(WF_HASH(Data), ",Hash,").\n",
         "-define(WF_UNIQUE, ",Unique,").\n",
         "-define(WF_RAND_UNIFORM(Max), ",RandUniform1,").\n",
-        "-define(WF_RAND_UNIFORM(Min,Max), ",RandUniform2,").\n"
+        "-define(WF_RAND_UNIFORM(Min,Max), ",RandUniform2,").\n",
+        "-define(WF_INFO(String), ",Info1,").\n",
+        "-define(WF_INFO(String, Args), ",Info2,").\n",
+        "-define(WF_WARNING(String), ",Warning1,").\n",
+        "-define(WF_WARNING(String, Args), ",Warning2,").\n",
+        "-define(WF_ERROR(String), ",Error1,").\n",
+        "-define(WF_ERROR(String, Args), ",Error2,").\n"
 	],
 
     ContentsBin = iolist_to_binary(Contents),
@@ -39,6 +51,17 @@ main([]) ->
             io:format("...writing ~p\n",[Filename]),
             file:write_file(Filename, Contents)
     end.
+
+logger(Type) ->
+    case erlang:function_exported(logger, Type, 1) of
+        true ->
+            One = "logger:" ++ atom_to_list(Type) ++ "(String)",
+            Two = "logger:" ++ atom_to_list(Type) ++ "(String, Args)";
+        false ->
+            One = "error_logger:" ++ atom_to_list(Type) ++ "_msg(String)",
+            Two = "error_logger:" ++ atom_to_list(Type) ++ "_msg(String, Args)"
+    end,
+    {One, Two}.
 
 rand_uniform_1() ->
     case erlang:function_exported(rand, uniform, 1) of

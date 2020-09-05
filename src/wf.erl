@@ -378,22 +378,22 @@ params() ->
 
 %%% EXPOSE LOG_HANDLER %%%
 info(String, Args) -> 
-    ok = log_handler:info(String, Args).
+    ?WF_INFO(String, Args).
 
 info(String) -> 
-    ok = log_handler:info(String).
+    ?WF_INFO(String).
 
 warning(String, Args) -> 
-    ok = log_handler:warning(String, Args).
+    ?WF_WARNING(String, Args).
 
 warning(String) -> 
-    ok = log_handler:warning(String).
+    ?WF_WARNING(String).
 
 error(String, Args) -> 
-    ok = log_handler:error(String, Args).
+    ?WF_ERROR(String, Args).
 
 error(String) -> 
-    ok = log_handler:error(String).
+    ?WF_ERROR(String).
 
 %% console_log is not part of the log handler, but  relevant
 console_log(String) ->
