@@ -32,7 +32,6 @@ function NitrogenClass(o) {
     this.$js_dependencies = new Array();
     this.$websocket = null;
     this.$websockets_enabled = false; // default to off
-    this.$websocket_status = -2;  // -2 not attempted yet, -1 = trying to connect, 0 = not enabled, 1 = connected
     this.$websockets_ever_succeeded = false;
     this.$websocket_reconnect_timer = null;
     this.$disconnected = false;
@@ -183,23 +182,20 @@ NitrogenClass.prototype.$event_loop = function() {
         this.$cancel_event();
     }
 
-    // Wait until we know if websockets will work before we run any events.
-    if(this.$websocket_status==0 || this.$websocket_status==1) {
-        // If no events are running and an event is queued, then fire it.
-        if (!this.$system_event_is_running && this.$system_event_queue.length > 0) {
-            var o = this.$system_event_queue.shift();
-            this.$last_system_event = o;
-            this.$system_event_started = now;
-            this.$do_system_event(o.eventContext);
-        }
+    // If no events are running and an event is queued, then fire it.
+    if (!this.$system_event_is_running && this.$system_event_queue.length > 0) {
+        var o = this.$system_event_queue.shift();
+        this.$last_system_event = o;
+        this.$system_event_started = now;
+        this.$do_system_event(o.eventContext);
+    }
 
-        // If no events are running and an event is queued, then fire it.
-        if (!this.$event_is_running && this.$event_queue.length > 0) {
-            var o = this.$event_queue.shift();
-            this.$last_event = o;
-            this.$event_started = now;
-            this.$do_event(o.validationGroup, o.onInvalid, o.eventContext, o.extraParam, o.ajaxSettings);
-        }
+    // If no events are running and an event is queued, then fire it.
+    if (!this.$event_is_running && this.$event_queue.length > 0) {
+        var o = this.$event_queue.shift();
+        this.$last_event = o;
+        this.$event_started = now;
+        this.$do_event(o.validationGroup, o.onInvalid, o.eventContext, o.extraParam, o.ajaxSettings);
     }
 
     if (this.$system_event_queue.length == 0 || this.$event_queue.length == 0) {
@@ -1000,7 +996,6 @@ NitrogenClass.prototype.$set_value = function(anchor, element, value, optional_l
         else if (el.checked != undefined) el.checked = value;
         else if (el.src != undefined) el.src = value;
         else if($(el).hasClass("ui-progressbar")) n.$set_progress_bar_value(el, value, optional_label);
-        else if($(el).hasClass("wf_mermaid")) { n.$mermaid(el, value) }
         else $(el).html(value);
     });
 }
@@ -1237,34 +1232,12 @@ NitrogenClass.prototype.$get_progress_bar_value = function(el) {
     return objs(el).progressbar("option", "value");
 };
 
-/*** MERMAID ***/
-
-NitrogenClass.prototype.$mermaid = function(el, mermaidCode) {
-    if (typeof el == "object") {
-        element = $(el);
-        id = "wf_mermaid"
-    }
-    else  {
-        element = objs(el);
-        id = el
-    }
-
-    if (element.hasClass("wf_mermaid")) {
-        var insertSvg = function(svgCode, bindFunctions){
-            element.html(svgCode)
-        };
-
-        mermaid.mermaidAPI.render(id, mermaidCode, insertSvg);
-    }
-}
-
 /*** WEBSOCKETS ***/
 
 NitrogenClass.prototype.$enable_websockets = function() {
     this.$console_log("Websockets Enabled");
     this.$websockets_enabled = true;
     this.$websockets_ever_succeeded = true;
-    this.$websocket_status=1;
     this.$flush_switchover_comet_actions();
 };
 
@@ -1279,7 +1252,6 @@ NitrogenClass.prototype.$disable_websockets = function() {
     var n = this;
     n.$console_log("Websockets disabled or disconnected");
     n.$websockets_enabled = false;
-    n.$websocket_status = 0;
 
     // If websockets had ever succeeded, then disabling websockets is an
     // indicator that the websockets should try to reconnect and in the
@@ -1301,7 +1273,6 @@ NitrogenClass.prototype.$disable_websockets = function() {
 
 NitrogenClass.prototype.$ws_init = function() {
     try {
-        this.$websocket_status = -1;
         Bert.assoc_array_key_encoding("binary");
         var this2 = this;
         var e = new Error();
@@ -1381,6 +1352,20 @@ NitrogenClass.prototype.$attempt_websockets = function() {
         }
     });
 };
+
+NitrogenClass.prototype.$fix_jquery_mobile_ids = function() {
+    $('input[type=button]').each(function(i, el) {
+        var classes = $(el).attr('class').split(/\s+/);
+        $.each(classes, function(ii, c) {
+            // if starts with wfid
+            if(!$(el).parent.hasClass(c)) {
+                console.log("Adding Class " + c);
+                $(el).parent.addClass(c);
+            }
+        });
+    });
+}
+        
 
 var page = document;
 

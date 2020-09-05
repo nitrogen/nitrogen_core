@@ -75,6 +75,7 @@ run_websocket_comet() ->
     _ToSend = wf:to_unicode_binary(finish_websocket_request()).
 
 run_websocket(Data) ->
+    wf_context:type(postback_websocket),
     wf_event:update_context_with_websocket_event(Data),
     query_handler:set_websocket_params(Data),
     run_postback_request(),

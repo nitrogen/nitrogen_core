@@ -60,6 +60,8 @@ travis: eunit $(ERLANG_VERSION)
 19: dialyzer
 20: dialyzer
 21: dialyzer
+22: dialyzer
+23: dialyzer
 
 vim:
 	utils/vim-headers/add_vim.sh

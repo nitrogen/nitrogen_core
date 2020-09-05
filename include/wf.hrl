@@ -290,6 +290,12 @@
         text=""                 :: text(),
         html_encode=true        :: html_encode()
     }).
+-record(delay_body, {?ELEMENT_BASE(element_delay_body), 
+        delegate                :: module(),
+        tag=undefined           :: term(),
+        placeholder             :: body(),
+        delay=0                 :: integer()  %% milliseconds to wait to populate
+    }).
 -record(button, {?ELEMENT_BASE(element_button),
         text=""                 :: text(),
         body=""                 :: body(),
