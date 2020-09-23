@@ -540,9 +540,10 @@ spawn_with_context({Name, Function, Msg}, ReconActions, Mode) ->
 
 create_wrapped_comet_fun(Function, Mode, ReconActions) ->
     Context = wf_context:context(),
-    ReconTag = wf:temp_id(),
+    ReconTag = "recon" ++ wf:to_list(?WF_RAND_UNIFORM(1, 9999999999999999999999999999999999)),
     fun() ->
         wf_context:context(Context),
+        wf_context:type(comet),
         wf_context:clear_action_queue(),
         register_process_tag(ReconTag, self()),
         wire_reconnection(ReconTag, ReconActions),

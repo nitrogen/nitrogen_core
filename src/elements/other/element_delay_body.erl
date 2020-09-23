@@ -17,11 +17,20 @@ reflect() -> record_info(fields, delay_body).
 -spec transform_element(#delay_body{}) -> body().
 transform_element(#delay_body{delegate=Delegate, tag=Tag, delay=Delay, placeholder=Placeholder}) when is_integer(Delay) ->
     ID = wf:temp_id(),
-    queue_delayed_body(Delegate, ID, Tag, Delay),
+    ?PRINT(wf_context:type()),
+
+    case wf_context:type() of
+        comet ->
+            %% If this is being rendered in a comet session, just trigger it as a normal postback.  The problem with queueing it in trhe state is that the comet state is separate from the normal page state. This needs to change
+            wf:defer(#event{type=timer, delay=Delay, delegate=?MODULE, postback={do_delay_action, ID, Delegate, Tag}});
+        _ ->
+            %% If this is a normal request, then we can tell the system to queue it for better performance.
+            queue_delayed_body(Delegate, ID, Tag, Delay)
+    end,
     #span{id=ID, body=Placeholder}.
 
 queue_delayed_body(Delegate, ID, Tag, Delay) ->
-    %?PRINT(status(Delay)),
+   %?PRINT(status(Delay)),
     add_to_queue(Delegate, ID, Tag, Delay),
     maybe_wire_postback(Delay).
 
@@ -45,7 +54,7 @@ maybe_wire_postback(Delay) ->
     Key = wire_key(Delay),
     case wf:state_default(Key, false) of
         true ->
-            %wf:info("we've already wired ~p, so skipping",[Delay]),
+            wf:info("we've already wired ~p, so skipping",[Delay]),
             do_nothing;
         _ -> 
             wf:state(Key, true),
@@ -59,6 +68,10 @@ reset_wire_key(Delay) ->
 reset_tag_key(Delay) ->
     Key = tag_key(Delay),
     wf:state(Key, queue:new()).
+
+event({do_delay_action, ID, Delegate, Tag}) ->
+    Body = Delegate:delay_body_event(Tag),
+    wf:replace(ID, Body);
 
 event({do_delay_actions, Delay}) ->
     %wf:info("Doing Delay Actions: ~p"),
