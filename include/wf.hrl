@@ -62,7 +62,7 @@
 -type context_data()        :: iolist() | {file, Filename :: path()}
                                 | {stream, Size :: integer(), fun()}
                                 | {sendfile, integer(), Size :: integer(), Path :: any()}.
--type context_type()        :: first_request | postback_request | static_file | postback_websocket | undefined.
+-type context_type()        :: first_request | postback_request | static_file | postback_websocket | comet | undefined.
 -type mermaid_code()        :: binary() | string() | iolist().
 -type mermaid_diagram()     :: flowchart | sequence | gantt.
 -type mermaid_diagram_options(Diagram)      :: {Diagram, proplist()}.
