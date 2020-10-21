@@ -50,10 +50,11 @@ transform_element(Record) ->
 
     Postback = build_postback(Yid, Mid, Did, ValTempid),
     MaybeRemoveValidation = #event{type=focus, actions=[
-        "objs('me')
-            .removeClass('LV_invalid_field')
-            .siblings('.LV_validation_message')
-            .remove();"
+        wf:f("objs('~s')
+                .removeClass('LV_invalid_field')
+                .siblings('.LV_validation_message')
+                .remove();",
+                [Id])
     ]},
     BaseDD = #dropdown{delegate=?MODULE, actions=MaybeRemoveValidation, postback=Postback},
 
