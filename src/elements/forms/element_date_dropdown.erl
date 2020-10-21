@@ -49,10 +49,17 @@ transform_element(Record) ->
     YearOpts = maybe_add_blank(AllowBlank, YearOpts0),
 
     Postback = build_postback(Yid, Mid, Did, ValTempid),
+    MaybeRemoveValidation = #event{type=focus, actions=[
+        "objs('me')
+            .removeClass('LV_invalid_field')
+            .siblings('.LV_validation_message')
+            .remove();"
+    ]},
+    BaseDD = #dropdown{delegate=?MODULE, actions=MaybeRemoveValidation, postback=Postback},
 
-    YDD = #dropdown{id=Yid, value=Y, options=YearOpts, delegate=?MODULE, postback=Postback},
-    MDD = #dropdown{id=Mid, value=M, options=MonthOpts, delegate=?MODULE, postback=Postback},
-    DDD = #dropdown{id=Did, value=D, options=DayOpts, delegate=?MODULE, postback=Postback},
+    YDD = BaseDD#dropdown{id=Yid, value=Y, options=YearOpts},
+    MDD = BaseDD#dropdown{id=Mid, value=M, options=MonthOpts},
+    DDD = BaseDD#dropdown{id=Did, value=D, options=DayOpts},
 
     #panel{id=Wrapperid, class=Class, style=Style, actions=Actions, body=[
         build_format(Format, YDD, MDD, DDD),
