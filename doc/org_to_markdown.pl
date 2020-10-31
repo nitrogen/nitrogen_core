@@ -102,7 +102,7 @@ sub fix_global_things {
 	my ($x) = @_;
 
 	## Internal Links
-	$x =~ s/\[\[file:([^\]]*)\.org\]\[([^\]]*)\]\]/[$2]($1.html)/gis;
+	$x =~ s/\[\[file:[^\]]*?([^\]\/]*)\.org\]\[([^\]]*)\]\]/[$2]($1.html)/gis;
 
 	## External Links			
 	$x =~ s/\[\[([^\]]*?)\]\[([^\]]*?)\]\]/[$2]($1)/gis;
