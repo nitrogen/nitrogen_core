@@ -93,7 +93,7 @@
 
     * `module_aliases` (proplist) - This provides the template system with
       a default list of module aliases to use within Nitrogen templates. (See
-      the [Template Element](template.html) for more details).
+      the [Template Element](template.md) for more details).
 
 
 ```erlang
@@ -252,7 +252,7 @@ Here's the complete text of the default plugins.config:
     The plugin system has its own complete documentation along with a sample
     plugin stub for creating your own plugins.
 
-    We strongly advise reading the [Plugin Documentation](plugins.html).
+    We strongly advise reading the [Plugin Documentation](plugins.md).
 
 ### Notable mention: rebar.config
 
@@ -331,7 +331,7 @@ Here's the complete text of the default plugins.config:
 
   If you're running an older version of Nitrogen (pre-2.3) or you're running a
   Nitrogen without using the standard simple_bridge config, you can check out
-  the [server-specific configuration options](old_config.html) (no longer
+  the [server-specific configuration options](old_config.md) (no longer
   maintained), otherwise, you'll have to look at the server's official
   documentation.
 
@@ -339,7 +339,7 @@ Here's the complete text of the default plugins.config:
 
 ### Smart Extensions
 
-   See [Smart Extensions Documentation](smart_extension.html)
+   See [Smart Extensions Documentation](smart_extension.md)
 
 ### nginx - A lightweight reverse proxy
 

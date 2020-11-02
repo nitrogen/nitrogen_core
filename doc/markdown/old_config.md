@@ -237,7 +237,7 @@
 
 ### Yaws: etc/yaws.config
 
-  [Yaws](yaws.hyber.html) is a high performance webserver created by
+  [Yaws](yaws.hyber.md) is a high performance webserver created by
   [Claes Wikstrom](https://github.com/klacke) and is a unique addition to the
   Nitrogen's supported webserver line-up because it's one of the few that uses
   Apache-style configuration instead of the more usual Erlang proplist config 

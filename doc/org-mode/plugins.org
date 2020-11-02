@@ -1,9 +1,0 @@
-# vim: ts=2 sw=2 et ft=org
-#+STYLE: <LINK href="stylesheet.css" rel="stylesheet" type="text/css" />
-#+TITLE: Nitrogen Plugins
-#+AUTHOR: Jesse Gumm (@jessegumm)
-#+OPTIONS:   H:2 num:1 toc:1 \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
-#+EMAIL: 
-#+HTML: <script>location.href="advanced/plugins.html"</script>
-
-[[./advanced/plugins.html][This guide moved here]]

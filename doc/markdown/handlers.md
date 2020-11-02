@@ -63,35 +63,35 @@ In all of the handler behavior functions are found two particular variables:
   documentation:
 
 #### Core handlers:
- *  [Config Handler](config.html) - Controls how and from where the
+ *  [Config Handler](handler_config.md) - Controls how and from where the
       configuration settings are loaded.
- *  [Log Handler](log.html) - Controls the logging system for your
+ *  [Log Handler](log.md) - Controls the logging system for your
       Nitrogen app.
- *  [Process Registry Handler](process_registry.html) - Controls
+ *  [Process Registry Handler](process_registry.md) - Controls
       how processes are tracked. The default backend for the process registry
       is [nprocreg](https://github.com/nitrogen/nprocreg).
- *  [Crash Handler](crash.html) - Controls how to handle page
+ *  [Crash Handler](crash.md) - Controls how to handle page
       crashes, including logging and how to present the crash to the user.
- *  [Query Handler](query.html) - Controls the how `wf:q` (and its
+ *  [Query Handler](query.md) - Controls the how `wf:q` (and its
       siblings, `wf:qs`, `wf:mq`, etc), functions retrieve their values from the
       POST, GET, or other methods.
 
 #### Stateful Handlers
- *  [Session Handler](session.html) - Controls how session
+ *  [Session Handler](session.md) - Controls how session
       information and variables are set, stored, and/or distributed.
- *  [State Handler](state.html) - Controls how the `wf:state`
+ *  [State Handler](state.md) - Controls how the `wf:state`
       functions store and retrieve their values. The default uses a simple
       proplist.
- *  [Identity Handler](identity.html) - Controls how the identity
+ *  [Identity Handler](identity.md) - Controls how the identity
       of the client is stored and retrieved. This is related to the `wf:user`
       functions.
- *  [Role Handler](role.html) - Controls how the roles of the
+ *  [Role Handler](role.md) - Controls how the roles of the
       client are stored and retrieved. This is related to the `wf:role`
       functions.
 
 #### Handlers that possibly redirect
- *  [Route Handler](route.html) - Controls how Nitrogen routes
+ *  [Route Handler](route.md) - Controls how Nitrogen routes
       requests to modules or static files.
- *  [Security Handler](security.html) - Controls whether or not a user
+ *  [Security Handler](security.md) - Controls whether or not a user
       has access to a resource, and if not, should determine what to do with
       the request.

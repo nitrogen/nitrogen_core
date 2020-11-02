@@ -195,6 +195,9 @@
 -record(elementbase, {?ELEMENT_BASE(undefined)}).
 -record(template, {?ELEMENT_BASE(element_template),
        file                     :: string(),
+       to_type=html             :: string() | atom() | binary(),
+       from_type=html           :: string() | atom() | binary(),
+       options=[]               :: [{atom(), string() | atom()}],
        module_aliases=[]        :: [{atom(), atom()}],
        bindings=[]              :: proplist()
     }).

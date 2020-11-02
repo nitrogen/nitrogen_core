@@ -8,11 +8,15 @@ use File::Basename;
 use String::Random;
 
 my $file = $ARGV[0];
-my $new = $file =~ s/^(.*)markdown(.*)\.md$/$1html$2.html/r;
-my $dir = dirname($new);
+my $new = basename($file);
+
+$new =~ s/\.md$/.html/;
+$new = "html/$new";
+
+#my $dir = dirname($new);
 
 print "$file ==> $new\n";
 
-make_path($dir);
+#make_path($dir);
 
-system("pandoc -s -f gfm -o $new $file");
+system("pandoc -s -f gfm -o $new header.md $file");

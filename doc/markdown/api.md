@@ -21,7 +21,7 @@
 ## AJAX Updates
 
   TargetID can refer to the name of an element, or it can be a JQuery
-  selector path. See [Element Paths](paths.html) for more information.
+  selector path. See [Element Paths](paths.md) for more information.
 
   For every one of these functions which offer a `Priority` argument,
   `Priority` can be either the atom `eager`, `normal`, or `defer`. `eager` will
@@ -729,7 +729,7 @@ Example:
 
 ### wf:console_log(Terms)
 
-   Send a `console.log()` to the browser with `Terms` as the value. (See [Console Log Action](console_log.html))
+   Send a `console.log()` to the browser with `Terms` as the value. (See [Console Log Action](console_log.md))
 
 ## Configuration
 

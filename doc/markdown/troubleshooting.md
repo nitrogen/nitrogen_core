@@ -200,7 +200,7 @@ field text::binary() | maybe_improper_list(binary() | maybe_improper_list(any(),
 
   The other cause of javascript errors is with validations that might have been
   removed. While efforts have been made to minimize this problem, it's still
-  good practice to [clear validators](clear_validation.html) if
+  good practice to [clear validators](clear_validation.md) if
   a form with validation is removed from the page. For example, if a field has
   a validator attached to it, but the field is removed from the page without
   the submit button being removed, the validation system will still attempt to

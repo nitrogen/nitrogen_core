@@ -1,7 +1,7 @@
 % vim: sw=4 ts=4 et ft=erlang
 % Nitrogen Web Framework for Erlang
 % Copyright (c) 2008-2013 Rusty Klophaus
-% Copyright (c) 2014-2015 Jesse Gumm
+% Copyright (c) 2014-2020 Jesse Gumm
 % See MIT-LICENSE for licensing information.
 
 -module (element_template).
@@ -26,8 +26,8 @@ reflect() -> record_info(fields, template).
 render_element(Record) ->
     % Parse the template file...
 
-    File = wf:to_list(Record#template.file),
-    Template = get_cached_template(File),
+    File = wf:to_binary(Record#template.file),
+    Template = get_cached_template(File, Record),
 
     % Let's figure out the appropriate module aliases
     ModuleAliases = get_module_aliases(Record),
@@ -42,24 +42,21 @@ render_element(Record) ->
     Body = eval(Template, Fixed_bindings_record, ModuleAliases),
     Body.
 
-get_cached_template(File) ->
-    FileAtom = list_to_atom("template_file_" ++ File),
+get_cached_template(File0, #template{from_type=FromType, to_type=ToType, options=Options}) ->
+    File = wf:to_binary(File0),
+    FileKey = {File, FromType, ToType, Options},
    
-    case is_time_to_recache(File, FileAtom) of
+    case is_time_to_recache(File, FileKey) of
         true ->
             wf:info("Recaching Template: ~s",[File]),
             %% Recache the template...
-            Template = parse_template(File),
-            wf:set_cache({tempate_last_recached, FileAtom}, {date(), time()}),
-            wf:set_cache({template, FileAtom}, Template),
+            Template = parse_template(File, FromType, ToType, Options),
+            wf:set_cache({tempate_last_recached, FileKey}, {date(), time()}),
+            wf:set_cache({template, FileKey}, Template),
             Template;
         false ->
-            %% Load template from cache...
-            wf:cache({template, FileAtom}, fun() ->
-                %% Load the mochiglobal value for easier migration of a live
-                %% system.  In a few versions, we can just get rid of
-                %% nitro_mochiglobal altogether.
-                nitro_mochiglobal:get(FileAtom)
+            wf:cache({template, FileKey}, fun() ->
+                parse_template(File, FromType, ToType, Options)
             end)
     end.
 
@@ -83,7 +80,7 @@ is_time_to_recache(File, FileAtom) ->
     ?WF_IF(LastModified==0,wf:warning("File appears to be deleted or has no modified time: ~s",[File])),
     LastModified > LastRecached.
             
-parse_template(File) ->
+parse_template(File, FromType, ToType, []) when FromType=:=ToType ->
     % TODO - Templateroot
     % File1 = filename:join(nitrogen:get_templateroot(), File),
     File1 = File,
@@ -92,7 +89,38 @@ parse_template(File) ->
         _ ->
             ?LOG("Error reading file: ~s~n", [File1]),
             throw({template_not_found, File1})
+    end;
+parse_template(File, FromType, ToType, Options) ->
+    File1 = File,
+    case file:read_file(File1) of
+        {ok, Bin} ->
+            {Bin2, CalloutMap} = remove_callouts(Bin),
+            Bin3 = wf_pandoc:convert(Bin2, [{from, FromType}, {to, ToType} | Options]),
+            Bin4 = add_callouts(CalloutMap, Bin3),
+            parse_template1(Bin4);
+        _ ->
+            ?LOG("Error readibng file: ~s~n",[File1]),
+            throw({template_not_found, File1})
     end.
+
+
+remove_callouts(Bin) ->
+    case re:run(Bin, "[[[.*?]]]", [{capture, first, binary}]) of
+        nomatch -> {Bin, []};
+        {match, [Matches]} ->
+            lists:foldl(fun(Pattern, {AccBin, AccMap}) ->
+                Key = "wf_callout" ++ ?WF_RAND_UNIFORM(10000000000000,
+                                                       9999999999999999),
+                NewBin = binary:replace(AccBin, Pattern, Key),
+                NewMap = [{Key, Pattern} | AccMap],
+                {NewBin, NewMap}
+            end, Bin, Matches)
+    end.
+
+add_callouts(CalloutMap, Bin) ->
+    lists:foldl(fun({Key, Callout}, AccBin) ->
+        binary:replace(AccBin, Key, Callout)
+    end, Bin, CalloutMap).
 
 parse_template1(B) ->
     F = fun(Tag) ->

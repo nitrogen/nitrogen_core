@@ -18,7 +18,7 @@
 
 ## Is there a Nitrogen Tutorial?
 
-  Yes! You can [view the updated slides](tutorial.html) from Rusty's Nitrogen Tutorial at the
+  Yes! You can [view the updated slides](tutorial.md) from Rusty's Nitrogen Tutorial at the
   Erlang User Conference 2010 here.
   
 ## How do I create a new Nitrogen application?
@@ -133,7 +133,7 @@
 
 ## How do I change configuration settings?
 
-  Read all about the [configuration options](config.html).
+  Read all about the [configuration options](config.md).
 
 ## Where is the code for my website?
 
@@ -221,7 +221,7 @@
   : make
 
   You can read more detail about the Nitrogen plugin system its own section
-  here [in the documentation](plugins.html).
+  here [in the documentation](plugins.md).
 
   You can also play with creating your own Nitrogen plugins by checking out and
   modifying our
@@ -233,7 +233,7 @@
     
     Following the instructions for upgrading to 2.2.2 will work except that
   websockets won't be available. For a more complete upgrade guide, see the
-  [See the 2.3 upgrading guide](upgrade2.3.html)
+  [See the 2.3 upgrading guide](upgrade2.3.md)
 
   **Upgrading from 2.1 to any version up to 2.2.2**
 
@@ -249,7 +249,7 @@
 
     **Note:** If you've run `make upgrade` and nothing seems to have worked,
     please check out the relevant question in the
-    [Troubleshooting](troubleshooting.html) guide.
+    [Troubleshooting](troubleshooting.md) guide.
 
   **If you're running a version of Nitrogen pre 2.1 and want to upgrade to 2.1.0 and above:**
   
@@ -270,4 +270,4 @@
 
 ## What do I do if I run into errors? How do I troubleshoot? 
 
-  See our [Troubleshooting Guide](troubleshooting.html)
+  See our [Troubleshooting Guide](troubleshooting.md)

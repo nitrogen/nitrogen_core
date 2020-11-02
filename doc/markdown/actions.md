@@ -2,33 +2,33 @@
 # Nitrogen Actions
 
 ## Base Action
- *  [Base Action](base.html) - All actions contain these attributes.
+ *  [Base Action](base.md) - All actions contain these attributes.
 
 ## Page Manipulation
- *  [Redirect](redirect.html)
- *  [Event](event.html)
- *  [Update](update.html) (includes Update, Replace, Insert Top,
+ *  [Redirect](redirect.md)
+ *  [Event](event.md)
+ *  [Update](update.md) (includes Update, Replace, Insert Top,
     Insert Bottom, Insert Before, Insert, After, and Remove)
- *  [Script](script.html)
- *  [Validate](validate.html)
- *  [Clear Validation](clear_validation.html)
- *  [Ajax API](api.html)
+ *  [Script](script.md)
+ *  [Validate](validate.md)
+ *  [Clear Validation](clear_validation.md)
+ *  [Ajax API](action_api.md)
 
 ## Effects
- *  [Show](show.html) | [Hide](hide.html)
- *  [Appear](appear.html) | [Fade](fade.html)
- *  [Slide Down](slide_down.html) | [Slide Up](slide_up.html)
- *  [Toggle](toggle.html)
- *  [Animate](animate.html)
- *  [Effect](effect.html)
- *  [Add Class](add_class.html) | [Remove Class](remove_class.html)
- *  [Disable](disable.html) | [Enable](enable.html)
- *  [Make Readonly](make_readonly.html) | [Make Writable](make_writable.html)
+ *  [Show](show.md) | [Hide](hide.md)
+ *  [Appear](appear.md) | [Fade](fade.md)
+ *  [Slide Down](slide_down.md) | [Slide Up](slide_up.md)
+ *  [Toggle](toggle.md)
+ *  [Animate](animate.md)
+ *  [Effect](effect.md)
+ *  [Add Class](add_class.md) | [Remove Class](remove_class.md)
+ *  [Disable](disable.md) | [Enable](enable.md)
+ *  [Make Readonly](make_readonly.md) | [Make Writable](make_writable.md)
 
 ## Feedback and Debugging
- *  [Alert](alert.html)
- *  [Confirm](confirm.html)
- *  [Browser Console Log](console_log.html)
+ *  [Alert](alert.md)
+ *  [Confirm](confirm.md)
+ *  [Browser Console Log](console_log.md)
 
 ## See Also
- *  [Nitrogen Element Paths](paths.html)
+ *  [Nitrogen Element Paths](paths.md)
