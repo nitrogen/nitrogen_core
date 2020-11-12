@@ -3,8 +3,13 @@
 
 ## Is there a Nitrogen Tutorial?
 
-  Yes! You can [view the updated slides](tutorial.md) from Rusty's Nitrogen Tutorial at the
-  Erlang User Conference 2010 here.
+  Yes! You can [view the updated slides](/doc/tutorial.md) from Rusty's
+  Nitrogen Tutorial at the Erlang User Conference 2010 here.
+
+## Is there a Nitrogen Book?
+  
+  **Yes!** It's called [**Build it With Nitrogen**](http://builditwith.com/nitrogen)
+  by Lloyd R. Prentice and Jesse Gumm (Nitrogen Project Lead)
   
 ## How do I create a new Nitrogen application?
 
@@ -118,7 +123,7 @@
 
 ## How do I change configuration settings?
 
-  Read all about the [configuration options](config.md).
+  Read all about the [configuration options](/doc/config.md).
 
 ## Where is the code for my website?
 
@@ -190,7 +195,7 @@
 
   You can read all about how to make mobile-enabled sites with Nitrogen by
   reading our
-  [Mobile Integration Guide](./jquery_mobile_integration.md)
+  [Mobile Integration Guide](/doc/jquery_mobile_integration.md)
 
 ## How do I work with Nitrogen Plugins?
 
@@ -206,7 +211,7 @@
     make
 
   You can read more detail about the Nitrogen plugin system its own section
-  here [in the documentation](plugins.md).
+  here [in the documentation](/doc/plugins.md).
 
   You can also play with creating your own Nitrogen plugins by checking out and
   modifying our
@@ -218,7 +223,7 @@
     
   Following the instructions for upgrading to 2.2.2 will work except that
   websockets won't be available. For a more complete upgrade guide, see the
-  [See the 2.3 upgrading guide](upgrade2.3.md)
+  [See the 2.3 upgrading guide](/doc/upgrade2.3.md)
 
   **Upgrading from 2.1 to any version up to 2.2.2**
 
@@ -234,7 +239,7 @@
 
   **Note:** If you've run `make upgrade` and nothing seems to have worked,
   please check out the relevant question in the
-  [Troubleshooting](troubleshooting.md) guide.
+  [Troubleshooting](/doc/troubleshooting.md) guide.
 
   **If you're running a version of Nitrogen pre 2.1 and want to upgrade to 2.1.0 and above:**
   

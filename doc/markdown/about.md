@@ -138,7 +138,7 @@
 
 ## Documentation
 
-  This documentation is created using org-mode. To contribute updates
+  This documentation is created using markdown. To contribute updates
   or corrections, contact Jesse Gumm (@jessegumm) or fork and
   update the code in http://github.com/nitrogen/nitrogen_core under the
-  `./docs/org-mode` directory
+  `./docs/markdown` directory
