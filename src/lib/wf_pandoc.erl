@@ -26,7 +26,7 @@ make_options(Options) when is_map(Options) ->
     make_options(maps:to_list(Options));
 make_options(Options) when is_list(Options) ->
     Opts = [make_option(O) || O <- Options],
-    lists:join(" ",Opts).
+    wf:join(Opts," ").
 
 make_option({Key, Value}) ->
     [" --", wf:to_list(Key),"=",wf:to_list(Value)];
