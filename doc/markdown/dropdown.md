@@ -33,7 +33,7 @@ The dropdown element produces an HTML dropdown.
 
 ### See Also
 
- *  [base element](./base.html)
+ *  [base element](base_element)
 
  *  [option element](./option.html)
 

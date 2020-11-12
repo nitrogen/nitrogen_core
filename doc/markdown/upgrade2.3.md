@@ -35,7 +35,7 @@
 ### Upgrading with Sync
 
    If you wanted, you can enable sync, either with `bin/dev compile` (at the
-   *nix terminal) or with `sync:go()` (at the Erlang Shell).
+   \*nix terminal) or with `sync:go()` (at the Erlang Shell).
 
    Then run the above instructions for upgrading. Depending on the size of your
    application, you may experience a little bit of downtime while your Nitrogen

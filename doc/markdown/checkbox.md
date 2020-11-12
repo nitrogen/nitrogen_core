@@ -17,7 +17,7 @@
 
    * `html_encode` (boolean) - Set to true to safely html-encode the text.
 
-	*  label_position - (/'after', 'before', or 'none') :: Set the positioning
+   *  `label_position` - (/'after', 'before', or 'none') :: Set the positioning
 	  of the provided text label relative to the checkbox itself. If set to
 	  'none', no text label will be rendered at all. Default: `'before'`. (**Note:**
 	  `after` is a keyword in Erlang, so you /must/ ensure you wrap the after with
@@ -35,31 +35,23 @@
 
 ### Special Note about HTML, Checkboxes, and Nitrogen posbacks
 
-	In HTML Forms, a checkbox element is only submitted if the checkbox is
-	/actually checked/. Nitrogen follows this pattern in its postbacks, which
-	might be undesirable in certain situations. To alleviate this, there is a
-	plugin called `always_checkbox`, which always submits.  It has not been
-	rolled into mainline Nitrogen yet, as its still in an experimental stage
-	(basically trying to get the API right).
-	
-	[`#always_checkbox` on Github](https://github.com/choptastic/always_checkbox)
+In HTML Forms, a checkbox element is only submitted if the checkbox is
+/actually checked/. Nitrogen follows this pattern in its postbacks, which
+might be undesirable in certain situations. To alleviate this, there is a
+plugin called `always_checkbox`, which always submits.  It has not been
+rolled into mainline Nitrogen yet, as its still in an experimental stage
+(basically trying to get the API right).
+
+[`#always_checkbox` on Github](https://github.com/choptastic/always_checkbox)
 
 ### See Also
 
- *  [base](./base.html)
-
- *  [Button](./button.html)
-
- *  [Link](./link.html)
-
- *  [Textbox](./textbox.html)
-
- *  [Password](./password.html)
-
- *  [Textarea](./textarea.html)
-
- *  [Dropdown](./dropdown.html)
-
- *  [Dropdown Option](./option.html)
-
-	*  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)
+ * [base](./base_element.html)
+ * [Button](./button.html)
+ * [Link](./link.html)
+ * [Textbox](./textbox.html)
+ * [Password](./password.html)
+ * [Textarea](./textarea.html)
+ * [Dropdown](./dropdown.html)
+ * [Dropdown Option](./option.html)
+ * [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)

@@ -36,11 +36,11 @@
 
   Pull the latest source code from GitHub:
 
-  : git clone https://github.com/nitrogen/nitrogen
+    git clone https://github.com/nitrogen/nitrogen
 
   Then run:
 
-  : make rel_inets
+    make rel_inets
 
   This creates a completely self-contained starter application under
   `../myapp` that runs on Inets, Erlang's built in HTTP server.
@@ -49,15 +49,15 @@
   create a `.tar.gz` version of this code, exactly like you would find on the
   [Downloads](http://nitrogenproject.com/downloads) page, run:
 
-  : make package_inets
+    make package_inets
 
   You can also run Nitrogen with Mochiweb, Yaws, Cowboy, or Webmachine. Run one
   of the following make commands:
 
-  : make rel_cowboy
-  : make rel_mochiweb
-  : make rel_webmachine
-  : make rel_yaws
+    make rel_cowboy
+    make rel_mochiweb
+    make rel_webmachine
+    make rel_yaws
 
   **FreeBSD**: Compiling on FreeBSD requires using `gmake` instead of `make`,
   otherwise the steps are the same
@@ -74,11 +74,11 @@
 
   You can create these "slim releases" by typing:
   
-  : make slim_cowboy
-  : make slim_inets
-  : make slim_mochiweb
-  : make slim_webmachine
-  : make slim_yaws
+    make slim_cowboy
+    make slim_inets
+    make slim_mochiweb
+    make slim_webmachine
+    make slim_yaws
 
   All of the above commands can be provided with PREFIX or PROJECT variables to
   change the destination of the project, and the project directory name and
@@ -87,7 +87,7 @@
 
   For example:
 
-  : make slim_yaws PROJECT`my_awesome_yaws_app PREFIX`~/my_web_apps
+    make slim_yaws PROJECT`my_awesome_yaws_app PREFIX`~/my_web_apps
 
   Will create a `my_web_apps/my_awesome_yaws_app` directory in your home
   directory.
@@ -98,12 +98,12 @@
 
   Clone Nitrogen somewhere on your machine:
 
-  : git clone git://github.com/nitrogen/nitrogen.git
+    git clone git://github.com/nitrogen/nitrogen.git
 
   Then, from the root of your application's directory, run the `embed` script
   from the Nitrogen repo:
 
-  : /path/to/nitrogen/embed
+    /path/to/nitrogen/embed
 
   /Note: You must run this from your **application's** directory, **not** from the
   Nitrogen directory./
@@ -117,19 +117,19 @@
 
   To start Nitrogen in the console
 
-  : bin/nitrogen console
+    bin/nitrogen console
 
   To start Nitrogen, type
 
-  : bin/nitrogen start
+    bin/nitrogen start
 
   To attach to a detached Nitrogen console
 
-  : bin/nitrogen attach
+    bin/nitrogen attach
 
   To stop Nitrogen
 
-  : bin/nitrogen stop
+    bin/nitrogen stop
 
 ## How do I change configuration settings?
 
@@ -218,7 +218,7 @@
 
   Then running:
 
-  : make
+    make
 
   You can read more detail about the Nitrogen plugin system its own section
   here [in the documentation](plugins.md).
@@ -231,25 +231,25 @@
 
   **Upgrading to 2.3**
     
-    Following the instructions for upgrading to 2.2.2 will work except that
+  Following the instructions for upgrading to 2.2.2 will work except that
   websockets won't be available. For a more complete upgrade guide, see the
   [See the 2.3 upgrading guide](upgrade2.3.md)
 
   **Upgrading from 2.1 to any version up to 2.2.2**
 
-    Edit your rebar.config file and make sure dependencies are pointing at the
-    desired tag (ex: `{tag, "v2.2.2"}`) then run:
+  Edit your rebar.config file and make sure dependencies are pointing at the
+  desired tag (ex: `{tag, "v2.2.2"}`) then run:
 
-    : make upgrade
+    make upgrade
 
-    This will upgrade to the latest version of Nitrogen and it's dependencies.
-    It will **not** upgrade to the latest Erlang Runtime System. If you wish to
-    upgrade your version of ERTS, You'll want to follow the directions below for
-    upgrading from pre-2.1 to 2.1+.
+  This will upgrade to the latest version of Nitrogen and it's dependencies.
+  It will **not** upgrade to the latest Erlang Runtime System. If you wish to
+  upgrade your version of ERTS, You'll want to follow the directions below for
+  upgrading from pre-2.1 to 2.1+.
 
-    **Note:** If you've run `make upgrade` and nothing seems to have worked,
-    please check out the relevant question in the
-    [Troubleshooting](troubleshooting.md) guide.
+  **Note:** If you've run `make upgrade` and nothing seems to have worked,
+  please check out the relevant question in the
+  [Troubleshooting](troubleshooting.md) guide.
 
   **If you're running a version of Nitrogen pre 2.1 and want to upgrade to 2.1.0 and above:**
   
