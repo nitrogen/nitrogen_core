@@ -23,6 +23,6 @@
 
 ### See Also
 
- *  [Base element](./base.html)
+ *  [Base element](./element_base.md)
 
  *  [About the Nav HTML5 Element](http://html5doctor.com/nav-element/)

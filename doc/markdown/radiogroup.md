@@ -22,7 +22,7 @@ Note: As of Nitrogen 2.4, this will do a "deep dive" in the body elements.
 
 ### See Also
 
- *  [base](./base.html)
+ *  [base](./element_base.md)
 
  *  [radio](./radio.html)
 

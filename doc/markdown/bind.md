@@ -71,6 +71,6 @@
 
 ### See Also
 
- *  [base element](./base_element.html)
+ *  [base element](./element_base.md.html)
 
  *  [Data Binding Section of the Demos page](http://nitrogenproject.com/demos)

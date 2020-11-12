@@ -48,7 +48,7 @@
 
 ### See Also
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
  *  [button element](./button.html)
 

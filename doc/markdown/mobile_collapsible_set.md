@@ -33,7 +33,7 @@
 
  *  [jQuery mobile elements](./jquery_mobile.html)
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
  *  [mobile_collapsible element](./mobile_collapsible.html)
 

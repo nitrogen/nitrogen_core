@@ -28,7 +28,7 @@ The list element produces an HTML list element (<ol> and <ul>).
 
 ### See Also
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
  *  [listitem element](./listitem.html) 
 

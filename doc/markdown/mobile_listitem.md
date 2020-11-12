@@ -23,7 +23,7 @@ This element produces a list item formatted for jQuery Mobile list item for jQue
 
  *  [jQuery mobile elements](./jquery_mobile.html)
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
  *  [mobile list element](./mobile_list.html)
 

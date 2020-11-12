@@ -43,7 +43,7 @@
        
 ### See Also
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
  *  [About the iframe Element](http://html5doctor.com/element-index/#iframe)
 

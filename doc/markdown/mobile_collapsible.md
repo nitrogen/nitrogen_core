@@ -46,7 +46,7 @@ This element produces a [jQuery Mobile Collapsible Content](http://api.jquerymob
 
  *  [jQuery mobile elements](./jquery_mobile.html)
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
  *  [mobile\ collapsible\ set element](./mobile_collapsible_set.html)
 

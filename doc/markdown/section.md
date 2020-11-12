@@ -25,7 +25,7 @@
 
 ### See Also
 
- *  [Base element](./base.html)
+ *  [Base element](./element_base.md)
 
  *  [Article element](article.md)
    

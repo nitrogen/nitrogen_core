@@ -63,7 +63,7 @@
 
 ### See Also 
 
- *  [Base element](./base.html)
+ *  [Base element](./element_base.md)
 
  *  [About the HTML Time Element](http://www.brucelawson.co.uk/2012/best-of-time/)
 

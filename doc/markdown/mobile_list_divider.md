@@ -21,7 +21,7 @@ This element produces a [jQuery Mobile List Divider](http://jquerymobile.com/tes
 
  *  [jQuery mobile elements](./jquery_mobile.html)
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
  *  [mobile list element](./mobile_list.html)
 

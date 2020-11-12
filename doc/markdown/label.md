@@ -19,10 +19,7 @@
 
 ### See Also
 
- *  [base element](./base.html)
-
+ *  [base element](./element_base.md)
  *  [value element](./value.html)
-
  *  [span element](./span.html)
-
-	*  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)
+ *  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)

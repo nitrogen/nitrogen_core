@@ -33,7 +33,7 @@ This element produces a block element for a container [Mobile Grid](./mobile_gri
 
  *  [jQuery mobile elements](./jquery_mobile.html)
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
  *  [mobile grid element](./mobile_grid.html)
 

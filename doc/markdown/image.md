@@ -76,6 +76,6 @@
 
 ### See Also
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
  *  [Configuration Options](config.md)
  *  [wf:set/2 in API docs](../api.html#sec-2)

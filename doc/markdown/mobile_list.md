@@ -27,7 +27,7 @@ This element produces a wrapper for [jQuery Mobile Listviews](http://jquerymobil
 
  *  [jQuery mobile elements](./jquery_mobile.html)
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
  *  [label element](./mobile_listitem.html)
 

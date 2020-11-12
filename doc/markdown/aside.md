@@ -30,7 +30,7 @@
 
 ### See Also 
 
- *  [Base element](./base_element.html)
+ *  [Base element](./element_base.md.html)
 
  *  [Article element](article.md)
    

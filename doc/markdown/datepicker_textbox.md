@@ -85,7 +85,7 @@
 
 ### See Also
 
- *  [base element](base_element)
+ *  [base element](element_base.md)
 
  *  [button element](./button.html)
 

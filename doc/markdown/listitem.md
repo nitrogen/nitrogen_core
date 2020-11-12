@@ -22,7 +22,7 @@ The list element produces an HTML listitem element (<li>).
 
 ### See Also
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
  *  [list element](./list.html) 
 

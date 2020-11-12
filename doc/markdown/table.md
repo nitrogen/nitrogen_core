@@ -35,7 +35,7 @@ The table element allows you to build an HTML table in Nitrogen.
 
 ### See Also
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
  *  [tablerow element](./tablerow.html)
 

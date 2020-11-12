@@ -29,7 +29,7 @@
 
 ### See Also
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
 	*  [Sparkline Demonstration](http://nitrogenproject.com/demos/sparkline)
 

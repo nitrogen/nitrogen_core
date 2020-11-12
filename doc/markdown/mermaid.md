@@ -31,7 +31,7 @@
 
 ### See Also
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
 	*  [Mermaid Flowchars and Diagrams](http://nitrogenproject.com/demos/demos_mermaid1)
 

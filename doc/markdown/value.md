@@ -19,7 +19,7 @@ The value element produces an HTML span with a CSS type of 'value'.
 
 ### See Also
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
  *  [label element](./label.html)
 

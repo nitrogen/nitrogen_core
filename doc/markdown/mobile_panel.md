@@ -38,7 +38,7 @@
 
  *  [jQuery mobile elements](./jquery_mobile.html)
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
  *  [toggle_mobile_panel action](toggle_mobile_panel.md)
 

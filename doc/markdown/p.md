@@ -13,6 +13,6 @@ The p element produces a new HTML paragraph.
 
 ### See Also
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
  

@@ -29,7 +29,7 @@ This element produces a [jQuery Mobile Layout Grid](http://jquerymobile.com/demo
 
  *  [jQuery mobile elements](./jquery_mobile.html)
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
  *  [mobile\ grid_block element](./mobile_grid_block.html)
 

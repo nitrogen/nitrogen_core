@@ -33,7 +33,7 @@
    * `html_name` (string) - The name attribute of the password element.
 ### See Also
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
  *  [button element](./button.html)
 

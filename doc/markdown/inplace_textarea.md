@@ -41,7 +41,7 @@
 
 ### See Also 
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
  *  [inplace_textbox element](./inplace_textbox.html)
 

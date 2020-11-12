@@ -46,7 +46,7 @@ rolled into mainline Nitrogen yet, as its still in an experimental stage
 
 ### See Also
 
- * [base](./base_element.html)
+ * [base](./element_base.md.html)
  * [Button](./button.html)
  * [Link](./link.html)
  * [Textbox](./textbox.html)

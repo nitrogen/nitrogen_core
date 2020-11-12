@@ -24,7 +24,7 @@
 
 ### See Also
 
- *  [base element](./base.html)
+ *  [base element](./element_base.md)
 
  *  [jQuery Mobile Integration Guide](../jquery_mobile_integration.html)
 
