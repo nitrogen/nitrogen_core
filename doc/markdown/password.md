@@ -34,18 +34,11 @@
 ### See Also
 
  *  [base element](./element_base.md)
-
  *  [button element](./button.md)
-
  *  [textbox element](./textbox.md)
-
  *  [textarea element](./textarea.md)
-
  *  [checkbox element](./checkbox.md)
-
  *  [dropdown element](./dropdown.md)
-
  *  [option element](./option.md)
-
-	*  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)
+ *  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)
  
