@@ -15,11 +15,11 @@ dialyzer-deps-compile:
 clean:
 	./rebar clean
 
-docs:  
-	utils/make_docs/make_docs.el
-	@(cd doc;perl add_disqus.pl)
+#docs:  
+#	utils/make_docs/make_docs.el
+#	@(cd doc;perl add_disqus.pl)
 
-doc: docs
+#doc: docs
 
 eunit: clean deps compile
 	./rebar eunit
