@@ -17,7 +17,7 @@ The dropdown element produces an HTML dropdown.
 
 ### Attributes
 
-   * `options` (list of option elements or {Value, Text} tuple) - Set the
+   * `options` (list of option elements or `{Value, Text}` tuple) - Set the
 		available options for this dropdown.
 
    * `html_encode` (boolean) - Set to true to safely html-encode the
@@ -33,7 +33,7 @@ The dropdown element produces an HTML dropdown.
 
 ### See Also
 
- *  [base element](element_base)
+ *  [base element](element_base.md)
  *  [option element](./option.md)
  *  [button element](./button.md)
  *  [textbox element](./textbox.md)
