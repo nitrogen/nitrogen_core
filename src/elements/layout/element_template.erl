@@ -109,8 +109,8 @@ remove_callouts(Bin) ->
         nomatch -> {Bin, []};
         {match, [Matches]} ->
             lists:foldl(fun(Pattern, {AccBin, AccMap}) ->
-                Key = "wf_callout" ++ ?WF_RAND_UNIFORM(10000000000000,
-                                                       9999999999999999),
+                Suffix = wf:to_binary(?WF_RAND_UNIFORM(10000000000000, 9999999999999999)),
+                Key = <<"wf_callout",Suffix/binary>>,
                 NewBin = binary:replace(AccBin, Pattern, Key),
                 NewMap = [{Key, Pattern} | AccMap],
                 {NewBin, NewMap}
