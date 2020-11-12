@@ -1,7 +1,7 @@
 
 ## Mobile Grid Element - #mobile_grid {}
 
-This element produces a [jQuery Mobile Layout Grid](http://jquerymobile.com/demos/1.1.0/docs/content/content-grids.html) Element, which is a wrapper to allow you to break a mobile page up into a grid-like layout, consisting of rows and columns. Each block of this grid is defined with a series of [#mobile_grid_block{}](./mobile_grid_block.html) elements.
+This element produces a [jQuery Mobile Layout Grid](http://jquerymobile.com/demos/1.1.0/docs/content/content-grids.md) Element, which is a wrapper to allow you to break a mobile page up into a grid-like layout, consisting of rows and columns. Each block of this grid is defined with a series of [#mobile_grid_block{}](./mobile_grid_block.md) elements.
 
 ### Usage
 
@@ -27,10 +27,10 @@ This element produces a [jQuery Mobile Layout Grid](http://jquerymobile.com/demo
    
 ### See Also
 
- *  [jQuery mobile elements](./jquery_mobile.html)
+ *  [jQuery mobile elements](./jquery_mobile.md)
 
  *  [base element](./element_base.md)
 
- *  [mobile\ grid_block element](./mobile_grid_block.html)
+ *  [mobile\ grid_block element](./mobile_grid_block.md)
 
- *  [table element](./table.html)
+ *  [table element](./table.md)

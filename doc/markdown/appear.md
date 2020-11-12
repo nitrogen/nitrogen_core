@@ -19,6 +19,6 @@
 
  *  [base element](./action_base.md)
 
- *  [fade element](./fade.html)
+ *  [fade element](./fade.md)
 
  

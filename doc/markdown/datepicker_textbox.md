@@ -87,17 +87,17 @@
 
  *  [base element](element_base.md)
 
- *  [button element](./button.html)
+ *  [button element](./button.md)
 
- *  [password element](./password.html)
+ *  [password element](./password.md)
 
- *  [textarea element](./textarea.html)
+ *  [textarea element](./textarea.md)
 
- *  [checkbox element](./checkbox.html)
+ *  [checkbox element](./checkbox.md)
 
- *  [dropdown element](./dropdown.html)
+ *  [dropdown element](./dropdown.md)
 
- *  [option element](./option.html)
+ *  [option element](./option.md)
 
  *  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)
  

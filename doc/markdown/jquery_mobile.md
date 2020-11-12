@@ -1,7 +1,7 @@
 
 ## jQuery Mobile Elements
 
-   All of the jQuery Mobile Elements share a number of attributes in common. Please note that jQuery mobile elements will just be normal HTML elements unless the jQuery mobile javascript has been included. Please see the [jQuery Mobile Integration Guide](../jquery_mobile_integration.html).
+   All of the jQuery Mobile Elements share a number of attributes in common. Please note that jQuery mobile elements will just be normal HTML elements unless the jQuery mobile javascript has been included. Please see the [jQuery Mobile Integration Guide](./jquery_mobile_integration.md).
 
 ### Usage
 
@@ -26,6 +26,6 @@
 
  *  [base element](./element_base.md)
 
- *  [jQuery Mobile Integration Guide](../jquery_mobile_integration.html)
+ *  [jQuery Mobile Integration Guide](./jquery_mobile_integration.md)
 
  *  [jQuery Mobile data attributes](http://jquerymobile.com/test/docs/api/data-attributes.html)

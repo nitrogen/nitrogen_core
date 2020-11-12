@@ -28,10 +28,10 @@
 
  *  [Base element](./element_base.md)
 
- *  [Article element](./article.html)
+ *  [Article element](./article.md)
    
- *  [HTML5 Footer element](./html5_footer.html)
+ *  [HTML5 Footer element](./html5_footer.md)
 
- *  [Panel element](./panel.html)
+ *  [Panel element](./panel.md)
 
  *  [About the Header Element](http://html5doctor.com/the-header-element/)

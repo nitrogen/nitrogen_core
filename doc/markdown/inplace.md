@@ -50,6 +50,6 @@
 
  *  [base element](./element_base.md)
 
- *  [inplace_textarea element](./inplace_textarea.html)
+ *  [inplace_textarea element](./inplace_textarea.md)
 
- *  [inplace_textbox element](./inplace_textbox.html)
+ *  [inplace_textbox element](./inplace_textbox.md)

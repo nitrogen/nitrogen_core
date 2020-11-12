@@ -30,4 +30,4 @@
 
  *  [base element](./element_base.md)
 
- *  [video element](./video.html)
+ *  [video element](./video.md)

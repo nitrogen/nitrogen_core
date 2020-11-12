@@ -25,12 +25,12 @@ This element produces a wrapper for [jQuery Mobile Listviews](http://jquerymobil
 
 ### See Also
 
- *  [jQuery mobile elements](./jquery_mobile.html)
+ *  [jQuery mobile elements](./jquery_mobile.md)
 
  *  [base element](./element_base.md)
 
- *  [label element](./mobile_listitem.html)
+ *  [label element](./mobile_listitem.md)
 
- *  [list element](./list.html)
+ *  [list element](./list.md)
 
  *  [Mobile List Demos](http://nitrogenproject.com/demos/mobile_list)

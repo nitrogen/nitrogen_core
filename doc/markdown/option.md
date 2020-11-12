@@ -19,6 +19,6 @@
 
 ### See Also
 
- *  [dropdown element](./dropdown.html)
+ *  [dropdown element](./dropdown.md)
 
  *  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)

@@ -16,7 +16,7 @@
 
 ### See Also
 
- *  [sortblock element](./sortblock.html)
+ *  [sortblock element](./sortblock.md)
 
 	*  [Sorting Demo](http://nitrogenproject.com/demos/sorting1)
 

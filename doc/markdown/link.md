@@ -65,12 +65,12 @@
      jQuery Mobile to ensure that it skips using jQuery Mobile's automatic page
      transition loading system.
 
-   * `mobile_dialog` (Boolean) - If set to true, this will work with jQuery mobile to load the target URL in a [jQuery Mobile Dialog](http://jquerymobile.com/demos/1.1.1/docs/pages/page-dialogs.html).
+   * `mobile_dialog` (Boolean) - If set to true, this will work with jQuery mobile to load the target URL in a [jQuery Mobile Dialog](http://jquerymobile.com/demos/1.1.1/docs/pages/page-dialogs.md).
 
 ### See Also
 
  *  [base element](./element_base.md)
 
- *  [button element](./button.html)
+ *  [button element](./button.md)
 
- *  [jQuery Mobile Integration Guide](../jquery_mobile_integration.html)
+ *  [jQuery Mobile Integration Guide](../jquery_mobile_integration.md)

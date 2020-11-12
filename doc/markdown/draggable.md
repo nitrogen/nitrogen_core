@@ -59,7 +59,7 @@
 
 ### See Also
 
- *  [Droppable Element](./droppable.html)
+ *  [Droppable Element](./droppable.md)
 
  *  [Drag and Drop Demo](http://nitrogenproject.com/demos/dragdrop)
 

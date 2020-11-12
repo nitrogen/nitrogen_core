@@ -46,12 +46,12 @@ rolled into mainline Nitrogen yet, as its still in an experimental stage
 
 ### See Also
 
- * [base](./element_base.md.html)
- * [Button](./button.html)
- * [Link](./link.html)
- * [Textbox](./textbox.html)
- * [Password](./password.html)
- * [Textarea](./textarea.html)
- * [Dropdown](./dropdown.html)
- * [Dropdown Option](./option.html)
+ * [base](./element_base.md.md)
+ * [Button](./button.md)
+ * [Link](./link.md)
+ * [Textbox](./textbox.md)
+ * [Password](./password.md)
+ * [Textarea](./textarea.md)
+ * [Dropdown](./dropdown.md)
+ * [Dropdown Option](./option.md)
  * [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)

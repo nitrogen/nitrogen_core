@@ -25,8 +25,8 @@
 
  *  [base element](./element_base.md)
 
- *  [tableheader element](./tableheader.html)
+ *  [tableheader element](./tableheader.md)
 
- *  [tablecell element](./tablecell.html)
+ *  [tablecell element](./tablecell.md)
 
  

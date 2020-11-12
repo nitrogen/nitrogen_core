@@ -38,7 +38,7 @@
 
  *  [base element](./element_base.md)
 
- *  [panel element](./panel.html)
+ *  [panel element](./panel.md)
 
  *  [Asynchronous Page Updates](link:../api.html#sec-5)
 

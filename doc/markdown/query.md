@@ -151,6 +151,6 @@ strip_wfid(Path) ->
 
 ### See Also
 
- *  [Handler Overview](../handlers.html)
+ *  [Handler Overview](handlers.md)
 
- *  [API: Web Request and Response](../api.html#sec-10)
+ *  [API: Web Request and Response](api.md)

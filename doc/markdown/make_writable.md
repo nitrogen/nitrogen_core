@@ -15,6 +15,6 @@
 
  *  [base action](./action_base.md)
 
- *  [enable action](./enable.html)
+ *  [enable action](./enable.md)
 
- *  [make_readonly action](./make_readonly.html)
+ *  [make_readonly action](./make_readonly.md)

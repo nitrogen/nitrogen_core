@@ -101,6 +101,6 @@ clear_all(Config, _State) ->
 
 ### See Also
 
- *  [Handler Overview](../handlers.html)
+ *  [Handler Overview](../handlers.md)
 
  *  [API: State](../api.html#sec-8)

@@ -23,8 +23,8 @@
 
  *  [base element](./action_base.md)
 
- *  [animate element](./animate.html)
+ *  [animate element](./animate.md)
 
- *  [toggle element](./toggle.html)
+ *  [toggle element](./toggle.md)
 
  

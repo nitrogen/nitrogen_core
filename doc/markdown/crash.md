@@ -219,7 +219,7 @@ postback_request(Type, Error, Stacktrace, _Config, _State) ->
 
 ### See Also
 
- *  [Handler Overview](../handlers.html)
+ *  [Handler Overview](./handlers.md)
 
  *  [Template Element](template.md)
 

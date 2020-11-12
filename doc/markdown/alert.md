@@ -19,6 +19,6 @@
 
  *  [base element](./action_base.md)
 
- *  [confirm element](./confirm.html)
+ *  [confirm element](./confirm.md)
 
  

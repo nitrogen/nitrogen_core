@@ -25,6 +25,6 @@
 
  *  [base element](./action_base.md)
 
- *  [show element](./show.html)
+ *  [show element](./show.md)
 
  

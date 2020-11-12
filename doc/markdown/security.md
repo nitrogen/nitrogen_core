@@ -12,7 +12,7 @@
  
 ##### `init(Config, State)`
 
-  Initialize the Security Handler.  Like the [Route Handler](./route.html),
+  Initialize the Security Handler.  Like the [Route Handler](./route.md),
   the majority of the work done in the security handler will happen here, or
   at least will start here.
 
@@ -134,4 +134,4 @@ The full text of this can be viewed on [Github](https://github.com/nitrogen/nitr
 
 ### See Also
 
- *  [Handler Overview](../handlers.html)
+ *  [Handler Overview](../handlers.md)

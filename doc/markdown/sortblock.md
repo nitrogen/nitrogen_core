@@ -39,7 +39,7 @@ Called when the user sorts elements. BlockTag is the tag associated with this so
 
 ### See Also
 
- *  [sortitem element](./sortitem.html)
+ *  [sortitem element](./sortitem.md)
 
 	*  [Sorting Demo](http://nitrogenproject.com/demos/sorting1)
 

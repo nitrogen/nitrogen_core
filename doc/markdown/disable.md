@@ -19,8 +19,8 @@
 
  *  [base action](./action_base.md)
 
- *  [enable action](./enable.html)
+ *  [enable action](./enable.md)
 
- *  [show action](./show.html)
+ *  [show action](./show.md)
 
- *  [hide action](./hide.html)
+ *  [hide action](./hide.md)

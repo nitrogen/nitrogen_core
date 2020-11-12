@@ -37,25 +37,14 @@
 ### See Also 
 
  *  [base](./element_base.md)
-
- *  [radiogroup](./radiogroup.html)
-
- *  [Button](./button.html)
-
- *  [Link](./link.html)
-
- *  [Textbox](./textbox.html)
-
- *  [Password](./password.html)
-
- *  [Textarea](./textarea.html)
-
- *  [Dropdown](./dropdown.html)
-
- *  [Dropdown Option](./option.html)
-
- *  [RESTful element overview](../restful_overfiew.html)
-
-	*  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)
-
+ *  [radiogroup](./radiogroup.md)
+ *  [Button](./button.md)
+ *  [Link](./link.md)
+ *  [Textbox](./textbox.md)
+ *  [Password](./password.md)
+ *  [Textarea](./textarea.md)
+ *  [Dropdown](./dropdown.md)
+ *  [Dropdown Option](./option.md)
+ *  [RESTful element overview](/restful_overfiew.md)
+ *  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)
  *  [Radio Buttons Demo](http://nitrogenproject.com/demos/radio)

@@ -43,10 +43,10 @@
 
  *  [base element](./element_base.md)
 
- *  [inplace_textbox element](./inplace_textbox.html)
+ *  [inplace_textbox element](./inplace_textbox.md)
 
- *  [inplace element](./inplace.html)
+ *  [inplace element](./inplace.md)
 
- *  [textarea element](./textarea.html)
+ *  [textarea element](./textarea.md)
 
  

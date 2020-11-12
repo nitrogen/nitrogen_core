@@ -31,10 +31,10 @@
 
 ### See Also
 
- *  [jQuery mobile elements](./jquery_mobile.html)
+ *  [jQuery mobile elements](./jquery_mobile.md)
 
  *  [base element](./element_base.md)
 
- *  [mobile_collapsible element](./mobile_collapsible.html)
+ *  [mobile_collapsible element](./mobile_collapsible.md)
 
  *  [Mobile Collapsible Demos](http://nitrogenproject.com/demos/mobile_collapsibles)

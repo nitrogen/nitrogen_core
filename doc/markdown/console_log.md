@@ -28,6 +28,6 @@
 
  *  [base element](./action_base.md)
 
- *  [alert element](./alert.html)
+ *  [alert element](./alert.md)
 
  

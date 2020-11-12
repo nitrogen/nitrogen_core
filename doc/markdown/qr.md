@@ -23,5 +23,5 @@
 ### See Also
 
  *  [base element](./element_base.md)
- *  [image element](./image.html)
+ *  [image element](./image.md)
 	*  [QR Code Demos](/demos/qr)

@@ -15,6 +15,6 @@
 
  *  [base action](./action_base.md)
 
- *  [disable action](./disable.html)
+ *  [disable action](./disable.md)
 
- *  [make writable action](./make_writable.html)
+ *  [make writable action](./make_writable.md)

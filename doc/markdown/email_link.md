@@ -35,6 +35,6 @@
 
  *  [base element](./element_base.md)
 
- *  [link element](./link.html)
+ *  [link element](./link.md)
 
  

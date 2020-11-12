@@ -213,7 +213,7 @@ check_for_404(Module, PathInfo, Path) ->
 
 ### See Also
 
- *  [Handler Overview](../handlers.html)
+ *  [Handler Overview](../handlers.md)
 
  *  [Web Request and Response](../api.html#sec-10) - Scroll down a bit to the
       `wf:page_info` options.

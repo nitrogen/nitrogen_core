@@ -24,8 +24,8 @@ The list element produces an HTML listitem element (<li>).
 
  *  [base element](./element_base.md)
 
- *  [list element](./list.html) 
+ *  [list element](./list.md) 
 
- *  [mobile_listitem element](./mobile_listitem.html)
+ *  [mobile_listitem element](./mobile_listitem.md)
 
 	*  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)

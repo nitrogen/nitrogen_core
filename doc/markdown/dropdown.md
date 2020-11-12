@@ -34,17 +34,9 @@ The dropdown element produces an HTML dropdown.
 ### See Also
 
  *  [base element](element_base)
-
- *  [option element](./option.html)
-
- *  [button element](./button.html)
-
- *  [textbox element](./textbox.html)
-
- *  [password element](./password.html)
-
- *  [textarea element](./textarea.html)
-
- *  [checkbox element](./checkbox.html)
-
- 
+ *  [option element](./option.md)
+ *  [button element](./button.md)
+ *  [textbox element](./textbox.md)
+ *  [password element](./password.md)
+ *  [textarea element](./textarea.md)
+ *  [checkbox element](./checkbox.md)

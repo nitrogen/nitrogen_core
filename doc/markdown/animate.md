@@ -23,8 +23,8 @@
 
  *  [base element](./action_base.md)
 
- *  [effect element](./effect.html)
+ *  [effect element](./effect.md)
 
- *  [toggle element](./toggle.html)
+ *  [toggle element](./toggle.md)
 
  

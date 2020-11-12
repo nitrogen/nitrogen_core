@@ -108,6 +108,6 @@ clear_all(_Config, State) ->
 
 ### See Also
 
- *  [Handler Overview](../handlers.html)
+ *  [Handler Overview](../handlers.md)
 
  *  [API: Authentication and Authorization](../api.html#sec-9)

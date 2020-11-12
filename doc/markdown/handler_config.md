@@ -81,6 +81,6 @@ get_values(Key, DefaultValue, _Config, _State) ->
 
 ### See Also
 
- *  [Handler Overview](../handlers.html)
+ *  [Handler Overview](../handlers.md)
 
  *  [API: Configuration](../api.html#sec-15)

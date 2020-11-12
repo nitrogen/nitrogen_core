@@ -1,21 +1,6 @@
 
 # Getting Started
 
-## Common Questions
-
- *  [Is there a Nitrogen Tutorial?](0)
- *  [How do I create a new Nitrogen application?](100)
- *  [How do I add Nitrogen to an existing Erlang application?](200)
- *  [How do I start and stop my application?](300)
- *  [How do I change configuration settings?](400)
- *  [Where is the code for my website?](500)
- *  [How do I compile my code?](600)
- *  [How do I create new pages, custom elements, or custom actions?](700)
- *  [How do I make a mobile version?](800)
- *  [How do I work with Nitrogen Plugins?](900)
- *  [How do I upgrade to a new version of Nitrogen?](1000)
- *  [What do I do if I run into errors? How do I troubleshoot?](1100)
-
 ## Is there a Nitrogen Tutorial?
 
   Yes! You can [view the updated slides](tutorial.md) from Rusty's Nitrogen Tutorial at the
@@ -205,7 +190,7 @@
 
   You can read all about how to make mobile-enabled sites with Nitrogen by
   reading our
-  [Mobile Integration Guide](http://nitrogenproject.com/doc/jquery_mobile_integration.html)
+  [Mobile Integration Guide](./jquery_mobile_integration.md)
 
 ## How do I work with Nitrogen Plugins?
 

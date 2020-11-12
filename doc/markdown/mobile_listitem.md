@@ -21,12 +21,12 @@ This element produces a list item formatted for jQuery Mobile list item for jQue
 
 ### See Also
 
- *  [jQuery mobile elements](./jquery_mobile.html)
+ *  [jQuery mobile elements](./jquery_mobile.md)
 
  *  [base element](./element_base.md)
 
- *  [mobile list element](./mobile_list.html)
+ *  [mobile list element](./mobile_list.md)
 
- *  [listitem element](./listitem.html)
+ *  [listitem element](./listitem.md)
 
  *  [Mobile List Demos](http://nitrogenproject.com/demos/mobile_list)

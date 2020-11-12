@@ -26,4 +26,4 @@
 
  *  [base action](./action_base.md)
 
- *  [clear validation action](./clear_validation.html)
+ *  [clear validation action](./clear_validation.md)

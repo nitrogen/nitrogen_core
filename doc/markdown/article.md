@@ -23,7 +23,7 @@
 
 ### See Also
 
- *  [Base element](./element_base.md.html)
+ *  [Base element](./element_base.md.md)
 
  *  [HTML5 Header element](html5_header.md)
    

@@ -24,23 +24,23 @@ Note: As of Nitrogen 2.4, this will do a "deep dive" in the body elements.
 
  *  [base](./element_base.md)
 
- *  [radio](./radio.html)
+ *  [radio](./radio.md)
 
- *  [Button](./button.html)
+ *  [Button](./button.md)
 
- *  [Link](./link.html)
+ *  [Link](./link.md)
 
- *  [Textbox](./textbox.html)
+ *  [Textbox](./textbox.md)
 
- *  [Password](./password.html)
+ *  [Password](./password.md)
 
- *  [Textarea](./textarea.html)
+ *  [Textarea](./textarea.md)
 
- *  [Dropdown](./dropdown.html)
+ *  [Dropdown](./dropdown.md)
 
- *  [Dropdown Option](./option.html)
+ *  [Dropdown Option](./option.md)
 
- *  [RESTful element overview](./restful_overview.html)
+ *  [RESTful element overview](./restful_overview.md)
 
  *  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)
 

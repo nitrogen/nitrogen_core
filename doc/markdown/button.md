@@ -52,14 +52,14 @@
 
 ### See Also
 
- *  [Base](./element_base.md.html)
- *  [Link](./link.html)
- *  [Textbox](./textbox.html)
- *  [Password](./password.html)
- *  [Textarea](./textarea.html)
- *  [Checkbox](./checkbox.html)
- *  [Dropdown](./dropdown.html)
- *  [Dropdown Option](./option.html)
+ *  [Base](./element_base.md.md)
+ *  [Link](./link.md)
+ *  [Textbox](./textbox.md)
+ *  [Password](./password.md)
+ *  [Textarea](./textarea.md)
+ *  [Checkbox](./checkbox.md)
+ *  [Dropdown](./dropdown.md)
+ *  [Dropdown Option](./option.md)
  *  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)
  *  [Security Demo](http://nitrogenproject.com/demos/security)
      (showing the use of the `enter_clicks` attribute)

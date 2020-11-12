@@ -24,8 +24,8 @@
 
  *  [base element](./action_base.md)
 
- *  [animate element](./animate.html)
+ *  [animate element](./animate.md)
 
- *  [effect element](./effect.html)
+ *  [effect element](./effect.md)
 
  

@@ -86,6 +86,6 @@ error(S, _Config, State) ->
 
 ### See Also
 
- *  [Handler Overview](../handlers.html)
+ *  [Handler Overview](../handlers.md)
 
  *  [API: Logging](../api.html#sec-14)

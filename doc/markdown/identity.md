@@ -83,6 +83,6 @@ clear(_Config, State) ->
 
 ### See Also
 
- *  [Handler Overview](../handlers.html)
+ *  [Handler Overview](./handlers.md)
 
- *  [API: Authentication and Authorization](../api.html#sec-9)
+ *  [API: Authentication and Authorization](./api.md)

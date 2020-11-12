@@ -91,6 +91,6 @@ To see the completed jQuery mobile template, check out ./site/templates/mobile.h
 
 ### See Also
 
- *  [jQuery Mobile Elements](./elements/jquery_mobile.html)
+ *  [jQuery Mobile Elements](./jquery_mobile.md)
 
  *  [jQuery Mobile Homepage](http://jquerymobile.com)

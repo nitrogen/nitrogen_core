@@ -27,6 +27,6 @@
 
  *  [base element](./action_base.md)
 
- *  [hide element](./hide.html)
+ *  [hide element](./hide.md)
 
  

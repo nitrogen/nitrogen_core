@@ -20,6 +20,6 @@
 ### See Also
 
  *  [base element](./element_base.md)
- *  [value element](./value.html)
- *  [span element](./span.html)
+ *  [value element](./value.md)
+ *  [span element](./span.md)
  *  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)

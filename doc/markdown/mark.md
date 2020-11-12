@@ -32,6 +32,6 @@
 
  *  [base element](./element_base.md)
 
- *  [span element](./span.html)
+ *  [span element](./span.md)
 
  *  [About the HTML Mark Element](http://html5doctor.com/draw-attention-with-mark/) 

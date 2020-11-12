@@ -40,6 +40,6 @@ Here is the complete text of the default template handler
 
 ### See Also
 
- *  [Handler Overview](../handlers.html)
+ *  [Handler Overview](../handlers.md)
 
  *  [API: Template](../api.html#sec-X)

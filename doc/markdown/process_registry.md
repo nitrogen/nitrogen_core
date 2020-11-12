@@ -82,4 +82,4 @@ get_pid(Key, Function, _Config, State) ->
 
 ### See Also
 
- *  [Handler Overview](../handlers.html)
+ *  [Handler Overview](../handlers.md)

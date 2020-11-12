@@ -36,7 +36,7 @@
 
 ### See Also
 
- *  [jQuery mobile elements](./jquery_mobile.html)
+ *  [jQuery mobile elements](./jquery_mobile.md)
 
  *  [base element](./element_base.md)
 

@@ -44,12 +44,12 @@ This element produces a [jQuery Mobile Collapsible Content](http://api.jquerymob
 
 ### See Also
 
- *  [jQuery mobile elements](./jquery_mobile.html)
+ *  [jQuery mobile elements](./jquery_mobile.md)
 
  *  [base element](./element_base.md)
 
- *  [mobile\ collapsible\ set element](./mobile_collapsible_set.html)
+ *  [mobile\ collapsible\ set element](./mobile_collapsible_set.md)
 
- *  [panel element](./panel.html)
+ *  [panel element](./panel.md)
 
  *  [Mobile Collapsible Demos](http://nitrogenproject.com/demos/mobile_collapsibles)

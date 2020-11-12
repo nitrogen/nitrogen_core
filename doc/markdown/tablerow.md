@@ -16,12 +16,12 @@
 
  *  [base element](./element_base.md)
 
- *  [table element](./table.html)
+ *  [table element](./table.md)
 
- *  [tableheader element](./tableheader.html)
+ *  [tableheader element](./tableheader.md)
 
- *  [tablecell element](./tablecell.html)
+ *  [tablecell element](./tablecell.md)
 
- *  [singlerow element](./singlerow.html)
+ *  [singlerow element](./singlerow.md)
 
  

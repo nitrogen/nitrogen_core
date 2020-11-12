@@ -35,8 +35,8 @@ This element produces a [toggle switch](http://jquerymobile.com/demos/1.1.0/docs
 
 ### See Also
 
- *  [jQuery mobile elements](./jquery_mobile.html)
+ *  [jQuery mobile elements](./jquery_mobile.md)
 
  *  [base element](./element_base.md)
 
- *  [dropdown element](./dropdown.html)
+ *  [dropdown element](./dropdown.md)

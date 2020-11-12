@@ -50,16 +50,16 @@
 
  *  [base element](./element_base.md)
 
- *  [button element](./button.html)
+ *  [button element](./button.md)
 
- *  [textbox element](./textbox.html)
+ *  [textbox element](./textbox.md)
 
- *  [password element](./password.html)
+ *  [password element](./password.md)
 
- *  [checkbox element](./checkbox.html)
+ *  [checkbox element](./checkbox.md)
 
- *  [dropdown element](./dropdown.html)
+ *  [dropdown element](./dropdown.md)
 
- *  [option element](./option.html)
+ *  [option element](./option.md)
 
  *  [jQuery Placeholder Readme](https://github.com/mathiasbynens/jquery-placeholder)

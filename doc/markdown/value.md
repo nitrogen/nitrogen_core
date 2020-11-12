@@ -21,8 +21,8 @@ The value element produces an HTML span with a CSS type of 'value'.
 
  *  [base element](./element_base.md)
 
- *  [label element](./label.html)
+ *  [label element](./label.md)
 
- *  [span element](./span.html)
+ *  [span element](./span.md)
 
  

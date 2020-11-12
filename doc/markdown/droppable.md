@@ -45,4 +45,4 @@
 
 ### See Also
 
- *  [draggable element](./draggable.html)
+ *  [draggable element](./draggable.md)

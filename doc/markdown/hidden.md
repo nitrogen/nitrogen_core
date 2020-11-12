@@ -23,7 +23,7 @@
 
  *  [base element](./element_base.md)
 
- *  [textbox element](./textbox.html)
+ *  [textbox element](./textbox.md)
 
 	*  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)
  

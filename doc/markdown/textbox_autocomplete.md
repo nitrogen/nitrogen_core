@@ -36,17 +36,17 @@
 
  *  [base element](./element_base.md)
 
- *  [button element](./button.html)
+ *  [button element](./button.md)
 
- *  [textbox element](./textbox.html)
+ *  [textbox element](./textbox.md)
 
- *  [textarea element](./textarea.html)
+ *  [textarea element](./textarea.md)
 
- *  [checkbox element](./checkbox.html)
+ *  [checkbox element](./checkbox.md)
 
- *  [dropdown element](./dropdown.html)
+ *  [dropdown element](./dropdown.md)
 
- *  [option element](./option.html)
+ *  [option element](./option.md)
 
  *  [Textbox Autocomplete Demo](http://nitrogenproject.com/demos/textbox_autocomplete)
  

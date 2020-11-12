@@ -170,6 +170,6 @@ new_state() ->
 
 ### See Also
 
- *  [Handler Overview](../handlers.html)
+ *  [Handler Overview](../handlers.md)
 
  *  [API: Session](../api.html#sec-7)

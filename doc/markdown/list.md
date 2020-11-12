@@ -30,8 +30,8 @@ The list element produces an HTML list element (<ol> and <ul>).
 
  *  [base element](./element_base.md)
 
- *  [listitem element](./listitem.html) 
+ *  [listitem element](./listitem.md) 
 
- *  [mobile_list element](./mobile_list.html)
+ *  [mobile_list element](./mobile_list.md)
 
 	*  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)

@@ -28,12 +28,12 @@
 
  *  [base element](./element_base.md)
 
- *  [table element](./table.html)
+ *  [table element](./table.md)
 
- *  [tablerow element](./tablerow.html)
+ *  [tablerow element](./tablerow.md)
 
- *  [tableheader element](./tableheader.html)
+ *  [tableheader element](./tableheader.md)
 
- *  [singlerow element](./singlerow.html)
+ *  [singlerow element](./singlerow.md)
 
  

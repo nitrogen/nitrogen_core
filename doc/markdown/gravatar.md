@@ -31,6 +31,6 @@
 
 ### See Also
 
- *  [image element](./image.html)
+ *  [image element](./image.md)
 
 	*  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)

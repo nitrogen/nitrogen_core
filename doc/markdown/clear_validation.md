@@ -43,6 +43,6 @@ For example:
 
  *  [base action](./action_base.md)
 
- *  [validate action](./validate.html)
+ *  [validate action](./validate.md)
 
  *  [Clear Validation Demo](http://nitrogenproject.com/demos/clear_validation)

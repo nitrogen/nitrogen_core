@@ -23,6 +23,6 @@
 
  *  [base element](./element_base.md)
 
- *  [panel element](./panel.html)
+ *  [panel element](./panel.md)
 
  
