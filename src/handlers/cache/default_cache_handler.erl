@@ -1,10 +1,9 @@
 % vim: sw=4 ts=4 et ft=erlang
 % Nitrogen Web Framework for Erlang
-% Copyright (c) 2015 Jesse Gumm
+% Copyright (c) 2015-2020 Jesse Gumm
 % See MIT-LICENSE for licensing information.
 %
-% This cache handler relies on the nice little application called simple_cache
-% (no connection to simple_bridge, the name is merely a coincidence).
+% This cache handler relies on nitro_cache
 %
 
 -module (default_cache_handler).
@@ -23,13 +22,13 @@ init(Config, State) ->
     CacheName = cache_name(Config),
     try maybe_add_cache(CacheName)
     catch error:undef ->
-        wf:error("simple_cache not found in the system. You should add it as a dependency to your rebar.config like this:~n    ~p~n", [{simple_cache, "", {git, "git://github.com/nitrogen/simple_cache", {branch, master}}}]),
-        throw({simple_cache_not_found, "See message above"})
+        wf:error("nitro_cache not found in the system. You should add it as a dependency to your rebar.config like this:~n    ~p~n", [{nitro_cache, {git, "git://github.com/nitrogen/nitro_cache", {branch, master}}}]),
+        throw({nitro_cache_not_found, "See message above"})
     end,
     {ok, State}.
 
 maybe_add_cache(CacheName) ->
-    case application:get_env(simple_cache, initialized_nitrogen_caches) of
+    case application:get_env(nitro_cache, initialized_nitrogen_caches) of
         undefined ->
             add_cache([], CacheName);
         {ok, Caches} ->
@@ -40,14 +39,14 @@ maybe_add_cache(CacheName) ->
     end.
 
 add_cache(Caches, CacheName) ->
-    try simple_cache:init(CacheName)
+    try nitro_cache:init(CacheName)
     catch error:badarg ->
-        case simple_cache:cache_exists(CacheName) of
+        case nitro_cache:cache_exists(CacheName) of
             true -> ok;
             false -> throw({cannot_init_cache, CacheName})
         end
     end,
-    application:set_env(simple_cache, initialized_nitrogen_caches, [CacheName | Caches]).
+    application:set_env(nitro_cache, initialized_nitrogen_caches, [CacheName | Caches]).
 
 finish(_Config, State) -> 
     {ok, State}.
@@ -56,20 +55,20 @@ finish(_Config, State) ->
 get_cached(Key, Function, TTL, Config, State)
         when is_function(Function, 0) -> 
     CacheName = cache_name(Config),
-    Return = simple_cache:get(CacheName, TTL, Key, Function),
+    Return = nitro_cache:get(CacheName, TTL, Key, Function),
     {ok, Return, State}.
 
 set_cached(Key, Value, TTL, Config, State) ->
     CacheName = cache_name(Config),
-    simple_cache:set(CacheName, TTL, Key, Value),
+    nitro_cache:set(CacheName, TTL, Key, Value),
     {ok, State}.
 
 clear(Key, Config, State) -> 
-    simple_cache:flush(cache_name(Config), Key),
+    nitro_cache:flush(cache_name(Config), Key),
     {ok, State}.
 
 clear_all(Config, State) -> 
-    simple_cache:flush(cache_name(Config)),
+    nitro_cache:flush(cache_name(Config)),
     {ok, State}.
 
 cache_name(undefined) ->

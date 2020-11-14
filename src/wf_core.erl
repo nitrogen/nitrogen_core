@@ -188,8 +188,8 @@ deserialize_context(SerializedPageContext) ->
             exit({failure_to_deserialize_page_context, [
                 {serialized_page_context, SerializedPageContext},
                 {suggestion, "The most common cause of this is that "
-                             "simple_cache is not started. Try running: "
-                             "application:start(simple_cache)."}]})
+                             "nitro_cache is not started. Try running: "
+                             "application:start(nitro_cache)."}]})
     end.
 
 

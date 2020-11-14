@@ -71,8 +71,8 @@ inner_depickle(PickledData) ->
 -spec signkey() -> binary().
 signkey() ->
     %% Commented out because if the cache handler is actually initialized in
-    %% the right order, we don't need to call simple_cache directly.
-    %simple_cache:get(nitrogen, 1000, signkey, fun() ->
+    %% the right order, we don't need to call nitro_cache directly.
+    %nitro_cache:get(nitrogen, 1000, signkey, fun() ->
     wf:cache(signkey, 1000, fun() ->
         case config_handler:get_value(signkey) of
             undefined ->
