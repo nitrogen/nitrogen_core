@@ -57,20 +57,30 @@ rand_uniform_2() ->
     end.
 
 encrypt() ->
-	case erlang:function_exported(crypto, block_encrypt, 4) of
+	case erlang:function_exported(crypto, crypto_one_time, 5) of
 		true ->
-			"crypto:block_encrypt(aes_cbc128, Key, IV, Data)";
-		false ->
-			"crypto:aes_cbc_128_encrypt(Key, IV, Data)"
-	end.
+            "crypto:crypto_one_time(aes_128_cbc, Key, IV, Data, true)";
+        false ->
+            case erlang:function_exported(crypto, block_encrypt, 4) of
+                true ->
+                    "crypto:block_encrypt(aes_cbc128, Key, IV, Data)";
+                false ->
+                    "crypto:aes_cbc_128_encrypt(Key, IV, Data)"
+            end
+    end.
 
 decrypt() ->
-	case erlang:function_exported(crypto, block_decrypt, 4) of
-		true ->
-			"crypto:block_decrypt(aes_cbc128, Key, IV, Data)";
-		false ->
-			"crypto:aes_cbc_128_decrypt(Key, IV, Data)"
-	end.
+	case erlang:function_exported(crypto, crypto_one_time, 5) of
+        true ->
+            "crypto:crypto_one_time(aes_128_cbc, Key, IV, Data, false)";
+        false ->
+            case erlang:function_exported(crypto, block_decrypt, 4) of
+                true ->
+                    "crypto:block_decrypt(aes_cbc128, Key, IV, Data)";
+                false ->
+                    "crypto:aes_cbc_128_decrypt(Key, IV, Data)"
+            end
+    end.
 
 hash() ->
 	case erlang:function_exported(crypto, hash, 2) of
