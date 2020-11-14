@@ -302,7 +302,7 @@ parse_qs(Bin) when is_binary(Bin) ->
     [{list_to_binary(K), list_to_binary(V)} || {K,V} <- PL];
 parse_qs([]) -> [];
 parse_qs(S) ->
-    httpd:parse_query(S).
+    ?WF_PARSE_QS(S).
 
 %%% ESCAPE JAVASCRIPT %%%
 
