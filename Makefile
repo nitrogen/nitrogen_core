@@ -1,4 +1,4 @@
-.PHONY: test docs doc deps
+.PHONY: test deps
 
 all: deps compile
 
@@ -14,12 +14,6 @@ dialyzer-deps-compile:
 
 clean:
 	./rebar clean
-
-#docs:  
-#	utils/make_docs/make_docs.el
-#	@(cd doc;perl add_disqus.pl)
-
-#doc: docs
 
 eunit: clean deps compile
 	./rebar eunit
