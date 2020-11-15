@@ -1,8 +1,8 @@
 language: erlang
 script: "make travis"
 otp_release:
-  - 23.1
-  - 22.2
+  - 23.0
+  - 22.3
   - 21.3
 before_script:
   - sudo service postgresql stop
