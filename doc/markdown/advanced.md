@@ -29,5 +29,5 @@
     have an existing Erlang application, this guide will walk you through
     adding a web-based front-end to it using Nitrogen's `embed` script.
 
- *  [Deploying Nitrogen on Heroku](http://cstar.io/2014/07/02/nitrogen-on-heroku.html) (external) :: A step-by-step
+ *  [Deploying Nitrogen on Heroku](https://web.archive.org/web/20170429000130/http://cstar.io/2014/07/02/nitrogen-on-heroku.html) (external) :: A step-by-step
     guide to making your Nitrogen app Heroku-ready.
