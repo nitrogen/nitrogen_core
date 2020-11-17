@@ -5,9 +5,9 @@
 
 ### Include the necessary javascript.
 
-   There are two new javascript files that must be included in order properly integrate with jQuery Mobile: jQuery mobile itself (jquery-mobile.js) and the Nitrogen jQuery Mobile script (nitrogen_jqm.js), which makes necessary structural changes to the Nitrogen object.
+   There are two new javascript files that must be included in order properly integrate with jQuery Mobile: jQuery mobile itself (jquery-mobile.js) and the Nitrogen jQuery Mobile script (`nitrogen_jqm.js`), which makes necessary structural changes to the Nitrogen object.
 
-   The <script> elements in the head should look something like this. Please note that the order of these includes does matter.
+   The `<script>` elements in the head should look something like this. Please note that the order of these includes does matter.
 
 ```html
    <script type='text/javascript' src='/nitrogen/jquery.js'></script>
@@ -25,7 +25,7 @@
 
 You want to separate the page into three specific divs with a wrapper div.
 
-The wrapper div must have the attributes data-role`"page" and id`"pagediv"
+The wrapper div must have the attributes `data-role="page"` and `id="pagediv"`
 
 Contained within the Wrapper div are expected three other divs with the data-roles "header", "content" and "footer".
 
@@ -35,13 +35,13 @@ This is demonstrated below:
    <body>
       <div data-role="page" id="pagediv">
          <div data-role="header">
-            <h1>[[[page:title()]]]</h1>
+            <h1>\[\[\[page:title()\]\]\]</h1>
          </div>
          <div data-role="content">
-            [[[page:body()]]]
+            \[\[\[page:body()\]\]\]
          </div>
          <div data-role="footer">
-            <h4>[[[page:footer()]]]</h4>
+            <h4>\[\[\[page:footer()\]\]\]</h4>
          </div>
       </div>
    </body>
@@ -51,7 +51,7 @@ This is demonstrated below:
 #### The script tag with jquery mobile version
 
    The last step in order to ensure the proper loading of javascript from page to page while using transitions, is to add
-   : [[[mobile_script]]]
+   `\[\[\[mobile_script\]\]\]`
    to template inside a data-code attribute in the wrapper div.
 
 
@@ -59,15 +59,15 @@ This is demonstrated below:
 
 ```html
    <body>
-      <div data-role="page" id="pagediv" data-code="[[[mobile_script]]]">
+      <div data-role="page" id="pagediv" data-code="\[\[\[mobile_script\]\]\]">
          <div data-role="header">
-            <h1>[[[page:title()]]]</h1>
+            <h1>\[\[\[page:title()\]\]\]</h1>
          </div>
          <div data-role="content">
-            [[[page:body()]]]
+            \[\[\[page:body()\]\]\]
          </div>
          <div data-role="footer">
-            <h4>[[[page:footer()]]]</h4>
+            <h4>\[\[\[page:footer()\]\]\]</h4>
          </div>
       </div>
    </body>

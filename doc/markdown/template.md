@@ -9,7 +9,7 @@
   To specify a placeholder in the html template file, use the form:
   
 ```erlang
-  [[[Module:Function(Args)]]]
+  \[\[\[Module:Function(Args)]]]
 
 ```
 
