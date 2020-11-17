@@ -239,11 +239,11 @@ Open http://localhost:8000 in your Browser
  *  HTML. The Page is slurped into the Template.
  *  Contains one or more callouts, ie:
 
-      `[\[[module:body()]]]`
+      `[[[module:body()]]]`
 
  *  Contains a script callout for Javascript:
 
-      `[\[[script]]]`
+      `[[[script]]]`
 
  *  The callouts look like Erlang, but they are not. They can only be
       of the form `module:function(Args)`. The 'page' module refers to
@@ -1307,7 +1307,7 @@ Open http://localhost:8000 in your Browser
 ### Conclusion
   By now, you should have a basic understanding of how Nitrogen works,
   and know enough to be able to quickly grok the examples on
-  [[http://nitrogenproject.com]] and apply them to your own pages.
+  http://nitrogenproject.com and apply them to your own pages.
   
   Things not covered in this tutorial:
 
@@ -1323,7 +1323,7 @@ Open http://localhost:8000 in your Browser
 ## Conclusion
 ### Thanks
 
- *  Mailing List, Bugs, etc: [[http://nitrogenproject.com/community]]
+ *  Mailing List, Bugs, etc: http://nitrogenproject.com/community
  *  Follow Nitrogen on Twitter: [@nitrogenproject](http://twitter.com/nitrogenproject)
  *  Follow Rusty on Twitter: [@rustyio](http://twitter.com/rustyio)
  *  Follow Jesse on Twitter: [@jessegumm](http://twitter.com/jessegumm)
