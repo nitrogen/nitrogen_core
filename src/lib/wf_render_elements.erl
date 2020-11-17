@@ -62,7 +62,9 @@ render_element(Element) when is_tuple(Element) ->
 verify_and_render(Base = #elementbase{is_element=is_element}, Element) ->
     inner_render_element(Base, Element);
 verify_and_render(_, Element) ->
-    throw({not_an_element, Element}).
+    wf:error("Attempting to render an element that is not an element: ~p",[Element]),
+    wf:f("Unrenderable Element: <pre>~p</pre>",[Element]).
+    %throw({not_an_element, Element}).
 
 -spec inner_render_element(#elementbase{}, nitrogen_element()) -> html().
 inner_render_element(#elementbase{show_if=false}, _Element) ->

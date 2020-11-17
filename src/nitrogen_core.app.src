@@ -2,5 +2,11 @@
     {description,  "Nitrogen Web Framework Core Library"},
     {vsn,          "2.4.0"},
     {applications, [kernel, stdlib, sasl]},
-    {registered,   []}
+    {registered,   []},
+	{licenses, ["MIT"]},
+	{maintainers, ["Jesse Gumm"]},
+	{links, [
+		{"Homepage","https://nitrogenproject.com"},
+		{"GitHub","https://github.com/nitrogen/nitrogen_core"}
+	]}
 ]}.
