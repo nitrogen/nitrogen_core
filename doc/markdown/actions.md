@@ -2,7 +2,7 @@
 # Nitrogen Actions
 
 ## Base Action
- *  [Base Action](base.md) - All actions contain these attributes.
+ *  [Base Action](action_base.md) - All actions contain these attributes.
 
 ## Page Manipulation
  *  [Redirect](redirect.md)

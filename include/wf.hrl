@@ -198,6 +198,7 @@
        to_type=html             :: string() | atom() | binary(),
        from_type=html           :: string() | atom() | binary(),
        options=[]               :: [{atom(), string() | atom()}],
+       callouts=true            :: boolean(),
        module_aliases=[]        :: [{atom(), atom()}],
        bindings=[]              :: proplist()
     }).

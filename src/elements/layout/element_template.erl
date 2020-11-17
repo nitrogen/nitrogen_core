@@ -42,7 +42,7 @@ render_element(Record) ->
     Body = eval(Template, Fixed_bindings_record, ModuleAliases),
     Body.
 
-get_cached_template(File0, #template{from_type=FromType, to_type=ToType, options=Options}) ->
+get_cached_template(File0, #template{from_type=FromType, to_type=ToType, options=Options, callouts=Callouts}) ->
     File = wf:to_binary(File0),
     FileKey = {File, FromType, ToType, Options},
    
@@ -50,49 +50,52 @@ get_cached_template(File0, #template{from_type=FromType, to_type=ToType, options
         true ->
             wf:info("Recaching Template: ~s",[File]),
             %% Recache the template...
-            Template = parse_template(File, FromType, ToType, Options),
+            Template = parse_template(File, FromType, ToType, Callouts, Options),
             wf:set_cache({tempate_last_recached, FileKey}, {date(), time()}),
             wf:set_cache({template, FileKey}, Template),
             Template;
         false ->
             wf:cache({template, FileKey}, fun() ->
-                parse_template(File, FromType, ToType, Options)
+                parse_template(File, FromType, ToType, Callouts, Options)
             end)
     end.
 
-is_time_to_recache(File, FileAtom) ->
+is_time_to_recache(File, FileKey) ->
     %% First we check the last time the template was recached/recompiled. This
     %% will be used to compare against the time the file was updated on the
     %% filesystem. When it's first loaded, it'll be recorded as a "Never" tuple
     %% ({0,0,0}, {0,0,0}}) to ensure that all future dates tuples are greater
     %% than it.
     Never = fun() -> {{0,0,0}, {0,0,0}} end,
-    LastRecached = wf:cache({tempate_last_recached, FileAtom}, infinity, Never),
+    LastRecached = wf:cache({tempate_last_recached, FileKey}, infinity, Never),
 
     %% Now we load the file's last modified time from the filesystem, and cache
     %% that result for one second. That way we're not hammering the filesystem
     %% over and over for the same file.
     GetLastModified = fun() -> filelib:last_modified(File) end,
-    LastModified = wf:cache({template_last_modified, FileAtom}, 1000, GetLastModified),
+    LastModified = wf:cache({template_last_modified, FileKey}, 1000, GetLastModified),
 
     %% Finally if the file's last modification date is after the last time it
     %% was recached, we need to recache it.
     ?WF_IF(LastModified==0,wf:warning("File appears to be deleted or has no modified time: ~s",[File])),
     LastModified > LastRecached.
             
-parse_template(File, FromType, ToType, []) when FromType=:=ToType ->
+parse_template(File, FromType, ToType, Callouts, []) when FromType=:=ToType ->
     % TODO - Templateroot
     % File1 = filename:join(nitrogen:get_templateroot(), File),
     File1 = File,
     case file:read_file(File1) of
-        {ok, B} -> parse_template1(B);
+        {ok, B} when Callouts==true -> parse_template1(B);
+        {ok, B} -> B;
         _ ->
             ?LOG("Error reading file: ~s~n", [File1]),
             throw({template_not_found, File1})
     end;
-parse_template(File, FromType, ToType, Options) ->
+parse_template(File, FromType, ToType, Callouts, Options) ->
     File1 = File,
     case file:read_file(File1) of
+        {ok, Bin} when Callouts==false ->
+            wf_pandoc:convert(Bin, [{from, FromType}, {to, ToType} | Options]);
         {ok, Bin} ->
             {Bin2, CalloutMap} = remove_callouts(Bin),
             Bin3 = wf_pandoc:convert(Bin2, [{from, FromType}, {to, ToType} | Options]),
@@ -178,6 +181,7 @@ peel([H|T], Delim, Acc) -> peel(T, Delim, [H|Acc]).
 
 %%% EVALUATE %%%
 
+eval(Bin, _, _) when is_binary(Bin) -> Bin;
 eval([], _, _) -> [];
 eval([H|T], Record, ModuleAliases) when H==script;
                                         H==mobile_script;

@@ -4,17 +4,17 @@
 
 
   The template element allows you to specify html chrome for your page (header, footer, columns, etc.)
-  while using a special placeholder syntax to call back to your page or any Erlang module.
+  while using a special callout syntax to call back to your page or any Erlang module.
 
-  To specify a placeholder in the html template file, use the form:
+  To specify a callout in the html template file, use the form:
   
 ```erlang
-  \[\[\[Module:Function(Args)]]]
+  [[[Module:Function(Args)]]]
 
 ```
 
   Module can be any module, or can be the atom 'page' to refer to the current
-  Nitrogen pagemodule.  The function must return either one or more Nitrogen
+  Nitrogen page module.  The function must return either one or more Nitrogen
   elements, an Erlang string, or an Erlang binary.
 
   If the args are identifed like Erlang variables (capitalized first letter)
@@ -38,16 +38,24 @@
 
 ### Attributes
 
-   * `file` (String) - Path to an html template file, relative
-      to the directory from which Erlang was started.
+* `file` (String) - Path to an html template file, relative
+   to the directory from which Erlang was started.
 
-   * `bindings` (Bindings, as expected by erl_eval) - A list of
-      variable bindings to be used for arguments specified in the
-      template. Example: `[{'MyArg1', "Hello"}, {'MyArg2', "World"}]`
+* `from_type` (atom or string) - What is the file type you're loading (default: `html`)
 
-   * `module_aliases` (proplist of {alias, actual_module} pairs) - When 
-      `alias` is encountered as the module of a Module:Function(Args) call,
-      replace `alias` with `actual_module`.
+* `to_type` (atom or string) - What is the format we should convert to (default: `html`)
+
+* `options` (proplist) - This is a list of options to pass to `pandoc` for conversion.
+
+* `callouts` (boolean) - This disables or enables callouts.  If set to `true`, the callouts `[[[Module:Function()]]]`` will be parsed.  If `false`, callouts will not be parsed or processed.  (Default: `true`)
+
+* `bindings` (Bindings, as expected by `erl_eval`) - A list of
+   variable bindings to be used for arguments specified in the
+   template. Example: `[{'MyArg1', "Hello"}, {'MyArg2', "World"}]`
+
+* `module_aliases` (proplist of `{alias, actual_module}` pairs) - When 
+   `alias` is encountered as the module of a `Module:Function(Args)` call,
+   replace `alias` with `actual_module`.
 
 ### See Also
 
