@@ -105,7 +105,7 @@ parse_template(File, FromType, ToType, Options) ->
 
 
 remove_callouts(Bin) ->
-    case re:run(Bin, "[[[.*?]]]", [{capture, first, binary}]) of
+    case re:run(Bin, "\\[\\[\\[.*?\\]\\]\\]", [{capture, first, binary}]) of
         nomatch -> {Bin, []};
         {match, [Matches]} ->
             lists:foldl(fun(Pattern, {AccBin, AccMap}) ->
