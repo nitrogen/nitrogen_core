@@ -32,5 +32,4 @@
 ### See Also
 
  *  [image element](./image.md)
-
-	*  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)
+ *  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)
