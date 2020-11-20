@@ -33,8 +33,8 @@
 
 ### See Also
 
- *  [Confirm Password Validator](confirm_password.html)
+ *  [Confirm Password Validator](confirm_password.md)
 
- *  [Validate Action](validate.html)
+ *  [Validate Action](validate.md)
 
  *  [Validation Demos](http://nitrogenproject.com/demos/validation)
