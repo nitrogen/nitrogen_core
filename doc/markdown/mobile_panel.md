@@ -1,3 +1,5 @@
+<!-- dash: #mobile_panel | Element | ###:Section -->
+
 
 ## Mobile Panel Element - #mobile_panel {}
 

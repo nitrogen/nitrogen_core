@@ -1,6 +1,8 @@
+<!-- dash: #disable | Event | ###:Section -->
 
 
-## Disable Field - #enable {}
+
+## Disable Field - #disable {}
 
 	Disable a form field or button. Sets the HTML 'disabled' attribute.
 

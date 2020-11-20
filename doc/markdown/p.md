@@ -1,3 +1,5 @@
+<!-- dash: #p | Element | ###:Section -->
+
 
 
 ## New Paragraph Element - #p{}

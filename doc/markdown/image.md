@@ -1,3 +1,5 @@
+<!-- dash: #image | Element | ###:Section -->
+
 
 
 ## Image Element - #image {}

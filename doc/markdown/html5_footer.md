@@ -1,3 +1,5 @@
+<!-- dash: #html5_footer | Element | ###:Section -->
+
 
 
 ## HTML5 Footer Element - #html5_footer {}

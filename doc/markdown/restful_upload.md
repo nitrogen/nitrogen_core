@@ -1,3 +1,5 @@
+<!-- dash: #restful_upload | Element | ###:Section -->
+
 
 ## RESTful Upload Element - #restful_upload {}
   The button element produces an HTML input element that has type

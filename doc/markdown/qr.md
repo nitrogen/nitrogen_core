@@ -1,3 +1,5 @@
+<!-- dash: #qr | Element | ###:Section -->
+
 
 
 ## QR Code Element - #qr {}

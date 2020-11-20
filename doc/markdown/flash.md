@@ -1,3 +1,5 @@
+<!-- dash: #flash | Element | ###:Section -->
+
 
 
 ## Flash Element - #flash {}

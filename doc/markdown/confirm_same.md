@@ -1,3 +1,5 @@
+<!-- dash: #confirm_same | Test | ###:Section -->
+
 
 
 ## Confirm Same Validator - #confirm_same {}
@@ -31,8 +33,8 @@
 
 ### See Also
 
- *  [Confirm Password Validator](confirm_password.md)
+ *  [Confirm Password Validator](confirm_password.html)
 
- *  [Validate Action](validate.md)
+ *  [Validate Action](validate.html)
 
  *  [Validation Demos](http://nitrogenproject.com/demos/validation)
