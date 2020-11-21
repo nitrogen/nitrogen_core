@@ -108,10 +108,14 @@
   To start Nitrogen in the console
 
     bin/nitrogen console
+  
+  then open [http://localhost:8000/](http://localhost:8000/) to see your site.
 
   To start Nitrogen, type
 
     bin/nitrogen start
+  
+  then open [http://localhost:8000/](http://localhost:8000/) as above.
 
   To attach to a detached Nitrogen console
 
