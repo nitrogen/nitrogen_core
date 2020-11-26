@@ -1,3 +1,5 @@
+<!-- dash: #restful_submit | Element | ###:Section -->
+
 
 ## RESTful Submit Element #restful_submit{}
   The restful_submit element produces an input field of type submit.

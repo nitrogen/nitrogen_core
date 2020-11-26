@@ -1,3 +1,5 @@
+<!-- dash: #gravatar | Element | ###:Section -->
+
 
 
 ## Gravatar Element - #gravatar {}

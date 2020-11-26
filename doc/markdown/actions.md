@@ -1,10 +1,14 @@
+<!-- dash: Actions | Guide | ##:Section -->
+
 
 # Nitrogen Actions
 
 ## Base Action
+
  *  [Base Action](action_base.md) - All actions contain these attributes.
 
 ## Page Manipulation
+
  *  [Redirect](redirect.md)
  *  [Event](event.md)
  *  [Update](update.md) (includes Update, Replace, Insert Top,
@@ -15,6 +19,7 @@
  *  [Ajax API](action_api.md)
 
 ## Effects
+
  *  [Show](show.md) | [Hide](hide.md)
  *  [Appear](appear.md) | [Fade](fade.md)
  *  [Slide Down](slide_down.md) | [Slide Up](slide_up.md)
@@ -26,9 +31,11 @@
  *  [Make Readonly](make_readonly.md) | [Make Writable](make_writable.md)
 
 ## Feedback and Debugging
+
  *  [Alert](alert.md)
  *  [Confirm](confirm.md)
  *  [Browser Console Log](console_log.md)
 
 ## See Also
+
  *  [Nitrogen Element Paths](paths.md)

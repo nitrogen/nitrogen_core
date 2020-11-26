@@ -1,3 +1,5 @@
+<!-- dash: #is_integer | Test | ###:Section -->
+
 
 
 ## Integer Validator - #is_integer {}
