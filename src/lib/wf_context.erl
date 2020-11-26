@@ -13,6 +13,9 @@
         in_request/0,
         socket/0,
 
+        caching/0,
+        caching/1,
+
         path/0,
         protocol/0,
         uri/0,
@@ -394,6 +397,8 @@ event_handle_invalid(HandleInvalid) ->
     Event = event_context(),
     event_context(Event#event_context { handle_invalid = HandleInvalid }).
 
+    
+
 %%% HANDLERS %%%
 
 handlers() ->
@@ -469,6 +474,13 @@ make_handler(Name, Module) ->
         state=[]
     }.
 
+caching() ->
+    Context = context(),
+    Context#context.caching.
+
+caching(Caching) ->
+    Context = context(),
+    context(Context#context{caching=Caching}).
 
 %%% GET AND SET CONTEXT %%%
 % Yes, the context is stored in the process dictionary. It makes the Nitrogen 

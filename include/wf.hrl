@@ -109,6 +109,7 @@
     anchor=undefined        :: id(), 
     data=[]                 :: context_data(),
     encoding=auto           :: encoding(),
+    caching=false           :: boolean(),
     action_queue=undefined  :: wf_action_queue:action_queue() | undefined,
     % These are all serialized, sent to the browser
     % and de-serialized on each request.
@@ -298,6 +299,7 @@
         delegate                :: module(),
         tag=undefined           :: term(),
         placeholder             :: body(),
+        method=optimized        :: optimized | simple,
         delay=0                 :: integer()  %% milliseconds to wait to populate
     }).
 -record(button, {?ELEMENT_BASE(element_button),
