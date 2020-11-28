@@ -1,3 +1,5 @@
+<!-- dash: #toggle_mobile_panel | Event | ###:Section -->
+
 
 
 ## Toggle Mobile Panel Action - #toggle_mobile_panel {}
@@ -20,8 +22,8 @@
 
  *  [base element](./action_base.md)
 
-	*  [Mobile Panel Element](mobile_panel.md)
+ *  [Mobile Panel Element](mobile_panel.md)
 
-	*  [Mobile Panel Demonstration](/demos/mobile_panel)
+ *  [Mobile Panel Demonstration](https://nitrogenproject.com/demos/mobile_panel)
 
-	*  [Toggle Action](toggle.md) (non-mobile version)
+ *  [Toggle Action](toggle.md) (non-mobile version)

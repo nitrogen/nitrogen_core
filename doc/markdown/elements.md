@@ -1,8 +1,13 @@
+<!-- dash: Nitrogen Elements | Guide | ##:Section -->
+
 # Nitrogen Elements
 
 ## Base Element
+
  *  [Base Element](element_base.md) - All elements contain these attributes. 
+ 
 ## Layout
+
  *  [Template](template.md)
  *  [Panel](panel.md)
  *  [Sync Panel](sync_panel.md)
@@ -16,6 +21,7 @@
  *  [Lists](list.md) | [List Items](listitem.md)
 
 ## HTML
+
  *  [Heading 1](h1.md) | [Heading 2](h2.md) | [Heading 3](h3.md) | [Heading 4](h4.md)
  *  [Paragraph](p.md)
  *  [Break](br.md)
@@ -25,6 +31,7 @@
  *  [Horizontal Rule](hr.md)
 
 ## HTML5 Semantic Elements
+
  *  [Article](article.md)
  *  [Header](html5_header.md)
  *  [Footer](html5_footer.md)
@@ -36,6 +43,7 @@
  *  [Time](time.md)
 
 ## Form
+
  *  [Button](button.md)
  *  [Textbox](textbox.md)
  *  [Textbox Autocomplete](textbox_autocomplete.md)
@@ -52,6 +60,7 @@
  *  [AJAX Spinner](spinner.md)
 
 ## Mobile Elements
+
  *  [jQuery Mobile Elements](jquery_mobile.md)
  *  [Mobile List](mobile_list.md) | [Mobile List Item](mobile_listitem.md) | [Mobile List Divider](mobile_list_divider.md)
  *  [Mobile Toggle](mobile_toggle.md)
@@ -61,6 +70,7 @@
  *  [Mobile Panel](mobile_panel.md)
 
 ## RESTful Elements
+
  *  [RESTful Overview](restful_overview.md)
  *  [RESTful Form](restful_form.md)
  *  [RESTful Submit](restful_submit.md)
@@ -68,6 +78,7 @@
  *  [RESTful Upload](restful_upload.md)
 
 ## Other
+
  *  [Bind](bind.md)
  *  [File](file.md)
  *  [Flash](flash.md)
@@ -83,6 +94,7 @@
  *  [Iframe](iframe.md)
 
 ## See Also
+
  *  [Nitrogen Element Paths](paths.md)
  *  [jQuery Mobile Integration](jquery_mobile_integration.md)
 

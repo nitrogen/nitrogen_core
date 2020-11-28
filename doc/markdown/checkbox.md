@@ -1,3 +1,5 @@
+<!-- dash: #checkbox | Element | ###:Section -->
+
 
 
 ## Checkbox Element - #checkbox {}

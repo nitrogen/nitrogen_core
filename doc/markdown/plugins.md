@@ -1,3 +1,5 @@
+<!-- dash: Plugins | Guide | ##:Section -->
+
 # Nitrogen Plugins
 
 ## Plugins Overview

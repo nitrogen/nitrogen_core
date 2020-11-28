@@ -1,3 +1,5 @@
+<!-- dash: #hr | Element | ###:Section -->
+
 
 
 ## Horizontal Rule Element - #hr {}

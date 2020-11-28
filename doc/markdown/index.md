@@ -1,3 +1,5 @@
+<!-- dash: Getting Started | Guide | ##:Section -->
+
 
 # Getting Started
 
@@ -13,7 +15,7 @@
   
 ## How do I create a new Nitrogen application?
 
-  Note: If you want to add Nitrogen to an existing application, see [this question](200)
+  Note: If you want to add Nitrogen to an existing application, see [this question](#200)
 
   First, check the [Downloads](http://nitrogenproject.com/downloads) page to
   see if a pre-built package exists for your OS/architecture. If it does, then
@@ -82,7 +84,7 @@
   Will create a `my_web_apps/my_awesome_yaws_app` directory in your home
   directory.
 
-## How do I add Nitrogen into an existing Erlang application?
+## <a name="200">How do I add Nitrogen into an existing Erlang application?</a>
 
   As of 2.2.0, adding Nitrogen to an existing Erlang application is simple.
 
@@ -127,7 +129,7 @@
 
 ## How do I change configuration settings?
 
-  Read all about the [configuration options](/doc/config.md).
+  Read all about the [configuration options](config.md).
 
 ## Where is the code for my website?
 
@@ -199,7 +201,7 @@
 
   You can read all about how to make mobile-enabled sites with Nitrogen by
   reading our
-  [Mobile Integration Guide](/doc/jquery_mobile_integration.md)
+  [Mobile Integration Guide](jquery_mobile_integration.md)
 
 ## How do I work with Nitrogen Plugins?
 
@@ -215,7 +217,7 @@
     make
 
   You can read more detail about the Nitrogen plugin system its own section
-  here [in the documentation](/doc/plugins.md).
+  here [in the documentation](plugins.md).
 
   You can also play with creating your own Nitrogen plugins by checking out and
   modifying our
@@ -227,7 +229,7 @@
     
   Following the instructions for upgrading to 2.2.2 will work except that
   websockets won't be available. For a more complete upgrade guide, see the
-  [See the 2.3 upgrading guide](/doc/upgrade2.3.md)
+  [See the 2.3 upgrading guide](upgrade2.3.md)
 
   **Upgrading from 2.1 to any version up to 2.2.2**
 
@@ -243,7 +245,7 @@
 
   **Note:** If you've run `make upgrade` and nothing seems to have worked,
   please check out the relevant question in the
-  [Troubleshooting](/doc/troubleshooting.md) guide.
+  [Troubleshooting](troubleshooting.md) guide.
 
   **If you're running a version of Nitrogen pre 2.1 and want to upgrade to 2.1.0 and above:**
   

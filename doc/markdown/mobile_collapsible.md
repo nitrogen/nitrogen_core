@@ -1,3 +1,5 @@
+<!-- dash: #mobile_collapsible | Element | ###:Section -->
+
 
 ## Mobile Collapsible Element - #mobile_collapsible {}
 
