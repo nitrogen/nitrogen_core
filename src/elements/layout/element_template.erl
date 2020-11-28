@@ -24,8 +24,7 @@ reflect() -> record_info(fields, template).
 
 -spec render_element(#template{}) -> body().
 render_element(Record) ->
-    % Parse the template file...
-
+    % Parse the template file or supplied text
     Template = case Record#template.text of
                  [] ->
                    File = wf:to_binary(Record#template.file),
@@ -34,8 +33,8 @@ render_element(Record) ->
                    parse_template({content, wf:to_binary(Text)},
                                   Record#template.from_type,
                                   Record#template.to_type,
-                                  Record#template.options,
-                                  Record#template.callouts)
+                                  Record#template.callouts,
+                                  Record#template.options)
                end,
 
 
@@ -98,7 +97,7 @@ parse_template({content, Binary}, FromType, ToType, Callouts, []) when FromType=
 parse_template({content, Binary}, FromType, ToType, Callouts, Options) ->
     case Callouts of
         false ->
-            wf_pandoc:convert(Bin, [{from, FromType}, {to, ToType} | Options]);
+            wf_pandoc:convert(Binary, [{from, FromType}, {to, ToType} | Options]);
         true ->
             {Bin2, CalloutMap} = remove_callouts(Binary),
             Bin3 = wf_pandoc:convert(Bin2, [{from, FromType}, {to, ToType} | Options]),
@@ -108,7 +107,7 @@ parse_template({content, Binary}, FromType, ToType, Callouts, Options) ->
 parse_template(File, FromType, ToType, Callouts, Options) ->
     case file:read_file(File) of
         {ok, Binary} ->
-            parse_template({content, Binary}, FromType, ToType, Options);
+            parse_template({content, Binary}, FromType, ToType, Callouts, Options);
         _ ->
             ?LOG("Error reading file: ~s~n", [File]),
             throw({template_not_found, File})
