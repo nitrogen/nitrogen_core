@@ -15,9 +15,11 @@
 reflect() -> record_info(fields, delay_body).
 
 -spec transform_element(#delay_body{}) -> body().
-transform_element(#delay_body{delegate=Delegate, tag=Tag, delay=Delay, method=Method0, placeholder=Placeholder}) when is_integer(Delay) ->
+transform_element(#delay_body{delegate=Delegate0, tag=Tag, delay=Delay, method=Method0, placeholder=Placeholder}) when is_integer(Delay) ->
     ID = wf:temp_id(),
-    
+   
+    Delegate = wf:coalesce([Delegate0, wf:page_module()]),
+
     %% Comet maintains a separate page state from the main page state, so to work it must be simple.
     %% Also, if we're caching this element, the necessary state information wouldn't be established for subsequent requests.
     %% Also a result, in these two situations, we must force the simple method.
