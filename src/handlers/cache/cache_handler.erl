@@ -47,14 +47,13 @@ get_cached(Key, Function, TTL) ->
         %% let us know we're caching
         wf_context:caching(true),
 
+        %% Process the caching function
         Result = Function(),
 
-        case Caching of
-            true ->
-                wf_context:caching(Caching);
-            false ->
-                ok
-        end,
+        %% Restore the caching status to its previous state (and if the state is unchanged, save some cycles by skipping it
+        ?WF_IF(Caching, wf_context:caching(Caching)),
+
+        %% Return the result
         Result
     end,
     {ok, _Value} = wf_handler:call(cache_handler, get_cached, [Key, ContextedFun, TTL]).
