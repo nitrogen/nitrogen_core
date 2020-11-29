@@ -1,3 +1,5 @@
+<!-- dash: #console_log | Event | ###:Section -->
+
 
 
 ## Console Log Action - #console_log {}

@@ -1,0 +1,303 @@
+#!/usr/bin/env escript
+-mode(compile).
+
+%% TODO:
+%% 
+%% Perhaps ensure presence of sqlite3 in path?
+
+%% The location of this script in the FS.
+-define(BASE, filename:dirname(filename:absname(escript:script_name()))).
+
+%% Where to locate the input MD files.
+-define(INPUT, "../markdown").
+
+%% The work directory for intermediate artifacts.
+-define(WORK, "../work").
+
+%% The output directory/package.
+-define(OUTPUT, "Nitrogen.docset").
+
+%% The sqlite3 database file, relative to OUTPUT.
+-define(DB, "Contents/Resources/docSet.dsidx").
+
+%% The document (HTML) base directory, relative to OUTPUT.
+-define(HTML, "Contents/Resources/Documents").
+
+%% The css file, relative to OUTPUT.
+-define(CSS, "Contents/Resources/Documents/nitrogen.css").
+
+%% Files that are copied without further processing.  
+%% source is relative to this script; target is relative to OUTPUT.
+-define(STATIC_FILES, 
+        [{"Info.plist", "Contents/Info.plist"},
+         {"icon.png",   "icon.png"}]).
+
+%% Online CSS files.
+-define(GITHUB_BASE, "https://raw.githubusercontent.com/nitrogen").
+-define(CSS_URLS, [ "/nitrogen_core/master/www/nitrogen.css",
+                    "/NitrogenProject.com/master/static/css/style.css" ]).
+
+%% Local CSS file.
+-define(LOCAL_CSS, "local.css").
+
+%% Local file directory.
+-define(LOCAL_CONTENT, "local-html").
+
+
+%% Files in the INPUT that should be ignored.
+-define(EXCLUDED_FILES, [ "blank", "header", "handler_template" ]).
+
+%% The start of a "dash comment".
+-define(DASH_COMMENT, "<!-- dash:").
+
+-define(PRINT(Var), error_logger:info_msg("DEBUG: ~p:~p~n~p~n  ~p~n", 
+                                          [?MODULE, ?LINE, ??Var, Var])).
+
+
+main([]) ->
+  create_directory_structures(),
+  move_static_files(),
+  move_local_content(),
+  create_css_file(),
+  create_db(),
+  process_files(),
+  ok.
+
+create_directory_structures() ->
+  file:del_dir_r(path(output)),
+  file:del_dir_r(path(work)),
+  make_path(html),
+  make_path(work).
+
+move_static_files() ->
+  lists:foreach(fun({Source, Target}) ->
+                    {ok, _} = file:copy(filepath(base, Source), 
+                                        filepath(output, Target)) 
+                end,
+                ?STATIC_FILES).
+
+move_local_content() ->
+  Glob = filename:join([filepath(base, ?LOCAL_CONTENT), "*"]),
+  Files = filelib:wildcard(Glob),
+  lists:foreach(fun (Source) -> 
+                    Target = filepath(html, filename:basename(Source)),
+                    file:copy(Source, Target) end, Files).
+
+create_css_file() ->
+  ssl:start(),
+  inets:start(),
+  {ok, OUT} = file:open(path(css), [append]),
+  lists:foreach(fun(PartialURL) ->
+                    FullURL = ?GITHUB_BASE ++ PartialURL,
+                    {ok, {_, _, Content}} = httpc:request(FullURL),
+                    ok = file:write(OUT, Content) 
+                end,
+                ?CSS_URLS),
+  file:copy(filepath(base, ?LOCAL_CSS), OUT),
+  file:close(OUT).
+                    
+create_db() ->
+  execute_sqlite(table_definition()),
+  execute_sqlite(index_definition()).
+
+process_files() ->
+  filelib:fold_files(path(input), "md$", false, fun process_file/2, []).
+
+process_file(File, _Acc) ->
+  case is_not_excluded(File) of
+    true  -> 
+      io:format("Processing ~s~n", [filename:basename(File)]),
+      {Name, _Type} = annotate_file(File),
+      convert_file(File, Name);
+    false -> 
+      io:format("Excluding ~s~n", [filename:basename(File)])
+  end.
+
+annotate_file(File) ->
+  {ok, IN} = file:open(File, [read]),
+  {ok, OUT} = file:open(workfile(File), [write]),
+  Filename = html_filename(File),
+  {Name, Type} = 
+    parse_file_line(file:read_line(IN), IN, OUT, #{}, Filename, false),
+  execute_sqlite(add_sql_row(Name, Type, html_filename(File))),
+  {Name, Type}.
+
+parse_file_line(eof, IN, OUT, Attrs, _File, _CodeSectionFlag) ->
+  file:close(IN),
+  file:close(OUT),
+  {maps:get(name, Attrs), maps:get(type, Attrs)};
+
+parse_file_line({ok, Data}, IN, OUT, Attrs, File, CodeSectionFlag) ->
+  %% extract a <!-- dash: ... --> comment and set the attributes
+  NewAttrs = case string:find(Data, ?DASH_COMMENT) of
+               nomatch -> Attrs;
+               Comment -> extract_attrs(Comment)
+             end,
+
+  %% replace (xxx.md) links with (xxx.html)
+  Data1 = re:replace(Data, "\\((.+?)\\.md\\)", "(\\1.html)", [{return,list}]),
+
+  %% in a code section (```...```) don't do ToC replacements
+  NewCodeSectionFlag = maybe_toggle_code_section_flag(Data, CodeSectionFlag),  
+
+  %% replace e.g., ## Section with ## <a name="...">Section</a>
+  Data2 = case has_toc_marker(Data1, maps:get(toc, NewAttrs, #{})) of
+            {true, Marker} -> 
+              case NewCodeSectionFlag of
+                true -> 
+                  Data1;
+                false ->
+                  insert_toc_marker(Data1, Marker, maps:get(toc, NewAttrs))
+              end;
+            _ -> 
+              Data1
+    end,
+
+  %% add a function to the DB and ToC.
+  %% functions are `wf:fn_name(attr, attr, attr) ... `
+  Data3 = maybe_insert_function_marker(Data2, File),
+
+  file:write(OUT, Data3),
+  parse_file_line(file:read_line(IN), IN, OUT, NewAttrs, 
+                  File, NewCodeSectionFlag).
+
+maybe_toggle_code_section_flag(Subject, OldFlag) ->
+  case re:run(Subject, "^\\s*```") of
+    {match, _} -> not OldFlag;
+    nomatch    -> OldFlag
+  end.
+      
+maybe_insert_function_marker(Subject, File) ->
+  case re:run(Subject, "(.*?)(`(wf:[^(]+)\\(([^)]*)\\).*?`)(.*)", 
+                [{capture, all_but_first, list},dotall]) of
+    {match, [Pre, Code, Fn, Args, Post]} ->
+      Arity = integer_to_list(length(re:split(Args, ","))),
+      Spec = Fn ++ "/" ++ Arity,
+      Anchor = markup_anchor(Spec, Code, "Function"),
+      execute_sqlite(add_sql_row(Spec, "Function", File)),
+      Pre ++ Anchor ++ Post;
+    _ ->
+      Subject
+  end.
+
+has_toc_marker(_, Markers) when length(Markers) == 0 -> false;
+has_toc_marker(Subject, Markers) ->
+  case string:lexemes(string:trim(Subject, leading), " ") of
+    [X | _] -> {lists:member(X, maps:keys(Markers)), X};
+    _       -> {false, undefined}
+  end.
+       
+insert_toc_marker(Line, Marker, Markers) ->
+  Type = maps:get(Marker, Markers),
+  %% the Marker (e.g., "##") might be followed by whitespace or
+  %% potentially an anchor (e.g., <a name="xxx">)
+  case re:run(Line, "(\\s*)" ++ Marker ++ "(\\s*<[^>]+>\\s*|\\s*)(.+)", 
+              [{capture, all_but_first, list}]) of
+    {match, [LeadingSpace, PostSpace, Text]} -> 
+      LeadingSpace ++ Marker ++ PostSpace ++ markup_anchor(Text, Type);
+    _ -> 
+      Line
+  end.
+
+markup_anchor(Text, Type) ->
+  markup_anchor(Text, Text, Type).
+
+markup_anchor(Text, Label, Type) ->
+  {Anchor, _EncLabel} = toc_anchor(Type, Text),
+  "<a name=\"" ++ Anchor ++ "\" class=\"dashAnchor\">" ++ Label ++ "</a>".
+
+toc_anchor(Type, Label) ->
+  EncodedLabel = edoc_lib:escape_uri(Label),
+  {"//apple_ref/cpp/" ++ Type ++ "/" ++ EncodedLabel, EncodedLabel}.
+  
+extract_attrs(Comment) ->
+  Trimmed0 = string:trim(Comment),
+  Trimmed1 = string:trim(Trimmed0, leading, "<!-- dash:"),
+  Trimmed2 = string:trim(Trimmed1, trailing, "-->"),
+  Trimmed3 = string:trim(Trimmed2),
+  case re:split(Trimmed3, "\\s*\\|\\s*", [{return,list},{parts,3}]) of
+    [Name, Type] -> 
+      #{ name => Name, type => Type };
+    [Name, Type, ToC] -> 
+      #{ name => Name, type => Type, toc => extract_toc(ToC) }
+  end.
+
+extract_toc(ToC) ->
+  ToCSections = re:split(ToC, "\\s*;\\s*", [{return,list}]),
+  %% the try/catch avoids crashing if the attrs section is present but
+  %% empty or misformed
+  try
+      maps:from_list([list_to_tuple(string:split(S, ":")) || S <- ToCSections])
+  catch
+    _:_ ->
+      #{}
+  end.
+
+convert_file(File, Name) ->
+  Mounts = io_lib:format("-v ~s:/pandoc -v ~s:/output", 
+                         [path(work), path(html)]),
+  UID = string:trim(os:cmd("id -ur")),
+  DockerOpts = io_lib:format("--rm -u ~s ~s", [UID, Mounts]),
+  DockerImg = "dalibo/pandocker",
+  Metadata = io_lib:format("--metadata title='~s'", [Name]),
+  CSS = "--css nitrogen.css",
+  PandocOpts = io_lib:format("-o /output/~s --ascii ~s -s ~s ~s",
+                             [html_filename(File), 
+                              CSS, Metadata, filename:basename(File)]),
+  CMD = io_lib:format("docker run ~s ~s ~s", 
+                      [DockerOpts, DockerImg, PandocOpts]),
+  %?PRINT(os:cmd("echo " ++ CMD)),
+  case os:cmd(CMD) of
+    [] -> ok;
+    Err ->
+      ?PRINT(os:cmd("echo " ++ CMD)),
+      ?PRINT(Err)
+  end.
+      
+
+is_not_excluded(File) ->
+  not lists:member(filename:basename(File, ".md"), ?EXCLUDED_FILES).
+    
+execute_sqlite(SQL) ->
+  Cmd = string:join(["sqlite3", path(db), "'", SQL, "'"], " "),
+  os:cmd(Cmd).
+
+add_sql_row(Name, Type, Path) ->
+  io_lib:format("INSERT OR IGNORE INTO searchIndex(name, type, path) "
+                "VALUES(\"~s\", \"~s\", \"~s\")", [Name, Type, Path]).
+
+table_definition() ->
+  "CREATE TABLE searchIndex("
+    "id INTEGER PRIMARY KEY,"
+    "name TEXT,"
+    "type TEXT,"
+    "path TEXT)".
+
+index_definition() ->
+  "CREATE UNIQUE INDEX anchor ON searchIndex(name, type, path)".
+
+path(base)    -> ?BASE;
+path(input)   -> path(?BASE, ?INPUT);
+path(work)    -> path(?BASE, ?WORK);
+path(output)  -> path(?BASE, ?OUTPUT);
+path(db)      -> path(path(output), ?DB);
+path(html)    -> path(path(output), ?HTML);
+path(css)     -> path(path(output), ?CSS).
+
+path(Base, Partial) -> 
+  filename:join([Base, Partial]).
+
+filepath(PathSymbol, Filename) ->
+  filename:join([path(PathSymbol), Filename]).
+
+workfile(InputFile) ->
+  Filename = filename:basename(InputFile),
+  filename:join([path(work), Filename]).
+  
+make_path(PathSymbol) ->
+  % this file never exists but is handy for creating a directory tree
+  SlugFile = filename:join([path(PathSymbol), ".slug"]),
+  ok = filelib:ensure_dir(SlugFile).
+
+html_filename(File) ->
+  filename:basename(File, ".md") ++ ".html".

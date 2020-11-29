@@ -1,3 +1,5 @@
+<!-- dash: #template | Element | ###:Section -->
+
 
 
 ## Template Element - #template {}
@@ -7,7 +9,7 @@
   while using a special callout syntax to call back to your page or any Erlang module.
 
   To specify a callout in the html template file, use the form:
-  
+
 ```erlang
   [[[Module:Function(Args)]]]
 
@@ -24,7 +26,7 @@
   It's also possible to specify alias module references to other modules. For
   example, the default module alias is actually `[{page, wf:page_module()}]`,
   which basically means "If you encounter page:function(Args), replace `page`
-  with the current page's module." 
+  with the current page's module."
 
 ### Usage
 
@@ -41,6 +43,9 @@
 * `file` (String) - Path to an html template file, relative
    to the directory from which Erlang was started.
 
+* `text` (string or binary) - If present, Nitrogen will use the value
+  as the template text, ignoring tthe `file` value (if present).
+
 * `from_type` (atom or string) - What is the file type you're loading (default: `html`)
 
 * `to_type` (atom or string) - What is the format we should convert to (default: `html`)
@@ -53,12 +58,10 @@
    variable bindings to be used for arguments specified in the
    template. Example: `[{'MyArg1', "Hello"}, {'MyArg2', "World"}]`
 
-* `module_aliases` (proplist of `{alias, actual_module}` pairs) - When 
+* `module_aliases` (proplist of `{alias, actual_module}` pairs) - When
    `alias` is encountered as the module of a `Module:Function(Args)` call,
    replace `alias` with `actual_module`.
 
 ### See Also
 
  *  [base element](./element_base.md)
-
- 

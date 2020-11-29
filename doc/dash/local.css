@@ -1,0 +1,8 @@
+/* dash docs css */
+h1.title{ visibility: hidden !important; }
+h2{font-size: larger !important;}
+body{
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important; }

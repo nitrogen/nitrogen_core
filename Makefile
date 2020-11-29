@@ -28,6 +28,10 @@ test:
 	ln -s ../../.. test/browsertest/deps/nitrogen_core
 	cd test/browsertest; make test_all TESTLOGDIR="../results.$(shell date +%Y-%m-%d.%H%M%S)"
 
+dash-docs:
+	rm -f doc/dash/Nitrogen.tgz
+	doc/dash/md2docset
+	cd doc/dash; tar --exclude='.DS_Store' -zcvf Nitrogen.tgz Nitrogen.docset
 
 DEPS_PLT=$(CURDIR)/.deps_plt
 DEPS=erts kernel stdlib crypto sasl
