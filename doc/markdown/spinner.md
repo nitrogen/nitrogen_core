@@ -1,6 +1,4 @@
-<!-- dash: #spinnerd | Element | ###:Section -->
-
-
+<!-- dash: #spinner | Element | ###:Section -->
 
 ## Spinner Element
 
@@ -18,7 +16,7 @@
 
 ### Attributes
 
-   * `image` (string) - The spinner image to display. Defaults to "/nitrogen/spinner.gif".
+   * `image` (string) - The spinner image to display. Defaults to `"/nitrogen/spinner.gif"`.
 
 ### See Also
 
