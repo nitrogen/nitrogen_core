@@ -11,6 +11,7 @@
  *  [Template](template.md)
  *  [Panel](panel.md)
  *  [Sync Panel](sync_panel.md)
+ *  [Delay Body](delay_body.md)
  *  [Span](span.md)
  *  [Fieldset](fieldset.md)
  *  [Table](table.md) | [Row](tablerow.md) | [Cell](tablecell.md) | [Header Cell](tableheader.md)
