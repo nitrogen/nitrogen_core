@@ -33,7 +33,5 @@
 ### See Also 
 
  *  [Base element](./element_base.md.md)
-
  *  [Article element](article.md)
-   
  *  [About the Aside HTML Element](http://html5doctor.com/aside-revisited/)
