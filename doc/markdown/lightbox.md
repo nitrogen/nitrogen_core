@@ -4,13 +4,13 @@
 
 ## Lightbox Element - #lightbox {}
 
-  The lightbox element provides the basics for a Web 2.0 lightbox. 
+The lightbox element provides the basics for a Web 2.0 lightbox. 
 
-  To use, create a lightbox element on your Nitrogen page, and set
-  the body attribute.
+To use, create a lightbox element on your Nitrogen page, and set
+the body attribute.
 
-  When the lightbox is visible, an overlay is placed over the current webpage,
-  and the elements specified in the body are placed in the center of the browser.
+When the lightbox is visible, an overlay is placed over the current webpage,
+and the elements specified in the body are placed in the center of the browser.
 
 ### Usage
 
@@ -27,10 +27,10 @@
 
 ### Attributes
 
-   * `body` (Nitrogen element or list of elements.) - Set the element or elements that will be rendered in the lightbox.
+* `body` (Nitrogen element or list of elements.) - Set the element or elements that will be rendered in the lightbox.
 
 ### See Also
 
- *  [base element](./element_base.md)
+*  [base element](./element_base.md)
 
  

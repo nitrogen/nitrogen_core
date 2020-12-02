@@ -21,13 +21,13 @@
 
 ### Attributes
 
-   * `text` (string) - The text to display if validation fails.
+* `text` (string) - The text to display if validation fails.
 
-   * `min` (integer) - If set, will be the minimum acceptable value for the
-   field. If left blank, then no maximum will be enforced.
+* `min` (integer) - If set, will be the minimum acceptable value for the field.
+  If left blank, then no maximum will be enforced.
 
-   * `max` (integer) - If set, will be the maximum acceptable value for the
-   field. If left blank, then nno maximum will be enforced.
+* `max` (integer) - If set, will be the maximum acceptable value for the field.
+  If left blank, then no maximum will be enforced.
 
 ### See Also
 
