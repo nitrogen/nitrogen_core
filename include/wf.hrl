@@ -509,7 +509,8 @@
         html_name               :: html_name()
     }).
 -record(restful_upload, {?ELEMENT_BASE(element_restful_upload),
-        html_encode=true        :: html_encode(),
+%        text="Browse"           :: text(),
+%        html_encode=true        :: html_encode(),
         html_name               :: html_name()
     }).
 -record(panel, {?ELEMENT_BASE(element_panel),
