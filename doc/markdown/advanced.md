@@ -33,3 +33,6 @@
 
  *  [Deploying Nitrogen on Heroku](https://web.archive.org/web/20170429000130/http://cstar.io/2014/07/02/nitrogen-on-heroku.html) (external) :: A step-by-step
     guide to making your Nitrogen app Heroku-ready.
+
+ *  [Content Security Policy](csp.md) :: Nitrogen provides a mechanism
+    to generate a Content-Security-Policy header from a configuration.
