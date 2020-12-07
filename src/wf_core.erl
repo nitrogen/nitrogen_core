@@ -10,18 +10,18 @@
     serialize_context/0
 ]).
 
-% nitrogen_core - 
+% nitrogen_core -
 % --
 % Render a single Nitrogen page or inline application. This can be called
-% from other Erlang web frameworks or resource servers, such as WebMachine, 
+% from other Erlang web frameworks or resource servers, such as WebMachine,
 % Erlang Web, ErlyWeb, etc.
 
 run() ->
     Bridge = wf_context:bridge(),
-    try 
+    try
         case sbw:error(Bridge) of
             none -> run_catched();
-            Other -> 
+            Other ->
                 Message = wf:f("Errors: ~p~n", [Other]),
                 Bridge1 = sbw:set_response_data(Message, Bridge),
                 sbw:build_response(Bridge1)
@@ -29,11 +29,11 @@ run() ->
     catch
         exit:normal ->
             exit(normal);
-        Type : Error -> 
+        Type : Error ->
             run_crash(Bridge, Type, Error, erlang:get_stacktrace())
     end.
 
-    
+
 
 run_crash(Bridge, Type, Error, Stacktrace) ->
     try
@@ -86,13 +86,13 @@ run_catched() ->
     call_init_on_handlers(),
     wf_event:update_context_with_event(wf:q(eventContext)),
     case wf_context:type() of
-        first_request    -> 
-            run_first_request(), 
+        first_request    ->
+            run_first_request(),
             finish_dynamic_request();
-        postback_request -> 
-            run_postback_request(), 
+        postback_request ->
+            run_postback_request(),
             finish_dynamic_request();
-        static_file      -> 
+        static_file      ->
             finish_static_request()
     end.
 
@@ -195,9 +195,9 @@ deserialize_context(SerializedPageContext) ->
 
 %%% SET UP AND TEAR DOWN HANDLERS %%%
 
-% init_handlers/1 - 
+% init_handlers/1 -
 % Handlers are initialized in the order that they exist in #context.handlers. The order
-% is important, as some handlers may depend on others being initialize. For example, 
+% is important, as some handlers may depend on others being initialize. For example,
 % the session handler may use the cookie handler to get or set the session cookie.
 % TODO: Re-evaluate handlers into some form of middleware layer or something.
 % Allowing us to pass handler contexts from one handler to another and limit
@@ -211,12 +211,12 @@ call_init_on_handlers() ->
     [wf_handler:init(X) || X <- Handlers],
     ok.
 
-% finish_handlers/1 - 
+% finish_handlers/1 -
 % Handlers are finished in the order that they exist in #context.handlers. The order
 % is important, as some handlers should finish after others.
 call_finish_on_handlers() ->
     [wf_handler:finish(X) || X <- wf_context:handlers()],
-    ok.	
+    ok.
 
 
 %%% FIRST REQUEST %%%
@@ -269,6 +269,7 @@ build_first_response(Html, Script) ->
     Html2 = encode(Html1),
 
     % Update the response bridge and return.
+    wf_context:content_security_policy(),
     Bridge = wf_context:bridge(),
     Bridge1 = sbw:set_response_data(Html2, Bridge),
     sbw:build_response(Bridge1).
@@ -290,7 +291,7 @@ replace_script(Script, [H|T]) -> [replace_script(Script, H)|replace_script(Scrip
 replace_script(_, Other) -> Other.
 
 encode(Text) ->
-    Encoding = wf_context:encoding(), 
+    Encoding = wf_context:encoding(),
     encode(Encoding, Text).
 
 -spec encode(encoding(), iolist()) -> iolist().
