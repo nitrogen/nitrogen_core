@@ -56,7 +56,7 @@
 
         page_context/0,
         page_context/1,
-       
+
         entry_point/0,
         entry_point/1,
 
@@ -314,7 +314,7 @@ series_id(SeriesID) ->
     Page = page_context(),
     page_context(Page#page_context { series_id = SeriesID }).
 
-page_module() -> 
+page_module() ->
     Page = page_context(),
     Page#page_context.module.
 
@@ -330,7 +330,7 @@ entry_point(EntryPoint) ->
     Page = page_context(),
     page_context(Page#page_context { entry_point = EntryPoint}).
 
-path_info() -> 
+path_info() ->
     Page = page_context(),
     Page#page_context.path_info.
 
@@ -397,7 +397,7 @@ event_handle_invalid(HandleInvalid) ->
     Event = event_context(),
     event_context(Event#event_context { handle_invalid = HandleInvalid }).
 
-    
+
 
 %%% HANDLERS %%%
 
@@ -444,31 +444,33 @@ init_context(Bridge) ->
         bridge = Bridge,
         page_context = #page_context { series_id = wf:temp_id() },
         event_context = #event_context {},
-        action_queue = new_action_queue(),		
+        action_queue = new_action_queue(),
         handler_list = [
             % Core handlers...
-            make_handler(config_handler, default_config_handler), 
+            make_handler(config_handler, default_config_handler),
             make_handler(log_handler, default_log_handler),
             make_handler(process_registry_handler, nprocreg_registry_handler),
-            make_handler(cache_handler, default_cache_handler), 
+            make_handler(cache_handler, default_cache_handler),
             make_handler(query_handler, default_query_handler),
             make_handler(crash_handler, default_crash_handler),
 
             % Stateful handlers...
-            make_handler(session_handler, simple_session_handler), 
-            make_handler(state_handler, default_state_handler), 
-            make_handler(identity_handler, default_identity_handler), 
-            make_handler(role_handler, default_role_handler), 
+            make_handler(session_handler, simple_session_handler),
+            make_handler(state_handler, default_state_handler),
+            make_handler(identity_handler, default_identity_handler),
+            make_handler(role_handler, default_role_handler),
 
             % Handlers that possibly redirect...
-            make_handler(route_handler, dynamic_route_handler), 
-            make_handler(security_handler, default_security_handler)
+            make_handler(route_handler, dynamic_route_handler),
+            make_handler(security_handler, default_security_handler),
+            make_handler(postback_handler, default_postback_handler)
+
         ]
     },
     context(Context).
 
-make_handler(Name, Module) -> 
-    #handler_context { 
+make_handler(Name, Module) ->
+    #handler_context {
         name=Name,
         module=Module,
         state=[]
@@ -483,11 +485,11 @@ caching(Caching) ->
     context(Context#context{caching=Caching}).
 
 %%% GET AND SET CONTEXT %%%
-% Yes, the context is stored in the process dictionary. It makes the Nitrogen 
+% Yes, the context is stored in the process dictionary. It makes the Nitrogen
 % code much cleaner. Trust me.
-context() -> 
+context() ->
     get(context).
-context(Context) -> 
+context(Context) ->
     put(context, Context).
 
 %% for debugging. Remove when ready
