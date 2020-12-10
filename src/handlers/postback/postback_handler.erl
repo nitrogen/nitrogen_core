@@ -13,7 +13,7 @@
                  handler_state()) -> {ok, handler_state()}.
 
 -callback postback_request(handler_config(),
-                           handler_state()) -> {ok, handler_state()}.
+                           handler_state()) -> any().
 
 
 postback_request() ->
