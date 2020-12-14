@@ -240,6 +240,7 @@ run_crashed_first_request(Type, Error, Stacktrace) ->
 %%% POSTBACK REQUEST %%%
 
 run_postback_request() ->
+    postback_handler:postback_request(),
     Module = wf_context:event_module(),
     Tag = wf_context:event_tag(),
     HandleInvalid = wf_context:event_handle_invalid(),
