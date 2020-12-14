@@ -466,6 +466,7 @@ init_context(Bridge) ->
         page_context = #page_context { series_id = wf:temp_id() },
         event_context = #event_context {},
         action_queue = new_action_queue(),
+        script_nonce = wf_security_policy:nonce(),
         handler_list = [
             % Core handlers...
             make_handler(config_handler, default_config_handler),
@@ -483,9 +484,9 @@ init_context(Bridge) ->
 
             % Handlers that possibly redirect...
             make_handler(route_handler, dynamic_route_handler),
-            make_handler(security_handler, default_security_handler)
-        ],
-        script_nonce = wf_security_policy:nonce()
+            make_handler(security_handler, default_security_handler),
+            make_handler(postback_handler, default_postback_handler)
+        ]
     },
     context(Context).
 
