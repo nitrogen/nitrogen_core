@@ -54,10 +54,10 @@ set_websocket_cookie(Cookie, Value, Options) ->
         http_only=proplists:get_value(http_only, Options, false)
     },
     wf:wire(SetCookie).
-	
+
 set_bridge_cookie(Cookie, Value, Options) ->
 	Bridge = wf_context:bridge(),
-    Options2 = minutes_to_live_to_max_age(Options),
+  Options2 = minutes_to_live_to_max_age(Options),
 	NewBridge = sbw:set_cookie(Cookie, Value, Options2, Bridge),
 	wf_context:bridge(NewBridge),
     ok.
