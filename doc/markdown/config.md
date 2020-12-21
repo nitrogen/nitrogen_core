@@ -426,9 +426,9 @@ Here's the complete text of the default plugins.config:
 
 ```
 
-##### SSL-Only Sample: /etc/nginx/sites/enabled/my_secure_site
+##### SSL-Only Sample: /etc/nginx/sites-enabled/my_secure_site
 
-  This configuration will server only SSL. It will redirect all requests
+  This configuration will serve only SSL. It will redirect all requests
   from the HTTP port (port 80) to the HTTPS port (port 443) and load the certificates
 
 ```php

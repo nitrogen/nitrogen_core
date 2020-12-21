@@ -139,7 +139,7 @@
   
  *  `site/src` :: Your erlang code
 
- *  `site/static` :: Where static resources like CSS, Javascript, and Images Go
+ *  `site/static` :: Where static resources like CSS, Javascript, and images go
 
  *  `site/templates` :: Where your site's HTML templates go
 
