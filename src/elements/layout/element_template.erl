@@ -24,10 +24,19 @@ reflect() -> record_info(fields, template).
 
 -spec render_element(#template{}) -> body().
 render_element(Record) ->
-    % Parse the template file...
+    % Parse the template file or supplied text
+    Template = case Record#template.text of
+                 [] ->
+                   File = wf:to_binary(Record#template.file),
+                   get_cached_template(File, Record);
+                 Text ->
+                   parse_template({content, wf:to_binary(Text)},
+                                  Record#template.from_type,
+                                  Record#template.to_type,
+                                  Record#template.callouts,
+                                  Record#template.options)
+               end,
 
-    File = wf:to_binary(Record#template.file),
-    Template = get_cached_template(File, Record),
 
     % Let's figure out the appropriate module aliases
     ModuleAliases = get_module_aliases(Record),
@@ -42,70 +51,71 @@ render_element(Record) ->
     Body = eval(Template, Fixed_bindings_record, ModuleAliases),
     Body.
 
-get_cached_template(File0, #template{from_type=FromType, to_type=ToType, options=Options}) ->
+get_cached_template(File0, #template{from_type=FromType, to_type=ToType, options=Options, callouts=Callouts}) ->
     File = wf:to_binary(File0),
     FileKey = {File, FromType, ToType, Options},
-   
+
     case is_time_to_recache(File, FileKey) of
         true ->
             wf:info("Recaching Template: ~s",[File]),
             %% Recache the template...
-            Template = parse_template(File, FromType, ToType, Options),
+            Template = parse_template(File, FromType, ToType, Callouts, Options),
             wf:set_cache({tempate_last_recached, FileKey}, {date(), time()}),
             wf:set_cache({template, FileKey}, Template),
             Template;
         false ->
             wf:cache({template, FileKey}, fun() ->
-                parse_template(File, FromType, ToType, Options)
+                parse_template(File, FromType, ToType, Callouts, Options)
             end)
     end.
 
-is_time_to_recache(File, FileAtom) ->
+is_time_to_recache(File, FileKey) ->
     %% First we check the last time the template was recached/recompiled. This
     %% will be used to compare against the time the file was updated on the
     %% filesystem. When it's first loaded, it'll be recorded as a "Never" tuple
     %% ({0,0,0}, {0,0,0}}) to ensure that all future dates tuples are greater
     %% than it.
     Never = fun() -> {{0,0,0}, {0,0,0}} end,
-    LastRecached = wf:cache({tempate_last_recached, FileAtom}, infinity, Never),
+    LastRecached = wf:cache({tempate_last_recached, FileKey}, infinity, Never),
 
     %% Now we load the file's last modified time from the filesystem, and cache
     %% that result for one second. That way we're not hammering the filesystem
     %% over and over for the same file.
     GetLastModified = fun() -> filelib:last_modified(File) end,
-    LastModified = wf:cache({template_last_modified, FileAtom}, 1000, GetLastModified),
+    LastModified = wf:cache({template_last_modified, FileKey}, 1000, GetLastModified),
 
     %% Finally if the file's last modification date is after the last time it
     %% was recached, we need to recache it.
     ?WF_IF(LastModified==0,wf:warning("File appears to be deleted or has no modified time: ~s",[File])),
     LastModified > LastRecached.
-            
-parse_template(File, FromType, ToType, []) when FromType=:=ToType ->
-    % TODO - Templateroot
-    % File1 = filename:join(nitrogen:get_templateroot(), File),
-    File1 = File,
-    case file:read_file(File1) of
-        {ok, B} -> parse_template1(B);
-        _ ->
-            ?LOG("Error reading file: ~s~n", [File1]),
-            throw({template_not_found, File1})
+
+parse_template({content, Binary}, FromType, ToType, Callouts, []) when FromType=:=ToType ->
+    case Callouts of
+        true -> parse_template1(Binary);
+        false -> Binary
     end;
-parse_template(File, FromType, ToType, Options) ->
-    File1 = File,
-    case file:read_file(File1) of
-        {ok, Bin} ->
-            {Bin2, CalloutMap} = remove_callouts(Bin),
+parse_template({content, Binary}, FromType, ToType, Callouts, Options) ->
+    case Callouts of
+        false ->
+            wf_pandoc:convert(Binary, [{from, FromType}, {to, ToType} | Options]);
+        true ->
+            {Bin2, CalloutMap} = remove_callouts(Binary),
             Bin3 = wf_pandoc:convert(Bin2, [{from, FromType}, {to, ToType} | Options]),
             Bin4 = add_callouts(CalloutMap, Bin3),
-            parse_template1(Bin4);
+            parse_template1(Bin4)
+    end;
+parse_template(File, FromType, ToType, Callouts, Options) ->
+    case file:read_file(File) of
+        {ok, Binary} ->
+            parse_template({content, Binary}, FromType, ToType, Callouts, Options);
         _ ->
-            ?LOG("Error readibng file: ~s~n",[File1]),
-            throw({template_not_found, File1})
+            ?LOG("Error reading file: ~s~n", [File]),
+            throw({template_not_found, File})
     end.
 
 
 remove_callouts(Bin) ->
-    case re:run(Bin, "[[[.*?]]]", [{capture, first, binary}]) of
+    case re:run(Bin, "\\[\\[\\[.*?\\]\\]\\]", [{capture, first, binary}]) of
         nomatch -> {Bin, []};
         {match, [Matches]} ->
             lists:foldl(fun(Pattern, {AccBin, AccMap}) ->
@@ -141,12 +151,12 @@ parse_template1(B) ->
 parse(B, Callback) ->
     parse(B, Callback, <<>>).
 
-parse(<<>>, _Callback, Acc) -> 
+parse(<<>>, _Callback, Acc) ->
     [Acc];
 parse(<<"[[[", Rest/binary>>, Callback, Acc) ->
     { Token, Rest1 } = get_token(Rest, <<>>),
     [Acc, Callback(Token) | parse(Rest1, Callback, <<>>)];
-parse(<<C, Rest/binary>>, Callback, Acc) -> 
+parse(<<C, Rest/binary>>, Callback, Acc) ->
     parse(Rest, Callback, <<Acc/binary,C>>).
 
 get_token(<<"]]]", Rest/binary>>, Acc) -> { Acc, Rest };
@@ -178,6 +188,7 @@ peel([H|T], Delim, Acc) -> peel(T, Delim, [H|Acc]).
 
 %%% EVALUATE %%%
 
+eval(Bin, _, _) when is_binary(Bin) -> Bin;
 eval([], _, _) -> [];
 eval([H|T], Record, ModuleAliases) when H==script;
                                         H==mobile_script;
@@ -197,7 +208,7 @@ convert_callback_tuple_to_function(Module, _Function='', _ArgString=[], Bindings
     %% The parser extracted the Module as the only term, and the rest was
     %% ignored, so treat it as a simple Binding binding Lookup:
     convert_callback_tuple_to_function('element_template', 'passthrough', wf:to_list(Module), Bindings, ModuleAliases);
-    
+
 convert_callback_tuple_to_function(Module, Function, ArgString, Bindings, ModuleAliases) ->
     % De-reference to page module and custom module aliases...
     Module1 = get_module_from_alias(Module, ModuleAliases),
@@ -252,4 +263,3 @@ get_module_from_alias(Module, ModuleAliases) ->
         false ->
             Module
     end.
-

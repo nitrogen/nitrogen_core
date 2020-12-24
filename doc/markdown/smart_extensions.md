@@ -1,3 +1,5 @@
+<!-- dash: Smart Extensions | Guide | ###:Section -->
+
 
 # Smart Extensions
 

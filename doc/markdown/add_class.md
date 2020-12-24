@@ -1,3 +1,5 @@
+<!-- dash: #add_class | Event | ###:Section -->
+
 
 ## Add Class Action - #add_class {}
 

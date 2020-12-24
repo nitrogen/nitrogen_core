@@ -1,3 +1,5 @@
+<!-- dash: Nitrogen Tutorial | Guide | ##:Section -->
+
 
 ## Welcome
 
@@ -190,20 +192,20 @@ Open http://localhost:8000 in your Browser
 ## Dynamic Routes Explained
 ### Nitrogen Pages
 #### Dynamic Routing Explained
-    Dynamic routing rules:
-    1. If there is an extension, assume a static file.
-       : http://localhost:8000/routes/to/a/module
-       : http://localhost:8000/routes/to/a/static/file.html
-    2. Root page maps to `index.erl`
-    3. Replaces slashes with underscores.
-       : http://localhost:8000/routes/to/a/module ->
-       : routes_to_a_module.erl
-    4. Try the longest matching module.
-       : http://localhost:8000/routes/to/a/module/foo/bar ->
-       : routes_to_a_module.erl
-    5. Modules that aren't found go to `web_404.erl` if it exists.
-    6. Static files that aren't found are handled by the underlying
-       platform (not yet generalized.)
+  Dynamic routing rules:
+  * If there is an extension, assume a static file.
+     : http://localhost:8000/routes/to/a/module
+     : http://localhost:8000/routes/to/a/static/file.html
+  * Root page maps to `index.erl`
+  * Replaces slashes with underscores.
+     : http://localhost:8000/routes/to/a/module ->
+     : routes_to_a_module.erl
+  * Try the longest matching module.
+     : http://localhost:8000/routes/to/a/module/foo/bar ->
+     : routes_to_a_module.erl
+  * Modules that aren't found go to `web_404.erl` if it exists.
+  * Static files that aren't found are handled by the underlying
+     platform (not yet generalized.)
 
 ## Creating a New Page
 ### Nitrogen Pages
@@ -225,22 +227,26 @@ Open http://localhost:8000 in your Browser
 ## How is a Page Rendered (Simple Version)
 ### Nitrogen Pages
 #### How is a Page Rendered?
-    1. User hits a URL.
-    2. URL is mapped to a module.
-    3. Nitrogen framework calls `module:main()`
-    4. `module:main()` calls a `#template` 
-    5. `#template` calls back into the page (or other modules)
-    6. Nitrogen framework renders the output into HTML/Javascript.
-    (This is the simple version. Complex version will come later.)
+  1. User hits a URL.
+  2. URL is mapped to a module.
+  3. Nitrogen framework calls `module:main()`
+  4. `module:main()` calls a `#template` 
+  5. `#template` calls back into the page (or other modules)
+  6. Nitrogen framework renders the output into HTML/Javascript.
+  (This is the simple version. Complex version will come later.)
 
 ## Anatomy of a Template
 ### Nitrogen Pages
 #### Anatomy of a Template
  *  HTML. The Page is slurped into the Template.
  *  Contains one or more callouts, ie:
-      : [[[module:body()]]]
+
+      `[[[module:body()]]]`
+
  *  Contains a script callout for Javascript:
-      : [[[script]]]
+
+      `[[[script]]]`
+
  *  The callouts look like Erlang, but they are not. They can only be
       of the form `module:function(Args)`. The 'page' module refers to
       the current page.
@@ -638,7 +644,7 @@ Open http://localhost:8000 in your Browser
  *  `wf:set/2` :: Set a textbox or checkbox value.
 
     It also exposes many other generally useful utility functions:
-    [[http://nitrogenproject.com/doc/api.html]]
+    http://nitrogenproject.com/doc/api.html
                        
 ## PART 6 AGENDA
 ### Remembering State
@@ -1303,7 +1309,7 @@ Open http://localhost:8000 in your Browser
 ### Conclusion
   By now, you should have a basic understanding of how Nitrogen works,
   and know enough to be able to quickly grok the examples on
-  [[http://nitrogenproject.com]] and apply them to your own pages.
+  http://nitrogenproject.com and apply them to your own pages.
   
   Things not covered in this tutorial:
 
@@ -1319,7 +1325,7 @@ Open http://localhost:8000 in your Browser
 ## Conclusion
 ### Thanks
 
- *  Mailing List, Bugs, etc: [[http://nitrogenproject.com/community]]
+ *  Mailing List, Bugs, etc: http://nitrogenproject.com/community
  *  Follow Nitrogen on Twitter: [@nitrogenproject](http://twitter.com/nitrogenproject)
  *  Follow Rusty on Twitter: [@rustyio](http://twitter.com/rustyio)
  *  Follow Jesse on Twitter: [@jessegumm](http://twitter.com/jessegumm)

@@ -1,3 +1,5 @@
+<!-- dash: #literal | Element | ###:Section -->
+
 
 
 ## Literal Element - #literal {}
@@ -13,12 +15,13 @@
 
 ### Attributes
 
-   * `text` (string) - The text to display.
+* `text` (string) - The text to display.
 
-   * `html_encode` (boolean) - Set to true to safely html-encode the text.
+* `html_encode` (boolean) - Set to `true` to safely html-encode the text
+  (default: `true`)
 
 ### See Also
 
- *  [base element](./element_base.md)
+*  [base element](./element_base.md)
 
  

@@ -18,7 +18,7 @@
 
 -type nitrogen_element()    :: tuple().
 -type template_script_element() :: script | mobile_script.
--type body_element()        :: nitrogen_element() | binary() | string() | iolist() 
+-type body_element()        :: nitrogen_element() | binary() | string() | iolist()
                                 | template_script_element().
 -type body()                :: body_element() | [body_element()].
 -type action_element()      :: undefined | tuple() | string() | binary() | iolist().
@@ -30,8 +30,8 @@
 -type proplist()            :: [{term(), term()}].
 -type data_field_name()     :: atom() | text().
 -type data_field_value()    :: atom() | text().
--type data_fields()         :: [data_field_name() 
-                                | {data_field_name()} 
+-type data_fields()         :: [data_field_name()
+                                | {data_field_name()}
                                 | {data_field_name(),data_field_value()}].
 -type wire_priority()       :: eager | normal | defer.
 -type class()               :: string() | binary() | atom().
@@ -45,7 +45,7 @@
 -type mobile_theme()        :: string() | binary() | atom().
 -type comet_name()          :: term().
 -type comet_restart_msg()   :: term().
--type comet_function()      :: pid() | function() 
+-type comet_function()      :: pid() | function()
                                 | {comet_name(), function()}
                                 | {comet_name(), function(), comet_restart_msg()}.
 -type handler_config()      :: any().
@@ -106,15 +106,17 @@
     % Transient Information
     type                    :: context_type(),
     bridge                  :: undefined | simple_bridge:bridge(), %% will only be undefined when "not in a request"
-    anchor=undefined        :: id(), 
+    anchor=undefined        :: id(),
     data=[]                 :: context_data(),
     encoding=auto           :: encoding(),
+    caching=false           :: boolean(),
     action_queue=undefined  :: wf_action_queue:action_queue() | undefined,
     % These are all serialized, sent to the browser
     % and de-serialized on each request.
     page_context            :: undefined | #page_context{},
     event_context           :: undefined | #event_context{},
-    handler_list            :: undefined | list()
+    handler_list            :: undefined | list(),
+    script_nonce            :: undefined | string()
 }).
 
 %%% LOGGING %%%
@@ -158,7 +160,7 @@
                          WF_IF_VALUE==undefined;
                          WF_IF_VALUE==[] ->
                 IfFalse;
-            _ -> 
+            _ ->
                 IfTrue
         end
     end()).
@@ -179,7 +181,7 @@
         %% If we kept it as just `is_element`, that may be just fine, but then
         %% users would probably have to use dialyzer to debug the "is not an
         %% element" error
-        is_element=is_element   :: is_element | any(), 
+        is_element=is_element   :: is_element | any(),
         module=Module           :: atom(),
         id                      :: id(),
         anchor                  :: id(),
@@ -189,15 +191,17 @@
         style=""                :: text(),
         html_id=""              :: id(),
         title=""                :: undefined | text(),
-        data_fields=[]          :: data_fields()        
+        data_fields=[]          :: data_fields()
     ).
 
 -record(elementbase, {?ELEMENT_BASE(undefined)}).
 -record(template, {?ELEMENT_BASE(element_template),
        file                     :: string(),
+       text=[]                  :: string() | binary(),
        to_type=html             :: string() | atom() | binary(),
        from_type=html           :: string() | atom() | binary(),
        options=[]               :: [{atom(), string() | atom()}],
+       callouts=true            :: boolean(),
        module_aliases=[]        :: [{atom(), atom()}],
        bindings=[]              :: proplist()
     }).
@@ -293,10 +297,11 @@
         text=""                 :: text(),
         html_encode=true        :: html_encode()
     }).
--record(delay_body, {?ELEMENT_BASE(element_delay_body), 
+-record(delay_body, {?ELEMENT_BASE(element_delay_body),
         delegate                :: module(),
         tag=undefined           :: term(),
         placeholder             :: body(),
+        method=optimized        :: optimized | simple,
         delay=0                 :: integer()  %% milliseconds to wait to populate
     }).
 -record(button, {?ELEMENT_BASE(element_button),
@@ -505,7 +510,8 @@
         html_name               :: html_name()
     }).
 -record(restful_upload, {?ELEMENT_BASE(element_restful_upload),
-        html_encode=true        :: html_encode(),
+%        text="Browse"           :: text(),
+%        html_encode=true        :: html_encode(),
         html_name               :: html_name()
     }).
 -record(panel, {?ELEMENT_BASE(element_panel),
@@ -789,7 +795,7 @@
         width                   :: integer(),
         allowfullscreen=true    :: boolean()
     }).
-        
+
 %% HTML5 semantic elements
 -record(section, {?ELEMENT_BASE(element_section),
         body=""                 :: body(),

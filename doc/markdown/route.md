@@ -1,3 +1,5 @@
+<!-- dash: Handlers - Route | Guide | ###:Section -->
+
 
 
 ## Route Handler
@@ -64,7 +66,7 @@ finish(_Config, State) ->
 ### A More Complete Handler
 
    Here is the complete text of the default route handler for (as of Nitrogen
-   2.2) (found in handlers/dynamic_route_handler.erl). To help direct, I've
+   2.2) (found in `handlers/dynamic_route_handler.erl`). To help direct, I've
    kept the comments in the code explaining it along the way.
 
 ```erlang
@@ -213,7 +215,7 @@ check_for_404(Module, PathInfo, Path) ->
 
 ### See Also
 
- *  [Handler Overview](../handlers.md)
+ *  [Handler Overview](./handlers.md)
 
- *  [Web Request and Response](../api.html#sec-10) - Scroll down a bit to the
+ *  [Web Request and Response](./api.md) - Scroll down a bit to the
       `wf:page_info` options.

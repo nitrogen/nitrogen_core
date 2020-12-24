@@ -1,3 +1,5 @@
+<!-- dash: #table | Element | ###:Section -->
+
 
 
 ## Table Element - #table {}
@@ -31,18 +33,13 @@ The table element allows you to build an HTML table in Nitrogen.
 
 ### Attributes
 
-   * `rows` (One or more tablerow elements.) - Set the rows to be rendered within the table element.
+* `rows` (One or more [tablerow](./tablerow.md) elements.) - Set the rows to
+  be rendered within the table element.
 
 ### See Also
 
  *  [base element](./element_base.md)
-
  *  [tablerow element](./tablerow.md)
-
  *  [tableheader element](./tableheader.md)
-
  *  [tablecell element](./tablecell.md)
-
  *  [singlerow element](./singlerow.md)
-
- 

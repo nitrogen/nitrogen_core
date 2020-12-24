@@ -19,9 +19,10 @@ render_action(#redirect{url=Url, login=Login}) ->
     wf:f("window.location=\"~ts\";", [wf:js_escape(RedirectUrl)]).
 
 -spec redirect(url()) -> html().
-redirect(Url) -> 
+redirect(Url) ->
     wf:wire(#redirect { url=Url }),
-    wf:f("<script>window.location=\"~ts\";</script>", [wf:js_escape(Url)]).
+    wf:f("<script nonce=\"~s\">window.location=\"~ts\";</script>",
+         [wf_context:script_nonce(), wf:js_escape(Url)]).
 
 -spec redirect_url(Login :: boolean() | url(), Url :: url()) -> url().
 redirect_url(_Login=false, Url) ->
@@ -53,7 +54,7 @@ redirect_to_login(LoginUrl) ->
     redirect(login_redirect_url(LoginUrl)).
 
 -spec redirect_from_login(url()) -> html().
-redirect_from_login(DefaultUrl) ->	
+redirect_from_login(DefaultUrl) ->
     PickledUrl = wf:q(x),
     case wf:depickle(PickledUrl) of
         undefined -> redirect(DefaultUrl);

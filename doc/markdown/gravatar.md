@@ -1,3 +1,5 @@
+<!-- dash: #gravatar | Element | ###:Section -->
+
 
 
 ## Gravatar Element - #gravatar {}
@@ -32,5 +34,4 @@
 ### See Also
 
  *  [image element](./image.md)
-
-	*  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)
+ *  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)

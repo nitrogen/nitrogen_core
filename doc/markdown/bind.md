@@ -1,3 +1,5 @@
+<!-- dash: #bind | Element | ###:Section -->
+
 
 
 ## Bind Element - #bind {}
@@ -71,6 +73,6 @@
 
 ### See Also
 
- *  [base element](./element_base.md.md)
+ *  [base element](./element_base.md)
 
  *  [Data Binding Section of the Demos page](http://nitrogenproject.com/demos)

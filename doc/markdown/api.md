@@ -1,3 +1,5 @@
+<!-- dash: API | Guide | ##:Section -->
+
 
 # Nitrogen API
 
@@ -18,7 +20,7 @@
 
    Update a form element (textbox, dropdown, checkbox, etc) to set text value
    of TargetID. Can also be used to set the `src` attribute of an image tag.
-   
+
 * `wf:enable(Target) -> ok`
 * `wf:enable(Priority, Target) -> ok`
 
@@ -43,13 +45,13 @@
 * `wf:remove(Priority, TargetID) -> ok`
 
    Remove TargetID from the DOM.
-   
+
 * `wf:insert_top(TargetID, Elements) -> ok`
 * `wf:insert_top(Priority, TargetID, Elements) -> ok`
 
    Insert Nitrogen Elements at the top of TargetID (within the contents of
    TargetID), shifting the existing contents downward.
-   
+
 * `wf:insert_bottom(TargetID, Elements) -> ok`
 * `wf:insert_bottom(Priority, TargetID, Elements) -> ok`
 
@@ -61,7 +63,7 @@
 
    Insert Nitrogen Elements before TargetID in the DOM, shifting the existing
    contents downward.
-   
+
 * `wf:insert_after(TargetID, Elements) -> ok`
 * `wf:insert_after(Priority, TargetID, Elements) -> ok`
 
@@ -81,21 +83,21 @@
 
    Note, if `Format` is a binary, the return type will be a binary, and if
    `Format` is a string, the return type will be a string.
-   
+
 * `wf:coalesce([List]) -> Item`
 
    Return the first element in the list that is not 'undefined'.
-   
+
 * `wf:is_string(Term) -> Bool`
 
    Return true if the Term is an Erlang string. That is, a flat list
    of integers.
-   
+
 * `wf:to_list(Term) -> List`
 
    Convert the supplied term to a flat list, if possible. Useful for
    turning Integers, Atoms, Binaries into Strings.
-   
+
 * `wf:to_atom(Term) -> Atom`
 
    Convert the supplied term into an Atom, if possible. Useful for
@@ -137,7 +139,7 @@
    Encode a PropList (a list of `{Key, Value}` tuples) into a URL-encoded query string (returned as an IOList).
 
 * `wf:hex_encode(String) -> EncodedString.`
-  
+
    Hex-encode the supplied String.
 
 * `wf:hex_decode(String) -> DecodedString`
@@ -174,7 +176,7 @@
 ```
 
 ## Event Wiring
-   
+
 * `wf:wire(Actions) -> ok`
 
    Wire actions to the page. The Actions are applied against the entire page unless a
@@ -186,7 +188,7 @@
    wf:wire(#alert { text="Hello, World!" })
 
 ```
-   
+
 * `wf:wire(TargetID, Actions) -> ok`
 
    Wire actions to the page, targeted against supplied TargetID.
@@ -253,7 +255,7 @@
 
    Send the specified message to all comet function connected to the
    specified GlobalPool.
-   
+
 * `wf:flush() -> ok`
 
    Normally, the results of a comet function are sent to the browser when the function exits.
@@ -282,7 +284,7 @@
 
    Spawn the provided function (arity 0) and tell the browser to poll for the results.
    See [continuations example](http://nitrogenproject.com/demos/continuations) for usage.
-   
+
 * `wf:continue(Tag, Function, Interval) -> ok`
 
    Spawn the provided function (arity 0) and tell the browser to poll for the results at the specified interval.
@@ -294,7 +296,7 @@
   delivered by `wf:send/2` and `wf:send_global/2`. These messages are:
 
 * `'INIT'`
-	
+
   The init message is sent to the first process in a comet pool.
 
 * `{'JOIN', Pid}`
@@ -302,7 +304,7 @@
   This message is sent to already existing comets when a new process joins to the pool
 
 * `{'LEAVE', Pid}`
-	
+
   This message is triggered when certain comet process terminates and it is delivered to
   all other processes in the pool
 
@@ -313,7 +315,7 @@
 comet_function() ->
   process_flag(trap_exit, true),
   receive
-    {'EXIT', _, Message} -> 
+    {'EXIT', _, Message} ->
 		?PRINT(Message),
 		io:format("The user has left the page.~n")
   end.
@@ -324,7 +326,7 @@ comet_function() ->
 * `wf:redirect(URL) -> ok`
 
    Redirect to the provided `URL`.
-   
+
 * `wf:redirect_to_login(URL) -> ok`
 
   See Below.
@@ -358,25 +360,25 @@ comet_function() ->
 
    Retrieve the session value stored under a specific key. If not
    found, return the supplied default value.
-   
+
 * `wf:session(Key, Value) -> OldValue`
-   
+
    Store a session variable for the current user. Key and Value can be any Erlang term.
    For example, store a count: `wf:session(count, Count)`
 
    Returns the previous value associated with Key.
 
-   
+
 * `wf:clear_session() -> ok`
 
    Clear the current user's session.
-   
+
 * `wf:logout() -> ok`
 
    Clear session state, page state, identity, and roles.
 
 ## Page State
-   
+
 * `wf:state(Key) -> Value`
 
    Retrieve a page state value stored under the specified key. Page State is
@@ -387,19 +389,19 @@ comet_function() ->
 
    Retrieve a page state value stored under the specified key. If the
    value is not set, then return the supplied default value.
-   
+
 * `wf:state(Key, Value) -> ok`
 
    Store a page state variable for the current user. Page State is
    different from Session State in that Page State is scoped to a series
    of requests by one user to one Nitrogen Page.
-   
+
 * `wf:clear_state() -> ok`
 
    Clear a user's page state.
 
 ## Authentication and Authorization
-   
+
 * `wf:user() -> User or 'undefined'`
 
    Return the user value that was previously set by `wf:user(User)`
@@ -407,20 +409,20 @@ comet_function() ->
 * `wf:user(User) -> ok`
 
    Set the user for the current session.
-   
+
 * `wf:clear_user() -> ok`
 
    Same as `wf:user(undefined)`.
-   
+
 * `wf:role(Role) -> boolean`
 
    Check if the current user has a specified role.
-   
+
 * `wf:role(Role, IsInRole) -> ok`
 
    Set whether the current user is in a specified role. `IsInRole` should be a
    boolean (`true` or `false`)
-   
+
 * `wf:clear_roles() -> ok`
 
    Remove the user from all roles.
@@ -428,7 +430,7 @@ comet_function() ->
 ## Web Request and Response
 
 * `wf:in_request() -> boolean()`
-   
+
    Checks if the current running process is actually inside a Nitrogen request,
    that is to say, that it has a Nitrogen-initialized context.  Returns `true`
    if the current process is a Nitrogen request, and `false` otherwise.
@@ -484,7 +486,7 @@ Example:
 
    Get a list of query string and POST values for the provided
    key. (This acts like `wf:q(AtomKey)` in Nitrogen 1.0.)
-  
+
    **Mnemonic:** Think `qs` as "Query Plural"
 
 * `wf:mqs(ListOfAtomKeys) -> [ListOfStrings]`
@@ -523,8 +525,8 @@ Example:
 
 * `wf:request_body() -> String`
 
-   Return the complete text of the request body to the server. Note, this value 
-   will use the context of the current request. For example, the result of calling 
+   Return the complete text of the request body to the server. Note, this value
+   will use the context of the current request. For example, the result of calling
    this during the page's initial request will be different than calling it within
    a postback event.
 
@@ -558,11 +560,11 @@ Example:
 * `wf:status_code(IntegerCode) -> ok`
 
    Set the HTTP response code. Default is 200.
-   
+
 * `wf:content_type(ContentType) -> ok`
 
    Set the HTTP content type. Defaults is `"text/html"`. This can be
-   used to return text images or other files to the browser, rather than returning 
+   used to return text images or other files to the browser, rather than returning
    HTML.
 
 * `wf:download_as(Filename) -> ok`
@@ -599,7 +601,7 @@ Example:
    the module web_my_page is requsted with the path
    `"/web/my/page/some/extra/stuff` then `wf:path_info()` would return
    `"some/extra/stuff"`.
-   
+
 * `wf:page_module() -> Atom`
 
    Return the requested page module. Useful information to know when writing a
@@ -655,7 +657,7 @@ Example:
 
    Tell Nitrogen to set a cookie on the browser. Uses \"/\" for the Path, and Nitrogen's
    session timeout setting for the MinutesToLive value.
-   
+
 * `wf:cookie(Key, Value, Path, MinutesToLive) -> ok`
 
    Tell Nitrogen to set a cookie on the browser under the specified Path that is valid
@@ -663,21 +665,26 @@ Example:
 
 * `wf:delete_cookie(Key) -> ok`
 
-   Tell Nitrogen to set the cookie to expire immediately, effectively deleting it from 
+   Tell Nitrogen to set the cookie to expire immediately, effectively deleting it from
    the browser.  Is a shortcut for `wf:cookie(Key,"","/",0)`.
- 
+
+* `wf:script_nonce() -> String`
+
+    Get the value of the nonce in the current context.  See [Content
+    Security Policy](csp.md) for more information.
+
 ## HTTP Headers
-   
+
 * `wf:headers() -> [{AtomKey, StringValue}, ...]`
 
    Return a proplist of all HTTP headers.
-   
+
 * `wf:header(AtomKey) -> Value`
 
    Get the value of an HTTP header.
 
 * `wf:header_default(AtomKey, Default) -> Value.`
-  
+
    Get the value of an HTTP header, if it doesn't exist, return the default.
 
 * `wf:header(StringKey, HeaderValue) -> ok`
@@ -685,15 +692,15 @@ Example:
    Set an HTTP header during the next response.
 
 ## Serialization
-   
+
 * `wf:pickle(Term) -> PickledBinary`
 
    Serialize a term into a web-safe, checksummed, and AES-encrypted hex string.
-   
+
 * `wf:depickle(PickledBinary) -> Term`
 
    Turn a pickled binary back into the original term.
-   
+
 * `wf:depickle(PickledBinary, SecondsToLive) -> Term or 'undefined'`
 
    Turn a pickled binary back into the original term, checking to see
@@ -718,7 +725,7 @@ Example:
 * `wf:warning(Format, Args)`
 
    Log a warning message.
-  
+
 * `wf:error(String)`
 
    Log an error message.
@@ -734,12 +741,10 @@ Example:
 ## Configuration
 
 * `wf:config(Key) -> Term`
-   
+
    Get the Nitrogen configuration setting under the specified Key.
 
 * `wf:config_default(Key, DefaultValue) -> Term`
 
    Get the Nitrogen configuration setting under the specified Key. If
    not set, then return DefaultValue.
-
-  

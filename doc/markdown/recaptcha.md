@@ -1,3 +1,5 @@
+<!-- dash: #recaptcha | Element | ###:Section -->
+
 
 ## Recaptcha Element - #recaptcha{}
 

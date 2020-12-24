@@ -1,3 +1,5 @@
+<!-- dash: #sync_panel | Element | ###:Section -->
+
 
 
 ## Sync Panel Element - #sync_panel {}
@@ -42,6 +44,6 @@
 
  *  [Asynchronous Page Updates](link:../api.html#sec-5)
 
- *  [Demo of the #sync_panel element](/demos/sync_panel)
+ *  [Demo of the #sync_panel element](https://nitrogenproject.com/demos/sync_panel)
 
  *  [Article about #sync_panel](http://sigma-star.com/blog/post/sync_panel)

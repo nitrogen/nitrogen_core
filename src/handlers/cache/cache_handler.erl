@@ -40,7 +40,23 @@
                  Function :: function(),
                  TTL :: integer() | undefined | infinity) -> {ok, term()}.
 get_cached(Key, Function, TTL) ->  
-    {ok, _Value} = wf_handler:call(cache_handler, get_cached, [Key, Function, TTL]).
+    ContextedFun = fun() ->
+        %% capture existing caching state before evaluating
+        Caching = wf_context:caching(),
+    
+        %% let us know we're caching
+        wf_context:caching(true),
+
+        %% Process the caching function
+        Result = Function(),
+
+        %% Restore the caching status to its previous state (and if the state is unchanged, save some cycles by skipping it
+        ?WF_IF(Caching, wf_context:caching(Caching)),
+
+        %% Return the result
+        Result
+    end,
+    {ok, _Value} = wf_handler:call(cache_handler, get_cached, [Key, ContextedFun, TTL]).
 
 % @doc set_cached(Key, Value, TTL, State) -> {ok, NewState}
 % Set the cached value directly without checking if it currently exists. If a

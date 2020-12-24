@@ -1,3 +1,5 @@
+<!-- dash: #qr | Element | ###:Section -->
+
 
 
 ## QR Code Element - #qr {}
@@ -24,4 +26,4 @@
 
  *  [base element](./element_base.md)
  *  [image element](./image.md)
-	*  [QR Code Demos](/demos/qr)
+ *  [QR Code Demos](https://nitrogenproject.com/demos/qr)

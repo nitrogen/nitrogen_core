@@ -1,3 +1,5 @@
+<!-- dash: Handlers - Log | Guide | ###:Section -->
+
 
 
 ## Log Handler
@@ -86,6 +88,6 @@ error(S, _Config, State) ->
 
 ### See Also
 
- *  [Handler Overview](../handlers.md)
+ *  [Handler Overview](./handlers.md)
 
- *  [API: Logging](../api.html#sec-14)
+ *  [API: Logging](./api)

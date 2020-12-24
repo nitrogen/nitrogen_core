@@ -1,9 +1,11 @@
+<!-- dash: Handlers | Guide | ##:Section -->
+
 
 # Nitrogen Handlers
 
 ## Handler Overview
 
-Core Nitrogen behavior has been broken out into well-defined, pluggable 
+Core Nitrogen behavior has been broken out into well-defined, pluggable
 behavior modules called /handlers/. Handlers allow you to easily substitute
 your own logic for things like session, security, routing, and others. Simply
 create a module that implements one of the existing behaviors, and register it
@@ -95,3 +97,5 @@ In all of the handler behavior functions are found two particular variables:
  *  [Security Handler](security.md) - Controls whether or not a user
     has access to a resource, and if not, should determine what to do with
     the request.
+ *  [Postback Handler](postback.md) - Controls how postback requests
+    are handled.
