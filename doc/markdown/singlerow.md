@@ -7,7 +7,6 @@
   The single row element is a shortcut for a table with one row.
 
   Commonly used by CSS anti-purists to get simple layouts to work in cross-browser scenarious.
-  See [this site](http://giveupandusetables.com) for more information.
 
 ### Usage
 
