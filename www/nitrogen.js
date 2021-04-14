@@ -1304,14 +1304,24 @@ NitrogenClass.prototype.$ws_init = function() {
         this.$websocket_status = -1;
         Bert.assoc_array_key_encoding("binary");
         var this2 = this;
+	var has_opened = false;
         var e = new Error();
         var ws_url = this.$ws_url(location.href);
         this.$websocket = new WebSocket(ws_url);
         this.$websocket.binaryType="arraybuffer";
-        this.$websocket.onopen = function(evt) {this2.$ws_open()};
+        this.$websocket.onopen = function(evt) {
+		has_opened=true;
+		this2.$ws_open()
+	};
         this.$websocket.onclose = function(evt) {this2.$ws_close()};
         this.$websocket.onmessage = function(evt) {this2.$ws_message(evt.data) };
         this.$websocket.onerror = function(evt) {this2.$ws_close()};
+	setTimeout(function() {
+		if(!has_opened) {
+			console.log("Websockets timed out. Falling back to AJAX for postbacks.");
+			this2.$disable_websockets();
+		}
+	}, 5000);
     }catch(ex){ }
 };
 
