@@ -36,8 +36,10 @@ render_elements(Elements) ->
 -spec inner_render_elements(E :: body()) -> html().
 inner_render_elements(undefined) ->
     [];
-inner_render_elements(Es) when is_list(Es) ->
-    [inner_render_elements(E) || E <- Es];
+inner_render_elements([]) ->
+    [];
+inner_render_elements([E|T]) ->
+    [inner_render_elements(E) | inner_render_elements(T)];
 inner_render_elements(E) when is_tuple(E) ->
     render_element(E);
 inner_render_elements(mobile_script) ->
