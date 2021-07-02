@@ -987,7 +987,7 @@
         args=[]                 :: [text()]
     }).
 -record(set, {?ACTION_BASE(action_set),
-        value=""                :: text() | integer()
+        value=""                :: text() | integer() | atom()
     }).
 -record(set_multiple, {?ACTION_BASE(action_set_multiple),
         values=[]               :: [text()]
