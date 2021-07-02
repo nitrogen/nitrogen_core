@@ -35,7 +35,7 @@
                                 | {data_field_name(),data_field_value()}].
 -type wire_priority()       :: eager | normal | defer.
 -type class()               :: string() | binary() | atom().
--type text()                :: string() | binary() | iolist().
+-type text()                :: string() | binary() | iolist() | integer().
 -type html_encode()         :: boolean() | whites | fun((term()) -> text()).
 -type html()                :: string() | binary() | iolist().
 -type script()              :: string() | binary() | iolist().
@@ -300,7 +300,7 @@
 -record(delay_body, {?ELEMENT_BASE(element_delay_body),
         delegate                :: module(),
         tag=undefined           :: term(),
-        placeholder             :: body(),
+        placeholder             :: undefined | body(),
         method=optimized        :: optimized | simple,
         delay=0                 :: integer()  %% milliseconds to wait to populate
     }).
@@ -1146,7 +1146,7 @@
 ).
 -record(validatorbase, {?VALIDATOR_BASE(undefined)}).
 -record(is_required, {?VALIDATOR_BASE(validator_is_required),
-        unless_has_value        :: undefined | [id()]
+        unless_has_value        :: undefined | id() | [id()]
     }).
 -record(is_email, {?VALIDATOR_BASE(validator_is_email)}).
 -record(is_integer, {?VALIDATOR_BASE(validator_is_integer),
