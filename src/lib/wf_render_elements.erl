@@ -24,7 +24,7 @@ render_and_trap_actions(Elements) ->
     end,
     {ok, JS} = wf_render_actions:render_action_queue(),
     wf_context:action_queue(OldActionQueue),
-    {ok, wf:to_unicode_binary(Html), wf:to_unicode_binary(JS)}.
+    {ok, Html, wf:to_unicode_binary(JS)}.
 
 
 % Render elements and return the HTML that was produced.
