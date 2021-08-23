@@ -17,7 +17,7 @@ finish(_Config, State) ->
 
 first_request(Type, Error, Stacktrace, _Config, _State) ->
     Uri = wf:header(host) ++ wf:uri(),
-    ?LOG("~p~n", [{error, first_request, {url, Uri}, {Type, Error, Stacktrace}}]),
+    ?WF_LOG("~p~n", [{error, first_request, {url, Uri}, {Type, Error, Stacktrace}}]),
     wf:status_code(500),
     %% We use raw HTML here instead of Nitrogen elements in case the error is
     %% internal to nitrogen (like if the element rendering system is broken).
@@ -28,7 +28,7 @@ first_request(Type, Error, Stacktrace, _Config, _State) ->
 
 postback_request(Type, Error, Stacktrace, _Config, _State) ->
     Uri = wf:header(host) ++ wf:uri(),
-    ?LOG("~p~n", [{error, postback_request, {url, Uri}, {Type, Error, Stacktrace}}]),
+    ?WF_LOG("~p~n", [{error, postback_request, {url, Uri}, {Type, Error, Stacktrace}}]),
     ErrorMsg = <<"&#9888; An error occured performing this action. See console for details. &#9888;">>,
     CloseBtn = <<"<a style='float:right; color: #f00' href='javascript:' onclick='Nitrogen.$hide_notice_bar()'>[&times;]</a>">>,
     wf:wire([<<"Nitrogen.$show_notice_bar('error', \"">>, ErrorMsg , CloseBtn, <<"\")">>]),
