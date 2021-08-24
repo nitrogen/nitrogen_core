@@ -15,12 +15,12 @@ finish(_Config, State) ->
 	{ok, State}.
 
 first_request(Type, Error, Stacktrace, _Config, _State) ->
-	?LOG("~p~n", [{error, Type, Error, Stacktrace}]),
+	?WF_LOG("~p~n", [{error, Type, Error, Stacktrace}]),
 	wf:status_code(500),
 	"Internal Server Error".
 
 postback_request(Type, Error, Stacktrace, _Config, _State) ->
-	?LOG("~p~n", [{error, Type, Error, Stacktrace}]),
+	?WF_LOG("~p~n", [{error, Type, Error, Stacktrace}]),
 	wf:status_code(500),
 	wf:console_log("Postback Crashed. See console for details"),
 	ok.
