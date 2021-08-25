@@ -93,6 +93,8 @@ ws_info({comet_actions, Actions} , _Bridge, _State) ->
     wf:wire(page, page, Actions),
     Return = wf_core:run_websocket_comet(),
     {reply, {text, [<<"nitrogen_system_event:">>, Return]}};
+ws_info({'EXIT', _Pid, normal}, _Bridge, _State) ->
+    noreply;
 ws_info(Msg, _Bridge, _State) ->
     error_logger:warning_msg("Unhandled message(~p) to websocket process (~p)~n", [Msg, self()]),
     noreply.
