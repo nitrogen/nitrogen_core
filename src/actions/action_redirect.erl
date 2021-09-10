@@ -10,7 +10,9 @@
         redirect/1,
         redirect_to_login/1,
         redirect_to_login/2,
-        redirect_from_login/1
+        redirect_from_login/1,
+        login_redirect_url/1,
+        login_redirect_url/2
     ]).
 
 -spec render_action(#redirect{}) -> text().
