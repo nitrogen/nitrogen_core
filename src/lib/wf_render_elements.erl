@@ -71,8 +71,13 @@ inner_render_element(#elementbase{show_if=false}, _Element) ->
     [];
 inner_render_element(Base = #elementbase{show_if=true}, Element) ->
     Module = Base#elementbase.module, 
-    {module, Module} = code:ensure_loaded(Module),
-    prepare_and_render_or_transform(Module, Base, Element).
+    case code:ensure_loaded(Module) of
+        {module, Module} ->
+            prepare_and_render_or_transform(Module, Base, Element);
+        Response ->
+            ElementName = element(1, Element),
+            exit({failed_to_ensure_module_loaded, [{element, ElementName}, {'response_from code:ensure_loaded', Response}, {module, Module}, {record, Element}]})
+    end.
 
 -spec prepare_and_render_or_transform(Module :: atom(), #elementbase{}, nitrogen_element()) -> html().
 prepare_and_render_or_transform(Module, Base, Element) ->
