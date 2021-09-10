@@ -48,7 +48,7 @@ run_crash(Bridge, Type, Error, Stacktrace) ->
         exit:normal ->
             exit(normal);
         Type2:Error2 ->
-            ?LOG("Crash Handler Crashed:~n~p~n~nOriginal Crash:~n~p~n", [
+            ?WF_LOG("Crash Handler Crashed:~n~p~n~nOriginal Crash:~n~p~n", [
                 {Type2, Error2, erlang:get_stacktrace()},
                 {Type, Error, Stacktrace}]),
             Bridge1 = sbw:set_status_code(500, Bridge),
@@ -66,7 +66,7 @@ run_websocket_crash(Type, Error, Stacktrace) ->
         crash_handler:postback_request(Type, Error, Stacktrace),
         run_websocket_comet()
     catch Type2:Error2 ->
-        ?LOG("~p~n", [{error_in_crash_handler, Type2, Error2, erlang:get_stacktrace()}]),
+        ?WF_LOG("~p~n", [{error_in_crash_handler, Type2, Error2, erlang:get_stacktrace()}]),
         "Nitrogen.$console_log('crash_handler crashed in websocket');"
     end.
 
