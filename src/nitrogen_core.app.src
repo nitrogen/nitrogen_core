@@ -1,7 +1,7 @@
 {application, nitrogen_core, [
     {description,  "Nitrogen Web Framework Core Library"},
     {vsn,          "2.4.0"},
-    {applications, [kernel, stdlib, sasl, crypto, nprocreg, inets, nitro_cache, simple_bridge]},
+    {applications, [kernel, stdlib, sasl, crypto, nprocreg, inets, nitro_cache, simple_bridge, qdate]},
     {registered,   []},
 	{licenses, ["MIT"]},
 	{maintainers, ["Jesse Gumm"]},
