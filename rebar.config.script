@@ -9,11 +9,11 @@ case erlang:function_exported(rebar3, main, 1) of
         %% Rebuild deps, possibly including those that have been moved to
         %% profiles
         [{deps, [
-            {rekt, {git, "git://github.com/nitrogen/rekt",  {branch, master}}},
-            {stacktrace_compat, {git, "git://github.com/g-andrade/stacktrace_compat", {tag, "1.0.1"}}},
-            {simple_bridge, {git, "git://github.com/nitrogen/simple_bridge", {branch, master}}},
-            {nitro_cache, {git, "git://github.com/nitrogen/nitro_cache", {branch, master}}},
-            {nprocreg, {git, "git://github.com/nitrogen/nprocreg", {branch, master}}},
-            {qdate, {git, "git://github.com/choptastic/qdate", {branch, master}}}
+            {rekt, {git, "https://github.com/nitrogen/rekt",  {branch, master}}},
+            {stacktrace_compat, {git, "https://github.com/g-andrade/stacktrace_compat", {tag, "1.0.1"}}},
+            {simple_bridge, {git, "https://github.com/nitrogen/simple_bridge", {branch, master}}},
+            {nitro_cache, {git, "https://github.com/nitrogen/nitro_cache", {branch, master}}},
+            {nprocreg, {git, "https://github.com/nitrogen/nprocreg", {branch, master}}},
+            {qdate, {git, "https://github.com/choptastic/qdate", {branch, master}}}
         ]} | lists:keydelete(deps, 1, CONFIG)]
 end.
