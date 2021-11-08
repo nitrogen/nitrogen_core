@@ -11,12 +11,10 @@
     render_element/1,
     passthrough/1
 ]).
+-compile(export_all).
 
-% TODO - Revisit parsing in the to_module_callback. This
-% will currently fail if we encounter a string like:
-% "String with ) will fail"
-% or
-% "String with ]]] will fail"
+% TODO - Revisit parsing in parse/2.  This fails if we encounter a
+% string like "String with ]]] will fail".
 
 
 -spec reflect() -> [atom()].
@@ -165,26 +163,23 @@ get_token(<<H, Rest/binary>>, Acc) -> get_token(Rest, <<Acc/binary, H>>).
 to_module_callback("mobile_script") -> mobile_script;
 to_module_callback("script") -> script;
 to_module_callback(Tag) ->
-    % Get the module...
-    {ModuleString, Rest1} = peel(Tag, $:),
-    Module = wf:to_atom(string:strip(ModuleString)),
+    MFARegExp = "(.+?):([^\(]*)\\((.*)\\)(.*)",
 
-    % Get the function...
-    {FunctionString, Rest2} = peel(Rest1, $(),
-    Function = wf:to_atom(string:strip(FunctionString)),
+    Opts = [{capture, all_but_first, list}],
 
-    {ArgString, Rest3} = peel(Rest2, $)),
-
-    case Rest3 of
-        [] -> [{Module, Function, ArgString}];
-        _ ->  [{Module, Function, ArgString}|to_module_callback(tl(Rest3))]
+    case re:run(Tag, MFARegExp, Opts) of
+        {match, [M, F, A, Rest]} ->
+            Module = wf:to_atom(string:strip(M)),
+            Function = wf:to_atom(string:strip(F)),
+            ArgString = A,
+            case Rest of
+                [] -> [{Module, Function, ArgString}];
+                _  -> [{Module, Function, ArgString}|to_module_callback(Rest)]
+            end;
+        nomatch ->
+            %% This prepares it to be handled by convert_callback_tuple_to_function/5
+            [{Tag, '', []}]
     end.
-
-peel(S, Delim) -> peel(S, Delim, []).
-peel([], _Delim, Acc) -> {lists:reverse(Acc), []};
-peel([Delim|T], Delim, Acc) -> {lists:reverse(Acc), T};
-peel([H|T], Delim, Acc) -> peel(T, Delim, [H|Acc]).
-
 
 %%% EVALUATE %%%
 
@@ -214,7 +209,9 @@ convert_callback_tuple_to_function(Module, Function, ArgString, Bindings, Module
     Module1 = get_module_from_alias(Module, ModuleAliases),
     _F = fun() ->
         % Convert args to term...
-        Args = to_term(ArgString, Bindings),
+        Args = try to_term(ArgString, Bindings)
+               catch _:_ -> [ArgString]
+               end,
 
         % If the function in exported, then call it.
         % Otherwise return undefined...

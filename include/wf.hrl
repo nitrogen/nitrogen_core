@@ -34,8 +34,8 @@
                                 | {data_field_name()}
                                 | {data_field_name(),data_field_value()}].
 -type wire_priority()       :: eager | normal | defer.
--type class()               :: string() | binary() | atom().
--type text()                :: string() | binary() | iolist().
+-type class()               :: string() | binary() | atom() | [string() | binary() | atom()].
+-type text()                :: string() | binary() | iolist() | integer().
 -type html_encode()         :: boolean() | whites | fun((term()) -> text()).
 -type html()                :: string() | binary() | iolist().
 -type script()              :: string() | binary() | iolist().
@@ -122,9 +122,20 @@
 %%% LOGGING %%%
 -ifndef(debug_print).
 -define(debug_print, true).
+
+-ifndef(LOGGER_HRL).
 -define(PRINT(Var), error_logger:info_msg("DEBUG: ~p~n~p:~p~n~p~n  ~p~n", [self(), ?MODULE, ?LINE, ??Var, Var])).
 -define(LOG(Msg, Args), error_logger:info_msg(Msg, Args)).
+-define(WF_LOG(Msg, Args), error_logger:info_msg(Msg, Args)).
 -define(DEBUG, error_logger:info_msg("DEBUG: ~p:~p~n", [?MODULE, ?LINE])).
+
+-else.
+%% logger.hrl has been included - avoid redefining the OTP ?LOG macro
+-define(WF_LOG(Msg, Args), ?LOG_INFO(Msg, Args)).
+-define(PRINT(Var), ?LOG_INFO("DEBUG: ~p: ~p~n", [??Var, Var])).
+-define(DEBUG, ?LOG_INFO("DEBUG: ~p:~p~n", [?MODULE, ?LINE])).
+-endif.
+
 -endif.
 
 %%% GUARDS %%%
@@ -300,7 +311,7 @@
 -record(delay_body, {?ELEMENT_BASE(element_delay_body),
         delegate                :: module(),
         tag=undefined           :: term(),
-        placeholder             :: body(),
+        placeholder             :: undefined | body(),
         method=optimized        :: optimized | simple,
         delay=0                 :: integer()  %% milliseconds to wait to populate
     }).
@@ -987,7 +998,7 @@
         args=[]                 :: [text()]
     }).
 -record(set, {?ACTION_BASE(action_set),
-        value=""                :: text() | integer()
+        value=""                :: text() | integer() | atom()
     }).
 -record(set_multiple, {?ACTION_BASE(action_set_multiple),
         values=[]               :: [text()]
@@ -1146,7 +1157,7 @@
 ).
 -record(validatorbase, {?VALIDATOR_BASE(undefined)}).
 -record(is_required, {?VALIDATOR_BASE(validator_is_required),
-        unless_has_value        :: undefined | [id()]
+        unless_has_value        :: undefined | id() | [id()]
     }).
 -record(is_email, {?VALIDATOR_BASE(validator_is_email)}).
 -record(is_integer, {?VALIDATOR_BASE(validator_is_integer),

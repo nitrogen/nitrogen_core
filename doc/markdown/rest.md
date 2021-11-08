@@ -6,18 +6,23 @@
 ## Overview
 
   Nitrogen's default route handler gives you an easy way to add a no-nonsense
-  RESTful handler to a page module. If you need to add a simple a RESTful
-  interface without wanting to deal with Webmachine or Cowboy's restful
+  RESTful handler to a page module. If you need to add a simple RESTful
+  interface without dealing with Webmachine or Cowboy's RESTful
   handlers, and just use straight up Nitrogen, you can do this trivially.
 
-  Simply stated, if you add `-behaviour(nitrogen_rest).` to a module, instead
+  If you add `-behaviour(nitrogen_rest).` to a module, instead
   of looking for a `main()` function as the entry point, it will instead expect
   an entry point based on the HTTP request method used.  So a `GET` request
   will look for a `get()` function, and so on.
 
   Each Entry Point function expects a single argument, `PathInfo`, which is
-  exactly yhe same information that would be retrieved from calling
+  exactly the same information that would be retrieved from calling
   `wf:path_info()`.
+  
+  NOTE: This is designed to work with the standard `dynamic_route_handler`
+  provided with Nitrogen. If you switch away from using the
+  `dynamic_route_handler`, then you'll have to modify whatever route handler you
+  do use to incorporate this module.
 
 ### Request Methods Module Entry Points
 
@@ -50,4 +55,3 @@
 
  *  [Route Handler Docs](route.md)
 
- *  [REST Handler Demo](http://nitrogenproject.com/demos/rest_handler)

@@ -99,7 +99,7 @@ finish(_Config, State) ->
 
 first_request(Type, Error, Stacktrace, _Config, _State) ->
     %% Print the error message to the Erlang console
-    ?LOG("~p~n", [{error, Type, Error, Stacktrace}]),
+    ?WF_LOG("~p~n", [{error, Type, Error, Stacktrace}]),
 
     %% Set the response status code to 500 (internal server error)
     wf:status_code(500),
@@ -109,7 +109,7 @@ first_request(Type, Error, Stacktrace, _Config, _State) ->
 
 postback_request(Type, Error, Stacktrace, _Config, _State) ->
     %% Print the error message to the Erlang console
-    ?LOG("~p~n", [{error, Type, Error, Stacktrace}]),
+    ?WF_LOG("~p~n", [{error, Type, Error, Stacktrace}]),
 
     %% Set the status code to 500 (internal server error)
     wf:status_code(500),
@@ -143,7 +143,7 @@ finish(_Config, State) ->
 
 first_request(Type, Error, Stacktrace, _Config, _State) ->
     %% Print the error message to the Erlang console
-    ?LOG("~p~n", [{error, Type, Error, Stacktrace}]),
+    ?WF_LOG("~p~n", [{error, Type, Error, Stacktrace}]),
 
     %% Set the response status code to 500 (internal server error)
     wf:status_code(500),
@@ -164,7 +164,7 @@ body(Stacktrace) ->
 
 postback_request(Type, Error, Stacktrace, _Config, _State) ->
     %% Print the error message to the Erlang console
-    ?LOG("~p~n", [{error, Type, Error, Stacktrace}]),
+    ?WF_LOG("~p~n", [{error, Type, Error, Stacktrace}]),
 
     %% Note, we don't set the status code to 500. If we did, the browser will
     %% simply discard any javascript. So we keep a 200 status code and print

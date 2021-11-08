@@ -51,7 +51,7 @@ get_cached(Key, Function, TTL) ->
         Result = Function(),
 
         %% Restore the caching status to its previous state (and if the state is unchanged, save some cycles by skipping it
-        ?WF_IF(Caching, wf_context:caching(Caching)),
+        ?WF_IF(not(Caching), wf_context:caching(Caching)),
 
         %% Return the result
         Result

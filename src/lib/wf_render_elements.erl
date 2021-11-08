@@ -24,7 +24,7 @@ render_and_trap_actions(Elements) ->
     end,
     {ok, JS} = wf_render_actions:render_action_queue(),
     wf_context:action_queue(OldActionQueue),
-    {ok, wf:to_unicode_binary(Html), wf:to_unicode_binary(JS)}.
+    {ok, Html, wf:to_unicode_binary(JS)}.
 
 
 % Render elements and return the HTML that was produced.
@@ -36,8 +36,10 @@ render_elements(Elements) ->
 -spec inner_render_elements(E :: body()) -> html().
 inner_render_elements(undefined) ->
     [];
-inner_render_elements(Es) when is_list(Es) ->
-    [inner_render_elements(E) || E <- Es];
+inner_render_elements([]) ->
+    [];
+inner_render_elements([E|T]) ->
+    [inner_render_elements(E) | inner_render_elements(T)];
 inner_render_elements(E) when is_tuple(E) ->
     render_element(E);
 inner_render_elements(mobile_script) ->
@@ -71,8 +73,13 @@ inner_render_element(#elementbase{show_if=false}, _Element) ->
     [];
 inner_render_element(Base = #elementbase{show_if=true}, Element) ->
     Module = Base#elementbase.module, 
-    {module, Module} = code:ensure_loaded(Module),
-    prepare_and_render_or_transform(Module, Base, Element).
+    case code:ensure_loaded(Module) of
+        {module, Module} ->
+            prepare_and_render_or_transform(Module, Base, Element);
+        Response ->
+            ElementName = element(1, Element),
+            exit({failed_to_ensure_module_loaded, [{element, ElementName}, {'response_from code:ensure_loaded', Response}, {module, Module}, {record, Element}]})
+    end.
 
 -spec prepare_and_render_or_transform(Module :: atom(), #elementbase{}, nitrogen_element()) -> html().
 prepare_and_render_or_transform(Module, Base, Element) ->

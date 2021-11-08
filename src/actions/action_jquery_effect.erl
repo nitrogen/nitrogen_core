@@ -54,8 +54,12 @@ render_action(Record) ->
             [wf:f("effect('~s', ~s, ~p, ", [Effect, Options, Speed]), ActionsFun, ");"];
         'toggle' ->
             [wf:f("toggle('~s', ~s, ~p, ", [Effect, Options, Speed]), ActionsFun, ");"];
-        'add_class'    ->
+        'add_class' when Speed==undefined; Speed==0 ->
+            [wf:f("addClass('~s'); ", [Class]), execute_actions_fun(ActionsFun), ";"];
+        'add_class' ->
             [wf:f("addClass('~s', ~p, ", [Class, Speed]), ActionsFun, ");"];
+        'remove_class' when Speed==undefined; Speed==0 ->
+            [wf:f("removeClass('~s'); ",[Class]), execute_actions_fun(ActionsFun), ";"];
         'remove_class' ->
             [wf:f("removeClass('~s', ~p, ", [Class, Speed]), ActionsFun, ");"];
         'animate' ->
@@ -63,6 +67,10 @@ render_action(Record) ->
     end,
     [wf:f("objs('~s').", [Target]), Script].
 
+execute_actions_fun("null") ->
+    "";
+execute_actions_fun(ActionsFun) ->
+    [ActionsFun,"()"].
 
 if_visible(IfVisible, IfInvisible) ->
     [
