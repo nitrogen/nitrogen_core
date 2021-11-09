@@ -161,7 +161,7 @@ call_element_render(RenderOrTransform, Module, Element) ->
     %io:format("Time to render: ~p: ~p~n",[element(1, Element), Time]),
     inner_render_elements(NewElements).
 
--spec normalize_id(list()) -> string().
+-spec normalize_id(list() | atom() | binary()) -> string().
 normalize_id(ID) -> 
     case wf:to_string_list(ID) of
         [".wfid_" ++ _] = [NormalizedID] -> NormalizedID;
