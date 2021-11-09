@@ -334,7 +334,7 @@
         html_encode=true        :: html_encode()
     }).
 -record(textbox, {?ELEMENT_BASE(element_textbox),
-        text=""                 :: text(),
+        text=""                 :: text() | undefined,
         maxlength=""            :: integer() | string(),
         size=""                 :: integer() | string(),
         placeholder=""          :: text(),
@@ -533,7 +533,7 @@
 -record(sync_panel, {?ELEMENT_BASE(element_sync_panel),
         body_fun                :: undefined | fun(),
         triggers=[]             :: [term()],
-        pool=sync_panel         :: atom()
+        pool=sync_panel         :: term()
     }).
 -record(fieldset, {?ELEMENT_BASE(element_fieldset),
         body=[]                 :: body(),
@@ -797,13 +797,13 @@
 -record(iframe, {?ELEMENT_BASE(element_iframe),
         align                   :: text() | atom(),
         frameborder             :: integer() | undefined,
-        height                  :: integer() | undefined(),
+        height                  :: integer() | undefined,
         name=""                 :: text(),
         sandbox=""              :: text(),
         seamless                :: atom() | text(),
         src                     :: url(),
         srcdoc=""               :: text(),
-        width                   :: integer() | undefined(),
+        width                   :: integer() | undefined,
         allowfullscreen=true    :: boolean()
     }).
 
