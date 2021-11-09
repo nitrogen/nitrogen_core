@@ -797,13 +797,13 @@
 -record(iframe, {?ELEMENT_BASE(element_iframe),
         align                   :: text() | atom(),
         frameborder             :: integer() | undefined,
-        height                  :: integer(),
+        height                  :: integer() | undefined(),
         name=""                 :: text(),
         sandbox=""              :: text(),
         seamless                :: atom() | text(),
         src                     :: url(),
         srcdoc=""               :: text(),
-        width                   :: integer(),
+        width                   :: integer() | undefined(),
         allowfullscreen=true    :: boolean()
     }).
 
