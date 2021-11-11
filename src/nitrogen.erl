@@ -58,8 +58,7 @@ ws_message({binary, Bin}, _Bridge, _State) ->
     Reply = try
         ws_message_catched(binary_to_term(Bin, [safe]))
     catch
-        Class:Error ->
-            Stacktrace = erlang:get_stacktrace(),
+        Class:Error:Stacktrace ->
             CrashReturn = wf_core:run_websocket_crash(Class, Error, Stacktrace),
             [<<"nitrogen_event:">>,CrashReturn]
     end,

@@ -194,8 +194,8 @@ recurse_body(Fun, Rec0) when is_tuple(Rec0), element(2, Rec0)==is_element ->
             false ->
                 Rec
         end
-    catch E:T ->
-        error_logger:warning_msg("Error trying to apply function to an element tuple: ~p~nError: ~p: ~p.~nStacktrace: ~p",[Rec0, E, T, erlang:get_stacktrace()]),
+    catch E:T:S ->
+        error_logger:warning_msg("Error trying to apply function to an element tuple: ~p~nError: ~p: ~p.~nStacktrace: ~p",[Rec0, E, T, S]),
         Rec0
     end;
 recurse_body(_Fun, X) ->

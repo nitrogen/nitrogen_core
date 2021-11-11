@@ -161,8 +161,8 @@ test(AutoPostback, Name, Setup, Assertion, Options) when is_function(Setup, 0), 
                 internal_fail(Name, {timeout, Timeout})
          end
     catch
-        Class:Error ->
-            internal_fail(Name, {Class, Error, erlang:get_stacktrace()})
+        Class:Error:Stacktrace ->
+            internal_fail(Name, {Class, Error, Stacktrace})
     end.
 
 maybe_wire_autopostback(false=_AutoPostback, _, _) ->
@@ -177,8 +177,8 @@ maybe_wire_autopostback(true=_AutoPostback, Name, Delay) ->
         Expectation -> pass(Name);
         Other -> fail(Name, [{expected, Expectation}, {returned, Other}])
     catch
-        Class:Error ->
-            fail(Name, {Class, Error, erlang:get_stacktrace()})
+        Class:Error:Stacktrace ->
+            fail(Name, {Class, Error, Stacktrace})
     end).
 
 test_event(Name) ->
@@ -227,8 +227,8 @@ test_js(Name, Setup, JS, Assertion, Options) ->
                 internal_fail(Name, {timeout, Timeout})
          end
     catch
-        Class:Error ->
-            internal_fail(Name, {Class, Error, erlang:get_stacktrace()})
+        Class:Error:Stacktrace ->
+            internal_fail(Name, {Class, Error, Stacktrace})
     end.
 
 wire_api_call(JS, Name, _Delay=0) ->

@@ -35,7 +35,7 @@
                                 | {data_field_name(),data_field_value()}].
 -type wire_priority()       :: eager | normal | defer.
 -type class()               :: string() | binary() | atom() | [string() | binary() | atom()].
--type text()                :: string() | binary() | iolist() | integer().
+-type text()                :: string() | binary() | iolist() | integer() | atom().
 -type html_encode()         :: boolean() | whites | fun((term()) -> text()).
 -type html()                :: string() | binary() | iolist().
 -type script()              :: string() | binary() | iolist().
