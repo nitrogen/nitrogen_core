@@ -1,4 +1,4 @@
-REBAR?=./rebar3
+REBAR?=$(shell which rebar3 || echo ./rebar3)
 
 .PHONY: test
 
@@ -12,6 +12,9 @@ compile:
 
 eunit:
 	$(REBAR) eunit
+
+publish:
+	$(REBAR) hex publish
 
 test:
 	mkdir -p test
