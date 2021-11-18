@@ -13,7 +13,9 @@
 -export ([
     pickle/1,
     depickle/1, 
-    depickle/2
+    depickle/2,
+    inner_depickle/1,
+    repickle/1
 ]).
 
 -compile(export_all).
@@ -67,6 +69,11 @@ inner_depickle(PickledData) ->
     Signature = ?WF_HASH(<<Key/binary,Cipher/binary>>),
     DecryptedBinary = ?WF_DECRYPT(Key,IV,Cipher),
     {_Data,_Time} = binary_to_term(DecryptedBinary).
+
+
+repickle(PickledData) ->
+    {Data, _} = inner_depickle(PickledData),
+    pickle(Data).
 
 -spec signkey() -> binary().
 signkey() ->
