@@ -10,3 +10,4 @@ test/
 deps/
 *.dump
 _build
+ebin/
