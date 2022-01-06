@@ -655,12 +655,29 @@ Example:
 
 * `wf:cookie(Key, Value) -> ok`
 
-   Tell Nitrogen to set a cookie on the browser. Uses \"/\" for the Path, and Nitrogen's
+   Tell Nitrogen to set a cookie in the browser. Uses \"/\" for the Path, and Nitrogen's
    session timeout setting for the MinutesToLive value.
 
+* `wf:cookie(Key, Value, Options) -> ok`
+
+   Tell Nitrogen to set a cookie on the browser with the provided `Options`.  `Options`
+   is a proplist that looks something like this:
+
+   ```erlang
+   Options = [
+     {domain, "example.com"},
+     {path, "/"},
+     {max_age, 3600}, %% expire in an hour (3600 seconds)
+     {secure, true},   %% secure only?
+     {http_only, true},  %% HTTP-only means cookie can't be accessed with Javascript
+     {same_site, lax}  %% CSRF protection option. `lax` is usually recommended
+   ]
+   ```
+   The values of `Options` can be reviewed on [Mozilla's documentation for the Set-Cookie Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie)
+ 
 * `wf:cookie(Key, Value, Path, MinutesToLive) -> ok`
 
-   Tell Nitrogen to set a cookie on the browser under the specified Path that is valid
+   Tell Nitrogen to set a cookie in the browser under the specified Path that is valid
    for a certain number of minutes.
 
 * `wf:delete_cookie(Key) -> ok`

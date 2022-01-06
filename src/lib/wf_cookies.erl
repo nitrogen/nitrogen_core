@@ -50,6 +50,7 @@ set_websocket_cookie(Cookie, Value, Options) ->
         path=proplists:get_value(path, Options, "/"),
         domain=proplists:get_value(path, Options, undefined),
         minutes_to_live=proplists:get_value(minutes_to_live, Options, 20),
+        same_site=proplists:get_value(same_site, Options, lax),
         secure=proplists:get_value(secure, Options, false),
         http_only=proplists:get_value(http_only, Options, false)
     },
@@ -57,7 +58,7 @@ set_websocket_cookie(Cookie, Value, Options) ->
 
 set_bridge_cookie(Cookie, Value, Options) ->
 	Bridge = wf_context:bridge(),
-  Options2 = minutes_to_live_to_max_age(Options),
+    Options2 = minutes_to_live_to_max_age(Options),
 	NewBridge = sbw:set_cookie(Cookie, Value, Options2, Bridge),
 	wf_context:bridge(NewBridge),
     ok.
