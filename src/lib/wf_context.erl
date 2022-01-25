@@ -477,7 +477,7 @@ init_context(Bridge) ->
             make_handler(crash_handler, default_crash_handler),
 
             % Stateful handlers...
-            make_handler(session_handler, simple_session_handler),
+            make_handler(session_handler, canister_session_handler),
             make_handler(state_handler, default_state_handler),
             make_handler(identity_handler, default_identity_handler),
             make_handler(role_handler, default_role_handler),

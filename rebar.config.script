@@ -13,6 +13,7 @@ case erlang:function_exported(rebar3, main, 1) of
             {simple_bridge, {git, "https://github.com/nitrogen/simple_bridge", {branch, master}}},
             {nitro_cache, {git, "https://github.com/nitrogen/nitro_cache", {branch, master}}},
             {nprocreg, {git, "https://github.com/nitrogen/nprocreg", {branch, master}}},
+            {canister, {git, "https://github.com/nitrogen/canister", {branch, master}}},
             {qdate, {git, "https://github.com/choptastic/qdate", {branch, master}}}
         ]} | lists:keydelete(deps, 1, CONFIG)]
 end.
