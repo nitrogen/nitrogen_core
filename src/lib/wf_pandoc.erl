@@ -8,6 +8,7 @@
 convert(Contents, Options)  ->
     ScratchDir = simple_bridge_util:get_scratch_dir("./scratch"),
     RandFile = filename:join(ScratchDir, "tempfile_" ++ wf:to_list(?WF_RAND_UNIFORM(1000000000000, 99999999999999999))),
+    ok = filelib:ensure_dir(RandFile),
     file:write_file(RandFile, Contents),
     Converted = convert_file(RandFile, Options),
     file:delete(RandFile),
