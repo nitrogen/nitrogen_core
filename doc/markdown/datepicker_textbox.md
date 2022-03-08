@@ -30,27 +30,20 @@
 * `options` (list of {Key,Value} properties) - Set the jQuery UI options. You can view the full
    list of options at the official [jQuery UI Datepicker API Documentation](http://api.jqueryui.com/datepicker/).
    Here are a few common options:
-
   * `formatDate` (format string) - Change the format of the displayed
       date (e.g.: `"yy-mm-dd"`, `"mm/dd/yy"` ).
-
   * `showOtherMonths` (boolean) - Set to true to allow the datepicker to
       show the previous and next month's last and first days in the otherwise
       blank spaces.
-
   * `selectOtherMonths` (boolean) - If `showOtherMonths` is true, then
       clicking those leading and trailing dates will also put the date in the
       textbox.
-
   * `numberOfMonths` (integer) - Display the specified number of months
       in the calendar popup rather than just a single month.
-
   * `changeMonth` (boolean) - Put a "Month" dropdown box in the calendar
       popup
-
   * `changeYear` (boolean) - Put a "Year" dropdown box in the calendar
       popup
-
   * `showButtonPanel` (boolean) - Put a button panel below the calendar
       popup which includes a "Today" button, and a "Close" button (the text of
       which [can be customized](http://api.jqueryui.com/datepicker/#option-showButtonPanel)).
