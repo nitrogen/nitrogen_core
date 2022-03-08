@@ -64,6 +64,15 @@ verify_depickle_time(PickledTime, TTLSeconds) ->
 -spec inner_depickle(PickledData :: pickled()) -> {term(), erlang:timestamp()}.
 inner_depickle(PickledData) ->
     Key = signkey(),
+    try inner_depickle(Key, PickledData)
+    catch _:_ ->
+        case old_signkey() of
+            undefined -> throw(unable_to_depickle);
+            Key2 -> inner_depickle(Key2, PickledData)
+        end
+    end.
+
+inner_depickle(Key, PickledData) ->
     Decoded = modified_base64_decode(wf:to_binary(PickledData)),
     <<IV:16/binary,Signature:20/binary,Cipher/binary>> = Decoded,
     Signature = ?WF_HASH(<<Key/binary,Cipher/binary>>),
@@ -90,6 +99,20 @@ signkey() ->
                 erlang:md5(wf:to_list(Key))
         end
     end).
+
+-spec old_signkey() -> binary().
+old_signkey() ->
+    wf:cache(old_signkey, 1000, fun() ->
+        case config_handler:get_value(old_signkey) of
+            undefined ->
+                undefined;
+            Key when byte_size(Key)==16 -> 
+                Key;
+            Key ->
+                erlang:md5(wf:to_list(Key))
+        end
+    end).
+
 
 -spec modified_base64_encode(binary()) -> binary().
 % @doc Replace '+' and '/' with '-' and '_', respectively.  Strip '='.
