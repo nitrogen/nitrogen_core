@@ -29,15 +29,18 @@ init(_Config, _State) ->
 finish(_Config, State) -> 
     % Drop the session cookie...
     Timeout = wf:config_default(session_timeout, 20),
+    SameSite = wf:config_default(session_cookie_same_site, lax),
+    Secure = wf:config_default(session_cookie_secure, false),
     Opts = [
         {path, "/"},
         {minutes_to_live, Timeout},
         {http_only, true},
-        {same_site, lax}
+        {same_site, SameSite},
+        {secure, Secure}
     ],
     ok = wf:cookie(get_cookie_name(), wf:pickle(State), Opts),
     {ok, []}.
-
+    
 get_value(Key, DefaultValue, Config, State) -> 
     ID = get_session_id(Config, State),
     Value = wf:coalesce([canister:get(ID, Key), DefaultValue]),
