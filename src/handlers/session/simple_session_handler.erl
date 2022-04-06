@@ -35,10 +35,14 @@ init(_Config, _State) ->
 finish(_Config, State) -> 
     % Drop the session cookie...
     Timeout = wf:config_default(session_timeout, 20),
+    SameSite = wf:config_default(session_cookie_same_site, lax),
+    Secure = wf:config_default(session_cookie_secure, false),
     Opts = [
         {path, "/"},
         {minutes_to_live, Timeout},
-        {http_only, true}
+        {http_only, true},
+        {same_site, SameSite},
+        {secure, Secure}
     ],
     ok = wf:cookie(get_cookie_name(), wf:pickle(State), Opts),
     {ok, []}.
