@@ -30,7 +30,7 @@ transform_element(#qr{data=Data, size=Size, class=Class, id=Id, title=Title}) ->
     Chld = "H",
     Chl = Data,
 
-    Path = "http://chart.apis.google.com/chart?",
+    Path = "https://chart.apis.google.com/chart?",
     QS = wf:to_qs([
         {cht, Cht},
         {chs, Chs},
