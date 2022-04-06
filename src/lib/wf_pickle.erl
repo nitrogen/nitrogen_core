@@ -15,6 +15,7 @@
     depickle/1, 
     depickle/2,
     inner_depickle/1,
+    inner_depickle/2,
     repickle/1
 ]).
 
