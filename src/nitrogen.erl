@@ -52,6 +52,8 @@ ws_init(Bridge) ->
     call_main_handler_ws_init(),
     ok.
 
+ws_message({text, <<"ping">>}, _Bridge, _State) ->
+    {reply, {text, <<"pong">>}};
 ws_message({text, _Other}, _Bridge, _State) ->
     noreply;
 ws_message({binary, Bin}, _Bridge, _State) ->
