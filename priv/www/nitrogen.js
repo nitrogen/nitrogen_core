@@ -24,6 +24,7 @@ function NitrogenClass(o) {
 
     // If no websocket messages are received in 30000 milliseconds, this will trigger a ping test with the server
     this.$websocket_inactivity_interval = 30000;
+    this.$websocket_connecting = false;
     this.$last_websocket_received=0;
     this.$anchor_root_path = document;
     this.$params = new Object();
@@ -442,7 +443,7 @@ NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventCo
     if(this.$websockets_enabled) {
         delete params["pageContext"];
         var bertified = Bert.encode_to_bytearray(Bert.tuple(Bert.atom("nitrogen_postback"), params));
-        this.$websocket.send(bertified.buffer);
+        this.$ws_send(bertified.buffer);
     }else{
         this.$event_obj = jQuery.ajax({ 
             url: this.$url,
@@ -514,7 +515,7 @@ NitrogenClass.prototype.$do_system_event = function(eventContext) {
     if(this.$websockets_enabled) {
         delete params["pageContext"];
         var bertified = Bert.encode_to_bytearray(Bert.tuple(Bert.atom("nitrogen_postback"), params));
-        n.$websocket.send(bertified.buffer);
+        n.$ws_send(bertified.buffer);
     }
     else{
         n.$system_event_obj = $.ajax({
@@ -1274,6 +1275,25 @@ NitrogenClass.prototype.$mermaid = function(el, mermaidCode) {
 
 /*** WEBSOCKETS ***/
 
+NitrogenClass.prototype.$ws_send = function(data) {
+    //console.log(this.$websocket.readyState);
+    if(this.$websocket.readyState==this.$websocket.OPEN) {
+        this.$websocket.send(data);
+        return "ok";
+    }else if(this.$websocket.readyState==this.$websocket.OPENING) {
+        var n = this;
+        // try sending again in 100ms
+        setTimeout(function() { n.$ws_send(data) }, 100);
+        return "ok";
+    }else{
+        console.log("Unable to send message. Websocket is in an unsendable state. Force-closing websocket.");
+        this.$ws_close();
+        return "closed";
+    }
+};
+        
+
+
 NitrogenClass.prototype.$enable_websockets = function() {
     this.$console_log("Websockets Enabled");
     this.$websockets_enabled = true;
@@ -1284,7 +1304,7 @@ NitrogenClass.prototype.$enable_websockets = function() {
 
 NitrogenClass.prototype.$flush_switchover_comet_actions = function() {
     var bertified = Bert.encode_to_bytearray(Bert.atom("flush_switchover_comet_actions"));
-    this.$websocket.send(bertified);
+    this.$ws_send(bertified);
     // On success, this will run "Nitrogen.$reconnect_system()" (found in
     // nitrogen:ws_message_catched/1)
 };
@@ -1295,6 +1315,7 @@ NitrogenClass.prototype.$disable_websockets = function() {
         n.$console_log("Websockets disabled or disconnected");
     }
     n.$websockets_enabled = false;
+    n.$websockets_connecting = false;
     n.$websocket_status = 0;
 
     // If websockets had ever succeeded, then disabling websockets is an
@@ -1311,38 +1332,46 @@ NitrogenClass.prototype.$disable_websockets = function() {
         if(typeof n.$websocket_reconnect_timer != "null") {
             clearTimeout(n.$websocket_reconnect_timer);
         }
-        n.$current_websocket_reconnect_interval *= 4;
+        n.$current_websocket_reconnect_interval += Math.min(n.$current_websocket_reconnect_interval, 5000);
         if(n.$current_websocket_reconnect_interval > n.$max_websocket_reconnect_interval)
             n.$current_websocket_reconnect_interval = n.$max_websocket_reconnect_interval;
+    console.log("Attempting reconnect in " + n.$current_websocket_reconnect_interval + " ms");
         n.$websocket_reconnect_timer = setTimeout(function() { n.$ws_init() }, n.$current_websocket_reconnect_interval);
     }
 };
 
 NitrogenClass.prototype.$ws_init = function() {
     try {
-        this.$websocket_status = -1;
-        Bert.assoc_array_key_encoding("binary");
-        var this2 = this;
-        var has_opened = false;
-        var e = new Error();
-        var ws_url = this.$ws_url(location.href);
-        this.$websocket = new WebSocket(ws_url);
-        this.$websocket.binaryType="arraybuffer";
-        this.$websocket.onopen = function(evt) {
-            has_opened=true;
-            this2.$last_sleep_time = this2.$get_time();
-            this2.$ws_open()
-        };
-        this.$websocket.onclose = function(evt) {this2.$ws_close()};
-        this.$websocket.onmessage = function(evt) {this2.$ws_message(evt.data) };
-        this.$websocket.onerror = function(evt) {this2.$ws_close()};
-        setTimeout(function() {
-            if(!has_opened) {
-                console.log("Websockets timed out. Falling back to AJAX for postbacks.");
-                this2.$disable_websockets();
-            }
-        }, 5000);
-    }catch(ex){ }
+        if(this.$websocket_connecting) {
+            console.log("Currently attempting to connect to websockets. This is a duplicate request to connect. Skipping...");
+        }else{
+            this.$websocket_connecting=true;
+            this.$websocket_status = -1;
+            Bert.assoc_array_key_encoding("binary");
+            var this2 = this;
+            var has_opened = false;
+            var e = new Error();
+            var ws_url = this.$ws_url(location.href);
+            this.$websocket = new WebSocket(ws_url);
+            this.$websocket.binaryType="arraybuffer";
+            this.$websocket.onopen = function(evt) {
+                has_opened=true;
+                this2.$last_sleep_time = this2.$get_time();
+                this2.$ws_open()
+            };
+            this.$websocket.onclose = function(evt) {this2.$ws_close()};
+            this.$websocket.onmessage = function(evt) {this2.$ws_message(evt.data) };
+            this.$websocket.onerror = function(evt) {this2.$ws_close()};
+            setTimeout(function() {
+                if(!has_opened) {
+                    console.log("Websockets timed out. Falling back to AJAX for postbacks.");
+                    this2.$disable_websockets();
+                }
+            }, 5000);
+        }
+    }catch(ex){
+        this.$websocket_connecting=false;
+    }
 };
 
 NitrogenClass.prototype.$ws_url = function(url) {
@@ -1351,6 +1380,7 @@ NitrogenClass.prototype.$ws_url = function(url) {
 };
 
 NitrogenClass.prototype.$ws_open = function() {
+    this.$websocket_connecting = false;
     this.$current_websocket_reconnect_interval = this.$websocket_reconnect_interval;
     this.$websocket_last_time = this.$get_time();
     this.$send_pagecontext();
@@ -1362,7 +1392,7 @@ NitrogenClass.prototype.$ws_open = function() {
 NitrogenClass.prototype.$send_pagecontext = function() {
     var pageContext = this.$params["pageContext"];
     var bertified = Bert.encode_to_bytearray(Bert.tuple(Bert.atom("page_context"), Bert.binary(pageContext)));
-    this.$websocket.send(bertified);
+    this.$ws_send(bertified);
 };
 
 NitrogenClass.prototype.$ws_close = function() {
@@ -1421,14 +1451,16 @@ NitrogenClass.prototype.$attempt_websockets = function() {
 
 NitrogenClass.prototype.$init_reconnect_loop = function() {
     var n = this;
-    setInterval(function() {n.$reconnect_loop()}, n.$sleep_check_interval);
+    setTimeout(function() {
+        n.$reconnect_loop();
+        n.$init_reconnect_loop();
+    }, n.$sleep_check_interval);
 };
 
 NitrogenClass.prototype.$reconnect_loop = function() {
     if(this.$websocket_status==1) {
-        console.log("reconnect loop");
         var currentTime = this.$get_time();
-        if (currentTime > (this.$last_sleep_time + this.$sleep_check_interval * 3)) {
+        if (currentTime > (this.$last_sleep_time + this.$sleep_check_interval * 2)) {
             console.log("Potential Sleep Detected. Checking websocket status");
             this.$ping_test();
         }else if(currentTime > (this.$last_websocket_received + this.$websocket_inactivity_interval)) {
@@ -1444,10 +1476,12 @@ NitrogenClass.prototype.$ping_test = function() {
         console.log("Ping test is still running. Skipping");
     }else{
         this.$ping_sent = this.$get_time();
-        this.$websocket.send("ping");
-        this.$ping_test_running = true;
-        var n = this;
-        this.$ping_timer = setTimeout(function() { n.$pong_not_received }, this.$ping_timeout);
+        var result = this.$ws_send("ping");
+        if(result=="ok") {
+            this.$ping_test_running = true;
+            var n = this;
+            this.$ping_timer = setTimeout(function() { n.$pong_not_received(); }, this.$ping_timeout);
+        }
     }
 };
 
@@ -1463,7 +1497,11 @@ NitrogenClass.prototype.$pong_received = function() {
 NitrogenClass.prototype.$pong_not_received = function() {
     console.log("Websocket does not appear to be connected. Triggering reconnect...");
     this.$ping_test_running = false;
-    this.$disable_websockets();
+    try {
+        this.$websocket.close();
+    }catch(ex) {
+        this.$disable_websockets();
+    }
 };
 
 NitrogenClass.prototype.$get_time = function() {
