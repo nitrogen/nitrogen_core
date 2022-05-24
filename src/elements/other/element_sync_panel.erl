@@ -7,16 +7,20 @@
     refresh/1,
     refresh/2,
     event/1,
-    update/3
+    update/3,
+    run_fun/1
 ]).
 
 -define(STATE_KEY, sync_panel_body_trigger).
-
 -spec reflect() -> [atom()].
 reflect() -> record_info(fields, sync_panel).
 
+
+
 -spec render_element(#sync_panel{}) -> #panel{}.
-render_element(#sync_panel{body_fun=Fun}) when not(is_function(Fun)) ->
+render_element(#sync_panel{body_fun=Fun}) 
+        when not(is_function(Fun)) 
+            andalso not(is_tuple(Fun) andalso (tuple_size(Fun)==2 orelse tuple_size(Fun)==3)) ->
     throw({sync_panel_element, {body_fun_not_a_function, Fun}});
 render_element(E = #sync_panel{
         body_fun=BodyFun,
@@ -28,8 +32,15 @@ render_element(E = #sync_panel{
     wf:comet_global(fun() -> update(Targetid, Triggers, BodyFun) end, Pool),
     register_target_body_fun(Targetid, BodyFun, Pool, Triggers),
     Panel = wf_utils:copy_fields(SyncPanel, #panel{}),
-    Panel#panel{body=BodyFun()}.
+    Panel#panel{body=run_fun(BodyFun)}.
    
+run_fun(Fun) when is_function(Fun) ->
+    Fun();
+run_fun({M,F}) ->
+    M:F();
+run_fun({M,F,A}) ->
+    erlang:apply(M,F,A).
+
 -spec register_target_body_fun(Targetid :: id(), BodyFun :: fun(), Pool :: term(), [Trigger :: term()]) -> ok.
 register_target_body_fun(_,_,_,[]) -> ok;
 register_target_body_fun(Targetid, BodyFun, Pool, [Trigger|Triggers]) ->
@@ -50,7 +61,7 @@ refresh(Pool, Trigger) ->
         undefined ->
             wf:send_global(Pool, {trigger, Trigger});
         {Targetid, BodyFun} ->
-            Body = BodyFun(),
+            Body = run_fun(BodyFun),%BodyFun(),
             wf:update(Targetid, Body),
             wf:send_global(Pool, {trigger, Trigger})
             %% Disabled sending generated body across.
@@ -64,7 +75,7 @@ update(Targetid, Triggers, BodyFun) ->
         {trigger, T} ->
             case lists:member(T, Triggers) of
                 true ->
-                    Rendered = BodyFun(),
+                    Rendered = run_fun(BodyFun), %BodyFun(),
                     wf:update(Targetid, Rendered),
                     wf:flush();
                 false ->
