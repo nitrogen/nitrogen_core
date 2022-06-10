@@ -19,8 +19,8 @@ render_element(Record) ->
         wf:html_encode(Record#tablecell.text, Record#tablecell.html_encode),
         Record#tablecell.body
     ],
-
-    wf_tags:emit_tag(td, Body, [
+    Type = case Record#tablecell.isheader of true -> th; false -> td end,
+    wf_tags:emit_tag(Type, Body, [
         {id, Record#tablecell.html_id},
         {class, [tablecell, Record#tablecell.class]},
         {title, Record#tablecell.title},

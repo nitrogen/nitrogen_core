@@ -598,7 +598,8 @@
         align="left"            :: text() | atom(),
         valign="middle"         :: text() | atom(),
         colspan=1               :: integer(),
-        rowspan=1               :: integer()
+        rowspan=1               :: integer(),
+        isheader=false          :: true|false
     }).
 -record(singlerow, {?ELEMENT_BASE(element_singlerow),
         cells                   :: body()
