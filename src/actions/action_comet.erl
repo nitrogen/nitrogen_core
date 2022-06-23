@@ -89,7 +89,7 @@ status(Pid) ->
     Context = proplists:get_value(context, PD),
     PC = Context#context.page_context,
     Seriesid = PC#page_context.series_id,
-    ?PRINT({seriesid, Seriesid}),
+    %?PRINT({seriesid, Seriesid}),
     {ok, AccPid} = get_accumulator_pid_no_start(Seriesid),
     AccPid ! info.
 
@@ -211,7 +211,7 @@ event(start_async) ->
     SeriesID = wf_context:series_id(),
     case get_accumulator_pid_no_start(SeriesID) of
         undefined ->
-            wf:wire("document.comet_started=false; Nitrogen.$set_disconnected(true); Nitrogen.$reconnect_system();");
+            wf:wire("document.comet_started=false; Nitrogen.$set_disconnected_no_notice(true); Nitrogen.$reconnect_system();");
         {ok, _Pid} ->
             case effective_async_mode() of
                 {websocket, Pid} ->
@@ -344,6 +344,7 @@ pool_loop(Processes) ->
             end;
         {'DOWN', _, process, LeavePid, _} ->
             [Pid!{'LEAVE', LeavePid} || Pid <- Processes],
+            %?PRINT({connected_pid_left, LeavePid}),
             NewProcesses = Processes -- [LeavePid],
             case NewProcesses == [] of 
                 false -> pool_loop(NewProcesses);
@@ -384,6 +385,7 @@ get_accumulator_pid_no_start(SeriesID) ->
 % and gathers actions from the various AsyncFunctions in order 
 % to send it the page when the actions are requested.
 accumulator_loop(Guardians, Actions, Waiting, TimerRef, WebsocketPid, ProcessTags) ->
+    %?PRINT({accululator_loop, self()}),
     receive
         {add_guardian, Pid} ->
             erlang:monitor(process, Pid),
@@ -508,6 +510,11 @@ guardian_process(FunctionPid, AccumulatorPid, PoolPid, DyingMessage) ->
             end,
             erlang:exit(FunctionPid, async_die),
             erlang:exit({guardian_process, exiting_accumulator_died});
+
+        {'DOWN', _, process, PoolPid, {pool_loop, exiting_empty_pool}} ->
+            ?PRINT({empty_pool, PoolPid, {function_pid, FunctionPid}}),
+            %% An empty pool is safe to kill without making a big deal of it
+            erlang:exit({guardian_process, exiting_empty_pool});
 
         {'DOWN', _, process, PoolPid, Info} ->
             % The pool should never die on us.
@@ -735,7 +742,14 @@ make_async_event(Interval) ->
     #event { type=system, delay=Interval, delegate=?MODULE, postback=start_async }.
 
 % Return true if the process is alive, accounting for processes on other nodes. 
-is_remote_process_alive(Pid) ->
-    is_pid(Pid) andalso
-    pong == net_adm:ping(node(Pid)) andalso
-    rpc:call(node(Pid), erlang, is_process_alive, [Pid]).
+is_remote_process_alive(Pid) when is_pid(Pid) ->
+    Node = node(Pid),
+    case Node==node() of
+        true ->
+            erlang:is_process_alive(Pid);
+        false ->
+            pong == net_adm:ping(node(Pid))
+                andalso rpc:call(node(Pid), erlang, is_process_alive, [Pid])
+    end;
+is_remote_process_alive(_) ->
+    false.
