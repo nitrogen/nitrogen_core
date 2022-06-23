@@ -1383,9 +1383,8 @@ NitrogenClass.prototype.$disable_websockets = function() {
             if(n.$websocket_reconnect_timer_start == null || n.$older_than(n.$websocket_reconnect_timer_start, n.$current_websocket_reconnect_interval - 10)) {
                 n.$current_websocket_reconnect_interval += Math.min(n.$current_websocket_reconnect_interval, 5000);
             }else{
-                n.$console_log("It seems the reconnect timer happened too quickly. So we'll repeat the reconnect logic in the same time.");
+                n.$console_log("It seems the reconnect timer happened too quickly. So we'll repeat the reconnection interval we just used.");
             }
-
 
             // We don't want to wait longer than the max interval between checks
             if(n.$current_websocket_reconnect_interval > n.$max_websocket_reconnect_interval)
