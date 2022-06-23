@@ -118,9 +118,9 @@ update(Targetid, Triggers, BodyFun) ->
 event({still_alive, TRef}) ->
     timer:cancel(TRef);
 event({reconnect, Targetid, Triggers, BodyFun, Pool}) ->
-    ?PRINT({reconnecting, Targetid, Triggers, BodyFun, Pool}),
+    %?PRINT({reconnecting, Targetid, Triggers, BodyFun, Pool}),
     Body = run_fun(BodyFun),
-    ?PRINT({updating, Targetid, Body}),
-    wf:update(Targetid, run_fun(BodyFun)),
+    %?PRINT({updating, Targetid, Body}),
+    wf:update(Targetid, Body),
     start_comet(Targetid, Triggers, BodyFun, Pool).
 

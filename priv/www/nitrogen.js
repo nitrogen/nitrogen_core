@@ -19,6 +19,7 @@ function NitrogenClass(o) {
     // This is the starting value for the websocket reconnection interval.
     // It's how many milliseconds to attempt to reconnect after a disconnect. It will quadruple until it reaches $max_websocket_reconnect_interval below
     this.$websocket_reconnect_interval = 25;
+    this.$websocket_reconnect_timer_start = null;
     this.$current_websocket_reconnect_interval = 25;
     this.$max_websocket_reconnect_interval = 30000;
     this.$websocket_closing_timeout = 1000; //if websockets take longer than 1000 seconds to close, just mark them closed and ignore
@@ -1372,12 +1373,27 @@ NitrogenClass.prototype.$disable_websockets = function() {
                 n.$set_disconnected(true);
             }
 
-            if(typeof n.$websocket_reconnect_timer != "null") {
+            if(n.$websocket_reconnect_timer != null) {
                 clearTimeout(n.$websocket_reconnect_timer);
             }
-            n.$current_websocket_reconnect_interval += Math.min(n.$current_websocket_reconnect_interval, 5000);
+
+            // In some cases, it seems the browser is weird is jumps ahead through time when recovering from sleep.
+            // In this case, we must check if the amount of time waited *actually* corresponds to the amount we were supposed to wait.
+            // If not, we repeat the previously iterval.
+            if(n.$websocket_reconnect_timer_start == null || n.$older_than(n.$websocket_reconnect_timer_start, n.$current_websocket_reconnect_interval - 10)) {
+                n.$current_websocket_reconnect_interval += Math.min(n.$current_websocket_reconnect_interval, 5000);
+            }else{
+                n.$console_log("It seems the reconnect timer happened too quickly. So we'll repeat the reconnect logic in the same time.");
+            }
+
+
+            // We don't want to wait longer than the max interval between checks
             if(n.$current_websocket_reconnect_interval > n.$max_websocket_reconnect_interval)
                 n.$current_websocket_reconnect_interval = n.$max_websocket_reconnect_interval;
+
+            // Reset the timer
+            n.$websocket_reconnect_timer_start = n.$get_time();
+            
             n.$console_log("Attempting reconnect in " + n.$current_websocket_reconnect_interval + " ms");
             n.$websocket_reconnect_timer = setTimeout(function() { n.$ws_init() }, n.$current_websocket_reconnect_interval);
         }
@@ -1416,7 +1432,7 @@ NitrogenClass.prototype.$ws_init = function() {
                     this2.$ws_open();
                 }else{
                     evt.target.close();
-                    this2.$console_log("An older websocket attempt connected.  Ignoring it to avoid conflicts");
+                    this2.$console_log("An older websocket attempt connected.  Closing it to avoid conflicts.");
                 }
             };
             this.$websocket.onclose = function(evt) {
