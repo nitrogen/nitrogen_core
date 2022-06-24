@@ -330,7 +330,7 @@ NitrogenClass.prototype.$validate_and_serialize = function(validationGroup) {
         } else {
             // Skip any unchecked radio boxes.
             if ((this.type=="radio" || this.type=="checkbox") && !this.checked) return;
-            if (this.type=="select-multiple" && $(this).val()==null) return;
+            if (this.type=="select-multiple" && ($(this).val()==null || $(this).val()==[])) return;
             if (this.type=='button' || this.type=='submit') return;
             
             // Skip elements that aren't nitrogen elements (they won't have a
@@ -341,7 +341,9 @@ NitrogenClass.prototype.$validate_and_serialize = function(validationGroup) {
             // It's a good element. Let's get the value, and return convert to
             // an empty string if it's null
             var val = $(this).val();
-            if(val == null) val = "";
+
+            if(val == null || (this.type=="select-multiple" && $(this).val()==[]))
+                val = "";
         
             // Add to the parameter list to send to the server
             params[id] = val;
@@ -1595,6 +1597,9 @@ NitrogenClass.prototype.$reconnect_loop = function() {
 };
 
 NitrogenClass.prototype.$older_than = function(comparison_time, age_in_ms) {
+    if(comparison_time == null){
+        return true;
+    }
     var currentTime = this.$get_time();
     return currentTime > (comparison_time + age_in_ms);
 }
@@ -1608,6 +1613,7 @@ NitrogenClass.prototype.$ping_test = function() {
         if(result=="ok") {
             this.$ping_test_running = true;
             var n = this;
+            this.$console_log("Ping test sent");
             this.$ping_timer = setTimeout(function() { n.$pong_not_received(); }, this.$ping_timeout);
         }
     }
