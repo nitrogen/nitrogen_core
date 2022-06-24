@@ -330,7 +330,7 @@ NitrogenClass.prototype.$validate_and_serialize = function(validationGroup) {
         } else {
             // Skip any unchecked radio boxes.
             if ((this.type=="radio" || this.type=="checkbox") && !this.checked) return;
-            if (this.type=="select-multiple" && ($(this).val()==null || $(this).val()==[])) return;
+            if (this.type=="select-multiple" && ($(this).val()==null || ($(this).val().length==0))) return;
             if (this.type=='button' || this.type=='submit') return;
             
             // Skip elements that aren't nitrogen elements (they won't have a
@@ -342,7 +342,9 @@ NitrogenClass.prototype.$validate_and_serialize = function(validationGroup) {
             // an empty string if it's null
             var val = $(this).val();
 
-            if(val == null || (this.type=="select-multiple" && $(this).val()==[]))
+            console.log(val);
+
+            if(val == null || (this.type=="select-multiple" && val.length==0))
                 val = "";
         
             // Add to the parameter list to send to the server
