@@ -29,11 +29,22 @@ render_element(E = #sync_panel{
         
     Targetid = wf:temp_id(),
     SyncPanel = E#sync_panel{id=Targetid},
-    wf:comet_global(fun() -> update(Targetid, Triggers, BodyFun) end, Pool),
+    start_comet(Targetid, Triggers, BodyFun, Pool),
     register_target_body_fun(Targetid, BodyFun, Pool, Triggers),
     Panel = wf_utils:copy_fields(SyncPanel, #panel{}),
     Panel#panel{body=run_fun(BodyFun)}.
-   
+  
+start_comet(Targetid, Triggers, BodyFun, Pool) ->
+    Reconnect = [#event{postback={reconnect, Targetid, Triggers, BodyFun, Pool}, delegate=?MODULE}],
+    CometFun = fun() -> update(Targetid, Triggers, BodyFun) end,
+    wf:wire(#comet{
+        pool=Pool,
+        scope=global,
+        function=CometFun,
+        reconnect_actions=Reconnect
+    }).
+    %wf:comet_global(fun() -> update(Targetid, Triggers, BodyFun) end, Pool).
+
 run_fun(Fun) when is_function(Fun) ->
     Fun();
 run_fun({M,F}) ->
@@ -41,13 +52,13 @@ run_fun({M,F}) ->
 run_fun({M,F,A}) ->
     erlang:apply(M,F,A).
 
--spec register_target_body_fun(Targetid :: id(), BodyFun :: fun(), Pool :: term(), [Trigger :: term()]) -> ok.
+-spec register_target_body_fun(Targetid :: id(), BodyFun :: fun() | tuple(), Pool :: term(), [Trigger :: term()]) -> ok.
 register_target_body_fun(_,_,_,[]) -> ok;
 register_target_body_fun(Targetid, BodyFun, Pool, [Trigger|Triggers]) ->
     wf:state({?STATE_KEY, Pool, Trigger},{Targetid, BodyFun}),
     register_target_body_fun(Targetid, BodyFun, Pool, Triggers).
 
--spec get_target_body_fun(Pool :: term(), Trigger :: term()) -> {Targetid :: id(), BodyFun :: fun()} | undefined.
+-spec get_target_body_fun(Pool :: term(), Trigger :: term()) -> {Targetid :: id(), BodyFun :: fun() | tuple()} | undefined.
 get_target_body_fun(Pool, Trigger) ->
     wf:state({?STATE_KEY, Pool, Trigger}).
 
@@ -105,4 +116,11 @@ update(Targetid, Triggers, BodyFun) ->
     ?MODULE:update(Targetid, Triggers, BodyFun).
 
 event({still_alive, TRef}) ->
-    timer:cancel(TRef).
+    timer:cancel(TRef);
+event({reconnect, Targetid, Triggers, BodyFun, Pool}) ->
+    %?PRINT({reconnecting, Targetid, Triggers, BodyFun, Pool}),
+    Body = run_fun(BodyFun),
+    %?PRINT({updating, Targetid, Body}),
+    wf:update(Targetid, Body),
+    start_comet(Targetid, Triggers, BodyFun, Pool).
+
