@@ -1539,7 +1539,9 @@ NitrogenClass.prototype.$older_than = function(comparison_time, age_in_ms) {
 }
 
 NitrogenClass.prototype.$ping_test = function() {
-    if(this.$ping_test_running) {
+    /*if(this.$system_event_is_running || this.$event_is_running) {
+        this.$console_log("A Nitrogen event is running.  Let's not risk interrupting it.");
+    }else */if(this.$ping_test_running) {
         this.$console_log("Ping test is still running. Skipping");
     }else{
         this.$ping_sent = this.$get_time();
