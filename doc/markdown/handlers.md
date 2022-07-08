@@ -9,7 +9,7 @@ Core Nitrogen behavior has been broken out into well-defined, pluggable
 behavior modules called /handlers/. Handlers allow you to easily substitute
 your own logic for things like session, security, routing, and others. Simply
 create a module that implements one of the existing behaviors, and register it
-to call `nitrogen:handler/2` between the `nitrogen:init_request/2` and
+to call `nitrogen:handler/2` or `nitrogen:handler/3` between the `nitrogen:init_request/2` and
 `nitrogen:run/0` calls found inside the `nitrogen_xxx` (where `xxx` is the
 webserver used, for example 'mochiweb', 'yaws', 'cowboy', etc).
 
@@ -33,17 +33,28 @@ loading, but that's because the `nitrogen:handler/2` function determines,
 based on the `behavior()` defined within the handler module, which handler it
 is we're actually loading.
 
-## nitrogen:handler(HandlerName, Config)
+## nitrogen:handler(HandlerModule, Config)
 
 `nitrogen:handler/2` is the way to function to connect your custom handler into
 Nitrogen's handler system. This function takes two arguments:
 
- *  `HandlerName` - The name of the module.
+ *  `HandlerModule` - The name of the module.
 
  *  `Config` - Any configuration settings for this handler. This variable
       could be just about anything, a proplist containing API keys or IP
       addresses of related servers (say for a session handler connected to
       an external memcache or something.
+
+## nitrogen:handler(HandlerName, HandlerModule, Config)
+
+There is also the function `nitrogen:handler/3` which is useful if your modules
+are stripped and the function `nitrogen:handler/2` is not able to discovery the
+handler based on the `behaviour()` attribute. For such cases the
+`nitrogen:handler/3` works receiving an additional parameter:
+
+ * `HandlerName` - The type of handler.
+
+The rest of the parameters follows the `nitrogen:handler/2` definition.
 
 ## Common Handler Behavior Arguments
 

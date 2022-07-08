@@ -8,7 +8,8 @@
     call/3,
     call_readonly/2, 
     call_readonly/3,
-    set_handler/2
+    set_handler/2,
+    set_handler/3
 ]).
 
 -spec init(#handler_context{}) -> ok.
