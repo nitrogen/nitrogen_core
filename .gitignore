@@ -9,3 +9,4 @@ test/
 .rebar/
 deps/
 *.dump
+rebar

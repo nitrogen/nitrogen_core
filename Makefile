@@ -1,18 +1,29 @@
 .PHONY: test deps
 
-all: deps compile
+all: rebar deps compile
 
-deps:
+deps: rebar
 	./rebar get-deps
 
-compile:
+compile: rebar
 	./rebar compile
 
-dialyzer-deps-compile:
+dialyzer-deps-compile: rebar
 	./rebar --config "rebar.dialyzer.config" get-deps
 	./rebar --config "rebar.dialyzer.config" compile
 
-clean:
+rebar:
+	@(echo "Building rebar2 for your platform..")
+	@(cd /tmp && \
+	git clone https://github.com/choptastic/rebar && \
+	cd rebar && \
+	./bootstrap)
+	@(echo "Moving rebar executable into your Nitrogen directory")
+	@(mv /tmp/rebar/rebar .)
+	@(echo "Cleaning up rebar remnants")
+	@(cd /tmp && rm -fr rebar)
+
+clean: rebar
 	./rebar clean
 
 eunit: clean deps compile
