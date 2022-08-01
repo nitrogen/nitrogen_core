@@ -86,7 +86,7 @@ size_class(Prefix0, Size0) ->
 
 add_class_from_prefix(Prefix, Vsn0, Type) ->
     Vsn = wf:to_integer(Vsn0, undefined),
-    add_class_from_prefix_(wf:to_atom(Prefix, icon), wf:to_integer(Vsn, 0), wf:to_atom(Type, regular)).
+    add_class_from_prefix_(wf:to_atom(Prefix, icon), wf:to_integer(Vsn, 0), wf:to_existing_atom(Type, regular)).
 
 %% fontawesome things
 add_class_from_prefix_(fa, 5, solid) ->
