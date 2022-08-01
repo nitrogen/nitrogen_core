@@ -10,7 +10,6 @@
 
 -define(WF_EXTEND(OrigRec, NewRec, Module, Fields), -extend({OrigRec, NewRec, [{module, Module} | Fields]})).
 
-
 %%% TYPES FOR DIALYZER %%%
 
 %% Allow Dialzer to be run on the .ebin files
@@ -155,6 +154,10 @@
         end)
     ).
 
+-define(WF_SAFE(Exp, Default), (try Exp catch _:_ -> Default end)).
+
+-define(WF_SAVE(Exp), ?WF_SAFE(Exp, undefined)).
+
 %%% TERNARY IF AND VARIATIONS %%%
 -define(WF_IF(Term,IfTrue,IfFalse),
     fun() ->
@@ -263,6 +266,13 @@
 -record(pre, {?ELEMENT_BASE(element_pre),
         text=""                 :: text(),
         html_encode=true        :: html_encode()
+     }).
+-record(icon, {?ELEMENT_BASE(element_pre),
+        icon                    :: atom() | string() | binary() | tuple(), 
+        prefix=icon             :: atom() | string() | binary(),
+        type                    :: atom(),
+        size                    :: integer() | atom() | string() | binary(),
+        version=undefined       :: integer() | atom() | string()
      }).
 -record(strong, {?ELEMENT_BASE(element_strong),
         body=""                 :: body(),

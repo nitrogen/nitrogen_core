@@ -17,7 +17,7 @@ render_action(#if_value{target=Target, map=Map, value=undefined, else=Else}) ->
                 [
                     wf:f(<<"case('~s'): ">>,[Value]),
                     Actions,
-                    <<"break;">>
+                    <<";break;">>
                 ]
             end, Map),
             <<"default: ">>,

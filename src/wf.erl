@@ -7,6 +7,8 @@
 -include("wf.hrl").
 -compile (export_all).
 
+v() -> 1.
+
 %%% EXPOSE WIRE, UPDATE, FLASH %%%
 wire(Actions) ->
     ok = wire(undefined, undefined, Actions).
@@ -163,26 +165,50 @@ depickle(SerializedData, TTLSeconds) ->
 to_list(T) ->
     _String = wf_convert:to_list(T).
 
+to_list(T, Default) ->
+    _String = ?WF_SAFE(to_list(T), Default).
+
 to_unicode_list(T) ->
     _String = wf_convert:to_unicode_list(T).
+
+to_unicode_list(T, Default) ->
+    _String = ?WF_SAFE(to_unicode_binary(T), Default).
 
 to_atom(T) ->
     _Atom = wf_convert:to_atom(T).
 
+to_atom(T, Default) ->
+    _Atom = ?WF_SAFE(to_atom(T), Default).
+
 to_existing_atom(T) ->
     _Atom = wf_convert:to_existing_atom(T).
+
+to_existing_atom(T, Default) ->
+    _Atom = ?WF_SAFE(to_existing_atom(T), Default).
 
 to_binary(T) ->
     _Binary = wf_convert:to_binary(T).
 
+to_binary(T, Default) ->
+    _Binary = ?WF_SAFE(to_binary(T), Default).
+
 to_unicode_binary(T) ->
     _Binary = wf_convert:to_unicode_binary(T).
+
+to_unicode_binary(T, Default) ->
+    _Binary = ?WF_SAFE(to_unicode_binary(T), Default).
 
 to_integer(T) ->
     _Integer = wf_convert:to_integer(T).
 
+to_integer(T, Default) ->
+    _Integer = ?WF_SAFE(to_integer(T), Default).
+
 to_float(T) ->
     _Float = wf_convert:to_float(T).
+
+to_float(T, Default) ->
+    _Float = ?WF_SAFE(to_float(T), Default).
 
 to_string_list(Term) ->
     _StringList = wf_convert:to_string_list(Term).
