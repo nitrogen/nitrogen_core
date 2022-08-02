@@ -267,7 +267,7 @@
         text=""                 :: text(),
         html_encode=true        :: html_encode()
      }).
--record(icon, {?ELEMENT_BASE(element_pre),
+-record(icon, {?ELEMENT_BASE(element_icon),
         icon                    :: atom() | string() | binary() | tuple(), 
         prefix=icon             :: atom() | string() | binary(),
         type                    :: atom(),

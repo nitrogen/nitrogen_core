@@ -7,7 +7,10 @@
 -include("wf.hrl").
 -export([
     reflect/0,
-    render_element/1
+    render_element/1,
+    scripts/0,
+    css/2,
+    js/2
 ]).
 
 -spec reflect() -> [atom()].
@@ -118,7 +121,7 @@ add_class_from_prefix_(_, _, _) ->
     "".
 
 size_to_style(fa, _) ->
-    "";
+    <<>>;
 size_to_style(_, Size0) ->
     case size_to_font_size(normalized_size(Size0)) of
         <<>> -> <<>>;
@@ -139,7 +142,7 @@ size_to_font_size(<<"6x">>) -> <<"6em">>;
 size_to_font_size(<<"7x">>) -> <<"7em">>;
 size_to_font_size(<<"8x">>) -> <<"8em">>;
 size_to_font_size(<<"9x">>) -> <<"9em">>;
-size_to_font_size(_) -> "".
+size_to_font_size(_) -> <<>>.
 
 tag_from_prefix(fa) ->
     i;
@@ -147,3 +150,89 @@ tag_from_prefix(la) ->
     i;
 tag_from_prefix(icon) ->
     span.
+
+scripts() ->
+    Prefix = wf:config(default_icon_prefix),
+    Vsn = wf:config(default_icon_version),
+    [
+        css(Prefix, Vsn),
+        js(Prefix, Vsn)
+    ].
+
+
+css(Prefix, Vsn) ->
+    {Url, Sha} = case wf:config(default_icon_css) of
+        undefined -> css_src(Prefix, Vsn);
+        Css ->
+            {wf:to_binary(Css), wf:config(default_icon_css_sha)}
+    end,
+    render_css(Url, Sha).
+
+render_css(X, _) when X == undefined;
+                      X == "";
+                      X == <<>> ->
+    "";
+render_css(Url, Sha) ->
+    Integrity = integrity_attr(Sha),
+    <<"<link rel=\"stylesheet\" href=\"",Url/binary,"\" ",Integrity/binary, " crossorigin=\"anonymous\" referrerpolicy=\"no-referrer\" />\n">>.
+
+js(Prefix, Vsn) ->
+    {Url, Sha} = case wf:config(default_icon_js) of
+        undefined -> js_src(Prefix, Vsn);
+        Js ->
+            {wf:to_binary(Js), wf:config(default_icon_js_sha)}
+    end,
+    render_js(Url, Sha).
+
+render_js(X, _) when X == undefined;
+                      X == "";
+                      X == <<>> ->
+    "";
+render_js(Url, Sha) ->
+    Integrity = integrity_attr(Sha),
+    <<"<script src=\"",Url/binary,"\" ",Integrity/binary," crossorigin=\"anonymous\" referrerpolicy=\"no-referrer\"></script>\n">>.
+
+integrity_attr(Sha) when is_list(Sha) ->
+    integrity_attr(wf:to_binary(Sha, <<>>));
+integrity_attr(Sha) when is_binary(Sha), Sha =/= <<>> ->
+    <<" integrity=\"",Sha/binary,"\" ">>;
+integrity_attr(_) ->
+    <<>>.
+
+css_src(fa, 4) ->
+    {
+        <<"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">>,
+        <<"sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==">>
+    };
+css_src(fa, 5) ->
+    {
+        <<"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">>,
+        <<"sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==">>
+    };
+css_src(fa, 6) ->
+    {
+        <<"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">>,
+        <<"sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==">>
+    };
+css_src(_, _) ->
+    {<<>>, <<>>}.
+
+
+js_src(fa, 5) ->
+    {
+        <<"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js">>,
+        <<"sha512-Tn2m0TIpgVyTzzvmxLNuqbSJH3JP8jm+Cy3hvHrW7ndTDcJ1w5mBiksqDBb8GpE2ksktFvDB/ykZ0mDpsZj20w==">>
+    };
+js_src(fa, 6) ->
+    {
+        <<"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/js/all.min.js">>,
+        <<"sha512-8pHNiqTlsrRjVD4A/3va++W1sMbUHwWxxRPWNyVlql3T+Hgfd81Qc6FC5WMXDC+tSauxxzp1tgiAvSKFu1qIlA==">>
+    };
+js_src(la, _) ->
+    {
+        <<"https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">>,
+        <<"sha512-vebUliqxrVkBy3gucMhClmyQP9On/HAWQdKDXRaAlb/FKuTbxkjPKUyqVOxAcGwFDka79eTF+YXwfke1h3/wfg==">>
+    };
+js_src(_, _) ->
+    {<<>>, <<>>}.
+
