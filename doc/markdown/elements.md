@@ -81,6 +81,7 @@
 ## Other
 
  *  [Bind](bind.md)
+ *  [Icon](icon.md)
  *  [File](file.md)
  *  [Flash](flash.md)
  *  [Draggable](draggable.md)

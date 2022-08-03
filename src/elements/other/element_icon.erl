@@ -1,6 +1,6 @@
 % vim: sw=4 ts=4 et ft=erlang
 % Nitrogen Web Framework for Erlang
-% Copyright (c) 2008-2010 Rusty Klophaus
+% Copyright (c) 2022 Jesse Gumm
 % See MIT-LICENSE for licensing information.
 
 -module (element_icon).
@@ -25,6 +25,7 @@ render_element(Record = #icon{icon=Icon, prefix=Prefix0, version=Vsn0, type=Type
     Tag = tag_from_prefix(Prefix),
     Style = size_to_style(Prefix, Size),
     IconClass = icon_class(Prefix, Icon),
+    Body = body_from_prefix_icon(Prefix, Icon),
     Attributes = [
         {id, Record#icon.html_id},
         {class, [Record#icon.class, Class, SizeClass, IconClass]},
@@ -32,7 +33,7 @@ render_element(Record = #icon{icon=Icon, prefix=Prefix0, version=Vsn0, type=Type
         {data_fields, Record#icon.data_fields},
         {'aria-hidden', true}
     ],
-    wf_tags:emit_tag(Tag, [], Attributes).
+    wf_tags:emit_tag(Tag, Body, Attributes).
 
 maybe_get_config(Key, Val) when Val=/=undefined,
                                   Val=/="",
@@ -41,6 +42,13 @@ maybe_get_config(Key, Val) when Val=/=undefined,
 maybe_get_config(_, Val) ->
     Val.
 
+body_from_prefix_icon(material, Icon) ->
+    wf:to_binary(Icon);
+body_from_prefix_icon(_, _) ->
+    <<>>.
+
+icon_class(material, _) ->
+    <<>>;
 icon_class(Prefix0, Icon0) ->
     Prefix = wf:to_binary(Prefix0),
     Icon = wf:to_binary(Icon0),
@@ -58,23 +66,23 @@ normalized_size(X) when X=='xl'; X=='xlarge' ->
     <<"xl">>;
 normalized_size(X) when X=='xxl'; X=='2xl'; X=='xxlarge' ->
     <<"2xl">>;
-normalized_size(X) when X==1; X=='1x' ->
-    <<"1x">>;
-normalized_size(X) when X==2; X=='2x' ->
-    <<"2x">>;
-normalized_size(X) when X==3; X=='3x' ->
-    <<"3x">>;
-normalized_size(X) when X==4; X=='4x' ->
-    <<"4x">>;
-normalized_size(X) when X==5; X=='5x' ->
-    <<"5x">>;
-normalized_size(X) when X==6; X=='6x' ->
-    <<"6x">>;
-normalized_size(X) when X==7; X=='7x' ->
-    <<"7x">>;
-normalized_size(X) when X==8; X=='8x' ->
-    <<"8x">>;
-normalized_size(X) when X==9; X=='9x' ->
+normalized_size(X) when X==1; X=='1x'; X=='1' ->
+    <<"1x">>;                                 
+normalized_size(X) when X==2; X=='2x'; X=='2' ->
+    <<"2x">>;                                 
+normalized_size(X) when X==3; X=='3x'; X=='3' ->
+    <<"3x">>;                                 
+normalized_size(X) when X==4; X=='4x'; X=='4' ->
+    <<"4x">>;                                 
+normalized_size(X) when X==5; X=='5x'; X=='5' ->
+    <<"5x">>;                                 
+normalized_size(X) when X==6; X=='6x'; X=='6' ->
+    <<"6x">>;                                 
+normalized_size(X) when X==7; X=='7x'; X=='7' ->
+    <<"7x">>;                                 
+normalized_size(X) when X==8; X=='8x'; X=='8' ->
+    <<"8x">>;                                 
+normalized_size(X) when X==9; X=='9x'; X=='9' ->
     <<"9x">>;
 normalized_size(X) ->
     wf:to_binary(X, <<>>).
@@ -112,11 +120,24 @@ add_class_from_prefix_(fa, 6, duotone) ->
     <<"fa-duotone">>;
 add_class_from_prefix_(fa, 6, _) ->
     <<"fa-regular">>;
-add_class_from_prefix_(fa, _, _) ->
+add_class_from_prefix_(fa, 4, _) ->
     <<"fa">>;
+add_class_from_prefix_(fa, _, Type) ->
+    %% If no version is provided, default to version 6 (the latest as of Aug 2022)
+    add_class_from_prefix(fa, 6, Type);
 %% icons8.com/line-awesome
 add_class_from_prefix_(la, _, _) ->
     <<"la">>;
+%% https://fonts.google.com/icons
+add_class_from_prefix_(material, _, rounded) ->
+    <<"material-symbols-rounded">>;
+add_class_from_prefix_(material, _, sharp) ->
+    <<"material-symbols-sharp">>;
+add_class_from_prefix_(material, _, _) ->
+    <<"material-symbols-outlined">>;
+%% https://icons.getbootstrap.com
+add_class_from_prefix_(bi, _, _) ->
+    <<"bi">>;
 add_class_from_prefix_(_, _, _) ->
     "".
 
@@ -148,7 +169,9 @@ tag_from_prefix(fa) ->
     i;
 tag_from_prefix(la) ->
     i;
-tag_from_prefix(icon) ->
+tag_from_prefix(bi) ->
+    i;
+tag_from_prefix(_) ->
     span.
 
 scripts() ->
@@ -213,6 +236,16 @@ css_src(fa, 6) ->
     {
         <<"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">>,
         <<"sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==">>
+    };
+css_src(material, _) ->
+    {
+        <<"<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200\" />">>,
+        <<>>
+    };
+css_src(bi, _) ->
+    {
+        <<"https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css">>,
+        <<"sha512-5PV92qsds/16vyYIJo3T/As4m2d8b6oWYfoqV+vtizRB6KhF1F9kYzWzQmsO6T3z3QG2Xdhrx7FQ+5R1LiQdUA==">>
     };
 css_src(_, _) ->
     {<<>>, <<>>}.
