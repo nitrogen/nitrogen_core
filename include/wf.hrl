@@ -357,7 +357,10 @@
         on_invalid              :: undefined | actions(),
         delegate                :: module(),
         html_name               :: html_name(),
-        type=text               :: string() | atom(),
+        type=text               :: string() | binary() | atom(),
+        step                    :: text() | integer(),
+        min                     :: undefined | text(),
+        max                     :: undefined | text(),
         autocomplete="off"      :: string() | atom()
     }).
 -record(datepicker_textbox, {?ELEMENT_BASE(element_datepicker_textbox),
