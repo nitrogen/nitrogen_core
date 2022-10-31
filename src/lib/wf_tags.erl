@@ -17,6 +17,7 @@
     TagName =/= 'th' andalso 
     TagName =/= 'td' andalso 
     TagName =/= 'p' andalso
+    TagName =/= 'i' andalso
     TagName =/= 'a' andalso
     TagName =/= 'ul' andalso
     TagName =/= 'ol' andalso

@@ -254,6 +254,11 @@
         text=""                 :: text(),
         html_encode=true        :: html_encode()
     }).
+-record(i, {?ELEMENT_BASE(element_i),
+        body=[]                 :: body(),
+        text=""                 :: text(),
+        html_encode=true        :: html_encode()
+    }).
 -record(label, {?ELEMENT_BASE(element_label),
         body=[]                 :: body(),
         text=""                 :: text(),
