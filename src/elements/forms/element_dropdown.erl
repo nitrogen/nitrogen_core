@@ -70,7 +70,7 @@ format_options(#dropdown{options=Opts, value=Value0, html_encode=HtmlEncode}) ->
 binary_or_undefined(undefined) ->
     undefined;
 binary_or_undefined(V) ->
-    wf:to_binary(V).
+    wf:to_unicode_binary(V).
 
 
 create_option(Option) ->
@@ -135,7 +135,7 @@ is_selected(DropDownValue, #option{value=OptValue}) ->
     %% Finally, if none of the above short-circuits trip, then we can convert
     %% #option.value to binary and compare directly. If they match, then it's
     %% selected.
-    wf:to_binary(OptValue) =:= DropDownValue.
+    wf:to_unicode_binary(OptValue) =:= DropDownValue.
 
 -include_lib("eunit/include/eunit.hrl").
 
