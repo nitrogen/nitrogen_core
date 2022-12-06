@@ -266,6 +266,7 @@
         for=""                  :: id()
     }).
 -record(pre, {?ELEMENT_BASE(element_pre),
+        body=""                 :: body(),
         text=""                 :: text(),
         html_encode=true        :: html_encode()
      }).
@@ -338,6 +339,11 @@
         text=""                 :: text(),
         html_encode=true        :: html_encode()
     }).
+-record(code, {?ELEMENT_BASE(element_code),
+        body=""                 :: body(),
+        text=""                 :: text(),
+        html_encode=true        :: html_encode()
+     }).
 -record(textbox, {?ELEMENT_BASE(element_textbox),
         text=""                 :: text() | undefined,
         maxlength=""            :: integer() | string(),
