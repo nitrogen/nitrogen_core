@@ -62,7 +62,10 @@ call_readonly(Name, FunctionName, Args) ->
     erlang:apply(Module, FunctionName, Args ++ [Config, State]).
 
 set_handler(Module, Config) ->
-    {module, Module} = code:ensure_loaded(Module),
+    case code:ensure_loaded(Module) of
+        {module, Module} -> ok;
+        Error -> throw({unable_to_load_handler, {module, Module}, {error, Error}})
+    end,
 
     % Get the module's behavior...
     L = Module:module_info(attributes),

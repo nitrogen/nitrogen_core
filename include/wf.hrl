@@ -223,19 +223,30 @@
         body=[]                 :: body()
     }).
 
--define(H_ELEMENT(Size), {?ELEMENT_BASE(element_h),
+-define(BASIC_ELEMENT(Tag),
+    -record(Tag, {?ELEMENT_BASE(element_basic_tag),
         text=""                 :: text(),
         body=[]                 :: body(),
-        html_encode=true        :: html_encode(),
-        size=Size               :: undefined | integer()
-    }).
--record(h,  ?H_ELEMENT(undefined)).
--record(h1, ?H_ELEMENT(1)).
--record(h2, ?H_ELEMENT(2)).
--record(h3, ?H_ELEMENT(3)).
--record(h4, ?H_ELEMENT(4)).
--record(h5, ?H_ELEMENT(5)).
--record(h6, ?H_ELEMENT(6)).
+        html_encode=true        :: html_encode()
+    })
+).
+
+%% The #basic_tag element will only really be used in the element_basic_tag.erl file
+?BASIC_ELEMENT(basic_tag).
+?BASIC_ELEMENT(h1).
+?BASIC_ELEMENT(h2).
+?BASIC_ELEMENT(h3).
+?BASIC_ELEMENT(h4).
+?BASIC_ELEMENT(h5).
+?BASIC_ELEMENT(h6).
+?BASIC_ELEMENT(p).
+?BASIC_ELEMENT(span).
+?BASIC_ELEMENT(panel).
+?BASIC_ELEMENT(i).
+?BASIC_ELEMENT(strong).
+?BASIC_ELEMENT(em).
+?BASIC_ELEMENT(pre).
+?BASIC_ELEMENT(code).
 
 -record(list, {?ELEMENT_BASE(element_list),
         numbered=false          :: boolean(),
@@ -249,37 +260,15 @@
     }).
 -record(br, {?ELEMENT_BASE(element_br) }).
 -record(hr, {?ELEMENT_BASE(element_hr) }).
--record(p, {?ELEMENT_BASE(element_p),
-        body=[]                 :: body(),
-        text=""                 :: text(),
-        html_encode=true        :: html_encode()
-    }).
--record(i, {?ELEMENT_BASE(element_i),
-        body=[]                 :: body(),
-        text=""                 :: text(),
-        html_encode=true        :: html_encode()
-    }).
+
+
 -record(label, {?ELEMENT_BASE(element_label),
         body=[]                 :: body(),
         text=""                 :: text(),
         html_encode=true        :: html_encode(),
         for=""                  :: id()
     }).
--record(pre, {?ELEMENT_BASE(element_pre),
-        body=""                 :: body(),
-        text=""                 :: text(),
-        html_encode=true        :: html_encode()
-     }).
--record(strong, {?ELEMENT_BASE(element_strong),
-        body=""                 :: body(),
-        text=""                 :: text(),
-        html_encode=true        :: html_encode()
-    }).
--record(em, {?ELEMENT_BASE(element_em),
-        body=""                 :: body(),
-        text=""                 :: text(),
-        html_encode=true        :: html_encode()
-    }).
+
 -record(value, {?ELEMENT_BASE(element_value),
         text=""                 :: text(),
         html_encode=true        :: html_encode()
@@ -309,11 +298,6 @@
         text=""                 :: text(),
         html_encode=true        :: html_encode()
     }).
--record(span, {?ELEMENT_BASE(element_span),
-        body=""                 :: body(),
-        text=""                 :: text(),
-        html_encode=true        :: html_encode()
-    }).
 -record(delay_body, {?ELEMENT_BASE(element_delay_body),
         delegate                :: module(),
         tag=undefined           :: term(),
@@ -339,11 +323,6 @@
         text=""                 :: text(),
         html_encode=true        :: html_encode()
     }).
--record(code, {?ELEMENT_BASE(element_code),
-        body=""                 :: body(),
-        text=""                 :: text(),
-        html_encode=true        :: html_encode()
-     }).
 -record(textbox, {?ELEMENT_BASE(element_textbox),
         text=""                 :: text() | undefined,
         maxlength=""            :: integer() | string(),
@@ -535,11 +514,6 @@
 %        text="Browse"           :: text(),
 %        html_encode=true        :: html_encode(),
         html_name               :: html_name()
-    }).
--record(panel, {?ELEMENT_BASE(element_panel),
-        body=[]                 :: body(),
-        text=""                 :: text(),
-        html_encode=true        :: html_encode()
     }).
 -record(sync_panel, {?ELEMENT_BASE(element_sync_panel),
         body_fun                :: undefined | fun(),
