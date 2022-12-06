@@ -15,7 +15,10 @@ reflect() -> record_info(fields, pre).
 
 -spec render_element(#pre{}) -> body().
 render_element(Record) ->
-    Body = wf:html_encode(Record#pre.text, Record#pre.html_encode),
+    Body = [
+        wf:html_encode(Record#pre.text, Record#pre.html_encode),
+        Record#pre.body
+    ],
     wf_tags:emit_tag(pre, Body, [
         {class, [pre, Record#pre.class]},
         {title, Record#pre.title},
