@@ -11,3 +11,5 @@ deps/
 *.dump
 _build
 ebin/
+rebar
+rebar3

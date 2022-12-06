@@ -10,6 +10,7 @@
         init_request/2,
         init_request/1,
         handler/2,
+        handler/3,
         run/0
     ]).
 
@@ -43,6 +44,9 @@ init_request(Bridge) ->
 handler(Module, Config) ->
     wf_handler:set_handler(Module, Config).
 
+handler(Name, Module, Config) ->
+    wf_handler:set_handler(Name, Module, Config).
+
 run(Bridge) ->
     init_request(Bridge),
     nitrogen_main_handler:run().
@@ -70,10 +74,10 @@ ws_message_catched({nitrogen_postback,Msg}) ->
     Return = wf_core:run_websocket(Msg),
     [<<"nitrogen_event:">>,Return];
 ws_message_catched(flush_switchover_comet_actions) ->
-    %% If there are any actions that weren't 
+    %% If there are any actions that weren't
     ReconnectionRecovery = <<"Nitrogen.$reconnect_system();">>,
     case action_comet:get_actions_and_register_new_websocket_pid(self()) of
-        [] -> 
+        [] ->
             [<<"nitrogen_system_event:">>, ReconnectionRecovery];
         Actions ->
             wf:wire(page, page, Actions),
@@ -105,6 +109,6 @@ ws_terminate(_Reason, _Bridge, _State) ->
 
 
 %% Deprecated, kept for backwards compatibility. Use nitrogen:run/1 with simple_bridge
-run() -> 
+run() ->
     wf_core:run().
 

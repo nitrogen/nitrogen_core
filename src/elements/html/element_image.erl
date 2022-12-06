@@ -24,7 +24,7 @@ render_element(Record) ->
         {height, Record#image.height},
         {width, Record#image.width},
         {alt, Record#image.alt},
-        {src, wf:to_binary(Record#image.image)}
+        {src, wf:to_unicode_binary(Record#image.image)}
     ],
 
     wf_tags:emit_tag(img, Attributes).

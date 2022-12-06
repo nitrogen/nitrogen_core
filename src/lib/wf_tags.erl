@@ -17,6 +17,7 @@
     TagName =/= 'th' andalso 
     TagName =/= 'td' andalso 
     TagName =/= 'p' andalso
+    TagName =/= 'i' andalso
     TagName =/= 'a' andalso
     TagName =/= 'ul' andalso
     TagName =/= 'ol' andalso
@@ -140,10 +141,10 @@ data_tags(Data) ->
     [display_property(data_tag(Datum)) || Datum <- Data].
 
 data_tag({FieldName,Value}) ->
-    DataField = wf:to_binary(FieldName),
+    DataField = wf:to_unicode_binary(FieldName),
     {<<"data-",DataField/binary>>,Value};
 data_tag({FieldName}) ->
-    DataField = wf:to_binary(FieldName),
+    DataField = wf:to_unicode_binary(FieldName),
     {<<"data-",DataField/binary>>};
 data_tag(FieldName) when is_atom(FieldName) ->
     data_tag({FieldName}).

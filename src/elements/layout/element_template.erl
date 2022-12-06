@@ -28,7 +28,7 @@ render_element(Record) ->
                    File = wf:to_binary(Record#template.file),
                    get_cached_template(File, Record);
                  Text ->
-                   parse_template({content, wf:to_binary(Text)},
+                   parse_template({content, wf:to_unicode_binary(Text)},
                                   Record#template.from_type,
                                   Record#template.to_type,
                                   Record#template.callouts,
