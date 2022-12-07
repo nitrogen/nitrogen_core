@@ -52,7 +52,7 @@ set_websocket_cookie(Cookie, Value, Options) ->
         minutes_to_live=proplists:get_value(minutes_to_live, Options, 20),
         secure=proplists:get_value(secure, Options, false),
         http_only=proplists:get_value(http_only, Options, false),
-        same_site=proplists:get_value(same_site, Options,"Lax")
+        same_site=proplists:get_value(same_site, Options, lax)
     },
     wf:wire(SetCookie).
 

@@ -1157,7 +1157,7 @@
         minutes_to_live=20      :: integer(),
         secure=false            :: boolean(),
         http_only=false         :: boolean(),
-        same_site               = "Lax" ::text()
+        same_site               = lax ::atom()
     }).
 
 %%% Validators %%%
