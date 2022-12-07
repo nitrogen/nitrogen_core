@@ -77,6 +77,7 @@ you must edit the server-specific configuration file in `etc/` such as
 
 ### See Also
 
- *  [base element](./element_base.md)
- *  [Configuration Options](./config.md)
- *  [wf:set/2 in API docs](./api.md)
+ * [base element](./element_base.md)
+ * [Configuration Options](./config.md)
+ * [wf:set/2 in API docs](./api.md)
+ * [icon element](./icon.md)

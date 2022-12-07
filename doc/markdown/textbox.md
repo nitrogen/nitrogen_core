@@ -54,6 +54,10 @@
 
       [About HTML5 Input Types](http://html5doctor.com/html5-forms-input-types/)
 
+      If `type` is set to a date or time value, the `text` attribute will be
+      parsed with `qdate` to automatically set the value to a correctly
+      formatted value.
+
    * `next` (atom) - 
       If set with a valid control ID, pressing the enter key in the 
       textbox will automatically move focus to the specified control.
@@ -62,25 +66,31 @@
       If set, pressing the enter key in the textbox will automatically
       initiate a Nitrogen postback with the supplied term.
 
+   * `min` (Erlang Term) - Assign the `min` value to the textbox (as defined by
+     some of the HTML5 Input Types). As with the `value` attribute, if the
+     textbox's `type` is set to a date or time format, the `max` attribute will
+     be parsed by `qdate` and formatted to a valid value.
+
+   * `max` (Erlang Term) - Assign the `max` value to the textbox (as defined by
+     some of the HTML5 Input Types). As with the `value` attribute, if the
+     textbox's `type` is set to a date or time format, the `max` attribute will
+     be parsed by `qdate` and formatted to a valid value.
+
+   * `step` (integer) - Assign the `min` value to the textbox (as defined by
+     some of the HTML5 Input Types).
+
    * `html_name` (string) - The name attribute of the textbox.
 
 ### See Also
 
- *  [base element](./element_base.md)
-
- *  [button element](./button.md)
-
- *  [password element](./password.md)
-
- *  [textarea element](./textarea.md)
-
- *  [checkbox element](./checkbox.md)
-
- *  [dropdown element](./dropdown.md)
-
- *  [option element](./option.md)
-
- *  [jQuery Placeholder Readme](https://github.com/mathiasbynens/jquery-placeholder)
-
-	*  [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)
+ * [base element](./element_base.md)
+ * [button element](./button.md)
+ * [password element](./password.md)
+ * [textarea element](./textarea.md)
+ * [checkbox element](./checkbox.md)
+ * [dropdown element](./dropdown.md)
+ * [option element](./option.md)
+ * [jQuery Placeholder Readme](https://github.com/mathiasbynens/jquery-placeholder)
+ * [Simple Controls Demos](http://nitrogenproject.com/demos/simplecontrols)
+ * [qdate](https://github.com/choptastic/qdate)
  

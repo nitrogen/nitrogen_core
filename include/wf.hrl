@@ -10,7 +10,6 @@
 
 -define(WF_EXTEND(OrigRec, NewRec, Module, Fields), -extend({OrigRec, NewRec, [{module, Module} | Fields]})).
 
-
 %%% TYPES FOR DIALYZER %%%
 
 %% Allow Dialzer to be run on the .ebin files
@@ -155,6 +154,10 @@
         end)
     ).
 
+-define(WF_SAFE(Exp, Default), (try Exp catch _:_ -> Default end)).
+
+-define(WF_SAVE(Exp), ?WF_SAFE(Exp, undefined)).
+
 %%% TERNARY IF AND VARIATIONS %%%
 -define(WF_IF(Term,IfTrue,IfFalse),
     fun() ->
@@ -268,7 +271,13 @@
         html_encode=true        :: html_encode(),
         for=""                  :: id()
     }).
-
+-record(icon, {?ELEMENT_BASE(element_icon),
+        icon                    :: atom() | string() | binary() | tuple(), 
+        prefix=icon             :: atom() | string() | binary(),
+        type                    :: atom(),
+        size                    :: integer() | atom() | string() | binary(),
+        version=undefined       :: integer() | atom() | string()
+     }).
 -record(value, {?ELEMENT_BASE(element_value),
         text=""                 :: text(),
         html_encode=true        :: html_encode()
@@ -337,7 +346,10 @@
         on_invalid              :: undefined | actions(),
         delegate                :: module(),
         html_name               :: html_name(),
-        type=text               :: string() | atom(),
+        type=text               :: string() | binary() | atom(),
+        step                    :: text() | integer(),
+        min                     :: undefined | text(),
+        max                     :: undefined | text(),
         autocomplete="off"      :: string() | atom()
     }).
 -record(datepicker_textbox, {?ELEMENT_BASE(element_datepicker_textbox),
