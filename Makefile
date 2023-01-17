@@ -1,4 +1,4 @@
-REBAR?=$(shell which rebar3 || echo ./rebar3)
+REBAR?=./rebar3
 
 .PHONY: test
 
@@ -7,16 +7,17 @@ all: compile
 clean:
 	rm -fr _build rebar.lock
 
-compile:
+compile: rebar3
 	$(REBAR) compile
 
-eunit:
-	$(REBAR) eunit
+eunit: rebar3
+	rm -fr _build/test
+	$(REBAR) eunit --app nitrogen_core
 
-publish:
+publish: rebar3
 	$(REBAR) hex publish
 
-test:
+test: rebar3
 	mkdir -p test
 	rm -fr test/browsertest
 	$(MAKE) eunit
@@ -30,7 +31,19 @@ dash-docs:
 	doc/dash/md2docset
 	cd doc/dash; tar --exclude='.DS_Store' -zcvf Nitrogen.tgz Nitrogen.docset
 
-dialyzer:
+rebar3:
+	@echo "Fetching and compiling updated rebar3 (this will not replace your system-wide rebar3, if you have one)"
+	@(cd /tmp && \
+	git clone https://github.com/erlang/rebar3 && \
+	cd rebar3 && \
+	./bootstrap)
+	@echo "Installing rebar3 into Nitrogen directory"
+	@(mv /tmp/rebar3/rebar3 .)
+	@echo "Cleaning up..."
+	@(rm -fr /tmp/rebar3)
+
+
+dialyzer: rebar3
 	$(REBAR) dialyzer
 
 # This is primarily for Travis build testing, as each build instruction will overwrite the previous
