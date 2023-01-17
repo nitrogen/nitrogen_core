@@ -15,6 +15,7 @@
     to_unicode_binary/1,
     to_integer/1,
     to_float/1,
+    to_bool/1,
     to_string_list/1,
     to_qs/1,
     parse_qs/1,
@@ -130,6 +131,29 @@ safe_to_float(L) when is_list(L) ->
     catch _:badarg -> float(list_to_integer(L))
     end.
 
+-spec to_bool(term()) -> boolean().
+to_bool(0) -> false;
+to_bool("0") -> false;
+to_bool(<<"0">>) -> false;
+to_bool(false) -> false;
+to_bool(0.0) -> false;
+to_bool(<<>>) -> false;
+to_bool("") -> false;
+to_bool([F,A,L,S,E]) 
+        when (F==$f orelse F==$F)
+        andalso (A==$a orelse A==$A)
+        andalso (L==$l orelse L==$L)
+        andalso (S==$s orelse S==$S)
+        andalso (E==$e orelse E==$E) -> false;
+
+to_bool(<<F,A,L,S,E>>)
+        when (F==$f orelse F==$F)
+        andalso (A==$a orelse A==$A)
+        andalso (L==$l orelse L==$L)
+        andalso (S==$s orelse S==$S)
+        andalso (E==$e orelse E==$E) -> false;
+to_bool(_) -> true.
+
 %%% TO STRING LIST %%%
 
 %% @doc
@@ -181,7 +205,7 @@ html_encode(Other, EncType) -> ihe(Other, EncType).
 %% This will remain backwards compatible for Nitrogen 2 releases, in Nitrogen
 %% 3, This will very likely be converted to a full binary conversion, with
 %% typespec being term() -> binary().
-ihe([], _)                              -> [];
+ihe([], _)                               -> [];
 ihe(<<>>, _)                            -> <<>>;
 ihe(A, ET) when is_atom(A)              -> html_encode(atom_to_list(A), ET);
 ihe([Bin|T], ET) when is_binary(Bin)    -> [ihe(Bin, ET) | ihe(T, ET)];
@@ -455,6 +479,39 @@ parse_ip(String) ->
     IP.
 
 -include_lib("eunit/include/eunit.hrl").
+
+bool_test() ->
+    ?assertEqual(true,  to_bool("TrUe")),
+
+    ?assertEqual(false, to_bool("false")),
+    ?assertEqual(false, to_bool("FaLsE")),
+    ?assertEqual(false, to_bool("FALSE")),
+    ?assertEqual(true,  to_bool("false-not")),
+
+    ?assertEqual(false, to_bool(<<"false">>)),
+    ?assertEqual(false, to_bool(<<"FaLsE">>)),
+    ?assertEqual(false, to_bool(<<"FALSE">>)),
+    ?assertEqual(true,  to_bool(<<"FALSE-not">>)),
+
+    ?assertEqual(true,  to_bool(true)),
+    ?assertEqual(false, to_bool(false)),
+
+    ?assertEqual(true,  to_bool(1)),
+    ?assertEqual(false, to_bool(0)),
+
+    ?assertEqual(false, to_bool(0.0)),
+    ?assertEqual(true,  to_bool(0.1)),
+    ?assertEqual(true,  to_bool(-0.1)),
+
+    ?assertEqual(true,  to_bool("1")),
+    ?assertEqual(false, to_bool("0")),
+
+    ?assertEqual(true,  to_bool(<<"1">>)),
+    ?assertEqual(false, to_bool(<<"0">>)),
+
+    ?assertEqual(true,  to_bool("some random string")),
+    ?assertEqual(false, to_bool("")),
+    ?assertEqual(false, to_bool(<<>>)).
 
 html_encode_test() ->
     %% Disabled with argument

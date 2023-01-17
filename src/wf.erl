@@ -210,6 +210,9 @@ to_float(T) ->
 to_float(T, Default) ->
     _Float = ?WF_SAFE(to_float(T), Default).
 
+to_bool(T) ->
+    _Bool = wf_convert:to_bool(T).
+
 to_string_list(Term) ->
     _StringList = wf_convert:to_string_list(Term).
 
