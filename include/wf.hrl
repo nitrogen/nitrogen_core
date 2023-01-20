@@ -65,6 +65,14 @@
 -type mermaid_code()        :: binary() | string() | iolist().
 -type mermaid_diagram()     :: flowchart | sequence | gantt.
 -type mermaid_diagram_options(Diagram)      :: {Diagram, proplist()}.
+
+
+-type websocket_msg()       :: {text, iolist()} | {binary, iolist()}.
+-type websocket_decoded()   :: {decoded, any()}.
+-type websocket_in()        :: websocket_msg() | websocket_decoded().
+-type websocket_out()       :: websocket_msg().
+-type websocket_reply()     :: noreply | {reply, websocket_out()}.
+
 %%% CONTEXT %%%
 
 % Page Request Information.

@@ -55,6 +55,7 @@ function NitrogenClass(o) {
     this.$websocket_status = -2;  // -2 not attempted yet, -1 = trying to connect, 0 = not enabled, 1 = connected
     this.$websockets_ever_succeeded = false;
     this.$websocket_reconnect_timer = null;
+    this.$websocket_handlers = new Array();
     this.$disconnected = false;
     this.$allow_redirect = true;
     this.$redirect_prompt = "Are you sure you want to leave?";
@@ -342,7 +343,7 @@ NitrogenClass.prototype.$validate_and_serialize = function(validationGroup) {
             // an empty string if it's null
             var val = $(this).val();
 
-            console.log(val);
+            //console.log(val);
 
             if(val == null || (this.type=="select-multiple" && val.length==0))
                 val = "";
@@ -1512,10 +1513,10 @@ NitrogenClass.prototype.$ws_message = function(data) {
         else if(matches = data.match(/^nitrogen_event:([\s\S]*)/)) {
             var response_data = null;
             if(this.$event_data_type == "json") {
-                // while other evals() are replaced with Nitrogen.$eval(), this is
-                // not necessary here, since we actually *want* the json to be
-                // evaluated, which is then passed to $event_success() to acually
-                // be eval()'d
+                // while other evals() are replaced with Nitrogen.$eval(), this
+                // is not necessary here, since we actually *want* the json to
+                // be evaluated, which is then passed to $event_success() to
+                // acually be eval()'d
                 response_data = eval(matches[1]);
             }
             else{
@@ -1523,10 +1524,46 @@ NitrogenClass.prototype.$ws_message = function(data) {
             }
             this.$event_data_type = null;
             this.$event_success(response_data);
-        }    
+        }
+        else{
+            this.$run_registered_ws_handlers(data);
+        }
     }
 };
 
+NitrogenClass.prototype.$register_ws_handler = function(id, handler) {
+    for (var i=0;i<this.$websocket_handlers.length;i++) {
+        if(this.$websocket_handlers[i].id==id) {
+            // We're replacing an existing handler identifier. So replace it
+            // and return, short-circuiting
+            this.$websocket_handlers[i].fun = handler;
+            return;
+        }
+    }
+    // If we get here, it means this is a new handler. Add it to the array.
+    this.$websocket_handlers.push({id:id, fun: handler});
+};
+
+NitrogenClass.prototype.$unregister_ws_handler = function(id) {
+    for (var i=0;i<this.$websocket_handlers.length;i++) {
+        if(this.$websocket_handlers[i].id==id) {
+            // remove just the item at the i-th index
+            this.$websocket_handler.splice(i, 1);
+            return;
+        }
+    }
+};
+
+NitrogenClass.prototype.$run_registered_ws_handlers = function(data) {
+    this.$websocket_handlers.forEach(function(e) {
+        if(e.fun(data)) {
+            return true;
+        }
+    });
+    // If we get here, there was an unhandled websocket message
+    this.$console_log({error:"Received a websocket message that was not handled.", message: data});
+    return false;
+};
 
 NitrogenClass.prototype.$listen_for_online = function() {
     var n = this;

@@ -475,6 +475,7 @@ init_context(Bridge) ->
             make_handler(cache_handler, default_cache_handler),
             make_handler(query_handler, default_query_handler),
             make_handler(crash_handler, default_crash_handler),
+            make_handler(websocket_handler, default_websocket_handler),
 
             % Stateful handlers...
             make_handler(session_handler, canister_session_handler),
