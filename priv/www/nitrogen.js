@@ -1503,31 +1503,35 @@ NitrogenClass.prototype.$ws_close = function() {
 
 NitrogenClass.prototype.$ws_message = function(data) {
     this.$last_websocket_received=this.$get_time();
-    if(data=="pong") {
-        this.$pong_received();
-    } else {
-        var matches = null;
-        if(matches = data.match(/^nitrogen_system_event:([\s\S]*)/)) {
-            this.$system_event_success(matches[1]);
-        }
-        else if(matches = data.match(/^nitrogen_event:([\s\S]*)/)) {
-            var response_data = null;
-            if(this.$event_data_type == "json") {
-                // while other evals() are replaced with Nitrogen.$eval(), this
-                // is not necessary here, since we actually *want* the json to
-                // be evaluated, which is then passed to $event_success() to
-                // acually be eval()'d
-                response_data = eval(matches[1]);
+    if(typeof data=="string") {
+        if(data=="pong") {
+            this.$pong_received();
+        } else {
+            var matches = null;
+            if(matches = data.match(/^nitrogen_system_event:([\s\S]*)/)) {
+                this.$system_event_success(matches[1]);
+            }
+            else if(matches = data.match(/^nitrogen_event:([\s\S]*)/)) {
+                var response_data = null;
+                if(this.$event_data_type == "json") {
+                    // while other evals() are replaced with Nitrogen.$eval(), this
+                    // is not necessary here, since we actually *want* the json to
+                    // be evaluated, which is then passed to $event_success() to
+                    // acually be eval()'d
+                    response_data = eval(matches[1]);
+                }
+                else{
+                    response_data=matches[1];
+                }
+                this.$event_data_type = null;
+                this.$event_success(response_data);
             }
             else{
-                response_data=matches[1];
+                this.$run_registered_ws_handlers(data);
             }
-            this.$event_data_type = null;
-            this.$event_success(response_data);
         }
-        else{
-            this.$run_registered_ws_handlers(data);
-        }
+    }else{
+        this.$run_registered_ws_handlers(data);
     }
 };
 
@@ -1548,7 +1552,7 @@ NitrogenClass.prototype.$unregister_ws_handler = function(id) {
     for (var i=0;i<this.$websocket_handlers.length;i++) {
         if(this.$websocket_handlers[i].id==id) {
             // remove just the item at the i-th index
-            this.$websocket_handler.splice(i, 1);
+            this.$websocket_handlers.splice(i, 1);
             return;
         }
     }

@@ -31,4 +31,3 @@ ws_message(Msg, Bridge) ->
 -spec ws_info(Msg :: any(), Bridge :: simple_bridge:bridge()) -> {ok, websocket_reply()}.
 ws_info(Msg, Bridge) ->
     {ok, _Reply} = wf_handler:call(websocket_handler, ws_info, [Msg, Bridge]).
-

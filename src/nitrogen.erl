@@ -126,8 +126,8 @@ ws_terminate(_Reason, _Bridge, _State) ->
     ok.
 
 
-%% Deprecated, kept for backwards compatibility. Use nitrogen:run/1 with
-%% simple_bridge
+%% Deprecated, kept for backwards compatibility. Use
+%% nitrogen_main_handler:run/0 (defined in your own project's src directory)
 run() ->
     wf_core:run().
 
