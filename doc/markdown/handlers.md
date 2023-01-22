@@ -9,22 +9,22 @@ Core Nitrogen behavior has been broken out into well-defined, pluggable
 behavior modules called /handlers/. Handlers allow you to easily substitute
 your own logic for things like session, security, routing, and others. Simply
 create a module that implements one of the existing behaviors, and register it
-to call `nitrogen:handler/2` or `nitrogen:handler/3` between the `nitrogen:init_request/2` and
-`nitrogen:run/0` calls found inside the `nitrogen_xxx` (where `xxx` is the
-webserver used, for example 'mochiweb', 'yaws', 'cowboy', etc).
+to call `nitrogen:handler/2` or `nitrogen:handler/3` inside
+`nitrogen_main_handler.erl`.
 
-For example, let's add custom session and config handlers to our mochiweb
-install. To do so, let's add our handlers to  `nitrogen_mochiweb:loop/1`:
+By default, these will go into the `handlers()` function in
+`nitrogen_main_handler`, ensuring that the handlers are executed for both
+initial request and for requests made via the websocket (like postbacks).
+
+As an example, let's add custom session and config handlers to our application.
+In `nitrogen_main_handler.erl`:
 
 ```erlang
-  loop(Req) ->
-    {ok, DocRoot} = application:get_env(mochiweb, document_root),
-    RequestBridge = simple_bridge:make_request(mochiweb_request_bridge, Req),
-    ResponseBridge = simple_bridge:make_response(mochiweb_response_bridge, {Req, DocRoot}),
-    nitrogen:init_request(RequestBridge, ResponseBridge),
+  handlers() ->
     nitrogen:handler(my_config_handler,[]),   %% Add custom config handler
     nitrogen:handler(my_session_handler,[]),  %% Add custom session handler
-    nitrogen:run().
+	nitrogen:handler(debug_crash_handler, []),
+	ok.
 
 ```
 
@@ -85,6 +85,8 @@ In all of the handler behavior functions are found two particular variables:
     is [nprocreg](https://github.com/nitrogen/nprocreg).
  *  [Crash Handler](crash.md) - Controls how to handle page
     crashes, including logging and how to present the crash to the user.
+ *  [Cache Handler](cache.md) - Controls how Nitrogen implements the caching
+    functionality: `wf:cache`, `wf:set_cache`, etc.
  *  [Query Handler](query.md) - Controls the how `wf:q` (and its
     siblings, `wf:qs`, `wf:mq`, etc), functions retrieve their values from the
     POST, GET, or other methods.
