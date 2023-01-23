@@ -10,12 +10,13 @@
   in the `etc/` directory of your Nitrogen installation.  Below we will go though
   the configuration options provided within each.
 
-  It's worth noting that Nitrogen has a
-  [small
-  modification](https://github.com/nitrogen/nitrogen/blob/master/rel/overlay/common/bin/nitrogen#L46-L56) to the standard rebar start script allow you to break
-  configuration files up into multiple files. Otherwise, you'd have to mash all
-  these files into a single configuration file. A minor convenience, but the
-  Erlang veterans might wonder why this even works.
+  It's worth noting that stock Nitrogen has a
+  [config combiner script](https://github.com/nitrogen/nitrogen/blob/rebar3/templates/common/etc/assemble_config.escript)
+  that [runs before compilation](https://github.com/nitrogen/nitrogen/blob/rebar3/templates/backends/sources/rebar.base.config#L18).
+  This allows you to break configuration files up into multiple files, rather
+  than the standard Erlang approach of having one big app.config file with all
+  configs. It provides a minor convenience, but is not a standard thing in
+  Erlang.
 
 ## Univeral Configuration Files (configs available in all Nitrogen intallations)
 
@@ -51,15 +52,6 @@
 
   ## Tweak GC to run more often
   -env ERL_FULLSWEEP_AFTER 10
-
-  ## Include .beam files for site.
-  -pa ./site/ebin
-
-  ## Include libraries and rebar dependency paths
-  -env ERL_LIBS ./lib
-
-  ## Run code at startup.
-  -eval "application:start(nitrogen)"
 
 ```
 
@@ -114,6 +106,12 @@ For the `nitrogen_core` application, the following `AppOptions` are recognized:
     returned; any other return value will cause the default config
     handler to continue processing.
 
+  * `test_browsers` (list of strings) - If you will employ Nitrogen's test
+    system, this provides a list of browsers to execute to test.
+
+  * `tests` - (list of strings) - If you are running any tests, these are the
+    page URLs to test in the specified browser(s).  An example of this might
+    be `["/mypage?test=1", "/some/other/page/test"]`.
 
 
 Also typically defined in the app.config file here is the [SASL
@@ -136,7 +134,7 @@ default of which for Nitrogen can be seen here:
 
   This file contains the configuration for SimpleBridge, Nitrogen's
   abstraction layer to each server.  When you generate your initial Nitrogen
-  release with `rel_cowboy`, `rel_yaws`, etc., Nitrogen will select the
+  release with `rel_cowboy`, `slim_yaws`, etc., Nitrogen will select the
   correct backend in this file for you.
 
   * `backend` (/Atom/ - cowboy | inets | mochiweb | webmachine | yaws) -
@@ -158,7 +156,7 @@ default of which for Nitrogen can be seen here:
 
   * `port` (Number) - The port number to bind. (Default: `8000`)
 
-    **About Ports and Linux**: While port 80 is the standard HTTP port, port 80 is a
+    **About Ports and Linux/Unix**: While port 80 is the standard HTTP port, port 80 is a
     privileged port in a Linux/Unix environment. This means that in order for
     Erlang to bind to port 80, it will need to be run with **root** privileges. This
     is generally unadvised. Instead, we recommend using a lightweight reverse
@@ -174,9 +172,8 @@ default of which for Nitrogen can be seen here:
     An example of `setcap` being run on your Erlang app:
 
     ```bash
-			sudo setcap cap_net_bind_service+ep ./erts-5.9.2/bin/beam
-			sudo setcap cap_net_bind_service+ep ./erts-5.9.2/bin/beam.smp
-
+			sudo setcap cap_net_bind_service+ep /path/to/erts-5.9.2/bin/beam
+			sudo setcap cap_net_bind_service+ep /path/to/erts-5.9.2/bin/beam.smp
     ```
 
     This will give the `beam` and `beam.smp` programs privileges to bind to
@@ -203,18 +200,16 @@ default of which for Nitrogen can be seen here:
 
     You should have the following in your config:
 
-    ```erlang
-        {document_root, "priv/static"},
-        {static_paths, "favicon.ico", "js/", "css/"},
+	```erlang
+	{document_root, "priv/static"},
+	{static_paths, "favicon.ico", "js/", "css/"},
+	```
 
-    ```
-
-    This will ensure that requests to (for example),
-    "http://yoursite.com/js/my_javascript.js" gets handled by the server's
+    This will ensure that requests to (for example), `"http://yoursite.com/js/my_javascript.js"` gets handled by the server's
     static handler, and will be served from "priv/static/js/my_javascript.js"
 
     Full configuration can be seen in Nitrogen's included
-    [simple_bridge.config](https://github.com/nitrogen/nitrogen/blob/master/rel/overlay/common/etc/simple_bridge.config)
+    [simple_bridge.config](https://github.com/nitrogen/nitrogen/blob/rebar3/templates/common/etc/simple_bridge.config)
     or in SimpleBridge's [sample config.](https://github.com/nitrogen/simple_bridge/blob/master/etc/simple_bridge.config)
 
 
@@ -233,10 +228,10 @@ default of which for Nitrogen can be seen here:
 
   * `plugins_hrl` (path string) - Tell the Nitrogen plugin importer where
     to put the generated plugins.hrl file for the purposes of including plugin
-    elements into your application. (default: `"./site/include/plugins.hrl"`)
+    elements into your application. (default: `"./include/plugins.hrl"`)
 
   * `static_dir` (path string) - Tell the plugin system where you wish to
-    put your plugins' static resources. (default: `"./site/static/plugins"`)
+    put your plugins' static resources. (default: `"./priv/static/plugins"`)
 
   * `copy_mode` (copy|link) - Tell the plugins system how to include any
     static resources.  `copy` will copy the entire contents of your plugins'
@@ -244,33 +239,7 @@ default of which for Nitrogen can be seen here:
     primarily with Linux or OSX, you can probably get away with using `link`,
     while if you use Windows, you should stick with `copy`. (default: `copy`).
 
-Here's the complete text of the default plugins.config:
-
-```erlang
-  %% vim: ts=2 sw=2 et ft=erlang
-  %% Nitrogen Plugin Installer Configuration
-  %%
-  %% This will tell the plugin-installer script where to put Nitrogen plugin
-  %% information it finds.
-  %%
-
-  %% plugins_hrl tells the Nitrogen plugin installer where to put the .hrl file
-  %% containing links to all your plugins' respective header files.
-  %% The default is "./site/include/plugins.hrl".
-  {plugins_hrl, "./site/include/plugins.hrl"}.
-
-  %% static_dir tells the Nitrogen plugin installer where to copy your plugins'
-  %% static resources (images, js, etc).
-  %% The default is "./site/static/plugins"
-  {static_dir, "./site/static/plugins"}.
-
-  %% copy_mode determines if static resources are copied or merely symlinked.
-  %% Keep in mind, symlinks do not work on Windows, so "copy" is the default.
-  %% Valid values are the atoms 'copy' or 'link'
-  %% Default: copy
-  {copy_mode, copy}.
-
-```
+[Here's the complete text of the default plugins.config](https://github.com/nitrogen/nitrogen/blob/rebar3/templates/common/plugins.config).
 
 #### More about Plugins
 
@@ -281,71 +250,19 @@ Here's the complete text of the default plugins.config:
 
 ### Notable mention: rebar.config
 
-  The standard for Erlang distribution and building is the use of Basho's
-  [rebar](http://github.com/basho/rebar) tool. Nitrogen takes advantage of this for
-  simplifying the process of making releases and compiling Nitrogen even after
-  a release is built and deployed.
+  The standard for Erlang distribution and building is the use of
+  [rebar3](http://rebar3.org). The standard Nitrogen installation will
+  automatically build a rebar3 binary for your platform so you don't have to
+  think about it too much.
 
-  Generally, the main reason one would want to customize their installation is by
-  adding additional dependency packages.  For example, if you wanted to include
-  the [erlware_commons](https://github.com/erlware/erlware_commons) package for
-  improved date parsing and formatting, or the
-  [erls3](https://github.com/shane42/erls3) package to give your app an
-  interface to Amazon S3, you would typically do it by adding the dependencies to
-  rebar.config then running `make` in your Nitrogen installation.
-
-  By default, the only dependencies are the core dependencies for Nitrogen:
-  nitrogen_core, nprocreg, sync, simple_bridge, and a webserver (Yaws, Cowboy,
-  etc).
-
-  Also contained within the rebar.config are a handful of other compilation
-  options: minimum Erlang version, where dependencies go, and debugging options.
-
-  Below is the rebar.config file when used with webmachine:
-
-```erlang
-  {sub_dirs, [
-      "site",
-      "deps"
-  ]}.
-
-  {require_otp_vsn, "R13B04|R14|R15"}.
-
-  {cover_enabled, true}.
-
-  {erl_opts, [debug_info, fail_on_warning]}.
-
-  {deps_dir, ["lib"]}.
-
-  {deps, [
-      {webmachine, "1.8.*", {git, "git://github.com/basho/webmachine.git", {tag, "webmachine-1.8.1"}}},
-
-      {nitrogen_core, "2.1.*", {git, "git://github.com/nitrogen/nitrogen_core", "HEAD"}},
-      {nprocreg,      "0.2.*", {git, "git://github.com/nitrogen/nprocreg", "HEAD"}},
-      {simple_bridge, "1.2.*", {git, "git://github.com/nitrogen/simple_bridge", "HEAD"}},
-      {sync,          "0.1.*", {git, "git://github.com/rustyio/sync.git", "HEAD"}}
-  ]}.
-
-```
-
-  To add the above mentioned dependencies (`erlware_commons` and `erls3`), edit
-  the rebar.config file and modify the `deps` list to look like this:
-
-```erlang
-  {deps, [
-      {webmachine, "1.8.*", {git, "git://github.com/basho/webmachine.git", {tag, "webmachine-1.8.1"}}},
-
-      %% Add our two new dependencies below
-      {erls3, "1.9.*", {git, "git://github.com/shane42/erls3.git", "HEAD"}},
-      {erlware_commons, ".*", {git, "git://github.com/erlware/erlware_commons.git", "HEAD"}},
-
-      {nitrogen_core, "2.1.*", {git, "git://github.com/nitrogen/nitrogen_core", "HEAD"}},
-      {nprocreg,      "0.2.*", {git, "git://github.com/nitrogen/nprocreg", "HEAD"}},
-      {simple_bridge, "1.2.*", {git, "git://github.com/nitrogen/simple_bridge", "HEAD"}},
-      {sync,          "0.1.*", {git, "git://github.com/rustyio/sync.git", "HEAD"}}
-  ]}.
-
-```
+  The file
+  [rebar.config](https://github.com/nitrogen/nitrogen/blob/rebar3/templates/backends/sources/rebar.base.config)
+  controls things like dependencies and build instructions, including options for
+  building releases with [relx](https://github.com/erlware/relx), rather than the
+  older [reltool](https://www.erlang.org/doc/man/reltool.html) that comes built
+  into Erlang. It also includes integration with [hex.pm](https://hex.pm),
+  which has become the standard repository for Erlang and Elixir package
+  management.
 
   Then run `make` from the root of your Nitrogen installation. This will download
   the new dependencies and install them into the `lib` directory of your
