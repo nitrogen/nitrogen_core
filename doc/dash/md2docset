@@ -174,7 +174,8 @@ maybe_insert_function_marker(Subject, File) ->
       Arity = integer_to_list(length(re:split(Args, ","))),
       Spec = Fn ++ "/" ++ Arity,
       Anchor = markup_anchor(Spec, Code, "Function"),
-      execute_sqlite(add_sql_row(Spec, "Function", File)),
+      {AnchorName, _} = toc_anchor("Function", Spec),
+      execute_sqlite(add_sql_row(Spec, "Function", File ++ "#" ++ AnchorName)),
       Pre ++ Anchor ++ Post;
     _ ->
       Subject
@@ -234,23 +235,27 @@ extract_toc(ToC) ->
   end.
 
 convert_file(File, Name) ->
-  Mounts = io_lib:format("-v ~s:/pandoc -v ~s:/output", 
-                         [path(work), path(html)]),
-  UID = string:trim(os:cmd("id -ur")),
-  DockerOpts = io_lib:format("--rm -u ~s ~s", [UID, Mounts]),
-  DockerImg = "dalibo/pandocker",
+  %Mounts = io_lib:format("-v ~s:/pandoc -v ~s:/output", 
+  %                       [path(work), path(html)]),
+  %UID = string:trim(os:cmd("id -ur")),
+  %DockerOpts = io_lib:format("--rm -u ~s ~s", [UID, Mounts]),
+  %DockerImg = "dalibo/pandocker",
   Metadata = io_lib:format("--metadata title='~s'", [Name]),
   CSS = "--css nitrogen.css",
-  PandocOpts = io_lib:format("-o /output/~s --ascii ~s -s ~s ~s",
-                             [html_filename(File), 
-                              CSS, Metadata, filename:basename(File)]),
-  CMD = io_lib:format("docker run ~s ~s ~s", 
-                      [DockerOpts, DockerImg, PandocOpts]),
-  %?PRINT(os:cmd("echo " ++ CMD)),
+  
+  PandocOpts = io_lib:format("-o ~s --ascii ~s -s ~s ~s",
+                             [path(path(html),html_filename(File)), 
+                              CSS, Metadata, path(path(work), filename:basename(File))]),
+  %PandocOpts = io_lib:format("-o /output/~s --ascii ~s -s ~s ~s",
+  %                           [html_filename(File), 
+  %                            CSS, Metadata, filename:basename(File)]),
+%  CMD = io_lib:format("docker run ~s ~s ~s", 
+%                      [DockerOpts, DockerImg, PandocOpts]),
+  CMD = io_lib:format("pandoc ~s",[PandocOpts]),
   case os:cmd(CMD) of
     [] -> ok;
     Err ->
-      ?PRINT(os:cmd("echo " ++ CMD)),
+      os:cmd("echo " ++ CMD),
       ?PRINT(Err)
   end.
       
@@ -260,7 +265,12 @@ is_not_excluded(File) ->
     
 execute_sqlite(SQL) ->
   Cmd = string:join(["sqlite3", path(db), "'", SQL, "'"], " "),
-  os:cmd(Cmd).
+  case os:cmd(Cmd) of
+      [] -> ok;
+      Err ->
+          os:cmd("echo " ++ Cmd),
+          ?PRINT(Err)
+  end.
 
 add_sql_row(Name, Type, Path) ->
   io_lib:format("INSERT OR IGNORE INTO searchIndex(name, type, path) "
