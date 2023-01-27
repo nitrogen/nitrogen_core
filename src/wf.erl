@@ -477,6 +477,9 @@ clear_cache(Key) ->
 clear_all_cache() ->
     ok = cache_handler:clear_all().
 
+cache_rendered(Key, TTL, Fun) ->
+    wf_render_elements:cache_rendered(Key, TTL, Fun).
+
 %%% EXPOSE IDENTITY_HANDLER %%%
 user() ->
     _User = identity_handler:get_user().

@@ -26,6 +26,12 @@ render_and_trap_actions(Elements) ->
     wf_context:action_queue(OldActionQueue),
     {ok, Html, wf:to_unicode_binary(JS)}.
 
+cache_rendered(Key, TTL, Fun) ->
+    {ok, Html, Actions} = wf:cache(Key, TTL, fun() ->
+        wf:render_isolated(Fun)
+    end),
+    wf:wire(Actions),
+    Html.
 
 % Render elements and return the HTML that was produced.
 % Puts any new actions into the current context.
