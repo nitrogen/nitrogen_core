@@ -3,7 +3,7 @@
 
 # Nitrogen API
 
-## AJAX Updates
+## Live Page Updates
 
   TargetID can refer to the name of an element, or it can be a JQuery
   selector path. See [Element Paths](paths.md) for more information.
@@ -26,8 +26,8 @@
 
    Enables the target form field or button.
 
-* `wf:disable(Target) ->`
-* `wf:disable(Priority, Target) ->`
+* `wf:disable(Target) -> ok`
+* `wf:disable(Priority, Target) -> ok`
 
    Disables the target form field or button.
 
@@ -116,27 +116,33 @@
 
 * `wf:to_integer(Term) -> Integer`
 
-   Convert the supplied term into an Integer, if possible. Useful for turning Atoms, Strings, and Binaries into Integers.
+   Convert the supplied term into an Integer, if possible. Useful for turning
+   Atoms, Strings, and Binaries into Integers.
 
 * `wf:html_encode(String) -> EncodedString`
 
-   HTML encode the supplied String, converting things like < and > into &lt; and &gt;.
+   HTML encode the supplied String, converting things like < and > into &lt;
+   and &gt;.
 
 * `wf:html_decode(String) -> DecodedString`
 
-   HTML decoding decode the supplied String, converting things like &lt; and &gt; into < and >.
+   HTML decoding decode the supplied String, converting things like &lt; and
+   &gt; into < and >.
 
 * `wf:url_encode(String) -> EncodedString`
 
-   URL encode the supplied String, converting potentially URL-breaking characters into percent notation (%XX).
+   URL encode the supplied String, converting potentially URL-breaking
+   characters into percent notation (%XX).
 
 * `wf:url_decode(String) -> DecodedString`
 
-   URL decode the supplied String, converting a percent-encoded String into a normal String.
+   URL decode the supplied String, converting a percent-encoded String into a
+   normal String.
 
 * `wf:to_qs(PropList) -> EncodedQueryString`
 
-   Encode a PropList (a list of `{Key, Value}` tuples) into a URL-encoded query string (returned as an IOList).
+   Encode a PropList (a list of `{Key, Value}` tuples) into a URL-encoded query
+   string (returned as an IOList).
 
 * `wf:hex_encode(String) -> EncodedString.`
 
@@ -166,9 +172,9 @@
 
 * `wf:join([Terms],Delimiter) -> [Terms]`
 
-   Because Erlang doesn't provide a means to
-   [join (or intersperse) a list](http://erlang.org/pipermail/erlang-questions/2016-March/088097.html) in a non-string fashion, this will join the
-   `Terms` on the delimiter, regardless of the type of `Delimiter`.
+  This will join the `Terms` on the delimiter, regardless of the type of
+  `Delimiter`.  This function exists because Erlang didn't provide a means to
+  join a list in a non-string fashion before Erlang 19.0.  
 
 ```erlang
    wf:join([Line1,Line2,Line2],#br{}).
@@ -201,9 +207,10 @@
 
 * `wf:wire(TriggerID, TargetID, Actions) -> ok`
 
-   Wire actions to the page, triggering on the supplied TriggerID and targeting against
-   the supplied TargetID. This allows you to wire actions (such as #event) that listen
-   to a click on one element and modify a different element.
+   Wire actions to the page, triggering on the supplied TriggerID and targeting
+   against the supplied TargetID. This allows you to wire actions (such as
+   #event) that listen to a click on one element and modify a different
+   element.
 
    For example, when a button is clicked, hide a panel:
 
@@ -228,15 +235,20 @@
 
 * `wf:continue(Tag, Function, IntervalInMS, TimeoutInMS) -> ok`
 
-   Spawn the provided function (arity 0) and tell the browser to poll for the results at the specified interval, with a timeout setting.
-   so See [continuations example](http://nitrogenproject.com/demos/continuations) for usage.
+   Spawn the provided function (arity 0) and tell the browser to poll for the
+   results at the specified interval, with a timeout setting.  so See
+   [continuations example](http://nitrogenproject.com/demos/continuations) for
+   usage.
 
 ## Asynchronous Page Updates (Comet, Continuations)
 
 * `wf:comet(Function) -> {ok, Pid}`
 
-   Spawn a comet function, and tell the browser to open a COMET request to receive the results in real time.
-   See [example 1](http://nitrogenproject.com/demos/comet1), [example 2](http://nitrogenproject.com/demos/comet2), and [example 3](http://nitrogenproject.com/demos/comet3) for usage.
+   Spawn a comet function, and tell the browser to open a COMET request to
+   receive the results in real time.  See\
+   [example 1](http://nitrogenproject.com/demos/comet1),
+   [example 2](http://nitrogenproject.com/demos/comet2), and 
+   [example 3](http://nitrogenproject.com/demos/comet3) for usage.
 
 * `wf:comet(Function, LocalPool) -> {ok, Pid}`
 
@@ -258,8 +270,9 @@
 
 * `wf:flush() -> ok`
 
-   Normally, the results of a comet function are sent to the browser when the function exits.
-   `flush/0` pushes results to the browser immediately, useful for a looping comet function.
+   Normally, the results of a comet function are sent to the browser when the
+   function exits.  `flush/0` pushes results to the browser immediately, useful
+   for a looping comet function.
 
 * `wf:async_mode() -> comet | {poll, Interval}`
 
@@ -282,33 +295,38 @@
 
 * `wf:continue(Tag, Function) -> ok`
 
-   Spawn the provided function (arity 0) and tell the browser to poll for the results.
-   See [continuations example](http://nitrogenproject.com/demos/continuations) for usage.
+   Spawn the provided function (arity 0) and tell the browser to poll for the
+   results.  See [continuations example](http://nitrogenproject.com/demos/continuations)
+   for usage.
 
 * `wf:continue(Tag, Function, Interval) -> ok`
 
-   Spawn the provided function (arity 0) and tell the browser to poll for the results at the specified interval.
-   See [continuations example](http://nitrogenproject.com/demos/continuations) for usage.
+   Spawn the provided function (arity 0) and tell the browser to poll for the
+   results at the specified interval.  See
+   [continuations example](http://nitrogenproject.com/demos/continuations) for
+   usage.
 
 ### Comet notes
 
   The comets functionality considers some internal messages other than the ones
   delivered by `wf:send/2` and `wf:send_global/2`. These messages are:
 
-* `'INIT'`
-
-  The init message is sent to the first process in a comet pool.
-
-* `{'JOIN', Pid}`
-
-  This message is sent to already existing comets when a new process joins to the pool
-
-* `{'LEAVE', Pid}`
-
-  This message is triggered when certain comet process terminates and it is delivered to
-  all other processes in the pool
-
-  Optionally you can detect when the user leaves the page with a comet by trapping its exit signal.
+  + `'INIT'`
+  
+    The init message is sent to the first process in a comet pool.
+  
+  + `{'JOIN', Pid}`
+  
+    This message is sent to already existing comets when a new process joins to
+    the pool
+  
+  + `{'LEAVE', Pid}`
+  
+    This message is triggered when certain comet process terminates and it is
+    delivered to all other processes in the pool
+  
+    Optionally you can detect when the user leaves the page with a comet by
+    trapping its exit signal.
 
 ```erlang
 
@@ -321,6 +339,54 @@ comet_function() ->
   end.
 ```
 
+## Caching
+
+* `wf:cache(Key, TTL, Fun) -> Value`
+
+  Allow cache or return the results for the function `Fun` (This function
+  should be a 0-arity function). The `Key` argument is used to identify the
+  cached item, and should uniquely identify the data that is being cached.  The
+  `TTL` argument is used to specify the time-to-live in milliseconds for the
+  cached item; after the TTL period has expired, the cached data is removed.
+
+* `wf:cache(Key, Fun) -> Value`
+  
+  This is the same as calling `wf:cache(Key, infinity, Fun)`. Basically just
+  caching a result with no expiration date.
+
+* `wf:cache(Key) -> Value`
+
+  This is the same as calling `wf:cache(Key, infinity, fun() -> undefined end)`.
+  Basically just return a prestored cache result, and if there is none,
+  store `undefined` and return `undefined`.
+
+* `wf:set_cache(Key, TTL, Value) -> ok`
+* `wf:set_cache(Key, Value) -> ok`
+
+  This will stored the provided `Value` in the cache with `Key` as the
+  identifier.  Unlike `wf:cache/[1,2,3]`, this will not execute the provided
+  value.  If `Value` is a function, then the cache will store the actual
+  function.
+
+* `wf:clear_cache(Key) -> ok`
+
+  Delete the cached item with the `Key` (if there is one)
+
+* `wf:clear_all_cache() -> ok`
+
+  Completely clear the cache
+
+* `wf:cache_rendered(Key, TTL, Elements) -> {ok, HTML}`
+
+  This is a special cache function to pre-render the `Elements` argument.
+  `Elements` can be either some Nitrogen elements to be rendered, or it can be
+  an arity-0 function that will be executed, and the contents of which will be
+  cached.  Further, any actions that are wired  to the client will be
+  evaluated, captured, and returned appropriately.
+
+  The return value for this is `{ok, HTML}` with the side effect that any of
+  the captured actions will be wired accordingly.
+
 ## Redirect
 
 * `wf:redirect(URL) -> ok`
@@ -331,7 +397,7 @@ comet_function() ->
 
   See Below.
 
-* `wf:redirect_to_login(URL, PostLoginURL)= -> ok`
+* `wf:redirect_to_login(URL, PostLoginURL) -> ok`
 
    Redirect to the provided URL, attaching a token on the end. The receiving
    page can subsequently call `wf:redirect_from_login(DefaultURL)` to send
@@ -460,7 +526,8 @@ comet_function() ->
 
 * `wf:q_pl(ListOfAtomKeys) -> [{Key,Values},...]`
 
-   Takes a list of keys returns a proplist of keys and respective values from query string and POST values.
+   Takes a list of keys returns a proplist of keys and respective values from
+   query string and POST values.
 
    **Mnemonic**: Think `q_pl` as "Query Proplist"
 
@@ -491,7 +558,8 @@ Example:
 
 * `wf:mqs(ListOfAtomKeys) -> [ListOfStrings]`
 
-   Get a list of query string and POST values for the provided list of keys.  Syntactical sugar equivilant of:
+   Get a list of query string and POST values for the provided list of keys.
+   Syntactical sugar equivilant of:
 
 ```erlang
    [wf:qs(AtomKey) || AtomKey <- ListOfAtomKeys]
@@ -502,7 +570,8 @@ Example:
 
 * `wf:qs_pl(ListOfAtomKeys) -> [{Key,ListOfValues},...]`
 
-   Takes a list of keys and returns a proplist of keys and respective list of values from the query string and POST values.
+   Takes a list of keys and returns a proplist of keys and respective list of
+   values from the query string and POST values.
 
    **Mnemonic**: Think `qs_pl` as "Query Plurals into a Proplist"
 
@@ -535,17 +604,17 @@ Example:
    Set the encoding to be applied just before sending to the client.  Valid
    values are:
 
-  *  `none` :: No encoding. Send the response as an iolist of bytes. This is what
+  +  `none` :: No encoding. Send the response as an iolist of bytes. This is what
      you would want to use if you were returning binary data (like if you were
      generating an image file on the fly).
-  *  `unicode` :: This runs the return value through Erlang's
+  +  `unicode` :: This runs the return value through Erlang's
      `unicocde:characters_to_binary/1` before sending to the client.
-  *  `Function/1` :: Run the response through this particular function before
+  +  `Function/1` :: Run the response through this particular function before
      sending, such as if you have a custom encoding you wish to use.
-  *  `{Module, Function}` :: Run this through `Module:Function/1`. This is merely
+  +  `{Module, Function}` :: Run this through `Module:Function/1`. This is merely
      an alternative to the previous option, but one that is configuration-file
      friendly.
-  *  `auto` (**Default**) :: Reads the specified response header to attempt to
+  +  `auto` (**Default**) :: Reads the specified response header to attempt to
      determine which encoding should be provided.  It's **quite** naive, however,
      in the name of speed.  If the header starts with "text/" or is set to
      "application/json" or "application/javascript", it will use `unicode`,
@@ -635,7 +704,7 @@ Example:
 
 * `wf:peer_ip(ListOfProxies, ForwardedHeader) -> IPAddress (4-tuple or 8-tuple)`
 
-   This will compare the peer_ip address against the provided list of proxies,
+   This will compare the `peer_ip` address against the provided list of proxies,
    and if any of them match the connected IP, then return the IP address from
    the `ForwardedHeader`.
 
@@ -655,8 +724,8 @@ Example:
 
 * `wf:cookie(Key, Value) -> ok`
 
-   Tell Nitrogen to set a cookie in the browser. Uses \"/\" for the Path, and Nitrogen's
-   session timeout setting for the MinutesToLive value.
+   Tell Nitrogen to set a cookie in the browser. Uses `"/"` for the Path, and
+   Nitrogen's session timeout setting for the MinutesToLive value.
 
 * `wf:cookie(Key, Value, Options) -> ok`
 
@@ -682,8 +751,8 @@ Example:
 
 * `wf:delete_cookie(Key) -> ok`
 
-   Tell Nitrogen to set the cookie to expire immediately, effectively deleting it from
-   the browser.  Is a shortcut for `wf:cookie(Key,"","/",0)`.
+   Tell Nitrogen to set the cookie to expire immediately, effectively deleting
+   it from the browser.  Is a shortcut for `wf:cookie(Key,"","/",0)`.
 
 * `wf:script_nonce() -> String`
 
@@ -753,7 +822,8 @@ Example:
 
 * `wf:console_log(Terms)`
 
-   Send a `console.log()` to the browser with `Terms` as the value. (See [Console Log Action](console_log.md))
+   Send a `console.log()` to the browser with `Terms` as the value. (See
+   [Console Log Action](console_log.md))
 
 ## Configuration
 
