@@ -30,6 +30,8 @@ dash-docs:
 	rm -f doc/dash/Nitrogen.tgz
 	doc/dash/md2docset
 	cd doc/dash; tar --exclude='.DS_Store' -zcvf Nitrogen.tgz Nitrogen.docset
+	mv doc/dash/Nitrogen.tgz .
+	@echo "Dash Docset created and can be found at Nitrogen.tgz in this directory"
 
 rebar3:
 	@echo "Fetching and compiling updated rebar3 (this will not replace your system-wide rebar3, if you have one)"
