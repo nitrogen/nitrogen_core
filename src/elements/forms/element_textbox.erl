@@ -17,6 +17,7 @@ render_element(Record) ->
     Anchor = Record#textbox.anchor,
     Delegate = Record#textbox.delegate,
     Postback = Record#textbox.postback,
+    Vessel = Record#textbox.vessel,
     Disabled = Record#textbox.disabled,
     Readonly = Record#textbox.readonly,
     HandleInvalid = Record#textbox.handle_invalid,
@@ -28,7 +29,7 @@ render_element(Record) ->
     end,
 
     action_event:maybe_wire_next(Anchor, Record#textbox.next),
-    wire_postback(Anchor, ID, HandleInvalid, OnInvalid, Delegate, Postback),
+    wire_postback(Anchor, ID, HandleInvalid, OnInvalid, Delegate, Postback, Vessel),
 
     Value = process_value(Type, Record#textbox.text, Record#textbox.html_encode),
     Min = process_value(Type, Record#textbox.min, Record#textbox.html_encode),
@@ -70,12 +71,13 @@ process_value(_, Value, HtmlEncode) ->
     
 
 
-wire_postback(_, _, _, _, _, undefined) ->
-    do_nothing;
-wire_postback(Anchor, ID, HandleInvalid, OnInvalid, Delegate, Postback) ->
+wire_postback(_, _, _, _, _, undefined, _) ->
+    do_nothing;1
+wire_postback(Anchor, ID, HandleInvalid, OnInvalid, Delegate, Postback, Vessel) ->
     wf:wire(Anchor, #event {
         type=enterkey,
         postback=Postback,
+        vessel=Vessel,
         validation_group=ID,
         handle_invalid=HandleInvalid,
         on_invalid=OnInvalid,

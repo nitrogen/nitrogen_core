@@ -30,6 +30,7 @@ render_element(Record) ->
         Postback -> wf:wire(Anchor, #event {
                     type=change,
                     postback=Postback,
+                    vessel=Record#radio.vessel,
                     validation_group=ID,
                     handle_invalid=Record#radio.handle_invalid,
                     on_invalid=Record#radio.on_invalid,

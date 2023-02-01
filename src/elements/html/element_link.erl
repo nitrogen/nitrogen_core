@@ -22,6 +22,7 @@ render_element(Record) ->
         Postback -> wf:wire(Anchor, #event {
                     type=click,
                     postback=Postback,
+                    vessel=Record#link.vessel,
                     validation_group=ID,
                     handle_invalid=Record#link.handle_invalid,
                     on_invalid=Record#link.on_invalid,

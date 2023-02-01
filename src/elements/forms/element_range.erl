@@ -14,14 +14,22 @@
 reflect() -> record_info(fields, range).
 
 -spec render_element(#range{}) -> body().
-render_element(Record) -> 
+render_element(Record=#range{}) -> 
     ID = Record#range.id,
     Anchor = Record#range.anchor,
     action_event:maybe_wire_next(Anchor, Record#range.next),
 
     case Record#range.postback of
         undefined -> ignore;
-        Postback -> wf:wire(Anchor, #event { type=change, postback=Postback, validation_group=ID, delegate=Record#range.delegate })
+        Postback ->
+            Event = #event{
+                type=change,
+                postback=Postback,
+                vessel=Record#range.vessel,
+                validation_group=ID,
+                delegate=Record#range.delegate
+            },
+            wf:wire(Anchor, Event)
     end,
 
     wf_tags:emit_tag(input, [

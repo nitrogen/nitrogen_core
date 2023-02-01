@@ -400,8 +400,6 @@
         readonly=false          :: boolean(),
         delay=300               :: integer(),
         next                    :: id(),
-        postback                :: term(),
-        vessel                  :: id() | text(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module()

@@ -97,7 +97,7 @@ make_single_vessel_selector(Vessel) when is_atom(Vessel) ->
 make_single_vessel_selector(Vessel) ->
     %% NOTE: Perhaps this should check if the string is "atom-safe"
     %% (alphanumeric and underscores) and if so, treat it as an id, rather than
-    %% a raw selector.  For example: should "input" should be converted to
+    %% a raw selector.  For example: should the string "input" be converted to
     %% ".wfid_input" (treated as an atom/id) or should it stay "input" and be
     %% treated as a CSS selector?  For now, I'm going to say if the term is an
     %% atom, then it's an ID. If it's anything else, it's a CSS selector.

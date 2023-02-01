@@ -65,6 +65,7 @@ maybe_wire_postback(Anchor, Record=#checkbox{}) ->
     Action = #event {
         type=change,
         postback=Record#checkbox.postback,
+        vessel=Record#checkbox.vessel,
         validation_group=Record#checkbox.id,
         handle_invalid=Record#checkbox.handle_invalid,
         on_invalid=Record#checkbox.on_invalid,
