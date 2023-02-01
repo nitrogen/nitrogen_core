@@ -122,9 +122,10 @@ NitrogenClass.prototype.$destroy = function() {
 
 /*** EVENT QUEUE ***/
 
-NitrogenClass.prototype.$queue_event = function(validationGroup, onInvalid, eventContext, extraParam, ajaxSettings) {
+NitrogenClass.prototype.$queue_event = function(vessel, validationGroup, onInvalid, eventContext, extraParam, ajaxSettings) {
     // Put an event on the event_queue.
     this.$event_queue.push({
+        vessel          : vessel,
         validationGroup : validationGroup,
         onInvalid       : onInvalid,
         eventContext    : eventContext,
@@ -232,7 +233,7 @@ NitrogenClass.prototype.$event_loop = function() {
             var o = this.$event_queue.shift();
             this.$last_event = o;
             this.$event_started = now;
-            this.$do_event(o.validationGroup, o.onInvalid, o.eventContext, o.extraParam, o.ajaxSettings);
+            this.$do_event(o.vessel, o.validationGroup, o.onInvalid, o.eventContext, o.extraParam, o.ajaxSettings);
         }
     }
 
@@ -315,15 +316,24 @@ NitrogenClass.prototype.$execute_before_postbacks = function() {
     }
 }
 
-NitrogenClass.prototype.$validate_and_serialize = function(validationGroup) {
+NitrogenClass.prototype.$validate_and_serialize = function(vessel, validationGroup) {
     // Check validatation, build object of params...
     var is_valid = true,
         params = {},
         n = this;
 
     this.$execute_before_postbacks();
-    
-    jQuery(":input").not(".no_postback").each(function(i) {
+
+    var inputs;
+
+    if(vessel == null)
+        inputs = jQuery(":input");
+    else
+        inputs = jQuery(vessel).find(":input");
+
+    var all_inputs = jQuery(inputs).not(".no_postback");
+
+    jQuery(all_inputs).each(function(i) {
         var LV = Nitrogen.$get_validation(this);
         if (LV && LV.group == validationGroup && !LV.validate()) {
             // Set a flag, but keep validating to show all messages.
@@ -331,7 +341,9 @@ NitrogenClass.prototype.$validate_and_serialize = function(validationGroup) {
         } else {
             // Skip any unchecked radio boxes.
             if ((this.type=="radio" || this.type=="checkbox") && !this.checked) return;
+            // Skip multi-select boxes with nothing selected
             if (this.type=="select-multiple" && ($(this).val()==null || ($(this).val().length==0))) return;
+            // Skip any plain buttons or submit buttons
             if (this.type=='button' || this.type=='submit') return;
             
             // Skip elements that aren't nitrogen elements (they won't have a
@@ -424,7 +436,7 @@ NitrogenClass.prototype.$hide_spinner = function() {
     $("div.spinner").hide();
 }
 
-NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventContext, extraParam, ajaxSettings) {
+NitrogenClass.prototype.$do_event = function(vessel, validationGroup, onInvalid, eventContext, extraParam, ajaxSettings) {
     var n = this;
     
     // Flag to prevent firing multiple postbacks at the same time...
@@ -432,7 +444,7 @@ NitrogenClass.prototype.$do_event = function(validationGroup, onInvalid, eventCo
 
     // Run validation...
     this.$show_spinner();
-    var validationParams = this.$validate_and_serialize(validationGroup);   
+    var validationParams = this.$validate_and_serialize(vessel, validationGroup);   
     this.$hide_spinner();
     if (validationParams == null) {
         this.$event_is_running = false;
@@ -1142,14 +1154,16 @@ NitrogenClass.prototype.$datepicker = function(pickerObj, pickerOptions) {
 /*** AUTOCOMPLETE TEXTBOX ***/
 NitrogenClass.prototype.$autocomplete = function(path, autocompleteOptions, enterPostbackInfo, selectPostbackInfo) {
     var n = this;
+    //TODO: for now
+    var vessel = null;
     jQuery.extend(autocompleteOptions, {
         select: function(ev, ui) {
           var val = ui.item.value.replace(/"/g,'\\"');
           var item = (ui.item) && '{"id":"'+ui.item.id+'","value":"'+val+'"}' || '';
-          n.$queue_event(null, null, selectPostbackInfo, {select_item: item});
+          n.$queue_event(vessel, null, null, selectPostbackInfo, {select_item: item});
         },
         source: function(req, res) {
-          n.$queue_event(null, null, enterPostbackInfo, {search_term: req.term}, {
+          n.$queue_event(vessel, null, null, enterPostbackInfo, {search_term: req.term}, {
               dataType: 'json',
               success: function(data) {
                  res(data);
@@ -1171,9 +1185,11 @@ NitrogenClass.prototype.$draggable = function(path, dragOptions, dragTag) {
 
 NitrogenClass.prototype.$droppable = function(path, dropOptions, dropPostbackInfo) {
     var n = this;
+    // TODO: for now
+    var vessel = null;
     dropOptions.drop = function(ev, ui) {
         var dragItem = ui.draggable[0].$drag_tag;
-        n.$queue_event(null, null, dropPostbackInfo, {drag_item: dragItem});
+        n.$queue_event(vessel, null, null, dropPostbackInfo, {drag_item: dragItem});
     };
     objs(path).each(function(index, el) {
           jQuery(el).droppable(dropOptions);
@@ -1191,6 +1207,7 @@ NitrogenClass.prototype.$sortitem = function(el, sortTag) {
 
 NitrogenClass.prototype.$sortblock = function(el, sortOptions, sortPostbackInfo) {
     var n = this;
+    var vessel = null;
     sortOptions.update = function() {
         var sortItems = "";
         for (var i=0; i<this.childNodes.length; i++) {
@@ -1198,7 +1215,7 @@ NitrogenClass.prototype.$sortblock = function(el, sortOptions, sortPostbackInfo)
             if (sortItems != "") sortItems += ",";
             if (childNode.$sort_tag) sortItems += childNode.$sort_tag;
         }
-        n.$queue_event(null, null, sortPostbackInfo, {sort_items: sortItems});
+        n.$queue_event(vessel, null, null, sortPostbackInfo, {sort_items: sortItems});
     };
     objs(el).sortable(sortOptions);
 }

@@ -24,6 +24,7 @@ render_element(Record) ->
                 type=click,
                 validation_group=ID,
                 postback=Postback,
+                vessel=Record#button.vessel,
                 handle_invalid=Record#button.handle_invalid,
                 on_invalid=Record#button.on_invalid,
                 delegate=Record#button.delegate

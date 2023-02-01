@@ -12,6 +12,7 @@
 
 render_action(#event { 
         postback=Postback,
+        vessel=Vessel,
         actions=Actions,
         anchor=Anchor,
         trigger=Trigger,
@@ -29,7 +30,7 @@ render_action(#event {
 
     ValidationGroup1 = wf:coalesce([ValidationGroup, Trigger]),
     AnchorScript = wf_render_actions:generate_anchor_script(Anchor, Target), 
-    PostbackScript = wf_event:generate_postback_script(Postback, Anchor, ValidationGroup1, HandleInvalid, OnInvalid, Delegate, ExtraParam),
+    PostbackScript = wf_event:generate_postback_script(Postback, Vessel, Anchor, ValidationGroup1, HandleInvalid, OnInvalid, Delegate, ExtraParam),
     SystemPostbackScript = wf_event:generate_system_postback_script(Postback, Anchor, ValidationGroup1, HandleInvalid, Delegate),
     {EffectiveType, EffectiveKeyCode} = effective_type_and_keycode(Type, KeyCode),
     WireAction = #wire { trigger=Trigger, target=Target, actions=Actions },

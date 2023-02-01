@@ -9,6 +9,7 @@
 -compile({parse_transform, rekt}).
 
 -define(WF_EXTEND(OrigRec, NewRec, Module, Fields), -extend({OrigRec, NewRec, [{module, Module} | Fields]})).
+-define(WF_BLANK(X), (X==undefined orelse X=="" orelse X==<<>>)).
 
 %%% TYPES FOR DIALYZER %%%
 
@@ -301,6 +302,7 @@
         url="javascript:"       :: script() | url(),
         click                   :: actions(),
         postback                :: term(),
+        vessel                  :: id() | text(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module()
@@ -331,6 +333,7 @@
         click                   :: actions(),
         enter_clicks=[]         :: [id()],
         postback                :: term(),
+        vessel                  :: id() | text(),
         disabled=false          :: boolean(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
@@ -350,6 +353,7 @@
         readonly=false          :: boolean(),
         next                    :: id(),
         postback                :: term(),
+        vessel                  :: id() | text(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module(),
@@ -397,6 +401,7 @@
         delay=300               :: integer(),
         next                    :: id(),
         postback                :: term(),
+        vessel                  :: id() | text(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module()
@@ -426,6 +431,7 @@
         value=0                 :: integer(),
         next                    :: id(),
         postback                :: term(),
+        vessel                  :: id() | text(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module()
@@ -453,6 +459,7 @@
         size=auto               :: auto | integer(),
         html_encode=true        :: html_encode(),
         postback                :: term(),
+        vessel                  :: id() | text(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module(),
@@ -471,6 +478,7 @@
         value="on"              :: text(),
         next                    :: id(),
         postback                :: term(),
+        vessel                  :: id() | text(),
         handle_invalid=false    :: boolean(),
         disabled=false          :: boolean(),
         on_invalid              :: undefined | actions(),
@@ -490,6 +498,7 @@
         name                    :: html_name(),
         checked=false           :: boolean(),
         postback                :: term(),
+        vessel                  :: id() | text(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module(),
@@ -1030,6 +1039,7 @@
         shift_key=false         :: boolean(),
         delay=0                 :: integer(),
         postback                :: term(),
+        vessel                  :: id() | text(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         validation_group        :: string() | binary() | atom(),
@@ -1062,6 +1072,7 @@
 -record(confirm, {?ACTION_BASE(action_confirm),
         text=""                 :: text(),
         postback                :: term(),
+        vessel                  :: id() | text(),
         delegate                :: module()
     }).
 -record(console_log, {?ACTION_BASE(action_console_log),

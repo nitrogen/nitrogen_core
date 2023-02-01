@@ -9,7 +9,7 @@
     update_context_with_websocket_event/1,
     update_context_with_event/0,
     update_context_with_event/1,
-    generate_postback_script/7,
+    generate_postback_script/8,
     generate_system_postback_script/5,
     serialize_event_context/5
 ]).
@@ -67,18 +67,46 @@ update_context_for_postback_request(Event) ->
     wf_context:event_handle_invalid(HandleInvalid),
     ok.
 
-generate_postback_script(undefined, _Anchor, _ValidationGroup, _HandleInvalid, _OnInvalid, _Delegate, _ExtraParam) -> [];
-generate_postback_script(Postback, Anchor, ValidationGroup, HandleInvalid, OnInvalid, Delegate, ExtraParam) ->
+generate_postback_script(undefined, _Vessel, _Anchor, _ValidationGroup, _HandleInvalid, _OnInvalid, _Delegate, _ExtraParam) -> [];
+generate_postback_script(Postback, Vessel, Anchor, ValidationGroup, HandleInvalid, OnInvalid, Delegate, ExtraParam) ->
     PickledPostbackInfo = serialize_event_context(Postback, Anchor, ValidationGroup, HandleInvalid, Delegate),
+    VesselSelector = make_vessel_selector(Vessel),
     OnInvalidScript = case OnInvalid of
         undefined -> "null";
         _         -> ["function(){", OnInvalid, "}"]
     end,
     [
-        wf:f("Nitrogen.$queue_event('~s', ", [ValidationGroup]),
+        wf:f("Nitrogen.$queue_event(~s, '~s', ", [VesselSelector, ValidationGroup]),
         OnInvalidScript,
         wf:f(", '~s', ~s);", [PickledPostbackInfo, ExtraParam])
     ].
+
+
+make_vessel_selector(Vessel) when ?WF_BLANK(Vessel) ->
+    "null";
+make_vessel_selector(Vessel) when is_atom(Vessel) ->
+    ["'",wf:normalize_id(Vessel),"'"];
+make_vessel_selector(Vessel) when is_binary(Vessel); ?IS_STRING(Vessel) ->
+    Vessels = string:split(Vessel, ",", all),
+    make_multi_vessel_selector(Vessels);
+make_vessel_selector(Vessels) when is_list(Vessels) ->
+    make_multi_vessel_selector(Vessels).
+
+make_single_vessel_selector(Vessel) when is_atom(Vessel) ->
+    wf:normalize_id(Vessel);
+make_single_vessel_selector(Vessel) ->
+    %% NOTE: Perhaps this should check if the string is "atom-safe"
+    %% (alphanumeric and underscores) and if so, treat it as an id, rather than
+    %% a raw selector.  For example: should "input" should be converted to
+    %% ".wfid_input" (treated as an atom/id) or should it stay "input" and be
+    %% treated as a CSS selector?  For now, I'm going to say if the term is an
+    %% atom, then it's an ID. If it's anything else, it's a CSS selector.
+    Vessel.
+
+make_multi_vessel_selector(Vessels) ->
+    FormattedVessels = [make_single_vessel_selector(X) || X <- Vessels, not(?WF_BLANK(X))],
+    JoinedVessels = wf:join(FormattedVessels, ","),
+    wf:f("'~s'", [wf:js_escape(JoinedVessels)]).
 
 generate_system_postback_script(undefined, _Anchor, _ValidationGroup, _HandleInvalid, _Delegate) -> [];
 generate_system_postback_script(Postback, Anchor, ValidationGroup, HandleInvalid, Delegate) ->
