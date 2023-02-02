@@ -32,7 +32,7 @@
 
   Then run:
 
-    make rel_inets
+    make inets
 
   This creates a completely self-contained starter application under
   `../myapp` that runs on Inets, Erlang's built in HTTP server.
@@ -46,18 +46,17 @@
   You can also run Nitrogen with Mochiweb, Yaws, Cowboy, or Webmachine. Run one
   of the following make commands:
 
-    make rel_cowboy
-    make rel_mochiweb
-    make rel_webmachine
-    make rel_yaws
+    make cowboy
+    make mochiweb
+    make webmachine
+    make yaws
 
-  **FreeBSD**: Compiling on FreeBSD requires using `gmake` instead of `make`,
+  **BSD**: Compiling on BSD requires using `gmake` instead of `make`,
   otherwise the steps are the same
 
   **Microsoft Windows**: There are special instructions for Windows users who
   wish to compile on Windows. Read about
-  [Compiling
-  Nitrogen on Windows](https://github.com/nitrogen/nitrogen/blob/master/rel/overlay/win/README.md)
+  [Compiling Nitrogen on Windows](https://github.com/nitrogen/nitrogen/blob/master/rel/overlay/win/README.md)
  
   There are also "slim release" versions that can be built. These take
   advantage of a new feature introduced in Erlang's R15B02 release, which
@@ -79,7 +78,7 @@
 
   For example:
 
-    make slim_yaws PROJECT`my_awesome_yaws_app PREFIX`~/my_web_apps
+    make slim_yaws PROJECT=my_awesome_yaws_app PREFIX=~/my_web_apps
 
   Will create a `my_web_apps/my_awesome_yaws_app` directory in your home
   directory.
