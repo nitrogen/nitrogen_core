@@ -13,11 +13,16 @@
  *  Nitrogen Core: http://github.com/nitrogen/nitrogen_core
  *  Simple Bridge: http://github.com/nitrogen/simple_bridge
  *  nprocreg: http://github.com/nitrogen/nprocreg
+ *  Canister: http://github.com/nitrogen/canister
  *  NitroCache: http://github.com/nitrogen/nitro_cache (forked from https://github.com/marcelog/simple_cache)
  *  rekt: http://github.com/nitrogen/rekt
  *  NitrogenProject.com: http://github.com/nitrogen/NitrogenProject.com
  *  Mailing List - http://groups.google.com/group/nitrogenweb
  *  Bugs and Issues - http://github.com/nitrogen/nitrogen/issues
+
+## Toolbox
+
+* Helpful tools and utilities can be found in the [toolbox](/doc/toolbox.md)
 
 ## Versions
 
@@ -38,7 +43,6 @@
     - Git Repo: https://github.com/webmachine/webmachine
 
  *  **yaws** - HTTP Server (Optional)
-    - Homepage: https://yaws.hyber.org
     - Git Repo: https://github.com/erlyaws/yaws 
 
  *  **Sync** - Automatically recompile changed Erlang modules.
@@ -51,8 +55,6 @@
  *  **Live Validation 1.3** - http://livevalidation.com/
 
  *  **jQuery File Upload 5.19** - https://github.com/blueimp/jQuery-File-Upload
-
- *  **jQuery Mobile 1.4.5** - http://jquerymobile.com (will be removed in Nitrogen 3)
 
 ## Documentation
 

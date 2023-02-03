@@ -1,7 +1,6 @@
 <!-- dash: #console_log | Event | ###:Section -->
 
 
-
 ## Console Log Action - #console_log {}
 
   This performs a safe `console.log()` call to print something some text or Erlang terms to your browser's javascript console. If your browser doesn't support `console.log()`, the call is ignored.

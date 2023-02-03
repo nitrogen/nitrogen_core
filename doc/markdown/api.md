@@ -1,7 +1,7 @@
-<!-- dash: API | Guide | ##:Section -->
+<!-- dash: Function Reference | Guide | ##:Section -->
 
 
-# Nitrogen API
+# Nitrogen Function Reference/API
 
 ## Live Page Updates
 
