@@ -7,6 +7,17 @@
   pops up a [jQuery UI Datepicker](http://jqueryui.com/datepicker/) when the
   control takes the focus.
 
+### Deprecated in Nitrogen 3.0
+
+The `#datepicker_textbox` element is deprecated in favor of using the HTML
+`#input{type=date}` element, which automatically formats the dates based on
+locale (controlled by the browser), and has additional functionality such as
+mins and maxes.
+
+Inevitably, when/if Nitrogen fully removes its reliance on Jquery, this element
+will be removed as well, as it's quite clunky and harkens back to a time when
+browsers were much less sophisticated.
+
 ### Usage
 
 ```erlang
