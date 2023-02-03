@@ -15,7 +15,7 @@ reflect() -> record_info(fields, spinner).
 
 -spec render_element(#spinner{}) -> body().
 render_element(Record) ->
-    Terms = #panel {
+    #panel {
         html_id=Record#spinner.html_id,
         id=Record#spinner.id,
         anchor=Record#spinner.anchor,
@@ -24,5 +24,4 @@ render_element(Record) ->
         style=["display:none;",Record#spinner.style],
         data_fields=Record#spinner.data_fields,
         body=#image { image=Record#spinner.image }
-    },
-    element_panel:render_element(Terms).
+    }.

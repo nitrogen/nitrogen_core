@@ -46,14 +46,14 @@ render_element(Record) ->
     wf:wire(Script),
 
     % Render as a panel...
-    element_panel:render_element(#panel {
+    #panel {
         id=Record#draggable.id,
         anchor=Anchor,
         class=[draggable, GroupClasses, Record#draggable.class],
         style=Record#draggable.style,
         data_fields=Record#draggable.data_fields,
         body=Record#draggable.body
-    }).
+    }.
 
 format_handle_opt(undefined) ->
     [];

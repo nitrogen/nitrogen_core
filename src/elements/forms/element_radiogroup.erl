@@ -23,7 +23,7 @@ render_element(Record) ->
     Body = wf_render_elements:recurse_body(NameFun, Record#radiogroup.body),
 
     % Render the record...
-    element_panel:render_element(#panel {
+    #panel {
         id=Record#radiogroup.id,
         anchor=Record#radiogroup.anchor,
         class=[radiogroup, Record#radiogroup.class],
@@ -31,7 +31,7 @@ render_element(Record) ->
         style=Record#radiogroup.style,
         data_fields=Record#radiogroup.data_fields,
         body=Body
-    }).
+    }.
 
 set_name_fun(Name) ->
     fun

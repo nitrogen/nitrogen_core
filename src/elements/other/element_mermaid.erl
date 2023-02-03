@@ -50,7 +50,7 @@ render_element(Record) ->
         data_fields=Record#mermaid.data_fields,
         style = Record#mermaid.style
     },
-    element_panel:render_element(Panel).
+    Panel.
 
 
 options_to_js(Global, Diagram) ->

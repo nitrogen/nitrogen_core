@@ -78,7 +78,7 @@ render_element(Record) ->
 
     wf:wire(OKButtonID, TextBoxID, #validate { attach_to=CancelButtonID, validators=Record#inplace_textbox.validators }),
 
-    element_panel:render_element(Terms).
+    Terms.
 
 -spec event(any()) -> ok.
 event({ok, Delegate, {ViewPanelID, LabelID, EditPanelID, TextBoxID}, Tag}) -> 

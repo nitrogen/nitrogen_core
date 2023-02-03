@@ -39,4 +39,4 @@ render_element(Record) ->
             }
         ]
     },
-    element_panel:render_element(Panel).
+    Panel.

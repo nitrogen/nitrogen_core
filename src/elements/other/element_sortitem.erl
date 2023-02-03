@@ -32,6 +32,5 @@ render_element(Record) ->
         data_fields=Record#sortitem.data_fields,
         body=Record#sortitem.body
     },
-
-    element_panel:render_element(Panel).
+    Panel.
 
