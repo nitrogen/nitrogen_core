@@ -224,44 +224,12 @@
 
 ## How do I upgrade to a new version of Nitrogen?
 
-  **Upgrading to 2.3**
-    
-  Following the instructions for upgrading to 2.2.2 will work except that
-  websockets won't be available. For a more complete upgrade guide, see the
-  [See the 2.3 upgrading guide](upgrade2.3.md)
+### Upgrading any 2.x Version to Nitrogen 3.0
 
-  **Upgrading from 2.1 to any version up to 2.2.2**
-
-  Edit your rebar.config file and make sure dependencies are pointing at the
-  desired tag (ex: `{tag, "v2.2.2"}`) then run:
-
-    make upgrade
-
-  This will upgrade to the latest version of Nitrogen and it's dependencies.
-  It will **not** upgrade to the latest Erlang Runtime System. If you wish to
-  upgrade your version of ERTS, You'll want to follow the directions below for
-  upgrading from pre-2.1 to 2.1+.
-
-  **Note:** If you've run `make upgrade` and nothing seems to have worked,
-  please check out the relevant question in the
-  [Troubleshooting](troubleshooting.md) guide.
-
-  **If you're running a version of Nitrogen pre 2.1 and want to upgrade to 2.1.0 and above:**
-  
- *  Build or download the new Nitrogen environment for your architecture and
-    preferred web server. Unzip to a new directory.
-
- *  Copy your existing `./etc` directory to the new build. This retains your
-    configuration settings.
-
- *  Copy your existing `./site` directory to the new build, **except** for the
-    files in `./site/static/nitrogen`. You will want to use the new version of
-    any files in `./site/static/nitrogen`.
-
-    This will update the Erlang version, the dependencies files, and
-    all of the Javascript used by Nitrogen. 
-    
-    You will also need to update your code if there are any API level changes.
+  * [Upgrading Any 2.x to 3.0](upgrade3.0.md)
+  * [Upgrading 2.2 to 2.3](upgrade 2.3.md)
+  * [Upgrading 2.1 to 2.2](upgrade2.2.md)
+  * [Upgrading 2.0 to 2.1](upgrade2.1.md)
 
 ## What do I do if I run into errors? How do I troubleshoot? 
 

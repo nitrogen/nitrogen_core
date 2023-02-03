@@ -20,11 +20,6 @@
  *  [Label](label.md)
  *  [Value](value.md)
  *  [Lists](list.md) | [List Items](listitem.md)
-  * [Preformatted Text](basic_tag.md)
-  * [Code](basic_tag.md)
-  * [Italic](basic_tag.md)
-  * [Strong](basic_tag.md)
-  * [Emphasis](basic_tag.md)
 
 ## HTML
 
@@ -35,6 +30,11 @@
  *  [Link](link.md) | [Email Link](email_link.md)
  *  [Literal](literal.md)
  *  [Horizontal Rule](hr.md)
+  * [Preformatted Text](basic_tag.md)
+  * [Code](basic_tag.md)
+  * [Italic](basic_tag.md)
+  * [Strong](basic_tag.md)
+  * [Emphasis](basic_tag.md)
 
 ## HTML5 Semantic Elements
 
@@ -63,7 +63,7 @@
  *  [General In-Place Element](inplace.md)
  *  [In-Place Textbox](inplace_textbox.md)
  *  [In-Place Textarea](inplace_textarea.md)
- *  [AJAX Spinner](spinner.md)
+ *  [Spinner](spinner.md)
 
 ## Mobile Elements
 
