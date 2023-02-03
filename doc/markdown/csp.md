@@ -39,7 +39,7 @@ Domains may either be atoms (as shown, with underscores instead of
 hyphens) or strings (retaining the hyphens documented in the CSP
 specification).
 
-Sources might be strings ("*.fontawesome.com") or atoms (self).
+Sources might be strings (`"*.fontawesome.com"`) or atoms (`self`).
 Strings are left untouched by the CSP header constructor; atoms are
 translated into single-quoted strings.  The following atoms are
 available:
