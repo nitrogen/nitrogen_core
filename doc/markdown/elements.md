@@ -9,10 +9,10 @@
 ## Layout
 
  *  [Template](template.md)
- *  [Panel](panel.md)
+ *  [Panel (div)](basic_tag.md)
  *  [Sync Panel](sync_panel.md)
  *  [Delay Body](delay_body.md)
- *  [Span](span.md)
+ *  [Span](basic_tag.md)
  *  [Fieldset](fieldset.md)
  *  [Table](table.md) | [Row](tablerow.md) | [Cell](tablecell.md) | [Header Cell](tableheader.md)
  *  [Single Row Table](singlerow.md)
@@ -20,11 +20,16 @@
  *  [Label](label.md)
  *  [Value](value.md)
  *  [Lists](list.md) | [List Items](listitem.md)
+  * [Preformatted Text](basic_tag.md)
+  * [Code](basic_tag.md)
+  * [Italic](basic_tag.md)
+  * [Strong](basic_tag.md)
+  * [Emphasis](basic_tag.md)
 
 ## HTML
 
- *  [Heading 1](h1.md) | [Heading 2](h2.md) | [Heading 3](h3.md) | [Heading 4](h4.md)
- *  [Paragraph](p.md)
+ *  [Heading 1-6](basic_tag.md)
+ *  [Paragraph](basic_tag.md)
  *  [Break](br.md)
  *  [Image](image.md)
  *  [Link](link.md) | [Email Link](email_link.md)
