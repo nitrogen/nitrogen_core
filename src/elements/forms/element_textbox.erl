@@ -72,7 +72,7 @@ process_value(_, Value, HtmlEncode) ->
 
 
 wire_postback(_, _, _, _, _, undefined, _) ->
-    do_nothing;1
+    do_nothing;
 wire_postback(Anchor, ID, HandleInvalid, OnInvalid, Delegate, Postback, Vessel) ->
     wf:wire(Anchor, #event {
         type=enterkey,
