@@ -1736,11 +1736,13 @@ $(window).on("beforeunload", function() {
     return;
 });
 
-$(document).ready(function() {
-    if(!nitrogen_jqm_loaded) {
-        Nitrogen.$attempt_websockets();
-        Nitrogen.$init_reconnect_loop();
-        Nitrogen.$event_loop();
-        Nitrogen.$listen_for_online();
-    }
+document.addEventListener('readystatechange', function() {
+    if ("complete" !== document.readyState || nitrogen_jqm_loaded) {
+        return;
+    };
+
+    Nitrogen.$attempt_websockets();
+    Nitrogen.$init_reconnect_loop();
+    Nitrogen.$event_loop();
+    Nitrogen.$listen_for_online();
 });
