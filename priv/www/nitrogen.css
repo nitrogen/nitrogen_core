@@ -113,35 +113,42 @@ div.inplace_textbox .LV_invalid {
 }
 
 /*** Disconnection Bar ***/
-div.nitrogen_notice_bar {
-	display:none;
+#nitrogen-notice-bar {
 	position:fixed;
+    overflow: hidden;
 	top:0;
 	left:0;
 	width:100%;
-	padding:5px 0 5px 0;
+    padding: 0;
 	text-align:center;
-	height:20px;
+	height:0;
 	background: #ddd;
 	color: #222;
 	font-weight:bold;
+    line-height: 1.4;
 	z-index: 10000;
 	border-bottom: 1px solid #000;
+    transition: 0.5s ease-in-out;
 }
 
-div.nitrogen_notice_warning_bar {
+#nitrogen-notice-bar.visible {
+    height: 20px;
+	padding: 5px 0;
+}
+
+#nitrogen-notice-bar.is-warning {
 	background: #ff0;
-	color: #000
+	color: #000;
 	border-bottom: 1px solid #000;
 }
 
-div.nitrogen_notice_error_bar {
+#nitrogen-notice-bar.is-error {
 	background: #fcc;
 	color: #F00;
 	border-bottom: 1px solid #f00;
 }
 
-div.nitrogen_notice_ok_bar {
+#nitrogen-notice-bar.is-ok {
 	color:#090;
 	background:#cfc;
 	border-bottom: 1px solid #090;
@@ -296,4 +303,3 @@ a.upload_delete_file:hover {
     position: absolute;
     left:-10000px;
 }
-
