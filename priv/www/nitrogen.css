@@ -16,19 +16,23 @@ label.nitrogen_label {
 
 /*** INPLACE EDITING ***/
 
+div.inplace_textarea div.view,
 div.inplace_textbox div.view {
     cursor: pointer;
 }
 
+div.inplace_textarea .label,
 div.inplace_textbox .label {
     display: inline;
 }
 
+div.inplace_textarea .instructions, 
 div.inplace_textbox .instructions {
     padding-left: 12px;
     font-size: 0.8em;
 }
 
+div.inplace_textarea .LV_invalid,
 div.inplace_textbox .LV_invalid {
     position: relative;
     margin-right: 7px;
@@ -295,5 +299,42 @@ a.upload_delete_file:hover {
     display: inline !important;
     position: absolute;
     left:-10000px;
+}
+
+
+.calendar_day_header th {
+	width: 14%;
+	text-align:center;
+}
+
+.calendar > table > tbody > tr > th,
+.calendar > table > tbody > tr > td {
+	border: 1px solid #999;
+	padding:0;
+}
+
+.calendar_day_body {
+	min-height:100px;
+	padding-top: 30px;
+}
+
+.calendar_day_wrapper {
+	position:relative;
+	min-height:100px;
+	padding:4px;
+}
+
+.calendar_day {
+	position:absolute;
+	width: 100%;
+	left:0;
+	top:0;
+	text-align:left;
+	background: rgba(128, 128, 128, 0.1);
+	padding:4px;
+}
+
+.calendar_today {
+	background: rgba(0, 255, 0, 0.1);
 }
 
