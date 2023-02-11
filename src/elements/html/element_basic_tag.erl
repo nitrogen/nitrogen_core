@@ -28,8 +28,8 @@ render_element(Rec0) ->
         Rec#basic_tag.body
     ],
     wf_tags:emit_tag(Tag, Body, [
-        {id, Rec#basic_tag.id},
-        {class, [ElementName, Rec#basic_tag.class]},
+        {id, Rec#basic_tag.html_id},
+        {class, Rec#basic_tag.class},
         {title, Rec#basic_tag.title},
         {data_fields, Rec#basic_tag.data_fields},
         {style, Rec#basic_tag.style}
