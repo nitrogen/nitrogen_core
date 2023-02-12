@@ -3,20 +3,20 @@
 -include("wf.hrl").
 -export([
     reflect/0,
-    render_element/1
+    transform_element/1
 ]).
 
 -spec reflect() -> [atom()].
 reflect() -> record_info(fields, grid).
 
--spec render_element(nitrogen_element()) -> body().
-render_element(#grid_clear {}) ->
+-spec transform_element(nitrogen_element()) -> body().
+transform_element(#grid_clear {}) ->
     "<div class='clear'></div>\n";
-render_element(Record0)  ->
+transform_element(Record0)  ->
     Record = to_grid_record(Record0),
     Body = rewrite_body(lists:flatten([Record#grid.body])),
 
-    element_panel:render_element(#panel {
+    #panel {
         html_id=Record#grid.html_id,
         class=to_classes(Record),
         data_fields=Record#grid.data_fields,
@@ -34,7 +34,7 @@ render_element(Record0)  ->
                     body=Body
                 }
         end
-    }).
+    }.
 
 -spec to_grid_record(X :: nitrogen_element()) -> #grid{}.
 to_grid_record(X) -> 
