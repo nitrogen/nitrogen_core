@@ -3,16 +3,16 @@
 -include("wf.hrl").
 -export([
     reflect/0,
-    transform_element/1
+    render_element/1
 ]).
 
 -spec reflect() -> [atom()].
 reflect() -> record_info(fields, grid).
 
--spec transform_element(nitrogen_element()) -> body().
-transform_element(#grid_clear {}) ->
+-spec render_element(nitrogen_element()) -> body().
+render_element(#grid_clear {}) ->
     "<div class='clear'></div>\n";
-transform_element(Record0)  ->
+render_element(Record0)  ->
     Record = to_grid_record(Record0),
     Body = rewrite_body(lists:flatten([Record#grid.body])),
 
