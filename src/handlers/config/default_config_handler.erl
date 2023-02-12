@@ -5,22 +5,22 @@
 
 -module (default_config_handler).
 -include("wf.hrl").
--behaviour (config_handler).
+-behaviour(config_handler).
 -export ([
-    init/2,
-    finish/2,
-    get_value/4,
-    get_values/4
+    init/1,
+    finish/1,
+    get_value/3,
+    get_values/3
 ]).
 
-init(_Config, _State) ->
-    {ok, []}.
+init(_Config) ->
+    ok.
 
-finish(_Config, _State) ->
-    {ok, []}.
+finish(_Config) ->
+    ok.
 
-get_value(Key, DefaultValue, Config, State) ->
-    case get_values(Key, [DefaultValue], Config, State) of
+get_value(Key, DefaultValue, Config) ->
+    case get_values(Key, [DefaultValue], Config) of
         [Value] ->
             Value;
         Values ->
@@ -28,7 +28,7 @@ get_value(Key, DefaultValue, Config, State) ->
             throw({nitrogen_error, too_many_matching_values, Key, Values})
     end.
 
-get_values(Key, DefaultValue, Config, State) ->
+get_values(Key, DefaultValue, Config) ->
     %% By default, use nitrogen_core as the app (for Nitrogen 2.4+), however,
     %% for backwards compatibility, also check for the nitrogen app.
     DefaultApps = [nitrogen_core, nitrogen],
@@ -46,17 +46,17 @@ get_values(Key, DefaultValue, Config, State) ->
         {ok, Value} ->
             [Value];
         _ ->
-            get_values(Apps, Key, DefaultValue, Config, State)
+            get_values(Apps, Key, DefaultValue, Config)
     end.
 
-get_values([], _Key, DefaultValue, _Config, _State) ->
+get_values([], _Key, DefaultValue, _Config) ->
     DefaultValue;
-get_values([App|Apps], Key, DefaultValue, _Config, _State) ->
+get_values([App|Apps], Key, DefaultValue, _Config) ->
     case application:get_env(App, Key) of
         {ok, Value} ->
             [Value];
         undefined ->
-            get_values(Apps, Key, DefaultValue, _Config, _State)
+            get_values(Apps, Key, DefaultValue, _Config)
     end.
 
 configuration_function(Key, DefaultValue) ->

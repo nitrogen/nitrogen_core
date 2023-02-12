@@ -22,11 +22,12 @@ init(Config, State) ->
     CacheName = cache_name(Config),
     try maybe_add_cache(CacheName)
     catch error:undef ->
-        wf:error("nitro_cache not found in the system. You should add it as a dependency to your rebar.config like this:~n    ~p~n", [{nitro_cache, {git, "git://github.com/nitrogen/nitro_cache", {branch, master}}}]),
+        wf:error("nitro_cache not found in the system. You should add it as a dependency to your rebar.config like this:~n    ~p~n", [{nitro_cache, {git, "https://github.com/nitrogen/nitro_cache", {branch, master}}}]),
         throw({nitro_cache_not_found, "See message above"})
     end,
     {ok, State}.
 
+%% This is here in case the nitro_cache application is restarted.
 maybe_add_cache(CacheName) ->
     case application:get_env(nitro_cache, initialized_nitrogen_caches) of
         undefined ->
