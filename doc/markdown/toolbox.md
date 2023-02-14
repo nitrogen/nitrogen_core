@@ -47,9 +47,11 @@
 
 ### Cloud
 
+* [erlcloud](https://github.com/erlcloud/erlcloud) - A full suite of tools for
+  working with Amazon Web Services.
 * [erls3](https://github.com/choptastic/erls3) - This is a fork of the
   [original erls3](https://github.com/cstar/erls3) project.  This forked
-  version is maintained by the maintainer of Nitrogen.
+  version is (sort of) maintained by the maintainer of Nitrogen.
 
 ### Graphics
 
