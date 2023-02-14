@@ -9,6 +9,7 @@
     reflect/0,
     render_element/1,
     scripts/0,
+    scripts/2,
     css/2,
     js/2
 ]).
@@ -95,8 +96,7 @@ size_class(Prefix0, Size0) ->
         {Prefix, Size} -> <<Prefix/binary,"-",Size/binary>>
     end.
 
-add_class_from_prefix(Prefix, Vsn0, Type) ->
-    Vsn = wf:to_integer(Vsn0, undefined),
+add_class_from_prefix(Prefix, Vsn, Type) ->
     add_class_from_prefix_(wf:to_atom(Prefix, icon), wf:to_integer(Vsn, 0), wf:to_existing_atom(Type, regular)).
 
 %% fontawesome things
@@ -177,6 +177,9 @@ tag_from_prefix(_) ->
 scripts() ->
     Prefix = wf:config(default_icon_prefix),
     Vsn = wf:config(default_icon_version),
+    scripts(Prefix, Vsn).
+
+scripts(Prefix, Vsn) ->
     [
         css(Prefix, Vsn),
         js(Prefix, Vsn)
@@ -248,9 +251,9 @@ css_src(bi, _) ->
         <<"sha512-5PV92qsds/16vyYIJo3T/As4m2d8b6oWYfoqV+vtizRB6KhF1F9kYzWzQmsO6T3z3QG2Xdhrx7FQ+5R1LiQdUA==">>
     };
 css_src(_, _) ->
-    {<<>>, <<>>}.
+     {<<>>, <<>>}.
 
-
+ 
 js_src(fa, 5) ->
     {
         <<"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js">>,
@@ -267,5 +270,5 @@ js_src(la, _) ->
         <<"sha512-vebUliqxrVkBy3gucMhClmyQP9On/HAWQdKDXRaAlb/FKuTbxkjPKUyqVOxAcGwFDka79eTF+YXwfke1h3/wfg==">>
     };
 js_src(_, _) ->
-    {<<>>, <<>>}.
-
+     {<<>>, <<>>}.
+ 
