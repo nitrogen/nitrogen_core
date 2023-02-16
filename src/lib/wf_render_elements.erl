@@ -10,7 +10,8 @@
     render_and_trap_actions/1,
     temp_id/0,
     normalize_id/1,
-    recurse_body/2
+    recurse_body/2,
+    cache_rendered/3
 ]).
 
 -spec render_and_trap_actions(Elements :: body() | fun()) -> {ok, Html :: binary(), Actions :: binary()}.
