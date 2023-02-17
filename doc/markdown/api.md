@@ -105,6 +105,14 @@
    Convert the supplied term into an Atom, if possible. Useful for
    turning Integers, Binaries, and Strings into Atoms.
 
+* `wf:to_bool(Term) -> Boolean`
+
+   Convert the supplied `Term` to a boolean (`true` or `false`).  There are a
+   handful of terms that will evaluate to `false`: `0`, `0.0`, case-insensitive
+   string or binary of `"false"` (e.g. `<<"FaLSe">>`), the atom `false` itself,
+   the atom `undefined`, and empty strings or binaries (e.g. `<<>>` or `""`).
+   All other values will evaluate to `true`.
+
 * <a name="wf_to_existing_atom"></a>`wf:to_existing_atom(Term) -> Atom`
 
    Convert the supplied term to an Atom that already exists in the Erlang VM.
@@ -836,3 +844,52 @@ Example:
 
    Get the Nitrogen configuration setting under the specified Key. If
    not set, then return DefaultValue.
+
+## Macros
+
+* `?WF_IF(Term, IfTrue, IfFalse)`
+
+  This is a ternary `if`.  Basically, it's just a convenience macro that roughly simulates this case statement:
+
+  ```erlang
+  case wf:to_bool(Term) of
+      false -> IfFalse;
+	  true -> IfTrue
+  end.
+  ```
+
+* `?WF_IF(Term, IfTrue)`
+
+  This is equivilant to `?WF_IF(Term, IfTrue, "")`
+
+* `?WF_SAFE(Term, Default)`
+
+  This is effective just a wrapper around a `try-catch` block and is typically
+  used to wrap simple conversion functions.  Basically, if there is an error
+  evaluating `Term`, then `Default` will be returned.
+
+  For Erlang 25 and above, you could consider using the experimental
+  [`maybe`](https://www.erlang.org/doc/reference_manual/expressions.html#maybe)
+  keyword instead, but as of Erlang 26, this still needs to be enabled with
+  compiler options.
+
+* `?WF_SAFE(Term)`
+
+  This is equivilant to `?WF_SAFE(Term, undefined)`
+
+* `?WF_EXTEND(OrigRec, NewRec, Module, Fields)`
+
+  This uses the [rekt](https://github.com/nitrogen/rekt) tool to extend a
+  Nitrogen element or action. For example, to create a new element called
+  `#my_button` based on `#button` that adds a new attribute called `foo` that
+  can be an atom, with a default value of `bar`:
+
+  ```erlang
+  ?WF_EXTEND(button, my_button, element_my_button, [{foo, bar, "atom()"}]).
+  ```
+
+* `WF_LOG`
+
+* `DEBUG`
+
+* `PRINT`

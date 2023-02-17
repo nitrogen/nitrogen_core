@@ -148,13 +148,13 @@
 
 %%% GUARDS %%%
 
--define (IS_STRING(Term),
+-define(IS_STRING(Term),
     (is_list(Term) andalso Term /= [] andalso is_integer(hd(Term)))).
 
--define (IS_ACTION_PRIORITY(Priority),
+-define(IS_ACTION_PRIORITY(Priority),
     (Priority=:=normal orelse Priority=:=eager orelse Priority=:=defer)).
 
--define (PRIORITY_WIRE(Priority),
+-define(PRIORITY_WIRE(Priority),
         (case Priority of
             eager   -> eager;
             defer   -> defer;
@@ -165,7 +165,7 @@
 
 -define(WF_SAFE(Exp, Default), (try Exp catch _:_ -> Default end)).
 
--define(WF_SAVE(Exp), ?WF_SAFE(Exp, undefined)).
+-define(WF_SAFE(Exp), ?WF_SAFE(Exp, undefined)).
 
 %%% TERNARY IF AND VARIATIONS %%%
 -define(WF_IF(Term,IfTrue,IfFalse),
@@ -173,15 +173,8 @@
         %% This is wrapped in a fun to contain the leaky-case expression. It
         %% allows for nesting ?WF_IF calls. Though it obviously does incur the
         %% minor overhead of creating an anonymous function then executing it.
-        case Term of
-            %% We use the long "WF_IF_VALUE" variable to prevent the likelyhood
-            %% of a variable naming clash. This will throw some matching or
-            %% "shadowing" errors if, in a function, you define a variable
-            %% called "WF_IF_VALUE" before calling ?WF_IF. Given that this is
-            %% unlikely to happen, this is an acceptable compromise.
-            WF_IF_VALUE when WF_IF_VALUE==false;
-                         WF_IF_VALUE==undefined;
-                         WF_IF_VALUE==[] ->
+        case wf:to_bool(Term) of
+            false ->
                 IfFalse;
             _ ->
                 IfTrue
