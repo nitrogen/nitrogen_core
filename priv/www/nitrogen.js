@@ -1235,16 +1235,25 @@ NitrogenClass.prototype.$sortblock = function(el, sortOptions, sortPostbackInfo)
 }
 
 /*** TEXTAREA TAB-TRAPPING ***/
-/*** With a little help from http://stackoverflow.com/questions/6140632/how-to-handle-tab-in-textarea ***/
-NitrogenClass.prototype.$trap_tabs = function(el) {
-    $(el).keydown(function(e) {
+/**
+ * Intercept tab keypresses and insert a tab character.
+ * 
+ * Don't do this, as it will interferes with accessibility APIs.
+ * 
+ * See http://stackoverflow.com/questions/6140632/how-to-handle-tab-in-textarea
+ * 
+ * @param {string} Unique class name anchoring textarea.
+ */
+NitrogenClass.prototype.$trap_tabs = function(textarea_class_name) {
+    var textarea = document.querySelector(el);
+    if (null === textarea) {
+        return;
+    }
+
+    textarea.addEventListener('keydown', function(e) {
         if(e.keyCode == 9) {
-            var start = this.selectionStart;
-            var end = this.selectionEnd;
-            var $this = $(this);
-            var val = $this.val();
-            $this.val(val.substring(0, start) + "\t" + val.substring(end));
-            this.selectionStart = this.selectionEnd = start + 1;
+            document.execCommand("insertText", false, "\t");
+            e.preventDefault();
             return false;
         }
     });
