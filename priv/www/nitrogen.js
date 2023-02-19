@@ -263,22 +263,28 @@ NitrogenClass.prototype.$event_loop = function() {
 /*** NOTICE BAR AT THE TOP ***/
 //notice_type == error|warning|ok
 NitrogenClass.prototype.$show_notice_bar = function(notice_type, msg) {
-    var add_class = "nitrogen_notice_" + notice_type + "_bar";
-    if($("div.nitrogen_notice_bar").length == 0) {
-        var disc_bar = $("<div>")
-            .addClass("nitrogen_notice_bar");
-        $("body").prepend(disc_bar);
+    var notice_bar = document.getElementById("nitrogen-notice-bar");
+    if (null === notice_bar) {
+        notice_bar = document.createElement("div");
+        notice_bar.setAttribute("id", "nitrogen-notice-bar");
+        document.body.insertBefore(notice_bar, document.body.firstChild);
     }
-    $("div.nitrogen_notice_bar")
-        .addClass(add_class)
-        .html(msg)
-        .slideDown();
+
+    notice_bar.setAttribute("class", "visible is-" + notice_type);
+    notice_bar.innerHTML = msg;
 }
 
 NitrogenClass.prototype.$hide_notice_bar = function() {
-    $("div.nitrogen_notice_bar").slideUp(500, function() {
-        $("div.nitrogen_notice_bar").remove()
-    });
+    var notice_bar = document.getElementById("nitrogen-notice-bar");
+    if ( null === notice_bar ) {
+        return;
+    }
+
+    // Reset classes to default, where the bar is hidden.
+    // It's okay to leave the bar in the DOM because if it comes
+    // back it will transition in again instead of appearing abruptly.
+    notice_bar.removeAttribute("class");
+    notice_bar.innerHTML = "";
 }
 
 NitrogenClass.prototype.$show_disconnected_notice = function() {
@@ -293,7 +299,15 @@ NitrogenClass.prototype.$hide_disconnected_notice = function() {
 }
 
 NitrogenClass.prototype.$hide_disconnected_notice_worked = function() {
-    if($("div.nitrogen_notice_bar").is(":visible")) {
+    var notice_bar = document.getElementById("nitrogen-notice-bar");
+    if (null === notice_bar) {
+        return;
+    }
+
+    // Is the purpose of `$().is(':visible')` to prevent jank when
+    // removing a notice that's sliding out? or is it only to
+    // determine if the notice bar is present on the page?
+    if (notice_bar.clientHeight > 0) {
         this.$show_notice_bar("ok", "Reconnected!");
         this.$hide_disconnected_notice();
     }
