@@ -133,6 +133,7 @@ safe_to_float(L) when is_list(L) ->
     end.
 
 -spec to_bool(term()) -> boolean().
+to_bool(undefined) -> false;
 to_bool(0) -> false;
 to_bool("0") -> false;
 to_bool(<<"0">>) -> false;
@@ -482,6 +483,7 @@ parse_ip(String) ->
 -include_lib("eunit/include/eunit.hrl").
 
 bool_test() ->
+    ?assertEqual(false, to_bool(undefined)),
     ?assertEqual(true,  to_bool("TrUe")),
 
     ?assertEqual(false, to_bool("false")),
