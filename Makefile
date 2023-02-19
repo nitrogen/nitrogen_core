@@ -25,6 +25,7 @@ test: rebar3
 	mkdir -p test/browsertest/_checkouts
 	ln -s ../../.. test/browsertest/_checkouts/nitrogen_core
 	cd test/browsertest; make test_all TESTLOGDIR="../results.$(shell date +%Y-%m-%d.%H%M%S)"
+	rm -fr test/browsertest
 
 dash-docs:
 	rm -f doc/dash/Nitrogen.tgz
@@ -36,6 +37,7 @@ dash-docs:
 rebar3:
 	@echo "Fetching and compiling updated rebar3 (this will not replace your system-wide rebar3, if you have one)"
 	@(cd /tmp && \
+	rm -fr /tmp/rebar3 && \
 	git clone https://github.com/erlang/rebar3 && \
 	cd rebar3 && \
 	./bootstrap)

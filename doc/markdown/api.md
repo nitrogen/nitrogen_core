@@ -877,6 +877,10 @@ Example:
 
   This is equivilant to `?WF_SAFE(Term, undefined)`
 
+* `?WF_BLANK(Term)`
+
+* `?IS_STRING(Term)`
+
 * `?WF_EXTEND(OrigRec, NewRec, Module, Fields)`
 
   This uses the [rekt](https://github.com/nitrogen/rekt) tool to extend a
