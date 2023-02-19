@@ -1244,8 +1244,8 @@ NitrogenClass.prototype.$sortblock = function(el, sortOptions, sortPostbackInfo)
  * 
  * @param {string} Unique class name anchoring textarea.
  */
-NitrogenClass.prototype.$trap_tabs = function(textarea_class_name) {
-    var textarea = document.querySelector(el);
+NitrogenClass.prototype.$trap_tabs = function(selector) {
+    var textarea = document.querySelector(selector);
     if (null === textarea) {
         return;
     }
