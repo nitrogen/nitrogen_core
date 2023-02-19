@@ -33,16 +33,16 @@ render_action(Record) ->
 
     Script = case Record#jquery_effect.type of
         'show' when Effect==none ->
-            if_visible(Actions, ["$(this).show(", ActionsFun, ");"]);
+            {raw, ["this.forEach(node => { node.classList.remove('n2-effect-hidden'); } )"]};
         'hide' when Effect==none ->
-            if_visible(["$(this).hide(", ActionsFun, ");"], Actions);
+            {raw, ["this.forEach(node => { node.classList.remove('n2-effect', 'n2-effect-fase', 'n2-effect-appear'); node.classList.add('n2-effect-hidden'); } )"]};
         'toggle' when Effect==none ->
-            ["toggle(", ActionsFun, ");"];
+            {raw, ["this.forEach(node => { node.classList.remove('n2-effect', 'n2-effect-fase', 'n2-effect-appear'); node.classList.toggle('n2-effect-hidden'); } )"]};
         'appear' ->
-            if_visible(Actions, [wf:f("$(this).fadeIn(~p, ", [Speed]), ActionsFun, ");"]);
+            {raw, ["this.forEach(node => { node.classList.remove('n2-effect-fade'); node.classList.add('n2-effect', 'n2-effect-appear'); } )"]};
         'fade'   ->
-            if_visible([wf:f("$(this).fadeOut(~p, ", [Speed]), ActionsFun, ");"], Actions);
-        'slideup'->
+            {raw, ["this..forEach(node => { node.classList.remove('n2-effect-appear'); node.classList.add('n2-effect', 'n2-effect-fade'); } )"]};
+        'slideup' ->
             if_visible([wf:f("$(this).slideUp(~p, ",[Speed]), ActionsFun, ");"], Actions);
         'slidedown' ->
             if_visible(Actions, [wf:f("$(this).slideDown(~p, ",[Speed]), ActionsFun, ");"]);
@@ -65,7 +65,12 @@ render_action(Record) ->
         'animate' ->
             [wf:f("animate(~s, ~p, '~s', ", [Options, Speed, Easing]), ActionsFun, ");"]
     end,
-    [wf:f("objs('~s').", [Target]), Script].
+    R = case Script of
+        {raw, S} -> [";(function(){", S, "}.bind(", wf:f("document.querySelectorAll('~s')", [Target]), ")})();"];
+        S        -> [wf:f("objs('~s').", [Target]), Script]
+    end,
+    io:format("Effect: ~p~n", [R]),
+    R.
 
 execute_actions_fun("null") ->
     "";

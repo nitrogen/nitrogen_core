@@ -297,3 +297,18 @@ a.upload_delete_file:hover {
     left:-10000px;
 }
 
+.n2-effect-appear {
+    transition: height 500ms, opacity 500ms;
+    height: auto;
+    opacity: inherit;
+}
+
+.n2-effect-fade {
+    transition: height 500ms, opacity 500ms;
+    height: 0;
+    opacity: 0;
+}
+
+.n2-effect-hidden {
+    display: none;
+}
