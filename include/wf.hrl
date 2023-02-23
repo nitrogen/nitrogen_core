@@ -944,6 +944,27 @@
         diagram_options=undefined      :: undefined | mermaid_diagram_options(mermaid_diagram())
     }).
 
+%% Calendar
+-record(calendar,   {?ELEMENT_BASE(element_calendar),
+        delegate                :: module(),
+        tag=undefined           :: term(),
+        month=element(2, date()):: integer(),
+        year=element(1, date()) :: integer()
+    }).
+
+-record(calendar_item, {
+        tag                     :: term(),
+        draggable=false         :: boolean(),
+        class                   :: class(),
+        body                    :: body(),
+        text=""                 :: text(),
+        date                    :: {integer(), integer(), integer()}
+    }).
+
+-record(calendar_invalid_drop,  {
+        date                    :: {integer(), integer(), integer()}
+}).
+        
 %%% Actions %%%
 -define(AV_BASE(Module,Type),
    is_action=Type               :: is_action | is_validator,

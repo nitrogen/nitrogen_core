@@ -42,7 +42,7 @@ render_element(Record) ->
     Text = Record#inplace_textarea.text,
     Terms = #panel { 
         html_id=Record#inplace_textarea.html_id,
-        class=[inplace_textbox, Record#inplace_textarea.class],
+        class=[inplace_textarea, Record#inplace_textarea.class],
         title=Record#inplace_textarea.title,
         data_fields=Record#inplace_textarea.data_fields,
         style=Record#inplace_textarea.style,
@@ -52,7 +52,7 @@ render_element(Record) ->
 				class="view", 
 				style = ?WF_IF(StartMode==edit,"diplay:none"),
 				body=[
-                #span { id=LabelID, class="inplace_textarea", text=Text, html_encode=HTMLEncode, actions=[
+                #span { id=LabelID, class="label", text=Text, html_encode=HTMLEncode, actions=[
                     #buttonize { target=ViewPanelID }
                 ]},
                 #span { id=MouseOverID, class="instructions", text="Click to edit", style="display:none" }
