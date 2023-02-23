@@ -28,14 +28,14 @@ transform_element(_Rec = #calendar{id=Id0, delegate=Delegate0, actions=Actions,
     Days = [Date || {Date, _Time} <- DateTimes],
     Items = load_items(Delegate, CalTag, Y, M),
     {Today, _} = qdate:to_date(os:timestamp()),
-    #panel{id=Id, class=[calendar, Class], style=Style, actions=Actions, html_id=Htmlid, data_fields=Data, body=[
+    #panel{id=Id, class=[nitrogen_calendar, Class], style=Style, actions=Actions, html_id=Htmlid, data_fields=Data, body=[
         #table{rows=[
             #tablerow{cells=[
                 #tableheader{colspan=7, body=[
                     #h3{style="text-align:center", text=qdate:to_string("F Y", FirstDay)}
                 ]}
             ]},
-            #tablerow{class=calendar_day_header, cells=[
+            #tablerow{class=nitrogen_calendar_day_header, cells=[
                 #tableheader{text="Sunday"},
                 #tableheader{text="Monday"},
                 #tableheader{text="Tuesday"},
@@ -77,13 +77,13 @@ draw_day(Today, Delegate, CalTag, Items, Date = {_, _, D}) ->
                 calendar_tag=CalTag,
                 date=Date
             },
-            #droppable{class=calendar_drop, delegate=?MODULE, tag=DropTag, body=Body}
+            #droppable{class=nitrogen_calendar_drop, delegate=?MODULE, tag=DropTag, body=Body}
     end,
 
     #tablecell{class=CellClass, body=[
-        #panel{class=calendar_day_wrapper, body=[
-            #panel{class=calendar_day, text=D},
-            #panel{class=calendar_day_body, body=[
+        #panel{class=nitrogen_calendar_day_wrapper, body=[
+            #panel{class=nitrogen_calendar_day, text=D},
+            #panel{class=nitrogen_calendar_day_body, body=[
                 Body2
             ]}
         ]}
@@ -98,15 +98,15 @@ draw_items(Items) ->
     [draw_item(I) || I <- Items].
 
 draw_item(I = #calendar_item{draggable=false}) ->
-    #panel{class=calendar_static_item, body=draw_item_body(I)};
+    #panel{class=nitrogen_calendar_static_item, body=draw_item_body(I)};
 draw_item(I = #calendar_item{draggable=true, tag=ItemTag}) ->
-    #draggable{tag=ItemTag, class=calendar_draggable_item, body=draw_item_body(I)};
+    #draggable{tag=ItemTag, class=nitrogen_calendar_draggable_item, body=draw_item_body(I)};
 draw_item(_) ->
     [].
 
 draw_item_body(I) ->
     #panel{
-        class=[I#calendar_item.class, calendar_item_body],
+        class=[I#calendar_item.class, nitrogen_calendar_item_body],
         body=I#calendar_item.body,
         text=I#calendar_item.text
     }.
