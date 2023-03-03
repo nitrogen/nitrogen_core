@@ -133,6 +133,7 @@ div.inplace_textbox .LV_invalid {
 	z-index: 10000;
 	border-bottom: 1px solid #000;
     transition: 0.5s ease-in-out;
+	box-sizing: content-box;
 }
 
 #nitrogen-notice-bar.visible {
