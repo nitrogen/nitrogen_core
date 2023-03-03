@@ -16,10 +16,11 @@ init([]) ->
         period => 1
     },
     ChildSpecs = [
-    #{
-        id=>nitrogen_handler_srv,
-        start=>{nitrogen_handler_srv, start_link, []}
-    },
+        #{
+            id=>nitrogen_handler_srv,
+            start=>{nitrogen_handler_srv, start_link, []}
+        }
+    ],
     {ok, {SupFlags, ChildSpecs}}.
 
 

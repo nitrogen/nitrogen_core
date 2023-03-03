@@ -10,7 +10,7 @@
     get_value/2, get_values/2
 ]).
 
--callback global() ->   boolean().
+%-callback global() -> boolean().
 -callback init(         handler_config(),
                         handler_state()) -> {ok, handler_state()}.
 -callback finish(       handler_config(),
@@ -24,7 +24,7 @@
                         handler_config(),
                         handler_state()) -> [term()].
 
--optional_callbacks([global/0]).
+%-optional_callbacks([global/0]).
 
 % Retrieve a configuration value.
 -spec get_value(Key :: term()) -> term().

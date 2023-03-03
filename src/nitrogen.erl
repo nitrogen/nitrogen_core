@@ -9,8 +9,12 @@
 -export([
         init_request/2,
         init_request/1,
+        handler/1,
         handler/2,
         handler/3,
+        global_handler/1,
+        global_handler/2,
+        global_handler/3,
         run/0
     ]).
 
@@ -41,11 +45,23 @@ init_request(Bridge, _) ->
 init_request(Bridge) ->
     wf_context:init_context(Bridge).
 
+handler(Module) ->
+    handler(Module, []).
+
 handler(Module, Config) ->
     wf_handler:set_handler(Module, Config).
 
 handler(Name, Module, Config) ->
     wf_handler:set_handler(Name, Module, Config).
+
+global_handler(Module) ->
+    global_handler(Module, []).
+
+global_handler(Module, Config) ->
+    wf_handler:set_global_handler(Module, Config).
+
+global_handler(Name, Module, Config) ->
+    wf_handler:set_global_handler(Name, Module, Config).
 
 run(Bridge) ->
     init_request(Bridge),
