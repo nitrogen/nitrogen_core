@@ -127,11 +127,12 @@ div.nitrogen_notice_bar {
 	font-weight:bold;
 	z-index: 10000;
 	border-bottom: 1px solid #000;
+	box-sizing: content-box;
 }
 
 div.nitrogen_notice_warning_bar {
 	background: #ff0;
-	color: #000
+	color: #000;
 	border-bottom: 1px solid #000;
 }
 
