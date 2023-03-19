@@ -9,8 +9,8 @@
     postback_request/5
 ]).
 
-init(_Config,State) ->
-    {ok, State}.
+init(_Config, _State) ->
+    {ok, no_statea}.
 
 finish(_Config, State) ->
     {ok, State}.

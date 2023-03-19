@@ -2,12 +2,13 @@
 %% Gproc registry handler copied from the n2o project (https://github.com/5HT/n2o)
 -author('Maxim Sokhatsky').
 -behaviour(process_registry_handler).
--include_lib("nitrogen_core/include/wf.hrl").
+-include("wf.hrl").
 -include_lib("stdlib/include/qlc.hrl").
 -export([init/2, finish/2, get_pid/3, get_pid/4]).
 
 
-init(_Config, State) -> {ok, State}.
+init(_Config, _State) -> {ok, no_state}.
+
 finish(_Config, State) -> {ok, State}.
 
 get_pid(Key, _Config, State) -> 

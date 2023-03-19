@@ -71,7 +71,7 @@
 %% If the step is successful, then move on to the step below.
 %% If the step is NOT successful, then prompt for authentication.
 
-init(CallbackMod, State) ->
+init(CallbackMod, _State) ->
     PageModule = wf:page_module(),
     case CallbackMod:is_protected(PageModule) of
 	true ->
@@ -84,7 +84,7 @@ init(CallbackMod, State) ->
 	_ ->
 	    do_nothing
     end,
-    {ok, State}.
+    {ok, no_state}.
 
 finish(_Config, State) -> 
     {ok, State}.

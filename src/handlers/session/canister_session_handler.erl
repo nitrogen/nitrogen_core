@@ -18,9 +18,9 @@
 
 init(_Config, _State) -> 
     % Get the session cookie ...
-    ?PRINT(get_cookie),
+    %?PRINT(get_cookie),
     Cookie = wf:cookie(get_cookie_name()),
-    ?PRINT(depickle),
+    %?PRINT(depickle),
     State = case wf:depickle(Cookie) of
         undefined -> new_state();
         Other=#state{} -> Other;
@@ -46,27 +46,26 @@ finish(_Config, State) ->
 get_value(Key, DefaultValue, Config, State) -> 
     ID = get_session_id(Config, State),
     Value = wf:coalesce([canister:get(ID, Key), DefaultValue]),
-    {ok, Value, State}.
+    {ok, Value, no_change}.
 
 set_value(Key, Value, Config, State) -> 
     ID = get_session_id(Config, State),
     OldValue = canister:put(ID, Key, Value),
-    {ok, OldValue, State}.
+    {ok, OldValue, no_change}.
 
 clear_all(Config, State) -> 
     ID = get_session_id(Config, State),
     canister:clear(ID),
-    {ok, State}.
+    {ok, no_change}.
 
 %% This is the external session-id
 session_id(_Config, State) ->
     {ok, SessionId} = wf:hex_encode (State#state.id),
-    {ok, SessionId, State}.
+    {ok, SessionId, no_change}.
 
 %%% PRIVATE FUNCTIONS
 
 get_cookie_name() ->
-    ?PRINT(getting_cookie),
     wf:config_default(cookie_name, "newcookie").
 
 get_session_id(_Config, #state{id=ID}) ->

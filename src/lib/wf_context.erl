@@ -438,14 +438,9 @@ handler(HandlerName) ->
     end.
 
 restore_handler(NewHandler) ->
-    Handlers = handlers(),
-    NewHandlers = [maybe_restore_handler(H, NewHandler) || H <- Handlers],
-    handlers(NewHandlers).
-
-maybe_restore_handler(Orig = #handler_context{name=Name}, New = #handler_context{name=Name}) ->
-    New#handler_context{config=Orig#handler_context.config};
-maybe_restore_handler(Orig, _New) ->
-    Orig.
+    HandlerName = NewHandler#handler_context.name,
+    State = NewHandler#handler_context.state,
+    wf_handler:set_handler_state(HandlerName, State).
 
 %% MAYBE DO THIS?
 %%serializable_handlers() ->
@@ -467,14 +462,18 @@ init_context(Bridge) ->
         event_context = #event_context {},
         action_queue = new_action_queue(),
         script_nonce = wf_security_policy:nonce(),
-        handler_list = #{
-            %% These are the only two default request-based handlers.  The
-            %% others are global handlers. See wf_handler.erl for more details
-            session_handler => make_handler(session_handler, canister_session_handler),
-            state_handler => make_handler(state_handler, default_state_handler)
-        }
+        handler_list = make_request_handlers()
     },
     context(Context).
+
+%% Instantiate the few request handlers based on the handler list in
+%% wf_handler:handler_order
+make_request_handlers() ->
+    Names = wf_handler:default_request_handlers(),
+    lists:foldl(fun(Name, Acc) ->
+        Handler = make_handler(Name, wf_handler:handler_default(Name)),
+        maps:put(Name, Handler, Acc)
+    end, #{}, Names).
 
 make_handler(Name, Module) ->
     #handler_context {

@@ -27,7 +27,7 @@
 %% If the request path does have an extension, then it is treated like a request
 %% for a static file. This is delegated back to the HTTP server.
 
-init(_Config, State) -> 
+init(_Config, _) -> 
     % Get the path...
     Bridge = wf_context:bridge(),
     Path = sbw:path(Bridge),
@@ -42,10 +42,10 @@ init(_Config, State) ->
     wf_context:path_info(PathInfo1),
     wf_context:entry_point(EntryPoint),
 
-    {ok, State}.
+    {ok, no_state}.
 
-finish(_Config, State) -> 
-    {ok, State}.
+finish(_Config, _State) -> 
+    {ok, no_state}.
 
 %%% PRIVATE FUNCTIONS %%%
 

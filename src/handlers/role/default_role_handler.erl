@@ -15,8 +15,8 @@
 ]).
 -define(KEY, {default_role_handler, roles}).
 
-init(_Config, State) -> 
-    {ok, State}.
+init(_Config, _State) -> 
+    {ok, no_state}.
 
 finish(_Config, State) -> 
     {ok, State}.

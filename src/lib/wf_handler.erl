@@ -13,6 +13,7 @@
     set_global_handler/2,
     set_global_handler/3,
     get_handler_name/1,
+    set_handler_state/2,
     default_global_handlers/0,
     default_request_handlers/0,
     handler_order/0,
@@ -21,7 +22,7 @@
 
 -spec init(#handler_context{} | atom()) -> ok.
 init(Handler) ->
-    ?PRINT({calling_init, Handler}),
+    %?PRINT({calling_init, Handler}),
     call(Handler, init, []).
 
 -spec finish(#handler_context{} | atom()) -> ok.
@@ -41,9 +42,9 @@ call(Name, FunctionName, Args) when is_atom(Name) ->
     call(Handler, FunctionName, Args);
 
 call(OrigHandler = #handler_context{ name=Name, module=Module, config=Config, state=State }, FunctionName, Args) ->
-    ?PRINT({Module, FunctionName, Args ++ [Config, State]}),
+    %?PRINT({Module, FunctionName, Args ++ [Config, State]}),
     Result = erlang:apply(Module, FunctionName, Args ++ [Config, State]),
-    ?PRINT(Result),
+    %?PRINT(Result),
 
     % Result will be {ok, State}, {ok, Value1, State}, or {ok, Value1, Value2, State}.
     % Update the context with the new state.
@@ -66,11 +67,11 @@ call_readonly(Name, FunctionName) -> call_readonly(Name, FunctionName, []).
 call_readonly(Name, FunctionName, Args) ->
     % Get the handler and state from the context. Then, call
     % the function, passing in the Args with State appended.
-    ?PRINT({get_handler, Name}),
+    %?PRINT({get_handler, Name}),
     Handler = get_handler(Name),
     #handler_context { module=Module, config=Config, state=State } = Handler,
 
-    ?PRINT({applying_fun, Module, FunctionName, Args ++ [Config, State]}),
+    %?PRINT({applying_fun, Module, FunctionName, Args ++ [Config, State]}),
 
     erlang:apply(Module, FunctionName, Args ++ [Config, State]).
 
@@ -104,16 +105,28 @@ set_handler(Name, Module, Config) ->
     NewHandlers = maps:put(Name, NewHandler, Handlers),
     wf_context:handlers(NewHandlers).
 
-%set_handler_state(Name, State) ->
-%    Handlers = wf_context:handlers(),
-%    NewHandler = case maps:get(name, Handlers, undefined) of
-%        undefined ->
-%            #handler_context{name=Name, state=State};
-%        H ->
-%            H#handler_context{state=State}
-%    end,
-%    NewHandlers = maps:put(Name, NewHandler, Handlers),
-%    wf_context:handlers(NewHandlers).
+set_handler_state(Name, State) ->
+    Handlers = wf_context:handlers(),
+    %?PRINT(Handlers),
+    NewHandler = case maps:get(Name, Handlers, undefined) of
+        undefined ->
+            case wf_handler_mapper:lookup(Name) of
+                context ->
+                    skip;
+                {Module, _, _} ->
+                    #handler_context{name=Name, module=Module, state=State}
+            end;
+        H ->
+            H#handler_context{state=State}
+    end,
+    case NewHandler of
+        skip ->
+            logger:warning("Failed to restore handler: ~p.~nState: ~p~n", [Name, State]),
+            ok;
+        _ ->
+            NewHandlers = maps:put(Name, NewHandler, Handlers),
+            wf_context:handlers(NewHandlers)
+    end.
 
 set_global_handler(Module, Config) ->
     nitrogen_handler_srv:set_handler(Module, Config).
@@ -125,6 +138,8 @@ set_global_handler(Name, Module, Config) ->
 % Look up a handler in a context. Return {ok, HandlerModule, State}
 -spec get_handler(Name :: atom()) -> #handler_context{}.
 get_handler(Name) -> 
+    ?WF_IF(Name==undefined, throw({no_handler1, Name})),
+    ?PRINT(Name),
     try wf_handler_mapper:lookup(Name) of
         context ->
             %% Request Handlers keep their state in their handler record
@@ -147,6 +162,7 @@ get_handler(Name) ->
 
 get_request_handler(Name) ->
     Handlers = wf_context:handlers(),
+    ?PRINT({get_handler, Name}),
     maps:get(Name, Handlers, undefined).
 
 -spec update_handler_state(
@@ -178,10 +194,8 @@ default_global_handlers() ->
         log_handler,
         process_registry_handler,
         cache_handler,
-        query_handler,
         crash_handler,
         websocket_handler,
-        session_handler,
         identity_handler,
         role_handler,
         route_handler,
@@ -191,6 +205,7 @@ default_global_handlers() ->
 
 default_request_handlers() ->
     [
+        query_handler,
         session_handler,
         state_handler
     ].

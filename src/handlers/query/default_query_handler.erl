@@ -9,7 +9,7 @@
 % into the existing handler pattern.
 
 -module (default_query_handler).
--behaviour (query_handler).
+-behaviour(query_handler).
 -include ("wf.hrl").
 -export ([
     init/2, 

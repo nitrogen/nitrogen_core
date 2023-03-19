@@ -52,7 +52,6 @@ get_values(Key, DefaultValue, Config, State) ->
 get_values([], _Key, DefaultValue, _Config, _State) ->
     DefaultValue;
 get_values([App|Apps], Key, DefaultValue, _Config, _State) ->
-    ?PRINT({searching, App, Key}),
     case application:get_env(App, Key) of
         {ok, Value} ->
             [Value];

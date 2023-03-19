@@ -15,8 +15,8 @@
 ]).
 
 -spec init(handler_config(), handler_state()) -> {ok, handler_state()}.
-init(_Config, State) -> 
-    {ok, State}.
+init(_Config, _State) -> 
+    {ok,  no_state}.
 
 -spec finish(handler_config(), handler_state()) -> {ok, handler_state()}.
 finish(_Config, State) -> 

@@ -18,9 +18,9 @@ get_cookie(Cookie) ->
 	get_cookie(Cookie, undefined).
 
 get_cookie(Cookie, Default) ->
-    ?PRINT(get_bridge),
+    %?PRINT(get_bridge),
 	Bridge = wf_context:bridge(),
-    ?PRINT(get_cookie),
+    %?PRINT(get_cookie),
 	case sbw:cookie(Cookie, Bridge) of
 		undefined -> Default;
 		Value -> Value

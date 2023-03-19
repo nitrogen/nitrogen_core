@@ -90,9 +90,9 @@ run_catched() ->
     wf_event:update_context_with_event(wf:q(eventContext)),
     case wf_context:type() of
         first_request ->
-            ?PRINT(run_first),
+            %?PRINT(run_first),
             run_first_request(),
-            ?PRINT(finish_dynamic),
+            %?PRINT(finish_dynamic),
             finish_dynamic_request();
         postback_request ->
             run_postback_request(),
@@ -165,6 +165,7 @@ serialize_context() ->
     % Get handler context, but don't serialize the config.
     StateHandler = wf_context:handler(state_handler),
     SerializedContextState = wf_pickle:pickle([Page, StateHandler]),
+    %?PRINT(StateHandler),
     wf:f("Nitrogen.$set_param('pageContext', '~s');~n", [SerializedContextState]).
 
 deserialize_request_context() ->
@@ -207,6 +208,7 @@ deserialize_context(SerializedPageContext) ->
 call_init_on_handlers() ->
     %% Get the handler order
     HandlerNames = wf_handler:handler_order(),
+    ?PRINT(HandlerNames),
 
     %% Go through each handler, and initialize them for the request 
     [wf_handler:init(X) || X <- HandlerNames],

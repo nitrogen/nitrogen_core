@@ -11,7 +11,7 @@
     finish/2
 ]).
 
-init(Module, State) -> 
+init(Module, _State) -> 
     % Some values...
     Bridge = wf_context:bridge(),
     Path = sbw:path(Bridge),
@@ -19,7 +19,7 @@ init(Module, State) ->
     % Update the page_context with the path and module.
     wf_context:page_module(Module),
     wf_context:path_info(Path),
-    {ok, State}.
+    {ok, no_state}.
 
 finish(_Config, State) -> 
     {ok, State}.

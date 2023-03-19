@@ -14,8 +14,8 @@
 ]).
 -define(KEY, {default_identity_handler, user}).
 
-init(_Config, State) -> 
-    {ok, State}.
+init(_Config, _State) -> 
+    {ok, no_statae}.
 
 finish(_Config, State) -> 
     {ok, State}.

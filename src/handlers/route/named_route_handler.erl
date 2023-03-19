@@ -39,7 +39,7 @@
 
 
 init(undefined, State) -> init([], State);
-init(Routes, State) -> 
+init(Routes, _State) -> 
     % Get the path...
     Bridge = wf_context:bridge(),
     Path = sbw:path(Bridge),
@@ -49,7 +49,7 @@ init(Routes, State) ->
     {Module1, PathInfo1} = check_for_404(Module, PathInfo, Path),
     wf_context:page_module(Module1),
     wf_context:path_info(PathInfo1),
-    {ok, State}.
+    {ok, no_state}.
 
 finish(_Config, State) -> 
     {ok, State}.
