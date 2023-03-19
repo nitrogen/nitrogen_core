@@ -82,12 +82,17 @@ run_websocket(Data) ->
     _ToSend = wf:to_unicode_binary(finish_websocket_request()).
 
 run_catched() ->
+    ?PRINT(deserialize),
     deserialize_request_context(),
+    ?PRINT(call_init),
     call_init_on_handlers(),
+    ?PRINT(update_context_with_event_context),
     wf_event:update_context_with_event(wf:q(eventContext)),
     case wf_context:type() of
-        first_request    ->
+        first_request ->
+            ?PRINT(run_first),
             run_first_request(),
+            ?PRINT(finish_dynamic),
             finish_dynamic_request();
         postback_request ->
             run_postback_request(),
@@ -196,26 +201,24 @@ deserialize_context(SerializedPageContext) ->
 %%% SET UP AND TEAR DOWN HANDLERS %%%
 
 % init_handlers/1 -
-% Handlers are initialized in the order that they exist in #context.handlers. The order
-% is important, as some handlers may depend on others being initialize. For example,
-% the session handler may use the cookie handler to get or set the session cookie.
-% TODO: Re-evaluate handlers into some form of middleware layer or something.
-% Allowing us to pass handler contexts from one handler to another and limit
-% the number of process dict sets and gets
+% Handlers are initialized in the order defined in wf_handler.erl.  The handler_list
+% has been changed to a map for slightly faster lookup.
+
 call_init_on_handlers() ->
-    %% Get initial handlers
-    Handlers = wf_context:handlers(),
-    %% Clear Handler list, to re-initiate in order
-    wf_context:handlers([]),
-    %% Re-initiate handlers in order, appending them back to the handler list as we go
-    [wf_handler:init(X) || X <- Handlers],
+    %% Get the handler order
+    HandlerNames = wf_handler:handler_order(),
+
+    %% Go through each handler, and initialize them for the request 
+    [wf_handler:init(X) || X <- HandlerNames],
     ok.
 
 % finish_handlers/1 -
 % Handlers are finished in the order that they exist in #context.handlers. The order
 % is important, as some handlers should finish after others.
 call_finish_on_handlers() ->
-    [wf_handler:finish(X) || X <- wf_context:handlers()],
+    %% Get the handler order
+    HandlerNames = wf_handler:handler_order(),
+    [wf_handler:finish(X) || X <- HandlerNames],
     ok.
 
 

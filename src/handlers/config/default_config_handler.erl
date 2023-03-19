@@ -7,20 +7,20 @@
 -include("wf.hrl").
 -behaviour(config_handler).
 -export ([
-    init/1,
-    finish/1,
-    get_value/3,
-    get_values/3
+    init/2,
+    finish/2,
+    get_value/4,
+    get_values/4
 ]).
 
-init(_Config) ->
-    ok.
+init(_Config, _State) ->
+    {ok, no_state}.
 
-finish(_Config) ->
-    ok.
+finish(_Config, _State) ->
+    {ok, no_state}.
 
-get_value(Key, DefaultValue, Config) ->
-    case get_values(Key, [DefaultValue], Config) of
+get_value(Key, DefaultValue, Config, State) ->
+    case get_values(Key, [DefaultValue], Config, State) of
         [Value] ->
             Value;
         Values ->
@@ -28,16 +28,16 @@ get_value(Key, DefaultValue, Config) ->
             throw({nitrogen_error, too_many_matching_values, Key, Values})
     end.
 
-get_values(Key, DefaultValue, Config) ->
+get_values(Key, DefaultValue, Config, State) ->
     %% By default, use nitrogen_core as the app (for Nitrogen 2.4+), however,
     %% for backwards compatibility, also check for the nitrogen app.
     DefaultApps = [nitrogen_core, nitrogen],
     Apps = case application:get_env(nitrogen_core, application_config_key, []) of
-               App when is_list(App) ->
-                   App ++ DefaultApps;
-               App ->
-                   [App] ++ DefaultApps
-           end,
+        App when is_list(App) ->
+            App ++ DefaultApps;
+        App ->
+            [App] ++ DefaultApps
+    end,
     %% If a nitrogen_core configuration key application_config_fn
     %% exists and is a function of arity 2, dispatch to that function.
     %%
@@ -46,17 +46,18 @@ get_values(Key, DefaultValue, Config) ->
         {ok, Value} ->
             [Value];
         _ ->
-            get_values(Apps, Key, DefaultValue, Config)
+            get_values(Apps, Key, DefaultValue, Config, State)
     end.
 
-get_values([], _Key, DefaultValue, _Config) ->
+get_values([], _Key, DefaultValue, _Config, _State) ->
     DefaultValue;
-get_values([App|Apps], Key, DefaultValue, _Config) ->
+get_values([App|Apps], Key, DefaultValue, _Config, _State) ->
+    ?PRINT({searching, App, Key}),
     case application:get_env(App, Key) of
         {ok, Value} ->
             [Value];
         undefined ->
-            get_values(Apps, Key, DefaultValue, _Config)
+            get_values(Apps, Key, DefaultValue, _Config, _State)
     end.
 
 configuration_function(Key, DefaultValue) ->

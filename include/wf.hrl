@@ -123,7 +123,7 @@
     % and de-serialized on each request.
     page_context            :: undefined | #page_context{},
     event_context           :: undefined | #event_context{},
-    handler_list            :: undefined | list(),
+    handler_list=maps:new() :: undefined | map(),
     script_nonce            :: undefined | string()
 }).
 

@@ -13,11 +13,11 @@
     get_pid/4
 ]).
 
-init(_Config, State) -> 
-    {ok, State}.
+init(_Config, _State) -> 
+    {ok, no_state}.
 
-finish(_Config, State) ->
-    {ok, State}.
+finish(_Config, _State) ->
+    {ok, no_state}.
 
 get_pid(Key, _Config, State) ->
     Pid = nprocreg:get_pid(Key),

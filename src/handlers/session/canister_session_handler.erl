@@ -18,7 +18,9 @@
 
 init(_Config, _State) -> 
     % Get the session cookie ...
+    ?PRINT(get_cookie),
     Cookie = wf:cookie(get_cookie_name()),
+    ?PRINT(depickle),
     State = case wf:depickle(Cookie) of
         undefined -> new_state();
         Other=#state{} -> Other;
@@ -64,6 +66,7 @@ session_id(_Config, State) ->
 %%% PRIVATE FUNCTIONS
 
 get_cookie_name() ->
+    ?PRINT(getting_cookie),
     wf:config_default(cookie_name, "newcookie").
 
 get_session_id(_Config, #state{id=ID}) ->

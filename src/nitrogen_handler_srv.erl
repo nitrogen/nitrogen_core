@@ -8,7 +8,9 @@
          set_handler/1,
          set_handler/2,
          set_handler/3,
-         update_state/2]).
+         update_state/2,
+         build_handler_mapper/0
+        ]).
 
 %% gen_server callbacks
 -export([init/1,

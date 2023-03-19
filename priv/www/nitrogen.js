@@ -534,6 +534,9 @@ NitrogenClass.prototype.$event_error = function(XHR, textStatus, errorThrown) {
     }   
     if(textStatus == "timeout" || textStatus=="error") {
         this.$console_log("Event Error: (" + textStatus + "): " + errorThrown);
+        // TODO: This needs to get progressively longer, and eventually switch
+        // to checking every, like 5 minutes or something so we don't kill
+        // batteries
         setTimeout(function() {
             n.$requeue_last_event();
         }, 500);

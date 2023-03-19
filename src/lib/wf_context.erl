@@ -432,8 +432,8 @@ handlers(Handlers) ->
 
 handler(HandlerName) ->
     Handlers = handlers(),
-    case lists:keyfind(HandlerName, #handler_context.name, Handlers) of
-        false -> undefined;
+    case maps:get(HandlerName, Handlers, undefined) of
+        undefined -> undefined;
         HandlerContext -> HandlerContext
     end.
 
@@ -467,30 +467,14 @@ init_context(Bridge) ->
         event_context = #event_context {},
         action_queue = new_action_queue(),
         script_nonce = wf_security_policy:nonce(),
-        handler_list = [
-            %%% Core handlers...
-            %%make_handler(config_handler, default_config_handler),
-            %%make_handler(log_handler, default_log_handler),
-            %%make_handler(process_registry_handler, nprocreg_registry_handler),
-            %%make_handler(cache_handler, default_cache_handler),
-            %%make_handler(query_handler, default_query_handler),
-            %%make_handler(crash_handler, default_crash_handler),
-            %%make_handler(websocket_handler, default_websocket_handler),
-
-            %%% Stateful handlers...
-            make_handler(session_handler, canister_session_handler),
-            make_handler(state_handler, default_state_handler)
-            %%make_handler(identity_handler, default_identity_handler),
-            %%make_handler(role_handler, default_role_handler),
-
-            %%% Handlers that possibly redirect...
-            %%make_handler(route_handler, dynamic_route_handler),
-            %%make_handler(security_handler, default_security_handler),
-            %%make_handler(postback_handler, default_postback_handler)
-        ]
+        handler_list = #{
+            %% These are the only two default request-based handlers.  The
+            %% others are global handlers. See wf_handler.erl for more details
+            session_handler => make_handler(session_handler, canister_session_handler),
+            state_handler => make_handler(state_handler, default_state_handler)
+        }
     },
     context(Context).
-    
 
 make_handler(Name, Module) ->
     #handler_context {

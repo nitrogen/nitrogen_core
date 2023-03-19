@@ -19,15 +19,14 @@
     handler_default/1
 ]).
 
--spec init(#handler_context{}) -> ok.
-init(H = #handler_context{module=Module, config=Config, state=State}) ->
-    {ok, NewState} = Module:init(Config, State),
-    NewH = H#handler_context{state=NewState},
-    append_handler_state(NewH).
+-spec init(#handler_context{} | atom()) -> ok.
+init(Handler) ->
+    ?PRINT({calling_init, Handler}),
+    call(Handler, init, []).
 
--spec finish(#handler_context{}) -> ok.
-finish(H = #handler_context{}) ->
-    call(H, finish, []).
+-spec finish(#handler_context{} | atom()) -> ok.
+finish(Handler) -> 
+    call(Handler, finish, []).
 
 % Helper function to call a function within a handler.
 % Returns ok or {ok, Value}.
@@ -41,22 +40,24 @@ call(Name, FunctionName, Args) when is_atom(Name) ->
     Handler = get_handler(Name),
     call(Handler, FunctionName, Args);
 
-call(#handler_context{ name=Name, module=Module, config=Config, state=State }, FunctionName, Args) ->
+call(OrigHandler = #handler_context{ name=Name, module=Module, config=Config, state=State }, FunctionName, Args) ->
+    ?PRINT({Module, FunctionName, Args ++ [Config, State]}),
     Result = erlang:apply(Module, FunctionName, Args ++ [Config, State]),
+    ?PRINT(Result),
 
     % Result will be {ok, State}, {ok, Value1, State}, or {ok, Value1, Value2, State}.
     % Update the context with the new state.
     case Result of
         {ok, NewState} -> 
-            update_handler_state(Name, State, NewState),
+            update_handler_state(Name, OrigHandler, State, NewState),
             ok;
 
         {ok, Value, NewState} ->
-            update_handler_state(Name, State, NewState),
+            update_handler_state(Name, OrigHandler, State, NewState),
             {ok, Value};
 
         {ok, Value1, Value2, NewState} ->
-            update_handler_state(Name, State, NewState),
+            update_handler_state(Name, OrigHandler, State, NewState),
             {ok, Value1, Value2}
     end.
 
@@ -65,7 +66,12 @@ call_readonly(Name, FunctionName) -> call_readonly(Name, FunctionName, []).
 call_readonly(Name, FunctionName, Args) ->
     % Get the handler and state from the context. Then, call
     % the function, passing in the Args with State appended.
-    #handler_context { module=Module, config=Config, state=State } = get_handler(Name),
+    ?PRINT({get_handler, Name}),
+    Handler = get_handler(Name),
+    #handler_context { module=Module, config=Config, state=State } = Handler,
+
+    ?PRINT({applying_fun, Module, FunctionName, Args ++ [Config, State]}),
+
     erlang:apply(Module, FunctionName, Args ++ [Config, State]).
 
 set_handler(Module, Config) ->
@@ -76,6 +82,7 @@ set_handler(Module, Config) ->
     Name = get_handler_name(Module),
     set_handler(Name, Module, Config).
 
+-spec get_handler_name(Module :: atom()) -> atom().
 get_handler_name(Module) ->
     % Get the module's behavior...
     L = Module:module_info(attributes),
@@ -83,16 +90,30 @@ get_handler_name(Module) ->
         [N] -> N;
         _      -> throw({must_define_a_nitrogen_behaviour, Module})
     end.
-
-
+                        
 % set_handler/3
 % Set the configuration for a handler.
 set_handler(Name, Module, Config) ->
     Handlers = wf_context:handlers(),
-    OldHandler = lists:keyfind(Name, 2, Handlers),
-    NewHandler = OldHandler#handler_context { module=Module, config=Config },
-    NewHandlers = lists:keyreplace(Name, 2, Handlers, NewHandler),
-    wf_context:handlers(NewHandlers).	
+    NewHandler = case maps:get(name, Handlers, undefined) of
+        undefined ->
+            #handler_context{name=Name, module=Module, config=Config};
+        H ->
+            H#handler_context{module=Module, config=Config}
+    end,
+    NewHandlers = maps:put(Name, NewHandler, Handlers),
+    wf_context:handlers(NewHandlers).
+
+%set_handler_state(Name, State) ->
+%    Handlers = wf_context:handlers(),
+%    NewHandler = case maps:get(name, Handlers, undefined) of
+%        undefined ->
+%            #handler_context{name=Name, state=State};
+%        H ->
+%            H#handler_context{state=State}
+%    end,
+%    NewHandlers = maps:put(Name, NewHandler, Handlers),
+%    wf_context:handlers(NewHandlers).
 
 set_global_handler(Module, Config) ->
     nitrogen_handler_srv:set_handler(Module, Config).
@@ -100,42 +121,56 @@ set_global_handler(Module, Config) ->
 set_global_handler(Name, Module, Config) ->
     nitrogen_handler_srv:set_handler(Name, Module, Config).
 
-% get_handler/2 - 
+% get_handler/1 - 
 % Look up a handler in a context. Return {ok, HandlerModule, State}
+-spec get_handler(Name :: atom()) -> #handler_context{}.
 get_handler(Name) -> 
     try wf_handler_mapper:lookup(Name) of
         context ->
+            %% Request Handlers keep their state in their handler record
             get_request_handler(Name);
-        Handler when is_record(Handler, handler_context) ->
-            Handler
+        {Module, Config, no_state} ->
+            #handler_context{name=Name, module=Module, config=Config, state=no_state};
+        {Module, Config, _} ->
+            %% If this global handler does have another state, then we
+            %% can treat it like a request_handler
+            case get_request_handler(Name) of
+                undefined ->
+                    #handler_context{name=Name, module=Module, config=Config, state=undefined};
+                HC ->
+                    HC
+            end
     catch
         error:undef ->
-            erlang:error("wf_handler_mapper module hasn't been built. This likely means nitrogen_core needs to be started")
+            erlang:error({wf_handler_mapper_not_built, "wf_handler_mapper module hasn't been built. This likely means nitrogen_core needs to be started. Try calling: application:ensure_all_started(nitrogen_core)."})
     end.
 
 get_request_handler(Name) ->
     Handlers = wf_context:handlers(),
-    case lists:keyfind(Name, 2, Handlers) of
-        Handler when is_record(Handler, handler_context) -> 
-            Handler;
-        false -> 
-            throw({handler_not_found_in_context, Name, Handlers})
-    end.
+    maps:get(Name, Handlers, undefined).
 
-update_handler_state(_Name, _OrigState, no_change) ->
+-spec update_handler_state(
+    Name :: atom(),
+    Handler :: #handler_context{},
+    OrigState :: no_state | any(),
+    NewState :: no_state | no_change | any()
+    ) -> ok.
+    
+update_handler_state(_Name, _H, _OrigState, no_state) ->
     ok;
-update_handler_state(_Name, OrigState, OrigState) ->
+update_handler_state(_Name, _H, _OrigState, no_change) ->
     ok;
-update_handler_state(Name, _OrigState, State) ->
+update_handler_state(_Name, _H, OrigState, OrigState) ->
+    ok;
+update_handler_state(Name, Handler, _OrigState, NewState) ->
+    NewHandler = Handler#handler_context{state=NewState},
     Handlers = wf_context:handlers(),
-    OldHandler = lists:keyfind(Name, 2, Handlers),
-    NewHandler = OldHandler#handler_context { state=State },
-    NewHandlers = lists:keyreplace(Name, 2, Handlers, NewHandler),
+    NewHandlers = maps:put(Name, NewHandler, Handlers),
     wf_context:handlers(NewHandlers).
 
-append_handler_state(State) ->
-    Handlers = wf_context:handlers(),
-    wf_context:handlers(Handlers ++ [State]).
+%% append_handler_state(State) ->
+%%     Handlers = wf_context:handlers(),
+%%     wf_context:handlers(Handlers ++ [State]).
 
 default_global_handlers() ->
     [
@@ -181,15 +216,15 @@ handler_order() ->
 
 handler_default(config_handler) ->      default_config_handler;
 handler_default(log_handler) ->         default_log_handler;
-handler_default(process_registry_handler) -> nprocreg_registery_handler;
+handler_default(process_registry_handler) -> nprocreg_registry_handler;
 handler_default(cache_handler) ->       default_cache_handler;
-handler_default(query_handler) ->       defaut_query_handler;
+handler_default(query_handler) ->       default_query_handler;
 handler_default(crash_handler) ->       default_crash_handler;
 handler_default(websocket_handler) ->   default_websocket_handler;
 handler_default(session_handler) ->     canister_session_handler;
 handler_default(state_handler) ->       default_state_handler;
 handler_default(identity_handler) ->    default_identity_handler;
 handler_default(role_handler) ->        default_role_handler;
-handler_default(route_handler) ->       default_route_handler;
+handler_default(route_handler) ->       dynamic_route_handler;
 handler_default(security_handler) ->    default_security_handler;
 handler_default(postback_handler) ->    default_postback_handler.
