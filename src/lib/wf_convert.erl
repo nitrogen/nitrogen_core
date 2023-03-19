@@ -96,6 +96,7 @@ to_existing_atom(I) when is_integer(I) -> to_existing_atom(integer_to_list(I));
 to_existing_atom(L) when is_list(L) -> list_to_existing_atom(binary_to_list(iolist_to_binary(L))).
 
 -spec to_binary(term()) -> binary().
+to_binary(undefined) -> <<>>;
 to_binary(A) when is_atom(A) -> to_binary(atom_to_list(A));
 to_binary(B) when is_binary(B) -> B;
 to_binary(I) when is_integer(I) -> to_binary(integer_to_list(I));
@@ -132,6 +133,7 @@ safe_to_float(L) when is_list(L) ->
     end.
 
 -spec to_bool(term()) -> boolean().
+to_bool(undefined) -> false;
 to_bool(0) -> false;
 to_bool("0") -> false;
 to_bool(<<"0">>) -> false;
@@ -481,6 +483,7 @@ parse_ip(String) ->
 -include_lib("eunit/include/eunit.hrl").
 
 bool_test() ->
+    ?assertEqual(false, to_bool(undefined)),
     ?assertEqual(true,  to_bool("TrUe")),
 
     ?assertEqual(false, to_bool("false")),

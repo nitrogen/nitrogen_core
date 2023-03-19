@@ -16,7 +16,7 @@ render_element(Record0)  ->
     Record = to_grid_record(Record0),
     Body = rewrite_body(lists:flatten([Record#grid.body])),
 
-    element_panel:render_element(#panel {
+    #panel {
         html_id=Record#grid.html_id,
         class=to_classes(Record),
         data_fields=Record#grid.data_fields,
@@ -34,7 +34,7 @@ render_element(Record0)  ->
                     body=Body
                 }
         end
-    }).
+    }.
 
 -spec to_grid_record(X :: nitrogen_element()) -> #grid{}.
 to_grid_record(X) -> 

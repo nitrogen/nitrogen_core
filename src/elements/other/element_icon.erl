@@ -9,6 +9,7 @@
     reflect/0,
     render_element/1,
     scripts/0,
+    scripts/2,
     css/2,
     js/2
 ]).
@@ -35,9 +36,9 @@ render_element(Record = #icon{icon=Icon, prefix=Prefix0, version=Vsn0, type=Type
     ],
     wf_tags:emit_tag(Tag, Body, Attributes).
 
-maybe_get_config(Key, Val) when Val=/=undefined,
-                                  Val=/="",
-                                  Val =/= <<>> ->
+maybe_get_config(Key, Val) when Val==undefined;
+                                  Val=="";
+                                  Val == <<>> ->
     wf:config(Key);
 maybe_get_config(_, Val) ->
     Val.
@@ -95,8 +96,7 @@ size_class(Prefix0, Size0) ->
         {Prefix, Size} -> <<Prefix/binary,"-",Size/binary>>
     end.
 
-add_class_from_prefix(Prefix, Vsn0, Type) ->
-    Vsn = wf:to_integer(Vsn0, undefined),
+add_class_from_prefix(Prefix, Vsn, Type) ->
     add_class_from_prefix_(wf:to_atom(Prefix, icon), wf:to_integer(Vsn, 0), wf:to_existing_atom(Type, regular)).
 
 %% fontawesome things
@@ -177,6 +177,9 @@ tag_from_prefix(_) ->
 scripts() ->
     Prefix = wf:config(default_icon_prefix),
     Vsn = wf:config(default_icon_version),
+    scripts(Prefix, Vsn).
+
+scripts(Prefix, Vsn) ->
     [
         css(Prefix, Vsn),
         js(Prefix, Vsn)
@@ -239,7 +242,7 @@ css_src(fa, 6) ->
     };
 css_src(material, _) ->
     {
-        <<"<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200\" />">>,
+        <<"https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">>,
         <<>>
     };
 css_src(bi, _) ->
@@ -247,10 +250,15 @@ css_src(bi, _) ->
         <<"https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.9.1/font/bootstrap-icons.min.css">>,
         <<"sha512-5PV92qsds/16vyYIJo3T/As4m2d8b6oWYfoqV+vtizRB6KhF1F9kYzWzQmsO6T3z3QG2Xdhrx7FQ+5R1LiQdUA==">>
     };
+css_src(la, _) ->
+    {
+        <<"https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">>,
+        <<"sha512-vebUliqxrVkBy3gucMhClmyQP9On/HAWQdKDXRaAlb/FKuTbxkjPKUyqVOxAcGwFDka79eTF+YXwfke1h3/wfg==">>
+    };
 css_src(_, _) ->
-    {<<>>, <<>>}.
+     {<<>>, <<>>}.
 
-
+ 
 js_src(fa, 5) ->
     {
         <<"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js">>,
@@ -261,11 +269,6 @@ js_src(fa, 6) ->
         <<"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/js/all.min.js">>,
         <<"sha512-8pHNiqTlsrRjVD4A/3va++W1sMbUHwWxxRPWNyVlql3T+Hgfd81Qc6FC5WMXDC+tSauxxzp1tgiAvSKFu1qIlA==">>
     };
-js_src(la, _) ->
-    {
-        <<"https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css">>,
-        <<"sha512-vebUliqxrVkBy3gucMhClmyQP9On/HAWQdKDXRaAlb/FKuTbxkjPKUyqVOxAcGwFDka79eTF+YXwfke1h3/wfg==">>
-    };
 js_src(_, _) ->
-    {<<>>, <<>>}.
-
+     {<<>>, <<>>}.
+ 
