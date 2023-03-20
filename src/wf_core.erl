@@ -82,11 +82,11 @@ run_websocket(Data) ->
     _ToSend = wf:to_unicode_binary(finish_websocket_request()).
 
 run_catched() ->
-    ?PRINT(deserialize),
+    %?PRINT(deserialize),
     deserialize_request_context(),
-    ?PRINT(call_init),
+    %?PRINT(call_init),
     call_init_on_handlers(),
-    ?PRINT(update_context_with_event_context),
+    %?PRINT(update_context_with_event_context),
     wf_event:update_context_with_event(wf:q(eventContext)),
     case wf_context:type() of
         first_request ->
@@ -208,7 +208,7 @@ deserialize_context(SerializedPageContext) ->
 call_init_on_handlers() ->
     %% Get the handler order
     HandlerNames = wf_handler:handler_order(),
-    ?PRINT(HandlerNames),
+    %?PRINT(HandlerNames),
 
     %% Go through each handler, and initialize them for the request 
     [wf_handler:init(X) || X <- HandlerNames],

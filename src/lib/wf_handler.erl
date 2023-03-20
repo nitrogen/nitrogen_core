@@ -139,7 +139,7 @@ set_global_handler(Name, Module, Config) ->
 -spec get_handler(Name :: atom()) -> #handler_context{}.
 get_handler(Name) -> 
     ?WF_IF(Name==undefined, throw({no_handler1, Name})),
-    ?PRINT(Name),
+    %?PRINT(Name),
     try wf_handler_mapper:lookup(Name) of
         context ->
             %% Request Handlers keep their state in their handler record
@@ -162,7 +162,7 @@ get_handler(Name) ->
 
 get_request_handler(Name) ->
     Handlers = wf_context:handlers(),
-    ?PRINT({get_handler, Name}),
+    %?PRINT({get_handler, Name}),
     maps:get(Name, Handlers, undefined).
 
 -spec update_handler_state(
