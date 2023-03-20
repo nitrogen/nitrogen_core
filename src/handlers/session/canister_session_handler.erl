@@ -46,26 +46,27 @@ finish(_Config, State) ->
 get_value(Key, DefaultValue, Config, State) -> 
     ID = get_session_id(Config, State),
     Value = wf:coalesce([canister:get(ID, Key), DefaultValue]),
-    {ok, Value, no_change}.
+    {ok, Value, State}.
 
 set_value(Key, Value, Config, State) -> 
     ID = get_session_id(Config, State),
     OldValue = canister:put(ID, Key, Value),
-    {ok, OldValue, no_change}.
+    {ok, OldValue, State}.
 
 clear_all(Config, State) -> 
     ID = get_session_id(Config, State),
     canister:clear(ID),
-    {ok, no_change}.
+    {ok, State}.
 
 %% This is the external session-id
 session_id(_Config, State) ->
     {ok, SessionId} = wf:hex_encode (State#state.id),
-    {ok, SessionId, no_change}.
+    {ok, SessionId, State}.
 
 %%% PRIVATE FUNCTIONS
 
 get_cookie_name() ->
+    %?PRINT(getting_cookie),
     wf:config_default(cookie_name, "newcookie").
 
 get_session_id(_Config, #state{id=ID}) ->
