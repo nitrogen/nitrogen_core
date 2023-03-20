@@ -21,6 +21,7 @@
     copy_fields/2,
     is_iolist_empty/1,
     has_behaviour/2,
+    app_modules/1,
     ensure_loaded/1
 ]).
 
@@ -259,3 +260,7 @@ get_behaviours(Module) ->
 
 ensure_loaded(Module) ->
     wf:cache({ensure_loaded, Module}, 1000, fun() -> code:ensure_loaded(Module) end).
+
+app_modules(App) ->
+    {ok, Modules} = application:get_key(App, modules),
+    Modules.
