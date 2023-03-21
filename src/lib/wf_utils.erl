@@ -21,7 +21,9 @@
     copy_fields/2,
     is_iolist_empty/1,
     has_behaviour/2,
-    ensure_loaded/1
+    app_modules/1,
+    ensure_loaded/1,
+    write_debug/2
 ]).
 
 -define(COPY_TO_BASERECORD(Name, Size, Record),
@@ -259,3 +261,11 @@ get_behaviours(Module) ->
 
 ensure_loaded(Module) ->
     wf:cache({ensure_loaded, Module}, 1000, fun() -> code:ensure_loaded(Module) end).
+
+app_modules(App) ->
+    {ok, Modules} = application:get_key(App, modules),
+    Modules.
+
+write_debug(Tag, Term) ->
+    Output = wf:f("NITROGEN DEBUG: ~p~n~p~n*****************************************~n", [Tag, Term]),
+    ok = file:write_file("nitrogen.debug", Output, [append]).

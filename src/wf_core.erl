@@ -105,7 +105,7 @@ finish_dynamic_request() ->
     call_finish_on_handlers(),
 
     StateScript = serialize_context(),
-    JavascriptFinal = [StateScript, Javascript],
+    JavascriptFinal = unicode:characters_to_binary([StateScript, Javascript]),
 
     case wf_context:type() of
         first_request       -> build_first_response(Html, JavascriptFinal);
@@ -279,8 +279,8 @@ build_postback_response(Script) ->
     % Update the response bridge and return.
     Bridge = wf_context:bridge(),
     %% Encoding for a postback request will be utf8
-    Script1 = unicode:characters_to_binary(Script),
-    Bridge1 = sbw:set_response_data(Script1, Bridge),
+    %Script1 = unicode:characters_to_binary(Script),
+    Bridge1 = sbw:set_response_data(Script, Bridge),
     sbw:build_response(Bridge1).
 
 replace_script(_,Html) when ?IS_STRING(Html) -> Html;

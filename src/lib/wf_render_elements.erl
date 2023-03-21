@@ -38,6 +38,7 @@ cache_rendered(Key, TTL, Fun) ->
 % Puts any new actions into the current context.
 -spec render_elements(Elements :: body()) -> {ok, html()}.
 render_elements(Elements) ->
+    %wf_utils:write_debug(render_elements, Elements),
     {ok, inner_render_elements(Elements)}.
 
 -spec inner_render_elements(E :: body()) -> html().
@@ -45,6 +46,8 @@ inner_render_elements(undefined) ->
     [];
 inner_render_elements([]) ->
     [];
+inner_render_elements(E) when is_binary(E); is_integer(E) ->
+    E;
 inner_render_elements([E|T]) ->
     [inner_render_elements(E) | inner_render_elements(T)];
 inner_render_elements(E) when is_tuple(E) ->
@@ -55,9 +58,6 @@ inner_render_elements(script) ->
     script;
 inner_render_elements(Atom) when is_atom(Atom) ->
     wf:to_binary(Atom);
-inner_render_elements(E)
-    when is_integer(E); is_binary(E); ?IS_STRING(E)->
-    E;
 inner_render_elements(Unknown) ->
     throw({unanticipated_case_in_render_elements, Unknown}).
 
@@ -125,7 +125,7 @@ prepare_and_render(Module, Base, Element) ->
     Class = extract_class(Base, Anchor, ID),
 
     % Update the base element with the new id and class...
-    Base1 = Base#elementbase { id=ID, anchor=Anchor, class=Class },
+    Base1 = Base#elementbase{id=ID, anchor=Anchor, class=Class},
     Element1 = wf_utils:replace_with_base(Base1, Element),
 
     % Wire the actions...           
@@ -165,6 +165,7 @@ extract_class(#elementbase{class=Class}, ID, Anchor) ->
 call_element_render(RenderOrTransform, Module, Element) ->
     %{Time, NewElements} = timer:tc(Module, RenderOrTransform, [Element]),
     NewElements = Module:RenderOrTransform(Element),
+    %wf_utils:write_debug(render_elements, NewElements),
     %io:format("Time to render: ~p: ~p~n",[element(1, Element), Time]),
     inner_render_elements(NewElements).
 
