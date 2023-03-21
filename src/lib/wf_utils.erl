@@ -22,7 +22,8 @@
     is_iolist_empty/1,
     has_behaviour/2,
     app_modules/1,
-    ensure_loaded/1
+    ensure_loaded/1,
+    write_debug/2
 ]).
 
 -define(COPY_TO_BASERECORD(Name, Size, Record),
@@ -264,3 +265,7 @@ ensure_loaded(Module) ->
 app_modules(App) ->
     {ok, Modules} = application:get_key(App, modules),
     Modules.
+
+write_debug(Tag, Term) ->
+    Output = wf:f("NITROGEN DEBUG: ~p~n~p~n*****************************************~n", [Tag, Term]),
+    ok = file:write_file("nitrogen.debug", Output, [append]).

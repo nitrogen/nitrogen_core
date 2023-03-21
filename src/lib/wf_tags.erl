@@ -49,13 +49,9 @@ html_name(Id, Name) ->
 %%%  Empty tags %%%
 
 emit_tag(TagName, Props) ->
-    STagName = wf:to_list(TagName),
-    [
-        "<",
-        STagName,
-        write_props(Props),
-        "/>"
-    ].
+    BTagName = wf:to_binary(TagName),
+    BProps = write_props(Props),
+    <<"<",BTagName/binary,BProps/binary,"/>">>.
 
 %%% Tags with child content %%%
 
@@ -67,28 +63,28 @@ emit_tag(TagName, [], Props) when ?NO_SHORT_TAGS(TagName) ->
     emit_tag(TagName, Props);
 
 emit_tag(TagName, Content, Props) ->
-    STagName = wf:to_list(TagName),
+    BTagName = wf:to_binary(TagName),
+    BProps = write_props(Props),
     [
-        "<", 
-        STagName, 
-        write_props(Props), 
-        ">", 
+        <<"<",BTagName/binary,BProps/binary,">">>,
         Content,
-        "</", 
-        STagName, 
-        ">"
+        <<"</", BTagName/binary, ">">>
     ].    
 
 %%% Property display functions %%%
 
-write_props(Props) ->
-    lists:map(fun display_property/1, Props).
+write_props([]) ->
+    <<>>;
+write_props([H|T]) ->
+    HBin = display_property(H),
+    TBin = write_props(T),
+    <<HBin/binary,TBin/binary>>.
 
 display_property(undefined) ->
-    [];
+    <<>>;
 
 display_property([]) ->
-    [];
+    <<>>;
 
 display_property({Prop}) ->
     display_property(Prop);
@@ -97,48 +93,59 @@ display_property(Prop) when is_atom(Prop) ->
     display_property(wf:to_binary(Prop));
 
 display_property(Prop) when is_binary(Prop) ->
-    [" ", Prop];
+    <<" ",Prop/binary>>;
 
 display_property(Prop) when ?IS_STRING(Prop) ->
-    [" ", Prop];
+    display_property(wf:to_unicode_binary(Prop));
 
 %% Data fields are special in HTML5.
 %% In this case, the DataTags value is expected to be a
 %% proplist of [{field,Value}]. Emitted will be data-field="value".
 %% "data-" gets prefixed on the fieldnames.
 display_property({data_fields,DataTags}) ->
-    [" ",data_tags(DataTags)];
+    BinTags = data_tags(DataTags),
+    <<" ",BinTags/binary>>;
 
 display_property({Prop, V}) when is_atom(Prop) ->
-    display_property({atom_to_list(Prop), V});
+    display_property({wf:to_binary(Prop), V});
 
 %% Most HTML tags don't care about a property with an empty string as its value
 %% Except for the "value" tag on <option> and other form tags.
 %% In this case, we emit the 'value' propery even if it's an empty value.
-display_property({Prop, []}) when Prop =/= "value" ->
-    [];
+display_property({Prop, Value}) when Prop =/= <<"value">> andalso ?WF_BLANK(Value) ->
+    <<>>;
 
-display_property({Prop, undefined}) when Prop =/= "value" ->
-    [];    
+display_property({Prop, Value}) when is_list(Prop) ->
+    display_property({wf:to_binary(Prop), Value});
 
 display_property({Prop, Value}) when is_integer(Value); is_atom(Value); is_float(Value) ->
-    [" ", Prop, "=\"", wf:to_list(Value), "\""];
+    BinValue = wf:to_binary(Value),
+    <<" ",Prop/binary,"=\"",BinValue/binary, "\"">>;
 
 %% 'class' is a special kind of field, which will be reformatted to handle
-display_property({"class", Values}) ->
+display_property({<<"class">>, Values}) ->
     StrValues = wf:to_string_list(Values),
     StrValues1 = string:strip(string:join(StrValues, " ")),
     StrValues2 = wf_utils:replace(StrValues1, ".", ""),
-    [" class=\"", StrValues2, "\""];
+    BinValues = wf:to_binary(StrValues2),
+    <<" class=\"", BinValues/binary, "\"">>;
 
-display_property({Prop, Value}) ->
-    [" ", Prop, "=\"", Value, "\""].
+display_property({Prop, Value}) when is_list(Value) ->
+    display_property({Prop, wf:to_unicode_binary(Value)});
+
+
+display_property({Prop, Value}) when is_binary(Prop), is_binary(Value) ->
+    <<" ", Prop/binary, "=\"", Value/binary, "\"">>.
 
 
 
 %% 
-data_tags(Data) ->
-    [display_property(data_tag(Datum)) || Datum <- Data].
+data_tags([]) ->
+    <<>>;
+data_tags([H|T]) ->
+    HBin = display_property(data_tag(H)),
+    TBin = data_tags(T),
+    <<HBin/binary,TBin/binary>>.
 
 data_tag({FieldName,Value}) ->
     DataField = wf:to_unicode_binary(FieldName),
