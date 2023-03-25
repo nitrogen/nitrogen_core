@@ -163,10 +163,7 @@ extract_class(#elementbase{class=Class}, ID, Anchor) ->
                           Module :: module(),
                           Element :: nitrogen_element() ) -> html().
 call_element_render(RenderOrTransform, Module, Element) ->
-    %{Time, NewElements} = timer:tc(Module, RenderOrTransform, [Element]),
     NewElements = Module:RenderOrTransform(Element),
-    %wf_utils:write_debug(render_elements, NewElements),
-    %io:format("Time to render: ~p: ~p~n",[element(1, Element), Time]),
     inner_render_elements(NewElements).
 
 -spec normalize_id(list() | atom() | binary()) -> string().
