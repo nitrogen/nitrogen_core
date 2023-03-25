@@ -23,7 +23,8 @@
     has_behaviour/2,
     app_modules/1,
     ensure_loaded/1,
-    write_debug/2
+    write_debug/2,
+    profile/2
 ]).
 
 -define(COPY_TO_BASERECORD(Name, Size, Record),
@@ -269,3 +270,19 @@ app_modules(App) ->
 write_debug(Tag, Term) ->
     Output = wf:f("NITROGEN DEBUG: ~p~n~p~n*****************************************~n", [Tag, Term]),
     ok = file:write_file("nitrogen.debug", Output, [append]).
+
+profile(Tag, Fun) ->
+    Pid = self(),
+    {_, StartRed} = erlang:process_info(Pid, reductions),
+    {_, StartHeap} = erlang:process_info(Pid, heap_size),
+    {_, StartMem} = erlang:process_info(Pid, memory),
+    {Time, Res} = timer:tc(Fun),
+    {_, EndRed} = erlang:process_info(Pid, reductions),
+    {_, EndHeap} = erlang:process_info(Pid, heap_size),
+    {_, EndMem} = erlang:process_info(Pid, memory),
+    Reductions = EndRed - StartRed,
+    Heap = EndHeap - StartHeap,
+    Mem = EndMem - StartMem,
+
+    io:format("~p, ~p, ~p, ~p, ~p~n", [Tag, Time, Reductions, Heap, Mem]),
+    Res.
