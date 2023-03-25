@@ -136,6 +136,10 @@ div.inplace_textbox .LV_invalid {
     box-sizing: content-box;
 }
 
+#nitrogen-notice-bar:not(.visible) {
+	border-bottom:none;
+}
+
 #nitrogen-notice-bar.visible {
     height: 20px;
     padding: 5px 0;
