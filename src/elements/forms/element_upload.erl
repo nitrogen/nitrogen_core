@@ -213,7 +213,7 @@ event({upload_finished, Record}) ->
     Anchor = wf_context:anchor(),
     ValidationGroup = wf_context:event_validation_group(),
     HandleInvalid = wf_context:event_handle_invalid(),
-    Postback = wf_event:generate_postback_script(NewTag, Anchor, ValidationGroup, HandleInvalid, undefined, ?MODULE, undefined),
+    Postback = wf_event:generate_postback_script(NewTag, undefined, Anchor, ValidationGroup, HandleInvalid, undefined, ?MODULE, undefined),
 
     % Set the response...
     wf_context:data([
