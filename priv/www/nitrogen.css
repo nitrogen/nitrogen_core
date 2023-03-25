@@ -66,29 +66,29 @@ div.inplace_textbox .LV_invalid {
 
 .wizard .wizard_title {
         font-size: 1.2em;
-	font-weight: bold;
+    font-weight: bold;
 }
 
 .wizard .wizard_body {
-	padding-top:1em;
-	padding-bottom:1em;
+    padding-top:1em;
+    padding-bottom:1em;
 }
 
 .wizard_progress {
-	margin-left:10px;
-	font-size:1em;
+    margin-left:10px;
+    font-size:1em;
 }
 
 .wizard_buttons table, .wizard_buttons {
-	width:100%;
+    width:100%;
 }
 
 .wizard_buttons_next {
-	text-align:right;
+    text-align:right;
 }
 
 .wizard_buttons_back {
-	text-align:left;
+    text-align:left;
 }
 
 .wizard .wizard_buttons input {
@@ -118,54 +118,54 @@ div.inplace_textbox .LV_invalid {
 
 /*** Disconnection Bar ***/
 #nitrogen-notice-bar {
-	position:fixed;
+    position:fixed;
     overflow: hidden;
-	top:0;
-	left:0;
-	width:100%;
+    top:0;
+    left:0;
+    width:100%;
     padding: 0;
-	text-align:center;
-	height:0;
-	background: #ddd;
-	color: #222;
-	font-weight:bold;
+    text-align:center;
+    height:0;
+    background: #ddd;
+    color: #222;
+    font-weight:bold;
     line-height: 1.4;
-	z-index: 10000;
-	border-bottom: 1px solid #000;
+    z-index: 10000;
+    border-bottom: 1px solid #000;
     transition: 0.5s ease-in-out;
-	box-sizing: content-box;
+    box-sizing: content-box;
 }
 
 #nitrogen-notice-bar.visible {
     height: 20px;
-	padding: 5px 0;
+    padding: 5px 0;
 }
 
 #nitrogen-notice-bar.is-warning {
-	background: #ff0;
-	color: #000;
-	border-bottom: 1px solid #000;
+    background: #ff0;
+    color: #000;
+    border-bottom: 1px solid #000;
 }
 
 #nitrogen-notice-bar.is-error {
-	background: #fcc;
-	color: #F00;
-	border-bottom: 1px solid #f00;
+    background: #fcc;
+    color: #F00;
+    border-bottom: 1px solid #f00;
 }
 
 #nitrogen-notice-bar.is-ok {
-	color:#090;
-	background:#cfc;
-	border-bottom: 1px solid #090;
+    color:#090;
+    background:#cfc;
+    border-bottom: 1px solid #090;
 }
 
 /*** Lightbox ***/
 
 .lightbox, .lightbox_table, .lightbox_background {
-	position:fixed;
-	top: 0px;
-	left: 0px;
-	bottom:0px;
+    position:fixed;
+    top: 0px;
+    left: 0px;
+    bottom:0px;
     right:0px;
 }
 
@@ -190,7 +190,7 @@ div.inplace_textbox .LV_invalid {
     vertical-align:center;
     width:300px;
     background:#ffc;
-	color: #000;
+    color: #000;
     border:2px dashed #000;
     font-size:18pt;
     border-radius:15px;
@@ -243,59 +243,59 @@ div.inplace_textbox .LV_invalid {
 }
 
 .upload_overall_progress {
-	height:20px;
+    height:20px;
 }
 
 .upload_droplist li div.upload_progress {
-	height: 10px;
-	width:50px;
-	margin-left: 10px;
-	display: inline-block;
+    height: 10px;
+    width:50px;
+    margin-left: 10px;
+    display: inline-block;
 }
 
 a.upload_delete_file:visited,
 a.upload_delete_file:link,
 a.upload_delete_file:active {
-	background: #f00;
-	color: #fff;
-	border: 1px solid #f00;
-	border-radius:15px;
-	display:inline-block;
-	padding:1px;
-	line-height:8px;
-	text-align:center;
-	font-size:14px;
-	margin-left:5px;
-	font-weight:bold;
+    background: #f00;
+    color: #fff;
+    border: 1px solid #f00;
+    border-radius:15px;
+    display:inline-block;
+    padding:1px;
+    line-height:8px;
+    text-align:center;
+    font-size:14px;
+    margin-left:5px;
+    font-weight:bold;
 }
 
 a.upload_delete_file:hover {
-	background: #fff;
-	border: 1px solid #f00;
-	color: #000;
-	text-decoration: none;
+    background: #fff;
+    border: 1px solid #f00;
+    color: #000;
+    text-decoration: none;
 }
 
 /* RECAPTCHA */
 
 .recaptcha * {
-	line-height:1em;
+    line-height:1em;
 }
 
 .recaptcha {
-	width:315px !important;
+    width:315px !important;
 }
 
 .ui-progressbar {
-	position:relative;
-}		
+    position:relative;
+}       
 
 .progressbar-label {
-	text-align:center;
-	position:absolute;
-	left:0;
-	top:0;
-	width:100%;
+    text-align:center;
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
 }
 
 /*** jQuery Tabs ***/
@@ -313,38 +313,38 @@ a.upload_delete_file:hover {
 
 
 .nitrogen_calendar_day_header th {
-	width: 14%;
-	text-align:center;
+    width: 14%;
+    text-align:center;
 }
 
 .nitrogen_calendar > table > tbody > tr > th,
 .nitrogen_calendar > table > tbody > tr > td {
-	border: 1px solid #999;
-	padding:0;
+    border: 1px solid #999;
+    padding:0;
 }
 
 .nitrogen_calendar_day_body {
-	min-height:100px;
-	padding-top: 30px;
+    min-height:100px;
+    padding-top: 30px;
 }
 
 .nitrogen_calendar_day_wrapper {
-	position:relative;
-	min-height:100px;
-	padding:4px;
+    position:relative;
+    min-height:100px;
+    padding:4px;
 }
 
 .nitrogen_calendar_day {
-	position:absolute;
-	width: 100%;
-	left:0;
-	top:0;
-	text-align:left;
-	background: rgba(128, 128, 128, 0.1);
-	padding:4px;
+    position:absolute;
+    width: 100%;
+    left:0;
+    top:0;
+    text-align:left;
+    background: rgba(128, 128, 128, 0.1);
+    padding:4px;
 }
 
 .nitrogen_calendar_today {
-	background: rgba(0, 255, 0, 0.1);
+    background: rgba(0, 255, 0, 0.1);
 }
 
