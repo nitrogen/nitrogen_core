@@ -76,6 +76,7 @@ emit_tag(TagName, Content, Props) ->
 write_props([]) ->
     <<>>;
 write_props([H|T]) ->
+    %HBin = ?WF_PROFILE({props, H}, display_property(H)),
     HBin = display_property(H),
     TBin = write_props(T),
     <<HBin/binary,TBin/binary>>.
@@ -124,11 +125,12 @@ display_property({Prop, Value}) when is_integer(Value); is_atom(Value); is_float
 
 %% 'class' is a special kind of field, which will be reformatted to handle
 display_property({<<"class">>, Values}) ->
-    StrValues = wf:to_string_list(Values),
-    StrValues1 = string:strip(string:join(StrValues, " ")),
-    StrValues2 = wf_utils:replace(StrValues1, ".", ""),
-    BinValues = wf:to_binary(StrValues2),
-    <<" class=\"", BinValues/binary, "\"">>;
+    Class = format_class(Values),
+    %StrValues = wf:to_string_list(Values),
+    %StrValues1 = string:strip(string:join(StrValues, " ")),
+    %StrValues2 = wf_utils:replace(StrValues1, ".", ""),
+    %BinValues = wf:to_binary(StrValues2),
+    <<" class=\"", Class/binary, "\"">>;
 
 display_property({Prop, Value}) when is_list(Value) ->
     display_property({Prop, wf:to_unicode_binary(Value)});
@@ -138,6 +140,23 @@ display_property({Prop, Value}) when is_binary(Prop), is_binary(Value) ->
     <<" ", Prop/binary, "=\"", Value/binary, "\"">>.
 
 
+format_class([]) ->
+    <<>>;
+format_class(<<".",Class/binary>>) ->
+    Class;
+format_class(Class) when is_binary(Class) ->
+    Class;
+format_class("." ++ Class) ->
+    wf:to_binary(Class);
+format_class(Class) when is_atom(Class) ->
+    wf:to_binary(Class);
+format_class(Class) when ?IS_STRING(Class) ->
+    wf:to_binary(Class);
+format_class([H|T]) ->
+    HBin = format_class(H),
+    TBin = format_class(T),
+    <<HBin/binary," ",TBin/binary>>.
+    
 
 %% 
 data_tags([]) ->
