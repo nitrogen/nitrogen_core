@@ -31,7 +31,7 @@ render_element(Record) ->
 
 	case Record#link.click of
 		undefined -> ignore;
-		ClickActions -> wf:wire(Anchor, #event { type=click, actions=ClickActions })
+		ClickActions -> wf:wire(Anchor, #event{type=click, actions=ClickActions })
 	end,
 
     Body = [
@@ -52,7 +52,7 @@ render_element(Record) ->
     wf_tags:emit_tag(a, Body, [
         {id, Record#link.html_id},
         {href, wf:to_list(Record#link.url)},
-        {class, [link, Record#link.class]},
+        {class, ?ADD_ELEMENT_CLASS(link, Record#link.class)},
         {target, Target},
         {style, Record#link.style},
         {title, wf:html_encode(Record#link.title, Record#link.html_encode)},

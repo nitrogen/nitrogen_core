@@ -22,7 +22,7 @@ render_element(Record) ->
 
     wf_tags:emit_tag(li, Body, [
         {id, Record#listitem.html_id},
-        {class, [listitem, Record#listitem.class]},
+        {class, ?ADD_ELEMENT_CLASS(listitem, Record#listitem.class)},
         {title, Record#listitem.title},
         {role, Record#listitem.role},
         {style, Record#listitem.style},

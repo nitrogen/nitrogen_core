@@ -23,16 +23,30 @@ render_element(Rec0) ->
         false -> throw({unable_to_convert_to_basic_tag, Rec0})
     end,
 
+    #basic_tag{
+        text=Text,
+        body=Body0,
+        html_encode=HtmlEncode,
+        html_id=HtmlID,
+        class=Class,
+        title=Title,
+        data_fields=DataFields,
+        %aria=Aria,
+        role=Role,
+        style=Style
+    } = Rec,
+
     Body = [
-        wf:html_encode(Rec#basic_tag.text, Rec#basic_tag.html_encode),
-        Rec#basic_tag.body
+        wf:html_encode(Text, HtmlEncode),
+        Body0
     ],
     wf_tags:emit_tag(Tag, Body, [
-        {id, Rec#basic_tag.html_id},
-        {class, Rec#basic_tag.class},
-        {title, Rec#basic_tag.title},
-        {data_fields, Rec#basic_tag.data_fields},
-        {style, Rec#basic_tag.style}
+        {id, HtmlID},
+        {class, ?ADD_ELEMENT_CLASS(ElementName, Class)},
+        {title, Title},
+        {data_fields, DataFields},
+        {role, Role},
+        {style, Style}
     ]).
 
 
@@ -42,5 +56,9 @@ render_element(Rec0) ->
 %% The most common example would be #panel{} becomes <div> (since div is a keyword in Erlang)
 tagname(panel) ->
     'div';
+tagname(html5_header) ->
+    'header';
+tagname(html5_footer) ->
+    'footer';
 tagname(Element) ->
     Element.

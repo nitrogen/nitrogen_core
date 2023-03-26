@@ -34,7 +34,7 @@ render_element(Record=#range{}) ->
 
     wf_tags:emit_tag(input, [
         {type, range}, 
-        {class, [range, Record#range.class]},
+        {class, ?ADD_ELEMENT_CLASS(range, Record#range.class)},
         {title, Record#range.title},
         {min, Record#range.min},
         {max, Record#range.max},

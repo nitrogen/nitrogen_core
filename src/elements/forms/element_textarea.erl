@@ -18,7 +18,7 @@ render_element(Record) ->
     maybe_trap_tabs(Anchor, Record#textarea.trap_tabs),
 
     wf_tags:emit_tag(textarea, Text, [
-        {class, [textarea, Record#textarea.class]},
+        {class, ?ADD_ELEMENT_CLASS(textarea, Record#textarea.class)},
         {id, Record#textarea.html_id},
         {style, Record#textarea.style},
         {title, Record#textarea.title},

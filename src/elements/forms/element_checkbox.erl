@@ -47,7 +47,7 @@ render_checkbox_tag(Anchor, Record) ->
         {name, Record#checkbox.html_name},
         {id,   Anchor},
         {type, checkbox},
-        {class, [checkbox, Record#checkbox.class]},
+        {class, ?ADD_ELEMENT_CLASS(checkbox, Record#checkbox.class)},
         {title, Record#checkbox.title},
         {style, Record#checkbox.style},
         {value, Record#checkbox.value},

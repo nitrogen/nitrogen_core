@@ -19,7 +19,7 @@ render_element(Record) ->
     wf_tags:emit_tag(input, [
         {type,  reset},
         {name,  Record#restful_reset.html_name},
-        {class, [restful_reset, Record#restful_reset.class]},
+        {class, ?ADD_ELEMENT_CLASS(restful_reset, Record#restful_reset.class)},
         {title, Record#restful_reset.title},
         {style, Record#restful_reset.style},
         {value, Value},

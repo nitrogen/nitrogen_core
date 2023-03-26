@@ -13,6 +13,12 @@
 -define(WF_PROFILE(Tag, Cmd), wf_utils:profile(Tag, fun() -> Cmd end)).
 -define(WF_PROFILE(Cmd), ?WF_PROFILE(??Cmd, Cmd)).
 
+-ifdef(DO_ELEMENT_CLASSES).
+-define(ADD_ELEMENT_CLASS(NewClass, ExistingClass), [NewClass, ExistingClass]).
+-else.
+-define(ADD_ELEMENT_CLASS(NewClass, ExistingClass), ExistingClass).
+-endif.
+
 %%% TYPES FOR DIALYZER %%%
 
 %% Allow Dialzer to be run on the .ebin files
@@ -35,6 +41,9 @@
 -type data_fields()         :: [data_field_name()
                                 | {data_field_name()}
                                 | {data_field_name(),data_field_value()}].
+-type aria_field_name()     :: atom() | text().
+-type aria_field_value()    :: atom() | text().
+-type aria_fields()         :: [{aria_field_name(), aria_field_value()}].
 -type wire_priority()       :: eager | normal | defer.
 -type class()               :: string() | binary() | atom() | [string() | binary() | atom()].
 -type text()                :: string() | binary() | iolist() | integer() | atom().
@@ -209,7 +218,9 @@
         style=""                :: text(),
         html_id=""              :: id(),
         title=""                :: undefined | text(),
-        data_fields=[]          :: data_fields()
+        role=""                 :: text() | atom(),
+        data_fields=[]          :: data_fields(),
+        aria=[]                 :: aria_fields()
     ).
 
 -record(elementbase, {?ELEMENT_BASE(undefined)}).
@@ -255,6 +266,19 @@
 ?BASIC_ELEMENT(pre).
 ?BASIC_ELEMENT(code).
 
+?BASIC_ELEMENT(section).
+?BASIC_ELEMENT(nav).
+?BASIC_ELEMENT(article).
+?BASIC_ELEMENT(aside).
+?BASIC_ELEMENT(header).
+?BASIC_ELEMENT(footer).
+?BASIC_ELEMENT(main).
+?BASIC_ELEMENT(summary).
+?BASIC_ELEMENT(mark).
+%% deprecated
+?BASIC_ELEMENT(html5_header).
+?BASIC_ELEMENT(html5_footer).
+
 -record(list, {?ELEMENT_BASE(element_list),
         numbered=false          :: boolean(),
         body=[]                 :: body()
@@ -262,8 +286,7 @@
 -record(listitem, {?ELEMENT_BASE(element_listitem),
         body=[]                 :: body(),
         text=""                 :: text(),
-        html_encode=true        :: html_encode(),
-        role=""                 :: term()
+        html_encode=true        :: html_encode()
     }).
 -record(br, {?ELEMENT_BASE(element_br) }).
 -record(hr, {?ELEMENT_BASE(element_hr) }).
@@ -748,8 +771,7 @@
 -record(mobile_list_divider, {?ELEMENT_BASE(element_mobile_list_divider),
         theme                   :: mobile_theme(),
         text=""                 :: text(),
-        body=[]                 :: body(),
-        role=heading            :: atom() | string()
+        body=[]                 :: body()
      }).
 -record(mobile_listitem, {?ELEMENT_BASE(element_mobile_listitem),
         text=""                 :: text(),
@@ -815,48 +837,15 @@
         allowfullscreen=true    :: boolean()
     }).
 
-%% HTML5 semantic elements
--record(section, {?ELEMENT_BASE(element_section),
-        body=""                 :: body(),
-        role=""                 :: text()
-    }).
--record(nav, {?ELEMENT_BASE(element_nav),
-        body=""                 :: body(),
-        role=""                 :: text()
-    }).
--record(article, {?ELEMENT_BASE(element_article),
-        body=""                 :: body(),
-        role=""                 :: text()
-    }).
--record(aside, {?ELEMENT_BASE(element_aside),
-        body=""                 :: body(),
-        role=""                 :: text()
-    }).
--record(html5_header, {?ELEMENT_BASE(element_html5_header),
-        body=""                 :: body(),
-        role=""                 :: text()
-    }).
--record(html5_footer, {?ELEMENT_BASE(element_html5_footer),
-        body=""                 :: body(),
-        role=""                 :: text()
-    }).
+%% HTML Semantic Elements
 -record(time, {?ELEMENT_BASE(element_time),
         datetime=""             :: text(),
         body=""                 :: body(),
         text=""                 :: text(),
-        html_encode=true        :: html_encode(),
-        role=""                 :: text()
+        html_encode=true        :: html_encode()
     }).
--record(mark, {?ELEMENT_BASE(element_mark),
-        body=""                 :: body(),
-        text=""                 :: text(),
-        html_encode=true        :: html_encode(),
-        role=""                 :: text()
-    }).
--record(main, {?ELEMENT_BASE(element_main),
-        body=""                 :: body(),
-        role=""                 :: text()
-    }).
+
+
 
 %% 960.gs Grid
 

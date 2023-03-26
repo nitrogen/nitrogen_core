@@ -41,7 +41,7 @@ render_element(Record) ->
 
     % Render as a textbox.
     Textbox = wf_utils:copy_fields(Record, #textbox{}),
-    Textbox1 = Textbox#textbox{class=[textbox_autocomplete | Textbox#textbox.class]},
+    Textbox1 = Textbox#textbox{class=?ADD_ELEMENT_CLASS(textbox_autocomplete, Textbox#textbox.class)},
     element_textbox:render_element(Textbox1).
 
 -spec event(any()) -> any().

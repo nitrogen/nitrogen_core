@@ -59,7 +59,7 @@ render_element(Record) ->
             %% attribute.
             {name, wf:coalesce([Record#radio.html_name,Record#radio.name])},
             {type, radio},
-            {class, [radio, Record#radio.class]},
+            {class, ?ADD_ELEMENT_CLASS(radio, Record#radio.class)},
             {title, Record#radio.title},
             {style, Record#radio.style},
             ?WF_IF(Record#radio.disabled, disabled),

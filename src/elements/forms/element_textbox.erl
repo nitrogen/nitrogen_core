@@ -61,7 +61,7 @@ render_element(Record) ->
         {id, HtmlID},
         {type, Type}, 
         {autocomplete,Autocomplete},
-        {class, [textbox, Class]},
+        {class, ?ADD_ELEMENT_CLASS(textbox, Class)},
         {title, Title},
         {maxlength, Maxlength},
         {pattern, Pattern},
