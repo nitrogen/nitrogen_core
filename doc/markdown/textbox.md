@@ -53,6 +53,14 @@
     parsed with `qdate` to automatically set the value to a correctly
     formatted value.
 
+ * `pattern` (string) - Assigns the HTML `pattern` attribute.  This is a
+   regular expression that controls the values of the form.  For example, you
+   could enforce a US-Style phone number by specifying `\d{3}-\d{3}-d\{4}`
+   (which would succeed on a value like `"111-222-4567"`).  Bear in mind, this
+   is only client-side enforcement, and doesn't currently stop postbacks from
+   happening. But it can provide an cheap and fast client-side verification
+   method.
+
  * `next` (atom) - 
     If set with a valid control ID, pressing the enter or tab key in the 
     textbox will automatically move focus to the specified control.

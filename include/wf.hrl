@@ -343,6 +343,7 @@
         maxlength=""            :: integer() | string(),
         size=""                 :: integer() | string(),
         placeholder=""          :: text(),
+        pattern=""              :: text(),
         html_encode=true        :: html_encode(),
         disabled=false          :: boolean(),
         readonly=false          :: boolean(),
