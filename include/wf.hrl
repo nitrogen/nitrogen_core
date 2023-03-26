@@ -266,6 +266,7 @@
 ?BASIC_ELEMENT(pre).
 ?BASIC_ELEMENT(code).
 
+%% HTML Semantic Elements
 ?BASIC_ELEMENT(section).
 ?BASIC_ELEMENT(nav).
 ?BASIC_ELEMENT(article).
@@ -275,9 +276,10 @@
 ?BASIC_ELEMENT(main).
 ?BASIC_ELEMENT(summary).
 ?BASIC_ELEMENT(mark).
+
 %% deprecated
-?BASIC_ELEMENT(html5_header).
-?BASIC_ELEMENT(html5_footer).
+?BASIC_ELEMENT(html5_header). %% just use #header{}
+?BASIC_ELEMENT(html5_footer). %% just use #footer{}
 
 -record(list, {?ELEMENT_BASE(element_list),
         numbered=false          :: boolean(),
