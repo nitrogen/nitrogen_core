@@ -237,9 +237,6 @@
 -record(function_el, {?ELEMENT_BASE(element_function),
         function=fun() ->[]end  :: fun() | [fun()]
     }).
--record(body, {?ELEMENT_BASE(element_body),
-        body=[]                 :: body()
-    }).
 
 -define(BASIC_ELEMENT(Tag),
     -record(Tag, {?ELEMENT_BASE(element_basic_tag),
