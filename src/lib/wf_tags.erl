@@ -7,31 +7,42 @@
 -module (wf_tags).
 -author('tom.mcnulty@cetiforge.com').
 -include_lib ("wf.hrl").
--define(NO_SHORT_TAGS(TagName),(
-    TagName =/= 'div' andalso 
-    TagName =/= 'span' andalso 
-    TagName =/= 'label' andalso 
-    TagName =/= 'textarea' andalso 
-    TagName =/= 'table' andalso 
-    TagName =/= 'tr' andalso 
-    TagName =/= 'th' andalso 
-    TagName =/= 'td' andalso 
-    TagName =/= 'p' andalso
-    TagName =/= 'i' andalso
-    TagName =/= 'a' andalso
-    TagName =/= 'ul' andalso
-    TagName =/= 'ol' andalso
-    TagName =/= 'select' andalso
-    TagName =/= 'script' andalso
-    TagName =/= 'legend' andalso
-    TagName =/= 'fieldset' andalso
-    TagName =/= 'h1' andalso
-    TagName =/= 'h2' andalso
-    TagName =/= 'h3' andalso
-    TagName =/= 'h4' andalso
-    TagName =/= 'h5' andalso
-    TagName =/= 'h6' andalso
-    TagName =/= 'iframe')).
+
+%% These tags always self-close
+-define(VOID_TAG(TagName), (
+    TagName =:= area orelse
+    TagName =:= base orelse
+    TagName =:= br orelse
+    TagName =:= col orelse
+    TagName =:= embed orelse
+    TagName =:= hr orelse
+    TagName =:= img orelse
+    TagName =:= input orelse
+    TagName =:= link orelse
+    TagName =:= meta orelse
+    TagName =:= source orelse
+    TagName =:= track orelse
+    TagName =:= wbr
+)).
+
+%% These tags may self-close
+-define(SELF_CLOSING(TagName),(
+    TagName =:= html orelse
+    TagName =:= head orelse
+    TagName =:= body orelse
+    TagName =:= p orelse
+    TagName =:= dt orelse
+    TagName =:= dd orelse
+    TagName =:= li orelse
+    TagName =:= option orelse
+    TagName =:= thead orelse
+    TagName =:= th orelse
+    TagName =:= tbody orelse
+    TagName =:= tr orelse
+    TagName =:= td orelse
+    TagName =:= tfoot orelse
+    TagName =:= colgroup
+)).
 
 -export ([emit_tag/2, emit_tag/3, html_name/2]).
 
@@ -56,10 +67,15 @@ emit_tag(TagName, Props) ->
 %%% Tags with child content %%%
 
 % empty text and body
-emit_tag(TagName, [[], []], Props) when ?NO_SHORT_TAGS(TagName) ->
+emit_tag(TagName, [X, Y], Props)
+        when ?WF_BLANK(X) andalso ?WF_BLANK(Y) andalso ?SELF_CLOSING(TagName) ->
     emit_tag(TagName, Props);
 
-emit_tag(TagName, [], Props) when ?NO_SHORT_TAGS(TagName) ->
+emit_tag(TagName, X, Props) when ?WF_BLANK(X) andalso ?SELF_CLOSING(TagName) ->
+    emit_tag(TagName, Props);
+
+emit_tag(TagName, _, Props)
+        when ?VOID_TAG(TagName) ->
     emit_tag(TagName, Props);
 
 emit_tag(TagName, Content, Props) ->
