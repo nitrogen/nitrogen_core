@@ -107,6 +107,10 @@ display_property({data_fields,DataTags}) ->
     BinTags = data_tags(DataTags),
     <<" ",BinTags/binary>>;
 
+display_property({aria, AriaTags}) ->
+    BinTags = aria_tags(AriaTags),
+    <<" ",BinTags/binary>>;
+
 display_property({Prop, V}) when is_atom(Prop) ->
     display_property({wf:to_binary(Prop), V});
 
@@ -156,21 +160,26 @@ format_class([H|T]) ->
     HBin = format_class(H),
     TBin = format_class(T),
     <<HBin/binary," ",TBin/binary>>.
-    
 
-%% 
-data_tags([]) ->
+
+data_tags(Tags) ->
+    prefix_tags(<<"data-">>, Tags).
+
+aria_tags(Tags) ->
+    prefix_tags(<<"aria-">>, Tags).
+
+prefix_tags(_Prefix, []) ->
     <<>>;
-data_tags([H|T]) ->
-    HBin = display_property(data_tag(H)),
-    TBin = data_tags(T),
+prefix_tags(Prefix, [H|T]) ->
+    HBin = display_property(prefix_tag(Prefix,H)),
+    TBin = prefix_tags(Prefix,T),
     <<HBin/binary,TBin/binary>>.
 
-data_tag({FieldName,Value}) ->
+prefix_tag(Prefix, {FieldName,Value}) ->
     DataField = wf:to_unicode_binary(FieldName),
-    {<<"data-",DataField/binary>>,Value};
-data_tag({FieldName}) ->
+    {<<Prefix/binary,DataField/binary>>,Value};
+prefix_tag(Prefix, {FieldName}) ->
     DataField = wf:to_unicode_binary(FieldName),
-    {<<"data-",DataField/binary>>};
-data_tag(FieldName) when is_atom(FieldName) ->
-    data_tag({FieldName}).
+    {<<Prefix/binary,DataField/binary>>};
+prefix_tag(Prefix, FieldName) when is_atom(FieldName) ->
+    prefix_tag(Prefix, {FieldName}).
