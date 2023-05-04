@@ -74,6 +74,52 @@ is because `div` is a keyword in Erlang, so `#panel{}` is used.
 
 ```
 
+## header element - `#header{}`
+
+Produces an HTML `<HEADER>`
+
+## html5\_header element - `#html5_header{}`
+
+Alias to `#header{}`. Deprecated in Nitrogen 3.0, but currently kept for backwards compatibility
+
+## footer element - `#footer{}`
+
+Produces an HTML `<FOOTER>`
+
+## html5\_footer element - `#html5_footer{}`
+
+Alias to `#footer{}`. Deprecated in Nitrogen 3.0, but currently kept for backwards compatibility
+
+## nav element - `#nav{}`
+
+Produces an HTML `<NAV>`
+
+## main element - `#main{}`
+
+Produces an HTML `<MAIN>`
+
+## section element - `#section{}`
+
+Produces an HTML `<SECTION>`
+
+## article element - `#article{}`
+
+Produces an HTML `<ARTICLE>`
+
+## aside element - `#aside{}`
+
+Produces an HTML `<ASIDE>`
+
+## summary element - `#summary{}`
+
+Produces an HTML `<SUMMARY>`
+
+## mark element - `#mark{}`
+
+Produces an HTML `<MARK>`
+
+
+
 ### Attributes
 
    * `body` (Nitrogen element or list of elements) - Set the element or elements that will be rendered within this panel.
@@ -84,5 +130,5 @@ is because `div` is a keyword in Erlang, so `#panel{}` is used.
 
 ### See Also
 
- *  [base element](./element_base.md)
-
+ * [base element](./element_base.md)
+ * [HTML Semantic Elements](https://developer.mozilla.org/en-US/docs/Glossary/Semantics#semantic_elements)
