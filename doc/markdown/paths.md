@@ -29,7 +29,7 @@
 ## How Are Paths Matched?
   
   The `objs(Path, Anchor)` function is used to match selectors on the
-  client. This is defined in /nitrogen.js/, and returns a jQuery
+  client. This is defined in `nitrogen.js`, and returns a jQuery
   object containing all of the elements that match the selector
   provided under `Path`, potentially in close proximity to the
   selector provided under `Anchor`. If `Anchor` is not provided, then
@@ -110,7 +110,7 @@
 ### Selecter: ##element
    A shortcut for referring to a Nitrogen element when you specify a
    string path. Because of the way Nitrogen uses class names to tag
-   elements, this is the same as specifying ".wfid_element".
+   elements, this is the same as specifying `.wfid_element`.
 
 ## jQuery Selectors
 
