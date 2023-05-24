@@ -23,5 +23,6 @@ render_element(Record) ->
         {title, Record#restful_reset.title},
         {style, Record#restful_reset.style},
         {value, Value},
-        {data_fields, Record#restful_reset.data_fields}
+        {data_fields, Record#restful_reset.data_fields},
+        {aria, Record#restful_reset.aria}
     ]).

@@ -27,5 +27,6 @@ render_element(R = #fieldset{}) ->
 		{class, ?ADD_ELEMENT_CLASS(fieldset, R#fieldset.class)},
 		{title, R#fieldset.title},
 		{style, R#fieldset.style},
-        {data_fields, R#fieldset.data_fields}
+        {data_fields, R#fieldset.data_fields},
+        {aria, R#fieldset.aria}
 	]).

@@ -43,6 +43,8 @@ render_element(#youtube{
 				class=Class,
 				width=Width,
 				height=Height,
+                data_fields=DataFields,
+                aria=Aria,
 				key=Key,
 				allowfullscreen=Allowfullscreen }) ->
 
@@ -55,6 +57,8 @@ render_element(#youtube{
 		{height,wf:to_list(Height)},
 		{src,URL},
 		{frameborder,"0"},
+        {data_fields, DataFields},
+        {aria, Aria},
 	    ?WF_IF(Allowfullscreen, {allowfullscreen})
 	]).
 

@@ -40,7 +40,8 @@ render_element(Record) ->
         {enctype, WithName#restful_form.enctype},
         {target, WithName#restful_form.target},
         {style, WithName#restful_form.style},
-        {data_fields, WithName#restful_form.data_fields}
+        {data_fields, WithName#restful_form.data_fields},
+        {aria, WithName#restful_form.aria}
     ]).
 
 %%internal

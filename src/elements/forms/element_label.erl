@@ -25,5 +25,6 @@ render_element(Record) ->
         {title, Record#label.title},
         {style, Record#label.style},
         {for, Record#label.for},
-        {data_fields, Record#label.data_fields}
+        {data_fields, Record#label.data_fields},
+        {aria, Record#label.aria}
     ]).

@@ -90,6 +90,7 @@ render_element(Record = #wizard{tag=Tag, next_class=NextClass, back_class=BackCl
 	Terms = #panel {
 		class=[wizard,Record#wizard.class],
         data_fields=Record#wizard.data_fields,
+        aria=Record#wizard.aria,
 		body=[F(X) || X <- StepSeq] 
 	},
 	

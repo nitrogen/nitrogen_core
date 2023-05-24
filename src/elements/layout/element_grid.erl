@@ -16,17 +16,18 @@ render_element(Record0)  ->
     Record = to_grid_record(Record0),
     Body = rewrite_body(lists:flatten([Record#grid.body])),
 
-    #panel {
+    #panel{
         html_id=Record#grid.html_id,
         class=to_classes(Record),
         data_fields=Record#grid.data_fields,
+        aria=Record#grid.aria,
         body=case Record#grid.type of
             clear ->
                 Body;
             container ->
                 Body;
             grid ->
-                #panel { 
+                #panel{ 
                     id=Record#grid.id,
                     anchor=Record#grid.anchor,
                     class=[grid, Record#grid.class],

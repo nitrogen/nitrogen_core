@@ -20,6 +20,7 @@ render_element(Record) ->
         {class, [iframe, Record#iframe.class]},
         {style, Record#iframe.style},
         {data_fields, Record#iframe.data_fields},
+        {aria, Record#iframe.aria},
         {height, Record#iframe.height},
         {width, Record#iframe.width},
         {src, Record#iframe.src},

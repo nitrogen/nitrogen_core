@@ -23,5 +23,6 @@ render_element(Record) ->
         title=Record#spinner.title,
         style=["display:none;",Record#spinner.style],
         data_fields=Record#spinner.data_fields,
+        aria=Record#spinner.aria,
         body=#image { image=Record#spinner.image }
     }.

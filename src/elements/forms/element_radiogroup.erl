@@ -30,6 +30,7 @@ render_element(Record) ->
         title=Record#radiogroup.title,
         style=Record#radiogroup.style,
         data_fields=Record#radiogroup.data_fields,
+        aria=Record#radiogroup.aria,
         body=Body
     }.
 

@@ -128,6 +128,7 @@ render_element(Record) ->
         class=[google_chart, Record#google_chart.class],
         style = Record#google_chart.style,
         data_fields = Record#google_chart.data_fields,
+        aria = Record#google_chart.aria,
         image = lists:flatten([Path, Type, Title, TitleStyle, Size, Grid, BGColors, LegendLocation, BarSize, Axes, Data])
     },
     element_image:render_element(Image).

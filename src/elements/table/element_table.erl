@@ -35,5 +35,6 @@ render_element(Record) ->
         {class, [table, Record#table.class]},
         {title, Record#table.title},
         {style, Record#table.style},
-        {data_fields, Record#table.data_fields}
+        {data_fields, Record#table.data_fields},
+        {aria, Record#table.aria}
     ]).

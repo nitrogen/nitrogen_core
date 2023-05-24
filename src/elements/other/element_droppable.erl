@@ -39,6 +39,7 @@ render_element(Record) ->
         title=Record#droppable.title,
         style=Record#droppable.style,
         data_fields=Record#droppable.data_fields,
+        aria=Record#droppable.aria,
         body=Record#droppable.body
     }.
 

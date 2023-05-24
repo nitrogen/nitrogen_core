@@ -30,6 +30,7 @@ render_element(Record) ->
         title=Record#sortitem.title,
         style=Record#sortitem.style,
         data_fields=Record#sortitem.data_fields,
+        aria=Record#sortitem.aria,
         body=Record#sortitem.body
     },
     Panel.

@@ -36,7 +36,7 @@ render_element(Record) ->
     },
     wf:wire(Script),
 
-    #panel {
+    #panel{
         html_id=Record#sortblock.html_id,
         id=Record#sortblock.id,
         anchor=Record#sortblock.anchor,
@@ -44,7 +44,8 @@ render_element(Record) ->
         title=Record#sortblock.title,
         style=Record#sortblock.style,
         body=Record#sortblock.items,
-        data_fields=Record#sortblock.data_fields
+        data_fields=Record#sortblock.data_fields,
+        aria=Record#sortblock.aria
     }.
 
 -spec event(any()) -> any().

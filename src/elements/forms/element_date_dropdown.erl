@@ -30,6 +30,8 @@ transform_element(Record) ->
     Class = Record#date_dropdown.class,
     Style = Record#date_dropdown.style,
     Actions = Record#date_dropdown.actions,
+    DataFields = Record#date_dropdown.data_fields,
+    Aria = Record#date_dropdown.aria,
 
     AllowBlank = Record#date_dropdown.allow_blank,
     {Y,M,D} = to_date(AllowBlank, Record#date_dropdown.value),
@@ -62,10 +64,18 @@ transform_element(Record) ->
     MDD = BaseDD#dropdown{id=Mid, value=M, options=MonthOpts},
     DDD = BaseDD#dropdown{id=Did, value=D, options=DayOpts},
 
-    #panel{id=Wrapperid, class=Class, style=Style, actions=Actions, body=[
-        build_format(Format, YDD, MDD, DDD),
-        Hidden
-    ]}.
+    #panel{
+        id=Wrapperid,
+        class=Class,
+        style=Style,
+        actions=Actions,
+        data_fields=DataFields,
+        aria=Aria,
+        body=[
+            build_format(Format, YDD, MDD, DDD),
+            Hidden
+        ]
+    }.
 
 maybe_add_blank(false, Opts) ->
     Opts;

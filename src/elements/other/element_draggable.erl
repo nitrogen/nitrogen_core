@@ -52,6 +52,7 @@ render_element(Record) ->
         class=[draggable, GroupClasses, Record#draggable.class],
         style=Record#draggable.style,
         data_fields=Record#draggable.data_fields,
+        aria=Record#draggable.aria,
         body=Record#draggable.body
     }.
 

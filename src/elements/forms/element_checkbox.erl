@@ -53,7 +53,8 @@ render_checkbox_tag(Anchor, Record) ->
         {value, Record#checkbox.value},
         ?WF_IF(Record#checkbox.checked, checked),
         ?WF_IF(Record#checkbox.disabled, disabled),
-        {data_fields, Record#checkbox.data_fields}
+        {data_fields, Record#checkbox.data_fields},
+        {aria, Record#checkbox.aria}
     ]).
 
 format_anchor(Anchor) ->

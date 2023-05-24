@@ -23,7 +23,9 @@ render_element(Rec = #progress_bar{value=Value, color=Color, max=Max, label=Labe
         {style, Rec#progress_bar.style},
         {title, Rec#progress_bar.title},
         {id, Rec#progress_bar.html_id},
-        {class, Class}
+        {class, Class},
+        {data_fields, Rec#progress_bar.data_fields},
+        {aria, Rec#progress_bar.aria}
     ]).
 
 create_class(Tempid, Label, CurClass) ->

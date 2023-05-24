@@ -32,6 +32,7 @@ render_element(Record = #icon{icon=Icon, prefix=Prefix0, version=Vsn0, type=Type
         {class, [Record#icon.class, Class, SizeClass, IconClass]},
         {style, [Style, Record#icon.style]},
         {data_fields, Record#icon.data_fields},
+        {aria, Record#icon.aria},
         {'aria-hidden', true}
     ],
     wf_tags:emit_tag(Tag, Body, Attributes).

@@ -3,7 +3,7 @@
 % Copyright (c) 2008-2010 Rusty Klophaus
 % See MIT-LICENSE for licensing information.
 
--module (element_list).
+-module(element_list).
 -include("wf.hrl").
 -export([
     reflect/0,
@@ -25,5 +25,6 @@ render_element(Record) ->
         {class, ?ADD_ELEMENT_CLASS(list, Record#list.class)},
         {title, Record#list.title},
         {style, Record#list.style},
-        {data_fields, Record#list.data_fields}
+        {data_fields, Record#list.data_fields},
+        {aria, Record#list.aria}
     ]).

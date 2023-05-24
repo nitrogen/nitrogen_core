@@ -24,7 +24,8 @@ render_element(#inplace{
         class=Class,
         style=Style,
         start_mode=StartMode,
-        data_fields=DataFields}) ->
+        data_fields=DataFields,
+        aria=Aria }) ->
 
 	OKButtonID = wf:temp_id(),
 	CancelButtonID = wf:temp_id(),
@@ -48,16 +49,17 @@ render_element(#inplace{
 	Controls = {ViewPanelID, ViewID, EditPanelID, EditID},
 	OKPostback = {ok, Delegate, Controls, Tag},
 	CancelPostback = {cancel, Controls, Tag},
-	CancelEvent = #event { delegate=?MODULE, postback=CancelPostback, actions=[
-			#script {
+	CancelEvent = #event{delegate=?MODULE, postback=CancelPostback, actions=[
+			#script{
 				script = wf:f("v=Nitrogen.$get_value('~s', '~s');Nitrogen.$set_value('~s', '~s', v);",
-					["", ViewID, "", EditID]) }
+					["", ViewID, "", EditID])
+            }
 		]},
 
 	% Create the view...
 
 	ViewAction = [
-		#buttonize { target=ViewPanelID }
+		#buttonize{target=ViewPanelID}
 	],
 
 	View1 = wf_utils:replace_field(id, ViewID, ViewModule:reflect(), View),
@@ -94,18 +96,18 @@ render_element(#inplace{
 
 	% Create the main panel...
 
-    #panel { class=[inplace, Class], data_fields=DataFields, style=Style, body=[
-        #panel { id=ViewPanelID, class="view", body=[ View3 ], actions = [
-            #event { type=click, actions=[
-                #hide { target=ViewPanelID },
-                #show { target=EditPanelID },
-                #script { script = wf:f("objs('~s').focus(); objs('~s').select();", [EditID, EditID]) }
+    #panel{class=[inplace, Class], data_fields=DataFields, aria=Aria, style=Style, body=[
+        #panel{id=ViewPanelID, class="view", body=[View3], actions=[
+            #event{type=click, actions=[
+                #hide{target=ViewPanelID},
+                #show{target=EditPanelID},
+                #script{script = wf:f("objs('~s').focus(); objs('~s').select();", [EditID, EditID])}
             ]}
         ]},
-        #panel { id=EditPanelID, class="edit", body=[
+        #panel{id=EditPanelID, class="edit", body=[
             Edit3,
-            #button { id=OKButtonID, text="OK", delegate=?MODULE, postback=OKPostback },
-            #button { id=CancelButtonID, text="Cancel", actions = [CancelEvent#event{ type=click }] }
+            #button{id=OKButtonID, text="OK", delegate=?MODULE, postback=OKPostback},
+            #button{id=CancelButtonID, text="Cancel", actions=[CancelEvent#event{type=click}]}
         ]}
     ]}.
 

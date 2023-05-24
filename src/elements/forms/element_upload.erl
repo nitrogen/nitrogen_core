@@ -59,7 +59,8 @@ render_element(Record = #upload{
         show_button=ShowButton,
         button_text=ButtonText,
         button_class=ButtonClass,
-        data_fields=DataFields}) ->
+        data_fields=DataFields,
+        aria=Aria }) ->
     
     StartedTag = {upload_started, Record},
     FinishedTag = {upload_finished, Record}, 
@@ -112,6 +113,7 @@ render_element(Record = #upload{
         wf_tags:emit_tag(input, [
             {name, file},
             {data_fields, DataFields},
+            {aria, Aria},
             {class, [no_postback, 'upload-input', FileInputID|Anchor]},
             {id, FileInputID},
             {type, file},

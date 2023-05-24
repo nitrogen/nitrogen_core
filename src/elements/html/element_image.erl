@@ -21,6 +21,7 @@ render_element(Record) ->
         {title, Record#image.title},
         {style, Record#image.style},
         {data_fields, Record#image.data_fields},
+        {aria, Record#image.aria},
         {height, Record#image.height},
         {width, Record#image.width},
         {alt, Record#image.alt},

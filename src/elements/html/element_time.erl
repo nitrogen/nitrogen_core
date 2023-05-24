@@ -2,7 +2,7 @@
 % Nitrogen Web Framework for Erlang
 % See MIT-LICENSE for licensing information.
 
--module (element_time).
+-module(element_time).
 -include("wf.hrl").
 -export([
     reflect/0,
@@ -22,5 +22,6 @@ render_element(Record) ->
         {style, Record#time.style},
         {role, Record#time.role},
         {data_fields, Record#time.data_fields},
+        {aria, Record#time.aria},
         ?WF_IF(Record#time.datetime, {datetime, Record#time.datetime})
     ]).

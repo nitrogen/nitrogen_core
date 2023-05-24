@@ -31,7 +31,7 @@ render_element(Rec0) ->
         class=Class,
         title=Title,
         data_fields=DataFields,
-        %aria=Aria,
+        aria=Aria,
         role=Role,
         style=Style
     } = Rec,
@@ -45,6 +45,7 @@ render_element(Rec0) ->
         {class, ?ADD_ELEMENT_CLASS(ElementName, Class)},
         {title, Title},
         {data_fields, DataFields},
+        {aria, Aria},
         {role, Role},
         {style, Style}
     ]).

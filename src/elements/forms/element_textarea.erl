@@ -28,7 +28,8 @@ render_element(Record) ->
         ?WF_IF(Record#textarea.disabled,disabled,undefined),
         ?WF_IF(Record#textarea.readonly,readonly,undefined),
         {placeholder, Placeholder},
-        {data_fields, Record#textarea.data_fields}
+        {data_fields, Record#textarea.data_fields},
+        {aria, Record#textarea.aria}
     ]).
 
 maybe_trap_tabs(_Anchor, false) -> ok;

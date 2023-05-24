@@ -38,6 +38,7 @@ render_element(Record) ->
         class=[inplace_textbox, Record#inplace_textbox.class],
         title=Record#inplace_textbox.title,
         data_fields=Record#inplace_textbox.data_fields,
+        aria=Record#inplace_textbox.aria,
         style=Record#inplace_textbox.style,
         body = [
             #panel { id=ViewPanelID, class="view", body=[

@@ -56,7 +56,8 @@ render_element(Record) ->
         {target, Target},
         {style, Record#link.style},
         {title, wf:html_encode(Record#link.title, Record#link.html_encode)},
-        {data_fields, DataFields2}
+        {data_fields, DataFields2},
+        {aria, Record#link.aria}
     ]).
 
 add_field(true,ToAdd,DataFields) -> [ToAdd | DataFields];

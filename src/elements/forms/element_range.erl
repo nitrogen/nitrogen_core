@@ -42,5 +42,6 @@ render_element(Record=#range{}) ->
         {style, Record#range.style},
         {id, Record#range.html_id},
         {value, Record#range.value},
-        {data_fields, Record#range.data_fields}
+        {data_fields, Record#range.data_fields},
+        {aria, Record#range.aria}
     ]).

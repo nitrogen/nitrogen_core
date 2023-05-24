@@ -23,6 +23,7 @@ render_element(Record) ->
         title=Record#singlerow.title,
         style=Record#singlerow.style,
         data_fields=Record#singlerow.data_fields,
+        aria=Record#singlerow.aria,
         rows=#tablerow { cells=Record#singlerow.cells }
     },
     element_table:render_element(Table).

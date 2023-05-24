@@ -21,5 +21,6 @@ render_element(Record) ->
         {class, ?ADD_ELEMENT_CLASS(hr, Record#hr.class)},
         {title, Record#hr.title},
         {style, Record#hr.style},
-        {data_fields, Record#hr.data_fields}
+        {data_fields, Record#hr.data_fields},
+        {aria, Record#hr.aria}
     ]).

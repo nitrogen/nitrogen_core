@@ -45,6 +45,7 @@ render_element(Record) ->
         class=[inplace_textarea, Record#inplace_textarea.class],
         title=Record#inplace_textarea.title,
         data_fields=Record#inplace_textarea.data_fields,
+        aria=Record#inplace_textarea.aria,
         style=Record#inplace_textarea.style,
         body = [
             #panel { 

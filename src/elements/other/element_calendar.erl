@@ -15,7 +15,7 @@
 reflect() -> record_info(fields, calendar).
 
 -spec transform_element(#calendar{}) -> body().
-transform_element(_Rec = #calendar{id=Id0, delegate=Delegate0, actions=Actions,
+transform_element(_Rec = #calendar{id=Id0, delegate=Delegate0, actions=Actions, aria=Aria,
         class=Class, style=Style, tag=CalTag, month=M, year=Y, html_id=Htmlid, data_fields=Data}) ->
     Delegate = wf:coalesce([Delegate0, wf:page_module()]),
     FirstDay = {{Y, M, 1}, {0,0,0}},
@@ -28,7 +28,7 @@ transform_element(_Rec = #calendar{id=Id0, delegate=Delegate0, actions=Actions,
     Days = [Date || {Date, _Time} <- DateTimes],
     Items = load_items(Delegate, CalTag, Y, M),
     {Today, _} = qdate:to_date(os:timestamp()),
-    #panel{id=Id, class=[nitrogen_calendar, Class], style=Style, actions=Actions, html_id=Htmlid, data_fields=Data, body=[
+    #panel{id=Id, class=[nitrogen_calendar, Class], style=Style, actions=Actions, aria=Aria, html_id=Htmlid, data_fields=Data, body=[
         #table{rows=[
             #tablerow{cells=[
                 #tableheader{colspan=7, body=[

@@ -23,5 +23,6 @@ render_element(Record) ->
         {name, Record#hidden.html_name},
         {value, Value},
         {data_fields, Record#hidden.data_fields},
+        {aria, Record#hidden.aria},
         ?WF_IF(Record#hidden.disabled, disabled, undefined)
     ]).

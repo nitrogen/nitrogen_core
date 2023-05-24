@@ -40,6 +40,7 @@ render_element(Record) ->
         size=Size,
         style=Style,
         data_fields=DataFields,
+        aria=Aria,
         next=Next
     } = Record,
     Type = case wf:to_binary(Type0) of
@@ -75,7 +76,8 @@ render_element(Record) ->
         {value, Value},
         {min, Min},
         {max, Max},
-        {data_fields, DataFields}
+        {data_fields, DataFields},
+        {aria, Aria}
     ],
 
     wf_tags:emit_tag(input, Attributes).

@@ -39,7 +39,8 @@ render_element(Record) ->
         {size, Size},
         MultipleAttribute,
         DisabledAttribute,
-        {data_fields, Record#dropdown.data_fields}
+        {data_fields, Record#dropdown.data_fields},
+        {aria, Record#dropdown.aria}
     ]).
 
 provided_or_default_size(#dropdown{size=auto, multiple=true}) ->

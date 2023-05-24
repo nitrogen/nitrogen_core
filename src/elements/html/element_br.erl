@@ -20,7 +20,8 @@ render_element(Record) ->
         {class, ?ADD_ELEMENT_CLASS(br, Record#br.class)},
         {title, Record#br.title},
         {style, Record#br.style},
-        {data_fields, Record#br.data_fields}
+        {data_fields, Record#br.data_fields},
+        {aria, Record#br.aria}
     ]).
 
 

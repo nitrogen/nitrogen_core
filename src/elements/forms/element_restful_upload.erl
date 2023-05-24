@@ -16,5 +16,6 @@ render_element(Record) ->
         {title, Record#restful_upload.title},
         {style, Record#restful_upload.style},
         {name, Record#restful_upload.html_name},
-        {data_fields, Record#restful_upload.data_fields}
+        {data_fields, Record#restful_upload.data_fields},
+        {aria, Record#restful_upload.aria}
     ]).

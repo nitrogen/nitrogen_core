@@ -23,6 +23,7 @@ render_element(Record) ->
         style=wf:to_list(Record#lightbox.style),
         title=Record#lightbox.title,
         data_fields=Record#lightbox.data_fields,
+        aria=Record#lightbox.aria,
         body=[
             #panel { 			
                 class=lightbox_background

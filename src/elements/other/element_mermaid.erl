@@ -48,6 +48,7 @@ render_element(Record) ->
         title = Record#mermaid.title,
         body = [],
         data_fields=Record#mermaid.data_fields,
+        aria=Record#mermaid.aria,
         style = Record#mermaid.style
     },
     Panel.

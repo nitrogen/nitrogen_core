@@ -52,6 +52,7 @@ render_element(Record) ->
         {title, Record#button.title},
         {style, Record#button.style},
         {data_fields, Record#button.data_fields},
+        {aria, Record#button.aria},
         ?WF_IF(Record#button.disabled, disabled)
     ],
 

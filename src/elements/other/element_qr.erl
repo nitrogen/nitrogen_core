@@ -18,7 +18,7 @@ transform_element(#qr{data=Empty} = QR) when Empty =:= undefined;
                                           Empty =:= <<"">>;
                                           Empty =:= "" ->
     transform_element(QR#qr{data=wf:url()});
-transform_element(#qr{data=Data, size=Size, class=Class, id=Id, title=Title}) ->
+transform_element(#qr{data=Data, size=Size, class=Class, id=Id, title=Title, data_fields=DataFields, aria=Aria}) ->
     BSize = wf:to_binary(Size),
     Cht = <<"qr">>,
     Chs = <<BSize/binary,"x",BSize/binary>>,
@@ -42,5 +42,7 @@ transform_element(#qr{data=Data, size=Size, class=Class, id=Id, title=Title}) ->
        id=Id,
        class=Class,
        title=Title,
-       image=[Path,QS]
+       image=[Path,QS],
+       data_fields=DataFields,
+       aria=Aria
     }.
