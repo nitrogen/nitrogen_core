@@ -30,7 +30,7 @@ render_element(Record) ->
         min=Min0,
         max=Max0,
         step=Step0,
-        placeholder=Placeholder,
+        placeholder=Placeholder0,
         autocomplete=Autocomplete,
         html_id=HtmlID,
         class=Class,
@@ -55,7 +55,7 @@ render_element(Record) ->
     Max = process_value(Type, Max0, HtmlEncode),
     Step = wf:to_list(Step0),
         
-    Placeholder  = wf:html_encode(Placeholder, true),
+    Placeholder  = wf:html_encode(Placeholder0, true),
 
     Attributes = [
         {id, HtmlID},
