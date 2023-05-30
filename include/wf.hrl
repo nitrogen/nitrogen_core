@@ -939,8 +939,8 @@
 -record(calendar,   {?ELEMENT_BASE(element_calendar),
         delegate                :: module(),
         tag=undefined           :: term(),
-        month=element(2, date()):: integer(),
-        year=element(1, date()) :: integer()
+        month=element(2, erlang:date()) :: integer(),
+        year=element(1, erlang:date()) :: integer()
     }).
 
 -record(calendar_item, {
