@@ -154,7 +154,7 @@ try_load_module(EntryFun, ProcessingFun, Tokens, ExtraTokens) ->
             end
     end.
 
-
+%% TODO: Rejigger this to use lists:split instead of 3 reverses
 next_try_load_module(EntryFun, ProcessingFun, Tokens, ExtraTokens) ->
     Tokens1 = lists:reverse(tl(lists:reverse(Tokens))),
     ExtraTokens1 = [hd(lists:reverse(Tokens))|ExtraTokens],
