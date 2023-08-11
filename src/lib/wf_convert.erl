@@ -309,10 +309,12 @@ url_encode(S) -> quote_plus(S).
 -spec url_decode(binary() | string()) -> string().
 url_decode(S) -> unquote(S).
 
--spec to_qs(proplist()) -> list().
+-spec to_qs(proplist() | map()) -> list().
 %% @doc Builds a safely-encoded querystring out of a proplist.
 %% Example: build_qs([{a, something}, {b, 123}]),
 %% Returns: "a=something&b=123" 
+to_qs(Map) when is_map(Map) ->
+    to_qs(maps:to_list(Map));
 to_qs(undefined) -> [];  
 to_qs([]) -> [];
 to_qs([{Key, Val}]) ->

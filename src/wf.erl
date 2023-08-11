@@ -249,8 +249,8 @@ json_encode(Data) ->
 json_decode(Json) ->
     _Data = wf_convert:json_decode(Json).
 
-to_qs(List) ->
-    _Iolist = wf_convert:to_qs(List).
+to_qs(ListOrMap) ->
+    _Iolist = wf_convert:to_qs(ListOrMap).
 
 parse_qs(String) ->
     _Proplist = wf_convert:parse_qs(String).
