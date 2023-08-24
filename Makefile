@@ -1,6 +1,13 @@
-REBAR?=./rebar3
-
 .PHONY: test
+
+# Check if rebar3.mk exists, and if not, download it
+ifeq ("$(wildcard rebar3.mk)","")
+$(shell curl -O https://raw.githubusercontent.com/choptastic/rebar3.mk/master/rebar3.mk)
+endif
+
+# rebar3.mk adds a new rebar3 rule to your Makefile
+# (see https://github.com/choptastic/rebar3.mk) for full info
+include rebar3.mk
 
 all: compile
 
@@ -33,19 +40,6 @@ dash-docs:
 	cd doc/dash; tar --exclude='.DS_Store' -zcvf Nitrogen.tgz Nitrogen.docset
 	mv doc/dash/Nitrogen.tgz .
 	@echo "Dash Docset created and can be found at Nitrogen.tgz in this directory"
-
-rebar3:
-	@echo "Fetching and compiling updated rebar3 (this will not replace your system-wide rebar3, if you have one)"
-	@(cd /tmp && \
-	rm -fr /tmp/rebar3 && \
-	git clone https://github.com/erlang/rebar3 && \
-	cd rebar3 && \
-	./bootstrap)
-	@echo "Installing rebar3 into Nitrogen directory"
-	@(mv /tmp/rebar3/rebar3 .)
-	@echo "Cleaning up..."
-	@(rm -fr /tmp/rebar3)
-
 
 dialyzer: rebar3
 	$(REBAR) dialyzer
