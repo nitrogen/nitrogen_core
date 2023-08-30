@@ -1,5 +1,7 @@
 .PHONY: test
 
+all: compile
+
 # Check if rebar3.mk exists, and if not, download it
 ifeq ("$(wildcard rebar3.mk)","")
 $(shell curl -O https://raw.githubusercontent.com/choptastic/rebar3.mk/master/rebar3.mk)
@@ -9,7 +11,6 @@ endif
 # (see https://github.com/choptastic/rebar3.mk) for full info
 include rebar3.mk
 
-all: compile
 
 clean:
 	rm -fr _build rebar.lock
