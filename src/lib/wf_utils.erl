@@ -24,7 +24,9 @@
     app_modules/1,
     ensure_loaded/1,
     write_debug/2,
-    profile/2
+    profile/2,
+    pterm/1,
+    pterm/2
 ]).
 
 -define(COPY_TO_BASERECORD(Name, Size, Record),
@@ -286,3 +288,9 @@ profile(Tag, Fun) ->
 
     io:format("~p, ~p, ~p, ~p, ~p~n", [Tag, Time, Reductions, Heap, Mem]),
     Res.
+
+pterm(Key) ->
+    persistent_term:get({nitrogen_core, Key}, undefined).
+
+pterm(Key, Value) ->
+    persistent_term:put({nitrogen_core, Key}, Value).
