@@ -565,6 +565,15 @@ config(Key) ->
 config_default(Key, DefaultValue) ->
     config_handler:get_value(Key, DefaultValue).
 
+%%% PROFILING %%%
+
+profile(Tag, Fun) ->
+    wf_utils:profile(Tag, Fun, undefined).
+
+profile(Tag, Fun, To) ->
+    wf_utils:profile(Tag, Fun, To).
+
+
 %%% DEBUGGING %%%
 debug() -> wf_utils:debug().
 break() -> wf_utils:break().
