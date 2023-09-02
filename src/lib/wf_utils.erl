@@ -24,7 +24,7 @@
     app_modules/1,
     ensure_loaded/1,
     write_debug/2,
-    profile/2,
+    profile/3,
     pterm/1,
     pterm/2
 ]).
@@ -273,7 +273,10 @@ write_debug(Tag, Term) ->
     Output = wf:f("NITROGEN DEBUG: ~p~n~p~n*****************************************~n", [Tag, Term]),
     ok = file:write_file("nitrogen.debug", Output, [append]).
 
-profile(Tag, Fun) ->
+-define(PROFILE_FORMAT_STRING, "~p, ~p, ~p, ~p, ~p~n").
+
+-spec profile(Tag :: any(), Fun :: fun(), To :: undefined | pid() | string()) -> any().
+profile(Tag, Fun, To) ->
     Pid = self(),
     {_, StartRed} = erlang:process_info(Pid, reductions),
     {_, StartHeap} = erlang:process_info(Pid, heap_size),
@@ -286,7 +289,17 @@ profile(Tag, Fun) ->
     Heap = EndHeap - StartHeap,
     Mem = EndMem - StartMem,
 
-    io:format("~p, ~p, ~p, ~p, ~p~n", [Tag, Time, Reductions, Heap, Mem]),
+    Terms = [Tag, Time, Reductions, Heap, Mem],
+
+    case To of
+        undefined ->
+            io:format(?PROFILE_FORMAT_STRING, Terms);
+        ToPid when is_pid(ToPid) ->
+            ToPid ! {profile,  Terms};
+        _ ->
+            Output = io_lib:format(?PROFILE_FORMAT_STRING, Terms),
+            file:write_file(To, Output, [append])
+    end,
     Res.
 
 pterm(Key) ->
