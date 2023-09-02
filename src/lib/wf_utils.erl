@@ -301,3 +301,9 @@ profile(Tag, Fun, To) ->
             file:write_file(To, Output, [append])
     end,
     Res.
+
+pterm(Key) ->
+    persistent_term:get({nitrogen_core, Key}, undefined).
+
+pterm(Key, Value) ->
+    persistent_term:put({nitrogen_core, Key}, Value).

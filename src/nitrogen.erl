@@ -12,7 +12,16 @@
         handler/2,
         handler/3,
         run/0
-    ]).
+]).
+
+%% Grid system setting
+-export([
+    default_grid_system/0,
+    default_grid_system_module/0,
+    default_grid_system/1,
+    grid_system_module/2,
+    grid_system_module/1
+]).
 
 %% Simple Bridge Callout functions
 -export([
@@ -46,6 +55,22 @@ handler(Module, Config) ->
 
 handler(Name, Module, Config) ->
     wf_handler:set_handler(Name, Module, Config).
+
+default_grid_system() ->
+    wf_grid_system:default_grid_system().
+
+-spec default_grid_system(atom() | {atom(), atom()}) -> ok.
+default_grid_system(GridSystem) ->
+    wf_grid_system:default_grid_system(GridSystem).
+
+default_grid_system_module() ->
+    wf_grid_system:default_grid_system_module().
+
+grid_system_module(Name, Module) ->
+    wf_grid_system:grid_system_module(Name, Module).
+
+grid_system_module(Name) ->
+    wf_grid_system:grid_system_module(Name).
 
 run(Bridge) ->
     init_request(Bridge),

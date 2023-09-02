@@ -14,6 +14,7 @@ case erlang:function_exported(rebar3, main, 1) of
             {nitro_cache, {git, "https://github.com/nitrogen/nitro_cache", {branch, master}}},
             {nprocreg, {git, "https://github.com/nitrogen/nprocreg", {branch, master}}},
             {canister, {git, "https://github.com/nitrogen/canister", {branch, master}}},
+            {erlang_ds, {git, "https://github.com/choptastic/erlang_ds", {branch, master}}},
             {qdate, {git, "https://github.com/choptastic/qdate", {branch, master}}}
         ]} | lists:keydelete(deps, 1, CONFIG)]
 end.

@@ -849,19 +849,25 @@
 
 %% 960.gs Grid
 
+-define(GET_DEFAULT_GRID_SYSTEM, nitrogen:default_grid_system()).
+
 -define(GRID_ELEMENT(Type, Columns), {?ELEMENT_BASE(element_grid),
-        type=Type               :: undefined | container | grid | clear,
-        columns=Columns         :: undefined | integer(),
+        system=?GET_DEFAULT_GRID_SYSTEM :: undefined | atom(),
+        type=Type               :: undefined | container | grid | clear | any(),
+        width                   :: undefined | any(),
+        columns=Columns         :: undefined | integer()  | any(),
         alpha=false             :: boolean(),
         omega=false             :: boolean(),
         push                    :: integer() | undefined,
         pull                    :: integer() | undefined,
         prefix                  :: integer() | undefined,
         suffix                  :: integer() | undefined,
+        options=[]              :: [{any(), any()} | atom() | binary() | string()],
         body=[]                 :: body()
     }).
 
 -record(grid,           ?GRID_ELEMENT(undefined, undefined)).
+-record(container,      ?GRID_ELEMENT(container, undefined)).
 -record(container_12,   ?GRID_ELEMENT(container,12)).
 -record(container_16,   ?GRID_ELEMENT(container,16)).
 -record(grid_1,         ?GRID_ELEMENT(grid, 1)).
