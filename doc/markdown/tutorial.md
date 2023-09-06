@@ -1170,6 +1170,12 @@ Open http://localhost:8000 in your Browser
         PageModule:my_element_event(Text).
 
 ```
+    Also, make sure you export the new `event/1` function at the top of the module:
+
+```erlang
+    -export([event/1]).
+```
+
 ## Custom Elements - Part 4
 ### Extending Nitrogen
 #### Custom Elements - Part 4
