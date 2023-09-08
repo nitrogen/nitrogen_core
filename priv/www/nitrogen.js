@@ -1746,7 +1746,7 @@ var page = document;
 var Nitrogen = new NitrogenClass();
 
 
-$(window).on("beforeunload", function() {
+window.addEventListener('beforeunload', function() {
     // Give a "redirect prompt" if presented to prevent such.
     if(!Nitrogen.$allow_redirect) {
         return Nitrogen.$redirect_prompt;
