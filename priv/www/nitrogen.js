@@ -5,6 +5,13 @@
 
 var nitrogen_jqm_loaded=false;
 
+const WebSocketStatus = {
+    NOT_ATTEMPTED: -2,
+    TRYING_TO_CONNECT: -1,
+    NOT_ENABLED: 0,
+    CONNECTED: 1
+};
+
 function NitrogenClass(o) {
     this.$url = document.location.href;
     this.$div = document;
@@ -52,7 +59,7 @@ function NitrogenClass(o) {
     this.$js_dependencies = new Array();
     this.$websocket = null;
     this.$websockets_enabled = false; // default to off
-    this.$websocket_status = -2;  // -2 not attempted yet, -1 = trying to connect, 0 = not enabled, 1 = connected
+    this.$websocket_status = WebSocketStatus.NOT_ATTEMPTED;
     this.$websockets_ever_succeeded = false;
     this.$websocket_reconnect_timer = null;
     this.$websocket_handlers = new Array();
@@ -219,7 +226,7 @@ NitrogenClass.prototype.$event_loop = function() {
     }
 
     // Wait until we know if websockets will work before we run any events.
-    if(this.$websocket_status==0 || this.$websocket_status==1) {
+    if ([WebSocketStatus.NOT_ENABLED, WebSocketStatus.CONNECTED].includes(this.$websocket_status)) {
         // If no events are running and an event is queued, then fire it.
         if (!this.$system_event_is_running && this.$system_event_queue.length > 0) {
             var o = this.$system_event_queue.shift();
@@ -1382,7 +1389,7 @@ NitrogenClass.prototype.$enable_websockets = function() {
     this.$console_log("Websockets Enabled (instance_id = " + this.$websocket.instance_id + ")");
     this.$websockets_enabled = true;
     this.$websockets_ever_succeeded = true;
-    this.$websocket_status=1;
+    this.$websocket_status = WebSocketStatus.CONNECTED;
     this.$flush_switchover_comet_actions();
 };
 
@@ -1397,7 +1404,7 @@ NitrogenClass.prototype.$disable_websockets = function() {
     var n = this;
     n.$console_log("Websockets disabled or disconnected");
     n.$websockets_enabled = false;
-    n.$websocket_status = 0;
+    n.$websocket_status = WebSocketStatus.NOT_ENABLED;
     clearTimeout(n.$websocket_closing_timer);
     n.$websocket_closing_timer = null;
     n.$websocket = null;
@@ -1458,7 +1465,7 @@ NitrogenClass.prototype.$ws_init = function() {
                 this.$console_log("Currently attempting to connect to websockets. This is a duplicate request to connect. Skipping...");
             }
         }else{
-            this.$websocket_status = -1;
+            this.$websocket_status = WebSocketStatus.TRYING_TO_CONNECT;
             Bert.assoc_array_key_encoding("binary");
             //var has_opened = false;
             var e = new Error();
@@ -1666,7 +1673,7 @@ NitrogenClass.prototype.$kill_reconnect_loop = function() {
 };
 
 NitrogenClass.prototype.$reconnect_loop = function() {
-    if(this.$websocket_status==1) {
+    if (this.$websocket_status === WebSocketStatus.CONNECTED) {
         var currentTime = this.$get_time();
         if (this.$older_than(this.$last_sleep_time, this.$sleep_check_interval * 2)) {
             this.$console_log("Potential Sleep Detected. Checking websocket status with a ping");
@@ -1746,7 +1753,7 @@ var page = document;
 var Nitrogen = new NitrogenClass();
 
 
-$(window).on("beforeunload", function() {
+window.addEventListener('beforeunload', function() {
     // Give a "redirect prompt" if presented to prevent such.
     if(!Nitrogen.$allow_redirect) {
         return Nitrogen.$redirect_prompt;
