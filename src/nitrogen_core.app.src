@@ -5,7 +5,6 @@
     {loaded_applications, [rekt, erlang_ds]},
     {registered,   []},
 	{licenses, ["MIT"]},
-	{maintainers, ["Jesse Gumm"]},
 	{links, [
 		{"Homepage","https://nitrogenproject.com"},
 		{"GitHub","https://github.com/nitrogen/nitrogen_core"}
