@@ -196,12 +196,6 @@
   `./site/src/actions` for pages, elements, and actions,
   respectively. 
 
-## How do I make a mobile version?
-
-  You can read all about how to make mobile-enabled sites with Nitrogen by
-  reading our
-  [Mobile Integration Guide](jquery_mobile_integration.md)
-
 ## How do I work with Nitrogen Plugins?
 
   Adding Plugins to a Nitrogen app is as simple as adding them as rebar dependencies.
