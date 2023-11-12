@@ -113,8 +113,9 @@ parse_template(File, FromType, ToType, Callouts, Options) ->
 
 
 remove_callouts(Bin) ->
-    case re:run(Bin, "\\[\\[\\[.*?\\]\\]\\]", [{capture, first, binary}]) of
-        nomatch -> {Bin, []};
+    case re:run(Bin, "\\[\\[\\[.*?\\]\\]\\]", [{capture, first, binary}, global]) of
+        nomatch ->
+            {Bin, []};
         {match, [Matches]} ->
             lists:foldl(fun(Pattern, {AccBin, AccMap}) ->
                 Suffix = wf:to_binary(?WF_RAND_UNIFORM(10000000000000, 9999999999999999)),
@@ -122,7 +123,7 @@ remove_callouts(Bin) ->
                 NewBin = binary:replace(AccBin, Pattern, Key),
                 NewMap = [{Key, Pattern} | AccMap],
                 {NewBin, NewMap}
-            end, Bin, Matches)
+            end, {Bin, []}, Matches)
     end.
 
 add_callouts(CalloutMap, Bin) ->
