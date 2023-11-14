@@ -27,6 +27,8 @@
 %% If the request path does have an extension, then it is treated like a request
 %% for a static file. This is delegated back to the HTTP server.
 
+-define(DEFAULT_404_MODULE, web_404).
+
 init(_Config, State) -> 
     % Get the path...
     Bridge = wf_context:bridge(),
@@ -72,8 +74,11 @@ handle_initial_entry_point(Path, {module, EntryFun, ProcessingFun}) ->
         {Module, EntryPoint, PathInfo} -> 
             {Module, EntryPoint, PathInfo};
         undefined ->
-            {web_404, main, Path1}
+            {lookup_404_module(), main, Path1}
     end.
+
+lookup_404_module() ->
+    wf:config_default(file_not_found_module, ?DEFAULT_404_MODULE).
 
 determine_initial_entry_point(Filename) ->
     SmartExtensions = wf:config_default(smart_extensions, []),
@@ -169,13 +174,13 @@ check_for_404(static_file, _PathInfo, Path) ->
 
 check_for_404(Module, PathInfo, Path) ->
     % Make sure the requested module is loaded. If it
-    % is not, then try to load the web_404 page. If that
+    % is not, then try to load the 404 page. If that
     % is not available, then default to the 'file_not_found_page' module.
     case wf_utils:ensure_loaded(Module) of
         {module, Module} -> {Module, PathInfo};
         _ -> 
-            case wf_utils:ensure_loaded(web_404) of
-                {module, web_404} -> {web_404, Path};
+            case wf_utils:ensure_loaded(lookup_404_module()) of
+                {module, Mod404} -> {Mod404, Path};
                 _ -> {file_not_found_page, Path}
             end
     end.
