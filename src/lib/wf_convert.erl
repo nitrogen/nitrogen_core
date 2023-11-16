@@ -18,6 +18,7 @@
     to_bool/1,
     to_string_list/1,
     to_qs/1,
+    maybe_convert/2,
     parse_qs/1,
     encode/2, decode/2,
     html_encode/1, html_encode/2,
@@ -126,6 +127,51 @@ to_float(I) when is_integer(I) -> float(I);
 to_float(T) when is_list(T);
                  is_binary(T);
                  is_atom(T) -> safe_to_float(wf:to_list(T)).
+
+maybe_convert(undefined, _) ->
+    undefined;
+maybe_convert(V, undefined) ->
+    %% TODO: This should be customized. If users want binaries back, convert to unicode_binaries
+    wf:to_unicode_list(V);
+maybe_convert(V, atom) ->
+    to_existing_atom(V);
+maybe_convert(V, integer) ->
+    wf:to_integer(V, undefined);
+maybe_convert(V, {integer, Default}) ->
+    wf:to_integer(V, Default);
+maybe_convert(V, float) ->
+    wf:to_float(V, undefined);
+maybe_convert(V, {float, Default}) ->
+    wf:to_float(V, Default);
+maybe_convert(V, list) ->
+    to_list(V);
+maybe_convert(V, string) ->
+    to_unicode_list(V);
+maybe_convert(V, unicode_list) ->
+    to_unicode_list(V);
+maybe_convert(V, binary) ->
+    to_binary(V);
+maybe_convert(V, bin) ->
+    to_binary(V);
+maybe_convert(V, unicode_binary) ->
+    to_unicode_binary(V);
+maybe_convert(V, ub) -> %% short for unicode_binary
+    to_unicode_binary(V);
+maybe_convert(V, bool) ->
+    to_bool(V);
+maybe_convert(V, Fun) when is_function(Fun, 1) ->
+    Fun(V);
+maybe_convert(V, {Mod, Fun}) when is_atom(Mod), is_atom(Fun) ->
+    Mod:Fun(V);
+maybe_convert(V, ConverterKey) ->
+    try wf_fastmap:lookup({nitrogen_converter_key, ConverterKey}) of
+        {Mod, Fun} ->
+            maybe_convert(V, {Mod, Fun});
+        Fun when is_function(Fun, 1) ->
+            maybe_convert(V, Fun)
+    catch throw:_Type ->
+        error({no_converter_associated_with_key, ConverterKey})
+    end.
 
 safe_to_float(L) when is_list(L) ->
     try list_to_float(L)
