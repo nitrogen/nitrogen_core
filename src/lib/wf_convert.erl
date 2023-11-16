@@ -166,9 +166,9 @@ maybe_convert(V, {Mod, Fun}) when is_atom(Mod), is_atom(Fun) ->
 maybe_convert(V, ConverterKey) ->
     try wf_fastmap:lookup({nitrogen_converter_key, ConverterKey}) of
         {Mod, Fun} ->
-            maybe_convert({V, {Mod, Fun}});
+            maybe_convert(V, {Mod, Fun});
         Fun when is_function(Fun, 1) ->
-            maybe_convert({V, Fun})
+            maybe_convert(V, Fun)
     catch throw:_Type ->
         error({no_converter_associated_with_key, ConverterKey})
     end.
