@@ -53,17 +53,38 @@ set_websocket_params(Params, _Config, State) ->
 
 %% Given a path, return the value that matches the path.
 get_value(Path, Config, State) ->
-    case get_values(Path, Config, State) of
+    case get_values(Path, 1, Config, State) of
         [] -> undefined;
-        [One] -> 
-            wf:to_unicode_list(One);
-        _Many -> throw({?MODULE, too_many_matches, Path})
+        [One] ->  One
+        % We don't need to match other criteria because it will crash in
+        % convert_or_crash/4 if we need to
     end.
 
-get_values(Path, _Config, #state{request=Request, websocket=Websocket} = _State) ->
-    Path1 = normalize_path(Path),
+get_values(Path, Config, State) ->
+    get_values(Path, infinite, Config, State).
+
+get_values(Path, MaxValues, _Config, #state{request=Request, websocket=Websocket} = _State) ->
+    {Path0, Converter} = extract_path_and_converter(Path),
+    Path1 = normalize_path(Path0),
     Vs = refine_params(Path1, Websocket ++ Request),
-    Vs.
+    convert_or_crash(Path, Converter, MaxValues, Vs).
+
+convert_or_crash(_Path, Converter, MaxValues, Vs) when MaxValues==infinite; 
+                                                       length(Vs) =< MaxValues ->
+    [wf_convert:maybe_convert(V, Converter) || V <- Vs];
+convert_or_crash(Path, _Converter, MaxValues, Vs) ->
+    throw({?MODULE, too_many_matches, [
+        {path_queried, Path},
+        {max_requested, MaxValues},
+        {number_of_matches, length(Vs)}
+    ]}).
+    
+
+extract_path_and_converter({Path, Converter}) ->
+    {Path, Converter};
+extract_path_and_converter(Path) ->
+    {Path, undefined}.
+
 
 get_params(_Config, #state{request=Request, websocket=Websocket} = _State) ->
     Params = Websocket ++ Request,
@@ -85,7 +106,7 @@ get_params(_Config, #state{request=Request, websocket=Websocket} = _State) ->
 %%   Params = [y, b, c]
 -spec refine_params(NormalizedPath :: list(), Params :: list()) -> Values :: list().
 refine_params([], Params) -> 
-    [wf:to_unicode_list(V) || {_, V} <- Params];
+    [V || {_, V} <- Params];
 refine_params([H|T], Params) ->
     F = fun({Path, Value}, Acc) ->
         case split_on(H, Path) of
