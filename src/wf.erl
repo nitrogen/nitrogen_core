@@ -381,7 +381,7 @@ request_body() ->
 
 %%% EXPOSE QUERY_HANDLER %%%
 q(Key) ->
-    _String = query_handler:get_value(Key).
+    query_handler:get_value(Key).
 
 qs(Key) ->
     query_handler:get_values(Key).
