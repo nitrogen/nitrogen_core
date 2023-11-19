@@ -761,6 +761,18 @@
         verify_url              :: url() | undefined
     }).
 
+-record(iframe, {?ELEMENT_BASE(element_iframe),
+        align                   :: text() | atom(),
+        frameborder             :: integer() | undefined,
+        height                  :: integer() | undefined,
+        name=""                 :: text(),
+        sandbox=""              :: text(),
+        seamless                :: atom() | text(),
+        src                     :: url(),
+        srcdoc=""               :: text(),
+        width                   :: integer() | undefined,
+        allowfullscreen=true    :: boolean()
+    }).
 
 %% HTML Semantic Elements
 -record(time, {?ELEMENT_BASE(element_time),
