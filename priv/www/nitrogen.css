@@ -352,3 +352,8 @@ a.upload_delete_file:hover {
     background: rgba(0, 255, 0, 0.1);
 }
 
+.button_icon,
+.link_icon {
+	margin-right: 0.2em;
+}
+

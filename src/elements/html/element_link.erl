@@ -38,7 +38,7 @@ render_element(Record = #link{}) ->
     Icon = icon(Record#link.icon),
     HasIcon = not(?WF_BLANK(Image)) orelse not(?WF_BLANK(Icon)),
     Body = [
-        ?WF_IF(HasIcon, [Image, Icon, " "]),
+        ?WF_IF(HasIcon, [Image, Icon]),
         wf:html_encode(Record#link.text, Record#link.html_encode),
         Record#link.body
     ],
@@ -71,11 +71,11 @@ image(X) when ?WF_BLANK(X) ->
 image(X) when is_tuple(X) ->
     X;
 image(X) ->
-    #image{image=X}.
+    #image{image=X, class=link_icon}.
 
 icon(X) when ?WF_BLANK(X) ->
     "";
 icon(X) when is_tuple(X) ->
     X;
 icon(X) ->
-    #icon{icon=X}.
+    #icon{icon=X, class=link_icon}.
