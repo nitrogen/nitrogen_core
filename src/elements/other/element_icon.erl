@@ -227,6 +227,9 @@ integrity_attr(Sha) when is_binary(Sha), Sha =/= <<>> ->
 integrity_attr(_) ->
     <<>>.
 
+css_src(fa, X) when ?WF_BLANK(X) ->
+    %% FA version 6 is the current newest
+    css_src(fa, 6);
 css_src(fa, 4) ->
     {
         <<"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">>,
@@ -239,8 +242,8 @@ css_src(fa, 5) ->
     };
 css_src(fa, 6) ->
     {
-        <<"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">>,
-        <<"sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==">>
+        <<"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">>,
+        <<"sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==">>
     };
 css_src(material, _) ->
     {
