@@ -267,6 +267,14 @@ parse_qs(String) ->
 join(List,Delimiter) ->
     _Result = wf_convert:join(List,Delimiter).
 
+remove_blanks(List) ->
+    _Result = wf_convert:remove_blanks(List).
+
+join_nonblank(List) ->
+    _Result = wf_convert:join_nonblanks(List).
+
+
+
 %%% EXPOSE WF_BIND %%%
 % TODO
 

@@ -48,6 +48,7 @@
 -type wire_priority()       :: eager | normal | defer.
 -type class()               :: string() | binary() | atom() | [string() | binary() | atom()].
 -type text()                :: string() | binary() | iolist() | integer() | atom().
+-type icon()                :: atom() | string() | binary() | tuple().
 -type html_encode()         :: boolean() | whites | fun((term()) -> text()).
 -type html()                :: string() | binary() | iolist().
 -type script()              :: string() | binary() | iolist().
@@ -160,8 +161,10 @@
 
 %%% GUARDS %%%
 
--define(IS_STRING(Term),
+-define(WF_STRING(Term),
     (is_list(Term) andalso Term /= [] andalso is_integer(hd(Term)))).
+
+-define(IS_STRING(Term), ?WF_STRING(Term)).
 
 -define(IS_ACTION_PRIORITY(Priority),
     (Priority=:=normal orelse Priority=:=eager orelse Priority=:=defer)).
@@ -299,8 +302,8 @@
         for=""                  :: id()
     }).
 -record(icon, {?ELEMENT_BASE(element_icon),
-        icon                    :: atom() | string() | binary() | tuple(), 
-        prefix=icon             :: atom() | string() | binary(),
+        icon                    :: icon(),
+        prefix                  :: atom() | string() | binary(),
         type                    :: atom(),
         size                    :: integer() | atom() | string() | binary(),
         version=undefined       :: integer() | atom() | string()
@@ -313,6 +316,7 @@
         text=""                 :: text(),
         body=""                 :: body(),
         image=undefined         :: undefined | url(),
+        icon=undefined          :: undefined | icon(),
         new=false               :: boolean(),
         html_encode=true        :: html_encode(),
         mobile_target=false     :: boolean(),
@@ -328,9 +332,20 @@
 -record(email_link, {?ELEMENT_BASE(element_email_link),
         text=""                 :: text(),
         body=""                 :: body(),
+        image                   :: undefined | url(),
+        icon                    :: icon(),
         html_encode=true        :: html_encode(),
         email=""                :: text()
     }).
+-record(phone_link, {?ELEMENT_BASE(element_phone_link),
+        text=""                 :: text(),
+        body=""                 :: body(),
+        image                   :: undefined | url(),
+        icon                    :: icon(),
+        html_encode=true        :: html_encode(),
+        phone=""                :: text()
+    }).
+
 -record(error, {?ELEMENT_BASE(element_error),
         text=""                 :: text(),
         html_encode=true        :: html_encode()
@@ -346,6 +361,7 @@
         text=""                 :: text(),
         body=""                 :: body(),
         image=undefined         :: undefined | url(),
+        icon                    :: icon(),
         html_encode=true        :: html_encode(),
         next                    :: id(),
         click                   :: actions(),

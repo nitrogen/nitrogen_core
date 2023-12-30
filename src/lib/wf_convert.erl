@@ -31,6 +31,9 @@
     json_encode/1,
     json_decode/1,
 	join/2,
+    remove_blanks/1,
+    %remove_blanks/2,
+    join_nonblanks/2,
     parse_ip/1
 ]).
 
@@ -418,6 +421,14 @@ join([Item],_Delim) ->
 	[Item];
 join([Item|Items],Delim) ->
 	[Item,Delim | join(Items,Delim)].
+
+
+remove_blanks(List) ->
+    [X || X <- List, not(?WF_BLANK(X))].
+
+join_nonblanks(Items, Delim) ->
+    Items2 = remove_blanks(Items),
+    join(Items2, Delim).
 
 %%% CODE BELOW IS FROM MOCHIWEB %%%
 

@@ -112,16 +112,16 @@ add_class_from_prefix_(fa, 5, duotone) ->
     <<"fad">>;
 add_class_from_prefix_(fa, 5, _) ->
     <<"far">>;
-add_class_from_prefix_(fa, 6, solid) ->
-    <<"fa-solid">>;
 add_class_from_prefix_(fa, 6, light) ->
     <<"fa-light">>;
 add_class_from_prefix_(fa, 6, thin) ->
     <<"fa-thin">>;
 add_class_from_prefix_(fa, 6, duotone) ->
     <<"fa-duotone">>;
-add_class_from_prefix_(fa, 6, _) ->
+add_class_from_prefix_(fa, 6, regular) ->
     <<"fa-regular">>;
+add_class_from_prefix_(fa, 6, _) ->
+    <<"fa-solid">>;
 add_class_from_prefix_(fa, 4, _) ->
     <<"fa">>;
 add_class_from_prefix_(fa, _, Type) ->
