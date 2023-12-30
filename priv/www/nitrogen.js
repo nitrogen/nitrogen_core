@@ -1085,8 +1085,8 @@ NitrogenClass.prototype.$set_value = function(anchor, element, value, optional_l
     var n = this;
     if (!element.id) element = objs(element);
     element.each(function(index, el) {
-        if (el.value != undefined) $(el).val(value);
-        else if (el.checked != undefined) el.checked = value;
+        if (el.checked != undefined) el.checked = value;
+        else if (el.value != undefined) $(el).val(value);
         else if (el.src != undefined) el.src = value;
         else if($(el).hasClass("ui-progressbar")) n.$set_progress_bar_value(el, value, optional_label);
         else if($(el).hasClass("wf_mermaid")) { n.$mermaid(el, value) }
