@@ -252,6 +252,15 @@ json_decode(Json) ->
 to_qs(ListOrMap) ->
     _Iolist = wf_convert:to_qs(ListOrMap).
 
+add_qs(URL, ListOrMap) ->
+    _IoList = wf_convert:add_qs(URL, ListOrMap).
+
+add_qs(URL, Key, Value) ->
+    _IoList = add_qs(URL, [{Key, Value}]).
+
+remove_qs(URL, Key) ->
+    _IoList = wf_convert:remove_qs(URL, Key).
+
 parse_qs(String) ->
     _Proplist = wf_convert:parse_qs(String).
 

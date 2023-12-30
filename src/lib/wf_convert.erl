@@ -18,6 +18,8 @@
     to_bool/1,
     to_string_list/1,
     to_qs/1,
+    add_qs/2,
+    remove_qs/2,
     maybe_convert/2,
     parse_qs/1,
     encode/2, decode/2,
@@ -366,7 +368,18 @@ to_qs([]) -> [];
 to_qs([{Key, Val}]) ->
     [url_encode(Key),"=",url_encode(Val)];
 to_qs([{Key, Val} | Rest]) ->
-    [url_encode(Key),"=",url_encode(Val),"&" | to_qs(Rest)].
+    [url_encode(Key),"=",url_encode(Val), "&" | to_qs(Rest)].
+
+-spec add_qs(URL :: text(), Map :: map() | proplist()) -> text().
+add_qs(URL, Map) ->
+    QS = wf:to_qs(Map),
+    Delim = ?WF_IF(re:run(URL, "\\?", [{capture, none}])==match, "&", "?"),
+    [URL, Delim, QS].
+
+-spec remove_qs(URL :: text(), Key :: text() | atom()) -> text().
+remove_qs(URL, Key) ->
+    RE = url_encode(Key) ++ "=[^&]*",
+    re:replace(URL, RE, "", [{return, list}]).
 
 -spec parse_qs(string() | binary()) -> proplist().
 %% @doc Will if the argument passed is a string, it will return a proplist of
