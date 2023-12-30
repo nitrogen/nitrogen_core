@@ -29,7 +29,6 @@ render_action(#if_value{target=Target, map=undefined, value=Value0, actions=Acti
     Value = wf:js_escape(wf:to_list(Value0)),
     [
         wf:f(<<"if(objs('~s').val()=='~s') {">>, [Target, Value]),
-            wf:f("console.log('~s');",[Value]),
             Actions,
         <<"}else{">>,
             Else,
