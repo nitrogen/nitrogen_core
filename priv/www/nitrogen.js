@@ -356,29 +356,20 @@ NitrogenClass.prototype.$validate_and_serialize = function(vessel, validationGro
 
     jQuery(all_inputs).each(function(i) {
         var LV = Nitrogen.$get_validation(this);
+        // THIS IS FOR CLIENT-SIDE VALIDATION - WE'RE GOING TO SKIP IT FOR NOW
         if (LV && LV.group == validationGroup && !LV.validate()) {
             // Set a flag, but keep validating to show all messages.
             is_valid = false;
         } else {
-            // Skip any unchecked radio boxes.
-            if ((this.type=="radio" || this.type=="checkbox") && !this.checked) return;
-            // Skip multi-select boxes with nothing selected
-            if (this.type=="select-multiple" && ($(this).val()==null || ($(this).val().length==0))) return;
-            // Skip any plain buttons or submit buttons
-            if (this.type=='button' || this.type=='submit') return;
-            
-            // Skip elements that aren't nitrogen elements (they won't have a
-            // properly named Nitrogen 'id')
-            var id = n.$make_id(this);
-            if(id == "") return;
+            // Short circuit this element if it's one of the items we don't want to to submit
+            if(n.$ignore_element(this))
+                return;
 
             // It's a good element. Let's get the value, and return convert to
             // an empty string if it's null
             var val = $(this).val();
 
-            //console.log(val);
-
-            if(val == null || (this.type=="select-multiple" && val.length==0))
+            if(val == null)
                 val = "";
         
             // Add to the parameter list to send to the server
@@ -389,6 +380,37 @@ NitrogenClass.prototype.$validate_and_serialize = function(vessel, validationGro
     return is_valid && params || null;
 }
 
+NitrogenClass.prototype.$ignore_element = function(element) {
+    return this.$is_unchecked(element)
+        || this.$is_empty_multiselect(element)
+        || this.$is_button(element)
+        || !this.$is_nitrogen_element(element);
+};
+
+NitrogenClass.prototype.$is_unchecked = function(element) {
+    // Skip any unchecked radio boxes.
+    return (element.type=="radio" || element.type=="checkbox")
+            && !element.checked
+};
+
+NitrogenClass.prototype.$is_empty_multiselect = function(element) {
+    // Skip multi-select boxes with nothing selected
+    return element.type=="select-multiple"
+            && ($(element).val()==null || ($(element).val().length==0));
+};
+w
+NitrogenClass.prototype.$is_button= function(element) {
+    // Skip any plain buttons or submit buttons
+    return (element.type=='button' || element.type=='submit');
+};
+
+NitrogenClass.prototype.$is_nitrogen_element = function(element) {
+    // Skip elements that aren't nitrogen elements (they won't have a
+    // properly named Nitrogen 'id')
+    var id = this.$make_id(element);
+    return (id != "");
+};
+
 NitrogenClass.prototype.$add_validation = function(element, args) {
     if($(element)){
         if(!$(element).data(Nitrogen.$live_validation_data_field))
@@ -396,7 +418,7 @@ NitrogenClass.prototype.$add_validation = function(element, args) {
         return Nitrogen.$get_validation(element);
     } else
         return null;
-}
+};
 
 NitrogenClass.prototype.$get_validation = function(element) {
     return $(element).data(Nitrogen.$live_validation_data_field);

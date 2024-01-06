@@ -986,7 +986,7 @@
     }).
 %% we want validation assignments to happen last, so we use AV_BASE and set deferral to zero first
 -record(validate, {?ACTION_BASE(action_validate),
-        on=submit               :: atom(),
+        on=submit               :: atom() | submit | blur | postback,
         success_text=" "        :: text(),
         group                   :: string() | binary() | atom(),
         validators              :: validators(),

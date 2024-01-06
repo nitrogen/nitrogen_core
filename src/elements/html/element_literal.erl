@@ -3,7 +3,7 @@
 % Copyright (c) 2008-2010 Rusty Klophaus
 % See MIT-LICENSE for licensing information.
 
--module (element_literal).
+-module(element_literal).
 -include("wf.hrl").
 -export([
     reflect/0,
