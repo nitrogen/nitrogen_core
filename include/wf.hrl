@@ -838,6 +838,18 @@
         line_length=1           :: integer(),
         blank_length=0          :: integer()
     }).
+-record(iframe, {?ELEMENT_BASE(element_iframe),
+        align                   :: text() | atom(),
+        frameborder             :: integer() | undefined,
+        height                  :: integer() | undefined,
+        name=""                 :: text(),
+        sandbox=""              :: text(),
+        seamless                :: atom() | text(),
+        src                     :: url(),
+        srcdoc=""               :: text(),
+        width                   :: integer() | undefined,
+        allowfullscreen=true    :: boolean()
+    }).
 -record(google_chart,   {?ELEMENT_BASE(element_google_chart),
         type=line               :: google_chart_type(),
         color = <<"909090">>    :: color(),
@@ -1070,6 +1082,7 @@
         options=[]              :: proplist(),
         speed=500               :: integer()
     }).
+-record(toggle_mobile_panel, {?ACTION_BASE(action_toggle_mobile_panel)}).
 -record(add_class, {?ACTION_BASE(action_add_class),
         class=none              :: class(),
         speed=0                 :: integer()
