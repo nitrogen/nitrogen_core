@@ -101,7 +101,7 @@ signkey() ->
         end
     end).
 
--spec old_signkey() -> binary().
+-spec old_signkey() -> binary() | undefined.
 old_signkey() ->
     wf:cache(old_signkey, 1000, fun() ->
         case config_handler:get_value(old_signkey) of
