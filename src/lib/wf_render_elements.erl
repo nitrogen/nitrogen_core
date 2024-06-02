@@ -12,6 +12,7 @@
     normalize_id/1,
     recurse_body/2,
     cache_rendered/3
+    %image_or_icon/1
 ]).
 
 -spec render_and_trap_actions(Elements :: body() | fun()) -> {ok, Html :: binary(), Actions :: binary()}.
@@ -166,6 +167,16 @@ extract_class(#elementbase{class=Class}, ID, Anchor) ->
 call_element_render(RenderOrTransform, Module, Element) ->
     NewElements = Module:RenderOrTransform(Element),
     inner_render_elements(NewElements).
+
+%image_or_icon(Image) when ?WF_BLANK(Image) ->
+%    "";
+%image_or_icon(Image) when ?IS_STRING(Image); is_binary(Image) ->
+%    #image{image=Image};
+%image_or_icon(Icon) when is_atom(Icon) ->
+%    #icon{icon=Icon};
+%image_or_icon(Term) ->
+%    Term.
+    
 
 -spec normalize_id(list() | atom() | binary()) -> string().
 normalize_id(ID) -> 

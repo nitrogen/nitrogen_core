@@ -14,7 +14,7 @@
 reflect() -> record_info(fields, link).
 
 -spec render_element(#link{}) -> body().
-render_element(Record) -> 
+render_element(Record = #link{}) -> 
     ID = Record#link.id,
     Anchor = Record#link.anchor,
     case Record#link.postback of
@@ -34,8 +34,11 @@ render_element(Record) ->
 		ClickActions -> wf:wire(Anchor, #event{type=click, actions=ClickActions })
 	end,
 
+    Image = image(Record#link.image),
+    Icon = icon(Record#link.icon),
+    HasIcon = not(?WF_BLANK(Image)) orelse not(?WF_BLANK(Icon)),
     Body = [
-        ?WF_IF(Record#link.image, #image{image=Record#link.image}),
+        ?WF_IF(HasIcon, [Image, Icon]),
         wf:html_encode(Record#link.text, Record#link.html_encode),
         Record#link.body
     ],
@@ -62,3 +65,17 @@ render_element(Record) ->
 
 add_field(true,ToAdd,DataFields) -> [ToAdd | DataFields];
 add_field(_,_,DataFields) -> DataFields.
+
+image(X) when ?WF_BLANK(X) ->
+    "";
+image(X) when is_tuple(X) ->
+    X;
+image(X) ->
+    #image{image=X, class=link_icon}.
+
+icon(X) when ?WF_BLANK(X) ->
+    "";
+icon(X) when is_tuple(X) ->
+    X;
+icon(X) ->
+    #icon{icon=X, class=link_icon}.

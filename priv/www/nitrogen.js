@@ -1086,6 +1086,7 @@ NitrogenClass.prototype.$set_value = function(anchor, element, value, optional_l
     if (!element.id) element = objs(element);
     element.each(function(index, el) {
         if (el.value != undefined) $(el).val(value);
+        // use checked if el.type=="checkbox"
         else if (el.checked != undefined) el.checked = value;
         else if (el.src != undefined) el.src = value;
         else if($(el).hasClass("ui-progressbar")) n.$set_progress_bar_value(el, value, optional_label);

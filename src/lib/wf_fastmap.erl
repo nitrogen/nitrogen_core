@@ -37,7 +37,7 @@
 %% get(some_key) -> Val;
 %% get(some_other_key) -> Val;
 %% ...
-%% get(_) -> error().
+%% get(_) -> throw().
 %% ...
 
 -define(PTERM_FASTMAP_CONFIG, wf_fastmap_config).
@@ -136,7 +136,7 @@ build_clause_get_1({Key, Value}) ->
     wf:f("get(~p) -> ~p;~n", [Key, Value]).
 
 build_clause_get_1_catchall() ->
-    "get(X) -> error({wf_fastmap_key_not_found, X}).\n\n".
+    "get(X) -> throw({wf_fastmap_key_not_found, X}).\n\n".
 
 build_keys_0(PL) ->
     Keys = proplists:get_keys(PL),

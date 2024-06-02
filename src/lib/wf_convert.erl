@@ -18,6 +18,9 @@
     to_bool/1,
     to_string_list/1,
     to_qs/1,
+    add_qs/2,
+    remove_qs/2,
+    maybe_convert/2,
     parse_qs/1,
     encode/2, decode/2,
     html_encode/1, html_encode/2,
@@ -28,6 +31,9 @@
     json_encode/1,
     json_decode/1,
 	join/2,
+    remove_blanks/1,
+    %remove_blanks/2,
+    join_nonblanks/2,
     parse_ip/1
 ]).
 
@@ -126,6 +132,51 @@ to_float(I) when is_integer(I) -> float(I);
 to_float(T) when is_list(T);
                  is_binary(T);
                  is_atom(T) -> safe_to_float(wf:to_list(T)).
+
+maybe_convert(undefined, _) ->
+    undefined;
+maybe_convert(V, undefined) ->
+    %% TODO: This should be customized. If users want binaries back, convert to unicode_binaries
+    wf:to_unicode_list(V);
+maybe_convert(V, atom) ->
+    to_existing_atom(V);
+maybe_convert(V, integer) ->
+    wf:to_integer(V, undefined);
+maybe_convert(V, {integer, Default}) ->
+    wf:to_integer(V, Default);
+maybe_convert(V, float) ->
+    wf:to_float(V, undefined);
+maybe_convert(V, {float, Default}) ->
+    wf:to_float(V, Default);
+maybe_convert(V, list) ->
+    to_list(V);
+maybe_convert(V, string) ->
+    to_unicode_list(V);
+maybe_convert(V, unicode_list) ->
+    to_unicode_list(V);
+maybe_convert(V, binary) ->
+    to_binary(V);
+maybe_convert(V, bin) ->
+    to_binary(V);
+maybe_convert(V, unicode_binary) ->
+    to_unicode_binary(V);
+maybe_convert(V, ub) -> %% short for unicode_binary
+    to_unicode_binary(V);
+maybe_convert(V, bool) ->
+    to_bool(V);
+maybe_convert(V, Fun) when is_function(Fun, 1) ->
+    Fun(V);
+maybe_convert(V, {Mod, Fun}) when is_atom(Mod), is_atom(Fun) ->
+    Mod:Fun(V);
+maybe_convert(V, ConverterKey) ->
+    try wf_fastmap:lookup({nitrogen_converter_key, ConverterKey}) of
+        {Mod, Fun} ->
+            maybe_convert(V, {Mod, Fun});
+        Fun when is_function(Fun, 1) ->
+            maybe_convert(V, Fun)
+    catch throw:_Type ->
+        error({no_converter_associated_with_key, ConverterKey})
+    end.
 
 safe_to_float(L) when is_list(L) ->
     try list_to_float(L)
@@ -320,7 +371,18 @@ to_qs([]) -> [];
 to_qs([{Key, Val}]) ->
     [url_encode(Key),"=",url_encode(Val)];
 to_qs([{Key, Val} | Rest]) ->
-    [url_encode(Key),"=",url_encode(Val),"&" | to_qs(Rest)].
+    [url_encode(Key),"=",url_encode(Val), "&" | to_qs(Rest)].
+
+-spec add_qs(URL :: text(), Map :: map() | proplist()) -> text().
+add_qs(URL, Map) ->
+    QS = wf:to_qs(Map),
+    Delim = ?WF_IF(re:run(URL, "\\?", [{capture, none}])==match, "&", "?"),
+    [URL, Delim, QS].
+
+-spec remove_qs(URL :: text(), Key :: text() | atom()) -> text().
+remove_qs(URL, Key) ->
+    RE = url_encode(Key) ++ "=[^&]*",
+    re:replace(URL, RE, "", [{return, list}]).
 
 -spec parse_qs(string() | binary()) -> proplist().
 %% @doc Will if the argument passed is a string, it will return a proplist of
@@ -359,6 +421,14 @@ join([Item],_Delim) ->
 	[Item];
 join([Item|Items],Delim) ->
 	[Item,Delim | join(Items,Delim)].
+
+
+remove_blanks(List) ->
+    [X || X <- List, not(?WF_BLANK(X))].
+
+join_nonblanks(Items, Delim) ->
+    Items2 = remove_blanks(Items),
+    join(Items2, Delim).
 
 %%% CODE BELOW IS FROM MOCHIWEB %%%
 
