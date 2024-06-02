@@ -169,7 +169,7 @@ maybe_convert(V, Fun) when is_function(Fun, 1) ->
 maybe_convert(V, {Mod, Fun}) when is_atom(Mod), is_atom(Fun) ->
     Mod:Fun(V);
 maybe_convert(V, ConverterKey) ->
-    try wf_fastmap:lookup({nitrogen_converter_key, ConverterKey}) of
+    try wf_fastmap:get({nitrogen_converter_key, ConverterKey}) of
         {Mod, Fun} ->
             maybe_convert(V, {Mod, Fun});
         Fun when is_function(Fun, 1) ->
