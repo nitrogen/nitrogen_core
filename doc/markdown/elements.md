@@ -67,13 +67,8 @@
 
 ## Mobile Elements
 
- * [jQuery Mobile Elements](jquery_mobile.md)
- * [Mobile List](mobile_list.md) | [Mobile List Item](mobile_listitem.md) | [Mobile List Divider](mobile_list_divider.md)
- * [Mobile Toggle](mobile_toggle.md)
- * [Mobile Collapsible](mobile_collapsible.md)
- * [Mobile Collapsible Set](mobile_collapsible_set.md)
- * [Mobile Grid](mobile_grid.md) | [Mobile Grid Block](mobile_grid_block.md)
- * [Mobile Panel](mobile_panel.md)
+ * The [jQuery Mobile Elements](https://github.com/nitrogen/nitrogen_jqm) have
+   been moved out of `nitrogen_core` and into their own plugin.
 
 ## RESTful Elements
 

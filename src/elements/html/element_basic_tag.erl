@@ -42,7 +42,7 @@ render_element(Rec0) ->
     ],
     wf_tags:emit_tag(Tag, Body, [
         {id, HtmlID},
-        {class, ?ADD_ELEMENT_CLASS(ElementName, Class)},
+        {class, ?ADD_ELEMENT_CLASS(backcompat_element_class(ElementName), Class)},
         {title, Title},
         {data_fields, DataFields},
         {aria, Aria},
@@ -50,6 +50,10 @@ render_element(Rec0) ->
         {style, Style}
     ]).
 
+backcompat_element_class(label) ->
+    nitrogen_label;
+backcompat_element_class(X) ->
+    X.
 
 %% For the most part, the name of the HTML tag name and the record will be the same.
 %% For example, #span{} will become <span>.
