@@ -7,42 +7,29 @@
 -include("wf.hrl").
 -export([
 	reflect/0,
-	transform_element/1
+	render_element/1
 ]).
 
 -spec reflect() -> [atom()].
 reflect() -> record_info(fields, qr).
 
--spec transform_element(#qr{}) -> body().
-transform_element(#qr{data=Empty} = QR) when Empty =:= undefined;
+-spec render_element(#qr{}) -> body().
+render_element(#qr{data=Empty} = QR) when Empty =:= undefined;
                                           Empty =:= <<"">>;
                                           Empty =:= "" ->
-    transform_element(QR#qr{data=wf:url()});
-transform_element(#qr{data=Data, size=Size, class=Class, id=Id, title=Title, data_fields=DataFields, aria=Aria}) ->
-    BSize = wf:to_binary(Size),
-    Cht = <<"qr">>,
-    Chs = <<BSize/binary,"x",BSize/binary>>,
-    Choe = "UTF-8",
-
-    %% Not sure what this is exactly, but it's recommended to stay at H. Feel
-    %% free to examine if you wish. From
-    %% http://www.webmaster-source.com/2010/10/11/generate-qr-codes-on-the-fly-with-the-google-chart-api/
-    Chld = "H",
-    Chl = Data,
-
-    Path = "https://chart.apis.google.com/chart?",
-    QS = wf:to_qs([
-        {cht, Cht},
-        {chs, Chs},
-        {choe, Choe},
-        {chld, Chld},
-        {chl, Chl}
-    ]),
-    #image{
-       id=Id,
-       class=Class,
-       title=Title,
-       image=[Path,QS],
-       data_fields=DataFields,
-       aria=Aria
-    }.
+    render_element(QR#qr{data=wf:url()});
+render_element(#qr{data=Data, size=Size, class=Class, title=Title, data_fields=DataFields, aria=Aria, style=Style}) ->
+    {SvgAttrs, Body} = nqr_svg:tag(Data),
+    XMLNS = "http://www.w3.org/2000/svg",
+    SvgAttrs2 = [{xmlns, XMLNS} | SvgAttrs],
+    Attrs = [
+        {class, Class},
+        {title, Title},
+        {data_fields, DataFields},
+        {width, Size},
+        {height, Size},
+        {aria, Aria},
+        {style, Style}
+    ],
+    Attrs2 = SvgAttrs2 ++ Attrs,
+    wf_tags:emit_tag(svg, Body, Attrs2).
