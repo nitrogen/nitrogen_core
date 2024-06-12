@@ -54,7 +54,7 @@ function NitrogenClass(o) {
     this.$last_system_event = null;
     this.$going_away = false;
     this.$maybe_going_away = false;
-    this.$live_validation_data_field = "LV_live_validation";
+    this.$validation_data_field = "nitrogen_validation_field";
     this.$before_postback_list = new Array();
     this.$js_dependencies = new Array();
     this.$websocket = null;
@@ -413,15 +413,25 @@ NitrogenClass.prototype.$is_nitrogen_element = function(element) {
 
 NitrogenClass.prototype.$add_validation = function(element, args) {
     if($(element)){
-        if(!$(element).data(Nitrogen.$live_validation_data_field))
-            $(element).data(Nitrogen.$live_validation_data_field, new LiveValidation(element, args));
+        if(!$(element).data(Nitrogen.$validation_data_field))
+            $(element).data(Nitrogen.$validation_data_field, new LiveValidation(element, args));
         return Nitrogen.$get_validation(element);
     } else
         return null;
 };
 
+NitrogenClass.prototype.$new_validator = function(element, args) {
+    args.validate = function() {
+        // DO SOMETHING
+    }
+} 
+
+NitrogenClass.prototype.$add_validation_message = function(element, message) {
+    
+};
+
 NitrogenClass.prototype.$get_validation = function(element) {
-    return $(element).data(Nitrogen.$live_validation_data_field);
+    return $(element).data(Nitrogen.$validation_data_field);
 }
 
 // TODO: This needs to be made smarter. Right now, I'm pretty sure elements have
@@ -436,7 +446,7 @@ NitrogenClass.prototype.$destroy_target_validation = function(element) {
     var v = Nitrogen.$get_validation(element);
     if(v) {
         v.destroy();
-        $(element).data(Nitrogen.$live_validation_data_field,null);
+        $(element).data(Nitrogen.$validation_data_field,null);
     }
 }
 

@@ -12,7 +12,7 @@
 
 -spec render_action(#confirm_same{}) -> script().
 render_action(Record)  ->
-    TriggerPath= Record#confirm_same.trigger,
+    TriggerPath = Record#confirm_same.trigger,
     TargetPath = Record#confirm_same.target,
     Text = wf:js_escape(Record#confirm_same.text),
     ConfirmID = Record#confirm_same.confirm_id,
