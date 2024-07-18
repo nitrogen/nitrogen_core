@@ -115,6 +115,8 @@ wrap_in_dependency(undefined, Script) ->
     Script;
 wrap_in_dependency("", Script) ->
     Script;
+wrap_in_dependency(<<>>, Script) ->
+    Script;
 wrap_in_dependency(Url, Script) ->
     [<<"Nitrogen.$dependency_register_function('">>,Url,<<"',function() {">>, Script, <<"});">>].
 
