@@ -411,7 +411,7 @@ js_escape(<<C, Rest/binary>>, Acc) -> js_escape(Rest, <<Acc/binary, C>>);
 js_escape(<<>>, Acc) -> Acc.
 
 %%% JOIN %%%
--spec join([term()], term()) -> [term()].
+-spec join(List :: [term()], Delim :: term()) -> [term()].
 %% @doc Provides a simple way to join things with other things. Erlang's
 %% string:join is not flexible enough for this. For example:
 %% join([#span{}, #span{}], #br{}) -> [#span{}, #br{}, #span{}]
@@ -458,9 +458,6 @@ join_nonblanks(Items, Delim) ->
 
 -define(PERCENT, 37).  % $\%
 -define(FULLSTOP, 46). % $\.
--define(IS_HEX(C), ((C >= $0 andalso C =< $9) orelse
-    (C >= $a andalso C =< $f) orelse
-    (C >= $A andalso C =< $F))).
 -define(QS_SAFE(C), ((C >= $a andalso C =< $z) orelse
     (C >= $A andalso C =< $Z) orelse
     (C >= $0 andalso C =< $9) orelse
@@ -511,7 +508,7 @@ qs_revdecode([], Acc) ->
     Acc;
 qs_revdecode([$+ | Rest], Acc) ->
     qs_revdecode(Rest, [$\s | Acc]);
-qs_revdecode([Lo, Hi, ?PERCENT | Rest], Acc) when ?IS_HEX(Lo), ?IS_HEX(Hi) ->
+qs_revdecode([Lo, Hi, ?PERCENT | Rest], Acc) when ?WF_HEX(Lo), ?WF_HEX(Hi) ->
     qs_revdecode(Rest, [(unhexdigit(Lo) bor (unhexdigit(Hi) bsl 4)) | Acc]);
 qs_revdecode([C | Rest], Acc) ->
     qs_revdecode(Rest, [C | Acc]).
