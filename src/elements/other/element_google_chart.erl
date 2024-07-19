@@ -30,11 +30,7 @@ render_element(Record) ->
     end,
 
     
-    % Title Color and Font Size...
-    %TitleStyle = wf:f("&chts=~s,~b", [wf:to_list(Record#google_chart.color), Record#google_chart.font_size]),
-
-    % Size...
-    %Size = wf:f("&chs=~bx~b", [Record#google_chart.width, Record#google_chart.height]),
+    StyleSize = format_size(Record#google_chart.height, Record#google_chart.width),
 
     %% Grid...
     %Grid = wf:f("&chg=~s,~s,~b,~b", [
@@ -62,9 +58,11 @@ render_element(Record) ->
     Opt3d = ?WF_IF(is_3d(Type), [{is3D, true}]),
     OptAxes = process_axes(Record#google_chart.axes),
 
+    OptSeries = [],
+
     Opts = OptChartType ++ OptTitle ++ OptAxes ++ OptLegend ++ OptColor ++ OptLineColors ++ Opt3d,
 
-    %?PRINT(Opts),
+    ?PRINT(Opts),
 
     ProcessedData = process_data(Record, OptAxes, Record#google_chart.data),
     
@@ -81,13 +79,40 @@ render_element(Record) ->
         id=Tempid,
         anchor=Record#google_chart.anchor,
         class=?ADD_ELEMENT_CLASS(google_chart, [Record#google_chart.class]),
-        style = Record#google_chart.style,
+        style = [StyleSize, Record#google_chart.style],
         data_fields = Record#google_chart.data_fields,
         aria = Record#google_chart.aria
     }.
 
-do_line_colors(_) ->
-    [].
+do_line_colors(Data0) ->
+    Data = lists:flatten(Data0),
+    Colors0 = [to_color(D#chart_data.color) || D <- Data],
+    Colors = [C || C <- Colors0, not(?WF_BLANK(C))],
+    ?WF_IF(Colors==[], [], [{colors, Colors}]).
+
+to_color(X) when ?WF_BLANK(X) -> <<>>;
+to_color(Str) when is_list(Str), (length(Str)==3 orelse length(Str)==6) ->
+    case all_hex(Str) of
+        true ->
+            wf:to_binary("#" ++ Str);
+        false ->
+            wf:to_unicode_binary(Str)
+    end;
+to_color(Str) ->
+    to_color(wf:to_list(Str)).
+
+all_hex(Str) when is_list(Str), (length(Str)==3 orelse length(Str)==6) ->
+    lists:all(fun(C) when ?WF_HEX(C) -> true;
+                 (_) -> false
+              end, Str).
+
+format_size(Height, Width) ->
+    format_size_field(height, Height) ++ format_size_field(width, Width).
+
+format_size_field(Field, Val) when not(?WF_BLANK(Val)) ->
+    %% if Val is an integer, we assume pixels. Otherwise we treat it as a string.
+    wf:to_list(Field) ++ ":" ++ wf:to_list(Val) ++ ?WF_IF(is_integer(Val),"px") ++ ";";
+format_size_field(_, _) -> "".
 
 code_from_data(Rec, ID, Type, ProcessedData, Opts) ->
     JSPath = "https://www.gstatic.com/charts/loader.js",
@@ -107,13 +132,16 @@ code_from_data(Rec, ID, Type, ProcessedData, Opts) ->
         google.charts.load('current', {'packages':['corechart'" ++ OtherPackages ++ "]});
         google.charts.setOnLoadCallback(function() {
             var data = new google.visualization.DataTable();",
-            JSColumns,
-            JSRows,
-            JSOpts,
-            JSChart,
+            JSColumns,"\n",
+            JSRows,"\n",
+            JSOpts,"\n",
+            JSChart,"\n",
         "   chart.draw(data, options);
         });"
     ],
+
+    io:format("JS: ~ts",[JS]),
+
     #script{
         dependency_js=JSPath,
         script=JS
@@ -141,14 +169,12 @@ add_row(Rec, RowN, NumCols, Data) ->
         false ->
             wf:to_list(RowN)
     end,
-    YValues0 = [format_data_for_arg(Rec, RowN, ColN, Data) || ColN <- Cols],
-    case all_null(YValues0) of
+    YValues = [format_data_for_arg(Rec, RowN, ColN, Data) || ColN <- Cols],
+    case all_null(YValues) of
         true ->
-            %% IF all values are null, we'll skip displaying this row:
+            %% If all values are null, we'll skip displaying this row:
             "";
         false ->
-            %% Google wants a "value" and a "display value" for the Y Values, so we'll duplicate all of them.
-            YValues = YValues0, %duplicate_values(YValues0),
             Values =  [XValue | YValues],
             ArgList = wf:join(Values, ","),
             "data.addRow([" ++ ArgList ++ "]);\n"
@@ -170,11 +196,6 @@ format_data_for_arg(_Rec, Row, Col, Data) ->
         X ->
             "'" ++ wf:js_escape(wf:to_unicode_binary(X)) ++ "'"
     end.
-
-duplicate_values([]) ->
-    [];
-duplicate_values([H|T]) ->
-    [H,H|duplicate_values(T)].
 
 process_axes(undefined) ->
     [];

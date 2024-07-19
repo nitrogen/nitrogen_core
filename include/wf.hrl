@@ -10,6 +10,10 @@
 
 -define(WF_EXTEND(OrigRec, NewRec, Module, Fields), -extend({OrigRec, NewRec, [{module, Module} | Fields]})).
 -define(WF_BLANK(X), (X==undefined orelse X=="" orelse X==<<>>)).
+-define(WF_HEX(C), (
+                    (C >= $0 andalso C =< $9) orelse
+                    (C >= $a andalso C =< $f) orelse
+                    (C >= $A andalso C =< $F))).
 -define(WF_PROFILE(Tag, Cmd, To), wf:profile(Tag, fun() -> Cmd end, To)).
 -define(WF_PROFILE(Tag, Cmd), wf:profile(Tag, fun() -> Cmd end)).
 -define(WF_PROFILE(Cmd), ?WF_PROFILE(??Cmd, Cmd)).
