@@ -13,6 +13,23 @@
 -spec reflect() -> [atom()].
 reflect() -> record_info(fields, google_chart).
 
+%% NOTE: The original implementation of this is no longer supported by Google.
+%% The entirety of that image-based API was scrapped and replaced with a
+%% JS-=based version that uses JSON.  Some of the older options don't seem to
+%% exist in the new API.  If there's anything missing that you need, please
+%% submit a PR.  All current options are supported via the use of a new
+%% `options` attribute in both #google_chart and #chart_data fields.
+%%
+%% Some known examples:
+%%
+%% #google_chart.bar_space = not supported
+%% #google_chart.bar_group_space = not supported
+%% #google_chart.grid_x and .grid_y = I'm not sure what this actually did.
+%%
+%% #chart_data.min_value and .max_value = Not sure what these did exactly,
+%% since there could be multiple #chart_data records in a single #google_chart
+%% record.
+
 -spec render_element(#google_chart{}) -> body().
 render_element(Record) -> 
     
@@ -28,10 +45,10 @@ render_element(Record) ->
         Title when ?WF_BLANK(Title) -> [];
         Title -> [{title, wf:to_unicode_binary(Title)}]
     end,
-
     
     StyleSize = format_size(Record#google_chart.height, Record#google_chart.width),
 
+    %% TODO: These 4 options still need to be re-implemented
     %% Grid...
     %Grid = wf:f("&chg=~s,~s,~b,~b", [
     %    wf:to_list(wf:coalesce([Record#google_chart.grid_x, 0])),
@@ -58,11 +75,9 @@ render_element(Record) ->
     Opt3d = ?WF_IF(is_3d(Type), [{is3D, true}]),
     OptAxes = process_axes(Record#google_chart.axes),
 
-    OptSeries = [],
+    OptSeries = do_series(Record#google_chart.data),
 
-    Opts = OptChartType ++ OptTitle ++ OptAxes ++ OptLegend ++ OptColor ++ OptLineColors ++ Opt3d,
-
-    ?PRINT(Opts),
+    Opts = OptChartType ++ OptTitle ++ OptAxes ++ OptLegend ++ OptColor ++ OptLineColors ++ Opt3d ++ OptSeries,
 
     ProcessedData = process_data(Record, OptAxes, Record#google_chart.data),
     
@@ -72,7 +87,6 @@ render_element(Record) ->
 
     wf:defer(JS),
 
-    % Calculate bar size...
     % Render the image tag...
     #panel{
         html_id=Record#google_chart.html_id,
@@ -89,6 +103,39 @@ do_line_colors(Data0) ->
     Colors0 = [to_color(D#chart_data.color) || D <- Data],
     Colors = [C || C <- Colors0, not(?WF_BLANK(C))],
     ?WF_IF(Colors==[], [], [{colors, Colors}]).
+
+do_series(Data0) ->
+    Data = lists:flatten(Data0),
+    NumLines = length(Data),
+    %% Series are 0-indexed
+    SeriesNums = lists:seq(0, NumLines-1),
+    NSeries = lists:zip(SeriesNums, Data),
+    SeriesOpts = lists:map(fun({N, Line}) ->
+        {N, build_series_options(Line)}
+    end, NSeries),
+    [{series, SeriesOpts}].
+
+build_series_options(#chart_data{
+                        line_width=LineWidth,
+                        line_length=LineLength,
+                        blank_length=BlankLength}) ->
+    LW = build_line_width(LineWidth),
+    LD = build_line_dash(LineLength, BlankLength),
+    LW ++ LD.
+
+build_line_width(LW) when ?WF_BLANK(LW) ->
+    [];
+build_line_width(LW) ->
+    [{lineWidth, wf:to_unicode_binary(LW)}].
+
+build_line_dash(_Line, Blank) when ?WF_BLANK(Blank); Blank==0 ->
+    %% if Blank is 0, then it's a solid line
+    [];
+build_line_dash(Line, Blank) when ?WF_BLANK(Line); Line==0 ->
+    %% if "line" is 0, that's likely a mistake. Let's change it to 1.
+    build_line_dash(1, Blank);
+build_line_dash(Line, Blank) ->
+    [{lineDashStyle, [Line, Blank]}].
 
 to_color(X) when ?WF_BLANK(X) -> <<>>;
 to_color(Str) when is_list(Str), (length(Str)==3 orelse length(Str)==6) ->
@@ -240,8 +287,7 @@ process_data(Rec, OptAxes, Data) ->
         process_data_column(Rec, ColNum, Col, Acc)
     end, BaseAcc, lists:zip(ColNums, Data)).
 
-process_data_column(Rec, ColNum, #chart_data{legend=Legend, min_value=MinVal, max_value=MaxVal, values=Values,
-                             line_width=LineWidth, line_length=LineLength, blank_length=BlankLength}, Acc) ->
+process_data_column(_Rec, ColNum, #chart_data{legend=Legend, min_value=_MinVal, max_value=_MaxVal, values=Values}, Acc) ->
     %% need to return
     %% {Type, FieldName, Values},
     Type = ?WF_IF(all_numbers(Values), number, string),

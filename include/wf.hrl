@@ -941,15 +941,16 @@
         height=150              :: integer(),
         axes=[]                 :: undefined | [#chart_axis{}],
         data=[]                 :: undefined | [#chart_data{}],
-        grid_x=undefined        :: undefined | integer(),
-        grid_y=undefined        :: undefined | integer(),
+        grid_x=undefined        :: undefined | integer(), %% not clear what this did
+        grid_y=undefined        :: undefined | integer(), %% not clear what this did
         grid_line_length=1      :: integer(),
         grid_blank_length=5     :: integer(),
         background_color=ffffff :: color(),
         chart_color=ffffff      :: color(),
         legend_location=bottom  :: google_chart_position(),
-        bar_space=3             :: integer(),
-        bar_group_space=7       :: integer()
+        bar_space=3             :: integer(), %% no longer supported
+        bar_group_space=7       :: integer(), %% no longer supported
+        options=[]              :: proplist() | map()
     }).
 -record(qr, {?ELEMENT_BASE(element_qr),
         data=undefined          :: any(),
