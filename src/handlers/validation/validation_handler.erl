@@ -12,17 +12,20 @@
 -callback finish(handler_config(),
                  handler_state()) -> {ok, handler_state()}.
 
--callback validate(handler_config(),
-                 handler_state(),
-                 id(),
-                 text()) -> true | {false, Actions}.
+-callback validate(id(),
+                   text(),
+                   handler_config(),
+                   handler_state()) -> true | {false, actions()}.
 
--callback attach(handler_config(),
-                 handler_state(),
-                 Targetid :: id(),
-                 Field :: id(),
-                 validators()) -> {ok, handler_state()}.
+-callback attach(Targetid :: id(),
+                Field :: id(),
+                validators(),
+                handler_config(),
+                handler_state()) -> {ok, handler_state()}.
+
+validate(ID, Text) ->
+    wf_handler:call(?MODULE, ?FUNCTION_NAME, [ID, Text]).
 
 
-postback_request() ->
-    _Value = wf_handler:call_readonly(postback_handler, postback_request, []).
+attach(Targetid, Field, Validators) ->
+    wf_handler:call(?MODULE, ?FUNCTION_NAME, [Targetid, Field, Validators]).
