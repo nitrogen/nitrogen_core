@@ -486,9 +486,11 @@ init_context(Bridge) ->
             % Handlers that possibly redirect...
             make_handler(route_handler, dynamic_route_handler),
             make_handler(security_handler, default_security_handler),
+            make_handler(validation_handler, lv_validation_handler),
             make_handler(postback_handler, default_postback_handler)
         ]
     },
+    ?PRINT(Context),
     context(Context).
 
 make_handler(Name, Module) ->

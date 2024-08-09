@@ -3,8 +3,8 @@
 % Copyright (c) 2008-2010 Rusty Klophaus
 % See MIT-LICENSE for licensing information.
 
--module (action_clear_validation).
--include_lib ("wf.hrl").
+-module(action_clear_validation).
+-include("wf.hrl").
 -compile(export_all).
 
 render_action(Record) -> 
@@ -48,7 +48,7 @@ clear_target_validators(Target) ->
 	FilteredValidators = [X || X={_, ValPath, _} <- Validators, ValPath =/= Target],
 	set_validators(FilteredValidators),
 	wf:f("Nitrogen.$destroy_target_validation('~ts')",[Target]).
-	
+
 clear_trigger_validators(Trigger) ->
 	Validators = get_validators(),
 	FilteredValidators = [X || X={ValGroup, _, _} <- Validators, ValGroup =/= Trigger],

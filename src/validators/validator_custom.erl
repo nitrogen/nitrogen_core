@@ -8,9 +8,7 @@
 -compile(export_all).
 
 render_action(Record) -> 
-    TriggerPath= Record#custom.trigger,
+    TriggerPath = Record#custom.trigger,
     TargetPath = Record#custom.target,
-    Validators = state_handler:get_state(validators, []),
-    V = {TriggerPath, TargetPath, Record},
-    state_handler:set_state(validators, lists:delete(V, Validators) ++ [V]),
+    wf_validation:register_validator(TriggerPath, TargetPath, Record),
     [].

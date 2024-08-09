@@ -1,7 +1,7 @@
 <!-- dash: #validate | Event | ###:Section -->
 
 
-## Validate Action - #validate {}
+## Validate Action - `#validate{}`
 
   This action tells Nitrogen to validate input fields during a postback or blur event.
 

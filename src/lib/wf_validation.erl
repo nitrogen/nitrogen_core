@@ -1,16 +1,34 @@
 % vim: sw=4 ts=4 et ft=erlang
 % Nitrogen Web Framework for Erlang
-% Copyright (c) 2008-2010 Rusty Klophaus
+% Copyright (c) 2024 Jesse Gumm
 % See MIT-LICENSE for licensing information.
 
 -module (wf_validation).
 -include ("wf.hrl").
--export ([validate/0]).
+-export ([validate/0, register_validator/3]).
+
+-define(VALIDATOR_STATE_KEY, '$NITROGEN_VALIDATORS').
+
+get_validators() ->
+    state_handler:get_state(?VALIDATOR_STATE_KEY, []).
+
+set_validators(Validators) ->
+    state_handler:set_state(?VALIDATOR_STATE_KEY, Validators).
+
+%% NOTE: This function is called from validator_custom.  It was originally
+%% implemented there as well, but it was confusing where and how server-side
+%% validations were established.
+register_validator(TriggerPath, TargetPath, Record) ->
+    V = {TriggerPath, TargetPath, Record},
+    Validators = get_validators(),
+    NewValidators = (Validators -- [V]) ++ [V],
+    set_validators(NewValidators).
+
 
 validate() ->
     % Some values...
     ValidationGroup = wf_context:event_validation_group(),
-    Validators = state_handler:get_state(validators, []),
+    Validators = get_validators(),
 
     % Get all validators that match the validation group.
     % ValidationGroup is a string.

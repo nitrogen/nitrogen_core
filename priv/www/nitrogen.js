@@ -355,13 +355,15 @@ NitrogenClass.prototype.$validate_and_serialize = function(vessel, validationGro
     var all_inputs = jQuery(inputs).not(".no_postback");
 
     jQuery(all_inputs).each(function(i) {
-        var LV = Nitrogen.$get_validation(this);
-        // THIS IS FOR CLIENT-SIDE VALIDATION - WE'RE GOING TO SKIP IT FOR NOW
-        if (LV && LV.group == validationGroup && !LV.validate()) {
+        // We check client-side-validation first.  If all the client-side
+        // validation passes, then we'll package up the params and send them
+        // over via postback.
+        if (!n.$validate_element(this, validationGroup)) {
             // Set a flag, but keep validating to show all messages.
             is_valid = false;
         } else {
-            // Short circuit this element if it's one of the items we don't want to to submit
+            // Short circuit this element if it's one of the items we don't
+            // want to to submit
             if(n.$ignore_element(this))
                 return;
 
@@ -398,8 +400,8 @@ NitrogenClass.prototype.$is_empty_multiselect = function(element) {
     return element.type=="select-multiple"
             && ($(element).val()==null || ($(element).val().length==0));
 };
-w
-NitrogenClass.prototype.$is_button= function(element) {
+
+NitrogenClass.prototype.$is_button = function(element) {
     // Skip any plain buttons or submit buttons
     return (element.type=='button' || element.type=='submit');
 };
@@ -411,59 +413,79 @@ NitrogenClass.prototype.$is_nitrogen_element = function(element) {
     return (id != "");
 };
 
-NitrogenClass.prototype.$add_validation = function(element, args) {
+NitrogenClass.prototype.$init_validation = function(element, args) {
     if($(element)){
-        if(!$(element).data(Nitrogen.$validation_data_field))
-            $(element).data(Nitrogen.$validation_data_field, new LiveValidation(element, args));
+        // If the element exists, let's check if there is already validation data on the element
+        if(!$(element).data(this.$validation_data_field))
+            // Since there is not currently validation data on the element, let's initialize some
+            $(element).data(this.$validation_data_field, {});
         return Nitrogen.$get_validation(element);
-    } else
+    } else {
         return null;
+    }
+};
+
+NitrogenClass.prototype.$remove_validation_artifacts = function(element) {
+
+};
+
+NitrogenClass.prototype.$instant_validation_failure = function(element, message, attach_to) {
+    
 };
 
 NitrogenClass.prototype.$new_validator = function(element, args) {
     args.validate = function() {
         // DO SOMETHING
     }
-} 
+};
 
 NitrogenClass.prototype.$add_validation_message = function(element, message) {
     
 };
 
 NitrogenClass.prototype.$get_validation = function(element) {
-    return $(element).data(Nitrogen.$validation_data_field);
-}
+    return $(element).data(this.$validation_data_field);
+};
+
+NitrogenClass.prototype.$set_validation = function(element, data) {
+    $(element).data(this.$validation_data_field, data);
+};
+
+NitrogenClass.prototype.$validate_element = function(element) {
+    return true;
+};
 
 // TODO: This needs to be made smarter. Right now, I'm pretty sure elements have
 // single validation groups, while it should be a list of groups that get validated
 NitrogenClass.prototype.$destroy_specific_validation = function(trigger, target) {
-    var v = Nitrogen.$get_validation(target);
+    var v = this.$get_validation(target);
     if(v.group==trigger)
-        Nitrogen.$destroy_target_validation(target);
-}
+        this.$destroy_target_validation(target);
+};
 
 NitrogenClass.prototype.$destroy_target_validation = function(element) {
-    var v = Nitrogen.$get_validation(element);
+    var v = this.$get_validation(element);
     if(v) {
-        v.destroy();
-        $(element).data(Nitrogen.$validation_data_field,null);
+        $(element).data(this.$validation_data_field,null);
     }
-}
+};
 
 NitrogenClass.prototype.$destroy_validation_group = function(validationGroup) {
+    var this2 = this;
     jQuery(":input").not(".no_postback").each(function(i) {
-        var LV = Nitrogen.$get_validation(this);
+        var LV = this2.$get_validation(this);
         if( LV && LV.group == validationGroup) {
-            Nitrogen.$destroy_target_validation(this);
+            this2.$destroy_target_validation(this);
         }
     });
-}
+};
 
 NitrogenClass.prototype.$destroy_all_validation = function() {
+    var this2 = this;
     $("*").each(function() {
-        Nitrogen.$destroy_target_validation(this);
+        this2.$destroy_target_validation(this);
     });
-}
+};
 
 NitrogenClass.prototype.$make_id = function(element) {
     var a = [];
@@ -476,7 +498,7 @@ NitrogenClass.prototype.$make_id = function(element) {
         element = element.parentNode;
     }  
     return a.join(".");
-}
+};
 
 
 /*** AJAX METHODS ***/
@@ -989,8 +1011,8 @@ NitrogenClass.prototype.$insert_after = function(anchor, path, html) {
 }
 
 NitrogenClass.prototype.$remove = function(anchor, path) {
-    var x = objs(path, anchor).remove();
-    $(x).next('.LV_validation_message').remove();
+    var x = objs(path, anchor);
+    this.$remove_validation_artifacts(x);
     x.remove();
 }
 
@@ -1780,6 +1802,7 @@ NitrogenClass.prototype.$get_time = function() {
     return (new Date()).getTime();
 };
 
+
 var page = document;
 
 var Nitrogen = new NitrogenClass();
@@ -1808,3 +1831,5 @@ document.addEventListener('readystatechange', function() {
     Nitrogen.$event_loop();
     Nitrogen.$listen_for_online();
 });
+
+

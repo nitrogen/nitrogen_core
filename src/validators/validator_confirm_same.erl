@@ -3,7 +3,7 @@
 % Copyright (c) 2008-2010 Rusty Klophaus
 % See MIT-LICENSE for licensing information.
 
--module (validator_confirm_same).
+-module(validator_confirm_same).
 -include("wf.hrl").
 -export([
     render_action/1,

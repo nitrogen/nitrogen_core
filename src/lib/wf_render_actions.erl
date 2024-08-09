@@ -70,6 +70,7 @@ inner_render_actions(Actions, Anchor, Trigger, Target) ->
                           Target :: id()) -> script().
 inner_render_action(Action, Anchor, Trigger, Target) when is_tuple(Action) ->
     Base = wf_utils:get_actionbase(Action),
+
     Module = Base#actionbase.module, 
 
     % Verify that this is an action...

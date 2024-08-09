@@ -3,8 +3,8 @@
 % Copyright (c) 2008-2010 Rusty Klophaus
 % See MIT-LICENSE for licensing information.
 
--module (validator_confirm_password).
--include_lib ("wf.hrl").
+-module(validator_confirm_password).
+-include("wf.hrl").
 -export([
     render_action/1
 ]).

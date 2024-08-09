@@ -5,11 +5,16 @@
 
 -module (validator_js_custom).
 -include("wf.hrl").
--compile(export_all).
+-export([render_action/1]).
 
 render_action(Record) -> 
     Text = wf:js_escape(Record#js_custom.text),
     Function = Record#js_custom.function,
     Args = Record#js_custom.args,
     WhenEmpty = Record#js_custom.when_empty,
-    wf:f("v.add(Validate.Custom, { against: ~s, args: ~ts, failureMessage: \"~ts\", displayMessageWhenEmpty: ~ts });", [Function, Args, Text, WhenEmpty]).
+    Opts = #{
+        function=>Function,
+        args=>Args,
+        when_empty=>WhenEmpty
+    },
+    validation_handler:js_add_validator(custom, Text, Opts).

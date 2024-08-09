@@ -22,23 +22,26 @@ render_action(Record) ->
         undefined -> TriggerPath;
         Other -> Other
     end,
-    ValidMessage = wf:js_escape(Record#validate.success_text),
-    OnlyOnBlur = (Record#validate.on == blur),
-    OnlyOnSubmit = (Record#validate.on == submit),	
+    ValidMessage = Record#validate.success_text,
+    On = Record#validate.on,
+    AttachTo = Record#validate.attach_to,
+
     InsertAfterNode = case Record#validate.attach_to of
         undefined -> "";
         Node -> wf:f(<<", insertAfterWhatNode : obj(\"~s\")">>, [Node])
     end,
 
     % Create the validator Javascript...
-    ConstructorJS = wf:f(<<"var v = Nitrogen.$add_validation(obj('~s'), { validMessage: \"~ts\", onlyOnBlur: ~s, onlyOnSubmit: ~s ~s});">>, [TargetPath, wf:js_escape(ValidMessage), OnlyOnBlur, OnlyOnSubmit, InsertAfterNode]),
-
-    TriggerJS = wf:f(<<"v.group = '~s';">>, [ValidationGroup]),
+    ConstructorJS = validation_handler:js_constructor(TargetPath, ValidationGroup, ValidMessage, On, AttachTo),
 
     % Update all child validators with TriggerPath and TargetPath...
     F = fun(X) ->
         Base = wf_utils:get_validatorbase(X),
-        Base1 = Base#validatorbase { trigger = TriggerPath, target = TargetPath, attach_to = Record#validate.attach_to },
+        Base1 = Base#validatorbase{
+            trigger=TriggerPath,
+            target=TargetPath,
+            attach_to=Record#validate.attach_to
+        },
         wf_utils:replace_with_base(Base1, X)
     end,
     Validators = lists:flatten([Record#validate.validators]),
@@ -46,5 +49,7 @@ render_action(Record) ->
 
     % Use #script element to create the final javascript to send to the browser...
     [
-        ConstructorJS, TriggerJS, Validators1
+        ConstructorJS,
+        %TriggerJS,
+        Validators1
     ].	

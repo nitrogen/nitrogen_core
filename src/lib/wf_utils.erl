@@ -120,15 +120,15 @@ coalesce([H|_]) -> H.
 
 %%% BASE RECORDS %%%
 
-get_actionbase(Term) -> ?COPY_TO_BASERECORD(actionbase, size(#actionbase{}), Term).
-get_elementbase(Term) -> ?COPY_TO_BASERECORD(elementbase, size(#elementbase{}), Term).
-get_validatorbase(Term) -> ?COPY_TO_BASERECORD(validatorbase, size(#validatorbase{}), Term).
+get_actionbase(Term) -> ?COPY_TO_BASERECORD(actionbase, tuple_size(#actionbase{}), Term).
+get_elementbase(Term) -> ?COPY_TO_BASERECORD(elementbase, tuple_size(#elementbase{}), Term).
+get_validatorbase(Term) -> ?COPY_TO_BASERECORD(validatorbase, tuple_size(#validatorbase{}), Term).
 
 replace_with_base(Base, Record) -> 
     RecordType = element(1, Record),
     BaseMiddle = tl(tuple_to_list(Base)),
-    Start = size(Base) + 1,
-    Len = size(Record) - Start + 1,
+    Start = tuple_size(Base) + 1,
+    Len = tuple_size(Record) - Start + 1,
     RecordEnd = lists:sublist(tuple_to_list(Record), Start, Len),
     list_to_tuple([RecordType] ++ BaseMiddle ++ RecordEnd).
 

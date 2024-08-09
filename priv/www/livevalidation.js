@@ -259,7 +259,6 @@ LiveValidation.prototype = {
   getElementType: function(){
     var nn = this.element.nodeName.toUpperCase();
 
-	 console.log(nn);
     // NITROGEN	
 	// Modification to check for radiogroup selection
 	if($(this.element).hasClass("radiogroup"))

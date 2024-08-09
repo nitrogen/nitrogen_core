@@ -27,7 +27,7 @@ finish(H = #handler_context{}) ->
 call(Name, FunctionName) -> call(Name, FunctionName, []).
 
 % Helper function to call a function within a handler.
-% Returns ok or {ok, Value}.
+% Returns ok, {ok, Value}, or {ok, Value1, Value2}.
 call(Name, FunctionName, Args) when is_atom(Name) ->
     % Get the handler and state from the context. Then, call
     % the function, passing in the Args and State.

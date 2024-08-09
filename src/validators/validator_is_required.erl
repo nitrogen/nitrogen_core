@@ -6,8 +6,7 @@
 
 -module (validator_is_required).
 -include("wf.hrl").
--export([render_action/1]).
-
+-export([render_action/1, validate/2]).
 
 render_action(Record = #is_required{unless_has_value=undefined}) ->
     render_action(Record#is_required{unless_has_value=[]});
@@ -23,15 +22,20 @@ render_action(Record) ->
         target=TargetPath,
         text=Text,
         tag=Record,
-        function=fun validate/2,
+        function=fun ?MODULE:validate/2,
         attach_to=Record#is_required.attach_to
     },
 
     case Record#is_required.unless_has_value of
         [] ->
-            Script = wf:f(<<"v.add(Validate.Presence, { failureMessage: \"~ts\" });">>, [Text]),
+            %% Because where are no unless_has_value fields defined, we must
+            %% validate this for every postback
+            Script = validation_handler:js_add_validator(not_blank, Text),
             [CustomValidator, Script];
         Otherfields ->
+            %% There are other fields to test.  In which case, we augment the
+            %% client-side validation to also check the other fields, and if
+            %% *they* have value, we don't have to validate this field.
             JSValidatorFun = build_js_function(Otherfields),
             JSValidation = #js_custom{
                 trigger=TriggerPath,
@@ -48,24 +52,22 @@ build_js_function(OtherFields) ->
     FieldChecks = [wf:f(<<"(obj('~s').value != '')">>, [F]) || F <- OtherFields],
     OredFieldChecks = wf:join(FieldChecks, " || "),
     [
-        "function(value, args) {",
-            "return (value != '') || ", OredFieldChecks,
-        "}"
+        <<"function(value, args) {">>,
+            <<"return (value != '') || ">>, OredFieldChecks,
+        <<"}">>
     ].
 
-validate(Rec, undefined) ->
-    % provided value is undefined, convert to empty string and try again
-    validate(Rec, "");
-validate(#is_required{unless_has_value=Otherfields}, "") when Otherfields =/= [] ->
+validate(#is_required{unless_has_value=Otherfields}, V) when Otherfields =/= [], ?WF_BLANK(V) ->
     % provided value is blank, and we're evaluating the other fields, so let's
     % evaluate them
     lists:any(fun(Field) ->
-        Val = wf:q(Field),
-        Val =/= undefined andalso Val =/= ""
+        OtherVal = wf:q(Field),
+        not(?WF_BLANK(OtherVal))
     end, Otherfields);
-validate(_, "") ->
+validate(_, V) when ?WF_BLANK(V) ->
     % Provided field is blank, and we're not checking other fields (we know
-    % this because the previous clause would have caught it).
+    % this because the previous clause would have matched on OtherFields being
+    % a non-empty list).
     false;
 validate(_, _) ->
     % Finally, if the field is non-blank, then return true, the field

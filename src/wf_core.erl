@@ -159,7 +159,8 @@ serialize_context() ->
 
     % Get handler context, but don't serialize the config.
     StateHandler = wf_context:handler(state_handler),
-    SerializedContextState = wf_pickle:pickle([Page, StateHandler]),
+    ValidationHandler = wf_context:handler(validation_handler),
+    SerializedContextState = wf_pickle:pickle([Page, StateHandler, ValidationHandler]),
     wf:f("Nitrogen.$set_param('pageContext', '~s');~n", [SerializedContextState]).
 
 deserialize_request_context() ->

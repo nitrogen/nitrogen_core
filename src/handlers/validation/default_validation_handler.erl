@@ -24,4 +24,3 @@ validate(_Config, State, Field, Value) ->
 
 attach(_Config, State, Targetid, Field, Validators) ->
     State.
-
