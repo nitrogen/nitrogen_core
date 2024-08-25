@@ -265,7 +265,7 @@ LiveValidation.prototype = {
 		var nt = "RADIOGROUP";
 	else
 	  {
-	    console.log(this);
+	    //console.log(this);
 		var nt = this.element.type.toUpperCase();
 	  }
 

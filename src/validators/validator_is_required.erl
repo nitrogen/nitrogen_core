@@ -30,7 +30,7 @@ render_action(Record) ->
         [] ->
             %% Because where are no unless_has_value fields defined, we must
             %% validate this for every postback
-            Script = validation_handler:js_add_validator(not_blank, Text),
+            Script = validation_handler:js_add_validator(TargetPath, not_blank, Text),
             [CustomValidator, Script];
         Otherfields ->
             %% There are other fields to test.  In which case, we augment the

@@ -9,7 +9,6 @@
 -compile({parse_transform, rekt}).
 
 -define(WF_EXTEND(OrigRec, NewRec, Module, Fields), -extend({OrigRec, NewRec, [{module, Module} | Fields]})).
--define(WF_BLANK(X), (X==undefined orelse X=="" orelse X==<<>>)).
 -define(WF_PROFILE(Tag, Cmd, To), wf:profile(Tag, fun() -> Cmd end, To)).
 -define(WF_PROFILE(Tag, Cmd), wf:profile(Tag, fun() -> Cmd end)).
 -define(WF_PROFILE(Cmd), ?WF_PROFILE(??Cmd, Cmd)).
@@ -173,6 +172,15 @@
 -define(IS_ACTION_PRIORITY(Priority),
     (Priority=:=normal orelse Priority=:=eager orelse Priority=:=defer)).
 
+-define(WF_BLANK(X), (X==undefined orelse X=="" orelse X==<<>>)).
+
+-define(IS_ACTION(X), (is_tuple(X) andalso element(#actionbase.is_action, X)==is_action)).
+
+-define(IS_ELEMENT(X), (is_tuple(X) andalso element(#elementbase.is_element, X)==is_element)).
+
+%%% HELPER MACROS %%%
+
+
 -define(PRIORITY_WIRE(Priority),
         (case Priority of
             eager   -> eager;
@@ -181,6 +189,7 @@
             wire    -> wire
         end)
     ).
+
 
 -define(WF_SAFE(Exp, Default), (try Exp catch _:_ -> Default end)).
 

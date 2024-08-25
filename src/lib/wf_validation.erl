@@ -51,7 +51,7 @@ validate() ->
                     true -> 
                         FailedPaths;
                     false ->
-                        wf:wire(TargetPath, #validation_error { text=Text, attach_to=Record#custom.attach_to }),
+                        wf:wire(#validation_error{target=TargetPath, text=Text, attach_to=Record#custom.attach_to}),
                         [TargetPath|FailedPaths]
                 end
         end

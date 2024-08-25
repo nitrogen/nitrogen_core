@@ -26,10 +26,10 @@ render_action(Record) ->
     On = Record#validate.on,
     AttachTo = Record#validate.attach_to,
 
-    InsertAfterNode = case Record#validate.attach_to of
-        undefined -> "";
-        Node -> wf:f(<<", insertAfterWhatNode : obj(\"~s\")">>, [Node])
-    end,
+    %InsertAfterNode = case Record#validate.attach_to of
+    %    undefined -> "";
+    %    Node -> wf:f(<<", insertAfterWhatNode : obj(\"~s\")">>, [Node])
+    %end,
 
     % Create the validator Javascript...
     ConstructorJS = validation_handler:js_constructor(TargetPath, ValidationGroup, ValidMessage, On, AttachTo),

@@ -11,7 +11,7 @@
 %    attach/5,
 %    validate/4,
     js_constructor/7,
-    js_add_validator/5,
+    js_add_validator/6,
     required_js/2
 %    required_css/2
 ]).
@@ -49,12 +49,11 @@ js_constructor(TargetPath, ValidationGroup, ValidMessage, On, AttachTo, Config, 
     end,
     % Create the validator Javascript...
     
-    ConstructorJS = wf:f(<<"var v = Nitrogen.$init_validation(obj('~s'), { validMessage: \"~ts\", onlyOnBlur: ~s, onlyOnSubmit: ~s ~s});">>, [TargetPath, wf:js_escape(ValidMessage), OnlyOnBlur, OnlyOnSubmit, InsertAfterNode]),
-    GroupJS = ?WF_IF(ValidationGroup, wf:f(<<"v.group = '~s';">>, [ValidationGroup])),
+    ConstructorJS = wf:f(<<"var v = Nitrogen.$init_validation(obj('~s'), '~s', { validMessage: \"~ts\", onlyOnBlur: ~s, onlyOnSubmit: ~s ~s});">>, [TargetPath, ValidationGroup, wf:js_escape(ValidMessage), OnlyOnBlur, OnlyOnSubmit, InsertAfterNode]),
+    %GroupJS = ?WF_IF(ValidationGroup, wf:f(<<"v.group = '~s';">>, [ValidationGroup])),
     
     CombinedJS = [
-        ConstructorJS,
-        GroupJS
+        ConstructorJS
     ],
     {NewState, NewScript} = maybe_dependency_wrap(CombinedJS, Config, State),
     {ok, NewScript, NewState}.
@@ -73,32 +72,43 @@ maybe_dependency_wrap(Script, Config, State) ->
         false ->
             JS = required_js(Config, State),
             NewState = ds:set(State, live_validation_prewrapped, true),
-            NewScript = #script{
-               dependency_js=JS,
-               script=Script
-            },
+            NewScript = [
+                #script{
+                    dependency_js=JS,
+                    script=#console_log{text="JS is loaded: " ++ JS}
+                },
+                Script
+            ],
             {NewState, NewScript}
     end.
 
-    
+   
+%% Maybe rename ValidationGroup to Trigger?
 
--spec js_add_validator(validator_type(), FM :: text(), Opts :: proplist() | map(), Config :: any(), State :: any()) -> text().
+-spec js_add_validator(Target :: id(), validator_type(), FM :: text(), Opts :: proplist() | map(), Config :: any(), State :: any()) -> text().
+js_add_validator(Target, Type, FM, Opts, Config, State) ->
+    [
+        wf:f(<<"Nitrogen.$add_validation('~s', function(v) {">>, [wf:js_escape(Target)]),
+        js_add_validator_inner(Type, FM, Opts, Config, State),
+        <<"});">>
+    ].
+
 %% FM=FailureMessage
-js_add_validator(integer, FM, _Opts, _Config, _State) ->
+js_add_validator_inner(integer, FM, _Opts, _Config, _State) ->
     wf:f(<<"v.add(Validate.Numericality, {notAnIntegerMessage: \"~ts\", notANumberMessage: \"~ts\", onlyInteger: true});">>, [FM, FM]);
-js_add_validator(number, FM, _Opts, _Config, _State) ->
+js_add_validator_inner(number, FM, _Opts, _Config, _State) ->
     wf:f(<<"v.add(Validate.Numericality, {notANumberMessage: \"~ts\", onlyInteger: false});">>, [FM]);
-js_add_validator(not_blank, FM, _Opts, _Config, _State) ->
+js_add_validator_inner(not_blank, FM, _Opts, _Config, _State) ->
     wf:f(<<"v.add(Validate.Presence, {failureMessage: \"~ts\"});">>, [FM]);
-js_add_validator(email, FM, _Opts, _Config, _State) ->
+js_add_validator_inner(email, FM, _Opts, _Config, _State) ->
     wf:f(<<"v.add(Validate.Email, {failureMessage: \"~ts\"});">>, [FM]);
-js_add_validator(max_length, FM, Opts, _Config, _State) ->
+js_add_validator_inner(max_length, FM, Opts, _Config, _State) ->
     Max = ds:get(Opts, max),
     wf:f(<<"v.add(Validate.Length, {maximum: ~p, tooLongMessage: \"~ts\"});">>, [Max, FM]);
-js_add_validator(min_length, FM, Opts, _Config, _State) ->
+js_add_validator_inner(min_length, FM, Opts, _Config, _State) ->
     Min = ds:get(Opts, min),
     wf:f(<<"v.add(Validate.Length, {minimum: ~p, tooShortMessage: \"~ts\"});">>, [Min, FM]);
-js_add_validator(custom, FM, Opts, _Config, _State) ->
+js_add_validator_inner(custom, FM, Opts, _Config, _State) ->
     [Function, Args, WhenEmpty0] = ds:get_list(Opts, [function, args, when_empty]),
     WhenEmpty = wf:to_bool(WhenEmpty0),
     wf:f(<<"v.add(Validate.Custom, {against: ~s, args: ~ts, failureMessage: \"~ts\", displayMessageWhenEmpty:~p});">>, [Function, Args, FM, WhenEmpty]).

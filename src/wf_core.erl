@@ -181,9 +181,9 @@ deserialize_context(undefined) ->
 deserialize_context(SerializedPageContext) ->
     % Deserialize page_context and handler_list if available...
     case wf_pickle:depickle(SerializedPageContext) of
-        [PageContext, NewStateHandler] ->
+        [PageContext | NewHandlers] ->
             wf_context:page_context(PageContext),
-            wf_context:restore_handler(NewStateHandler),
+            [wf_context:restore_handler(H) || H <- NewHandlers],
             ok;
         undefined ->
             exit({failure_to_deserialize_page_context, [

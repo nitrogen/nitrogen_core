@@ -33,7 +33,7 @@ render_action(Type, Record)  ->
     ValidatorType = ?WF_IF(Type==min, min_length, max_length),
     [
         validator_custom:render_action(CustomValidatorAction),
-        validation_handler:js_add_validator(ValidatorType, Text, Opts)
+        validation_handler:js_add_validator(TargetPath, ValidatorType, Text, Opts)
     ].
 
 validate({max, Record}, Value) ->

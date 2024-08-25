@@ -23,7 +23,7 @@ render_action(Record)  ->
         tag=Record,
         attach_to=Record#is_email.attach_to
     }),
-    validation_handler:js_add_validator(email, Text).
+    validation_handler:js_add_validator(TargetPath, email, Text).
 
 -spec validate(any(), iolist()) -> boolean().
 validate(_, Value) ->

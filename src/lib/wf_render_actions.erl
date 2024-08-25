@@ -68,16 +68,10 @@ inner_render_actions(Actions, Anchor, Trigger, Target) ->
                           Anchor :: id(),
                           Trigger :: id(),
                           Target :: id()) -> script().
-inner_render_action(Action, Anchor, Trigger, Target) when is_tuple(Action) ->
+inner_render_action(Action, Anchor, Trigger, Target) when ?IS_ACTION(Action) ->
     Base = wf_utils:get_actionbase(Action),
 
     Module = Base#actionbase.module, 
-
-    % Verify that this is an action...
-    case Base#actionbase.is_action == is_action of
-        true -> ok;
-        false -> throw({not_an_action, Action})
-    end,
 
     % Render...
     case Base#actionbase.show_if of 
@@ -108,7 +102,9 @@ inner_render_action(Action, Anchor, Trigger, Target) when is_tuple(Action) ->
             end;
         _ -> 
             []
-    end.
+    end;
+inner_render_action(Action, _Anchor, _Trigger, _Target) ->
+    throw({not_an_action, Action}).
 
 -spec wrap_in_dependency(Url :: undefined | url(),
                          Script :: script()) -> script().
@@ -135,7 +131,7 @@ generate_anchor_script_if_needed(ActionScript, Anchor, Target) ->
 % should be faster than converting the whole script to a binary first just for
 % this comparison.  That said, it's probably worthwhile to convert to binary
 % and then doing all actions on it based on that. Most actions probably aren't
-% that longm, so it shouldn't be that big of a performance hit.
+% that long, so it shouldn't be that big of a performance hit.
 needs_anchor_script(<<"Nitrogen.$anchor",_/binary>>) ->
 	false;
 needs_anchor_script("Nitrogen.$anchor" ++ _) ->

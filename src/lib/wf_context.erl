@@ -490,7 +490,6 @@ init_context(Bridge) ->
             make_handler(postback_handler, default_postback_handler)
         ]
     },
-    ?PRINT(Context),
     context(Context).
 
 make_handler(Name, Module) ->

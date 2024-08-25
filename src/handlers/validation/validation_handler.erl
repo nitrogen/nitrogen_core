@@ -4,7 +4,7 @@
 
 -module (validation_handler).
 -include("wf.hrl").
--export([js_constructor/5, js_add_validator/3, js_add_validator/2,  required_js/0]).
+-export([js_constructor/5, js_add_validator/3, js_add_validator/4,  required_js/0]).
 
 -callback init(handler_config(),
                handler_state()) -> {ok, handler_state()}.
@@ -32,7 +32,8 @@
                   handler_config(),
                   handler_state()) -> {ok, script(), handler_state()}.
 
--callback js_add_validator(Type :: atom(),
+-callback js_add_validator(Target :: id(),
+                           Type :: atom(),
                            FailureMessage :: text(),
                            Options :: proplist() | map(),
                            handler_config(),
@@ -62,8 +63,8 @@ js_constructor(TargetPath, ValidationGroup, ValidMessage, On, AttachTo) when is_
     {ok, Script} = wf_handler:call(?MODULE, ?FUNCTION_NAME, [TargetPath, ValidationGroup, ValidMessage, On, AttachTo]),
     Script.
 
-js_add_validator(Type, FailureMessage) ->
-    js_add_validator(Type, FailureMessage, []).
+js_add_validator(Target, Type, FailureMessage) ->
+    js_add_validator(Target, Type, FailureMessage, []).
 
-js_add_validator(Type, FailureMessage, Options) ->
-    wf_handler:call_readonly(?MODULE, ?FUNCTION_NAME, [Type, FailureMessage, Options]).
+js_add_validator(Target, Type, FailureMessage, Options) ->
+    wf_handler:call_readonly(?MODULE, ?FUNCTION_NAME, [Target, Type, FailureMessage, Options]).
