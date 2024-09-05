@@ -97,7 +97,7 @@ render_element(Record) ->
         html_id=Record#google_chart.html_id,
         id=Tempid,
         anchor=Record#google_chart.anchor,
-        class=?ADD_ELEMENT_CLASS(google_chart, [Record#google_chart.class]),
+        class=[google_chart, Record#google_chart.class],
         style = [StyleSize, Record#google_chart.style],
         data_fields = Record#google_chart.data_fields
     }.
