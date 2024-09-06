@@ -50,10 +50,14 @@ render_element(Rec0) ->
         {style, Style}
     ]).
 
+-ifdef(DO_ELEMENT_CLASSES).
+%% We just wrap this to prevent the error that the function is not used if
+%% we're not using the backcompat element classes
 backcompat_element_class(label) ->
     nitrogen_label;
 backcompat_element_class(X) ->
     X.
+-endif.
 
 %% For the most part, the name of the HTML tag name and the record will be the same.
 %% For example, #span{} will become <span>.
