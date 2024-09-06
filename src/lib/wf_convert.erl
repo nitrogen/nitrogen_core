@@ -189,7 +189,8 @@ to_bool(0) -> false;
 to_bool("0") -> false;
 to_bool(<<"0">>) -> false;
 to_bool(false) -> false;
-to_bool(0.0) -> false;
+to_bool(+0.0) -> false;
+to_bool(-0.0) -> false;
 to_bool(<<>>) -> false;
 to_bool("") -> false;
 to_bool([F,A,L,S,E]) 
