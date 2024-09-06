@@ -9,7 +9,7 @@
 	render_action/1
 ]).
 
-render_action(#if_value{target=Target, map=Map, value=undefined, else=Else}) ->
+render_action(#if_value{target=Target, map=Map, value=undefined, 'else'=Else}) ->
     [
         wf:f(<<"switch(objs('~s').val()) {">>, [Target]),
             lists:map(fun({Value0, Actions}) ->
@@ -25,7 +25,7 @@ render_action(#if_value{target=Target, map=Map, value=undefined, else=Else}) ->
         <<"}">>
     ];
 
-render_action(#if_value{target=Target, map=undefined, value=Value0, actions=Actions, else=Else}) ->
+render_action(#if_value{target=Target, map=undefined, value=Value0, actions=Actions, 'else'=Else}) ->
     Value = wf:js_escape(wf:to_list(Value0)),
     [
         wf:f(<<"if(objs('~s').val()=='~s') {">>, [Target, Value]),

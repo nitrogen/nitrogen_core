@@ -9,7 +9,7 @@
 	render_action/1
 ]).
 
-render_action(#if_checked{target=Target, actions=Actions, else=Else}) ->
+render_action(#if_checked{target=Target, actions=Actions, 'else'=Else}) ->
     [
 
         wf:f("console.log(obj('~s').checked);", [Target]),
