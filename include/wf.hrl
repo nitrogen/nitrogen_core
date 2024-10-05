@@ -1199,7 +1199,7 @@
 -record(if_value, {?ACTION_BASE(action_if_value),
         value                   :: atom() | text(),
         map                     :: undefined | [{atom() | text(), actions()}],
-        else=[]                 :: actions()
+        'else'=[]                 :: actions()
     }).
 
 -endif.
