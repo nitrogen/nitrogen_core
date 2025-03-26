@@ -7,6 +7,7 @@
 -include("wf.hrl").
 -compile (export_all).
 
+
 %%% EXPOSE WIRE, UPDATE, FLASH %%%
 wire(Actions) ->
     ok = wire(undefined, undefined, Actions).
