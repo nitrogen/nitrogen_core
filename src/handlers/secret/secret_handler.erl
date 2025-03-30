@@ -19,11 +19,6 @@
                         handler_config(),
                         handler_state()) -> term().
 
-% Retrieve a configuration value.
--spec get_value(Key :: term()) -> term().
-get_value(Key) -> 
-    _Value = get_value(Key, undefined).
-
 -spec get_value(Key :: term(), DefaultValue :: term()) -> term().
 get_value(Key, DefaultValue) -> 
     _Value= wf_handler:call_readonly(secret_handler, get_value, [Key, DefaultValue]).

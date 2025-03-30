@@ -577,6 +577,13 @@ continue(Tag, Function) -> action_continue:continue(Tag, Function).
 
 continue(Tag, Function, TimeoutMS) -> action_continue:continue(Tag, Function, TimeoutMS).
 
+%%% SECRETS %%%
+
+secret(Key) ->
+    secret(Key, undefined).
+
+secret(Key, Default) ->
+    secret_handler:get_value(Key, Default).
 
 %%% CONFIGURATION %%%
 
