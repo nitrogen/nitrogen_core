@@ -6,7 +6,6 @@
 -module(secret_handler).
 -include("wf.hrl").
 -export ([
-    get_value/1,
     get_value/2
 ]).
 
