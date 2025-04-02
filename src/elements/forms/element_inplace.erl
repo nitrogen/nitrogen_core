@@ -295,8 +295,8 @@ get_view_fun(ViewID) ->
 
 
         
-is_element(R) when ?IS_ELEMENT(R) -> true;
-is_element(_) -> false.
+%is_element(R) when ?IS_ELEMENT(R) -> true;
+%is_element(_) -> false.
 
 -spec event(any()) -> ok.
 event({ok, Delegate, Controls={ViewPanelID, _ViewID, EditPanelID, EditID}, Tag}) ->
