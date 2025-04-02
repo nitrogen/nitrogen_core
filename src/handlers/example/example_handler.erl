@@ -6,7 +6,7 @@
 -module(example_handler).
 -include("wf.hrl").
 -export ([
-    something_that_changes_handler_state/2
+    something_that_changes_handler_state/2,
     something_that_does_not_change_handler_state/1
 ]).
 

@@ -19,9 +19,9 @@ init(_Config, State) ->
 finish(_Config, _State) ->
     {ok, []}.
 
-something_that_changes_handler_state(Arg1, Arg2, Config, State) ->
+something_that_changes_handler_state(Arg1, Arg2, _Config, State) ->
     RetVal = {Arg1, Arg2}, %% just doing something arbitrary with the passed args
     {ok, RetVal, State}.
 
-something_that_does_not_change_handler_state(Arg1, Config, State) ->
+something_that_does_not_change_handler_state(_Arg1, _Config, _State) ->
     ok.
