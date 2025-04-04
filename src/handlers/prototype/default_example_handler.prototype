@@ -3,9 +3,9 @@
 % Copyright (c) 2025 Jesse Gumm
 % See MIT-LICENSE for licensing information.
 
--module(default_example_handler).
+-module(default_EXAMPLE_handler).
 -include("wf.hrl").
--behaviour(example_handler).
+-behaviour(EXAMPLE_handler).
 -export ([
     init/2,
     finish/2,
