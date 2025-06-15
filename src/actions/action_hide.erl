@@ -3,9 +3,9 @@
 % Copyright (c) 2008-2010 Rusty Klophaus
 % See MIT-LICENSE for licensing information.
 
--module (action_hide).
--include_lib ("wf.hrl").
--compile(export_all).
+-module(action_hide).
+-include("wf.hrl").
+-export([render_action/1]).
 
 render_action(Record) ->
     #jquery_effect {
