@@ -58,6 +58,8 @@ function NitrogenClass(o) {
     this.$websocket_connecting_start=0;
     this.$last_websocket_received=0;
 
+    this.$modals = new Array();
+
     this.$anchor_root_path = document;
     this.$params = new Object();
     this.$event_queue = new Array();
@@ -1353,13 +1355,80 @@ NitrogenClass.prototype.$set_cookie = function(cookie, value, path, minutes_to_l
         expires,
         "; path=",path
     ].join("");
-}   
+};
+
+NitrogenClass.prototype.$add_modal = function(id) {
+    var zindex = this.$max_modal_zindex() + 100;
+    var modal = {
+        zindex: zindex,
+        id: id
+    };
+    this.$modals.push(modal);
+};
+
+NitrogenClass.prototype.$add_modal_zindex = function(id) {
+    var max = this.$max_modal_zindex();
+    var z = objs(id).css('z-index');
+    objs(id).css('z-index', z + max);
+};
+
+NitrogenClass.prototype.$max_modal_zindex = function() {
+    if(this.$modals.length==0) {
+        return 0;
+    }else{
+        var max = 0;
+        this.$modals.forEach(function(x) {
+            max = (x.zindex > max) ? x.zindex : max;
+        });
+        return max;
+    }
+};
+
+NitrogenClass.prototype.$remove_modal = function(id) {
+    console.log("Removing: " + id);
+    if(id == undefined) {
+        var modal = this.$modals.pop();
+        return modal.id;
+    }else{
+        var item = this.$get_modal_index(id);
+        console.log("found item with id=" + item.modal.id);
+        if(item == null) {
+            return;
+        }else{
+            // delete the indexth itemm from this.$modals
+            this.$modals.splice(item.index, 1);
+            console.log("returning item.modal.id = " + item.modal.id);
+            return item.modal.id;
+        }
+    }
+};
+
+NitrogenClass.prototype.$get_modal_index = function(id) {
+    var found;
+    this.$modals.forEach(function(x, i) {
+        console.log("comparing " + id + " with " + x.id);
+        if(x.id==id) {
+            found = {
+                index: i,
+                modal: x
+            }
+        }
+    });
+    return found;
+};
+
+NitrogenClass.prototype.$scroll_to_modal = function(id) {
+    var o = objs(id);
+    if(o.css('position')=='absolute') {
+        var top = $(document).scrollTop() + 'px';
+        o.css('top', top);
+    }
+};
 
 /*** DATE PICKER ***/
-
 NitrogenClass.prototype.$datepicker = function(pickerObj, pickerOptions) {
     jQuery(pickerObj).datepicker(pickerOptions);
-}
+};
 
 /*** AUTOCOMPLETE TEXTBOX ***/
 NitrogenClass.prototype.$autocomplete = function(path, autocompleteOptions, enterPostbackInfo, selectPostbackInfo) {
@@ -1571,7 +1640,6 @@ NitrogenClass.prototype.$ws_send = function(data) {
         return "closed";
     }
 };
-        
 
 
 NitrogenClass.prototype.$enable_websockets = function() {

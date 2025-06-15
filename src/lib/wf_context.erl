@@ -488,6 +488,7 @@ init_context(Bridge) ->
             make_handler(route_handler, dynamic_route_handler),
             make_handler(security_handler, default_security_handler),
             make_handler(validation_handler, default_validation_handler),
+            make_handler(modal_handler, default_modal_handler),
             make_handler(postback_handler, default_postback_handler)
         ]
     },

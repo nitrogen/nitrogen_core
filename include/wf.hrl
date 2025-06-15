@@ -1070,6 +1070,26 @@
         vessel                  :: id() | text(),
         delegate                :: module()
     }).
+-record(modal, {?ACTION_BASE(action_modal),
+        text=""                 :: text() | undefined,
+        body                    :: body() | undefined,
+        title_text              :: text() | undefined,
+        title_body              :: body() | undefined,
+        buttons=[]              :: body() | undefined |
+                                    [#button{} |
+                                     {text(), Postback :: any()} |
+                                     {text(), Delegate :: module(), Postback :: any()}],
+
+        close_text              :: text() | undefined,
+        close_body              :: body() | undefined,
+        show_close_button=true  :: boolean(),
+        options=[]              :: term()
+    }).
+-record(close_modal, {?ACTION_BASE(action_modal),
+        id                      :: undefined | id(),
+        options=[]              :: term()
+    }).
+
 -record(console_log, {?ACTION_BASE(action_console_log),
         text=""                 :: any()
     }).
