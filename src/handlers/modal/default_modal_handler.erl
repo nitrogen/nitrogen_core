@@ -22,7 +22,7 @@ finish(_Config, _State) ->
     {ok, []}.
 
 process_open_action(Rec = #modal{}, _Config, _State) ->
-    ID = wf:temp_id(),
+    ID = wf:coalesce([Rec#modal.id, wf:temp_id()]),
     Body = build_body(ID, Rec),
 
     %% Rendering Body and capturing the Actions, otherwise the button actions will get wired to the page before the buttons exist
@@ -81,6 +81,8 @@ process_buttons([{Text, Delegate, Postback} | Rest]) ->
     [#button{text=Text, postback=Postback, delegate=Delegate} | process_buttons(Rest)];
 process_buttons([Button | Rest]) when ?IS_ELEMENT(Button) ->
     [Button | process_buttons(Rest)];
+process_buttons([Other | Rest]) ->
+    [Other | process_buttons(Rest)];
 process_buttons([]) ->
     [].
 

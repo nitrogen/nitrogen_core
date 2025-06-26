@@ -202,6 +202,9 @@ div.inplace_textbox .LV_invalid {
     color: var(---lightbox-form-color, #000);
 }
 
+.lightbox_buttons {
+    margin-top:20px;
+}
 /*** Gmail-style Uploading ***/
 
 .upload_drop {

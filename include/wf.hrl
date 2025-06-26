@@ -1071,6 +1071,7 @@
         delegate                :: module()
     }).
 -record(modal, {?ACTION_BASE(action_modal),
+        id                      :: undefined | id(),
         text=""                 :: text() | undefined,
         body                    :: body() | undefined,
         title_text              :: text() | undefined,
