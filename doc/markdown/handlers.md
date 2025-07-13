@@ -112,3 +112,6 @@ In all of the handler behavior functions are found two particular variables:
     the request.
  *  [Postback Handler](postback.md) - Controls how postback requests
     are handled.
+
+#### Advanced Routing Hooks Configuration
+   * See [Advanced Routing Hooks](routing_hook.md)    
