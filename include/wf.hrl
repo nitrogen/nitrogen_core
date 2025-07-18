@@ -1064,12 +1064,6 @@
 -record(alert, {?ACTION_BASE(action_alert),
         text=""                 :: text()
     }).
--record(confirm, {?ACTION_BASE(action_confirm),
-        text=""                 :: text(),
-        postback                :: term(),
-        vessel                  :: id() | text(),
-        delegate                :: module()
-    }).
 -record(modal, {?ACTION_BASE(action_modal),
         id                      :: undefined | id(),
         text=""                 :: text() | undefined,
@@ -1079,13 +1073,32 @@
         buttons=[]              :: body() | undefined |
                                     [#button{} |
                                      {text(), Postback :: any()} |
-                                     {text(), Delegate :: module(), Postback :: any()}],
+                                     {text(), Postback :: any(), Delegate :: module()}],
 
         close_text              :: text() | undefined,
         close_body              :: body() | undefined,
         show_close_button=true  :: boolean(),
         options=[]              :: term()
     }).
+%% create #confirm{} from #modal{}
+?WF_EXTEND(modal, confirm, action_confirm, [
+        {postback,  undefined, "term()"},
+        {vessel,    undefined, "id() | text()"},
+        {delegate,  undefined, "module()"},
+        {basic,     false,      "boolean()"}
+]).
+
+%% Create #prompt{} from #modal{}
+?WF_EXTEND(modal, prompt, action_prompt, [
+        %% `tag` used instead of `postback` because `postback` implies a call to
+        %% event/1, while `tag` implies a call to a different function
+        {tag,       undefined,  "term()"},
+        {vessel,    undefined,  "id() | text()"},
+        {delegate,  undefined,  "module()"},
+        {basic,     false,      "boolean()"},
+        {fields,    [],         "list()"},
+        {default,   "",         "text()"}
+]).
 -record(close_modal, {?ACTION_BASE(action_modal),
         id                      :: undefined | id(),
         options=[]              :: term()

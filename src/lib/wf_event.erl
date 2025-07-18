@@ -78,7 +78,7 @@ generate_postback_script(Postback, Vessel, Anchor, ValidationGroup, HandleInvali
     [
         wf:f("Nitrogen.$queue_event(~s, '~s', ", [VesselSelector, ValidationGroup]),
         OnInvalidScript,
-        wf:f(", '~s', ~s);", [PickledPostbackInfo, ExtraParam])
+        wf:f(", '~s', ~ts);", [PickledPostbackInfo, ExtraParam])
     ].
 
 

@@ -77,7 +77,7 @@ process_buttons([X | Rest]) when ?WF_BLANK(X) ->
     process_buttons(Rest);
 process_buttons([{Text, Postback} | Rest]) ->
     [#button{text=Text, postback=Postback} | process_buttons(Rest)];
-process_buttons([{Text, Delegate, Postback} | Rest]) ->
+process_buttons([{Text, Postback, Delegate} | Rest]) ->
     [#button{text=Text, postback=Postback, delegate=Delegate} | process_buttons(Rest)];
 process_buttons([Button | Rest]) when ?IS_ELEMENT(Button) ->
     [Button | process_buttons(Rest)];
