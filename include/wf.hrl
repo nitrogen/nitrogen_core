@@ -829,7 +829,38 @@
         html_encode=true        :: html_encode()
     }).
 
+-type quickform_field_opts()    :: ds:object().
+-type quickform_id()            :: id().
+-type quickform_label()         :: text().
+-type quickform_field_type()    :: textbox |
+                                    textarea |
+                                    date |
+                                    date_dropdown |
+                                    time |
+                                    yesno |
+                                    dropdown | {dropdown, options()} |
+                                    {year, Min :: integer(), Max :: integer()} |
+                                    {time, From :: qdate:qdate(), To :: qdate:qdate()} |
+                                    {yesno, YesText :: text(), NoText :: text()}.
 
+-type quickform_field()         ::  {quickform_id(), quickform_label()} |
+                                    {quickform_id(), quickform_label(), quickform_field_type()} |
+                                    {quickform_id(), quickform_label(), quickform_field_type(), quickform_field_opts()}.
+
+-record(quickform_group, {
+        header=""               :: body(),
+        fields=[]               :: quickform_fields(),
+        class                   :: class()
+    }).
+
+-type quickform_fields()        :: [quickform_fields() | #quickform_group{} | '-' | body()].
+
+-record(quickform, {?ELEMENT_BASE(element_quickform),
+                    delegate    :: module(),
+                    tag         :: term(),
+                    data        :: undefined | map() | proplist() | ds:object(),
+                    fields=[]   :: quickform_fields()
+    }).
 
 %% 960.gs Grid
 
