@@ -1287,10 +1287,10 @@ NitrogenClass.prototype.$set_values = function(anchor, element, values) {
     });
 }
 
-NitrogenClass.prototype.$get_value = function(anchor, element) {
+NitrogenClass.prototype.$get_element = function(anchor, element) {
     var el;
     if(element == null) {
-        element=anchor;
+        element = anchor;
     }
     if(typeof(element)=="string") {
         element = objs(element);
@@ -1301,6 +1301,11 @@ NitrogenClass.prototype.$get_value = function(anchor, element) {
     }else if(element instanceof jQuery) {
         el = element.get(0);
     }
+    return el;
+}
+
+NitrogenClass.prototype.$get_value = function(anchor, element) {
+    var el = this.$get_element(anchor, element);
 
     if (el.value != undefined) return el.value;
     else if (el.checked != undefined) return el.checked;
@@ -1309,6 +1314,10 @@ NitrogenClass.prototype.$get_value = function(anchor, element) {
     else return $(el).html();
 }
 
+NitrogenClass.prototype.$is_checked = function(anchor, element) {
+    var el = this.$get_element(anchor, element);
+    return el.checked==true;
+}
 
 NitrogenClass.prototype.$normalize_param = function(key, value) {
     // Create the key=value line to add.
