@@ -27,7 +27,8 @@ when the "Finish" button is clicked on the Wizard.
 
 ### Attributes
 
-- `tag` (Erlang term) - The identifying tag to be sent to the wizard
+- `tag` (Erlang term) - The identifying tag to be sent to the
+  `wizard_event(Tag)` function when the wizard is complete.
 
 - `titles` (list of strings) - The list of title strings for each step.
 
@@ -47,15 +48,15 @@ when the "Finish" button is clicked on the Wizard.
 
 - `show_progress` (boolean) - Show the progress through the wizard.
 
-- `progress_text` (string) - The text progress "meter", the first `~p`
-  will be replaced with the current steps, and the second `~p` will be
-  replaced with the total number of steps. For example, `"Step 6 of 12"`.
+- `progress_text` (string) - The text of the progress bar, the first `~p` will
+  be replaced with the current steps, and the second `~p` will be replaced with
+  the total number of steps. For example, `"Step 6 of 12"`.
   (Default: `"Step ~p of ~p"`)
 
 ### Other Important Information
 
-The current implementation of the `#wizard` element does not allow for
-multiple wizards on a single page.
+The current implementation of the `#wizard` element does not allow for multiple
+wizards on a single page.
 
 ### Wiring Validators
 
@@ -82,11 +83,9 @@ that you wish to be a required field, you would wire the validator as follows:
    Buttonids = element_wizard:next_button_ids(2, 5),
    Validator = #validate{validators=#is_required{text="Required"}},
    [wf:wire(Buttonid, pet_name, Validator) || Buttonid <- Buttonids].
-
 ```
 
 ### See Also
 
 - [base element](element_base.md)
-
 - [Wizard Demonstration](http://nitrogenproject.com/demos/wizard)
