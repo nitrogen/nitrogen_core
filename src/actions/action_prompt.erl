@@ -59,7 +59,6 @@ render_action(Prompt = #prompt{basic=false, fields=Fields}) ->
     Modal2 = Modal#modal{buttons=Buttons, body=Body},
     Modal2.
 
-
 preprocess_buttons(Buttons, FieldIDs) ->
     [preprocess_button(B, FieldIDs) || B <- Buttons].
 
@@ -87,8 +86,7 @@ build_postback(Tag, Delegate, Fields) ->
     }.
 
 make_ok_button_list(#prompt{tag=Tag, vessel=Vessel, delegate=Delegate,
-                            actions=Actions, basic=false}, FieldIDs) ->
-    %    when not(?WF_BLANK(Tag)) ->
+                            actions=Actions, basic=false, buttons=[]}, FieldIDs) ->
     PBMap = build_postback(Tag, Delegate, FieldIDs),
     [#button{
         text="OK",
