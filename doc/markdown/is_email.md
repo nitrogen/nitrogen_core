@@ -1,10 +1,8 @@
 <!-- dash: #is_email | Test | ###:Section -->
 
-
-
 ## Email Validator - #is_email {}
 
-  Validate that the field contains a valid email address.
+Validate that the field contains a valid email address.
 
 ### Usage
 
@@ -17,10 +15,10 @@
 
 ### Attributes
 
-   * `text` (string) - The text to display if validation fails.
+- `text` (string) - The text to display if validation fails.
 
 ### See Also
 
-	*  [Validate Action](validate.md)
+    *  [Validate Action](validate.md)
 
-	*  [Validation Demos](http://nitrogenproject.com/demos/validation)
+    *  [Validation Demos](http://nitrogenproject.com/demos/validation)

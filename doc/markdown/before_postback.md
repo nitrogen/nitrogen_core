@@ -1,4 +1,4 @@
-## Before Postback Action - #before_postback {}
+## Before Postback Action - `#before_postback{}`
 
 Adds custom javascript to be executed before every postback is performed on the
 page.
@@ -6,12 +6,12 @@ page.
 ### Usage
 
 ```erlang
-	wf:wire(#before_postback{script="console.log('Sending a postback');"}).
+wf:wire(#before_postback{script="console.log('Sending a postback');"}).
 ```
 
 ### Attributes
 
-* `script`: Raw JavaScript to be executed before postback is sent.
+- `script`: Raw JavaScript to be executed before postback is sent.
 
 ### Notes
 
@@ -19,7 +19,7 @@ The provided script will literally run before every postback on the page.
 
 ### See Also
 
-* [base action](./action_base.md)
-* [js_fun action](./js_fun.md)
-* [script action](./script.md)
-
+- [base action](./action_base.md)
+- [`#js_fun` action](./js_fun.md)
+- [`#script{}` action](./script.md)
+- [Postback Handler](postback.md)

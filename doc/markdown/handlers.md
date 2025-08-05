@@ -104,7 +104,7 @@ documentation:
 - [Role Handler](role.md) - Controls how the roles of the
   client are stored and retrieved. This is related to the `wf:role`
   functions.
-- [Secret Handler](secret.md) - Controls how secrets are accessed (such as API
+- [Secret Handler](handler_secret.md) - Controls how secrets are accessed (such as API
   keys or service passwords).
 
 ### Handlers that possibly redirect
@@ -119,5 +119,5 @@ documentation:
 
 #### User-interface Handlers
 
-- [Modal Handler](modal_handlers.md) - Controls how a the `#modal{}` action
+- [Modal Handler](handler_modal.md) - Controls how a the `#modal{}` action
   renders its modal popups.

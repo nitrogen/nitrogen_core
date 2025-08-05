@@ -25,7 +25,7 @@
 
 - [Heading 1-6](basic_tag.md)
 - [Paragraph](basic_tag.md)
-- [Break](br.md)
+- [Line Break](br.md)
 - [Image](image.md)
 - [Hyperlink](link.md) | [Email Hyperlink](email_link.md)
 - [Literal](literal.md)
@@ -64,7 +64,7 @@
 - [In-Place Textbox](inplace_textbox.md)
 - [In-Place Textarea](inplace_textarea.md)
 - [Spinner](spinner.md)
-- [Quick Form](quickform.md)
+- [MISSING Quick Form](quickform.md)
 
 ## Mobile Elements
 
@@ -102,4 +102,3 @@
 ## See Also
 
 - [Nitrogen Element Paths](paths.md)
-- [jQuery Mobile Integration](jquery_mobile_integration.md)
