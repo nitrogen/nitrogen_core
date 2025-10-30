@@ -127,10 +127,13 @@ eval_coalesce([H|T]) when is_function(H, 0) ->
             eval_coalesce(T);
         X ->
             X
-    end.
+    end;
+eval_coalesce([H|T]) when ?WF_BLANK(H) ->
+    eval_coalesce(T);
+eval_coalesce([H|_]) ->
+    H.
 
 %%% BASE RECORDS %%%
-
 
 get_actionbase(Term) -> ?COPY_TO_BASERECORD(actionbase, tuple_size(#actionbase{}), Term).
 get_elementbase(Term) -> ?COPY_TO_BASERECORD(elementbase, tuple_size(#elementbase{}), Term).

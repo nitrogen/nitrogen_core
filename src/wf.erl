@@ -1,11 +1,11 @@
 % vim: ts=4 sw=4 et
 % Nitrogen Web Framework for Erlang
-% Copyright (c) 2008-2010 Rusty Klophaus
+% Copyright (c) 2008-2025 Rusty Klophaus
 % See MIT-LICENSE for licensing information.
 
--module (wf).
+-module(wf).
 -include("wf.hrl").
--compile (export_all).
+-compile(export_all).
 
 
 %%% EXPOSE WIRE, UPDATE, FLASH %%%
@@ -134,6 +134,12 @@ f(S, Args) ->
 
 coalesce(L) ->
     _Value = wf_utils:coalesce(L).
+
+eval_coalesce(L) ->
+    _Value = wf_utils:eval_coalesce(L).
+
+lazy_coalesce(L) ->
+    _Value = coalesce(L).
 
 %%% WF_REDIRECT %%%
 redirect(Url) ->
