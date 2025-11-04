@@ -15,6 +15,10 @@ include rebar3.mk
 clean:
 	rm -fr _build rebar.lock
 
+clean_docs:
+	rm -fr doc/Nitrogen.docset doc/Nitrogen.tgz doc/work
+	
+
 compile: rebar3
 	$(REBAR) compile
 
