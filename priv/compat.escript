@@ -2,7 +2,7 @@
 %% vim: ts=4 sw=4 et sts=4 ft=erlang
 
 main([]) ->
-    crypto:start(),
+    application:ensure_all_started(crypto),
     code:ensure_loaded(rand),
     code:ensure_loaded(uri_string),
 
