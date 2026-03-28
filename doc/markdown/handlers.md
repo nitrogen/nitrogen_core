@@ -74,7 +74,7 @@ as defined in `wf_context:init_context/2`.
 In the order they are loaded, here are all the handlers, and their
 documentation:
 
-#### Core handlers
+### Core handlers
 
 - [Config Handler](handler_config.md) - Controls how and from where the
   configuration settings are loaded.
@@ -91,7 +91,7 @@ documentation:
   siblings, `wf:qs`, `wf:mq`, etc), functions retrieve their values from the
   POST, GET, or other methods.
 
-#### Stateful Handlers
+### Stateful Handlers
 
 - [Session Handler](session.md) - Controls how session
   information and variables are set, stored, and/or distributed.
@@ -104,8 +104,8 @@ documentation:
 - [Role Handler](role.md) - Controls how the roles of the
   client are stored and retrieved. This is related to the `wf:role`
   functions.
-- [Secret Handler](handler_secret.md) - Controls how secrets are accessed (such as API
-  keys or service passwords).
+- [Secret Handler](handler_secret.md) - Controls how secrets are accessed (such
+  as API keys or service passwords).
 
 ### Handlers that possibly redirect
 
@@ -117,7 +117,7 @@ documentation:
 - [Postback Handler](postback.md) - Controls how postback requests
   are handled.
 
-#### User-interface Handlers
+### User-interface Handlers
 
-- [Modal Handler](handler_modal.md) - Controls how a the `#modal{}` action
+- [Modal Handler](modal_handler.md) - Controls how a the `#modal{}` action
   renders its modal popups.
