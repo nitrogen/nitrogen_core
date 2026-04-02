@@ -104,7 +104,7 @@ documentation:
 - [Role Handler](role.md) - Controls how the roles of the
   client are stored and retrieved. This is related to the `wf:role`
   functions.
-- [Secret Handler](handler_secret.md) - Controls how secrets are accessed (such
+- [Secret Handler](secret_handler.md) - Controls how secrets are accessed (such
   as API keys or service passwords).
 
 ### Handlers that possibly redirect
