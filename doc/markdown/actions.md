@@ -18,7 +18,7 @@
 - [API Actions](action_api.md)
 - [Comet Action](comet.md)
 
-## Forms
+## Forms and Input
 
 - [Set](set.md) | [Set Multiple](set_multiple.md)
 - [Disable](disable.md) | [Enable](enable.md)
@@ -45,6 +45,7 @@
 
 ## Feedback and Debugging
 
+- [Modal](modal.md)
 - [Alert](alert.md)
 - [Confirm](confirm.md)
 - [Browser Console Log](console_log.md)

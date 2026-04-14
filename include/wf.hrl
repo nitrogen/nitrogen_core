@@ -1113,9 +1113,11 @@
     }).
 %% create #confirm{} from #modal{}
 ?WF_EXTEND(modal, confirm, action_confirm, [
-        {postback,  undefined, "term()"},
-        {vessel,    undefined, "id() | text()"},
-        {delegate,  undefined, "module()"},
+        {ok_text,   undefined,  "text() | undefined"},
+        {ok_body,   undefined,  "body() | undefined"},
+        {postback,  undefined,  "term()"},
+        {vessel,    undefined,  "id() | text()"},
+        {delegate,  undefined,  "module()"},
         {basic,     false,      "boolean()"}
 ]).
 

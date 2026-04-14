@@ -43,9 +43,17 @@ maybe_set_close_text(C = #confirm{close_text=T, close_body=B})
 maybe_set_close_text(C) ->
     C.
 
-make_ok_button_list(#confirm{postback=Postback, vessel=Vessel, delegate=Delegate, actions=Actions}) when not(?WF_BLANK(Postback)) ->
+make_ok_button_list(#confirm{postback=Postback}) when ?WF_BLANK(Postback) ->
+    [];
+make_ok_button_list(C = #confirm{ok_text=OKText, ok_body=OKBody}) when ?WF_BLANK(OKText),
+                                                                      ?WF_BLANK(OKBody) ->
+    make_ok_button_list(C#confirm{ok_body="OK"}); 
+make_ok_button_list(#confirm{ok_text=OKText, ok_body=OKBody, 
+                             postback=Postback, vessel=Vessel,
+                             delegate=Delegate, actions=Actions}) ->
     [#button{
-        text="OK",
+        text=OKText,
+        body=OKBody,
         postback=Postback,
         vessel=Vessel,
         delegate=Delegate,
