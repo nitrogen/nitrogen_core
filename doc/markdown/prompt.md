@@ -1,28 +1,55 @@
 <!-- dash: #confirm | Event | ###:Section -->
 
-## Confirm Action - `#confirm{}`
+## Prompt Action - `#prompt{}`
 
 This action tells Nitrogen to trigger a confirmation box, and can be executed
 either as a standard Javascript confirm box or as an "enhanced" box (using
 Nitrogen's `#modal{}` action.
 
-### Standard Usage
+### Standard Single Field Usage
 
 This standard usage is a shortcut for the [`#modal{}`](modal.md) action with an
 "OK" button (and a insteaad of "Close", it says "Cancel" to match the behavior
-of `window.confirm()`). Because it is an expanded `#modal{}`, it will use
+of `window.prompt()`). Because it is an expanded `#modal{}`, it will use
 whatever you've configured with the [modal_handler](modal_handler.md) if you've
 customized that).
 
 ```erlang
 wf:wire(#confirm{
-    title_text="Next Step",
-    text="Do you want to continue?",
-    ok_text="Yes, Continue",
-    close_text="No, do nothing and close this window",
+    title_text="Your name",
+    text="Tell us your name to continue",
+    default="Sarah Connor",
+    ok_text="Continue",
+    close_text="Cancel",
     postback=continue,
 })
 ```
+
+### Advanced (multi-field) Usage
+
+The `#prompt` action also has the ability to ask for multiple fields/form
+controls. This takes the `fields` and `default` attributes and plugs the values
+into a [`#quickform{}`](quickform.md) element's `fields` and `data` fields
+respectively. This looks like this:
+
+````erlang
+Data = [{first_name, "Sonya"},
+        {last_name, "Blade"},
+        {govid, "MK8675309"}],
+
+wf:wire(#confirm{
+    title_text="Your information",
+    text="Tell us everything about you",
+    fields=[
+        {first_name, "First Name"},
+        {last_name, "Last Name"},
+        {govid, "Government ID Number"}
+    ],
+    default=Data,
+    ok_text="Continue",
+    close_text="Cancel",
+    postback=continue,
+}).
 
 ### Basic Usage
 
@@ -32,14 +59,15 @@ box (with OK and Cancel buttons)
 
 ```erlang
 wf:wire(#confirm{
-    text="Do you want to continue?",
+    text="What is your name?",
+    default="Leeloo Dallas Multipass",
     postback=continue,
     basic=true
 })
-```
+````
 
 It's important to note that because this "basic" approach relies on the
-JavaScript `window.confirm()`, that JavaScript Execution halts while the popup
+JavaScript `window.prompt()`, that JavaScript execution halts while the popup
 is visible.
 
 ### Attributes
@@ -66,6 +94,14 @@ is visible.
   there will be no "OK" button created by default. Instead, it expects that
   you've defined the `buttons` attribute.
 
+- `fields` (list of field details) - For a multi-field setup, the `fields`
+  attribute will be processed the same as the `fields` attribute of the
+  [`#quickform{}`](quickform.md) element.
+
+- `default` (String or list of default values) - For a single-field use, this
+  should just be a string. For a multi-field use, this will follow the same
+  processing rules as the [`#quickform{}`](quickform.md) element's `data` attribute.
+
 - `buttons` (list of [`#button{}`](button.md) elements or button shortcut
   tuples) - While the attributes above are generally sufficient for most uses,
   sometimes you want more granular control over the buttons. In that case, the
@@ -86,7 +122,8 @@ When the user clicks the OK button, Nitrogen calls the `event(Tag)`, where
 
 - [base element](./action_base.md)
 - [modal action](modal.md)
-- [prompt action](prompt.md)
+- [confirm action](confirm.md)
 - [alert action](./alert.md)
 - [modal handler](modal_handler.md)
-- [External: `window.confrm()`](https://developer.mozilla.org/en-US/docs/Web/API/Window/confirm)
+- [quickform element](quickform.md)
+- [External: `window.prompt()`](https://developer.mozilla.org/en-US/docs/Web/API/Window/confirm)
