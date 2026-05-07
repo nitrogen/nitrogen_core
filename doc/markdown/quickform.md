@@ -79,11 +79,13 @@ The brief description of the format can be found below:
   field this will be (textbox, dropdown box, etc). The available options are:
   - `textbox` - A `#textbox{}`. Available options: `placeholder`
   - `textarea` - A `#textarea`. Available options: `placeholder`, `rows`, `columns`
-  - `date` - A `#datepicker_textbox`. Avaiable options: `placeholder`
+  - `date` - A `#textbox` with type `date`, which will use the browser's
+    built-in date seleector.
+  - `datepicker` - A `#datepicker_textbox`. Avaiable options: `placeholder`
   - `date_dropdown` - A `#date_dropdown{}` element. Available options: `format`
     (see [`#datepicker_textbox{}`](datepicker_textbox.md) for the valid
     options. Specifically, look at the `format` attribute on that element's
-    page).
+    page - note, `#datepicker_textbox` element is deprecated.)
   - `{dropdown, DropdownOptions}` - A [`#dropdown{}`](dropdown.md) box. The
     value of `DropdownOptions` can be anything acceptable to to the
     `#dropdown.options` attribute (a list containing either `{Value, Text}`,

@@ -54,6 +54,7 @@
 - [Textbox](textbox.md)
 - [Textbox Autocomplete](textbox_autocomplete.md)
 - [Datepicker Textbox](datepicker_textbox.md)
+- [Date Dropdown](date_dropdown.md)
 - [Textarea](textarea.md)
 - [Checkbox](checkbox.md)
 - [Radio Buttons](radio.md) | [Radio Group](radiogroup.md)
@@ -64,7 +65,7 @@
 - [In-Place Textbox](inplace_textbox.md)
 - [In-Place Textarea](inplace_textarea.md)
 - [Spinner](spinner.md)
-- [MISSING Quick Form](quickform.md)
+- [Quick Form](quickform.md)
 
 ## Mobile Elements
 

@@ -54,7 +54,7 @@ wrapper_selector(Field) ->
 
 render_form_field(Field, Value, textbox, Opts) ->
 	#textbox{id=Field,text=Value,class='form-control',placeholder=proplists:get_value(placeholder, Opts)};
-render_form_field(Field, Value, date, Opts) ->
+render_form_field(Field, Value, datepicker, Opts) ->
 	#datepicker_textbox{id=Field,text=Value,class='form-control',placeholder=proplists:get_value(placeholder, Opts), options=Opts};
 render_form_field(Field, Value, date_dropdown, Opts) ->
     Format = proplists:get_value(format, Opts, ymd),
