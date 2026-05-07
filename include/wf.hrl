@@ -834,14 +834,15 @@
 -type quickform_label()         :: text().
 -type quickform_field_type()    :: textbox |
                                     textarea |
-                                    date |
+                                    datepicker |
                                     date_dropdown |
                                     time |
                                     yesno |
                                     dropdown | {dropdown, options()} |
                                     {year, Min :: integer(), Max :: integer()} |
                                     {time, From :: qdate:qdate(), To :: qdate:qdate()} |
-                                    {yesno, YesText :: text(), NoText :: text()}.
+                                    {yesno, YesText :: text(), NoText :: text()} |
+                                    atom() | string() | binary(). %% these last 3 are catch-alls for valid input types
 
 -type quickform_field()         ::  {quickform_id(), quickform_label()} |
                                     {quickform_id(), quickform_label(), quickform_field_type()} |
