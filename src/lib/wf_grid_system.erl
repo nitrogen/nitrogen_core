@@ -78,7 +78,7 @@ add_default_grid_system_from_config(Config) ->
         {Name, Mod} ->
             NewSettings = create_default_grid_system_config(Name, Mod),
             ds:set(Config, NewSettings)
-    end.        
+    end.
 
 get_default_grid_system_from_config(Config) ->
     Default = application:get_env(nitrogen_core, default_grid_system, undefined),
