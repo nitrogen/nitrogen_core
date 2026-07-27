@@ -183,10 +183,11 @@ call_element_render(RenderOrTransform, Module, Element) ->
 
 -spec normalize_id(list() | atom() | binary()) -> string().
 normalize_id(ID) -> 
-    case wf:to_string_list(ID) of
-        [".wfid_" ++ _] = [NormalizedID] -> NormalizedID;
-        ["page"] -> "page";
-        [NewID]  -> ".wfid_" ++ NewID
+    [NormalizedID] = wf:to_string_list(ID),
+    case NormalizedID of
+        ".wfid_" ++ _ -> NormalizedID;
+        "page" -> "page";
+        _  -> ".wfid_" ++ NormalizedID
     end.
 
 -spec temp_id() -> string().

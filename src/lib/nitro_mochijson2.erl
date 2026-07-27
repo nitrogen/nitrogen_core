@@ -727,7 +727,9 @@ input_validation_test() ->
               ok = try decode(X) catch invalid_utf8 -> ok end,
               %% could be {ucs,{bad_utf8_character_code}} or
               %%          {json_encode,{bad_char,_}}
-              {'EXIT', _} = (catch encode(X))
+              {'EXIT', _} = try encode(X) of
+                            catch Error:Reason -> {Error, Reason)
+                            end
       end, Bad).
 
 inline_json_test() ->
@@ -857,7 +859,7 @@ float_test() ->
 handler_test() ->
     ?assertEqual(
        {'EXIT',{json_encode,{bad_term,{x,y}}}},
-       catch encode({x,y})),
+       try encode({x,y}) catch Error:Reason -> {Error, Reason} end),
     F = fun ({x,y}) -> [] end,
     ?assertEqual(
        <<"[]">>,
