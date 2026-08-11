@@ -88,7 +88,36 @@ priority.
 
 - <a name="wf_coalesce"></a>`wf:coalesce([List]) -> Item`
 
-  Return the first element in the list that is not 'undefined'.
+  Return the first element in the list that is not "blank" (an empty list, a
+  binary of length 0, or the atom `undefined`).
+
+- <a name="wf_eval_coalesce"></a>`wf:eval_coalesce([ListOfFunctions]) -> Item`
+
+  Takes a list of functions as an argument, then evaluates each function in
+  order. Returns the first return value that is not "blank" (an empty list, a
+  binary of length 0, or the atom `undefined`). The benefit of this over
+  `wf:coalesce/1` is that it can short circuit without evaluating every
+  function.
+
+- <a name="wf_lazy_coalesce"></a>`wf:lazy_coalesce([List]) -> Item`
+
+  Works exactly the same as `wf:coalesce/1`, but if the items of the list are
+  explicitly listed, it can employ some Erlang trickery to combine the functionality of `wf:coalesce/1` with `wf:eval_coalesce/1`.
+
+  Reminder that it requires every element of the list to be explicitly defined in the `wf:lazy_coalesce/1` call.
+
+  For example:
+
+  ```erlang
+  %% This will short circuit if some_function() returns a non-blank item
+  wf:lazy_coalesce([some_function(), some_other_function()]).
+
+  %% This does not work because the results of the function calls are
+  %% assigned to the list variable first, then the list is passed to
+  %% wf:lazy_coalesce/1
+  L = [some_function(), some_other_function()`],
+  wf:lazy_coalesce(L).
+  ```
 
 - <a name="wf_is_string"></a>`wf:is_string(Term) -> Bool`
 
@@ -105,7 +134,7 @@ priority.
   Convert the supplied term into an Atom, if possible. Useful for
   turning Integers, Binaries, and Strings into Atoms.
 
-- `wf:to_bool(Term) -> Boolean`
+- <a name="wf_to_bool"></a>`wf:to_bool(Term) -> Boolean`
 
   Convert the supplied `Term` to a boolean (`true` or `false`). There are a
   handful of terms that will evaluate to `false`: `0`, `0.0`, case-insensitive
