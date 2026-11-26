@@ -3,8 +3,8 @@
 % Copyright (c) 2008-2010 Rusty Klophaus
 % See MIT-LICENSE for licensing information.
 
--module (element_file).
--include_lib ("wf.hrl").
+-module(element_file).
+-include("wf.hrl").
 -export([
     reflect/0,
     transform_element/1
@@ -35,6 +35,7 @@ transform_element(Record) ->
                 title=Record#file.title,
                 html_id=Record#file.html_id,
                 data_fields=Record#file.data_fields,
+                aria=Record#file.aria,
                 body=FileContents
             }
     end.

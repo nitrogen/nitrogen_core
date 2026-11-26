@@ -1,6 +1,7 @@
 % vim: sw=4 ts=4 et ft=erlang
 % Nitrogen Web Framework for Erlang
 % Copyright (c) 2008-2013 Rusty Klophaus
+% Copyright (c) 2013-2016 Jesse Gumm
 % See MIT-LICENSE for licensing information.
 % This is heavily inspired by the n2o_secret pickler located at:
 % https://github.com/5HT/n2o/blob/master/src/handlers/n2o_secret.erl
@@ -12,8 +13,13 @@
 -export ([
     pickle/1,
     depickle/1, 
-    depickle/2
+    depickle/2,
+    inner_depickle/1,
+    inner_depickle/2,
+    repickle/1
 ]).
+
+-compile(export_all).
 
 -type pickled() :: binary() | string().
 
@@ -23,7 +29,7 @@ pickle(Data) ->
     Padding = size(Message) rem 16,
     Bits = (16-Padding)*8,
     Key = signkey(),
-    IV = crypto:rand_bytes(16),
+    IV = crypto:strong_rand_bytes(16),
     Cipher = ?WF_ENCRYPT(Key,IV,<<Message/binary,0:Bits>>),
     Signature = ?WF_HASH(<<Key/binary,Cipher/binary>>),
     modified_base64_encode(<<IV/binary,Signature/binary,Cipher/binary>>).
@@ -32,7 +38,7 @@ pickle(Data) ->
 depickle(PickledData) ->
     depickle(PickledData, infinity).
 
--spec depickle(PickledData :: pickled(), TTLSeconds :: infinity | integer()) -> undefined | term().
+-spec depickle(PickledData :: pickled(), TTLSeconds :: infinity | integer() | float()) -> undefined | term().
 depickle(PickledData, TTLSeconds) ->
     try
         {Data, PickledTime} = inner_depickle(PickledData),
@@ -46,34 +52,68 @@ depickle(PickledData, TTLSeconds) ->
 
 %% PRIVATE FUNCTIONS
 
--spec verify_depickle_time(PickledTime :: erlang:timestamp(), TTLSeconds :: infinity | integer()) -> boolean().
+-spec verify_depickle_time(PickledTime :: erlang:timestamp(), TTLSeconds :: infinity | integer() | float()) -> boolean().
 verify_depickle_time(_PickledTime, infinity) ->
     %% Short circuit, even though any number always evaluated to less than infinity,
     %% But this means we don't have to call os:timestamp(), and do the timer comparison
     %% Minor performance improvement.
     true;
 verify_depickle_time(PickledTime, TTLSeconds) ->
-    AgeInSeconds = timer:now_diff(os:timestamp(), PickledTime) / 1024 / 1024,
+    AgeInSeconds = timer:now_diff(os:timestamp(), PickledTime) / 1000000,
     AgeInSeconds < TTLSeconds.
 
 -spec inner_depickle(PickledData :: pickled()) -> {term(), erlang:timestamp()}.
 inner_depickle(PickledData) ->
     Key = signkey(),
+    try inner_depickle(Key, PickledData)
+    catch _:_ ->
+        case old_signkey() of
+            undefined -> throw(unable_to_depickle);
+            Key2 -> inner_depickle(Key2, PickledData)
+        end
+    end.
+
+inner_depickle(Key, PickledData) ->
     Decoded = modified_base64_decode(wf:to_binary(PickledData)),
     <<IV:16/binary,Signature:20/binary,Cipher/binary>> = Decoded,
     Signature = ?WF_HASH(<<Key/binary,Cipher/binary>>),
-    {_Data,_Time} = binary_to_term(?WF_DECRYPT(Key,IV,Cipher)).
+    DecryptedBinary = ?WF_DECRYPT(Key,IV,Cipher),
+    {_Data,_Time} = binary_to_term(DecryptedBinary).
+
+
+repickle(PickledData) ->
+    {Data, _} = inner_depickle(PickledData),
+    pickle(Data).
 
 -spec signkey() -> binary().
 signkey() ->
-    case config_handler:get_value(signkey) of
-        undefined ->
-            erlang:md5(wf:to_list(erlang:get_cookie()));
-        Key when byte_size(Key)==16 -> 
-            Key;
-        Key ->
-            erlang:md5(wf:to_list(Key))
-    end.
+    %% Commented out because if the cache handler is actually initialized in
+    %% the right order, we don't need to call nitro_cache directly.
+    %nitro_cache:get(nitrogen, 1000, signkey, fun() ->
+    wf:cache(signkey, 1000, fun() ->
+        case config_handler:get_value(signkey) of
+            undefined ->
+                erlang:md5(wf:to_list(erlang:get_cookie()));
+            Key when byte_size(Key)==16 -> 
+                Key;
+            Key ->
+                erlang:md5(wf:to_list(Key))
+        end
+    end).
+
+-spec old_signkey() -> binary().
+old_signkey() ->
+    wf:cache(old_signkey, 1000, fun() ->
+        case config_handler:get_value(old_signkey) of
+            undefined ->
+                undefined;
+            Key when byte_size(Key)==16 -> 
+                Key;
+            Key ->
+                erlang:md5(wf:to_list(Key))
+        end
+    end).
+
 
 -spec modified_base64_encode(binary()) -> binary().
 % @doc Replace '+' and '/' with '-' and '_', respectively.  Strip '='.

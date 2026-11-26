@@ -5,6 +5,7 @@
 
 -module (default_log_handler).
 -behaviour (log_handler).
+-handler_level(application).
 -include("wf.hrl").
 -export ([
     init/2, 

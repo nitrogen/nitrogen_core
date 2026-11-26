@@ -5,41 +5,159 @@
 
 -module (wf_context).
 -include("wf.hrl").
--compile(export_all).
+
+-export([
+        bridge/0,
+        bridge/1,
+
+        in_request/0,
+        socket/0,
+
+        caching/0,
+        caching/1,
+
+        path/0,
+        protocol/0,
+        uri/0,
+        url/0,
+
+        peer_ip/0,
+        peer_ip/1,
+        peer_ip/2,
+
+        request_method/0,
+        request_body/0,
+        status_code/0,
+        status_code/1,
+
+        content_type/1,
+        content_type/0,
+        encoding/0,
+        encoding/1,
+        download_as/1,
+        headers/0,
+        header/1,
+        header/2,
+
+        anchor/1,
+        anchor/0,
+
+        data/0,
+        data/1,
+        clear_data/0,
+
+        add_action/2,
+        actions/0,
+        next_action/0,
+        action_queue/0,
+        action_queue/1,
+        clear_action_queue/0,
+        new_action_queue/0,
+
+        page_context/0,
+        page_context/1,
+
+        entry_point/0,
+        entry_point/1,
+
+        series_id/0,
+        series_id/1,
+
+        page_module/0,
+        page_module/1,
+
+        path_info/0,
+        path_info/1,
+
+        async_mode/0,
+        async_mode/1,
+
+        event_context/0,
+        event_context/1,
+
+        type/0,
+        type/1,
+
+        event_module/0,
+        event_module/1,
+
+        event_tag/0,
+        event_tag/1,
+
+        event_validation_group/0,
+        event_validation_group/1,
+        event_handle_invalid/0,
+        event_handle_invalid/1,
+
+        handlers/0,
+        handlers/1,
+        handler/1,
+        restore_handler/1,
+
+        init_context/1,
+        make_handler/2,
+
+        context/0,
+        context/1,
+
+        script_nonce/0,
+        script_nonce/1,
+
+        content_security_policy/0,
+        content_security_policy/1
+    ]).
+
+-export([increment/1]).
+
+%% Exports for backwards compatibility
+-export([
+        request_bridge/0,
+        request_bridge/1,
+        response_bridge/0,
+        response_bridge/1
+    ]).
+
+%% This particular macro is really no longer needed the way it was when we were
+%% using tuple calls, but I like the way the macros are highlighted when
+%% a call uses ?BRIDGE, so I'm keeping it that way.
+-define(BRIDGE, bridge()).
 
 %%% REQUEST AND RESPONSE BRIDGE %%%
 
-request_bridge() ->
-    Context = context(),
-    Context#context.request_bridge.
+bridge() ->
+    Context=context(),
+    Context#context.bridge.
 
-request_bridge(RequestBridge) ->
+bridge(Bridge) ->
     Context = context(),
-    Context#context { request_bridge = RequestBridge }.
+    context(Context#context{bridge=Bridge}).
 
-response_bridge() ->
-    Context = context(),
-    Context#context.response_bridge.
-
-response_bridge(ResponseBridge) ->
-    Context = context(),
-    context(Context#context { response_bridge = ResponseBridge }).
+in_request() ->
+    %% If we have a context set and it is a #context{} tuple, then we are in a
+    %% request.
+    is_record(context(), context).
 
 socket() ->
-    Req = wf_context:request_bridge(), 
-    Req:socket().
+    sbw:socket(?BRIDGE).
 
 path() ->
-    Req = request_bridge(),
-    Req:path().
+    sbw:path(?BRIDGE).
+
+protocol() ->
+    sbw:protocol(?BRIDGE).
 
 uri() ->
-    Req = request_bridge(),
-    Req:uri().
+    sbw:uri(?BRIDGE).
+
+url() ->
+    Protocol = wf:to_list(protocol()),
+    Host = header(host),
+    Uri = uri(),
+    Protocol ++ "://" ++ Host ++ Uri.
 
 peer_ip() ->
-    Req = request_bridge(),
-    Req:peer_ip().
+    sbw:peer_ip(?BRIDGE).
+
 
 peer_ip(Proxies) ->
     peer_ip(Proxies,x_forwarded_for).
@@ -59,67 +177,86 @@ peer_ip(Proxies,ForwardedHeader) ->
             end
     end.
 
+request_method() ->
+    case sbw:request_method(?BRIDGE) of
+        'GET'       -> get;
+        get         -> get;
+        'POST'      -> post;
+        post        -> post;
+        'DELETE'    -> delete;
+        delete      -> delete;
+        'PUT'       -> put;
+        put         -> put;
+        'TRACE'     -> trace;
+        trace       -> trace;
+        'HEAD'      -> head;
+        head        -> head;
+        'CONNECT'   -> connect;
+        connect     -> connect;
+        'OPTIONS'   -> options;
+        options     -> options;
+        Other -> list_to_existing_atom(string:to_lower(wf:to_list(Other)))
+    end.
 
 request_body() ->
-    Req = request_bridge(),
-    Req:request_body().
+    sbw:request_body(?BRIDGE).
 
 status_code() ->
-    Req = request_bridge(),
-    Req:status_code().
+    sbw:get_status_code(?BRIDGE).
 
 status_code(StatusCode) ->
-    Res = response_bridge(),
-    response_bridge(Res:status_code(StatusCode)),
+    Bridge2 = sbw:set_status_code(StatusCode,?BRIDGE),
+    bridge(Bridge2),
     ok.
 
 content_type(ContentType) ->
-    Res = response_bridge(),
-    response_bridge(Res:header("Content-Type", ContentType)),
-    ok.
+    header("Content-Type", ContentType).
 
-headers() ->
-    Req = request_bridge(),
-    Req:headers().
-
-header(Header) ->
-    Req = request_bridge(),
-    Req:header(Header).
-
-header(Header, Value) ->
-    Res = response_bridge(),
-    response_bridge(Res:header(Header, Value)),
-    ok.
-
-cookies() ->
-    Req = request_bridge(),
-    Req:cookies().
-
-cookie(Cookie) when is_atom(Cookie) ->
-    cookie(atom_to_list(Cookie));
-cookie(Cookie) ->
-    Req = request_bridge(),
-    Req:cookie(Cookie).
-
-cookie_default(Cookie,DefaultValue) ->
-    case cookie(Cookie) of
-        undefined -> DefaultValue;
-        Value -> Value
+content_type() ->
+    case sbw:get_response_header(<<"content-type">>,?BRIDGE) of
+        undefined -> "text/html";
+        ContentType -> ContentType
     end.
 
-cookie(Cookie, Value) ->
-    Res = response_bridge(),
-    response_bridge(Res:cookie(Cookie, Value)),
+download_as(Filename0) ->
+    Filename = wf_convert:url_encode(Filename0),
+    header("Content-Disposition", "attachment; filename=\"" ++ Filename ++ "\"").
+
+headers() ->
+    sbw:headers(?BRIDGE).
+
+header(Header) ->
+    sbw:header(Header, ?BRIDGE).
+
+header(Header, Value) ->
+    Bridge2 = sbw:set_header(Header, Value, ?BRIDGE),
+    bridge(Bridge2),
     ok.
 
-cookie(Cookie, Value, Path, MinutesToLive) ->
-    Res = response_bridge(),
-    response_bridge(Res:cookie(Cookie, Value, Path, MinutesToLive)),
-    ok.
+-spec encoding(Encoding :: encoding()) -> ok.
+encoding(Encoding) ->
+    Context = context(),
+    context(Context#context { encoding=Encoding }).
 
-delete_cookie(Cookie) ->
-    cookie(Cookie,"","/",0).
+encoding() ->
+    Context = context(),
+    Context#context.encoding.
 
+script_nonce() ->
+    Context = context(),
+    Context#context.script_nonce.
+
+script_nonce(Value) ->
+    Context = context(),
+    context(Context#context{ script_nonce=Value }).
+
+content_security_policy() ->
+  content_security_policy(wf_security_policy:generate()).
+
+content_security_policy(undefined) ->
+  ok;
+content_security_policy(Policy) ->
+  header("Content-Security-Policy", Policy).
 
 %%% TRANSIENT CONTEXT %%%
 
@@ -152,8 +289,7 @@ add_action(Priority, Action) when ?IS_ACTION_PRIORITY(Priority) ->
 actions() ->
     ActionQueue = action_queue(),
     Actions = wf_action_queue:all(ActionQueue),
-    NewActionQueue = wf_action_queue:clear(ActionQueue),
-    action_queue(NewActionQueue),
+    clear_action_queue(),
     Actions.
 
 -spec next_action() -> {ok, actions()} | empty.
@@ -199,15 +335,23 @@ series_id(SeriesID) ->
     Page = page_context(),
     page_context(Page#page_context { series_id = SeriesID }).
 
-page_module() -> 
+page_module() ->
     Page = page_context(),
     Page#page_context.module.
 
 page_module(Module) ->
     Page = page_context(),
-    page_context(Page#page_context { module = Module }).
+     page_context(Page#page_context { module = Module }).
 
-path_info() -> 
+entry_point() ->
+    Page = page_context(),
+    Page#page_context.entry_point.
+
+entry_point(EntryPoint) ->
+    Page = page_context(),
+    page_context(Page#page_context { entry_point = EntryPoint}).
+
+path_info() ->
     Page = page_context(),
     Page#page_context.path_info.
 
@@ -234,12 +378,11 @@ event_context(EventContext) ->
     Context = context(),
     context(Context#context { event_context = EventContext }).
 
-
 type() ->
     Context = context(),
     Context#context.type.
 
-type(Type) -> % either first_request, postback_request, or static_file
+type(Type) -> % either first_request, postback_request, postback_websocket, comet, or static_file
     Context = context(),
     context(Context#context { type = Type }).
 
@@ -275,6 +418,8 @@ event_handle_invalid(HandleInvalid) ->
     Event = event_context(),
     event_context(Event#event_context { handle_invalid = HandleInvalid }).
 
+
+
 %%% HANDLERS %%%
 
 handlers() ->
@@ -285,48 +430,107 @@ handlers(Handlers) ->
     Context = context(),
     context(Context#context { handler_list = Handlers }).
 
+handler(HandlerName) ->
+    Handlers = handlers(),
+    case lists:keyfind(HandlerName, #handler_context.name, Handlers) of
+        false -> undefined;
+        HandlerContext -> HandlerContext
+    end.
+
+restore_handler(NewHandler) ->
+    Handlers = handlers(),
+    NewHandlers = [maybe_restore_handler(H, NewHandler) || H <- Handlers],
+    handlers(NewHandlers).
+
+maybe_restore_handler(Orig = #handler_context{name=Name}, New = #handler_context{name=Name}) ->
+    New#handler_context{config=Orig#handler_context.config};
+maybe_restore_handler(Orig, _New) ->
+    Orig.
+
+%% MAYBE DO THIS?
+%%serializable_handlers() ->
+%%    [H || H <- handlers(), is_handler_serializable(H)].
+%%
+%%is_handler_serializable(#handler_context{module=Module}) ->
+%%    case erlang:function_exported(Module, is_serializable, 0) of
+%%        true -> Module:is_serializable();
+%%        false -> true
+%%    end.
+
 %%% CONTEXT CONSTRUCTION %%%
 
-init_context(RequestBridge, ResponseBridge) ->
+init_context(Bridge) ->
     % Create the new context using the default handlers.
     Context = #context {
-        request_bridge = RequestBridge,
-        response_bridge = ResponseBridge,
+        bridge = Bridge,
         page_context = #page_context { series_id = wf:temp_id() },
         event_context = #event_context {},
-        action_queue = new_action_queue(),		
+        action_queue = new_action_queue(),
+        script_nonce = wf_security_policy:nonce(),
         handler_list = [
             % Core handlers...
-            make_handler(config_handler, default_config_handler), 
+            make_handler(config_handler, default_config_handler),
             make_handler(log_handler, default_log_handler),
             make_handler(process_registry_handler, nprocreg_registry_handler),
-            make_handler(cache_handler, default_cache_handler), 
+            make_handler(cache_handler, default_cache_handler),
             make_handler(query_handler, default_query_handler),
             make_handler(crash_handler, default_crash_handler),
+            make_handler(websocket_handler, default_websocket_handler),
 
             % Stateful handlers...
-            make_handler(session_handler, simple_session_handler), 
-            make_handler(state_handler, default_state_handler), 
-            make_handler(identity_handler, default_identity_handler), 
-            make_handler(role_handler, default_role_handler), 
+            make_handler(session_handler, canister_session_handler),
+            make_handler(state_handler, default_state_handler),
+            make_handler(identity_handler, default_identity_handler),
+            make_handler(role_handler, default_role_handler),
 
             % Handlers that possibly redirect...
-            make_handler(route_handler, dynamic_route_handler), 
-            make_handler(security_handler, default_security_handler)
+            make_handler(route_handler, dynamic_route_handler),
+            make_handler(security_handler, default_security_handler),
+            make_handler(postback_handler, default_postback_handler)
         ]
     },
     context(Context).
 
-make_handler(Name, Module) -> 
-    #handler_context { 
+make_handler(Name, Module) ->
+    #handler_context {
         name=Name,
         module=Module,
         state=[]
     }.
 
+caching() ->
+    Context = context(),
+    Context#context.caching.
+
+caching(Caching) ->
+    Context = context(),
+    context(Context#context{caching=Caching}).
 
 %%% GET AND SET CONTEXT %%%
-% Yes, the context is stored in the process dictionary. It makes the Nitrogen 
+% Yes, the context is stored in the process dictionary. It makes the Nitrogen
 % code much cleaner. Trust me.
-context() -> get(context).
-context(Context) -> put(context, Context).
+context() ->
+    get(context).
+context(Context) ->
+    put(context, Context).
+
+%% for debugging. Remove when ready
+increment(Key) ->
+    case get(Key) of
+        undefined -> put(Key, 1);
+        V -> io:format("~p=~p~n",[Key, V+1]), put(Key, V+1)
+    end.
+
+%% Kept for backwards compatibility with nitrogen 2.2 and below (and
+%% simple_bridge 1.x)
+request_bridge() ->
+    bridge().
+
+request_bridge(Bridge) ->
+    bridge(Bridge).
+
+response_bridge() ->
+    bridge().
+
+response_bridge(Bridge) ->
+    bridge(Bridge).

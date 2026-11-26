@@ -4,17 +4,19 @@
 % See MIT-LICENSE for licensing information.
 
 -module (wf).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -compile (export_all).
 
+v() -> 1.
+
 %%% EXPOSE WIRE, UPDATE, FLASH %%%
-wire(Actions) -> 
+wire(Actions) ->
     ok = wire(undefined, undefined, Actions).
 
-wire(Target, Actions) -> 
+wire(Target, Actions) ->
     ok = wire(Target, Target, Actions).
 
-wire(Trigger, Target, Actions) -> 
+wire(Trigger, Target, Actions) ->
     ok = action_wire:wire(Trigger, Target, Actions).
 
 defer(Actions) ->
@@ -50,13 +52,20 @@ priority_wire(normal, Trigger, Target, Actions) ->
 priority_wire(defer, Trigger, Target, Actions) ->
     ok = wf:defer(Trigger, Target, Actions).
 
-set(Element, Value) -> 
+set(Element, Value) ->
     ok = set(normal, Element, Value).
 
-set(Priority, Element, Value) when ?IS_ACTION_PRIORITY(Priority) -> 
+set(Priority, Element, Value) when ?IS_ACTION_PRIORITY(Priority) ->
     ok = action_set:set(Priority, Element, Value).
 
-update(Target, Elements) -> 
+set_multiple(Element, Values) ->
+    ok = set_multiple(normal, Element, Values).
+
+set_multiple(Priority, Element, Values) when is_list(Values), ?IS_ACTION_PRIORITY(Priority) ->
+    ok = action_set_multiple:set(Priority, Element, Values).
+
+
+update(Target, Elements) ->
     ok = update(normal, Target, Elements).
 
 update(Priority, Target, Elements) when ?IS_ACTION_PRIORITY(Priority) ->
@@ -68,13 +77,13 @@ replace(Target, Elements) ->
 replace(Priority, Target, Elements) when ?IS_ACTION_PRIORITY(Priority) ->
     ok = action_update:replace(Priority, Target, Elements).
 
-insert_top(Target, Elements) -> 
+insert_top(Target, Elements) ->
     ok = insert_top(normal, Target, Elements).
 
-insert_top(Priority, Target, Elements) when ?IS_ACTION_PRIORITY(Priority) -> 
+insert_top(Priority, Target, Elements) when ?IS_ACTION_PRIORITY(Priority) ->
     ok = action_update:insert_top(Priority, Target, Elements).
 
-insert_bottom(Target, Elements) -> 
+insert_bottom(Target, Elements) ->
     ok = insert_bottom(normal, Target, Elements).
 
 insert_bottom(Priority, Target, Elements) when ?IS_ACTION_PRIORITY(Priority) ->
@@ -103,7 +112,7 @@ disable(Target) ->
 
 disable(Priority, Target) when ?IS_ACTION_PRIORITY(Priority) ->
     ok = action_disable:disable(Priority, Target).
- 
+
 enable(Target) ->
     ok = enable(normal, Target).
 
@@ -118,34 +127,34 @@ flash(FlashID, Elements) ->
 
 %%% EXPOSE WF_UTILS %%%
 
-f(S) -> 
+f(S) ->
     _String = wf_utils:f(S).
 
-f(S, Args) -> 
+f(S, Args) ->
     _String = wf_utils:f(S, Args).
 
-coalesce(L) -> 
+coalesce(L) ->
     _Value = wf_utils:coalesce(L).
 
 %%% WF_REDIRECT %%%
-redirect(Url) -> 
+redirect(Url) ->
     action_redirect:redirect(Url).
 
-redirect_to_login(LoginUrl) -> 
+redirect_to_login(LoginUrl) ->
     action_redirect:redirect_to_login(LoginUrl).
 
 redirect_to_login(LoginUrl, PostLoginUrl) ->
     action_redirect:redirect_to_login(LoginUrl, PostLoginUrl).
 
-redirect_from_login(DefaultUrl) -> 
+redirect_from_login(DefaultUrl) ->
     action_redirect:redirect_from_login(DefaultUrl).
 
 
 %%% EXPOSE WF_PICKLE %%%
-pickle(Data) -> 
+pickle(Data) ->
     _SerializedData = wf_pickle:pickle(Data).
 
-depickle(SerializedData) -> 
+depickle(SerializedData) ->
     _Data = wf_pickle:depickle(SerializedData).
 
 depickle(SerializedData, TTLSeconds) ->
@@ -153,28 +162,67 @@ depickle(SerializedData, TTLSeconds) ->
 
 
 %%% EXPOSE WF_CONVERT %%%
-to_list(T) -> 
+to_list(T) ->
     _String = wf_convert:to_list(T).
 
-to_atom(T) -> 
+to_list(T, Default) ->
+    _String = ?WF_SAFE(to_list(T), Default).
+
+to_unicode_list(T) ->
+    _String = wf_convert:to_unicode_list(T).
+
+to_unicode_list(T, Default) ->
+    _String = ?WF_SAFE(to_unicode_binary(T), Default).
+
+to_atom(T) ->
     _Atom = wf_convert:to_atom(T).
 
-to_binary(T) -> 
+to_atom(T, Default) ->
+    _Atom = ?WF_SAFE(to_atom(T), Default).
+
+to_existing_atom(T) ->
+    _Atom = wf_convert:to_existing_atom(T).
+
+to_existing_atom(T, Default) ->
+    _Atom = ?WF_SAFE(to_existing_atom(T), Default).
+
+to_binary(T) ->
     _Binary = wf_convert:to_binary(T).
 
-to_integer(T) -> 
+to_binary(T, Default) ->
+    _Binary = ?WF_SAFE(to_binary(T), Default).
+
+to_unicode_binary(T) ->
+    _Binary = wf_convert:to_unicode_binary(T).
+
+to_unicode_binary(T, Default) ->
+    _Binary = ?WF_SAFE(to_unicode_binary(T), Default).
+
+to_integer(T) ->
     _Integer = wf_convert:to_integer(T).
+
+to_integer(T, Default) ->
+    _Integer = ?WF_SAFE(to_integer(T), Default).
+
+to_float(T) ->
+    _Float = wf_convert:to_float(T).
+
+to_float(T, Default) ->
+    _Float = ?WF_SAFE(to_float(T), Default).
+
+to_bool(T) ->
+    _Bool = wf_convert:to_bool(T).
 
 to_string_list(Term) ->
     _StringList = wf_convert:to_string_list(Term).
 
-clean_lower(S) -> 
+clean_lower(S) ->
     _String = wf_convert:clean_lower(S).
 
-html_encode(S) -> 
+html_encode(S) ->
     _String = wf_convert:html_encode(S).
 
-html_encode(S, Encode) -> 
+html_encode(S, Encode) ->
     _String = wf_convert:html_encode(S, Encode).
 
 html_decode(S) ->
@@ -192,11 +240,40 @@ hex_encode(S) ->
 hex_decode(S) ->
     _String = wf_convert:hex_decode(S).
 
-js_escape(String) -> 
+js_escape(String) ->
     _String = wf_convert:js_escape(String).
+
+json_encode(Data) ->
+    _String = wf_convert:json_encode(Data).
+
+json_decode(Json) ->
+    _Data = wf_convert:json_decode(Json).
+
+to_qs(ListOrMap) ->
+    _Iolist = wf_convert:to_qs(ListOrMap).
+
+add_qs(URL, ListOrMap) ->
+    _IoList = wf_convert:add_qs(URL, ListOrMap).
+
+add_qs(URL, Key, Value) ->
+    _IoList = add_qs(URL, [{Key, Value}]).
+
+remove_qs(URL, Key) ->
+    _IoList = wf_convert:remove_qs(URL, Key).
+
+parse_qs(String) ->
+    _Proplist = wf_convert:parse_qs(String).
 
 join(List,Delimiter) ->
     _Result = wf_convert:join(List,Delimiter).
+
+remove_blanks(List) ->
+    _Result = wf_convert:remove_blanks(List).
+
+join_nonblank(List) ->
+    _Result = wf_convert:join_nonblanks(List).
+
+
 
 %%% EXPOSE WF_BIND %%%
 % TODO
@@ -209,21 +286,30 @@ join(List,Delimiter) ->
 
 logout() -> clear_user(), clear_roles(), clear_state(), clear_session().
 
-to_js_id(Path) -> 
+to_js_id(Path) ->
     _String = wf_render_actions:to_js_id(Path).
 
-temp_id() -> 
+temp_id() ->
     _String = wf_render_elements:temp_id().
 
 normalize_id(Path) ->
     _String = wf_render_elements:normalize_id(Path).
 
+render_isolated(Elements) ->
+    {ok, _Html, _Actions} = wf_render_elements:render_and_trap_actions(Elements).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% EXPOSE REQUEST INFORMATION %%%
 
-page_module() -> 
+in_request() ->
+    wf_context:in_request().
+
+page_module() ->
     wf_context:page_module().
+
+page_module(Mod) ->
+    wf_context:page_module(Mod).
 
 path() ->
     wf_context:path().
@@ -234,7 +320,10 @@ path_info() ->
 uri() ->
     wf_context:uri().
 
-status_code() -> 
+url() ->
+    wf_context:url().
+
+status_code() ->
     ok = wf_context:status_code().
 
 status_code(StatusCode) ->
@@ -243,7 +332,16 @@ status_code(StatusCode) ->
 content_type(ContentType) ->
     ok = wf_context:content_type(ContentType).
 
-headers() -> 
+encoding() ->
+    wf_context:encoding().
+
+encoding(Encoding) ->
+    wf_context:encoding(Encoding).
+
+download_as(Filename) ->
+    wf_context:download_as(Filename).
+
+headers() ->
     wf_context:headers().
 
 header(Header) ->
@@ -253,22 +351,32 @@ header(Header, Value) ->
     ok = wf_context:header(Header, Value).
 
 cookies() ->
-    wf_context:cookies().
+    wf_cookies:cookies().
 
 cookie(Cookie) ->
-    wf_context:cookie(Cookie).
+    wf_cookies:get_cookie(Cookie).
 
 cookie_default(Cookie,DefaultValue) ->
-    wf_context:cookie_default(Cookie,DefaultValue).
+    wf_cookies:get_cookie(Cookie,DefaultValue).
 
 cookie(Cookie, Value) ->
-    ok = wf_context:cookie(Cookie, Value).
+    ok = wf_cookies:set_cookie(Cookie, Value).
 
+cookie(Cookie, Value, Options) ->
+    ok = wf_cookies:set_cookie(Cookie, Value, Options).
+
+script_nonce() ->
+  wf_context:script_nonce().
+
+script_nonce(Value) ->
+  wf_context:script_nonce(Value).
+
+%% Deprecated
 cookie(Cookie, Value, Path, MinutesToLive) ->
-    ok = wf_context:cookie(Cookie, Value, Path, MinutesToLive).
+    ok = wf_cookies:set_cookie(Cookie, Value, Path, MinutesToLive).
 
 delete_cookie(Cookie) ->
-    ok = wf_context:delete_cookie(Cookie).
+    ok = wf_cookies:delete_cookie(Cookie).
 
 socket() ->
     wf_context:socket().
@@ -282,14 +390,17 @@ peer_ip(Proxies) ->
 peer_ip(Proxies,ForwardedHeader) ->
     wf_context:peer_ip(Proxies,ForwardedHeader).
 
+request_method() ->
+    wf_context:request_method().
+
 request_body() ->
     wf_context:request_body().
 
 %%% EXPOSE QUERY_HANDLER %%%
-q(Key) -> 
-    _String = query_handler:get_value(Key).
+q(Key) ->
+    query_handler:get_value(Key).
 
-qs(Key) -> 
+qs(Key) ->
     query_handler:get_values(Key).
 
 mq(KeyList) when is_list(KeyList) ->
@@ -304,28 +415,36 @@ q_pl(KeyList) when is_list(KeyList) ->
 
 qs_pl(KeyList) when is_list(KeyList) ->
     [{K,qs(K)} || K <- KeyList].
-        
+
+q_map(KeyList) when is_list(KeyList) ->
+    PL = q_pl(KeyList),
+    maps:from_list(PL).
+
+qs_map(KeyList) when is_list(KeyList) ->
+    PL = qs_pl(KeyList),
+    maps:from_list(PL).
+
 params() ->
     query_handler:get_params().
 
 
 %%% EXPOSE LOG_HANDLER %%%
-info(String, Args) -> 
+info(String, Args) ->
     ok = log_handler:info(String, Args).
 
-info(String) -> 
+info(String) ->
     ok = log_handler:info(String).
 
-warning(String, Args) -> 
+warning(String, Args) ->
     ok = log_handler:warning(String, Args).
 
-warning(String) -> 
+warning(String) ->
     ok = log_handler:warning(String).
 
-error(String, Args) -> 
+error(String, Args) ->
     ok = log_handler:error(String, Args).
 
-error(String) -> 
+error(String) ->
     ok = log_handler:error(String).
 
 %% console_log is not part of the log handler, but  relevant
@@ -335,78 +454,103 @@ console_log(String) ->
 console_log(Priority, String) ->
     action_console_log:console_log(Priority, String).
 
-%%% EXPOSE SESSION_HANDLER %%% 
-session(Key) -> 
+%%% EXPOSE SESSION_HANDLER %%%
+session(Key) ->
     _Value = session_handler:get_value(Key).
 
-session(Key, Value) -> 
+session(Key, Value) ->
     _Value = session_handler:set_value(Key, Value).
 
 session_default(Key, DefaultValue) ->
     _Value = session_handler:get_value(Key, DefaultValue).
 
-clear_session() -> 
+clear_session() ->
     ok = session_handler:clear_all().
 
 session_id() ->
     session_handler:session_id().
 
+%%% EXPOSE CACHE_HANDLER %%%
 
+cache(Key) ->
+    cache(Key, fun() -> undefined end).
+
+cache(Key, Fun) ->
+    cache(Key, infinity, Fun).
+
+cache(Key, TTL, Fun) ->
+    {ok, Value} = cache_handler:get_cached(Key, Fun, TTL),
+    Value.
+
+set_cache(Key, Value) ->
+    set_cache(Key, infinity, Value).
+
+set_cache(Key, TTL, Value) ->
+    cache_handler:set_cached(Key, Value, TTL).
+
+clear_cache(Key) ->
+    ok = cache_handler:clear(Key).
+
+clear_all_cache() ->
+    ok = cache_handler:clear_all().
+
+cache_rendered(Key, TTL, Fun) ->
+    wf_render_elements:cache_rendered(Key, TTL, Fun).
 
 %%% EXPOSE IDENTITY_HANDLER %%%
-user() -> 
-    _User = identity_handler:get_user().    
+user() ->
+    _User = identity_handler:get_user().
 
-user(User) -> 
+user(User) ->
     ok = identity_handler:set_user(User).
 
-clear_user() -> 
+clear_user() ->
     ok = identity_handler:clear().
 
 
 
 %%% EXPOSE ROLE_HANDLER %%%
-role(Role) -> 
+role(Role) ->
     _Boolean = role_handler:get_has_role(Role).
 
-role(Role, IsInRole) -> 
+role(Role, IsInRole) ->
     ok = role_handler:set_has_role(Role, IsInRole).
 
 roles() ->
     _Roles = role_handler:get_roles().
 
-clear_roles() -> 
+clear_roles() ->
     ok = role_handler:clear_all().
 
 
 
 %%% EXPOSE STATE_HANDLER %%%
-state(Key) -> 
+state(Key) ->
     _Value = state_handler:get_state(Key).
 
 state_default(Key, DefaultValue) ->
     _Value = state_handler:get_state(Key, DefaultValue).
 
-state(Key, Value) -> 
+state(Key, Value) ->
     ok = state_handler:set_state(Key, Value).
 
 clear_state(Key) ->
     ok = state_handler:clear(Key).
 
-clear_state() -> 
+clear_state() ->
     ok = state_handler:clear_all().
 
 
 
 %%% EXPOSE ACTION_COMET %%%
 
-comet(Function) -> 
+comet(Function) ->
     action_comet:comet(Function).
 
-comet(Function, Pool) -> 
+comet(Function, Pool) ->
     action_comet:comet(Function, Pool).
 
-comet_global(Function, Pool) ->  
+comet_global(Function, Pool) ->
     action_comet:comet_global(Function, Pool).
 
 send(Pool, Message) ->
@@ -432,11 +576,20 @@ continue(Tag, Function, TimeoutMS) -> action_continue:continue(Tag, Function, Ti
 
 %%% CONFIGURATION %%%
 
-config(Key) -> 
+config(Key) ->
     config_handler:get_value(Key).
 
-config_default(Key, DefaultValue) -> 
+config_default(Key, DefaultValue) ->
     config_handler:get_value(Key, DefaultValue).
+
+%%% PROFILING %%%
+
+profile(Tag, Fun) ->
+    wf_utils:profile(Tag, Fun, undefined).
+
+profile(Tag, Fun, To) ->
+    wf_utils:profile(Tag, Fun, To).
+
 
 %%% DEBUGGING %%%
 debug() -> wf_utils:debug().

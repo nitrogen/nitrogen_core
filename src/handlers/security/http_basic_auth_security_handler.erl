@@ -123,10 +123,13 @@ authenticate_user(Module, CallbackMod, User, Password) ->
     end.
 
 prompt_for_authentication(CallbackMod) ->
-    % Set the callback module, then set the page module to 
-    % http_basic_auth_security_handler.erl, which will cause
-    % the page to be rendered using the main() function below.
+    % Set the callback module and entry_point, then set the page module to
+    % http_basic_auth_security_handler.erl, which will cause the page to be
+    % rendered using the main() function below.
+    % We must also set the entry-point because the Dynamic Route Handler might
+    % be using a custom entry point.
     wf:state(callback_mod, CallbackMod),
+    wf_context:entry_point(main),
     wf_context:page_module(?MODULE).
 
 main() ->

@@ -19,13 +19,16 @@ render_element(Record) ->
     Anchor = Record#button.anchor,
     case Record#button.postback of
         undefined -> ignore;
-        Postback -> wf:wire(Anchor, #event {
-                    type=click,
-                    validation_group=ID,
-                    postback=Postback,
-                    handle_invalid=Record#button.handle_invalid,
-                    on_invalid=Record#button.on_invalid,
-                    delegate=Record#button.delegate })
+        Postback ->
+            wf:wire(Anchor, #event {
+                type=click,
+                validation_group=ID,
+                postback=Postback,
+                vessel=Record#button.vessel,
+                handle_invalid=Record#button.handle_invalid,
+                on_invalid=Record#button.on_invalid,
+                delegate=Record#button.delegate
+            })
     end,
 
 	case Record#button.click of
@@ -33,23 +36,23 @@ render_element(Record) ->
 		ClickActions -> wf:wire(Anchor, #event { type=click, actions=ClickActions })
 	end,
 
-    action_event:maybe_wire_next(Record#button.anchor, Record#button.next),
+    action_event:maybe_wire_next(Anchor, Record#button.next),
+    wire_enter_clicks(Anchor, Record#button.enter_clicks),
 
     Text = wf:html_encode(Record#button.text, Record#button.html_encode), 
-  
     Image = format_image(Record#button.image),
     Body = case {Image,Record#button.body} of
         {[], []} -> [];
         {I, B} -> [I, B]
     end,
 
-
     UniversalAttributes = [
         {id, Record#button.html_id},
-        {class, [button, Record#button.class]},
+        {class, ?ADD_ELEMENT_CLASS(button, Record#button.class)},
         {title, Record#button.title},
         {style, Record#button.style},
         {data_fields, Record#button.data_fields},
+        {aria, Record#button.aria},
         ?WF_IF(Record#button.disabled, disabled)
     ],
 
@@ -63,6 +66,12 @@ render_element(Record) ->
         _ ->
             wf_tags:emit_tag(button, [Body, Text], UniversalAttributes)
     end.
+
+wire_enter_clicks(Targetid, Triggerids) when is_list(Triggerids) ->
+    [wire_enter_click(Targetid, Triggerid) || Triggerid <- Triggerids].
+
+wire_enter_click(Targetid, Triggerid) ->
+    wf:wire(Triggerid, #event{type=enterkey, actions=#click{target=Targetid}}).
 
 format_image(undefined) -> [];
 format_image([]) -> [];

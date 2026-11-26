@@ -109,11 +109,8 @@ ip_to_str(IPTuple) ->
     end.
 
 mk_post_request(Url, Params)->
-    MkField = fun(K, V) ->
-        wf:to_list([atom_to_list(K), "=", http_uri:encode(V)])
-    end,
-    Fields = [MkField(K,V) || {K,V} <- Params],
-    {Url, [], "application/x-www-form-urlencoded", string:join(Fields,"&")}.
+    Body = wf:to_qs(Params),
+    {Url, [], "application/x-www-form-urlencoded", Body}.
 
 render_options(OptProps, Defaults) ->
     ValToStr = fun(V) ->

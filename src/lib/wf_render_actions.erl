@@ -115,6 +115,8 @@ wrap_in_dependency(undefined, Script) ->
     Script;
 wrap_in_dependency("", Script) ->
     Script;
+wrap_in_dependency(<<>>, Script) ->
+    Script;
 wrap_in_dependency(Url, Script) ->
     [<<"Nitrogen.$dependency_register_function('">>,Url,<<"',function() {">>, Script, <<"});">>].
 
@@ -159,7 +161,7 @@ generate_anchor_script(Anchor, Target) ->
                          Trigger:: id(),
                          Target :: id()) -> script().
 call_action_render(Module, Action, Anchor, Trigger, Target) ->
-    case code:ensure_loaded(Module) of
+    case wf_utils:ensure_loaded(Module) of
         {module, Module} -> ok;
         {error, Error} -> throw({error_loading_action_module, Module, {error, Error}})
     end,

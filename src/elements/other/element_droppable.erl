@@ -32,15 +32,16 @@ render_element(Record) ->
     wf:wire(Script),
 
     % Render as a panel.
-    element_panel:render_element(#panel {
+    #panel {
         id=Record#droppable.id,
         anchor=Record#droppable.anchor,
         class=[droppable, Record#droppable.class],
         title=Record#droppable.title,
         style=Record#droppable.style,
         data_fields=Record#droppable.data_fields,
+        aria=Record#droppable.aria,
         body=Record#droppable.body
-    }).
+    }.
 
 -spec event(any()) -> any().
 event({Delegate, DropTag}) ->

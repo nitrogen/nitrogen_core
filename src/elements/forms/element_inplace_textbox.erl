@@ -38,6 +38,7 @@ render_element(Record) ->
         class=[inplace_textbox, Record#inplace_textbox.class],
         title=Record#inplace_textbox.title,
         data_fields=Record#inplace_textbox.data_fields,
+        aria=Record#inplace_textbox.aria,
         style=Record#inplace_textbox.style,
         body = [
             #panel { id=ViewPanelID, class="view", body=[
@@ -56,8 +57,8 @@ render_element(Record) ->
             ]},
             #panel { id=EditPanelID, class="edit", body=[
                 #textbox { id=TextBoxID, text=Text, next=OKButtonID },
-                #button { id=OKButtonID, text="OK" },
-                #button { id=CancelButtonID, text="Cancel", click=[
+                #button { id=OKButtonID, class=inplace_ok, text="OK" },
+                #button { id=CancelButtonID, class=inplace_cancel, text="Cancel", click=[
                     #hide{ target=EditPanelID },
                     #show{ target=ViewPanelID },
                     #script{ script=wf:f("obj('~s').value=obj('~s').defaultValue;",[TextBoxID, TextBoxID]) }
@@ -78,7 +79,7 @@ render_element(Record) ->
 
     wf:wire(OKButtonID, TextBoxID, #validate { attach_to=CancelButtonID, validators=Record#inplace_textbox.validators }),
 
-    element_panel:render_element(Terms).
+    Terms.
 
 -spec event(any()) -> ok.
 event({ok, Delegate, {ViewPanelID, LabelID, EditPanelID, TextBoxID}, Tag}) -> 

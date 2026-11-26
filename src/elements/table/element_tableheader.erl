@@ -29,5 +29,6 @@ render_element(Record) ->
         {valign, Record#tableheader.valign},
         {colspan, Record#tableheader.colspan},
         {rowspan, Record#tableheader.rowspan},
-        {data_fields, Record#tableheader.data_fields}
+        {data_fields, Record#tableheader.data_fields},
+        {aria, Record#tableheader.aria}
     ]).

@@ -1,6 +1,6 @@
 % vim: sw=4 ts=4 et ft=erlang
 -module (action_continue).
--include_lib ("wf.hrl").
+-include("wf.hrl").
 -compile(export_all).
 
 %%% - INTERFACE - %%%
@@ -54,8 +54,8 @@ run_continue_function(Record) ->
         catch 
             _Type : timeout ->
                 timeout;
-            Type : Error ->
-                error_logger:error_msg("Error in continuation function ~p (~p) - ~p : ~p~nStack Trace: ~p", [Fun, Tag, Type, Error, erlang:get_stacktrace()]),
+            Type : Error : Stacktrace ->
+                error_logger:error_msg("Error in continuation function ~p (~p) - ~p : ~p~nStack Trace: ~p", [Fun, Tag, Type, Error, Stacktrace]),
                 Self ! {result, error, Ref}
         end
 

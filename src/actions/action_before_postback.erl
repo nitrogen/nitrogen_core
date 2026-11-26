@@ -4,4 +4,4 @@
 -export([render_action/1]).
 
 render_action(#before_postback{script=Script}) ->
-    wf:f("Nitrogen.$before_postback(function(){ ~s });",[Script]).
+    wf:f("Nitrogen.$before_postback(function(){ ~ts });",[Script]).

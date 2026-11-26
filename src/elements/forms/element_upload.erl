@@ -37,18 +37,30 @@
 -spec reflect() -> [atom()].
 reflect() -> record_info(fields, upload).
 
+-spec overall_progress(OverallProgress :: boolean() | undefined | auto,
+                       Multiple :: boolean()) -> boolean().
+overall_progress(OverallProgress, _Multiple) when is_boolean(OverallProgress) ->
+    OverallProgress;
+overall_progress(undefined, Multiple) ->
+    Multiple;
+overall_progress(auto, Multiple) ->
+    Multiple.
+
 -spec render_element(#upload{}) -> body().
 render_element(Record = #upload{
         id=ID,
         class=Class,
         anchor=Anchor,
         multiple=Multiple,
+        overall_progress=OverallProgress0,
         droppable=Droppable,
         droppable_text=DroppableText,
         file_text=FileInputText,
         show_button=ShowButton,
         button_text=ButtonText,
-        data_fields=DataFields}) ->
+        button_class=ButtonClass,
+        data_fields=DataFields,
+        aria=Aria }) ->
     
     StartedTag = {upload_started, Record},
     FinishedTag = {upload_finished, Record}, 
@@ -61,7 +73,9 @@ render_element(Record = #upload{
 
 	Param = [
 		{droppable,Droppable},
-		{autoupload,not(ShowButton)}
+		{autoupload,not(ShowButton)},
+        {multiple, Multiple},
+        {overall_progress, overall_progress(OverallProgress0, Multiple)}
 	],
 
 	JSONParam = nitro_mochijson2:encode({struct,Param}),
@@ -99,6 +113,7 @@ render_element(Record = #upload{
         wf_tags:emit_tag(input, [
             {name, file},
             {data_fields, DataFields},
+            {aria, Aria},
             {class, [no_postback, 'upload-input', FileInputID|Anchor]},
             {id, FileInputID},
             {type, file},
@@ -125,8 +140,8 @@ render_element(Record = #upload{
             ]
         },
         #panel{
-            class=upload_progress,
-            body=""
+            style="display:none",
+            class=upload_overall_progress
         },
         #list{
             id=DropListingID,
@@ -157,7 +172,7 @@ render_element(Record = #upload{
             {value, ""}
         ]),
 
-        #button { id=ButtonID, show_if=ShowButton, text=ButtonText }
+        #button { id=ButtonID, show_if=ShowButton, text=ButtonText, class=ButtonClass}
     ],
 
     [
@@ -184,15 +199,15 @@ event({upload_started, Record}) ->
 % is trigger a postback that happens inside of Nitrogen. 
 event({upload_finished, Record}) ->
     wf_context:type(first_request),
-    Req = wf_context:request_bridge(),
+    Req = wf_context:bridge(),
 
     % % Create the postback...
-    {Filename,NewTag} = case Req:post_files() of
+    {Filename,NewTag} = case sbw:post_files(Req) of
         [] -> 
             {undefined,{upload_event, Record, undefined, undefined, undefined}};
         [UploadedFile | _] ->
-            OriginalName = UploadedFile:original_name(),
-            TempFile = UploadedFile:temp_file(),
+            OriginalName = sb_uploaded_file:original_name(UploadedFile),
+            TempFile = sb_uploaded_file:temp_file(UploadedFile),
             {OriginalName,{upload_event, Record, OriginalName, TempFile, node()}}
     end,
 
@@ -200,7 +215,7 @@ event({upload_finished, Record}) ->
     Anchor = wf_context:anchor(),
     ValidationGroup = wf_context:event_validation_group(),
     HandleInvalid = wf_context:event_handle_invalid(),
-    Postback = wf_event:generate_postback_script(NewTag, Anchor, ValidationGroup, HandleInvalid, undefined, ?MODULE, undefined),
+    Postback = wf_event:generate_postback_script(NewTag, undefined, Anchor, ValidationGroup, HandleInvalid, undefined, ?MODULE, undefined),
 
     % Set the response...
     wf_context:data([

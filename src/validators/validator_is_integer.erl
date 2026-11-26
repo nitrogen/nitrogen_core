@@ -15,8 +15,9 @@ render_action(Record) ->
     Text = wf:js_escape(Record#is_integer.text),
     Min = Record#is_integer.min,
     Max = Record#is_integer.max,
+    AllowBlank = Record#is_integer.allow_blank,
 
-    ValidationFun = fun(_, Value) -> validate(Value, Min, Max) end,
+    ValidationFun = fun(_, Value) -> validate(AllowBlank, Value, Min, Max) end,
 
     CustomValidatorAction =  #custom {
         trigger=TriggerPath,
@@ -27,10 +28,16 @@ render_action(Record) ->
         attach_to=Record#is_integer.attach_to
     },
 
-    Script = wf:f("v.add(Validate.Numericality, { notAnIntegerMessage: \"~s\", onlyInteger: true });", [Text]),
+    %% A little silly that we have to set both notAnInteger and notANumber
+    %% message, but apparently if it's not a number, Livevalidation shows "Not a
+    %% Number" before it checks if it's an integer.  This is an easy fix, but I
+    %% want to replace livevalidation completely
+    Script = wf:f("v.add(Validate.Numericality, { notAnIntegerMessage: \"~ts\", notANumberMessage: \"~ts\", onlyInteger: true });", [Text, Text]),
     [CustomValidatorAction, Script].
 
-validate(Value, Min, Max) ->
+validate(_AllowBlank=true, "", _Min, _Max) ->
+    true;
+validate(_AllowBlank, Value, Min, Max) ->
     try
         validate_range(wf:to_integer(Value), Min, Max)
     catch 

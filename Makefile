@@ -1,50 +1,58 @@
+.PHONY: test
+
 all: compile
 
-compile:
-	./rebar compile
+# Check if rebar3.mk exists, and if not, download it
+ifeq ("$(wildcard rebar3.mk)","")
+$(shell curl -O https://raw.githubusercontent.com/choptastic/rebar3.mk/master/rebar3.mk)
+endif
+
+# rebar3.mk adds a new rebar3 rule to your Makefile
+# (see https://github.com/choptastic/rebar3.mk) for full info
+include rebar3.mk
+
 
 clean:
-	./rebar clean
+	rm -fr _build rebar.lock
 
-docs:  
-	utils/make_docs/make_docs.el
-	@(cd doc;perl add_disqus.pl)
+compile: rebar3
+	$(REBAR) compile
 
-doc: docs
+eunit: rebar3
+	rm -fr _build/test
+	$(REBAR) eunit --app nitrogen_core
 
-test: compile
-	./rebar eunit
+publish: rebar3
+	$(REBAR) hex publish
 
-DEPS_PLT=$(CURDIR)/.deps_plt
-DEPS=erts kernel stdlib crypto sasl
-# removed 'sasl' in attempt to minimize memory usage for Travis
+test: rebar3
+	mkdir -p test
+	rm -fr test/browsertest
+	$(MAKE) eunit
+	git clone https://github.com/nitrogen/NitrogenProject.com.git -b rebar3 test/browsertest
+	mkdir -p test/browsertest/_checkouts
+	ln -s ../../.. test/browsertest/_checkouts/nitrogen_core
+	cd test/browsertest; make test_all TESTLOGDIR="../results.$(shell date +%Y-%m-%d.%H%M%S)"
+	rm -fr test/browsertest
 
-$(DEPS_PLT):
-	@echo Building local plt at $(DEPS_PLT)
-	@echo 
-	@(dialyzer --output_plt $(DEPS_PLT) --build_plt --apps $(DEPS))
+dash-docs:
+	rm -f doc/dash/Nitrogen.tgz
+	doc/dash/md2docset
+	cd doc/dash; tar --exclude='.DS_Store' -zcvf Nitrogen.tgz Nitrogen.docset
+	mv doc/dash/Nitrogen.tgz .
+	@echo "Dash Docset created and can be found at Nitrogen.tgz in this directory"
 
-dialyzer: compile $(DEPS_PLT)
-	@(dialyzer --fullpath --plt $(DEPS_PLT) -Wrace_conditions -r ./ebin)
-
-dialyzer-no-race: compile $(DEPS_PLT)
-	@(dialyzer --fullpath --plt $(DEPS_PLT) -r ./ebin)
-
-# TRAVIS-CI STUFF
-
-ERLANG_VERSION_CHECK := erl -eval "io:format(\"~s\",[erlang:system_info(otp_release)]), halt()."  -noshell
-ERLANG_VERSION = $(shell $(ERLANG_VERSION_CHECK))
+dialyzer: rebar3
+	$(REBAR) dialyzer
 
 # This is primarily for Travis build testing, as each build instruction will overwrite the previous
-travis: test $(ERLANG_VERSION)
-
-R15B: dialyzer
-R15B01: dialyzer
-R15B02: dialyzer-no-race
-R15B03: dialyzer
-R16B: dialyzer
-R16B01: dialyzer
-R16B02: dialyzer
+travis: eunit dialyzer
 
 vim:
 	utils/vim-headers/add_vim.sh
+
+
+## DON'T THINK WE NEED THIS ANYMORE, BUT WE'LL KEEP IT JUST IN CASE
+#ERLANG_VERSION_CHECK := erl -eval "io:format(\"~s\",[erlang:system_info(otp_release)]), halt()."  -noshell
+#ERLANG_VERSION = $(shell $(ERLANG_VERSION_CHECK))
+

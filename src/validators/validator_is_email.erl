@@ -20,11 +20,11 @@ render_action(Record)  ->
         target=TargetPath, 
         function=fun validate/2, text = Text, tag=Record, attach_to=Record#is_email.attach_to
     }),
-    wf:f("v.add(Validate.Email, { failureMessage: \"~s\" });", [Text]).
+    wf:f("v.add(Validate.Email, { failureMessage: \"~ts\" });", [Text]).
 
 -spec validate(any(), iolist()) -> boolean().
 validate(_, Value) ->
-    case re:run(wf:to_list(Value), "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]+") of
+    case re:run(wf:to_list(Value), "^[a-zA-Z0-9\\._%+-]+@[a-zA-Z0-9\\.-]+\\.[a-zA-Z]+$", [unicode]) of
         {match, _} -> true;
         _ -> false
     end.

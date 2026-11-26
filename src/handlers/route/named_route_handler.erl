@@ -41,8 +41,8 @@
 init(undefined, State) -> init([], State);
 init(Routes, State) -> 
     % Get the path...
-    RequestBridge = wf_context:request_bridge(),
-    Path = RequestBridge:path(),
+    Bridge = wf_context:bridge(),
+    Path = sbw:path(Bridge),
 
     % Match to the longest possible route.
     {Module, PathInfo} = route(Path, Routes),
@@ -86,10 +86,10 @@ check_for_404(Module, PathInfo, Path) ->
     % Make sure the requested module is loaded. If it
     % is not, then try to load the web_404 page. If that
     % is not available, then default to the 'file_not_found_page' module.
-    case code:ensure_loaded(Module) of
+    case wf_utils:ensure_loaded(Module) of
         {module, Module} -> {Module, PathInfo};
         _ -> 
-            case code:ensure_loaded(web_404) of
+            case wf_utils:ensure_loaded(web_404) of
                 {module, web_404} -> {web_404, Path};
                 _ -> {file_not_found_page, Path}
             end

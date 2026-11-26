@@ -1,8 +1,28 @@
 % vim: sw=4 ts=4 et ft=erlang
 -ifndef(wf_inc).
 -define(wf_inc, ok).
--include("crypto_compat.hrl").
+-include("compat.hrl").
+-include("wf_test.hrl").
+-compile(nowarn_export_all).
 
+%% This is the parse_transform to allow extending fields
+-compile({parse_transform, rekt}).
+
+-define(WF_EXTEND(OrigRec, NewRec, Module, Fields), -extend({OrigRec, NewRec, [{module, Module} | Fields]})).
+-define(WF_BLANK(X), (X==undefined orelse X=="" orelse X==<<>>)).
+-define(WF_HEX(C), (
+                    (C >= $0 andalso C =< $9) orelse
+                    (C >= $a andalso C =< $f) orelse
+                    (C >= $A andalso C =< $F))).
+-define(WF_PROFILE(Tag, Cmd, To), wf:profile(Tag, fun() -> Cmd end, To)).
+-define(WF_PROFILE(Tag, Cmd), wf:profile(Tag, fun() -> Cmd end)).
+-define(WF_PROFILE(Cmd), ?WF_PROFILE(??Cmd, Cmd)).
+
+-ifdef(DO_ELEMENT_CLASSES).
+-define(ADD_ELEMENT_CLASS(NewClass, ExistingClass), [NewClass, ExistingClass]).
+-else.
+-define(ADD_ELEMENT_CLASS(NewClass, ExistingClass), ExistingClass).
+-endif.
 
 %%% TYPES FOR DIALYZER %%%
 
@@ -11,7 +31,7 @@
 
 -type nitrogen_element()    :: tuple().
 -type template_script_element() :: script | mobile_script.
--type body_element()        :: nitrogen_element() | binary() | string() | iolist() 
+-type body_element()        :: nitrogen_element() | binary() | string() | iolist()
                                 | template_script_element().
 -type body()                :: body_element() | [body_element()].
 -type action_element()      :: undefined | tuple() | string() | binary() | iolist().
@@ -23,12 +43,16 @@
 -type proplist()            :: [{term(), term()}].
 -type data_field_name()     :: atom() | text().
 -type data_field_value()    :: atom() | text().
--type data_fields()         :: [data_field_name() 
-                                | {data_field_name()} 
+-type data_fields()         :: [data_field_name()
+                                | {data_field_name()}
                                 | {data_field_name(),data_field_value()}].
+-type aria_field_name()     :: atom() | text().
+-type aria_field_value()    :: atom() | text().
+-type aria_fields()         :: [{aria_field_name(), aria_field_value()}].
 -type wire_priority()       :: eager | normal | defer.
--type class()               :: string() | binary() | atom().
--type text()                :: string() | binary() | iolist().
+-type class()               :: string() | binary() | atom() | [string() | binary() | atom()].
+-type text()                :: string() | binary() | iolist() | integer() | atom().
+-type icon()                :: atom() | string() | binary() | tuple().
 -type html_encode()         :: boolean() | whites | fun((term()) -> text()).
 -type html()                :: string() | binary() | iolist().
 -type script()              :: string() | binary() | iolist().
@@ -38,8 +62,8 @@
 -type mobile_theme()        :: string() | binary() | atom().
 -type comet_name()          :: term().
 -type comet_restart_msg()   :: term().
--type comet_function()      :: pid() | function() 
-                                | {comet_name(), function()} 
+-type comet_function()      :: pid() | function()
+                                | {comet_name(), function()}
                                 | {comet_name(), function(), comet_restart_msg()}.
 -type handler_config()      :: any().
 -type handler_state()       :: any().
@@ -49,6 +73,23 @@
                                 | grouped_vertical_bar | pie | pie3d.
 -type color()               :: string() | binary() | atom().
 -type google_chart_position()      :: top | left | bottom | right.
+-type module_function()     :: {atom(), atom()}.
+-type encoding_function()   :: module_function() | fun((iolist()) -> iolist()).
+-type encoding()            :: none | unicode | auto | encoding_function().
+-type context_data()        :: iolist() | {file, Filename :: path()}
+                                | {stream, Size :: integer(), fun()}
+                                | {sendfile, integer(), Size :: integer(), Path :: any()}.
+-type context_type()        :: first_request | postback_request | static_file | postback_websocket | comet | undefined.
+-type mermaid_code()        :: binary() | string() | iolist().
+-type mermaid_diagram()     :: flowchart | sequence | gantt.
+-type mermaid_diagram_options(Diagram)      :: {Diagram, proplist()}.
+
+
+-type websocket_msg()       :: {text, iolist()} | {binary, iolist()}.
+-type websocket_decoded()   :: {decoded, any()}.
+-type websocket_in()        :: websocket_msg() | websocket_decoded().
+-type websocket_out()       :: websocket_msg().
+-type websocket_reply()     :: noreply | {reply, websocket_out()}.
 
 %%% CONTEXT %%%
 
@@ -56,8 +97,10 @@
 -record(page_context, {
     series_id,   % A unique ID assigned to the first request which stays constant on repeated requests.
     module,      % The requested page module
+    entry_point=main, % The entry point for the module. Either an atom name
+                      % (for Module:Atom/0) or can be a function arity 0
     path_info,   % Any extra info passed with the request
-    async_mode= comet % {poll, Interval} or comet
+    async_mode= comet % {poll, Interval}, comet, or {websocket, WebsocketConnectionPid}
 }).
 
 % Event Information. A serialized version of this record
@@ -77,45 +120,60 @@
 % to allow other frameworks to substitute their own behaviour.
 % These are set in wf_context:make_context/1
 -record(handler_context, {
-    name,    % The name of a handler. See wf_context for a list.
+    name,       % The name of a handler. See wf_context for a list.
     module,     % A module that provides the logic for a handler. This can be substituted by your app.
     config,     % The config of the handler, set at the beginning of each request.
     state       % The state of the handler, serialized and maintained between postbacks in a series.
+    %serialize=true % whether or not to serialize and deserialize this handler during requests. Usually, just the state handler needs to be serialized.
 }).
 
 -record(context, {
     % Transient Information
-    type,                % Either first_request, postback_request, or static_file
-    request_bridge,      % Holds the simple_bridge request object
-    response_bridge,     % Holds the simple_bridge response object
-    anchor=undefined,    % Holds the unique ID of the current anchor element.
-    data=[],             % Holds whatever the page_module:main/1 method returns: HTML, Elements, Binary, etc..
-    action_queue=undefined, %% Holds the reference to the action priority queue
-
+    type                    :: context_type(),
+    bridge                  :: undefined | simple_bridge:bridge(), %% will only be undefined when "not in a request"
+    anchor=undefined        :: id(),
+    data=[]                 :: context_data(),
+    encoding=auto           :: encoding(),
+    caching=false           :: boolean(),
+    action_queue=undefined  :: wf_action_queue:action_queue() | undefined,
     % These are all serialized, sent to the browser
     % and de-serialized on each request.
-    page_context,
-    event_context,
-    handler_list
+    page_context            :: undefined | #page_context{},
+    event_context           :: undefined | #event_context{},
+    handler_list            :: undefined | list(),
+    script_nonce            :: undefined | string()
 }).
 
 %%% LOGGING %%%
 -ifndef(debug_print).
 -define(debug_print, true).
--define(PRINT(Var), error_logger:info_msg("DEBUG: ~p:~p~n~p~n  ~p~n", [?MODULE, ?LINE, ??Var, Var])).
+
+-ifndef(LOGGER_HRL).
+-define(PRINT(Var), error_logger:info_msg("DEBUG: ~p~n~p:~p~n~p~n  ~p~n", [self(), ?MODULE, ?LINE, ??Var, Var])).
 -define(LOG(Msg, Args), error_logger:info_msg(Msg, Args)).
+-define(WF_LOG(Msg, Args), error_logger:info_msg(Msg, Args)).
 -define(DEBUG, error_logger:info_msg("DEBUG: ~p:~p~n", [?MODULE, ?LINE])).
+
+-else.
+%% logger.hrl has been included - avoid redefining the OTP ?LOG macro
+-define(WF_LOG(Msg, Args), ?LOG_INFO(Msg, Args)).
+-define(PRINT(Var), ?LOG_INFO("DEBUG: ~p: ~p~n", [??Var, Var])).
+-define(DEBUG, ?LOG_INFO("DEBUG: ~p:~p~n", [?MODULE, ?LINE])).
+-endif.
+
 -endif.
 
 %%% GUARDS %%%
 
--define (IS_STRING(Term),
+-define(WF_STRING(Term),
     (is_list(Term) andalso Term /= [] andalso is_integer(hd(Term)))).
 
--define (IS_ACTION_PRIORITY(Priority),
+-define(IS_STRING(Term), ?WF_STRING(Term)).
+
+-define(IS_ACTION_PRIORITY(Priority),
     (Priority=:=normal orelse Priority=:=eager orelse Priority=:=defer)).
 
--define (PRIORITY_WIRE(Priority),
+-define(PRIORITY_WIRE(Priority),
         (case Priority of
             eager   -> eager;
             defer   -> defer;
@@ -124,20 +182,20 @@
         end)
     ).
 
+-define(WF_SAFE(Exp, Default), (try Exp catch _:_ -> Default end)).
+
+-define(WF_SAFE(Exp), ?WF_SAFE(Exp, undefined)).
+
 %%% TERNARY IF AND VARIATIONS %%%
 -define(WF_IF(Term,IfTrue,IfFalse),
     fun() ->
-        case Term of
-            %% We use the long "WF_IF_VALUE" variable to prevent the likelyhood
-            %% of ambiguity in a function. This will throw some matching or
-            %% "shadowing" errors if, in a function, you define a variable
-            %% called "WF_IF_VALUE" before calling ?WF_IF. Given that this is
-            %% unlikely to happen, this is an acceptable compromise.
-            WF_IF_VALUE when WF_IF_VALUE==false;
-                         WF_IF_VALUE==undefined;
-                         WF_IF_VALUE==[] ->
+        %% This is wrapped in a fun to contain the leaky-case expression. It
+        %% allows for nesting ?WF_IF calls. Though it obviously does incur the
+        %% minor overhead of creating an anonymous function then executing it.
+        case wf:to_bool(Term) of
+            false ->
                 IfFalse;
-            _ -> 
+            _ ->
                 IfTrue
         end
     end()).
@@ -158,7 +216,7 @@
         %% If we kept it as just `is_element`, that may be just fine, but then
         %% users would probably have to use dialyzer to debug the "is not an
         %% element" error
-        is_element=is_element   :: is_element | any(), 
+        is_element=is_element   :: is_element | any(),
         module=Module           :: atom(),
         id                      :: id(),
         anchor                  :: id(),
@@ -168,35 +226,65 @@
         style=""                :: text(),
         html_id=""              :: id(),
         title=""                :: undefined | text(),
-        data_fields=[]          :: data_fields()        
+        role=""                 :: text() | atom(),
+        data_fields=[]          :: data_fields(),
+        aria=[]                 :: aria_fields()
     ).
 
 -record(elementbase, {?ELEMENT_BASE(undefined)}).
 -record(template, {?ELEMENT_BASE(element_template),
        file                     :: string(),
+       text=[]                  :: string() | binary(),
+       to_type=html             :: string() | atom() | binary(),
+       from_type=html           :: string() | atom() | binary(),
+       options=[]               :: [{atom(), string() | atom()}],
+       callouts=true            :: boolean(),
        module_aliases=[]        :: [{atom(), atom()}],
        bindings=[]              :: proplist()
     }).
 -record(function_el, {?ELEMENT_BASE(element_function),
         function=fun() ->[]end  :: fun() | [fun()]
     }).
--record(body, {?ELEMENT_BASE(element_body),
-        body=[]                 :: body()
-    }).
 
--define(H_ELEMENT(Size), {?ELEMENT_BASE(element_h),
+-define(BASIC_ELEMENT(Tag),
+    -record(Tag, {?ELEMENT_BASE(element_basic_tag),
         text=""                 :: text(),
         body=[]                 :: body(),
-        html_encode=true        :: html_encode(),
-        size=Size               :: undefined | integer()
-    }).
--record(h,  ?H_ELEMENT(undefined)).
--record(h1, ?H_ELEMENT(1)).
--record(h2, ?H_ELEMENT(2)).
--record(h3, ?H_ELEMENT(3)).
--record(h4, ?H_ELEMENT(4)).
--record(h5, ?H_ELEMENT(5)).
--record(h6, ?H_ELEMENT(6)).
+        html_encode=true        :: html_encode()
+    })
+).
+
+%% The #basic_tag element will only really be used in the element_basic_tag.erl file
+?BASIC_ELEMENT(basic_tag).
+?BASIC_ELEMENT(h1).
+?BASIC_ELEMENT(h2).
+?BASIC_ELEMENT(h3).
+?BASIC_ELEMENT(h4).
+?BASIC_ELEMENT(h5).
+?BASIC_ELEMENT(h6).
+?BASIC_ELEMENT(p).
+?BASIC_ELEMENT(span).
+?BASIC_ELEMENT(panel).
+?BASIC_ELEMENT(i).
+?BASIC_ELEMENT(strong).
+?BASIC_ELEMENT(em).
+?BASIC_ELEMENT(pre).
+?BASIC_ELEMENT(code).
+
+%% HTML Semantic Elements
+?BASIC_ELEMENT(section).
+?BASIC_ELEMENT(nav).
+?BASIC_ELEMENT(article).
+?BASIC_ELEMENT(aside).
+?BASIC_ELEMENT(header).
+?BASIC_ELEMENT(footer).
+?BASIC_ELEMENT(main).
+?BASIC_ELEMENT(summary).
+?BASIC_ELEMENT(mark).
+
+%% deprecated
+?BASIC_ELEMENT(html5_header). %% just use #header{}
+?BASIC_ELEMENT(html5_footer). %% just use #footer{}
 
 -record(list, {?ELEMENT_BASE(element_list),
         numbered=false          :: boolean(),
@@ -205,36 +293,25 @@
 -record(listitem, {?ELEMENT_BASE(element_listitem),
         body=[]                 :: body(),
         text=""                 :: text(),
-        html_encode=true        :: html_encode(),
-        role=""                 :: term()
+        html_encode=true        :: html_encode()
     }).
 -record(br, {?ELEMENT_BASE(element_br) }).
 -record(hr, {?ELEMENT_BASE(element_hr) }).
--record(p, {?ELEMENT_BASE(element_p),
-        body=[]                 :: body(),
-        text=""                 :: text(),
-        html_encode=true        :: html_encode()
-    }).
+
+
 -record(label, {?ELEMENT_BASE(element_label),
         body=[]                 :: body(),
         text=""                 :: text(),
         html_encode=true        :: html_encode(),
         for=""                  :: id()
     }).
--record(pre, {?ELEMENT_BASE(element_pre),
-        text=""                 :: text(),
-        html_encode=true        :: html_encode()
+-record(icon, {?ELEMENT_BASE(element_icon),
+        icon                    :: icon(),
+        prefix                  :: atom() | string() | binary(),
+        type                    :: atom(),
+        size                    :: integer() | atom() | string() | binary(),
+        version=undefined       :: integer() | atom() | string()
      }).
--record(strong, {?ELEMENT_BASE(element_strong),
-        body=""                 :: body(),
-        text=""                 :: text(),
-        html_encode=true        :: html_encode()
-    }).
--record(em, {?ELEMENT_BASE(element_em),
-        body=""                 :: body(),
-        text=""                 :: text(),
-        html_encode=true        :: html_encode()
-    }).
 -record(value, {?ELEMENT_BASE(element_value),
         text=""                 :: text(),
         html_encode=true        :: html_encode()
@@ -242,6 +319,8 @@
 -record(link, {?ELEMENT_BASE(element_link),
         text=""                 :: text(),
         body=""                 :: body(),
+        image=undefined         :: undefined | url(),
+        icon=undefined          :: undefined | icon(),
         new=false               :: boolean(),
         html_encode=true        :: html_encode(),
         mobile_target=false     :: boolean(),
@@ -249,6 +328,7 @@
         url="javascript:"       :: script() | url(),
         click                   :: actions(),
         postback                :: term(),
+        vessel                  :: id() | text(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module()
@@ -256,26 +336,42 @@
 -record(email_link, {?ELEMENT_BASE(element_email_link),
         text=""                 :: text(),
         body=""                 :: body(),
+        image                   :: undefined | url(),
+        icon                    :: icon(),
         html_encode=true        :: html_encode(),
         email=""                :: text()
     }).
+-record(phone_link, {?ELEMENT_BASE(element_phone_link),
+        text=""                 :: text(),
+        body=""                 :: body(),
+        image                   :: undefined | url(),
+        icon                    :: icon(),
+        html_encode=true        :: html_encode(),
+        phone=""                :: text()
+    }).
+
 -record(error, {?ELEMENT_BASE(element_error),
         text=""                 :: text(),
         html_encode=true        :: html_encode()
     }).
--record(span, {?ELEMENT_BASE(element_span),
-        body=""                 :: body(),
-        text=""                 :: text(),
-        html_encode=true        :: html_encode()
+-record(delay_body, {?ELEMENT_BASE(element_delay_body),
+        delegate                :: module(),
+        tag=undefined           :: term(),
+        placeholder             :: undefined | body(),
+        method=optimized        :: optimized | simple,
+        delay=0                 :: integer()  %% milliseconds to wait to populate
     }).
 -record(button, {?ELEMENT_BASE(element_button),
         text=""                 :: text(),
         body=""                 :: body(),
         image=undefined         :: undefined | url(),
+        icon                    :: icon(),
         html_encode=true        :: html_encode(),
         next                    :: id(),
         click                   :: actions(),
+        enter_clicks=[]         :: [id()],
         postback                :: term(),
+        vessel                  :: id() | text(),
         disabled=false          :: boolean(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
@@ -286,20 +382,26 @@
         html_encode=true        :: html_encode()
     }).
 -record(textbox, {?ELEMENT_BASE(element_textbox),
-        text=""                 :: text(),
+        text=""                 :: text() | undefined,
         maxlength=""            :: integer() | string(),
         size=""                 :: integer() | string(),
         placeholder=""          :: text(),
+        pattern=""              :: text(),
         html_encode=true        :: html_encode(),
         disabled=false          :: boolean(),
         readonly=false          :: boolean(),
         next                    :: id(),
         postback                :: term(),
+        vessel                  :: id() | text(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module(),
         html_name               :: html_name(),
-        type=text               :: string() | atom()
+        type=text               :: string() | binary() | atom(),
+        step                    :: text() | integer(),
+        min                     :: undefined | text(),
+        max                     :: undefined | text(),
+        autocomplete="off"      :: string() | atom()
     }).
 -record(datepicker_textbox, {?ELEMENT_BASE(element_datepicker_textbox),
         text=""                 :: text(),
@@ -316,6 +418,16 @@
         validators=[]           :: validators(),
         options = [{dateFormat, "yy-mm-dd"}]    :: proplist()
     }).
+-record(date_dropdown, {?ELEMENT_BASE(element_date_dropdown),
+        value=""                :: text() | erlang:date() | {erlang:date(),erlang:time()},
+        format=iso              :: ymd | iso | mdy | usa | dmy,
+        min_year=undefined      :: undefined | integer(),
+        max_year=undefined      :: undefined | integer(),
+        month_names=true        :: boolean(),
+        month_fun={element_date_dropdown, months} :: {module(), atom()} | fun(),
+        wrapperid=undefined     :: id(),
+        allow_blank=false	:: boolean()
+}).
 -record(textbox_autocomplete, {?ELEMENT_BASE(element_textbox_autocomplete),
         tag                     :: term(),
         text=""                 :: text(),
@@ -327,7 +439,6 @@
         readonly=false          :: boolean(),
         delay=300               :: integer(),
         next                    :: id(),
-        postback                :: term(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module()
@@ -357,6 +468,7 @@
         value=0                 :: integer(),
         next                    :: id(),
         postback                :: term(),
+        vessel                  :: id() | text(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module()
@@ -364,13 +476,13 @@
 
 -record(option, {
         text=""                 :: text(),
-        value=undefined         :: text() | atom() | undefined,
-        selected=false          :: boolean(),
+        value=undefined         :: text() | atom() | integer(),
+        selected                :: boolean() | undefined,
         show_if=true            :: boolean(),
         disabled=false          :: boolean()
     }).
 
--type short_option()        :: {text(), text()}.
+-type short_option()        :: {text() | atom() | integer(), text()} | text().
 -record(option_group, {
         text=""                 :: text(),
         options=[]              :: [#option{} | short_option()],
@@ -384,10 +496,11 @@
         size=auto               :: auto | integer(),
         html_encode=true        :: html_encode(),
         postback                :: term(),
+        vessel                  :: id() | text(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module(),
-        value                   :: text(),
+        value                   :: atom() | text() | integer(),
         next                    :: id(),
         multiple=false          :: boolean(),
         disabled=false          :: boolean(),
@@ -396,12 +509,15 @@
 
 -record(checkbox, {?ELEMENT_BASE(element_checkbox),
         text=""                 :: text(),
+        label_position='after'  :: 'after' | before | none,
         html_encode=true        :: html_encode(),
         checked=false           :: boolean(),
         value="on"              :: text(),
         next                    :: id(),
         postback                :: term(),
+        vessel                  :: id() | text(),
         handle_invalid=false    :: boolean(),
+        disabled=false          :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module(),
         html_name               :: html_name()
@@ -414,14 +530,17 @@
         text=""                 :: text(),
         html_encode=true        :: html_encode(),
         value                   :: text(),
+        label_class             :: class() | [class()],
         next                    :: id(),
         name                    :: html_name(),
         checked=false           :: boolean(),
         postback                :: term(),
+        vessel                  :: id() | text(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         delegate                :: module(),
-        html_name               :: html_name()
+        html_name               :: html_name(),
+        disabled=false          :: boolean()
     }).
 -record(password, {?ELEMENT_BASE(element_password),
         text=""                 :: text(),
@@ -440,10 +559,10 @@
     }).
 -record(restful_form, {?ELEMENT_BASE(element_restful_form),
         method="POST"           :: string() | atom(),
-        action                  :: url(),
+        action                  :: url() | undefined,
         html_name               :: html_name(),
         target                  :: string() | atom(),
-        enctype                 :: text(),
+        enctype                 :: text() | undefined,
         body=[]                 :: body()
       }).
 -record(restful_submit, {?ELEMENT_BASE(element_restful_submit),
@@ -458,18 +577,14 @@
         html_name               :: html_name()
     }).
 -record(restful_upload, {?ELEMENT_BASE(element_restful_upload),
-        html_encode=true        :: html_encode(),
+%        text="Browse"           :: text(),
+%        html_encode=true        :: html_encode(),
         html_name               :: html_name()
-    }).
--record(panel, {?ELEMENT_BASE(element_panel),
-        body=[]                 :: body(),
-        text=""                 :: text(),
-        html_encode=true        :: html_encode()
     }).
 -record(sync_panel, {?ELEMENT_BASE(element_sync_panel),
         body_fun                :: undefined | fun(),
         triggers=[]             :: [term()],
-        pool=sync_panel         :: atom()
+        pool=sync_panel         :: term()
     }).
 -record(fieldset, {?ELEMENT_BASE(element_fieldset),
         body=[]                 :: body(),
@@ -484,15 +599,34 @@
     }).
 -record(image, {?ELEMENT_BASE(element_image),
         image=""                :: url(),
-        alt                     :: text(),
-        width                   :: integer(),
-        height                  :: integer()
+        alt=""                  :: text(),
+        width                   :: undefined|integer(),
+        height                  :: undefined|integer()
+    }).
+-record(video, {?ELEMENT_BASE(element_video),
+        url=""                  :: url(),
+        poster_url=""           :: url(),
+        width=560               :: integer(),
+        height=315              :: integer(),
+        preload=metadata        :: auto | metadata | none,
+        loop=false              :: boolean(),
+        muted=false             :: boolean(),
+        autoplay=false          :: boolean(),
+        controls=false          :: boolean(),
+        body_no_support="Your browser does not support the video tag" :: body()
+    }).
+-record(youtube, {?ELEMENT_BASE(element_youtube),
+        width=560               :: integer(),
+        height=315              :: integer(),
+        key=""                  :: text(),
+        allowfullscreen=true    :: boolean()
     }).
 -record(lightbox, {?ELEMENT_BASE(element_lightbox),
         body=[]                 :: body()
     }).
 -record(table, {?ELEMENT_BASE(element_table),
         rows                    :: body(),
+        border = 0              :: integer(),
         header=[]               :: body(),
         footer=[]               :: body()
     }).
@@ -532,7 +666,7 @@
 -record(bind, {?ELEMENT_BASE(element_bind),
         data=[]                 :: list(),
         map=[]                  :: list() | tuple(),
-        transform               :: fun(),
+        transform               :: fun() | undefined,
         acc=[]                  :: term(),
         body=[]                 :: body(),
         empty_body=[]           :: body()
@@ -610,19 +744,24 @@
         show_button=true        :: boolean(),
         file_text="Select file" :: text(),
         button_text="Upload"    :: text(),
+        button_class=""         :: class() | [class()],
         droppable=false         :: boolean(),
         droppable_text="Drop Files Here" :: text(),
-        multiple=false          :: boolean()
+        multiple=false          :: boolean(),
+        overall_progress=auto   :: boolean() | undefined | auto
     }).
 -record(wizard, {?ELEMENT_BASE(element_wizard),
         tag                     :: term(),
-        titles                  :: [text()],
-        steps                   :: [body()],
+        titles                  :: undefined | [text()],
+        steps=[]                :: [body()],
         next="Next"             :: text(),
         back="Back"             :: text(),
         finish="Finish"         :: text(),
         show_progress=true      :: boolean(),
-        progress_text="(Step ~p of ~p)" :: text()
+        progress_text="(Step ~p of ~p)" :: text(),
+        next_class=""           :: text() | [text()],
+        back_class=""           :: text() | [text()],
+        finish_class=""         :: text() | [text()]
     }).
 -record(sparkline, {?ELEMENT_BASE(element_sparkline),
         type=line               :: line | bar | tristate | bullet | discrete | pie | box,
@@ -633,7 +772,7 @@
         captcha_opts=[]         :: proplist(),
         button_id               :: id(),
         button_label="Check!"   :: text(),
-        button_class            :: text(),
+        button_class            :: class(),
         delegate                :: module(),
         tag                     :: term(),
         fail_body="Please try again!" :: body(),
@@ -652,8 +791,7 @@
 -record(mobile_list_divider, {?ELEMENT_BASE(element_mobile_list_divider),
         theme                   :: mobile_theme(),
         text=""                 :: text(),
-        body=[]                 :: body(),
-        role=heading            :: atom() | string()
+        body=[]                 :: body()
      }).
 -record(mobile_listitem, {?ELEMENT_BASE(element_mobile_listitem),
         text=""                 :: text(),
@@ -706,54 +844,50 @@
         display_mode=reveal     :: reveal | overlay | push,
         body=[]                 :: body()
     }).
+-record(iframe, {?ELEMENT_BASE(element_iframe),
+        align                   :: text() | atom(),
+        frameborder             :: integer() | undefined,
+        height                  :: integer() | undefined,
+        name=""                 :: text(),
+        sandbox=""              :: text(),
+        seamless                :: atom() | text(),
+        src                     :: url(),
+        srcdoc=""               :: text(),
+        width                   :: integer() | undefined,
+        allowfullscreen=true    :: boolean()
+    }).
 
-        
-%% HTML5 semantic elements
--record(section, {?ELEMENT_BASE(element_section),
-        body=""                 :: body()
-    }).
--record(nav, {?ELEMENT_BASE(element_nav),
-        body=""                 :: body()
-    }).
--record(article, {?ELEMENT_BASE(element_article),
-        body=""                 :: body()
-    }).
--record(aside, {?ELEMENT_BASE(element_aside),
-        body=""                 :: body()
-    }).
--record(html5_header, {?ELEMENT_BASE(element_html5_header),
-        body=""                 :: body()
-    }).
--record(html5_footer, {?ELEMENT_BASE(element_html5_footer),
-        body=""                 :: body()
-    }).
+%% HTML Semantic Elements
 -record(time, {?ELEMENT_BASE(element_time),
         datetime=""             :: text(),
         body=""                 :: body(),
         text=""                 :: text(),
         html_encode=true        :: html_encode()
     }).
--record(mark, {?ELEMENT_BASE(element_mark),
-        body=""                 :: body(),
-        text=""                 :: text(),
-        html_encode=true        :: html_encode()
-    }).
+
+
 
 %% 960.gs Grid
 
+-define(GET_DEFAULT_GRID_SYSTEM, nitrogen:default_grid_system()).
+
 -define(GRID_ELEMENT(Type, Columns), {?ELEMENT_BASE(element_grid),
-        type=Type               :: undefined | container | grid | clear,
-        columns=Columns         :: undefined | integer(),
+        system=?GET_DEFAULT_GRID_SYSTEM :: undefined | atom(),
+        type=Type               :: undefined | container | grid | clear | any(),
+        width                   :: undefined | any(),
+        columns=Columns         :: undefined | integer()  | any(),
         alpha=false             :: boolean(),
         omega=false             :: boolean(),
         push                    :: integer() | undefined,
         pull                    :: integer() | undefined,
         prefix                  :: integer() | undefined,
         suffix                  :: integer() | undefined,
+        options=[]              :: [{any(), any()} | atom() | binary() | string()],
         body=[]                 :: body()
     }).
 
 -record(grid,           ?GRID_ELEMENT(undefined, undefined)).
+-record(container,      ?GRID_ELEMENT(container, undefined)).
 -record(container_12,   ?GRID_ELEMENT(container,12)).
 -record(container_16,   ?GRID_ELEMENT(container,16)).
 -record(grid_1,         ?GRID_ELEMENT(grid, 1)).
@@ -774,18 +908,25 @@
 -record(grid_16,        ?GRID_ELEMENT(grid, 16)).
 -record(grid_clear,     ?GRID_ELEMENT(clear, undefined)).
 
+-record(progress_bar,   {?ELEMENT_BASE(element_progress_bar),
+        value=undefined         :: integer() | undefined,
+        max=100                 :: integer(),
+        color = <<"909090">>    :: color(),
+        label                   :: undefined | percent | ratio | both | string()
+    }).
+
 %% Google Charts
 -record(chart_axis, {
         position                :: google_chart_position(),
         labels                  :: undefined | [text()],
-        color=909090            :: color(),
+        color = <<"909090">>    :: color(),
         font_size=10            :: integer()
     }).
 
 -record(chart_data, {
         color                   :: color(),
         legend                  :: text(),
-        values                  :: [text()],
+        values                  :: [text() | integer()],
         min_value=0             :: integer(),
         max_value=100           :: integer(),
         line_width=1            :: integer(),
@@ -794,24 +935,55 @@
     }).
 -record(google_chart,   {?ELEMENT_BASE(element_google_chart),
         type=line               :: google_chart_type(),
-        color="909090"          :: color(),
+        color = <<"909090">>    :: color(),
         font_size=10            :: integer(),
         width=300               :: integer(),
         height=150              :: integer(),
         axes=[]                 :: undefined | [#chart_axis{}],
         data=[]                 :: undefined | [#chart_data{}],
-        grid_x=undefined        :: undefined | integer(),
-        grid_y=undefined        :: undefined | integer(),
+        grid_x=undefined        :: undefined | integer(), %% not clear what this did
+        grid_y=undefined        :: undefined | integer(), %% not clear what this did
         grid_line_length=1      :: integer(),
         grid_blank_length=5     :: integer(),
         background_color=ffffff :: color(),
         chart_color=ffffff      :: color(),
         legend_location=bottom  :: google_chart_position(),
-        bar_space=3             :: integer(),
-        bar_group_space=7       :: integer()
+        bar_space=3             :: integer(), %% no longer supported
+        bar_group_space=7       :: integer(), %% no longer supported
+        options=[]              :: proplist() | map()
+    }).
+-record(qr, {?ELEMENT_BASE(element_qr),
+        data=undefined          :: any(),
+        size=200                :: integer()
     }).
 
+-record(mermaid, {?ELEMENT_BASE(element_mermaid),
+        code=[]                 :: mermaid_code(),
+        options=[]              :: proplist(),
+        diagram_options=undefined      :: undefined | mermaid_diagram_options(mermaid_diagram())
+    }).
 
+%% Calendar
+-record(calendar,   {?ELEMENT_BASE(element_calendar),
+        delegate                :: module(),
+        tag=undefined           :: term(),
+        month=element(2, erlang:date()) :: integer(),
+        year=element(1, erlang:date()) :: integer()
+    }).
+
+-record(calendar_item, {
+        tag                     :: term(),
+        draggable=false         :: boolean(),
+        class                   :: class(),
+        body                    :: body(),
+        text=""                 :: text(),
+        date                    :: {integer(), integer(), integer()}
+    }).
+
+-record(calendar_invalid_drop,  {
+        date                    :: {integer(), integer(), integer()}
+}).
+        
 %%% Actions %%%
 -define(AV_BASE(Module,Type),
    is_action=Type               :: is_action | is_validator,
@@ -828,6 +1000,7 @@
 
 -record(actionbase, {?ACTION_BASE(undefined)}).
 -record(wire, {?ACTION_BASE(action_wire)}).
+-record(click, {?ACTION_BASE(action_click)}).
 
 -define(ACTION_UPDATE(Type), {?ACTION_BASE(action_update),
         type=Type               :: atom(),
@@ -848,7 +1021,8 @@
         pool=undefined          :: term(),
         scope=local             :: local | global,
         function                :: comet_function(),
-        dying_message           :: term()
+        dying_message           :: term(),
+        reconnect_actions       :: actions()
     }).
 -record(continue, {?ACTION_BASE(action_continue),
         function                :: undefined | fun(),
@@ -864,11 +1038,31 @@
 -record(function, {?ACTION_BASE(action_function),
         function                :: fun() | undefined
     }).
+-record(js_fun, {?ACTION_BASE(action_js_fun),
+        function                :: atom() | text(),
+        args=[]                 :: [text()]
+    }).
 -record(set, {?ACTION_BASE(action_set),
-        value=""                :: text()
+        value=""                :: text() | integer() | atom()
+    }).
+-record(set_multiple, {?ACTION_BASE(action_set_multiple),
+        values=[]               :: [text()]
     }).
 -record(redirect, {?ACTION_BASE(action_redirect),
-        url=""                  :: url()
+        url=""                  :: url(),
+        login=false             :: boolean() | url()
+    }).
+-record(open_window, {?ACTION_BASE(action_open_window),
+        url=""                  :: url(),
+        height                  :: integer() | undefined,
+        width                   :: integer() | undefined,
+        left                    :: integer() | undefined,
+        top                     :: integer() | undefined,
+        menubar=true            :: boolean(),
+        statusbar=true          :: boolean(),
+        titlebar=true           :: boolean(),
+        name='_blank'           :: '_blank' | '_parent' | '_self' | '_top' | text(),
+        options=[]
     }).
 -record(event, {?ACTION_BASE(action_event),
         type=default            :: atom(),
@@ -876,6 +1070,7 @@
         shift_key=false         :: boolean(),
         delay=0                 :: integer(),
         postback                :: term(),
+        vessel                  :: id() | text(),
         handle_invalid=false    :: boolean(),
         on_invalid              :: undefined | actions(),
         validation_group        :: string() | binary() | atom(),
@@ -908,15 +1103,29 @@
 -record(confirm, {?ACTION_BASE(action_confirm),
         text=""                 :: text(),
         postback                :: term(),
+        vessel                  :: id() | text(),
         delegate                :: module()
     }).
 -record(console_log, {?ACTION_BASE(action_console_log),
-        text=""                 :: text()
+        text=""                 :: any()
     }).
 -record(script, {?ACTION_BASE(action_script),
         script                  :: text()
     }).
 -record(disable_selection, {?ACTION_BASE(action_disable_selection)}).
+-record(disable_option, {?ACTION_BASE(action_toggle_option),
+        value                   :: atom() | string() | binary() | integer()
+}).
+-record(enable_option, {?ACTION_BASE(action_toggle_option),
+        value                   :: atom() | string() | binary() | integer()
+}).
+-record(add_option, {?ACTION_BASE(action_add_option),
+        option                  :: #option{} | short_option(),
+        location=bottom         :: top | bottom
+}).
+-record(remove_option, {?ACTION_BASE(action_remove_option),
+        value                   :: atom() | string() | binary() | integer()
+}).
 -record(jquery_effect, {?ACTION_BASE(action_jquery_effect),
         type                    :: atom() | string() | binary(),
         effect                  :: atom() | string() | binary(),
@@ -976,6 +1185,16 @@
 -record(enable, {?ACTION_BASE(action_enable)}).
 -record(make_readonly, {?ACTION_BASE(action_make_readonly)}).
 -record(make_writable, {?ACTION_BASE(action_make_writable)}).
+-record(set_cookie, {?ACTION_BASE(action_set_cookie),
+        cookie                  :: atom() | text(),
+        value=""                :: atom() | text(),
+        path="/"                :: text(),
+        domain=undefined        :: undefined | text(),
+        minutes_to_live=20      :: integer(),
+        secure=false            :: boolean(),
+        http_only=false         :: boolean(),
+        same_site=lax           :: atom() | text()
+    }).
 
 %%% Validators %%%
 %%% %% TODO: Switch this from is_action to is_validator once deferred is implemented
@@ -985,11 +1204,19 @@
     attach_to                   :: undefined | id()
 ).
 -record(validatorbase, {?VALIDATOR_BASE(undefined)}).
--record(is_required, {?VALIDATOR_BASE(validator_is_required)}).
+-record(is_required, {?VALIDATOR_BASE(validator_is_required),
+        unless_has_value        :: undefined | id() | [id()]
+    }).
 -record(is_email, {?VALIDATOR_BASE(validator_is_email)}).
 -record(is_integer, {?VALIDATOR_BASE(validator_is_integer),
         min                     :: undefined | integer(),
-        max                     :: undefined | integer()
+        max                     :: undefined | integer(),
+        allow_blank=false       :: boolean()
+    }).
+-record(is_number, {?VALIDATOR_BASE(validator_is_number),
+        min                     :: undefined | integer(),
+        max                     :: undefined | integer(),
+        allow_blank=false       :: boolean()
     }).
 -record(min_length, {?VALIDATOR_BASE(validator_min_length),
         length                  :: undefined | integer()
@@ -1008,8 +1235,22 @@
         tag                     :: term()
     }).
 -record(js_custom, {?VALIDATOR_BASE(validator_js_custom),
-        function                :: script(),
-        args="{}"               :: text()
+        function                :: atom() | script(),
+        args="{}"               :: text(),
+        when_empty=false        :: boolean()
+    }).
+%-record(if_expr, {?ACTION_BASE(action_if_value),
+%        expr :: atom() | text(),
+%        map                     :: undefined | [{atom() | text(), actions()}],
+%        'else'=[]                 :: actions()
+%    }).
+-record(if_value, {?ACTION_BASE(action_if_value),
+        value                   :: atom() | text(),
+        map                     :: undefined | [{atom() | text(), actions()}],
+        'else'=[]                 :: actions()
+    }).
+-record(if_checked, {?ACTION_BASE(action_if_checked),
+        'else'=[]                 :: actions()
     }).
 
 -endif.

@@ -18,7 +18,7 @@ render_element(Record) ->
     maybe_trap_tabs(Anchor, Record#textarea.trap_tabs),
 
     wf_tags:emit_tag(textarea, Text, [
-        {class, [textarea, Record#textarea.class]},
+        {class, ?ADD_ELEMENT_CLASS(textarea, Record#textarea.class)},
         {id, Record#textarea.html_id},
         {style, Record#textarea.style},
         {title, Record#textarea.title},
@@ -28,7 +28,8 @@ render_element(Record) ->
         ?WF_IF(Record#textarea.disabled,disabled,undefined),
         ?WF_IF(Record#textarea.readonly,readonly,undefined),
         {placeholder, Placeholder},
-        {data_fields, Record#textarea.data_fields}
+        {data_fields, Record#textarea.data_fields},
+        {aria, Record#textarea.aria}
     ]).
 
 maybe_trap_tabs(_Anchor, false) -> ok;

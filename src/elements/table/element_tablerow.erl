@@ -21,5 +21,6 @@ render_element(Record) ->
         {class, [tablerow, Record#tablerow.class]},
         {title, Record#tablerow.title},
         {style, Record#tablerow.style},
-        {data_fields, Record#tablerow.data_fields}
+        {data_fields, Record#tablerow.data_fields},
+        {aria, Record#tablerow.aria}
     ]).

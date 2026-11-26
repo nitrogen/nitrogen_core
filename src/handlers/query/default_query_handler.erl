@@ -14,10 +14,13 @@
 -export ([
     init/2, 
     finish/2,
+    set_websocket_params/3,
     get_value/3,
     get_values/3,
     get_params/2
 ]).
+
+-record(state, {request=[], websocket=[]}).
 
 %% TODO: It's worth considering reworking this page to use simple_bridge for
 %% all the query and post parameter evaluation, rather than reproducing a
@@ -28,40 +31,67 @@
 init(_Config, _State) -> 
     % Get query params and post params
     % from the request bridge...
-    RequestBridge = wf_context:request_bridge(),
-    QueryParams = RequestBridge:query_params(),
-    PostParams = RequestBridge:post_params(),
+    Bridge = wf_context:bridge(),
+    QueryParams = sbw:query_params(Bridge),
+    PostParams = sbw:post_params(Bridge),
 
     % Load into state...
     Params = QueryParams ++ PostParams,
 
     % Pre-normalize the parameters.
-    Params1 = [{normalize_path(Path), Value} || {Path, Value} <- Params, Path /= undefined, Path /= []],
-    {ok, Params1}.
+    Params1 = normalize_params(Params),
+    {ok, #state{request=Params1}}.
 
 finish(_Config, _State) -> 
     % Clear out the state.
     {ok, []}.
 
+set_websocket_params(Params, _Config, State) ->
+    Params1 = normalize_params(Params),
+    State1 = State#state{websocket=Params1},
+    {ok, State1}.
+
 %% Given a path, return the value that matches the path.
 get_value(Path, Config, State) ->
-    case get_values(Path, Config, State) of
+    case get_values(Path, 1, Config, State) of
         [] -> undefined;
-        [One] -> One;
-        _Many -> throw({?MODULE, too_many_matches, Path})
+        [One] ->  One
+        % We don't need to match other criteria because it will crash in
+        % convert_or_crash/4 if we need to
     end.
 
-get_values(Path, _Config, State) ->
-    Params = State,
-    Path1 = normalize_path(Path),
-    refine_params(Path1, Params).    
+get_values(Path, Config, State) ->
+    get_values(Path, infinite, Config, State).
 
-get_params(_Config, State) ->
-    Params = State,
+get_values(Path, MaxValues, _Config, #state{request=Request, websocket=Websocket} = _State) ->
+    {Path0, Converter} = extract_path_and_converter(Path),
+    Path1 = normalize_path(Path0),
+    Vs = refine_params(Path1, Websocket ++ Request),
+    convert_or_crash(Path, Converter, MaxValues, Vs).
+
+convert_or_crash(_Path, Converter, MaxValues, Vs) when MaxValues==infinite; 
+                                                       length(Vs) =< MaxValues ->
+    [wf_convert:maybe_convert(V, Converter) || V <- Vs];
+convert_or_crash(Path, _Converter, MaxValues, Vs) ->
+    throw({?MODULE, too_many_matches, [
+        {path_queried, Path},
+        {max_requested, MaxValues},
+        {number_of_matches, length(Vs)}
+    ]}).
+    
+
+extract_path_and_converter({Path, Converter}) ->
+    {Path, Converter};
+extract_path_and_converter(Path) ->
+    {Path, undefined}.
+
+
+get_params(_Config, #state{request=Request, websocket=Websocket} = _State) ->
+    Params = Websocket ++ Request,
     F = fun({KeyPartsReversed, Value}) ->
         KeyParts = lists:reverse(KeyPartsReversed),
         Key = string:join(KeyParts, "."),
-        { Key, Value }
+        { Key, wf:to_unicode_list(Value) }
     end,
     lists:map(F, Params).
 
@@ -74,6 +104,7 @@ get_params(_Config, State) ->
 %% Then after the first round of refine_params/2 we would have:
 %%   Path   = [b, c]
 %%   Params = [y, b, c]
+-spec refine_params(NormalizedPath :: list(), Params :: list()) -> Values :: list().
 refine_params([], Params) -> 
     [V || {_, V} <- Params];
 refine_params([H|T], Params) ->
@@ -98,6 +129,32 @@ normalize_path(Path) when ?IS_STRING(Path) ->
     Tokens = string:tokens(Path, "."),
     Tokens1 = [strip_array_brackets(strip_wfid(X)) || X <- Tokens],
     lists:reverse(Tokens1).
+
+normalize_params(Params) ->
+    %% In typical erlang fashion, this list is being built in reverse, and will
+    %% need to be reversed when finished to ensure proper parameter order
+    BackwardNormalizedParams = lists:foldl(fun(Param, Acc) ->
+        normalize_param(Param) ++ Acc
+    end, [], Params),
+    lists:reverse(BackwardNormalizedParams).
+    
+normalize_param({undefined, _}) ->
+    [];
+normalize_param({[], _}) ->
+    [];
+normalize_param({<<>>, _}) ->
+    [];
+normalize_param({Path, Value}) when ?IS_STRING(Value);
+                                    Value =:= [];
+                                    is_binary(Value);
+                                    is_integer(Value);
+                                    is_atom(Value) ->
+    [{normalize_path(Path), Value}];
+normalize_param({Path, Values}) when is_list(Values) ->
+    NPath = normalize_path(Path),
+    %% Because this is running in the middle of a list that's being built in
+    %% reverse, this will have to be built in reverse also.
+    lists:reverse([{NPath, V} || V <- Values]).
 
 %% Most tokens will start with "wfid_". Strip this out.
 strip_wfid(Path) ->

@@ -36,23 +36,24 @@ render_element(Record) ->
     Controls = {ViewPanelID, LabelID, EditPanelID, TextBoxID},
     OKEvent = #event { delegate=?MODULE, postback={ok, Delegate, Controls, Tag} },
 
-	StartMode = Record#inplace_textarea.start_mode,
+    StartMode = Record#inplace_textarea.start_mode,
 
     % Create the view...
     Text = Record#inplace_textarea.text,
     Terms = #panel { 
         html_id=Record#inplace_textarea.html_id,
-        class=[inplace_textbox, Record#inplace_textarea.class],
+        class=[inplace_textarea, Record#inplace_textarea.class],
         title=Record#inplace_textarea.title,
         data_fields=Record#inplace_textarea.data_fields,
+        aria=Record#inplace_textarea.aria,
         style=Record#inplace_textarea.style,
         body = [
             #panel { 
-				id=ViewPanelID, 
-				class="view", 
-				style = ?WF_IF(StartMode==edit,"diplay:none"),
-				body=[
-                #span { id=LabelID, class="inplace_textarea", text=Text, html_encode=HTMLEncode, actions=[
+                id=ViewPanelID, 
+                class="view", 
+                style = ?WF_IF(StartMode==edit,"diplay:none"),
+                body=[
+                #span { id=LabelID, class="label", text=Text, html_encode=HTMLEncode, actions=[
                     #buttonize { target=ViewPanelID }
                 ]},
                 #span { id=MouseOverID, class="instructions", text="Click to edit", style="display:none" }
@@ -66,19 +67,19 @@ render_element(Record) ->
                     #event { type=mouseout, target=MouseOverID, actions=#hide{} }
             ]},
             #panel { 
-				id=EditPanelID, 
-				class="edit", 
-				style = ?WF_IF(StartMode==view,"display:none"),
-				body=[
-					#textarea { id=TextBoxID, text=Text },
-					#button { id=OKButtonID, text="OK"},
-					#button { id=CancelButtonID, text="Cancel", click=[
+                id=EditPanelID, 
+                class="edit", 
+                style = ?WF_IF(StartMode==view,"display:none"),
+                body=[
+                    #textarea { id=TextBoxID, text=Text },
+                    #button { id=OKButtonID, class=inplace_ok, text="OK"},
+                    #button { id=CancelButtonID, class=inplace_cancel, text="Cancel", click=[
                         #hide{ target=EditPanelID },
                         #show{ target=ViewPanelID },
                         #script{ script=wf:f("obj('~s').value=obj('~s').defaultValue;",[TextBoxID, TextBoxID]) }
                     ]}
-            	]
-			}
+                ]
+            }
         ]
     },
 
@@ -93,7 +94,7 @@ render_element(Record) ->
 
     wf:wire(OKButtonID, TextBoxID, #validate { attach_to=CancelButtonID, validators=Record#inplace_textarea.validators }),
 
-    element_panel:render_element(Terms).
+    Terms.
 
 -spec event(any()) -> ok.
 event({ok, Delegate, {ViewPanelID, LabelID, EditPanelID, TextBoxID}, Tag}) -> 

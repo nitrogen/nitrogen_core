@@ -17,6 +17,7 @@ render_element(Record) ->
         title=Record#gravatar.title,
         anchor=Record#gravatar.anchor,
         data_fields=Record#gravatar.data_fields,
+        aria=Record#gravatar.aria,
         image = gravatar_icon(Record)
     },
     element_image:render_element(Image).

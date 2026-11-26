@@ -5,16 +5,22 @@
     reflect/0,
     render_element/1,
     refresh/1,
-    refresh/2
+    refresh/2,
+    event/1,
+    update/3,
+    run_fun/1
 ]).
 
 -define(STATE_KEY, sync_panel_body_trigger).
-
 -spec reflect() -> [atom()].
 reflect() -> record_info(fields, sync_panel).
 
+
+
 -spec render_element(#sync_panel{}) -> #panel{}.
-render_element(#sync_panel{body_fun=Fun}) when not(is_function(Fun)) ->
+render_element(#sync_panel{body_fun=Fun}) 
+        when not(is_function(Fun)) 
+            andalso not(is_tuple(Fun) andalso (tuple_size(Fun)==2 orelse tuple_size(Fun)==3)) ->
     throw({sync_panel_element, {body_fun_not_a_function, Fun}});
 render_element(E = #sync_panel{
         body_fun=BodyFun,
@@ -23,18 +29,36 @@ render_element(E = #sync_panel{
         
     Targetid = wf:temp_id(),
     SyncPanel = E#sync_panel{id=Targetid},
-    wf:comet_global(fun() -> update(Targetid, Triggers, BodyFun) end, Pool),
+    start_comet(Targetid, Triggers, BodyFun, Pool),
     register_target_body_fun(Targetid, BodyFun, Pool, Triggers),
     Panel = wf_utils:copy_fields(SyncPanel, #panel{}),
-    Panel#panel{body=BodyFun()}.
-   
--spec register_target_body_fun(Targetid :: id(), BodyFun :: fun(), Pool :: term(), [Trigger :: term()]) -> ok.
+    Panel#panel{body=run_fun(BodyFun)}.
+  
+start_comet(Targetid, Triggers, BodyFun, Pool) ->
+    Reconnect = [#event{postback={reconnect, Targetid, Triggers, BodyFun, Pool}, delegate=?MODULE}],
+    CometFun = fun() -> update(Targetid, Triggers, BodyFun) end,
+    wf:wire(#comet{
+        pool=Pool,
+        scope=global,
+        function=CometFun,
+        reconnect_actions=Reconnect
+    }).
+    %wf:comet_global(fun() -> update(Targetid, Triggers, BodyFun) end, Pool).
+
+run_fun(Fun) when is_function(Fun) ->
+    Fun();
+run_fun({M,F}) ->
+    M:F();
+run_fun({M,F,A}) ->
+    erlang:apply(M,F,A).
+
+-spec register_target_body_fun(Targetid :: id(), BodyFun :: fun() | tuple(), Pool :: term(), [Trigger :: term()]) -> ok.
 register_target_body_fun(_,_,_,[]) -> ok;
 register_target_body_fun(Targetid, BodyFun, Pool, [Trigger|Triggers]) ->
     wf:state({?STATE_KEY, Pool, Trigger},{Targetid, BodyFun}),
     register_target_body_fun(Targetid, BodyFun, Pool, Triggers).
 
--spec get_target_body_fun(Pool :: term(), Trigger :: term()) -> {Targetid :: id(), BodyFun :: fun()} | undefined.
+-spec get_target_body_fun(Pool :: term(), Trigger :: term()) -> {Targetid :: id(), BodyFun :: fun() | tuple()} | undefined.
 get_target_body_fun(Pool, Trigger) ->
     wf:state({?STATE_KEY, Pool, Trigger}).
 
@@ -48,7 +72,7 @@ refresh(Pool, Trigger) ->
         undefined ->
             wf:send_global(Pool, {trigger, Trigger});
         {Targetid, BodyFun} ->
-            Body = BodyFun(),
+            Body = run_fun(BodyFun),%BodyFun(),
             wf:update(Targetid, Body),
             wf:send_global(Pool, {trigger, Trigger})
             %% Disabled sending generated body across.
@@ -62,12 +86,18 @@ update(Targetid, Triggers, BodyFun) ->
         {trigger, T} ->
             case lists:member(T, Triggers) of
                 true ->
-                    Rendered = BodyFun(),
+                    Rendered = run_fun(BodyFun), %BodyFun(),
                     wf:update(Targetid, Rendered),
                     wf:flush();
                 false ->
                     do_nothing
-            end
+            end;
+        not_alive ->
+            exit(normal);
+        {'JOIN', _} ->
+            do_nothing;
+        {'LEAVE', _} ->
+            do_nothing
 %%        %% Sending Body to all clients?
 %%        %% Let's disable for now. Needs more thought.
 %%        {body, T, Body} ->
@@ -77,5 +107,20 @@ update(Targetid, Triggers, BodyFun) ->
 %%                false ->
 %%                    do_nothing
 %%            end
+    after 20000 ->
+        %% The comet process will continue to live for as long as the comet pool exists. 
+        {ok, TRef} = timer:send_after(20000, self(), not_alive),
+        wf:wire(#event{delegate=?MODULE, postback={still_alive, TRef}}),
+        wf:flush()
     end,
-    update(Targetid, Triggers, BodyFun).
+    ?MODULE:update(Targetid, Triggers, BodyFun).
+
+event({still_alive, TRef}) ->
+    timer:cancel(TRef);
+event({reconnect, Targetid, Triggers, BodyFun, Pool}) ->
+    %?PRINT({reconnecting, Targetid, Triggers, BodyFun, Pool}),
+    Body = run_fun(BodyFun),
+    %?PRINT({updating, Targetid, Body}),
+    wf:update(Targetid, Body),
+    start_comet(Targetid, Triggers, BodyFun, Pool).
+

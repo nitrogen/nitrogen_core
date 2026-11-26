@@ -3,4 +3,14 @@
 *~
 .*.sw?
 crypto_compat.hrl
+compat.hrl
 .deps_plt
+test/
+.rebar/
+deps/
+*.dump
+_build
+ebin/
+rebar
+rebar3
+rebar3.mk

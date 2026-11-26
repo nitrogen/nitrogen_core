@@ -35,6 +35,7 @@ render_element(Record) ->
         class = [sparkline, Record#sparkline.class],
         title = Record#sparkline.title,
         data_fields = Record#sparkline.data_fields,
+        aria= Record#sparkline.aria,
         style = Record#sparkline.style
     },
     element_span:render_element(Span).
